@@ -1,0 +1,1081 @@
+{%- comment -%}
+  Featured Custom Info Tiles Section
+  Displays custom information tiles with image, heading, and description
+{%- endcomment -%}
+
+{%- liquid
+  if section.settings.image_shape != ''
+    assign image_shape = section.settings.image_shape
+  else
+    assign image_shape = settings.product_tile_media_shape
+  endif
+
+  assign mobile_grid_cols = section.settings.tiles_per_row_mobile
+  assign layout = section.settings.layout
+
+  case section.settings.tiles_per_row_desktop
+    when 2
+      assign desktop_grid_cols = 'lg:grid-cols-2'
+    when 3
+      assign desktop_grid_cols = 'lg:grid-cols-3'
+    when 4
+      assign desktop_grid_cols = 'lg:grid-cols-4'
+    when 5
+      assign desktop_grid_cols = 'lg:grid-cols-5'
+  endcase
+
+  case section.settings.mobile_slide_width
+    when 'three_fifths'
+      assign mobile_slide_width = 'w-3/5'
+    when 'full_width'
+      assign mobile_slide_width = 'w-full'
+  endcase
+
+  assign tiles_count = section.blocks.size
+
+  if tiles_count == 1
+    assign layout = 'grid'
+  endif
+
+  assign eager_loading_limit = mobile_grid_cols | plus: 0 | default: 1
+
+  if layout == 'grid'
+    if section.settings.display_on_card
+      assign desktop_sizes = 'calc((100vw / ' | append: section.settings.tiles_per_row_desktop | append: ') - 2.5rem)'
+
+      if section.settings.tiles_per_row_mobile == '2'
+        assign mobile_sizes = 'calc((100vw / ' | append: section.settings.tiles_per_row_mobile | append: ') - 1.25rem)'
+      else
+        assign mobile_sizes = 'calc((100vw / ' | append: section.settings.tiles_per_row_mobile | append: ') - 2.5rem)'
+      endif
+    else
+      assign desktop_sizes = 'calc(100vw / ' | append: section.settings.tiles_per_row_desktop | append: ')'
+      assign mobile_sizes = 'calc(100vw / ' | append: section.settings.tiles_per_row_mobile | append: ')'
+    endif
+  else
+    if section.settings.display_on_card
+      assign desktop_sizes = 'calc(' | append: section.settings.desktop_slide_width | append: 'vw - 2.5rem)'
+
+      if mobile_slide_width == 'w-3/5'
+        assign mobile_sizes = 'calc(60vw - 2.5rem)'
+      else
+        assign mobile_sizes = 'calc(100vw - 2.5rem)'
+      endif
+    else
+      assign desktop_sizes = section.settings.desktop_slide_width | append: 'vw'
+
+      if mobile_slide_width == 'w-3/5'
+        assign mobile_sizes = '60vw'
+      else
+        assign mobile_sizes = '100vw'
+      endif
+    endif
+  endif
+
+  assign sizes = '(min-width: 990px) ' | append: desktop_sizes | append: ', ' | append: mobile_sizes
+
+  assign will_transform = false
+  if layout == 'carousel'
+    assign will_transform = true
+  endif
+-%}
+
+{%- comment -%} Generate shape definitions for all tiles {%- endcomment -%}
+{%- for block in section.blocks -%}
+  {%- if block.type == 'info_tile' -%}
+    {%- liquid
+      assign tile_shape = image_shape
+      if block.settings.image_shape_override != blank
+        assign tile_shape = block.settings.image_shape_override
+      endif
+
+      assign shape_id = section.id | append: '-' | append: forloop.index0
+    -%}
+    {%- unless tile_shape == 'default' -%}
+      {%- render 'collection-shape-defs', shape: tile_shape, section_id: shape_id, item_count: 1 -%}
+    {%- endunless -%}
+  {%- endif -%}
+{%- endfor -%}
+
+<section
+  class="relative overflow-hidden bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %}"
+  data-color-scheme="{{ section.settings.color_scheme }}"
+>
+  <div class="section-content relative z-10 py-section-vertical-spacing {% unless layout == 'carousel' %}px-section w-full max-w-site mx-auto{% endunless %}">
+    {% if section.settings.title != '' %}
+      <h2 class="inline-heading-rte font-heading heading-standard heading-style custom-display-header break-words text-center {{ settings.heading_drop_shadow_style }}">
+        {{ section.settings.title }}
+      </h2>
+    {% endif %}
+
+    {% if section.settings.subheading != '' %}
+      <div class="rte mx-auto mt-5 max-w-md text-center custom-body-xlarge">
+        {{ section.settings.subheading }}
+      </div>
+    {%- endif -%}
+
+    <div
+      {% if layout == 'carousel' %}
+        id="slideshow-{{ section.id }}"
+      {% endif %}
+      class="{% if section.settings.title != '' %}section-content-top-margin{% endif %} {% if layout == 'carousel' %}splide{% endif %}"
+    >
+      <div class="{% if layout == 'carousel' %}splide__track overflow-visible {% if settings.product_tiles_scatter %}splide__track--scattered{% endif %} {% if section.settings.display_on_card %}{% if settings.card_shadow_direction contains 'top' %}with-top-card-shadow{% else %}with-bottom-card-shadow{% endif %}{% endif %}{% endif %}">
+        <ul class="{% if layout == 'carousel' %}splide__list{% endif %} {% if layout == 'grid' %}grid gap-theme {% if mobile_grid_cols == '2' %}grid-cols-2{% else %}grid-cols-1{% endif %} {{ desktop_grid_cols }}{% endif %}">
+          {%- for block in section.blocks -%}
+            <li
+              class="{% if layout == 'carousel' %}splide__slide {{ mobile_slide_width }}{% endif %}"
+              {{ block.shopify_attributes }}
+            >
+              {%- liquid
+                if settings.product_tiles_scatter
+                  if layout == 'carousel'
+                    capture class
+                      cycle '-mt-4 ', 'mt-4 '
+                    endcapture
+                    capture scatter_position
+                      cycle 'up', 'down'
+                    endcapture
+                  else
+                    capture class
+                      case section.settings.tiles_per_row_mobile
+                        when '2'
+                          cycle 'max-lg:-mt-4 ', 'max-lg:mt-4 '
+                      endcase
+                      case section.settings.tiles_per_row_desktop
+                        when 3
+                          cycle 'lg:mt-4 ', 'lg:-mt-4 ', 'lg:mt-4 '
+                        when 2, 4
+                          cycle 'lg:-mt-4 ', 'lg:mt-4 '
+                        when 5
+                          cycle 'lg:mt-4 ', 'lg:-mt-4 ', 'lg:mt-4 ', 'lg:-mt-4 ', 'lg:mt-4 '
+                      endcase
+                    endcapture
+                  endif
+                endif
+
+                capture odd_even
+                  cycle 'odd', 'even'
+                endcapture
+
+                assign tile_shape = image_shape
+                if block.settings.image_shape_override != blank
+                  assign tile_shape = block.settings.image_shape_override
+                endif
+
+                assign shape_id = section.id | append: '-' | append: forloop.index0
+
+                if forloop.index <= eager_loading_limit
+                  assign loading = 'eager'
+                else
+                  assign loading = 'lazy'
+                endif
+                if forloop.index <= eager_loading_limit
+                  assign loading = 'eager'
+                else
+                  assign loading = 'lazy'
+                endif
+
+                if forloop.first
+                  assign preload = true
+                else
+                  assign preload = false
+                endif
+              -%}
+
+              {%- render 'info-tile',
+                block: block,
+                crop: section.settings.tiles_aspect_ratio,
+                shape: image_shape,
+                shape_override: block.settings.image_shape_override,
+                shape_id: shape_id,
+                display_on_card: section.settings.display_on_card,
+                class: class,
+                odd_even: odd_even,
+                index: forloop.index0,
+                tiles_per_row_mobile: section.settings.tiles_per_row_mobile,
+                scatter_position: scatter_position,
+                loading: loading,
+                preload: preload,
+                sizes: sizes,
+                will_transform: will_transform
+              -%}
+            </li>
+          {%- else -%}
+            {%- comment -%} Placeholder when no blocks added {%- endcomment -%}
+            {% for i in (1..3) %}
+              <li class="{% if layout == 'carousel' %}splide__slide {{ mobile_slide_width }}{% endif %}">
+                {%- liquid
+                  if settings.product_tiles_scatter
+                    if layout == 'carousel'
+                      capture class
+                        cycle '-translate-y-4 ', 'translate-y-4 '
+                      endcapture
+                    else
+                      capture class
+                        case section.settings.tiles_per_row_mobile
+                          when '2'
+                            cycle 'max-lg:-translate-y-4 ', 'max-lg:translate-y-4 '
+                        endcase
+                        case section.settings.tiles_per_row_desktop
+                          when 3
+                            cycle 'lg:translate-y-4 ', 'lg:-translate-y-4 ', 'lg:translate-y-4 '
+                          when 2, 4
+                            cycle 'lg:-translate-y-4 ', 'lg:translate-y-4 '
+                          when 5
+                            cycle 'lg:translate-y-4 ', 'lg:-translate-y-4 ', 'lg:translate-y-4 ', 'lg:-translate-y-4 ', 'lg:translate-y-4 '
+                        endcase
+                      endcapture
+                    endif
+                  endif
+                  capture odd_even
+                    cycle 'odd', 'even'
+                  endcapture
+                  assign tile_shape = image_shape
+                  if block.settings.image_shape_override != blank
+                    assign tile_shape = block.settings.image_shape_override
+                  endif
+
+                  assign shape_id = section.id | append: '-' | append: forloop.index0
+                -%}
+                {%- render 'info-tile',
+                  block: blank,
+                  crop: section.settings.tiles_aspect_ratio,
+                  shape: image_shape,
+                  shape_id: shape_id,
+                  display_on_card: section.settings.display_on_card,
+                  class: class,
+                  odd_even: odd_even,
+                  index: forloop.index0,
+                  will_transform: will_transform
+                -%}
+              </li>
+            {%- endfor -%}
+          {%- endfor -%}
+        </ul>
+      </div>
+
+      {%- if layout == 'carousel' -%}
+        <div class="splide__arrows mt-5 flex items-center justify-center px-section">
+          {%- render 'splide-navigation' %}
+        </div>
+        <script class="slideshow-options" type="application/json">
+          {
+            "mediaQuery": "min",
+            "arrows": true,
+            "pagination": false,
+            "rewind": true,
+            "autoWidth": true,
+            "gap": "1.25rem",
+            "focus": {{ section.settings.slideshow_focus | json }},
+            "type": "loop",
+            "autoScroll": {
+              "autoStart": {% if section.settings.autoscroll_mode == '0' or section.settings.autoscroll_mode == blank %}false{% else %}true{% endif %},
+              "speed": {% if section.settings.autoscroll_mode == blank %}0{% else %}{{ section.settings.autoscroll_mode | plus: 0 | json }}{% endif %}
+            },
+            "padding": {
+              "left": "1.25rem",
+              "right": "1.25rem"
+            },
+            "breakpoints": {
+              "990": {
+                "gap": "2.5rem",
+                "padding": {
+                  "left": "2.5rem",
+                  "right": "2.5rem"
+                }
+              }
+            }
+          }
+        </script>
+        <style>
+          @media (min-width: 990px) {
+            #slideshow-{{ section.id }} .splide__slide {
+              width: {{ section.settings.desktop_slide_width }}%;
+            }
+          }
+        </style>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- liquid
+    for block in section.blocks
+      case block.type
+        when 'background_shape'
+          render 'block-background-shape', block: block
+        when 'background_pattern'
+          render 'block-background-pattern', block: block, scheme: section.settings.color_scheme
+      endcase
+    endfor
+  -%}
+</section>
+
+{%- liquid
+  assign stickers = section.blocks | where: 'type', 'sticker'
+  assign shape_dividers = section.blocks | where: 'type', 'shape_divider'
+  for sticker in stickers
+    render 'block-sticker', block: sticker
+  endfor
+  for shape_divider in shape_dividers
+    render 'block-shape-divider', block: shape_divider
+  endfor
+-%}
+
+{% schema %}
+{
+  "name": "Custom Info Tiles",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Heading",
+      "default": "Custom Info Tiles"
+    },
+    {
+      "id": "subheading",
+      "type": "text",
+      "label": "Subheading",
+      "default": "Share information using custom tiles"
+    },
+    {
+      "type": "checkbox",
+      "id": "display_on_card",
+      "label": "Display tiles on card background",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "default": "grid",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "carousel",
+          "label": "Carousel"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Grid Settings"
+    },
+    {
+      "type": "paragraph",
+      "content": "These settings only apply when layout is set to Grid"
+    },
+    {
+      "type": "select",
+      "id": "tiles_per_row_mobile",
+      "label": "Tiles per row (mobile)",
+      "default": "1",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "tiles_per_row_desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "label": "Tiles per row (desktop)",
+      "default": 3
+    },
+    {
+      "type": "header",
+      "content": "Carousel Settings"
+    },
+    {
+      "type": "paragraph",
+      "content": "These settings only apply when layout is set to Carousel"
+    },
+    {
+      "type": "select",
+      "id": "slideshow_focus",
+      "label": "Slide focus",
+      "options": [
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "mobile_slide_width",
+      "label": "Mobile slide width",
+      "options": [
+        {
+          "value": "three_fifths",
+          "label": "3/5 width"
+        },
+        {
+          "value": "full_width",
+          "label": "Full width"
+        }
+      ],
+      "default": "three_fifths"
+    },
+    {
+      "type": "range",
+      "id": "desktop_slide_width",
+      "min": 20,
+      "max": 60,
+      "step": 5,
+      "unit": "%",
+      "label": "Desktop slide width",
+      "default": 40
+    },
+    {
+      "type": "select",
+      "id": "autoscroll_mode",
+      "label": "Auto-scroll",
+      "options": [
+        {
+          "value": "1",
+          "label": "Right to left"
+        },
+        {
+          "value": "-1",
+          "label": "Left to right"
+        },
+        {
+          "value": "0",
+          "label": "Disabled"
+        }
+      ],
+      "default": "0"
+    },
+    {
+      "type": "header",
+      "content": "Tile Image Settings"
+    },
+    {
+      "type": "select",
+      "id": "tiles_aspect_ratio",
+      "label": "Image aspect ratio",
+      "options": [
+        {
+          "value": "",
+          "label": "Same as theme settings"
+        },
+        {
+          "value": "natural",
+          "label": "Natural"
+        },
+        {
+          "value": "aspect-w-4 aspect-h-3",
+          "label": "Landscape (4:3)"
+        },
+        {
+          "value": "aspect-w-1 aspect-h-1",
+          "label": "Square (1:1)"
+        },
+        {
+          "value": "aspect-w-3 aspect-h-4",
+          "label": "Portrait (3:4)"
+        }
+      ],
+      "default": ""
+    },
+    {
+      "type": "select",
+      "id": "image_shape",
+      "label": "Image shape",
+      "options": [
+        {
+          "value": "",
+          "label": "Same as theme settings"
+        },
+        {
+          "value": "default",
+          "label": "Default"
+        },
+        {
+          "value": "default_ellipse",
+          "label": "Ellipse"
+        },
+        {
+          "value": "circle",
+          "label": "Circle"
+        },
+        {
+          "value": "hexagon",
+          "label": "Hexagon"
+        },
+        {
+          "value": "star_1",
+          "label": "Star"
+        },
+        {
+          "value": "blob",
+          "label": "Blob (random)"
+        }
+      ],
+      "default": "",
+      "info": "Choose a shape to clip the tile images"
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_gradient_background",
+      "label": "Use gradient background"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "info_tile",
+      "name": "Info Tile",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Tile Heading"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Add details about this tile here."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link (optional)",
+          "info": "Make the entire tile clickable"
+        },
+        {
+          "type": "select",
+          "id": "image_shape_override",
+          "label": "Image shape (override)",
+          "options": [
+            {
+              "value": "website_shape_star",
+              "label": "custom star",
+              "group": "custom shapes"
+            },
+            {
+              "value": "website_shape_bun",
+              "label": "custom bun",
+              "group": "custom shapes"
+            },
+            {
+              "value": "website_shape_frame",
+              "label": "custom frame",
+              "group": "custom shapes"
+            },
+            {
+              "value": "website_shape_pancake",
+              "label": "custom pancake",
+              "group": "custom shapes"
+            },
+            {
+              "value": "website_shape_cloud",
+              "label": "custom cloud",
+              "group": "custom shapes"
+            },
+            {
+              "value": "default",
+              "label": "t:common.options.default.label",
+              "group": "t:common.groups.fit_to_image"
+            },
+            {
+              "value": "default_ellipse",
+              "label": "t:common.options.ellipse.label",
+              "group": "t:common.groups.fit_to_image"
+            },
+            {
+              "value": "default_pill",
+              "label": "t:common.options.pill.label",
+              "group": "t:common.groups.fit_to_image"
+            },
+            {
+              "value": "default_archway",
+              "label": "t:common.options.archway.label",
+              "group": "t:common.groups.fit_to_image"
+            },
+            {
+              "value": "diamond",
+              "label": "t:common.options.diamond.label",
+              "group": "t:common.groups.basic"
+            },
+            {
+              "value": "triangle_1",
+              "label": "t:common.options.triangle_1.label",
+              "group": "t:common.groups.basic"
+            },
+            {
+              "value": "triangle_2",
+              "label": "t:common.options.triangle_2.label",
+              "group": "t:common.groups.basic"
+            },
+            {
+              "value": "pentagon",
+              "label": "t:common.options.pentagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "hexagon",
+              "label": "t:common.options.hexagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "heptagon",
+              "label": "t:common.options.heptagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "octagon",
+              "label": "t:common.options.octagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "nonagon",
+              "label": "t:common.options.nonagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "decagon",
+              "label": "t:common.options.decagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "rounded_pentagon",
+              "label": "t:common.options.rounded_pentagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "rounded_hexagon",
+              "label": "t:common.options.rounded_hexagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "rounded_heptagon",
+              "label": "t:common.options.rounded_heptagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "rounded_octagon",
+              "label": "t:common.options.rounded_octagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "rounded_nonagon",
+              "label": "t:common.options.rounded_nonagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "rounded_decagon",
+              "label": "t:common.options.rounded_decagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "star_1",
+              "label": "t:common.options.star_1.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "star_2",
+              "label": "t:common.options.star_2.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "star_3",
+              "label": "t:common.options.star_3.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "star_4",
+              "label": "t:common.options.star_4.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "star_5",
+              "label": "t:common.options.star_5.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "star_6",
+              "label": "t:common.options.star_6.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "abstract_star_1",
+              "label": "t:common.options.abstract_star_1.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "abstract_star_2",
+              "label": "t:common.options.abstract_star_2.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "abstract_star_3",
+              "label": "t:common.options.abstract_star_3.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "scalloped_circle_1",
+              "label": "t:common.options.scalloped_circle_1.label",
+              "group": "t:common.groups.scalloped_circles"
+            },
+            {
+              "value": "scalloped_circle_2",
+              "label": "t:common.options.scalloped_circle_2.label",
+              "group": "t:common.groups.scalloped_circles"
+            },
+            {
+              "value": "scalloped_circle_3",
+              "label": "t:common.options.scalloped_circle_3.label",
+              "group": "t:common.groups.scalloped_circles"
+            },
+            {
+              "value": "scalloped_circle_4",
+              "label": "t:common.options.scalloped_circle_4.label",
+              "group": "t:common.groups.scalloped_circles"
+            },
+            {
+              "value": "scalloped_circle_5",
+              "label": "t:common.options.scalloped_circle_5.label",
+              "group": "t:common.groups.scalloped_circles"
+            },
+            {
+              "value": "scalloped_circle_6",
+              "label": "t:common.options.scalloped_circle_6.label",
+              "group": "t:common.groups.scalloped_circles"
+            },
+            {
+              "value": "parallelogram",
+              "label": "t:common.options.parallelogram.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "squircle",
+              "label": "t:common.options.squircle.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "scalloped_square_1",
+              "label": "t:common.options.scalloped_square_1.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "scalloped_square_2",
+              "label": "t:common.options.scalloped_square_2.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "leaf",
+              "label": "t:common.options.leaf.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "clipped_square",
+              "label": "t:common.options.clipped.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "convex_square",
+              "label": "t:common.options.convex.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "twisted_square",
+              "label": "t:common.options.twisted.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "trapeze",
+              "label": "t:common.options.trapeze.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "pinched",
+              "label": "t:common.options.pinched.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "pixelated",
+              "label": "t:common.options.pixelated.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "overlapped",
+              "label": "t:common.options.overlapped.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "zig_zag",
+              "label": "t:common.options.zig_zag.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "zig_zag_tear",
+              "label": "t:common.options.zig_zag_tear.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "wave_tear",
+              "label": "t:common.options.wave_tear.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "flower",
+              "label": "t:common.options.flower.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "flower_bloom",
+              "label": "t:common.options.flower_bloom.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "concave",
+              "label": "t:common.options.concave.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "flag",
+              "label": "t:common.options.flag.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "abstract_oval",
+              "label": "t:common.options.abstract_oval.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "cross",
+              "label": "t:common.options.cross.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "quatrefoil",
+              "label": "t:common.options.quatrefoil.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "quadrant",
+              "label": "t:common.options.quadrant.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "wind",
+              "label": "t:common.options.wind.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "windmill",
+              "label": "t:common.options.windmill.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "heart",
+              "label": "t:common.options.heart.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "mirrored_pyramids",
+              "label": "t:common.options.mirrored_pyramids.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "plus",
+              "label": "t:common.options.plus.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "double_pill_1",
+              "label": "t:common.options.double_pill_1.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "double_pill_2",
+              "label": "t:common.options.double_pill_2.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "triple_pill_1",
+              "label": "t:common.options.triple_pill_1.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "triple_pill_2",
+              "label": "t:common.options.triple_pill_2.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "crown",
+              "label": "t:common.options.crown.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "stair",
+              "label": "t:common.options.stair.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "pancake_stack",
+              "label": "t:common.options.pancake_stack.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "asterisk",
+              "label": "t:common.options.asterisk.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "overlapping_squares",
+              "label": "t:common.options.overlapping_squares.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "brush_stroke",
+              "label": "t:common.options.brush_stroke.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "blob",
+              "label": "t:common.options.blob.label",
+              "group": "t:common.groups.variable"
+            }
+          ],
+          "default": "default",
+          "info": "Override the section's default image shape for this tile only"
+        }
+      ]
+    },
+    {
+      "type": "background_pattern",
+      "name": "Background Pattern",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "type",
+          "label": "Pattern type",
+          "options": [
+            {
+              "value": "dots",
+              "label": "Dots"
+            },
+            {
+              "value": "grid",
+              "label": "Grid lines"
+            },
+            {
+              "value": "diagonal_lines",
+              "label": "Diagonal lines"
+            }
+          ],
+          "default": "dots"
+        },
+        {
+          "type": "range",
+          "id": "opacity",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "label": "Opacity",
+          "default": 10
+        }
+      ]
+    },
+    {
+      "type": "background_shape",
+      "name": "Background Shape",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "select",
+          "id": "shape",
+          "label": "Shape",
+          "options": [
+            {
+              "value": "circle",
+              "label": "Circle"
+            },
+            {
+              "value": "square",
+              "label": "Square"
+            },
+            {
+              "value": "blob",
+              "label": "Blob"
+            }
+          ],
+          "default": "circle"
+        },
+        {
+          "type": "range",
+          "id": "size",
+          "min": 50,
+          "max": 300,
+          "step": 10,
+          "label": "Size",
+          "default": 150
+        },
+        {
+          "type": "range",
+          "id": "opacity",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "label": "Opacity",
+          "default": 20
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Info Tiles",
+      "blocks": [
+        {
+          "type": "info_tile"
+        },
+        {
+          "type": "info_tile"
+        },
+        {
+          "type": "info_tile"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

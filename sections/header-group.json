@@ -1,0 +1,152 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "header",
+  "name": "Header",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "disabled": true,
+      "settings": {
+        "home_page_only": true,
+        "display": "scrolling_text",
+        "text": "Gratis Versand ab CHF 80",
+        "link": "",
+        "color_scheme": "scheme3",
+        "use_gradient_background": false,
+        "repeat_text": true,
+        "shape_between_text": "flower",
+        "animate_shape_between_text": true,
+        "speed": 10,
+        "direction": ""
+      }
+    },
+    "header": {
+      "type": "header",
+      "blocks": {
+        "feature_desktop_link_XCEhnA": {
+          "type": "feature_desktop_link",
+          "settings": {
+            "button_link": "",
+            "button_label": "Shop Now",
+            "position": "first_item_in_navigation",
+            "button_color": "",
+            "hide_button_shadow": false
+          }
+        }
+      },
+      "block_order": [
+        "feature_desktop_link_XCEhnA"
+      ],
+      "disabled": true,
+      "settings": {
+        "logo": "shopify://shop_images/Kaadu_wordmark_red_RGB.svg",
+        "logo_max_width": 160,
+        "main_linklist": "main-menu",
+        "nested_nav_style": "mega_menu",
+        "showcase_top_level_collections": false,
+        "show_all_navigation_links": false,
+        "showcase_second_level_links": false,
+        "crop": "",
+        "header_layout": "navigation_left_logo_center",
+        "header_show_search": true,
+        "sticky_header": false,
+        "show_icons": false,
+        "enable_overlay_on_homepage": true,
+        "enable_overlay_on_collection_pages": true,
+        "enable_overlay_on_product_pages": true,
+        "overlay_logo": "shopify://shop_images/Kaadu_wordmark_red_RGB.svg",
+        "overlay_color_scheme": "scheme1",
+        "transparent_when_overlaid_and_stuck": true,
+        "overlay_show_separator_border": false,
+        "overlay_first_section_padding_top_desktop": 6,
+        "overlay_first_section_padding_top_mobile": 6,
+        "color_scheme": "scheme1",
+        "active_color_scheme": "",
+        "mobile_main_linklist": "",
+        "sidebar_menu_font_size": "heading-standard",
+        "sidebar_show_footer_menu": false,
+        "sidebar_show_social_icons": false
+      }
+    },
+    "free_shipping_bar_jXrXVB": {
+      "type": "free-shipping-bar",
+      "name": "t:sections.free_shipping_bar.name",
+      "settings": {
+        "display": "static",
+        "color_scheme": "scheme5",
+        "use_gradient_background": false,
+        "show_bottom_border": true,
+        "progress_bar_color": "bg-scheme-accent-2 text-scheme-accent-2-contrast",
+        "show_progress_bar": true,
+        "repeat_text": true,
+        "shape_between_text": "10_point_star",
+        "animate_shape_between_text": true,
+        "speed": 120,
+        "direction": ""
+      }
+    },
+    "hero_logo_with_menu_qqjEtx": {
+      "type": "hero-logo-with-menu",
+      "name": "hero logo with menu",
+      "settings": {
+        "home_page_only": false,
+        "logo": "shopify://shop_images/Kaadu_wordmark_red_RGB.svg",
+        "logo_width_mobile": 45,
+        "logo_width_tablet": 25,
+        "logo_width_desktop": 240,
+        "logo_width_desktop_large": 244,
+        "logo_width_desktop_xlarge": 252,
+        "menu_button_image": "shopify://shop_images/Vector.png",
+        "shop_button_image": "shopify://shop_images/06d3f155e99649c6ad8f552f17b4bec9ac475189.png",
+        "cart_icon_image": "shopify://shop_images/Vector_f1de3305-1aa4-4f1c-9b06-f17b521b7581.png",
+        "menu_item_1_label": "Home",
+        "menu_item_1_link": "",
+        "menu_item_1_hide_on_desktop": false,
+        "menu_item_2_label": "Shop",
+        "menu_item_2_link": "",
+        "menu_item_2_hide_on_desktop": false,
+        "menu_item_3_label": "About",
+        "menu_item_3_link": "",
+        "menu_item_3_hide_on_desktop": false,
+        "menu_item_4_label": "Contact",
+        "menu_item_4_link": "",
+        "menu_item_4_hide_on_desktop": false,
+        "menu_item_5_label": "",
+        "menu_item_5_link": "",
+        "menu_item_5_hide_on_desktop": false,
+        "menu_item_6_label": "",
+        "menu_item_6_link": "",
+        "menu_item_6_hide_on_desktop": false,
+        "menu_item_7_label": "",
+        "menu_item_7_link": "",
+        "menu_item_7_hide_on_desktop": false,
+        "menu_item_8_label": "",
+        "menu_item_8_link": "",
+        "menu_item_8_hide_on_desktop": false,
+        "menu_item_9_label": "",
+        "menu_item_9_link": "",
+        "menu_item_9_hide_on_desktop": false,
+        "menu_item_10_label": "",
+        "menu_item_10_link": "",
+        "menu_item_10_hide_on_desktop": false,
+        "disable_vertical_spacing": false,
+        "color_scheme": "scheme3",
+        "use_gradient_background": false
+      }
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "header",
+    "free_shipping_bar_jXrXVB",
+    "hero_logo_with_menu_qqjEtx"
+  ]
+}

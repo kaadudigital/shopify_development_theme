@@ -1,0 +1,53 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "recipe-banner": {
+      "type": "main-article-recipe-banner",
+      "blocks": {
+        "icons_with_text": {
+          "type": "icons_with_text",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "icons_with_text"
+      ],
+      "settings": {}
+    },
+    "main-recipe": {
+      "type": "main-article-recipe",
+      "blocks": {
+        "ingredients": {
+          "type": "ingredients",
+          "settings": {}
+        },
+        "featured-products": {
+          "type": "featured-products",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "ingredients",
+        "featured-products"
+      ],
+      "settings": {}
+    },
+    "main-recipe-structured-data": {
+      "type": "main-article-recipe-structured-data",
+      "settings": {}
+    }
+  },
+  "order": [
+    "recipe-banner",
+    "main-recipe",
+    "main-recipe-structured-data"
+  ]
+}

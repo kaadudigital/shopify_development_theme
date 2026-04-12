@@ -1,0 +1,177 @@
+{% comment %}theme-check-disable MissingTemplate{% endcomment %}
+{%- liquid
+  if display_on_card
+    assign desktop_sizes_base = 'calc(100vw - 5rem)'
+    assign mobile_sizes_base = 'calc(100vw - 2.5rem)'
+  else
+    assign desktop_sizes_base = '100vw'
+    assign mobile_sizes_base = '100vw'
+  endif
+
+  case image_size
+    when 'third'
+      assign text_width_desktop = 'lg:col-span-8'
+      assign desktop_sizes = 'calc(' | append: desktop_sizes_base | append: ' / 3)'
+
+      if image_position == 'right'
+        assign image_width_desktop = 'lg:col-start-9 lg:col-end-13'
+      else
+        assign image_width_desktop = 'lg:col-span-4'
+      endif
+    when 'half'
+      assign text_width_desktop = 'lg:col-span-6'
+      assign desktop_sizes = 'calc(' | append: desktop_sizes_base | append: ' / 2)'
+
+      if image_position == 'right'
+        assign image_width_desktop = 'lg:col-start-7 lg:col-end-13'
+      else
+        assign image_width_desktop = 'lg:col-span-6'
+      endif
+    when 'three_fifths'
+      assign text_width_desktop = 'lg:col-span-5'
+      assign desktop_sizes = 'calc((' | append: desktop_sizes_base | append: ' / 12) * 7)'
+
+      if image_position == 'right'
+        assign image_width_desktop = 'lg:col-start-6 lg:col-end-13'
+      else
+        assign image_width_desktop = 'lg:col-span-7'
+      endif
+    when 'two_thirds'
+      assign text_width_desktop = 'lg:col-span-4'
+      assign desktop_sizes = 'calc((' | append: desktop_sizes_base | append: ' / 12) * 8)'
+
+      if image_position == 'right'
+        assign image_width_desktop = 'lg:col-start-5 lg:col-end-13'
+      else
+        assign image_width_desktop = 'lg:col-span-8'
+      endif
+  endcase
+
+  assign mobile_sizes = mobile_sizes_base
+
+  assign sizes = '(min-width: 990px) ' | append: desktop_sizes | append: ', ' | append: mobile_sizes
+
+  unless loading
+    assign loading = 'lazy'
+
+    if section.index <= 3
+      assign loading = 'eager'
+    endif
+  endunless
+
+  unless preload
+    assign preload = false
+  endunless
+
+  # Build responsive alignment classes
+  # mobile class is used as-is, desktop class gets lg: prefix
+  assign desktop_text_alignment = text_alignment | replace: 'text-', 'lg:text-'
+
+  # mx-auto / ml-auto logic for mobile
+  if text_alignment_mobile contains 'center'
+    assign mobile_mx = 'mx-auto'
+  elsif text_alignment_mobile contains 'right'
+    assign mobile_mx = 'ml-auto'
+  else
+    assign mobile_mx = ''
+  endif
+
+  # mx-auto / ml-auto logic for desktop
+  if text_alignment contains 'center'
+    assign desktop_mx = 'lg:mx-auto'
+  elsif text_alignment contains 'right'
+    assign desktop_mx = 'lg:ml-auto'
+  else
+    assign desktop_mx = ''
+  endif
+-%}
+
+{%- render 'shape-defs', shape: image_shape, shape_id: section_id, index: index, blob_type: blob_type -%}
+
+<div class="relative z-10 mx-auto max-w-site px-section">
+  <div class=" flex flex-col items-center {% if display_on_card %}card{% endif %}">
+    {% if title != '' %}
+      <div class="mb-5">
+        {% comment %} add custom-display-header to have big customised heading {% endcomment %}
+        <h2 class="inline-heading-rte font-heading {{ text_alignment_mobile }} {{ desktop_text_alignment }}  {{ heading_size }} heading-style custom-display-header {{ settings.heading_drop_shadow_style }} break-words ">
+          {{ title }}
+        </h2>
+      </div>
+    {% endif %}
+    {% if subheading != '' %}
+      <div class="mb-5">
+        {% comment %} add custom-display-header to have big customised heading {% endcomment %}
+        <div class="inline-heading-rte {{ text_alignment_mobile }} {{ desktop_text_alignment }}  custom-body-xlarge richtext-main break-words ">
+          {{ subheading }}
+        </div>
+      </div>
+    {% endif %}
+    <div class="{% if display_on_card %}card__surface p-5  lg:p-10{% endif %} section-content text_alignment  relative z-10 mx-auto mt-10">
+      <div class="grid grid-flow-row-dense grid-cols-1 gap-10 lg:grid-cols-12">
+        <div class="{{ image_width_desktop }}">
+          {%- if image != blank -%}
+            {%- render 'media-image',
+              media: image,
+              shape_id: section_id,
+              shape: image_shape,
+              crop: crop,
+              rotate: rotate_image,
+              is_card: display_on_card,
+              container_id: container_id,
+              disable_media_style: disable_media_style,
+              loading: loading,
+              preload: preload,
+              sizes: sizes
+            -%}
+          {%- else -%}
+            {%- render 'media-image-placeholder',
+              shape_id: section_id,
+              container_id: section_id,
+              shape: image_shape,
+              crop: crop,
+              rotate: rotate_image,
+              is_card: display_on_card,
+              blob_type: blob_type,
+              disable_media_style: disable_media_style
+            -%}
+          {%- endif -%}
+        </div>
+        <div class="flex items-center {{ text_width_desktop }}">
+          <div class="{{ text_alignment_mobile }} {{ desktop_text_alignment }} w-full">
+            {% if richtext_main != '' %}
+              <div class="rte mt-5 max-w-2xl custom-body-xlarge richtext-main {{ mobile_mx }} {{ desktop_mx }}">
+                {{ richtext_main }}
+              </div>
+            {% endif %}
+            <div class="rte mt-5 max-w-2xl custom-body-xlarge {{ mobile_mx }} {{ desktop_mx }}">
+              {{ richtext }}
+            </div>
+
+            {%- if button_link != blank and button_label != '' -%}
+              <div class="mt-5">
+                <a href="{{ button_link }}" class="custom-btn inline-block">
+                  <span class="push-btn__surface custom-btn__surface">{{ button_label }}</span>
+                </a>
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% if conclusion_heading != '' %}
+      <div class="mt-10">
+        {% comment %} add custom-display-header to have big customised heading {% endcomment %}
+        <div class="inline-heading-rte {{ text_alignment_mobile }} {{ desktop_text_alignment }}  custom-body-xlarge richtext-main break-words ">
+          {{ conclusion_heading }}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  .richtext-main {
+     font-size: calc(1em + 2px);
+     text-transform: uppercase;
+   }
+</style>

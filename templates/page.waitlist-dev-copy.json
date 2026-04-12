@@ -1,0 +1,175 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "max_width": "medium",
+        "display_on_card": true,
+        "color_scheme": "",
+        "use_gradient_background": false
+      }
+    },
+    "image_with_text_custom_nmQU4P": {
+      "type": "image-with-text-custom",
+      "blocks": {
+        "shape_divider_VK8CeQ": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "above",
+            "target_section_color_scheme": "scheme3",
+            "style": "circles-3-patterned_1200x67",
+            "flip_horizontal": false,
+            "enable_animation": true,
+            "animation_direction": ""
+          }
+        },
+        "shape_divider_XHc7ti": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "below",
+            "target_section_color_scheme": "scheme2",
+            "style": "circles-3-patterned_1200x67",
+            "flip_horizontal": false,
+            "enable_animation": true,
+            "animation_direction": ""
+          }
+        }
+      },
+      "block_order": [
+        "shape_divider_VK8CeQ",
+        "shape_divider_XHc7ti"
+      ],
+      "custom_css": [
+        "p {color: black;}",
+        "@media (min-width: 990px) {.custom-btn-wrapper, .custom-body-default {margin-top: 28px; }}"
+      ],
+      "name": "image with text custom",
+      "settings": {
+        "display_on_card": false,
+        "image": "shopify://shop_images/Group_18_1.webp",
+        "crop": "",
+        "image_shape": "default",
+        "blob_type": 1,
+        "rotate_image": 0,
+        "image_position": "right",
+        "image_size": "half",
+        "disable_media_style": false,
+        "title": "CRUNCH IN PROGRESS..",
+        "heading_size": "heading-feature",
+        "richtext": "<p></p><p>Unsere Fabrik und Website sind noch im Aufbau. </p><p>Hinter den Kulissen arbeiten wir mit Hochdruck daran, alles für die Produktion vorzubereiten; <strong>fair, transparent und nachhaltig</strong><br/></p>",
+        "text_alignment": "text-center",
+        "mobile_text_alignment": "text-center",
+        "mobile_layout_order": true,
+        "button_link_type": "focus_element",
+        "button_link": "",
+        "focus_element_id": "Email",
+        "button_label": "WAITLIST BEITRETEN",
+        "color_scheme": "",
+        "use_gradient_background": false
+      }
+    },
+    "rich_text_custom_73EGTA": {
+      "type": "rich-text-custom",
+      "custom_css": [
+        ".section-content {padding-bottom: 2rem;}"
+      ],
+      "name": "rich text custom",
+      "settings": {
+        "title": "",
+        "heading_size": "heading-feature",
+        "subtitle": "Pioniere profitieren!",
+        "subtitle_size": "heading-standard",
+        "header_spacing": "mt-1",
+        "rich_text": "<p>Tritt der Waitlist bei und erhalte 50 % <br/>auf deine erste Bestellung nach dem Launch!</p>",
+        "display_on_card": false,
+        "content_width_desktop": "lg:w-2/3",
+        "button_link": "",
+        "button_label": "Shop Now",
+        "color_scheme": "scheme2",
+        "use_gradient_background": false
+      }
+    },
+    "email_input_bUKmWP": {
+      "type": "email-input",
+      "blocks": {
+        "shape_divider_T4zwY7": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "below",
+            "target_section_color_scheme": "scheme3",
+            "style": "curve-inverse-shape_1440x149",
+            "flip_horizontal": false,
+            "enable_animation": false,
+            "animation_direction": ""
+          }
+        }
+      },
+      "block_order": [
+        "shape_divider_T4zwY7"
+      ],
+      "custom_css": [
+        "@media (max-width: 767px) {.custom-image-button {max-width: 25px; height: 45px; } .email-signup-wrapper {gap: 0px; } .email-signup-section {padding-bottom: 48px; }}"
+      ],
+      "name": "Email Signup",
+      "settings": {
+        "background_color": "#ae0000",
+        "padding_top": 0,
+        "padding_bottom": 144,
+        "container_width": 1200,
+        "heading": "",
+        "heading_color": "#ffffff",
+        "heading_size": 32,
+        "placeholder_text": "Email",
+        "input_background": "#ffffff",
+        "input_text_color": "#333333",
+        "placeholder_color": "#999999",
+        "input_border_color": "#000000",
+        "input_focus_border": "#007cba",
+        "input_border_width": 3,
+        "input_border_radius": 30,
+        "input_padding": 12,
+        "input_font_size": 14,
+        "use_image_button": true,
+        "button_image": "shopify://shop_images/Vector.png",
+        "image_fit": "contain",
+        "button_width": 160,
+        "button_height": 60,
+        "image_hue_rotate": 0,
+        "image_saturation": 100,
+        "image_brightness": 100,
+        "button_text": "BEITRETEN",
+        "button_background": "#ae0000",
+        "button_text_color": "#ae0000",
+        "button_border_color": "#22c55e",
+        "button_border_width": 0,
+        "button_border_radius": 25,
+        "button_padding_x": 30,
+        "button_padding_y": 18,
+        "button_font_size": 16,
+        "text_shadow_x": 0,
+        "text_shadow_y": 0,
+        "text_shadow_blur": 0,
+        "text_shadow_color": "#000000",
+        "subtitle": "",
+        "subtitle_color": "#ffffff",
+        "subtitle_size": 14
+      }
+    }
+  },
+  "order": [
+    "main",
+    "image_with_text_custom_nmQU4P",
+    "rich_text_custom_73EGTA",
+    "email_input_bUKmWP"
+  ]
+}

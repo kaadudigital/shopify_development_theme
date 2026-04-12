@@ -1,0 +1,75 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "max_width": "medium",
+        "display_on_card": true,
+        "color_scheme": "",
+        "use_gradient_background": false
+      }
+    },
+    "rich_text_with_image_custom_mbixaQ": {
+      "type": "rich-text-with-image-custom",
+      "blocks": {
+        "shape_divider_HnUbnw": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "above",
+            "target_section_color_scheme": "scheme3",
+            "style": "circles-3-patterned_1200x67",
+            "flip_horizontal": false,
+            "enable_animation": false,
+            "animation_direction": ""
+          }
+        },
+        "shape_divider_M3bmrq": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "below",
+            "target_section_color_scheme": "scheme3",
+            "style": "curve-inverse-shape_1440x149",
+            "flip_horizontal": false,
+            "enable_animation": false,
+            "animation_direction": ""
+          }
+        }
+      },
+      "block_order": [
+        "shape_divider_HnUbnw",
+        "shape_divider_M3bmrq"
+      ],
+      "custom_css": [
+        "p {color: black;}"
+      ],
+      "name": "Rich Text with Image",
+      "settings": {
+        "title": "YOU'RE IN!",
+        "heading_size": "custom-display-header",
+        "rich_text": "<p>Du bist jetzt auf der Liste ganz vorne mit dabei, wenn's losgeht.</p>",
+        "image": "shopify://shop_images/Group_21.webp",
+        "image_width": "full",
+        "display_on_card": false,
+        "content_width_desktop": "lg:w-1/2",
+        "button_link": "",
+        "button_label": "Shop Now",
+        "color_scheme": "scheme1",
+        "use_gradient_background": false
+      }
+    }
+  },
+  "order": [
+    "main",
+    "rich_text_with_image_custom_mbixaQ"
+  ]
+}

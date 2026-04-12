@@ -1,0 +1,295 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {
+            "display_on_card": false,
+            "text_align": "text-left"
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {
+            "display_on_card": false,
+            "show_on_sale_sticker": false,
+            "text_align": "text-left"
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "settings": {
+            "display_on_card": false,
+            "show_label": true
+          }
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "display_on_card": false,
+            "option_style": "drop_down",
+            "full_width_buttons": false,
+            "hide_option_labels": false,
+            "enable_color_swatches": false
+          }
+        },
+        "baf3083e-d14d-435d-bca3-100d6ac490ce": {
+          "type": "buy_buttons",
+          "settings": {
+            "display_on_card": false,
+            "show_price": true,
+            "enable_payment_button": true,
+            "show_pickup_availability": false,
+            "show_gift_card_recipient": false
+          }
+        },
+        "a17e90c4-acc9-4f1d-af84-828ae4cb2289": {
+          "type": "description",
+          "settings": {
+            "display_on_card": false,
+            "truncate_description": false,
+            "text_align": "text-left"
+          }
+        },
+        "icon_row_wrtkzr": {
+          "type": "icon_row",
+          "settings": {
+            "display_on_card": false,
+            "uppercase_text": false,
+            "icon_alignment": "justify-start",
+            "icon_thickness": 1.5,
+            "background_color": "bg-transparent text-scheme-text",
+            "show_border": true,
+            "icon_size": "h-10 w-10",
+            "icon_1": "globe",
+            "text_1": "Row item",
+            "icon_2": "truck",
+            "text_2": "Row item",
+            "icon_3": "washing",
+            "text_3": "Row item",
+            "icon_4": "heart",
+            "text_4": "Row item",
+            "icon_5": "ruler",
+            "text_5": "Row item"
+          }
+        },
+        "collapsible_tab_HcCcxd": {
+          "type": "collapsible_tab",
+          "settings": {
+            "display_on_card": false,
+            "icon": "none",
+            "heading": "Collapsible tab",
+            "uppercase_text": false,
+            "content": "",
+            "page": ""
+          }
+        },
+        "collapsible_tab_frJVcJ": {
+          "type": "collapsible_tab",
+          "settings": {
+            "display_on_card": false,
+            "icon": "none",
+            "heading": "Collapsible tab",
+            "uppercase_text": false,
+            "content": "",
+            "page": ""
+          }
+        },
+        "collapsible_tab_Xz4gce": {
+          "type": "collapsible_tab",
+          "settings": {
+            "display_on_card": false,
+            "icon": "none",
+            "heading": "Collapsible tab",
+            "uppercase_text": false,
+            "content": "",
+            "page": ""
+          }
+        },
+        "spacer_WggyqB": {
+          "type": "spacer",
+          "settings": {
+            "height": 4
+          }
+        },
+        "nutritional_information_P7xGA8": {
+          "type": "nutritional_information",
+          "settings": {
+            "display_on_card": false,
+            "heading": "Nutritional information",
+            "right_label": "Per 100g",
+            "information": "<p>Protein, 13g<br/>Total Carbohydrate, 36g<br/>- Dietary Fiber, 11g<br/>- Sugars, 6g<br/>Total Fat, 1g</p>"
+          }
+        }
+      },
+      "block_order": [
+        "title",
+        "price",
+        "quantity_selector",
+        "variant_picker",
+        "baf3083e-d14d-435d-bca3-100d6ac490ce",
+        "a17e90c4-acc9-4f1d-af84-828ae4cb2289",
+        "icon_row_wrtkzr",
+        "collapsible_tab_HcCcxd",
+        "collapsible_tab_frJVcJ",
+        "collapsible_tab_Xz4gce",
+        "spacer_WggyqB",
+        "nutritional_information_P7xGA8"
+      ],
+      "settings": {
+        "crop": "",
+        "image_shape": "default",
+        "desktop_media_width": "lg:col-span-6_lg:col-span-6",
+        "show_slideshow_arrows_on_desktop": false,
+        "enable_image_zoom": false,
+        "enable_video_looping": true,
+        "autoplay_videos_on_desktop": true,
+        "media_mobile_width": "w-full",
+        "thumbnails_position": "under",
+        "thumbnail_crop": "aspect-w-1 aspect-h-1",
+        "thumbnail_shape": "heptagon",
+        "thumbnail_size": "large",
+        "show_thumbnails_on_mobile": false,
+        "hide_media_shadow": false,
+        "color_scheme": "scheme1",
+        "use_gradient_background": false
+      }
+    },
+    "image_with_highlights_fF4JxP": {
+      "type": "image-with-highlights",
+      "blocks": {
+        "shape_divider_RQXK6i": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "above",
+            "target_section_color_scheme": "scheme1",
+            "style": "circles-1-patterned_1200x16",
+            "flip_horizontal": false,
+            "enable_animation": false,
+            "animation_direction": ""
+          }
+        },
+        "highlight_6Cd9k9": {
+          "type": "highlight",
+          "settings": {
+            "title": "",
+            "text": "Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.",
+            "cta_link": "",
+            "cta_text": "",
+            "override_section_color_scheme": false,
+            "color_scheme": ""
+          }
+        },
+        "highlight_xewKVM": {
+          "type": "highlight",
+          "settings": {
+            "title": "",
+            "text": "Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.",
+            "cta_link": "",
+            "cta_text": "",
+            "override_section_color_scheme": false,
+            "color_scheme": ""
+          }
+        },
+        "highlight_QFzHkR": {
+          "type": "highlight",
+          "settings": {
+            "title": "",
+            "text": "Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.",
+            "cta_link": "",
+            "cta_text": "",
+            "override_section_color_scheme": false,
+            "color_scheme": ""
+          }
+        },
+        "highlight_4364VG": {
+          "type": "highlight",
+          "settings": {
+            "title": "",
+            "text": "Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.",
+            "cta_link": "",
+            "cta_text": "",
+            "override_section_color_scheme": false,
+            "color_scheme": ""
+          }
+        },
+        "highlight_wyRzMT": {
+          "type": "highlight",
+          "settings": {
+            "title": "",
+            "text": "Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.",
+            "cta_link": "",
+            "cta_text": "",
+            "override_section_color_scheme": false,
+            "color_scheme": ""
+          }
+        },
+        "highlight_hz8q9m": {
+          "type": "highlight",
+          "settings": {
+            "title": "",
+            "text": "Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.",
+            "cta_link": "",
+            "cta_text": "",
+            "override_section_color_scheme": false,
+            "color_scheme": ""
+          }
+        }
+      },
+      "block_order": [
+        "shape_divider_RQXK6i",
+        "highlight_6Cd9k9",
+        "highlight_xewKVM",
+        "highlight_QFzHkR",
+        "highlight_4364VG",
+        "highlight_wyRzMT",
+        "highlight_hz8q9m"
+      ],
+      "name": "t:sections.image_with_highlights.name",
+      "settings": {
+        "title": "",
+        "block_alignment_on_desktop": "justify-center",
+        "display_on_card": true,
+        "slideshow_on_mobile": true,
+        "slideshow_focus": "center",
+        "max_width": 500,
+        "crop": "",
+        "image_shape": "default",
+        "blob_type": 1,
+        "rotate_image": 0,
+        "disable_media_style": false,
+        "color_scheme": "scheme1",
+        "use_gradient_background": false
+      }
+    },
+    "related-products": {
+      "type": "related-products",
+      "settings": {
+        "display_on_card": false,
+        "enable_quick_buy": false,
+        "related_products_heading": "You may also like",
+        "max_products": "3",
+        "product_tiles_aspect_ratio": "",
+        "image_shape": "",
+        "color_scheme": "scheme1",
+        "use_gradient_background": false
+      }
+    }
+  },
+  "order": [
+    "main",
+    "image_with_highlights_fF4JxP",
+    "related-products"
+  ]
+}

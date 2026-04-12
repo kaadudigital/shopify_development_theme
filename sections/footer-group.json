@@ -1,0 +1,91 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "footer",
+  "name": "Footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "tagline-and-social-links-0": {
+          "type": "tagline_and_social_links",
+          "settings": {
+            "tagline": "Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.",
+            "show_social_icons": true
+          }
+        },
+        "menus-0": {
+          "type": "menus",
+          "settings": {
+            "show_menu_headings": false,
+            "linklist_1": "main-menu",
+            "linklist_2": "footer",
+            "linklist_3": ""
+          }
+        },
+        "newsletter-0": {
+          "type": "newsletter",
+          "settings": {
+            "newsletter_heading": "Sign up to our newsletter"
+          }
+        }
+      },
+      "block_order": [
+        "tagline-and-social-links-0",
+        "menus-0",
+        "newsletter-0"
+      ],
+      "disabled": true,
+      "settings": {
+        "show_payment_icons": true,
+        "show_country_selector": true,
+        "show_locale_selector": true,
+        "color_scheme": "scheme1",
+        "use_gradient_background": true
+      }
+    },
+    "custom_footer_tiyDdY": {
+      "type": "custom-footer",
+      "blocks": {
+        "shape_divider_aPNFjV": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "above",
+            "target_section_color_scheme": "scheme3",
+            "style": "waves-1-patterned_1200x20",
+            "flip_horizontal": false,
+            "enable_animation": false,
+            "animation_direction": ""
+          }
+        }
+      },
+      "block_order": [
+        "shape_divider_aPNFjV"
+      ],
+      "name": "Custom Footer",
+      "settings": {
+        "email": "HELLO@KAADU.CH",
+        "show_social_icons": true,
+        "instagram_url": "https://www.instagram.com/eatkaadu",
+        "tiktok_url": "https://www.tiktok.com/@eatkaadu",
+        "show_footer_links": true,
+        "link_1_text": "Impressum",
+        "link_1_url": "shopify://policies/contact-information",
+        "link_2_text": "Datenschutz",
+        "link_2_url": "shopify://policies/privacy-policy",
+        "color_scheme": "scheme3"
+      }
+    }
+  },
+  "order": [
+    "footer",
+    "custom_footer_tiyDdY"
+  ]
+}

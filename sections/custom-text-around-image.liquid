@@ -1,0 +1,1352 @@
+{%- comment -%}
+  Custom section: Centered image with 6 richtext blocks in a 2-col × 3-row grid.
+  The image sits below the text blocks via z-index layering.
+  All 6 blocks are full richtext with individually configurable text alignment.
+{%- endcomment -%}
+
+<section
+  class="custom-img-text-section relative overflow-hidden text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %}"
+  data-color-scheme="{{ section.settings.color_scheme }}"
+  id="custom-img-text-{{ section.id }}"
+  style="background-color: {{ section.settings.section_bg_color }}; padding-left: 24px; padding-right: 24px; padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px; --content-height-desktop: {{ section.settings.content_height_desktop }}px; --content-height-mobile: {{ section.settings.content_height_mobile }}px;"
+>
+
+  {%- comment -%} ── Section headings ── {%- endcomment -%}
+  {% if section.settings.title != blank %}
+    <h2
+      class="inline-heading-rte font-heading heading-standard heading-style break-words custom-display-header {{ settings.heading_drop_shadow_style }}"
+      style="display:block; text-align: {{ section.settings.heading_alignment }}; color: {{ section.settings.heading_color }}; font-size: {{ section.settings.heading_size }}px; margin-bottom: 0;"
+    >
+      {{ section.settings.title }}
+    </h2>
+  {% endif %}
+  {% if section.settings.title2 != blank %}
+    <h2
+      class="inline-heading-rte font-heading heading-standard heading-style break-words  custom-display-header {{ settings.heading_drop_shadow_style }}"
+      style="display:block; text-align: {{ section.settings.heading_alignment }}; color: {{ section.settings.heading_color }}; font-size: {{ section.settings.heading_size }}px; margin-bottom: 0;"
+    >
+      {{ section.settings.title2 }}
+    </h2>
+  {% endif %}
+  {% if section.settings.title3 != blank %}
+    <h2
+      class="inline-heading-rte font-heading heading-standard heading-style break-words custom-display-header {{ settings.heading_drop_shadow_style }}"
+      style="display:block; text-align: {{ section.settings.heading_alignment }}; color: {{ section.settings.heading_color }}; font-size: {{ section.settings.heading_size }}px;"
+    >
+      {{ section.settings.title3 }}
+    </h2>
+  {% endif %}
+
+  {% if section.settings.subheading != blank %}
+    <div
+      class="inline-rte mx-auto custom-body-xlarge"
+      style="text-align: {{ section.settings.heading_alignment }}; color: {{ section.settings.subheading_color }}; font-size: {{ section.settings.subheading_size }}px; margin-top: {{ section.settings.subheading_margin_top }}px; max-width: {{ section.settings.subheading_max_width }}px;"
+    >
+      {{ section.settings.subheading }}
+    </div>
+  {% endif %}
+
+  {%- comment -%}
+    ── Content area ──
+    The image is absolutely centred at z-index 0.
+    The 2-col × 3-row grid sits at z-index 1 above it.
+  {%- endcomment -%}
+  <div
+    class="custom-img-text-section__content"
+    style="margin-top: {{ section.settings.content_margin_top }}px;"
+  >
+    {%- comment -%} Spacer that gives the content area its explicit height {%- endcomment -%}
+
+    {%- comment -%} Centered image — z-index 0, behind text {%- endcomment -%}
+    {% if section.settings.main_image != blank %}
+      <div class="custom-img-text-section__image-wrap">
+        <img
+          height=""
+          width=""
+          src="{{ section.settings.main_image | img_url: 'master' }}"
+          alt="{{ section.settings.main_image.alt | escape }}"
+          class="custom-img-text-section__image"
+          style="
+            {% if section.settings.image_dimension_type == 'width' %}
+              width: {{ section.settings.image_width }}px;
+              height: auto;
+            {% else %}
+              height: {{ section.settings.image_height }}px;
+              width: auto;
+            {% endif %}
+            max-width: 100%;
+          "
+          loading="lazy"
+        >
+      </div>
+    {% endif %}
+
+    {%- comment -%} 2-col × 3-row text grid — z-index 1, above image {%- endcomment -%}
+    <div
+      class="custom-img-text-section__grid"
+      style="gap: {{ section.settings.grid_gap }}px; max-width: {{ section.settings.grid_max_width }}px;"
+    >
+      {% for block in section.blocks %}
+        {% if block.type == 'richtext' %}
+          {%- liquid
+            assign offset_desktop_val = block.settings.offset_desktop_px
+            assign offset_mobile_val  = block.settings.offset_mobile_px
+            if block.settings.offset_desktop_dir == 'left'
+              assign offset_desktop_val = offset_desktop_val | times: -1
+            endif
+            if block.settings.offset_mobile_dir == 'left'
+              assign offset_mobile_val = offset_mobile_val | times: -1
+            endif
+          -%}
+          <div
+            class="custom-img-text-section__block"
+            {{ block.shopify_attributes }}
+            style="
+              text-align: {{ block.settings.text_alignment }};
+              --block-offset-desktop: {{ offset_desktop_val }}px;
+              --block-offset-mobile: {{ offset_mobile_val }}px;
+              {% if block.settings.block_bg_color != blank %}
+                background-color: {{ block.settings.block_bg_color }};
+                padding: {{ block.settings.block_padding }}px;
+                border-radius: {{ block.settings.block_border_radius }}px;
+              {% endif %}
+            "
+          >
+            {% if block.settings.heading != blank %}
+              <p
+                style="
+                  color: {{ block.settings.heading_color }};
+                  font-size: {{ block.settings.heading_font_size }}px;
+                  font-weight: {{ block.settings.heading_font_weight }};
+                  font-family: {{ block.settings.heading_font_family }};
+                  line-height: 1.2;
+                  margin: 0 0 6px 0;
+                "
+              >
+                {{ block.settings.heading }}
+              </p>
+            {% endif %}
+
+            {% if block.settings.text != blank %}
+              <div
+                style="
+                  color: {{ block.settings.text_color }};
+                  font-size: {{ block.settings.text_font_size }}px;
+                  line-height: 1.5;
+                "
+              >
+                {{ block.settings.text }}
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+  </div>
+
+  {%- comment -%} ── CTA Button (below content grid) ── {%- endcomment -%}
+  {%- if section.settings.button_label != blank -%}
+    {%- if section.settings.button_link_type == 'url' and section.settings.button_link != blank -%}
+      <div
+        class="custom-img-text-section__btn-wrap"
+        style="justify-content: {{ section.settings.button_alignment }}; margin-top: {{ section.settings.button_margin_top }}px;"
+      >
+        <a href="{{ section.settings.button_link }}">
+          <button
+            class="custom-img-text-section__btn"
+            style="
+              {% if section.settings.button_image != blank %}
+                background-image: url('{{ section.settings.button_image | img_url: 'master' }}');
+                background-color: transparent;
+              {% else %}
+                background-color: {{ section.settings.button_bg_color }};
+                border-radius: {{ section.settings.button_border_radius }}px;
+              {% endif %}
+              background-size: contain;
+              background-position: center;
+              background-repeat: no-repeat;
+            "
+          >
+            <span
+              class="custom-img-text-section__btn-text"
+              style="
+                color: {{ section.settings.button_text_color }};
+                font-family: {{ section.settings.button_font_family }};
+                font-size: {{ section.settings.button_font_size }}px;
+                font-weight: {{ section.settings.button_font_weight }};
+                padding: {{ section.settings.button_padding_tb }}px {{ section.settings.button_padding_lr }}px;
+              "
+            >
+              {{ section.settings.button_label }}
+            </span>
+          </button>
+        </a>
+      </div>
+    {%- elsif section.settings.button_link_type == 'focus_element' and section.settings.focus_element_id != blank -%}
+      <div
+        class="custom-img-text-section__btn-wrap"
+        style="justify-content: {{ section.settings.button_alignment }}; margin-top: {{ section.settings.button_margin_top }}px;"
+      >
+        <button
+          class="custom-img-text-section__btn"
+          onclick="document.getElementById('{{ section.settings.focus_element_id }}')?.focus()"
+          style="
+            {% if section.settings.button_image != blank %}
+              background-image: url('{{ section.settings.button_image | img_url: 'master' }}');
+              background-color: transparent;
+            {% else %}
+              background-color: {{ section.settings.button_bg_color }};
+              border-radius: {{ section.settings.button_border_radius }}px;
+            {% endif %}
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+          "
+        >
+          <span
+            class="custom-img-text-section__btn-text"
+            style="
+              color: {{ section.settings.button_text_color }};
+              font-family: {{ section.settings.button_font_family }};
+              font-size: {{ section.settings.button_font_size }}px;
+              font-weight: {{ section.settings.button_font_weight }};
+              padding: {{ section.settings.button_padding_tb }}px {{ section.settings.button_padding_lr }}px;
+            "
+          >
+            {{ section.settings.button_label }}
+          </span>
+        </button>
+      </div>
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- comment -%} ── Background shapes & patterns ── {%- endcomment -%}
+  {%- liquid
+    for block in section.blocks
+      case block.type
+        when 'background_shape'
+          render 'block-background-shape', block: block
+        when 'background_pattern'
+          render 'block-background-pattern', block: block, scheme: section.settings.color_scheme
+      endcase
+    endfor
+  -%}
+
+</section>
+
+{%- liquid
+  assign stickers = section.blocks | where: 'type', 'sticker'
+  assign shape_dividers = section.blocks | where: 'type', 'shape_divider'
+  for sticker in stickers
+    render 'block-sticker', block: sticker
+  endfor
+  for shape_divider in shape_dividers
+    render 'block-shape-divider', block: shape_divider
+  endfor
+-%}
+
+<style>
+  /* ────────────────────────────────────────────────
+     Content wrapper
+     - starts after the subheading (normal flow)
+     - explicit desktop height so image + grid share
+       the same measured space
+  ──────────────────────────────────────────────── */
+  #custom-img-text-{{ section.id }} .custom-img-text-section__content {
+    position: relative;
+    width: 100%;
+    height: var(--content-height-desktop);
+    /* centre children for the absolute image */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ── Image: centred absolutely inside the content box,
+       z-index 0 — behind the text grid ── */
+  #custom-img-text-{{ section.id }} .custom-img-text-section__image-wrap {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #custom-img-text-{{ section.id }} .custom-img-text-section__image {
+    display: block;
+  }
+
+  /* ── 2-column × 3-row grid
+       z-index 1 — above the image ── */
+  #custom-img-text-{{ section.id }} .custom-img-text-section__grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    width: 100%;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #custom-img-text-{{ section.id }} .custom-img-text-section__block {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transform: translateX(var(--block-offset-desktop, 0px));
+    transition: transform 0s;
+  }
+
+  /* ── Button ── */
+  #custom-img-text-{{ section.id }} .custom-img-text-section__btn-wrap {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  #custom-img-text-{{ section.id }} .custom-img-text-section__btn {
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #custom-img-text-{{ section.id }} .custom-img-text-section__btn:hover {
+
+  }
+
+  /* ── Mobile: single column, centered text, mobile height & mobile offsets ── */
+  @media (max-width: 600px) {
+    #custom-img-text-{{ section.id }} .custom-img-text-section__content {
+      height: var(--content-height-mobile);
+    }
+
+    #custom-img-text-{{ section.id }} .custom-img-text-section__grid {
+      grid-template-columns: 1fr;
+    }
+
+    /* Force all text blocks to center-align on mobile */
+    #custom-img-text-{{ section.id }} .custom-img-text-section__block {
+      text-align: center !important;
+      transform: translateX(var(--block-offset-mobile, 0px));
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Custom text around image",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Headings"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Heading Line 1",
+      "default": "GEFRIERGETROCKNETER"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title2",
+      "label": "Heading Line 2",
+      "default": "GENUSS"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title3",
+      "label": "Heading Line 3"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Colour",
+      "default": "#AE0000"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading Font Size",
+      "min": 16,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "inline_richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Ohne Stress, ohne Masse – dafür mit 100 % Fokus auf Qualität."
+    },
+    {
+      "type": "color",
+      "id": "subheading_color",
+      "label": "Subheading Colour",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "subheading_size",
+      "label": "Subheading Font Size",
+      "min": 10,
+      "max": 36,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "subheading_margin_top",
+      "label": "Subheading Margin Top",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "subheading_max_width",
+      "label": "Subheading Max Width",
+      "min": 200,
+      "max": 1200,
+      "step": 20,
+      "unit": "px",
+      "default": 600
+    },
+    {
+      "type": "header",
+      "content": "Center Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "main_image",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "image_dimension_type",
+      "label": "Control Image Size By",
+      "options": [
+        { "value": "width", "label": "Width (height scales automatically)" },
+        { "value": "height", "label": "Height (width scales automatically)" }
+      ],
+      "default": "width"
+    },
+    {
+      "type": "range",
+      "id": "image_width",
+      "label": "Image Width",
+      "min": 200,
+      "max": 1200,
+      "step": 20,
+      "unit": "px",
+      "default": 500,
+      "info": "Active when 'Control Image Size By' is set to Width"
+    },
+    {
+      "type": "range",
+      "id": "image_height",
+      "label": "Image Height",
+      "min": 100,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "default": 500,
+      "info": "Active when 'Control Image Size By' is set to Height"
+    },
+    {
+      "type": "header",
+      "content": "Section Layout"
+    },
+    {
+      "type": "color",
+      "id": "section_bg_color",
+      "label": "Section Background Colour",
+      "default": "#FFB3D9"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "content_margin_top",
+      "label": "Space Between Subheading and Content",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "content_height_desktop",
+      "label": "Content Area Height — Desktop",
+      "min": 200,
+      "max": 1200,
+      "step": 10,
+      "unit": "px",
+      "default": 600,
+      "info": "Height of the image + text grid area on screens wider than 600 px."
+    },
+    {
+      "type": "range",
+      "id": "content_height_mobile",
+      "label": "Content Area Height — Mobile",
+      "min": 200,
+      "max": 900,
+      "step": 10,
+      "unit": "px",
+      "default": 420,
+      "info": "Height of the image + text grid area on screens 600 px wide and below."
+    },
+    {
+      "type": "header",
+      "content": "Text Grid"
+    },
+    {
+      "type": "range",
+      "id": "grid_max_width",
+      "label": "Grid Max Width",
+      "min": 400,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "default": 1100
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "label": "Grid Gap",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "select",
+      "id": "button_link_type",
+      "label": "Button Action",
+      "options": [
+        { "value": "url", "label": "Go to URL" },
+        { "value": "focus_element", "label": "Focus Element by ID" }
+      ],
+      "default": "url"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "Jetzt Probieren"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button URL"
+    },
+    {
+      "type": "text",
+      "id": "focus_element_id",
+      "label": "Element ID to Focus",
+      "placeholder": "my-element-id",
+      "info": "Enter ID without #. Used only when action is 'Focus Element by ID'."
+    },
+    {
+      "type": "image_picker",
+      "id": "button_image",
+      "label": "Button Background Image",
+      "info": "Replaces solid colour if set (e.g. a shaped PNG)."
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Button Background Colour",
+      "default": "#7CFC00"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button Text Colour",
+      "default": "#AE0000"
+    },
+    {
+      "type": "text",
+      "id": "button_font_family",
+      "label": "Button Font Family",
+      "default": "fagies, sans-serif"
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "label": "Button Font Size",
+      "min": 10,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "select",
+      "id": "button_font_weight",
+      "label": "Button Font Weight",
+      "options": [
+        { "value": "400", "label": "Regular" },
+        { "value": "600", "label": "Semi Bold" },
+        { "value": "700", "label": "Bold" }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "range",
+      "id": "button_padding_tb",
+      "label": "Button Padding Top/Bottom",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "button_padding_lr",
+      "label": "Button Padding Left/Right",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Button Border Radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "button_margin_top",
+      "label": "Button Margin Top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "select",
+      "id": "button_alignment",
+      "label": "Button Alignment",
+      "options": [
+        { "value": "flex-start", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "flex-end", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Colour Scheme"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme1",
+      "label": "Colour Scheme"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_gradient_background",
+      "label": "Use Gradient Background"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "richtext",
+      "name": "Richtext Block",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "heading",
+          "label": "Heading",
+        },
+        {
+          "type": "range",
+          "id": "heading_font_size",
+          "label": "Heading Font Size",
+          "min": 10,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "default": 18
+        },
+        {
+          "type": "select",
+          "id": "heading_font_weight",
+          "label": "Heading Font Weight",
+          "options": [
+            { "value": "400", "label": "Regular" },
+            { "value": "600", "label": "Semi Bold" },
+            { "value": "700", "label": "Bold" },
+            { "value": "800", "label": "Extra Bold" },
+            { "value": "900", "label": "Black" }
+          ],
+          "default": "700"
+        },
+        {
+          "type": "text",
+          "id": "heading_font_family",
+          "label": "Heading Font Family",
+          "default": "inherit",
+          "info": "Use 'inherit' to follow theme font, or enter a custom font name e.g. 'fagies, sans-serif'."
+        },
+        {
+          "type": "color",
+          "id": "heading_color",
+          "label": "Heading Colour",
+          "default": "#AE0000"
+        },
+        {
+          "type": "header",
+          "content": "Body Text"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Body Text",
+          "default": "<p>Use this text to describe a feature or benefit.</p>"
+        },
+        {
+          "type": "range",
+          "id": "text_font_size",
+          "label": "Body Font Size",
+          "min": 10,
+          "max": 36,
+          "step": 1,
+          "unit": "px",
+          "default": 14
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Body Text Colour",
+          "default": "#333333"
+        },
+        {
+          "type": "header",
+          "content": "Alignment"
+        },
+        {
+          "type": "select",
+          "id": "text_alignment",
+          "label": "Text Alignment",
+          "options": [
+            { "value": "left",   "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right",  "label": "Right" }
+          ],
+          "default": "left",
+          "info": "Each block has its own independent alignment."
+        },
+        {
+          "type": "header",
+          "content": "Horizontal Offset — Desktop"
+        },
+        {
+          "type": "select",
+          "id": "offset_desktop_dir",
+          "label": "Offset Direction — Desktop",
+          "options": [
+            { "value": "right", "label": "Right (+)" },
+            { "value": "left",  "label": "Left (−)" }
+          ],
+          "default": "right",
+          "info": "Nudge this block left or right after alignment is applied."
+        },
+        {
+          "type": "range",
+          "id": "offset_desktop_px",
+          "label": "Offset Amount — Desktop",
+          "min": 0,
+          "max": 300,
+          "step": 4,
+          "unit": "px",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Horizontal Offset — Mobile"
+        },
+        {
+          "type": "select",
+          "id": "offset_mobile_dir",
+          "label": "Offset Direction — Mobile",
+          "options": [
+            { "value": "right", "label": "Right (+)" },
+            { "value": "left",  "label": "Left (−)" }
+          ],
+          "default": "right",
+          "info": "Nudge this block left or right on screens 600 px wide and below."
+        },
+        {
+          "type": "range",
+          "id": "offset_mobile_px",
+          "label": "Offset Amount — Mobile",
+          "min": 0,
+          "max": 200,
+          "step": 2,
+          "unit": "px",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Block Background (optional)"
+        },
+        {
+          "type": "color",
+          "id": "block_bg_color",
+          "label": "Background Colour",
+          "info": "Leave blank for no background on this block."
+        },
+        {
+          "type": "range",
+          "id": "block_padding",
+          "label": "Padding",
+          "min": 0,
+          "max": 48,
+          "step": 2,
+          "unit": "px",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "block_border_radius",
+          "label": "Border Radius",
+          "min": 0,
+          "max": 40,
+          "step": 2,
+          "unit": "px",
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "background_pattern",
+      "name": "Background Pattern",
+      "settings": [
+        {
+          "type": "select",
+          "id": "type",
+          "label": "Pattern Type",
+          "options": [
+            { "value": "diagonal_lines", "label": "Diagonal Lines", "group": "Lines" },
+            { "value": "grid", "label": "Grid", "group": "Lines" },
+            { "value": "crosshatch", "label": "Crosshatch", "group": "Lines" },
+            { "value": "zig_zag_lines", "label": "Zig Zag", "group": "Lines" },
+            { "value": "dots", "label": "Dots", "group": "Shapes" },
+            { "value": "polka_dot", "label": "Polka Dot", "group": "Shapes" },
+            { "value": "checkerboard", "label": "Checkerboard", "group": "Geometric" },
+            { "value": "hexagons_geometric", "label": "Hexagons", "group": "Geometric" },
+            { "value": "leaves", "label": "Leaves", "group": "Misc" },
+            { "value": "blobs", "label": "Blobs", "group": "Misc" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "color",
+          "label": "Colour",
+          "default": "text",
+          "options": [
+            { "value": "text", "label": "Text" },
+            { "value": "accent-1", "label": "Accent 1" },
+            { "value": "accent-2", "label": "Accent 2" },
+            { "value": "background", "label": "Background" }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "size",
+          "min": 8,
+          "max": 200,
+          "unit": "px",
+          "label": "Size",
+          "step": 8,
+          "default": 24
+        },
+        {
+          "type": "range",
+          "id": "opacity",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Opacity",
+          "default": 100
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_parallax",
+          "label": "Enable Parallax",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "parallax_speed",
+          "min": 1,
+          "max": 10,
+          "step": 1,
+          "label": "Parallax Speed",
+          "default": 3
+        }
+      ]
+    },
+    {
+      "type": "background_shape",
+      "name": "Background Shape",
+      "settings": [
+        {
+          "type": "select",
+          "id": "shape",
+          "label": "Shape",
+          "default": "circle",
+          "options": [
+            { "value": "square", "label": "Square", "group": "Basic" },
+            { "value": "circle", "label": "Circle", "group": "Basic" },
+            { "value": "oval", "label": "Oval", "group": "Basic" },
+            { "value": "triangle", "label": "Triangle", "group": "Basic" },
+            { "value": "hexagon", "label": "Hexagon", "group": "Polygons" },
+            { "value": "star_1", "label": "Star 1", "group": "Stars" },
+            { "value": "blob", "label": "Blob", "group": "Variable" }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "blob_type",
+          "min": 1,
+          "max": 10,
+          "step": 1,
+          "label": "Blob Type",
+          "default": 1
+        },
+        {
+          "type": "range",
+          "id": "size",
+          "min": 25,
+          "max": 300,
+          "step": 5,
+          "label": "Size",
+          "default": 100
+        },
+        {
+          "type": "range",
+          "id": "opacity",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Opacity",
+          "default": 100
+        },
+        {
+          "type": "range",
+          "id": "blur",
+          "min": 0,
+          "max": 500,
+          "step": 5,
+          "unit": "px",
+          "label": "Blur",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "horizontal_position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Horizontal Position",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "vertical_position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Vertical Position",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "rotate",
+          "min": -90,
+          "max": 90,
+          "step": 2,
+          "unit": "deg",
+          "label": "Rotation",
+          "default": 0
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_parallax",
+          "label": "Enable Parallax",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "parallax_speed",
+          "min": 1,
+          "max": 10,
+          "step": 1,
+          "label": "Parallax Speed",
+          "default": 3
+        },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "default": "scheme1",
+          "label": "Colour Scheme"
+        },
+        {
+          "type": "select",
+          "id": "color",
+          "label": "Shape Colour",
+          "default": "accent-1",
+          "options": [
+            { "value": "text", "label": "Text" },
+            { "value": "accent-1", "label": "Accent 1" },
+            { "value": "accent-2", "label": "Accent 2" },
+            { "value": "card", "label": "Card" },
+            { "value": "background", "label": "Background" },
+            { "value": "gradient", "label": "Gradient" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Sticker",
+      "type": "sticker",
+      "settings": [
+        {
+          "type": "range",
+          "id": "width",
+          "min": 100,
+          "max": 300,
+          "step": 10,
+          "unit": "px",
+          "label": "Width",
+          "default": 150
+        },
+        {
+          "type": "checkbox",
+          "id": "half_width_on_mobile",
+          "label": "Half Width on Mobile",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Sticker"
+        },
+        {
+          "type": "select",
+          "id": "shape",
+          "label": "Shape",
+          "default": "star_1",
+          "options": [
+            { "value": "fit_to_text", "label": "Fit to Text" },
+            { "value": "circle", "label": "Circle" },
+            { "value": "star_1", "label": "Star 1" },
+            { "value": "star_2", "label": "Star 2" },
+            { "value": "hexagon", "label": "Hexagon" },
+            { "value": "ribbon", "label": "Ribbon" },
+            { "value": "ellipse", "label": "Ellipse" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "sticker_font_size",
+          "label": "Font Size",
+          "options": [
+            { "value": "1rem", "label": "XS" },
+            { "value": "1.25rem", "label": "S" },
+            { "value": "1.563rem", "label": "M" },
+            { "value": "1.953rem", "label": "L" },
+            { "value": "2.441rem", "label": "XL" }
+          ],
+          "default": "1.563rem"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Custom Image"
+        },
+        {
+          "type": "range",
+          "id": "horizontal_position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Horizontal Position",
+          "default": 80
+        },
+        {
+          "type": "range",
+          "id": "vertical_position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Vertical Position",
+          "default": 80
+        },
+        {
+          "type": "range",
+          "id": "rotate",
+          "min": -90,
+          "max": 90,
+          "step": 2,
+          "unit": "deg",
+          "label": "Rotation",
+          "default": 0
+        },
+        {
+          "type": "checkbox",
+          "id": "show_sticker_on_mobile",
+          "label": "Show on Mobile",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_sticker_on_desktop",
+          "label": "Show on Desktop",
+          "default": true
+        },
+        {
+          "type": "select",
+          "id": "rotation_animation",
+          "label": "Rotation Animation",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "constantly_rotate", "label": "Constantly Rotate" },
+            { "value": "rotate_when_scrolling", "label": "Rotate on Scroll" }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_parallax",
+          "label": "Enable Parallax",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "parallax_speed",
+          "min": 1,
+          "max": 10,
+          "step": 1,
+          "label": "Parallax Speed",
+          "default": 3
+        },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "default": "scheme1",
+          "label": "Colour Scheme"
+        },
+        {
+          "type": "select",
+          "id": "color",
+          "label": "Background Colour",
+          "default": "bg-scheme-accent-1 text-scheme-accent-1-contrast",
+          "options": [
+            { "value": "bg-scheme-text text-scheme-text-contrast", "label": "Text" },
+            { "value": "bg-scheme-accent-1 text-scheme-accent-1-contrast", "label": "Accent 1" },
+            { "value": "bg-scheme-accent-2 text-scheme-accent-2-contrast", "label": "Accent 2" },
+            { "value": "bg-scheme-card text-scheme-card-text", "label": "Card" },
+            { "value": "bg-scheme-background text-scheme-text", "label": "Background" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Shape Divider",
+      "type": "shape_divider",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "select",
+          "id": "target_section",
+          "label": "Target Section",
+          "default": "above",
+          "options": [
+            { "value": "above", "label": "Section Above" },
+            { "value": "below", "label": "Section Below" }
+          ]
+        },
+        {
+          "type": "color_scheme",
+          "id": "target_section_color_scheme",
+          "default": "scheme1",
+          "label": "Target Section Colour Scheme"
+        },
+        {
+          "type": "select",
+          "id": "style",
+          "label": "Divider Style",
+          "default": "waves-1-patterned_1200x20",
+          "options": [
+            { "value": "waves-1-patterned_1200x20", "label": "Waves 1", "group": "Patterned" },
+            { "value": "waves-2-patterned_1200x43", "label": "Waves 2", "group": "Patterned" },
+            { "value": "zig-zag-1-patterned_1200x21", "label": "Zig Zag", "group": "Patterned" },
+            { "value": "tilt-1-shape_1440x101", "label": "Tilt", "group": "Shape" },
+            { "value": "curve-shape_1440x149", "label": "Curve", "group": "Shape" },
+            { "value": "curve-inverse-shape_1440x149", "label": "Curve Inverse", "group": "Shape" },
+            { "value": "triangle-shape_1400x145", "label": "Triangle", "group": "Shape" },
+            { "value": "clouds-shape_1400x161", "label": "Clouds", "group": "Shape" }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "flip_horizontal",
+          "label": "Flip Horizontal"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_animation",
+          "label": "Enable Animation"
+        },
+        {
+          "type": "select",
+          "id": "animation_direction",
+          "label": "Animation Direction",
+          "options": [
+            { "value": "", "label": "Right to Left" },
+            { "value": "reverse", "label": "Left to Right" }
+          ],
+          "default": ""
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom text around image",
+      "blocks": [
+        {
+          "type": "richtext",
+          "settings": {
+            "heading": "<p>VOLLES AROMA – WEIL REIF GEERNTET </p>",
+            "text": "<p>Weil reif geerntetes Obst intensiver schmeckt.</p>",
+            "text_alignment": "left",
+            "heading_color": "#AE0000"
+          }
+        },
+        {
+          "type": "richtext",
+          "settings": {
+            "heading": "<p>KNUSPRIG, LUFTIG, LEICHT</p>",
+            "text": "<p>Einzigartiger Biss durch schonende Trocknung.</p>",
+            "text_alignment": "right",
+            "heading_color": "#AE0000"
+          }
+        },
+        {
+          "type": "richtext",
+          "settings": {
+            "heading": "<p>100 % FRUCHT – OHNE ZUSÄTZE</p>",
+            "text": "<p>Keine Zusatzstoffe, keine Kompromisse.</p>",
+            "text_alignment": "left",
+            "heading_color": "#AE0000"
+          }
+        },
+        {
+          "type": "richtext",
+          "settings": {
+            "heading": "<p>SCHONENDE TROCKNUNG = MEHR NÄHRSTOFFE</p>",
+            "text": "<p>Vitamine und Mineralstoffe bleiben erhalten.</p>",
+            "text_alignment": "right",
+            "heading_color": "#AE0000"
+          }
+        },
+        {
+          "type": "richtext",
+          "settings": {
+            "heading": "<p>SCHONENDE TROCKNUNG</p>",
+            "text": "<p>Gefriergetrocknet für maximale Qualität.</p>",
+            "text_alignment": "left",
+            "heading_color": "#AE0000"
+          }
+        },
+        {
+          "type": "richtext",
+          "settings": {
+            "heading": "<p>UNPROFITABLE FRÜCHTE GERETTET</p>",
+            "text": "<p>Wir verwerten Früchte, die sonst weggeworfen würden.</p>",
+            "text_alignment": "right",
+            "heading_color": "#AE0000"
+          }
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer", "aside"]
+  }
+}
+{% endschema %}

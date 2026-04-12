@@ -1,0 +1,1019 @@
+{%- liquid
+  assign logo = section.settings.logo | default: settings.logo
+  assign enable_overlay = false
+
+  if enable_overlay
+    assign mobile_offset = section.settings.overlay_offset | times: 0.5
+    assign desktop_offset = section.settings.overlay_offset
+  endif
+
+  case section.location
+    when 'header'
+      assign border_classes = 'border-b-section border-section-border'
+    when 'footer'
+      assign border_classes = 'border-t-section border-section-border'
+  endcase
+
+  # Count menu items from settings
+  assign menu_count = 0
+  for i in (1..10)
+    assign label_key = 'menu_item_' | append: i | append: '_label'
+    assign label = section.settings[label_key]
+    if label != blank
+      assign menu_count = menu_count | plus: 1
+    endif
+  endfor
+-%}
+
+{%- style -%}
+      /* ========================================
+         BUTTON STYLES
+         ======================================== */
+      .custom-menu-button,
+      .custom-shop-button,
+      .custom-cart-button {
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+        border: none;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .custom-menu-button {
+        margin-left: 20px;
+        background-image: url('{{ section.settings.menu_button_image | img_url: 'master' }}');
+        transform: rotate(-3.94deg);
+      }
+
+      .custom-menu-button:hover {
+        transform: rotate(1.2deg);
+      }
+
+      .custom-shop-button {
+        background-image: url('{{ section.settings.shop_button_image | img_url: 'master' }}');
+        transform: rotate(6.14deg);
+      }
+
+      .custom-shop-button:hover,
+      .custom-cart-button:hover {
+        transform: rotate(1deg);
+      }
+
+      .custom-cart-button {
+        background-image: url('{{ section.settings.cart_icon_image | img_url: 'master' }}');
+        transform: rotate(-9.53deg);
+        padding: 24px;
+      }
+
+      .custom-menu-button-text,
+      .custom-shop-button-text {
+        color: #AE0000;
+        font-family: fagies;
+        font-size: 24px;
+        font-weight: 400;
+        padding: 20px 24px;
+      }
+
+      /* Menu button text container for animation */
+    .menu-text-wrapper {
+      position: relative;
+      overflow: hidden;
+      height: 1.2em;
+      display: block;
+      min-width: 80px;
+    }
+
+    .menu-text-wrapper .menu-text,
+    .menu-text-wrapper .close-text {
+      display: block;
+      transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1),
+                  opacity 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+    }
+
+    /* Initial state - MENU visible, CLOSE below */
+    .menu-text-wrapper .close-text {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+    }
+
+    /* Active state - MENU goes up and fades, CLOSE comes in and fades in */
+    .custom-menu-button.active .menu-text {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+
+    .custom-menu-button.active .close-text {
+      transform: translateY(-100%);
+      opacity: 1;
+    }
+
+    /* Ensure CLOSE starts invisible */
+    .menu-text-wrapper .close-text {
+      opacity: 0;
+    }
+
+    /* Ensure MENU starts visible */
+    .menu-text-wrapper .menu-text {
+      opacity: 1;
+    }
+
+      /* ========================================
+         HAMBURGER MENU
+         ======================================== */
+      .hamburger-menu {
+        display: none;
+        flex-direction: column;
+        justify-content: space-around;
+        width: 30px;
+        height: 24px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        z-index: 10;
+        position: relative;
+      }
+
+      .hamburger-menu .line {
+        width: 100%;
+        height: 3px;
+        background-color: rgb(var(--color-scheme-text));
+        transition: all 0.3s ease;
+        border-radius: 2px;
+        position: absolute;
+        left: 0;
+      }
+
+      .hamburger-menu .line:nth-child(1) {
+        top: 0;
+      }
+
+      .hamburger-menu .line:nth-child(2) {
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      .hamburger-menu .line:nth-child(3) {
+        bottom: 0;
+      }
+
+      /* Hamburger to X animation */
+      .hamburger-menu.active .line:nth-child(1) {
+        top: 50%;
+        transform: translateY(-50%) rotate(45deg);
+      }
+
+      .hamburger-menu.active .line:nth-child(2) {
+        opacity: 0;
+      }
+
+      .hamburger-menu.active .line:nth-child(3) {
+        bottom: 50%;
+        transform: translateY(50%) rotate(-45deg);
+      }
+
+      /* ========================================
+         HEADER LAYOUT
+         ======================================== */
+      .adjust-menu-on-overlay {
+        position: relative;
+        z-index: 100000;
+      }
+
+      .header-content-wrapper {
+        display: flex;
+        align-items: center;
+      }
+
+      #{{ section.id }} .header-left {
+        flex: 0 0 auto;
+      }
+
+      #{{ section.id }} .header-right {
+        flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-left: auto;
+      }
+
+      .responsive-logo-container {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      #{{ section.id }} .header-button-wrapper,
+      #{{ section.id }} .header-cart-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      }
+
+      /* ========================================
+         MENU OVERLAY
+         ======================================== */
+      #{{ section.id }} .menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgb(var(--color-scheme-background));
+        z-index: 9999;
+        visibility: hidden;
+        overflow: hidden;
+        clip-path: circle(0% at var(--menu-x, 10%) var(--menu-y, 10%));
+        transition: clip-path 0.8s cubic-bezier(0.76, 0, 0.24, 1), visibility 0s 0.8s;
+      }
+
+      #{{ section.id }} .menu-overlay.active {
+        clip-path: circle(150% at var(--menu-x, 10%) var(--menu-y, 10%));
+        visibility: visible;
+        transition: clip-path 0.8s cubic-bezier(0.76, 0, 0.24, 1), visibility 0s 0s;
+      }
+
+      #{{ section.id }} .menu-content {
+        position: relative;
+        z-index: 5;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem;
+        color: rgb(var(--color-scheme-text));
+      }
+
+      #{{ section.id }} .menu-content nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        text-align: center;
+      }
+
+      #{{ section.id }} .menu-content nav ul li {
+        margin: 1.5rem 0;
+        font-size: 3rem;
+      }
+    /* Menu items - closing animation (top to bottom) */
+    #{{ section.id }} .menu-content nav ul li a {
+      display: block;
+      text-decoration: none;
+      color: rgb(var(--color-scheme-text));
+      transform: translateY(100%) translateZ(0);
+      opacity: 0;
+      transition: transform 0.65s cubic-bezier(0.215, 0.61, 0.355, 1) 0ms,
+                  opacity 0.65s cubic-bezier(0.215, 0.61, 0.355, 1) 0ms;
+      font-family: fagies;
+    }
+
+
+    /* Opening animation (bottom to top) */
+    #{{ section.id }} .menu-overlay.active .menu-content nav ul li a {
+      transform: translateY(0) translateZ(0);
+      opacity: 1;
+    }
+
+    /* Opening delays - bottom to top */
+    {% for i in (1..10) %}
+      #{{ section.id }} .menu-overlay.active .menu-content nav ul li:nth-child({{ i }}) a {
+        transition-delay: calc(({{ menu_count }} - {{ i }}) * 0.11s + 0.3s);
+      }
+    {% endfor %}
+
+    /* Closing delays - top to bottom (reverse) */
+    {% for i in (1..10) %}
+      #{{ section.id }} .menu-content nav ul li:nth-child({{ i }}) a {
+        transition-delay: calc({{ i | minus: 1 }} * 0.08s);
+      }
+    {% endfor %}
+
+      #{{ section.id }} .menu-content a:hover {
+        opacity: 0.7;
+        transform: translateY(0) translateZ(0) scale(1.05);
+        transition: transform 0.3s ease, opacity 0.3s ease;
+      }
+
+      /* Close button */
+      #{{ section.id }} .menu-close-button {
+        position: absolute;
+        top: 2rem;
+        right: 2rem;
+        background: none;
+        border: none;
+        font-size: 2rem;
+        color: rgb(var(--color-scheme-text));
+        cursor: pointer;
+        z-index: 10;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+        opacity: 0;
+      }
+
+      #{{ section.id }} .menu-overlay.active .menu-close-button {
+        opacity: 1;
+        transition-delay: 0.5s;
+      }
+
+      #{{ section.id }} .menu-close-button:hover {
+        transform: rotate(90deg);
+      }
+
+      #{{ section.id }} .section-content-custom-padding {
+        padding: 40px 20px;
+      }
+  /* Dim all items when any item is hovered */
+  #{{ section.id }} .menu-overlay.active .menu-content nav ul:hover li a {
+    opacity: 0.3;
+    transition-delay: 0s;
+  }
+
+  /* Keep hovered item at full opacity */
+  #{{ section.id }} .menu-overlay.active .menu-content nav ul li a:hover {
+    opacity: 1 !important;
+    transform: translateY(0) translateZ(0) scale(1);
+  }
+
+  /* Underline animation */
+  #{{ section.id }} .menu-overlay.active .menu-content nav ul li a {
+    position: relative;
+    display: inline-block;
+  }
+
+  #{{ section.id }} .menu-overlay.active .menu-content nav ul li a::after {
+    content: '';
+    position: absolute;
+    bottom: 6px;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background-color: currentColor;
+    transition: width 0.6s cubic-bezier(0.215, 0.61, 0.355, 1) 0ms;
+  }
+
+  #{{ section.id }} .menu-overlay.active .menu-content nav ul li a:hover::after {
+    width: 100%;
+  }
+      /* ========================================
+         RESPONSIVE STYLES
+         ======================================== */
+
+      /* Mobile (max-width: 767px) */
+      @media (max-width: 767px) {
+        #{{ section.id }} .responsive-logo-container {
+          max-width: {{ section.settings.logo_width_mobile }}% !important;
+        }
+
+
+        #{{ section.id }} .header-right {
+          gap: 0.5rem;
+          display: none;
+        }
+
+        #{{ section.id }} .menu-content nav ul li {
+          font-size: 2rem;
+          margin: 1rem 0;
+        }
+
+        /* Show hamburger, hide custom menu button */
+        .custom-menu-button,
+        .menu-close-button,
+        .custom-menu-button-text {
+          display: none !important;
+        }
+
+        .hamburger-menu {
+          display: flex !important;
+        }
+      }
+
+      /* Tablet (768px - 1023px) */
+      @media (min-width: 768px) and (max-width: 1023px) {
+        #{{ section.id }} .responsive-logo-container {
+          max-width: {{ section.settings.logo_width_tablet }}% !important;
+        }
+
+        #{{ section.id }} .header-cart-icon {
+          width: 50px;
+          height: 50px;
+        }
+
+        #{{ section.id }} .menu-content nav ul li {
+          font-size: 2.5rem;
+        }
+      }
+
+      /* Desktop (1024px - 1439px) */
+      @media (min-width: 1024px) and (max-width: 1439px) {
+        #{{ section.id }} .responsive-logo-container {
+          max-width: {{ section.settings.logo_width_desktop }}px !important;
+        }
+
+        #{{ section.id }} .header-button-wrapper {
+          width: 100px;
+          height: 70px;
+        }
+
+        #{{ section.id }} .header-cart-icon {
+          width: 60px;
+          height: 60px;
+        }
+      }
+
+      /* Large Desktop (1440px - 1999px) */
+      @media (min-width: 1440px) and (max-width: 1999px) {
+        #{{ section.id }} .responsive-logo-container {
+          max-width: {{ section.settings.logo_width_desktop_large }}px !important;
+        }
+      }
+
+      /* XL Desktop (2000px+) */
+      @media (min-width: 2000px) {
+        #{{ section.id }} .responsive-logo-container {
+          max-width: {{ section.settings.logo_width_desktop_xlarge }}px !important;
+        }
+      }
+
+      /* ========================================
+         OVERLAY OFFSET (if enabled)
+         ======================================== */
+      {%- if enable_overlay -%}
+        #{{ section.id }} {
+          --overlay-offset: {{ mobile_offset }}px;
+        }
+
+        @media (min-width: 990px) {
+          #{{ section.id }} {
+            --overlay-offset: {{ desktop_offset }}px;
+          }
+        }
+      {%- endif -%}
+{%- endstyle -%}
+
+{%- if section.settings.home_page_only == false or template.name == 'index' -%}
+  <section
+    id="{{ section.id }}"
+    class="relative bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %} {{ border_classes }}"
+    data-color-scheme="{{ section.settings.color_scheme }}"
+    role="banner"
+  >
+    <div
+      id="menubar-{{ section.id }}"
+      class="adjust-menu-on-overlay"
+      {% if enable_overlay %}
+        style="height: var(--overlay-offset);"
+      {% endif %}
+    >
+      <div class="section-content px-section {% unless section.settings.disable_vertical_spacing %}section-content-custom-padding{% endunless %} {% if enable_overlay %}absolute top-0 left-0 right-0 pointer-events-none z-20{% endif %}">
+        <div class="mx-auto max-w-site header-content-wrapper">
+          {%- comment -%} Left Section - Menu Button / Hamburger {%- endcomment -%}
+          <div class="header-left">
+            <div class="header-button-wrapper" id="menuButton-{{ section.id }}">
+              {%- comment -%} Hamburger Menu (Mobile/Tablet) {%- endcomment -%}
+              <button class="hamburger-menu" aria-label="Open menu">
+                <span class="line"></span>
+                <span class="line"></span>
+                <span class="line"></span>
+              </button>
+
+              {%- comment -%} Custom Menu Button (Desktop) {%- endcomment -%}
+              {%- if section.settings.menu_button_image != blank -%}
+                <button class="custom-menu-button">
+                  <span class="custom-menu-button-text">
+                    <span class="menu-text-wrapper">
+                      <span class="menu-text">MENU</span>
+                      <span class="close-text">CLOSE</span>
+                    </span>
+                  </span>
+                </button>
+              {%- else -%}
+                <div
+                  class="custom-menu-button-text"
+                  style="background-color: #8bc34a; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #c62828; width: 100%; height: 100%;"
+                >
+                  MENU
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+
+          {%- comment -%} Center Section - Logo {%- endcomment -%}
+          {%- if logo != blank -%}
+            <div class="responsive-logo-container">
+              {{
+                logo
+                | image_url: width: 3000
+                | image_tag: class: 'w-full', width: logo.width, alt: logo.alt
+                | default: shop.name, loading: 'eager'
+              }}
+            </div>
+          {%- else -%}
+            <div class="font-heading break-word responsive-logo-container">
+              {{ shop.name }}
+            </div>
+          {%- endif -%}
+
+          {%- comment -%} Right Section - Shop Button and Cart {%- endcomment -%}
+          <div class="header-right">
+            {%- comment -%} Shop Button {%- endcomment -%}
+            {%- if section.settings.shop_button_image != blank -%}
+              <div class="header-button-wrapper">
+                <button class="custom-shop-button">
+                  <span class="custom-shop-button-text">SHOP</span>
+                </button>
+              </div>
+            {%- else -%}
+              <div
+                class="header-button-wrapper"
+                style="background-color: #90caf9; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #c62828;"
+              >
+                SHOP
+              </div>
+            {%- endif -%}
+
+            {%- comment -%} Cart Icon {%- endcomment -%}
+            {%- if section.settings.cart_icon_image != blank -%}
+              <button class="custom-cart-button">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="#c62828">
+                  <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+                </svg>
+              </button>
+            {%- else -%}
+              <div
+                class="header-cart-icon"
+                style="background-color: #c62828; display: flex; align-items: center; justify-content: center;"
+              >
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+                  <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+                </svg>
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} Menu Overlay - Fullscreen {%- endcomment -%}
+    <div class="menu-overlay" id="menuOverlay-{{ section.id }}">
+      <button class="menu-close-button" id="menuClose-{{ section.id }}" aria-label="Close menu">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div id="menuContent-{{ section.id }}" class="menu-content">
+        <nav>
+          <ul>
+            {%- comment -%} Loop through menu items from settings {%- endcomment -%}
+            {%- for i in (1..10) -%}
+              {%- assign label_key = 'menu_item_' | append: i | append: '_label' -%}
+              {%- assign link_key = 'menu_item_' | append: i | append: '_link' -%}
+              {%- assign hide_desktop_key = 'menu_item_' | append: i | append: '_hide_on_desktop' -%}
+
+              {%- assign label = section.settings[label_key] -%}
+              {%- assign link = section.settings[link_key] -%}
+              {%- assign hide_on_desktop = section.settings[hide_desktop_key] -%}
+
+              {%- if label != blank -%}
+                <li class="menu-item-{{ i }}{% if hide_on_desktop %} hide-on-desktop{% endif %}">
+                  <a class="custom-display-header" href="{{ link }}">{{ label }}</a>
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        </nav>
+      </div>
+
+      {%- comment -%} Bottom Animated Cloud {%- endcomment -%}
+      <div class="cloud-footer">
+        <svg
+          width="100%"
+          height="240"
+          viewBox="0 0 2400 240"
+          preserveAspectRatio="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M 0,240 L 0,120 A 60,60 0 0,1 120,120 A 60,60 0 0,1 240,120 A 60,60 0 0,1 360,120 A 60,60 0 0,1 480,120 A 60,60 0 0,1 600,120 A 60,60 0 0,1 720,120 A 60,60 0 0,1 840,120 A 60,60 0 0,1 960,120 A 60,60 0 0,1 1080,120 A 60,60 0 0,1 1200,120 A 60,60 0 0,1 1320,120 A 60,60 0 0,1 1440,120 A 60,60 0 0,1 1560,120 A 60,60 0 0,1 1680,120 A 60,60 0 0,1 1800,120 A 60,60 0 0,1 1920,120 A 60,60 0 0,1 2040,120 A 60,60 0 0,1 2160,120 A 60,60 0 0,1 2280,120 A 60,60 0 0,1 2400,120 L 2400,240 Z" fill="#542A76"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{%- comment -%} Render Background Blocks {%- endcomment -%}
+{%- liquid
+  for block in section.blocks
+    case block.type
+      when 'background_shape'
+        render 'block-background-shape', block: block
+      when 'background_pattern'
+        render 'block-background-pattern', block: block, scheme: section.settings.color_scheme
+    endcase
+  endfor
+
+  assign stickers = section.blocks | where: 'type', 'sticker'
+  assign shape_dividers = section.blocks | where: 'type', 'shape_divider'
+
+  for sticker in stickers
+    render 'block-sticker', block: sticker
+  endfor
+
+  for shape_divider in shape_dividers
+    render 'block-shape-divider', block: shape_divider
+  endfor
+-%}
+
+<script>
+  (function () {
+    const sectionId = '{{ section.id }}';
+    const menuButton = document.getElementById('menuButton-' + sectionId);
+    const menuOverlay = document.getElementById('menuOverlay-' + sectionId);
+    const menuClose = document.getElementById('menuClose-' + sectionId);
+    const hamburger = menuButton.querySelector('.hamburger-menu');
+    const customMenuButton = menuButton.querySelector('.custom-menu-button');
+    const menubarsection = document.getElementById(sectionId);
+    const menuContent = document.getElementById('menuContent-' + sectionId);
+
+    menuContent.style.marginTop = menubarsection.offsetHeight + 'px';
+    let originalOverflow;
+
+    function openMenu() {
+      const buttonRect = menuButton.getBoundingClientRect();
+      const centerX = ((buttonRect.left + buttonRect.right) / 2 / window.innerWidth) * 100;
+      const centerY = ((buttonRect.top + buttonRect.bottom) / 2 / window.innerHeight) * 100;
+
+      menuOverlay.style.setProperty('--menu-x', centerX + '%');
+      menuOverlay.style.setProperty('--menu-y', centerY + '%');
+
+      originalOverflow = document.body.style.overflow;
+      menuOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+
+      // Add active class to hamburger or custom button
+      if (hamburger && window.getComputedStyle(hamburger).display !== 'none') {
+        hamburger.classList.add('active');
+      }
+      if (customMenuButton && window.getComputedStyle(customMenuButton).display !== 'none') {
+        customMenuButton.classList.add('active');
+      }
+    }
+
+    function closeMenu() {
+      menuOverlay.classList.remove('active');
+      document.body.style.overflow = originalOverflow || '';
+
+      // Remove active class from hamburger and custom button
+      if (hamburger) {
+        hamburger.classList.remove('active');
+      }
+      if (customMenuButton) {
+        customMenuButton.classList.remove('active');
+      }
+    }
+
+    if (menuButton && menuOverlay) {
+      menuButton.addEventListener('click', function () {
+        menuOverlay.classList.contains('active') ? closeMenu() : openMenu();
+      });
+
+      if (menuClose) {
+        menuClose.addEventListener('click', closeMenu);
+      }
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && menuOverlay.classList.contains('active')) {
+          closeMenu();
+        }
+      });
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Hero Logo with Menu",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "home_page_only",
+      "label": "Show on homepage only",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Logo Settings"
+    },
+    {
+      "id": "logo",
+      "type": "image_picker",
+      "label": "Logo Image"
+    },
+    {
+      "type": "header",
+      "content": "Responsive Logo Sizes"
+    },
+    {
+      "type": "range",
+      "id": "logo_width_mobile",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Mobile Width",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "logo_width_tablet",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Tablet Width",
+      "default": 30
+    },
+    {
+      "type": "number",
+      "id": "logo_width_desktop",
+      "label": "Small Desktop Width (px)",
+      "default": 300
+    },
+    {
+      "type": "number",
+      "id": "logo_width_desktop_large",
+      "label": "Standard Desktop Width (px)",
+      "default": 350
+    },
+    {
+      "type": "number",
+      "id": "logo_width_desktop_xlarge",
+      "label": "Large Desktop Width (px)",
+      "default": 400
+    },
+    {
+      "type": "header",
+      "content": "Menu Button"
+    },
+    {
+      "type": "image_picker",
+      "id": "menu_button_image",
+      "label": "Menu Button Image"
+    },
+    {
+      "type": "header",
+      "content": "Shop Button"
+    },
+    {
+      "type": "image_picker",
+      "id": "shop_button_image",
+      "label": "Shop Button Image"
+    },
+    {
+      "type": "header",
+      "content": "Cart Icon"
+    },
+    {
+      "type": "image_picker",
+      "id": "cart_icon_image",
+      "label": "Cart Icon Image"
+    },
+    {
+      "type": "header",
+      "content": "Menu Items"
+    },
+    {
+      "type": "text",
+      "id": "menu_item_1_label",
+      "label": "Menu Item 1 - Label",
+      "default": "Home"
+    },
+    {
+      "type": "url",
+      "id": "menu_item_1_link",
+      "label": "Menu Item 1 - Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "menu_item_1_hide_on_desktop",
+      "label": "Menu Item 1 - Hide on Desktop",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "menu_item_2_label",
+      "label": "Menu Item 2 - Label",
+      "default": "Shop"
+    },
+    {
+      "type": "url",
+      "id": "menu_item_2_link",
+      "label": "Menu Item 2 - Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "menu_item_2_hide_on_desktop",
+      "label": "Menu Item 2 - Hide on Desktop",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "menu_item_3_label",
+      "label": "Menu Item 3 - Label",
+      "default": "About"
+    },
+    {
+      "type": "url",
+      "id": "menu_item_3_link",
+      "label": "Menu Item 3 - Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "menu_item_3_hide_on_desktop",
+      "label": "Menu Item 3 - Hide on Desktop",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "menu_item_4_label",
+      "label": "Menu Item 4 - Label",
+      "default": "Contact"
+    },
+    {
+      "type": "url",
+      "id": "menu_item_4_link",
+      "label": "Menu Item 4 - Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "menu_item_4_hide_on_desktop",
+      "label": "Menu Item 4 - Hide on Desktop",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "menu_item_5_label",
+      "label": "Menu Item 5 - Label"
+    },
+    {
+      "type": "url",
+      "id": "menu_item_5_link",
+      "label": "Menu Item 5 - Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "menu_item_5_hide_on_desktop",
+      "label": "Menu Item 5 - Hide on Desktop",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "menu_item_6_label",
+      "label": "Menu Item 6 - Label"
+    },
+    {
+      "type": "url",
+      "id": "menu_item_6_link",
+      "label": "Menu Item 6 - Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "menu_item_6_hide_on_desktop",
+      "label": "Menu Item 6 - Hide on Desktop",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "menu_item_7_label",
+      "label": "Menu Item 7 - Label"
+    },
+    {
+      "type": "url",
+      "id": "menu_item_7_link",
+      "label": "Menu Item 7 - Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "menu_item_7_hide_on_desktop",
+      "label": "Menu Item 7 - Hide on Desktop",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "menu_item_8_label",
+      "label": "Menu Item 8 - Label"
+    },
+    {
+      "type": "url",
+      "id": "menu_item_8_link",
+      "label": "Menu Item 8 - Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "menu_item_8_hide_on_desktop",
+      "label": "Menu Item 8 - Hide on Desktop",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "menu_item_9_label",
+      "label": "Menu Item 9 - Label"
+    },
+    {
+      "type": "url",
+      "id": "menu_item_9_link",
+      "label": "Menu Item 9 - Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "menu_item_9_hide_on_desktop",
+      "label": "Menu Item 9 - Hide on Desktop",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "menu_item_10_label",
+      "label": "Menu Item 10 - Label"
+    },
+    {
+      "type": "url",
+      "id": "menu_item_10_link",
+      "label": "Menu Item 10 - Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "menu_item_10_hide_on_desktop",
+      "label": "Menu Item 10 - Hide on Desktop",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "checkbox",
+      "id": "disable_vertical_spacing",
+      "label": "Disable vertical spacing",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme1",
+      "label": "Color Scheme"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_gradient_background",
+      "label": "Use gradient background"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "background_shape",
+      "name": "Background Shape",
+      "settings": []
+    },
+    {
+      "type": "background_pattern",
+      "name": "Background Pattern",
+      "settings": []
+    },
+    {
+      "type": "sticker",
+      "name": "Sticker",
+      "settings": []
+    },
+    {
+      "type": "shape_divider",
+      "name": "Shape Divider",
+      "settings": []
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Logo with Menu"
+    }
+  ],
+  "enabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}
