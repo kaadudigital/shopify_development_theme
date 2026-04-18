@@ -1,0 +1,404 @@
+{%- liquid
+  assign loading = 'lazy'
+  if section.index <= 3
+    assign loading = 'eager'
+  endif
+  assign star_path = 'M121.033 20.5772C123.249 18.916 125.172 18.1531 126.789 18.6378V18.6387C128.497 19.1526 129.736 20.8799 130.701 23.4962C131.657 26.0883 132.286 29.3918 132.883 32.8096C133.476 36.2063 134.037 39.7156 134.861 42.6446C135.652 45.4549 136.721 47.8752 138.421 49.1241L138.588 49.2413C140.421 50.4758 143.171 50.6034 146.193 50.294C149.242 49.9818 152.719 49.2044 156.094 48.4922C159.489 47.7758 162.779 47.1256 165.519 47.0352C168.202 46.9467 170.186 47.4025 171.277 48.6641L171.381 48.7891C172.458 50.1562 172.457 52.2368 171.714 54.8946C170.977 57.526 169.562 60.5523 168.052 63.6651C166.55 66.7587 164.956 69.936 163.91 72.8116C162.905 75.5732 162.353 78.1873 162.983 80.2364L163.049 80.4327C163.763 82.4657 165.876 84.1881 168.461 85.7432C171.07 87.3133 174.301 88.7914 177.406 90.2745C180.53 91.7669 183.526 93.2642 185.741 94.8897C187.975 96.5293 189.273 98.198 189.273 100C189.273 101.802 187.975 103.472 185.741 105.112C183.526 106.739 180.53 108.237 177.406 109.731C174.302 111.214 171.071 112.692 168.462 114.262C165.958 115.768 163.895 117.43 163.119 119.378L163.049 119.567C162.319 121.645 162.873 124.338 163.91 127.189C164.956 130.064 166.55 133.241 168.052 136.335C169.562 139.448 170.978 142.474 171.714 145.106C172.411 147.597 172.455 149.582 171.57 150.946L171.381 151.211C170.314 152.568 168.289 153.056 165.519 152.965C162.779 152.875 159.489 152.224 156.094 151.508C152.719 150.796 149.242 150.018 146.193 149.706C143.265 149.406 140.593 149.517 138.762 150.647L138.588 150.759C136.791 151.969 135.679 154.454 134.863 157.356C134.04 160.284 133.48 163.794 132.888 167.19C132.291 170.608 131.662 173.912 130.706 176.504C129.771 179.038 128.578 180.738 126.949 181.31L126.79 181.361C125.172 181.847 123.25 181.083 121.033 179.422C118.841 177.779 116.509 175.372 114.117 172.856C111.74 170.355 109.307 167.75 106.95 165.774C104.613 163.816 102.243 162.38 99.9871 162.38C97.7313 162.38 95.3608 163.815 93.0233 165.774C90.6665 167.75 88.2334 170.355 85.8563 172.856C83.4647 175.372 81.132 177.779 78.9402 179.422C76.7234 181.083 74.801 181.847 73.1834 181.361H73.1844C71.4765 180.848 70.237 179.12 69.2723 176.504C68.3165 173.912 67.6875 170.608 67.0906 167.19C66.4974 163.794 65.9365 160.285 65.1121 157.356C64.3211 154.545 63.2522 152.125 61.5526 150.876L61.3856 150.759C59.5519 149.524 56.8019 149.397 53.7801 149.706C50.7315 150.018 47.2544 150.796 43.8797 151.508C40.4843 152.224 37.1947 152.875 34.4539 152.965C31.771 153.053 29.7873 152.598 28.6961 151.336L28.5926 151.211C27.5157 149.844 27.5161 147.763 28.2596 145.106C28.9958 142.474 30.4112 139.448 31.9217 136.335C33.4229 133.241 35.0169 130.064 36.0633 127.189C37.0682 124.427 37.6204 121.813 36.9901 119.764L36.9246 119.567C36.2102 117.534 34.0972 115.812 31.5125 114.257C28.9029 112.687 25.6718 111.209 22.5672 109.726C19.4429 108.233 16.4468 106.736 14.2322 105.11C11.9986 103.471 10.7 101.802 10.7 100C10.7 98.198 11.9986 96.5283 14.2322 94.8878C16.4467 93.2613 19.443 91.7628 22.5672 90.2696C25.6718 88.7857 28.903 87.3068 31.5125 85.7374C34.0163 84.2315 36.0784 82.5699 36.8543 80.6221L36.9246 80.4327C37.6547 78.3556 37.1005 75.6621 36.0633 72.8116C35.017 69.936 33.4229 66.7587 31.9217 63.6651C30.4112 60.5523 28.9958 57.526 28.2596 54.8946C27.5625 52.4029 27.5185 50.4185 28.4031 49.0538L28.5926 48.7891C29.6593 47.4326 31.6841 46.9439 34.4539 47.0352C37.1948 47.1256 40.4843 47.7758 43.8797 48.4922C47.2544 49.2044 50.7315 49.9818 53.7801 50.294C56.7078 50.5938 59.3805 50.4834 61.2117 49.3536L61.3856 49.2413C63.1827 48.031 64.2947 45.5448 65.1102 42.6436C65.9334 39.7148 66.4934 36.2061 67.0858 32.8096C67.6818 29.3917 68.311 26.0882 69.2674 23.4962C70.2026 20.9617 71.3955 19.2614 73.0252 18.6905L73.1834 18.6387C74.801 18.1535 76.7234 18.9156 78.9402 20.5772C81.1321 22.22 83.4646 24.6284 85.8563 27.1446C88.2334 29.6454 90.6665 32.2506 93.0233 34.2256C95.3608 36.1846 97.7313 37.6202 99.9871 37.6202C102.243 37.62 104.613 36.1845 106.95 34.2256C109.307 32.2506 111.74 29.6454 114.117 27.1446C116.509 24.6284 118.841 22.22 121.033 20.5772Z'
+-%}
+
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;overflow:hidden">
+  <defs>
+    <clipPath id="kaadu-star-{{ section.id }}" clipPathUnits="objectBoundingBox">
+      <path transform="scale(0.005,0.005)" d="{{ star_path }}" />
+    </clipPath>
+  </defs>
+</svg>
+
+<section id="kaadu-hero-{{ section.id }}" class="kaadu-hero">
+  <div class="kaadu-hero__inner">
+
+    {%- comment -%} ── Image composition ── {%- endcomment -%}
+    <div class="kaadu-hero__image-col">
+      <div class="kaadu-hero__star-wrap">
+        <div class="kaadu-hero__star-bg" style="clip-path:url(#kaadu-star-{{ section.id }})">
+          {%- if section.settings.background_image != blank -%}
+            {{
+              section.settings.background_image
+              | image_url: width: 800
+              | image_tag:
+                loading: loading,
+                widths: '400,600,800',
+                sizes: '(min-width: 769px) 55vw, 100vw',
+                alt: section.settings.background_image.alt | escape,
+                class: 'kaadu-hero__star-bg-img'
+            }}
+          {%- else -%}
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'kaadu-hero__star-bg-img kaadu-hero__star-bg-img--placeholder' }}
+          {%- endif -%}
+        </div>
+        {%- if section.settings.product_image != blank -%}
+          <div class="kaadu-hero__product-wrap">
+            {{
+              section.settings.product_image
+              | image_url: width: 600
+              | image_tag:
+                loading: loading,
+                widths: '300,500,600',
+                sizes: '(min-width: 769px) 40vw, 85vw',
+                alt: section.settings.product_image.alt | escape,
+                class: 'kaadu-hero__product-img'
+            }}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- comment -%} ── Content column ── {%- endcomment -%}
+    <div class="kaadu-hero__content-col">
+      {%- if section.settings.eyebrow_text != blank -%}
+        <p class="kaadu-hero__eyebrow">{{ section.settings.eyebrow_text | escape }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.title != blank -%}
+        <h2 class="kaadu-hero__heading">{{ section.settings.title }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.richtext != blank -%}
+        <div class="kaadu-hero__body rte">{{ section.settings.richtext }}</div>
+      {%- endif -%}
+
+      <div class="kaadu-hero__buttons">
+        {%- if section.settings.button1_label != blank -%}
+          <a
+            href="{{ section.settings.button1_link | default: '#' }}"
+            class="kaadu-hero__btn-shape"
+            {%- if section.settings.button1_shape_image != blank -%}
+              style="background-image:url('{{ section.settings.button1_shape_image | image_url: width: 600 }}')"
+            {%- endif -%}
+          >
+            {{- section.settings.button1_label | escape -}}
+          </a>
+        {%- endif -%}
+
+        {%- if section.settings.button2_label != blank -%}
+          <a href="{{ section.settings.button2_link | default: '#' }}" class="kaadu-hero__btn-pill">
+            {{- section.settings.button2_label | escape -}}
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  /* ── kaadu-hero ── */
+  #kaadu-hero-{{ section.id }} {
+    background-color: var(--color-brand-pink, #ffc5ff);
+    width: 100%;
+    overflow: hidden;
+    padding: 32px 20px 40px;
+  }
+
+  #kaadu-hero-{{ section.id }} .kaadu-hero__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+  }
+
+  /* Image column */
+  #kaadu-hero-{{ section.id }} .kaadu-hero__image-col {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  #kaadu-hero-{{ section.id }} .kaadu-hero__star-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+  }
+
+  #kaadu-hero-{{ section.id }} .kaadu-hero__star-bg {
+    position: absolute;
+    inset: 0;
+  }
+
+  #kaadu-hero-{{ section.id }} .kaadu-hero__star-bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  #kaadu-hero-{{ section.id }} .kaadu-hero__star-bg-img--placeholder {
+    background-color: var(--color-brand-lime, #acff64);
+  }
+
+  #kaadu-hero-{{ section.id }} .kaadu-hero__product-wrap {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #kaadu-hero-{{ section.id }} .kaadu-hero__product-img {
+    width: 88%;
+    height: 88%;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 8px 20px rgba(0,0,0,0.22));
+  }
+
+  /* Content column */
+  #kaadu-hero-{{ section.id }} .kaadu-hero__content-col {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+  }
+
+  #kaadu-hero-{{ section.id }} .kaadu-hero__eyebrow {
+    font-family: var(--font-heading, 'Banter Grotesk', Helvetica, sans-serif);
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-ink, #201920);
+    margin: 0;
+  }
+
+  #kaadu-hero-{{ section.id }} .kaadu-hero__heading {
+    font-family: var(--font-display, 'Fagies', Helvetica, sans-serif);
+    font-weight: 400;
+    font-size: 48px;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--color-brand-red, #ae0000);
+    margin: 0;
+    word-break: break-word;
+  }
+
+  #kaadu-hero-{{ section.id }} .kaadu-hero__body {
+    font-family: var(--font-body, 'Banter Grotesk', Helvetica, sans-serif);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--color-ink, #201920);
+    margin: 0;
+    max-width: 480px;
+  }
+
+  #kaadu-hero-{{ section.id }} .kaadu-hero__body p {
+    margin: 0 0 8px;
+  }
+
+  #kaadu-hero-{{ section.id }} .kaadu-hero__body p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Buttons */
+  #kaadu-hero-{{ section.id }} .kaadu-hero__buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    margin-top: 4px;
+  }
+
+  /* Lime shape button */
+  #kaadu-hero-{{ section.id }} .kaadu-hero__btn-shape {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 53px;
+    width: 100%;
+    padding: 14px 24px;
+    background-color: var(--color-brand-lime, #acff64);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
+    border-radius: 4px;
+    font-family: var(--font-heading, 'Banter Grotesk', Helvetica, sans-serif);
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1.5;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-brand-purple, #542a76);
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    transition: filter 0.2s ease-out, transform 0.2s ease-out;
+  }
+
+  #kaadu-hero-{{ section.id }} .kaadu-hero__btn-shape:hover {
+    filter: brightness(0.95);
+    transform: translateY(-2px);
+  }
+
+  /* Pill button */
+  #kaadu-hero-{{ section.id }} .kaadu-hero__btn-pill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    width: 100%;
+    padding: 12px 28px;
+    background-color: var(--color-offwhite, #fffff5);
+    border: 2px solid var(--color-ink, #201920);
+    border-radius: 30px;
+    font-family: var(--font-heading, 'Banter Grotesk', Helvetica, sans-serif);
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1.5;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-ink, #201920);
+    text-decoration: none;
+    box-shadow: 0 4px 4px rgba(0,0,0,0.25);
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+  }
+
+  #kaadu-hero-{{ section.id }} .kaadu-hero__btn-pill:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0,0,0,0.3);
+  }
+
+  /* ── Desktop ── */
+  @media (min-width: 769px) {
+    #kaadu-hero-{{ section.id }} {
+      padding: 64px 48px;
+    }
+
+    #kaadu-hero-{{ section.id }} .kaadu-hero__inner {
+      flex-direction: row;
+      align-items: center;
+      gap: 56px;
+    }
+
+    #kaadu-hero-{{ section.id }} .kaadu-hero__image-col {
+      flex: 0 0 55%;
+      max-width: 55%;
+    }
+
+    #kaadu-hero-{{ section.id }} .kaadu-hero__content-col {
+      flex: 1 1 0;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    #kaadu-hero-{{ section.id }} .kaadu-hero__heading {
+      font-size: 72px;
+    }
+
+    #kaadu-hero-{{ section.id }} .kaadu-hero__body {
+      font-size: 18px;
+      max-width: none;
+    }
+
+    #kaadu-hero-{{ section.id }} .kaadu-hero__buttons {
+      flex-direction: row;
+      gap: 16px;
+    }
+
+    #kaadu-hero-{{ section.id }} .kaadu-hero__btn-shape,
+    #kaadu-hero-{{ section.id }} .kaadu-hero__btn-pill {
+      flex: 1;
+      font-size: 18px;
+      width: auto;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Kaadu Hero",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow_text",
+      "label": "Eyebrow text",
+      "placeholder": "JUSTICE NEVER TASTED SO SWEET"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Heading",
+      "default": "100% FRUCHT<br>100% FAIR"
+    },
+    {
+      "type": "richtext",
+      "id": "richtext",
+      "label": "Body text"
+    },
+    {
+      "type": "header",
+      "content": "Images"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Star background photo",
+      "info": "Photo clipped inside the star shape"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_image",
+      "label": "Product image",
+      "info": "Overlaid on top of the star"
+    },
+    {
+      "type": "header",
+      "content": "Primary button (lime shape)"
+    },
+    {
+      "type": "text",
+      "id": "button1_label",
+      "label": "Label",
+      "default": "PROBIERPAKET BESTELLEN"
+    },
+    {
+      "type": "url",
+      "id": "button1_link",
+      "label": "Link"
+    },
+    {
+      "type": "image_picker",
+      "id": "button1_shape_image",
+      "label": "Shape background image",
+      "info": "Upload the lime wavy/jagged shape asset. Falls back to solid lime if empty."
+    },
+    {
+      "type": "header",
+      "content": "Secondary button (pill)"
+    },
+    {
+      "type": "text",
+      "id": "button2_label",
+      "label": "Label",
+      "default": "SHOP ÖFFNEN"
+    },
+    {
+      "type": "url",
+      "id": "button2_link",
+      "label": "Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kaadu Hero"
+    }
+  ]
+}
+{% endschema %}

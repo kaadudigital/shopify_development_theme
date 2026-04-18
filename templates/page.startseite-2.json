@@ -19,57 +19,19 @@
         "use_gradient_background": false
       }
     },
-    "image_with_text_custom_nmQU4P": {
-      "type": "image-with-text-custom",
-      "blocks": {
-        "shape_divider_VK8CeQ": {
-          "type": "shape_divider",
-          "settings": {
-            "target_section": "above",
-            "target_section_color_scheme": "scheme3",
-            "style": "circles-3-patterned_1200x67",
-            "flip_horizontal": false,
-            "enable_animation": true,
-            "animation_direction": ""
-          }
-        }
-      },
-      "block_order": [
-        "shape_divider_VK8CeQ"
-      ],
-      "custom_css": [
-        "p {color: black;}",
-        "@media (min-width: 990px) {.custom-btn-wrapper, .custom-body-default {margin-top: 28px; }}"
-      ],
-      "name": "image with text custom",
+    "kaadu_hero_nmQU4P": {
+      "type": "kaadu-hero",
+      "name": "Kaadu Hero",
       "settings": {
-        "display_on_card": false,
-        "image": "shopify://shop_images/Adobe_Express_-_file.png",
-        "crop": "",
-        "image_shape": "default",
-        "blob_type": 1,
-        "rotate_image": 0,
-        "image_position": "left",
-        "image_size": "half",
-        "disable_media_style": false,
+        "eyebrow_text": "JUSTICE NEVER TASTED SO SWEET",
         "title": "Snack like you give a damn:",
-        "heading_size": "heading-feature",
-        "richtext": "<p><strong>100% Frucht. 0% Ausbeutung.</strong></p><p>Gefriergetrocknete Früchte; fair produziert, in der Ursprungsgemeinde verarbeitet, radikal transparent.<br/><br/></p>",
-        "text_alignment": "text-center",
-        "mobile_text_alignment": "text-center",
-        "mobile_layout_order": false,
-        "button_link_type": "url",
-        "button_link": "shopify://pages/contact",
-        "focus_element_id": "",
-        "button_label": "SHOP OFFNEN",
-        "button2_link_type": "url",
-        "button2_link": "shopify://products/bananen-crunchys",
-        "focus_element2_id": "",
-        "button2_label": "JETZT PROBIEREN",
-        "button2_image": "shopify://shop_images/Vector_1.png",
-        "button2_padding_topbottom": 40,
-        "color_scheme": "",
-        "use_gradient_background": false
+        "richtext": "<p><strong>100% Frucht. 0% Ausbeutung.</strong></p><p>Gefriergetrocknete Früchte – fair produziert, in der Ursprungsgemeinde verarbeitet, radikal transparent.</p>",
+        "product_image": "shopify://shop_images/Adobe_Express_-_file.png",
+        "button1_label": "JETZT PROBIEREN",
+        "button1_link": "shopify://products/bananen-crunchys",
+        "button1_shape_image": "shopify://shop_images/Vector_1.png",
+        "button2_label": "SHOP ÖFFNEN",
+        "button2_link": "shopify://pages/contact"
       }
     },
     "scrolling_text_j9kYtA": {
@@ -695,7 +657,7 @@
   },
   "order": [
     "main",
-    "image_with_text_custom_nmQU4P",
+    "kaadu_hero_nmQU4P",
     "scrolling_text_j9kYtA",
     "custom_feature_infotile_ejghiA",
     "custom_image_section_anwQpJ",
