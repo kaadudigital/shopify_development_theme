@@ -85,13 +85,10 @@
       <div class="grid grid-flow-row-dense grid-cols-1 gap-4 lg:grid-cols-12 {% if image_size == 'half' and image_position == 'right' %}reverse-flex-half{% elsif image_size == 'half' %}normal-flex-half{% endif %}">
         {%- comment -%} Mobile Layout when mobile_layout_order is enabled {%- endcomment -%}
         {%- if mobile_layout_order -%}
-          {%- comment -%} Mobile: Eyebrow + Heading first {%- endcomment -%}
-          <div class="mx-auto col-span-1 lg:hidden {{ mobile_heading_order }}">
-            {%- if eyebrow_text != blank -%}
-              <p class="custom-eyebrow-text {{ combined_text_alignment }}">{{ eyebrow_text }}</p>
-            {%- endif -%}
+          {%- comment -%} Mobile: Heading first {%- endcomment -%}
+          <div style="margin: auto;" class="col-span-1 lg:hidden {{ mobile_heading_order }}">
             {% if title != '' %}
-              <h2 class="inline-heading-rte font-subheading {{ heading_size }} heading-style {{ settings.heading_drop_shadow_style }} break-words {{ combined_text_alignment }} custom-display-header">
+              <h2 class="inline-heading-rte font-subheading {{ heading_size }} heading-style {{ settings.heading_drop_shadow_style }} break-words {{ combined_text_alignment }} custom-section-headline custom-display-header ">
                 {{ title }}
               </h2>
             {% endif %}
@@ -99,7 +96,8 @@
 
           {%- comment -%} Image column - responsive to both mobile order and desktop position {%- endcomment -%}
           <div
-            class="image-with-text-custom-image-wrapper mx-auto lg:mx-0 {{ image_width_desktop }} {{ mobile_image_order }}"
+            style="max-width: 600px; max-height: 660px; "
+            class=" mx-auto lg:mx-0  {{ image_width_desktop }} {{ mobile_image_order }}"
           >
             {%- if image != blank -%}
               {%- render 'media-image',
@@ -132,26 +130,25 @@
           {%- comment -%} Text content column {%- endcomment -%}
           <div class="flex items-center {{ text_width_desktop }} {% if image_size == 'half'%}min-width-on-lg-screen{% endif %}">
             <div class="w-full center-flex-column-custom">
-              {%- comment -%} Desktop: Eyebrow + Heading shown here {%- endcomment -%}
-              <div class="mx-auto hidden lg:block">
-                {%- if eyebrow_text != blank -%}
-                  <p class="custom-eyebrow-text {{ combined_text_alignment }}">{{ eyebrow_text }}</p>
-                {%- endif -%}
+              {%- comment -%} Desktop: Heading shown here {%- endcomment -%}
+              <div style="margin: auto;" class="hidden lg:block">
                 {% if title != '' %}
-                  <h2 class="inline-heading-rte font-subheading {{ heading_size }} heading-style {{ settings.heading_drop_shadow_style }} break-words {{ combined_text_alignment }} custom-display-header">
+                  <h2 class="inline-heading-rte font-subheading {{ heading_size }} heading-style {{ settings.heading_drop_shadow_style }} break-words {{ combined_text_alignment }} custom-section-headline custom-display-header">
                     {{ title }}
                   </h2>
                 {% endif %}
               </div>
 
-              <div class="rte max-w-2xl {{ mobile_text_order }} {{ combined_text_alignment }} lg:mt-6 mt-3 custom-body-large">
+              {%- comment -%} Mobile: Text content {%- endcomment -%}
+              {% comment %} <div class="rte mt-5 max-w-2xl {{ combined_text_alignment }} {{ mobile_text_order }} {% if text_alignment contains 'center' %}lg:mx-auto{% elsif text_alignment contains 'right' %}lg:ml-auto{% endif %} {% if mobile_text_alignment contains 'center' %}mx-auto lg:mx-0{% elsif mobile_text_alignment contains 'right' %}ml-auto lg:ml-0{% endif %}"> {% endcomment %}
+              <div class="rte    max-w-2xl {{ mobile_text_order }} {{ combined_text_alignment }} lg:mt-6 mt-3 custom-body-xlarge">
                 {{ richtext }}
               </div>
-              <div class="mt-5 flex items-center gap-4 custom-image-with-text-button-wrapper {{ mobile_button_order }} {{ combined_text_alignment }} lg:mt-8">
+              <div class=" mt-5 flex items-center custom-image-with-text-button-wrapper {{ mobile_button_order }} {{ combined_text_alignment }} lgmt-8  ">
                 {%- if button2_link_type == 'url' and button2_link != blank and button2_label != '' -%}
-                  <div class="flex-1">
-                    <a href="{{ button2_link }}" class="inline-block w-full">
-                      <button class="custom-shape-button w-full">
+                  <div class="mt-5">
+                    <a href="{{ button2_link }}">
+                      <button class="custom-shape-button">
                         <span class="custom-shape-button-text">
                           {{ button2_label }}
                         </span>
@@ -160,10 +157,10 @@
                   </div>
                 {%- endif -%}
                 {%- if button2_link_type == 'focus_element' and focus_element2_id != blank -%}
-                  <div class="flex-1">
+                  <div class=" mt-5 lg:mt-6 custom-btn-wrapper">
                     <button
-                      onclick="document.getElementById('{{focus_element2_id}}')?.focus()"
-                      class="w-full custom-btn custom-shape-button"
+                      onclick="console.log('Focus Element ID: {{ focus_element2_id }}'); document.getElementById('{{focus_element2_id}}')?.focus()"
+                      class="inline-block custom-btn custom-shape-button"
                     >
                       <span class="custom-shape-button-text">
                         {{ button2_label }}
@@ -172,19 +169,17 @@
                   </div>
                 {%- endif -%}
                 {%- if button_link_type == 'url' and button_link != blank and button_label != '' -%}
-                  <div class="flex-1">
-                    <a href="{{ button_link }}" class="inline-block w-full">
-                      <button class="custom-cat push-btn custom-btn">
-                        <span class="push-btn__surface custom-btn__surface custom-button-text">{{ button_label }}</span>
-                      </button>
+                  <div class="mt-5">
+                    <a href="{{ button_link }}" class=" inline-block custom-btn">
+                      <span class="push-btn__surface custom-btn__surface">{{ button_label }}</span>
                     </a>
                   </div>
                 {%- endif -%}
                 {%- if button_link_type == 'focus_element' and focus_element_id != blank -%}
-                  <div class="flex-1">
+                  <div class=" mt-5 lg:mt-6 custom-btn-wrapper">
                     <button
-                      onclick="document.getElementById('{{focus_element_id}}')?.focus()"
-                      class="w-full custom-btn custom-cat push-btn"
+                      onclick="console.log('Focus Element ID: {{ focus_element_id }}'); document.getElementById('{{focus_element_id}}')?.focus()"
+                      class="inline-block custom-btn"
                     >
                       <span class="push-btn__surface custom-btn__surface custom-button-text">{{ button_label }}</span>
                     </button>
@@ -196,7 +191,7 @@
 
         {%- else -%}
           {%- comment -%} Default layout when mobile_layout_order is disabled {%- endcomment -%}
-          <div class="image-with-text-custom-image-wrapper {{ image_width_desktop }}">
+          <div style="max-width: 600px; max-height: 660px; " class="{{ image_width_desktop }}">
             {%- if image != blank -%}
               {%- render 'media-image',
                 media: image,
@@ -225,26 +220,24 @@
             {%- endif -%}
           </div>
 
-          <div class="flex items-center {{ text_width_desktop }} {% if image_size == 'half'%}min-width-on-lg-screen{% endif %}">
-            <div class="mx-auto w-full center-flex-column-custom">
-              {%- if eyebrow_text != blank -%}
-                <p class="custom-eyebrow-text {{ combined_text_alignment }}">{{ eyebrow_text }}</p>
-              {%- endif -%}
+          <div class="flex items-center {{ text_width_desktop }} {% if image_size == 'half'%}min-width-on-lg-screen{% endif %} ">
+            <div style="margin: auto;" class="w-full center-flex-column-custom ">
               {% if title != '' %}
-                <h2 class="inline-heading-rte font-subheading {{ heading_size }} heading-style {{ settings.heading_drop_shadow_style }} break-words {{ combined_text_alignment }} custom-display-header">
+                <h2 class="inline-heading-rte font-subheading {{ heading_size }} heading-style {{ settings.heading_drop_shadow_style }} break-words {{ combined_text_alignment }} custom-section-headline custom-display-header ">
                   {{ title }}
                 </h2>
               {% endif %}
 
-              <div class="rte max-w-2xl {{ combined_text_alignment }} lg:mt-6 mt-3 custom-body-large">
+              {% comment %} <div class="rte mt-5 max-w-2xl {{ combined_text_alignment }} {% if text_alignment contains 'center' %}lg:mx-auto{% elsif text_alignment contains 'right' %}lg:ml-auto{% endif %} {% if mobile_text_alignment contains 'center' %}mx-auto lg:mx-0{% elsif mobile_text_alignment contains 'right' %}ml-auto lg:ml-0{% endif %}"> {% endcomment %}
+              <div class="rte   max-w-2xl {{ combined_text_alignment }} lg:mt-6 mt-3 custom-body-xlarge ">
                 {{ richtext }}
               </div>
 
-              <div class="mt-5 flex items-center gap-4 custom-image-with-text-button-wrapper {{ combined_text_alignment }} lg:mt-8">
-                {%- if button2_link_type == 'url' and button2_link != blank and button2_label != '' -%}
-                  <div class="flex-1">
-                    <a href="{{ button2_link }}" class="inline-block w-full">
-                      <button class="custom-shape-button w-full">
+              <div class=" mt-5 flex  items-center custom-image-with-text-button-wrapper {{ combined_text_alignment }} lgmt-8  ">
+                 {%- if button2_link_type == 'url' and button2_link != blank and button2_label != '' -%}
+                  <div class="mt-5">
+                    <a href="{{ button2_link }}">
+                      <button class="custom-shape-button">
                         <span class="custom-shape-button-text">
                           {{ button2_label }}
                         </span>
@@ -253,10 +246,10 @@
                   </div>
                 {%- endif -%}
                 {%- if button2_link_type == 'focus_element' and focus_element2_id != blank -%}
-                  <div class="flex-1">
+                  <div class=" mt-5 lg:mt-6 custom-btn-wrapper">
                     <button
-                      onclick="document.getElementById('{{focus_element2_id}}')?.focus()"
-                      class="w-full custom-btn custom-shape-button"
+                      onclick="console.log('Focus Element ID: {{ focus_element2_id }}'); document.getElementById('{{focus_element2_id}}')?.focus()"
+                      class="inline-block custom-btn custom-shape-button"
                     >
                       <span class="custom-shape-button-text">
                         {{ button2_label }}
@@ -265,19 +258,17 @@
                   </div>
                 {%- endif -%}
                 {%- if button_link_type == 'url' and button_link != blank and button_label != '' -%}
-                  <div class="flex-1">
-                    <a href="{{ button_link }}" class="inline-block w-full">
-                      <button class="custom-cat push-btn custom-btn">
-                        <span class="push-btn__surface custom-btn__surface custom-button-text">{{ button_label }}</span>
-                      </button>
+                  <div class="mt-5">
+                    <a href="{{ button_link }}" class=" inline-block custom-btn">
+                      <span class="push-btn__surface custom-btn__surface">{{ button_label }}</span>
                     </a>
                   </div>
                 {%- endif -%}
                 {%- if button_link_type == 'focus_element' and focus_element_id != blank -%}
-                  <div class="flex-1">
+                  <div class=" mt-5 lg:mt-6 custom-btn-wrapper">
                     <button
-                      onclick="document.getElementById('{{focus_element_id}}')?.focus()"
-                      class="w-full custom-btn custom-cat push-btn"
+                      onclick="console.log('Focus Element ID: {{ focus_element_id }}'); document.getElementById('{{focus_element_id}}')?.focus()"
+                      class="inline-block custom-btn"
                     >
                       <span class="push-btn__surface custom-btn__surface custom-button-text">{{ button_label }}</span>
                     </button>
@@ -292,126 +283,42 @@
   </div>
 </div>
 <style>
-    /* Eyebrow / tagline above heading */
-    .custom-eyebrow-text {
-      font-family: var(--font-heading, 'Banter Grotesk', sans-serif);
-      font-weight: 600;
-      font-size: 14px;
-      line-height: 24px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--color-ink, #201920);
-      margin: 0 0 8px;
-    }
-
-    /* Image wrapper — shadow wraps the full composed image boundary */
-    .image-with-text-custom-image-wrapper {
-      max-width: 600px;
-      max-height: 660px;
-      position: relative;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-      border-radius: 8px;
-    }
-
-    /* Button wrapper layout */
     .custom-image-with-text-button-wrapper {
       flex-direction: row;
-      gap: 16px;
-      width: 100%;
+      gap: 20px
     }
-
     @media (max-width: 768px) {
       .custom-image-with-text-button-wrapper {
         flex-direction: column;
-        gap: 12px;
       }
     }
 
-    /* Ensure flex-1 buttons take equal space */
-    .custom-image-with-text-button-wrapper > div {
-      flex: 1;
-      min-width: 0;
-    }
 
-    /* Center flex column utility */
     .center-flex-column-custom {
       display: flex;
       flex-direction: column;
       align-items: center;
     }
-
-    /* Custom shape button (green button with image background) */
     .custom-shape-button {
-      background-size: contain;
-      background-position: center;
-      background-repeat: no-repeat;
-      border: none;
-      cursor: pointer;
-      transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-image: url('{{ section.settings.button2_image | image_url: width: 800 }}');
-      width: 100%;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-      border-radius: 30px;
-      min-height: 48px;
+          background-size: contain;
+          background-position: center;
+          background-repeat: no-repeat;
+          border: none;
+          cursor: pointer;
+          transition: transform 0.3s ease;
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-image: url('{{ section.settings.button2_image | img_url: 'master' }}');
     }
-
-    .custom-shape-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-    }
-
-    .custom-shape-button-text {
-      color: var(--color-brand-purple, #542a76);
-      font-family: var(--font-body, 'Banter Grotesk', sans-serif);
-      font-size: 16px;
-      font-weight: 400;
-      padding: {{ section.settings.button2_padding_topbottom | default: 20 }}px 24px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    @media (min-width: 769px) {
-      .custom-shape-button-text {
-        font-size: 18px;
-      }
-    }
-
-    /* Standard button styling - push-btn overrides */
-    .custom-image-with-text-button-wrapper .custom-cat.push-btn {
-      position: relative;
-      width: 100%;
-      min-height: 48px;
-    }
-
-    .custom-image-with-text-button-wrapper .push-btn__surface {
-      display: block;
-      width: 100%;
-      box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-      border-radius: 30px;
-      transition: all 0.2s ease-out;
-    }
-
-    .custom-image-with-text-button-wrapper .push-btn:hover .push-btn__surface {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
-    }
-
-    /* Responsive font sizing for buttons */
-    @media (max-width: 768px) {
-      .custom-image-with-text-button-wrapper .custom-button-text {
-        font-size: 16px !important;
-      }
-    }
-
-    @media (min-width: 769px) {
-      .custom-image-with-text-button-wrapper .custom-button-text {
-        font-size: 18px !important;
-      }
-    }
+  .custom-shape-button-text {
+          color: #AE0000;
+          font-family: fagies;
+          font-size: 24px;
+          font-weight: 400;
+          padding: {{  section.settings.button2_padding_topbottom }}px 24px;
+        }
 
     @media (min-width: 1024px) {
       .normal-flex-half {
@@ -419,7 +326,6 @@
         justify-content: center;
         gap: 1.5rem; /* 24px - lg:gap-6 */
       }
-
       .min-width-on-lg-screen {
         min-width: 460px;
       }
