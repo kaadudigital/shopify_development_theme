@@ -96,8 +96,7 @@
 
           {%- comment -%} Image column - responsive to both mobile order and desktop position {%- endcomment -%}
           <div
-            style="max-width: 600px; max-height: 660px; "
-            class=" mx-auto lg:mx-0  {{ image_width_desktop }} {{ mobile_image_order }}"
+            class="image-with-text-custom-image-wrapper mx-auto lg:mx-0 {{ image_width_desktop }} {{ mobile_image_order }}"
           >
             {%- if image != blank -%}
               {%- render 'media-image',
@@ -144,11 +143,11 @@
               <div class="rte    max-w-2xl {{ mobile_text_order }} {{ combined_text_alignment }} lg:mt-6 mt-3 custom-body-xlarge">
                 {{ richtext }}
               </div>
-              <div class=" mt-5 flex items-center custom-image-with-text-button-wrapper {{ mobile_button_order }} {{ combined_text_alignment }} lgmt-8  ">
+              <div class="mt-5 flex items-center gap-4 custom-image-with-text-button-wrapper {{ mobile_button_order }} {{ combined_text_alignment }} lg:mt-8">
                 {%- if button2_link_type == 'url' and button2_link != blank and button2_label != '' -%}
-                  <div class="mt-5">
-                    <a href="{{ button2_link }}">
-                      <button class="custom-shape-button">
+                  <div class="flex-1">
+                    <a href="{{ button2_link }}" class="inline-block w-full">
+                      <button class="custom-shape-button w-full">
                         <span class="custom-shape-button-text">
                           {{ button2_label }}
                         </span>
@@ -157,10 +156,10 @@
                   </div>
                 {%- endif -%}
                 {%- if button2_link_type == 'focus_element' and focus_element2_id != blank -%}
-                  <div class=" mt-5 lg:mt-6 custom-btn-wrapper">
+                  <div class="flex-1">
                     <button
                       onclick="console.log('Focus Element ID: {{ focus_element2_id }}'); document.getElementById('{{focus_element2_id}}')?.focus()"
-                      class="inline-block custom-btn custom-shape-button"
+                      class="w-full custom-btn custom-shape-button"
                     >
                       <span class="custom-shape-button-text">
                         {{ button2_label }}
@@ -169,17 +168,19 @@
                   </div>
                 {%- endif -%}
                 {%- if button_link_type == 'url' and button_link != blank and button_label != '' -%}
-                  <div class="mt-5">
-                    <a href="{{ button_link }}" class=" inline-block custom-btn">
-                      <span class="push-btn__surface custom-btn__surface">{{ button_label }}</span>
+                  <div class="flex-1">
+                    <a href="{{ button_link }}" class="inline-block w-full">
+                      <button class="custom-cat push-btn custom-btn">
+                        <span class="push-btn__surface custom-btn__surface custom-button-text">{{ button_label }}</span>
+                      </button>
                     </a>
                   </div>
                 {%- endif -%}
                 {%- if button_link_type == 'focus_element' and focus_element_id != blank -%}
-                  <div class=" mt-5 lg:mt-6 custom-btn-wrapper">
+                  <div class="flex-1">
                     <button
                       onclick="console.log('Focus Element ID: {{ focus_element_id }}'); document.getElementById('{{focus_element_id}}')?.focus()"
-                      class="inline-block custom-btn"
+                      class="w-full custom-btn custom-cat push-btn"
                     >
                       <span class="push-btn__surface custom-btn__surface custom-button-text">{{ button_label }}</span>
                     </button>
@@ -191,7 +192,7 @@
 
         {%- else -%}
           {%- comment -%} Default layout when mobile_layout_order is disabled {%- endcomment -%}
-          <div style="max-width: 600px; max-height: 660px; " class="{{ image_width_desktop }}">
+          <div class="image-with-text-custom-image-wrapper {{ image_width_desktop }}">
             {%- if image != blank -%}
               {%- render 'media-image',
                 media: image,
@@ -233,11 +234,11 @@
                 {{ richtext }}
               </div>
 
-              <div class=" mt-5 flex  items-center custom-image-with-text-button-wrapper {{ combined_text_alignment }} lgmt-8  ">
-                 {%- if button2_link_type == 'url' and button2_link != blank and button2_label != '' -%}
-                  <div class="mt-5">
-                    <a href="{{ button2_link }}">
-                      <button class="custom-shape-button">
+              <div class="mt-5 flex items-center gap-4 custom-image-with-text-button-wrapper {{ combined_text_alignment }} lg:mt-8">
+                {%- if button2_link_type == 'url' and button2_link != blank and button2_label != '' -%}
+                  <div class="flex-1">
+                    <a href="{{ button2_link }}" class="inline-block w-full">
+                      <button class="custom-shape-button w-full">
                         <span class="custom-shape-button-text">
                           {{ button2_label }}
                         </span>
@@ -246,10 +247,10 @@
                   </div>
                 {%- endif -%}
                 {%- if button2_link_type == 'focus_element' and focus_element2_id != blank -%}
-                  <div class=" mt-5 lg:mt-6 custom-btn-wrapper">
+                  <div class="flex-1">
                     <button
                       onclick="console.log('Focus Element ID: {{ focus_element2_id }}'); document.getElementById('{{focus_element2_id}}')?.focus()"
-                      class="inline-block custom-btn custom-shape-button"
+                      class="w-full custom-btn custom-shape-button"
                     >
                       <span class="custom-shape-button-text">
                         {{ button2_label }}
@@ -258,17 +259,19 @@
                   </div>
                 {%- endif -%}
                 {%- if button_link_type == 'url' and button_link != blank and button_label != '' -%}
-                  <div class="mt-5">
-                    <a href="{{ button_link }}" class=" inline-block custom-btn">
-                      <span class="push-btn__surface custom-btn__surface">{{ button_label }}</span>
+                  <div class="flex-1">
+                    <a href="{{ button_link }}" class="inline-block w-full">
+                      <button class="custom-cat push-btn custom-btn">
+                        <span class="push-btn__surface custom-btn__surface custom-button-text">{{ button_label }}</span>
+                      </button>
                     </a>
                   </div>
                 {%- endif -%}
                 {%- if button_link_type == 'focus_element' and focus_element_id != blank -%}
-                  <div class=" mt-5 lg:mt-6 custom-btn-wrapper">
+                  <div class="flex-1">
                     <button
                       onclick="console.log('Focus Element ID: {{ focus_element_id }}'); document.getElementById('{{focus_element_id}}')?.focus()"
-                      class="inline-block custom-btn"
+                      class="w-full custom-btn custom-cat push-btn"
                     >
                       <span class="push-btn__surface custom-btn__surface custom-button-text">{{ button_label }}</span>
                     </button>
@@ -283,42 +286,117 @@
   </div>
 </div>
 <style>
+    /* Image wrapper with shadow support */
+    .image-with-text-custom-image-wrapper {
+      max-width: 600px;
+      max-height: 660px;
+      position: relative;
+    }
+
+    .image-with-text-custom-image-wrapper .media {
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+      border-radius: 8px;
+    }
+
+    /* Button wrapper layout */
     .custom-image-with-text-button-wrapper {
       flex-direction: row;
-      gap: 20px
+      gap: 16px;
+      width: 100%;
     }
+
     @media (max-width: 768px) {
       .custom-image-with-text-button-wrapper {
         flex-direction: column;
+        gap: 12px;
       }
     }
 
+    /* Ensure flex-1 buttons take equal space */
+    .custom-image-with-text-button-wrapper > div {
+      flex: 1;
+      min-width: 0;
+    }
 
+    /* Center flex column utility */
     .center-flex-column-custom {
       display: flex;
       flex-direction: column;
       align-items: center;
     }
+
+    /* Custom shape button (green button with image background) */
     .custom-shape-button {
-          background-size: contain;
-          background-position: center;
-          background-repeat: no-repeat;
-          border: none;
-          cursor: pointer;
-          transition: transform 0.3s ease;
-          position: relative;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background-image: url('{{ section.settings.button2_image | img_url: 'master' }}');
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-image: url('{{ section.settings.button2_image | img_url: 'master' }}');
+      width: 100%;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      border-radius: 8px;
+      min-height: 48px;
     }
-  .custom-shape-button-text {
-          color: #AE0000;
-          font-family: fagies;
-          font-size: 24px;
-          font-weight: 400;
-          padding: {{  section.settings.button2_padding_topbottom }}px 24px;
-        }
+
+    .custom-shape-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .custom-shape-button-text {
+      color: var(--color-ink, #201920);
+      font-family: var(--font-body, 'Banter Grotesk', sans-serif);
+      font-size: 16px;
+      font-weight: 400;
+      padding: {{ section.settings.button2_padding_topbottom | default: 20 }}px 24px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    @media (min-width: 769px) {
+      .custom-shape-button-text {
+        font-size: 18px;
+      }
+    }
+
+    /* Standard button styling - push-btn overrides */
+    .custom-image-with-text-button-wrapper .custom-cat.push-btn {
+      position: relative;
+      width: 100%;
+      min-height: 48px;
+    }
+
+    .custom-image-with-text-button-wrapper .push-btn__surface {
+      display: block;
+      width: 100%;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .custom-image-with-text-button-wrapper .push-btn:hover .push-btn__surface {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Responsive font sizing for buttons */
+    @media (max-width: 768px) {
+      .custom-image-with-text-button-wrapper .custom-button-text {
+        font-size: 16px !important;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .custom-image-with-text-button-wrapper .custom-button-text {
+        font-size: 18px !important;
+      }
+    }
 
     @media (min-width: 1024px) {
       .normal-flex-half {
@@ -326,6 +404,7 @@
         justify-content: center;
         gap: 1.5rem; /* 24px - lg:gap-6 */
       }
+
       .min-width-on-lg-screen {
         min-width: 460px;
       }
