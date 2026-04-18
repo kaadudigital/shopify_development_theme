@@ -6807,3 +6807,16 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
 
 }
 
+
+
+/* image-with-text eyebrow label (Figma nodes 759:228 / 802:94) */
+.image-with-text__eyebrow {
+  font-family: var(--font-heading, 'Banter Grotesk', Helvetica, sans-serif);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 24px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-ink, #201920);
+  margin: 0 0 8px;
+}
