@@ -24,6 +24,7 @@
       crop: section.settings.crop,
       rotate_image: section.settings.rotate_image,
       title: section.settings.title,
+      h2_title: section.settings.h2_title,
       richtext: section.settings.richtext,
       button_link: section.settings.button_link,
       button2_link: section.settings.button2_link,
@@ -34,6 +35,9 @@
       button_label: section.settings.button_label,
       button2_label: section.settings.button2_label,
       button2_image: section.settings.button2_image,
+      button2_image_mobile: section.settings.button2_image_mobile,
+      button_text_color_desktop: section.settings.button_text_color_desktop,
+      button_text_color_mobile: section.settings.button_text_color_mobile,
       heading_size: section.settings.heading_size,
       container_id: section.id,
       disable_media_style: section.settings.disable_media_style,
@@ -582,6 +586,12 @@
       "default": "Image with text"
     },
     {
+      "type": "inline_richtext",
+      "id": "h2_title",
+      "label": "sub heading",
+      "default": "Image with text sub heading"
+    },
+    {
       "type": "select",
       "id": "heading_size",
       "label": "t:sections.image_with_text.settings.heading_size.label",
@@ -724,7 +734,24 @@
     {
       "type": "image_picker",
       "id": "button2_image",
-      "label": "Second Button Image"
+      "label": "Second Button Image (Desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "button2_image_mobile",
+      "label": "Second Button Image (Mobile)"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color_desktop",
+      "label": "Button Text Color (Desktop)",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color_mobile",
+      "label": "Button Text Color (Mobile)",
+      "default": "#ffffff"
     },
     {
       "type": "range",

@@ -105,9 +105,6 @@
         </div>
         <div class="flex items-center {{ text_width_desktop }}">
           <div class="{{ text_alignment }} w-full">
-            {%- if h2_title != blank -%}
-              <p class="image-with-text__eyebrow">{{ h2_title | escape }}</p>
-            {%- endif -%}
             {% if title != '' %}
               <h2 class="inline-heading-rte font-heading  {{ heading_size }} heading-style {{ settings.heading_drop_shadow_style }} break-words">
                 {{ title }}

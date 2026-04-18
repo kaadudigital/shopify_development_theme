@@ -87,6 +87,9 @@
         {%- if mobile_layout_order -%}
           {%- comment -%} Mobile: Heading first {%- endcomment -%}
           <div style="margin: auto;" class="col-span-1 lg:hidden {{ mobile_heading_order }}">
+            {%- if h2_title != blank -%}
+              <p class="image-with-text__eyebrow t-section-headline {{ combined_text_alignment }}">{{ h2_title | escape }}</p>
+            {%- endif -%}
             {% if title != '' %}
               <h2 class="inline-heading-rte font-subheading {{ heading_size }} heading-style {{ settings.heading_drop_shadow_style }} break-words {{ combined_text_alignment }} custom-section-headline custom-display-header ">
                 {{ title }}
@@ -132,6 +135,9 @@
             <div class="w-full center-flex-column-custom">
               {%- comment -%} Desktop: Heading shown here {%- endcomment -%}
               <div style="margin: auto;" class="hidden lg:block">
+                {%- if h2_title != blank -%}
+                  <p class="image-with-text__eyebrow t-section-headline {{ combined_text_alignment }}">{{ h2_title | escape }}</p>
+                {%- endif -%}
                 {% if title != '' %}
                   <h2 class="inline-heading-rte font-subheading {{ heading_size }} heading-style {{ settings.heading_drop_shadow_style }} break-words {{ combined_text_alignment }} custom-section-headline custom-display-header">
                     {{ title }}
@@ -139,6 +145,7 @@
                 {% endif %}
               </div>
 
+              
               {%- comment -%} Mobile: Text content {%- endcomment -%}
               {% comment %} <div class="rte mt-5 max-w-2xl {{ combined_text_alignment }} {{ mobile_text_order }} {% if text_alignment contains 'center' %}lg:mx-auto{% elsif text_alignment contains 'right' %}lg:ml-auto{% endif %} {% if mobile_text_alignment contains 'center' %}mx-auto lg:mx-0{% elsif mobile_text_alignment contains 'right' %}ml-auto lg:ml-0{% endif %}"> {% endcomment %}
               <div class="rte    max-w-2xl {{ mobile_text_order }} {{ combined_text_alignment }} lg:mt-6 mt-3 custom-body-xlarge">
@@ -222,6 +229,9 @@
 
           <div class="flex items-center {{ text_width_desktop }} {% if image_size == 'half'%}min-width-on-lg-screen{% endif %} ">
             <div style="margin: auto;" class="w-full center-flex-column-custom ">
+              {%- if h2_title != blank -%}
+                <p class="image-with-text__eyebrow t-section-headline {{ combined_text_alignment }}">{{ h2_title | escape }}</p>
+              {%- endif -%}
               {% if title != '' %}
                 <h2 class="inline-heading-rte font-subheading {{ heading_size }} heading-style {{ settings.heading_drop_shadow_style }} break-words {{ combined_text_alignment }} custom-section-headline custom-display-header ">
                   {{ title }}
@@ -310,15 +320,29 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          background-image: url('{{ section.settings.button2_image | img_url: 'master' }}');
+          {%- if button2_image != blank -%}
+          background-image: url('{{ button2_image | image_url: width: 800 }}');
+          {%- endif -%}
     }
+    {%- if button2_image_mobile != blank -%}
+    @media (max-width: 768px) {
+      .custom-shape-button {
+        background-image: url('{{ button2_image_mobile | image_url: width: 600 }}');
+      }
+    }
+    {%- endif -%}
   .custom-shape-button-text {
-          color: #AE0000;
+          color: {{ button_text_color_desktop | default: '#AE0000' }};
           font-family: fagies;
           font-size: 24px;
           font-weight: 400;
-          padding: {{  section.settings.button2_padding_topbottom }}px 24px;
+          padding: {{ section.settings.button2_padding_topbottom }}px 24px;
         }
+    @media (max-width: 768px) {
+      .custom-shape-button-text {
+        color: {{ button_text_color_mobile | default: '#AE0000' }};
+      }
+    }
 
     @media (min-width: 1024px) {
       .normal-flex-half {
