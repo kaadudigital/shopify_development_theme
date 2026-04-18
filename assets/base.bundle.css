@@ -6802,7 +6802,7 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
 
   .custom-display-header {
     font-size: 48px !important;
-    line-height: 52px !important;
+    line-height: 44px !important;
   }
 
 }

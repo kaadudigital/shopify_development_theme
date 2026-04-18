@@ -86,9 +86,9 @@
         {%- comment -%} Mobile Layout when mobile_layout_order is enabled {%- endcomment -%}
         {%- if mobile_layout_order -%}
           {%- comment -%} Mobile: Heading first {%- endcomment -%}
-          <div style="margin: auto;" class="col-span-1 lg:hidden {{ mobile_heading_order }}">
+          <div class="mx-auto col-span-1 lg:hidden {{ mobile_heading_order }}">
             {% if title != '' %}
-              <h2 class="inline-heading-rte font-subheading {{ heading_size }} heading-style {{ settings.heading_drop_shadow_style }} break-words {{ combined_text_alignment }} custom-section-headline custom-display-header ">
+              <h2 class="inline-heading-rte font-subheading {{ heading_size }} heading-style {{ settings.heading_drop_shadow_style }} break-words {{ combined_text_alignment }} custom-display-header">
                 {{ title }}
               </h2>
             {% endif %}
@@ -130,17 +130,15 @@
           <div class="flex items-center {{ text_width_desktop }} {% if image_size == 'half'%}min-width-on-lg-screen{% endif %}">
             <div class="w-full center-flex-column-custom">
               {%- comment -%} Desktop: Heading shown here {%- endcomment -%}
-              <div style="margin: auto;" class="hidden lg:block">
+              <div class="mx-auto hidden lg:block">
                 {% if title != '' %}
-                  <h2 class="inline-heading-rte font-subheading {{ heading_size }} heading-style {{ settings.heading_drop_shadow_style }} break-words {{ combined_text_alignment }} custom-section-headline custom-display-header">
+                  <h2 class="inline-heading-rte font-subheading {{ heading_size }} heading-style {{ settings.heading_drop_shadow_style }} break-words {{ combined_text_alignment }} custom-display-header">
                     {{ title }}
                   </h2>
                 {% endif %}
               </div>
 
-              {%- comment -%} Mobile: Text content {%- endcomment -%}
-              {% comment %} <div class="rte mt-5 max-w-2xl {{ combined_text_alignment }} {{ mobile_text_order }} {% if text_alignment contains 'center' %}lg:mx-auto{% elsif text_alignment contains 'right' %}lg:ml-auto{% endif %} {% if mobile_text_alignment contains 'center' %}mx-auto lg:mx-0{% elsif mobile_text_alignment contains 'right' %}ml-auto lg:ml-0{% endif %}"> {% endcomment %}
-              <div class="rte    max-w-2xl {{ mobile_text_order }} {{ combined_text_alignment }} lg:mt-6 mt-3 custom-body-xlarge">
+              <div class="rte max-w-2xl {{ mobile_text_order }} {{ combined_text_alignment }} lg:mt-6 mt-3 custom-body-large">
                 {{ richtext }}
               </div>
               <div class="mt-5 flex items-center gap-4 custom-image-with-text-button-wrapper {{ mobile_button_order }} {{ combined_text_alignment }} lg:mt-8">
@@ -158,7 +156,7 @@
                 {%- if button2_link_type == 'focus_element' and focus_element2_id != blank -%}
                   <div class="flex-1">
                     <button
-                      onclick="console.log('Focus Element ID: {{ focus_element2_id }}'); document.getElementById('{{focus_element2_id}}')?.focus()"
+                      onclick="document.getElementById('{{focus_element2_id}}')?.focus()"
                       class="w-full custom-btn custom-shape-button"
                     >
                       <span class="custom-shape-button-text">
@@ -179,7 +177,7 @@
                 {%- if button_link_type == 'focus_element' and focus_element_id != blank -%}
                   <div class="flex-1">
                     <button
-                      onclick="console.log('Focus Element ID: {{ focus_element_id }}'); document.getElementById('{{focus_element_id}}')?.focus()"
+                      onclick="document.getElementById('{{focus_element_id}}')?.focus()"
                       class="w-full custom-btn custom-cat push-btn"
                     >
                       <span class="push-btn__surface custom-btn__surface custom-button-text">{{ button_label }}</span>
@@ -221,16 +219,15 @@
             {%- endif -%}
           </div>
 
-          <div class="flex items-center {{ text_width_desktop }} {% if image_size == 'half'%}min-width-on-lg-screen{% endif %} ">
-            <div style="margin: auto;" class="w-full center-flex-column-custom ">
+          <div class="flex items-center {{ text_width_desktop }} {% if image_size == 'half'%}min-width-on-lg-screen{% endif %}">
+            <div class="mx-auto w-full center-flex-column-custom">
               {% if title != '' %}
-                <h2 class="inline-heading-rte font-subheading {{ heading_size }} heading-style {{ settings.heading_drop_shadow_style }} break-words {{ combined_text_alignment }} custom-section-headline custom-display-header ">
+                <h2 class="inline-heading-rte font-subheading {{ heading_size }} heading-style {{ settings.heading_drop_shadow_style }} break-words {{ combined_text_alignment }} custom-display-header">
                   {{ title }}
                 </h2>
               {% endif %}
 
-              {% comment %} <div class="rte mt-5 max-w-2xl {{ combined_text_alignment }} {% if text_alignment contains 'center' %}lg:mx-auto{% elsif text_alignment contains 'right' %}lg:ml-auto{% endif %} {% if mobile_text_alignment contains 'center' %}mx-auto lg:mx-0{% elsif mobile_text_alignment contains 'right' %}ml-auto lg:ml-0{% endif %}"> {% endcomment %}
-              <div class="rte   max-w-2xl {{ combined_text_alignment }} lg:mt-6 mt-3 custom-body-xlarge ">
+              <div class="rte max-w-2xl {{ combined_text_alignment }} lg:mt-6 mt-3 custom-body-large">
                 {{ richtext }}
               </div>
 
@@ -249,7 +246,7 @@
                 {%- if button2_link_type == 'focus_element' and focus_element2_id != blank -%}
                   <div class="flex-1">
                     <button
-                      onclick="console.log('Focus Element ID: {{ focus_element2_id }}'); document.getElementById('{{focus_element2_id}}')?.focus()"
+                      onclick="document.getElementById('{{focus_element2_id}}')?.focus()"
                       class="w-full custom-btn custom-shape-button"
                     >
                       <span class="custom-shape-button-text">
@@ -270,7 +267,7 @@
                 {%- if button_link_type == 'focus_element' and focus_element_id != blank -%}
                   <div class="flex-1">
                     <button
-                      onclick="console.log('Focus Element ID: {{ focus_element_id }}'); document.getElementById('{{focus_element_id}}')?.focus()"
+                      onclick="document.getElementById('{{focus_element_id}}')?.focus()"
                       class="w-full custom-btn custom-cat push-btn"
                     >
                       <span class="push-btn__surface custom-btn__surface custom-button-text">{{ button_label }}</span>
@@ -337,7 +334,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background-image: url('{{ section.settings.button2_image | img_url: 'master' }}');
+      background-image: url('{{ section.settings.button2_image | image_url: width: 800 }}');
       width: 100%;
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
       border-radius: 8px;
