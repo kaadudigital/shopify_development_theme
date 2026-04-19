@@ -44,7 +44,7 @@
       "name": "image with text custom",
       "settings": {
         "display_on_card": false,
-        "image": "shopify://shop_images/Adobe_Express_-_file.png",
+        "image": "shopify://shop_images/product_in_star_background.png",
         "crop": "",
         "image_shape": "default",
         "blob_type": 1,
