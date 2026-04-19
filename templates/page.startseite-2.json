@@ -71,7 +71,7 @@
         "button2_image_mobile": "shopify://shop_images/custom-image-button-green-long.png",
         "button_text_color_desktop": "#ae0000",
         "button_text_color_mobile": "#542a76",
-        "button2_padding_topbottom": 10,
+        "button2_padding_topbottom": 56,
         "color_scheme": "",
         "use_gradient_background": false
       }
