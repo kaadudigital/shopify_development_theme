@@ -6757,7 +6757,7 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
 }
 
 .custom-button-text {
-  font-size: 20px !important;
+  font-size: 18px !important;
   line-height: 24px !important;
 }
 
@@ -6788,11 +6788,11 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
   }
 
   .custom-body-default {
-    font-size: 15px !important;
+    font-size: 16px !important;
   }
 
   .custom-button-text {
-    font-size: 20px !important;
+    font-size: 16px !important;
   }
 
   .py-half-section-vertical-spacing {
@@ -6801,8 +6801,8 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
   }
 
   .custom-display-header {
-    font-size: 52px !important;
-    line-height: 56px !important;
+    font-size: 48px !important;
+    line-height: 44px !important;
   }
 
 }

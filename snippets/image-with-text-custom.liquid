@@ -86,7 +86,7 @@
         {%- comment -%} Mobile Layout when mobile_layout_order is enabled {%- endcomment -%}
         {%- if mobile_layout_order -%}
           {%- comment -%} Mobile: Heading first {%- endcomment -%}
-          <div style="margin: auto;" class="col-span-1 lg:hidden {{ mobile_heading_order }}">
+          <div class="mx-auto col-span-1 lg:hidden {{ mobile_heading_order }}">
             {%- if h2_title != blank -%}
               <p class="image-with-text__eyebrow t-section-headline {{ combined_text_alignment }}">{{ h2_title | escape }}</p>
             {%- endif -%}
@@ -98,10 +98,7 @@
           </div>
 
           {%- comment -%} Image column - responsive to both mobile order and desktop position {%- endcomment -%}
-          <div
-            style="max-width: 600px; max-height: 660px; "
-            class=" mx-auto lg:mx-0  {{ image_width_desktop }} {{ mobile_image_order }}"
-          >
+          <div class="kaadu-iw-image-wrap mx-auto lg:mx-0 {{ image_width_desktop }} {{ mobile_image_order }}">
             {%- if image != blank -%}
               {%- render 'media-image',
                 media: image,
@@ -134,7 +131,7 @@
           <div class="flex items-center {{ text_width_desktop }} {% if image_size == 'half'%}min-width-on-lg-screen{% endif %}">
             <div class="w-full center-flex-column-custom">
               {%- comment -%} Desktop: Heading shown here {%- endcomment -%}
-              <div style="margin: auto;" class="hidden lg:block">
+              <div class="mx-auto hidden lg:block">
                 {%- if h2_title != blank -%}
                   <p class="image-with-text__eyebrow t-section-headline {{ combined_text_alignment }}">{{ h2_title | escape }}</p>
                 {%- endif -%}
@@ -198,7 +195,7 @@
 
         {%- else -%}
           {%- comment -%} Default layout when mobile_layout_order is disabled {%- endcomment -%}
-          <div style="max-width: 600px; max-height: 660px; " class="{{ image_width_desktop }}">
+          <div class="kaadu-iw-image-wrap {{ image_width_desktop }}">
             {%- if image != blank -%}
               {%- render 'media-image',
                 media: image,
@@ -228,7 +225,7 @@
           </div>
 
           <div class="flex items-center {{ text_width_desktop }} {% if image_size == 'half'%}min-width-on-lg-screen{% endif %} ">
-            <div style="margin: auto;" class="w-full center-flex-column-custom ">
+            <div class="mx-auto w-full center-flex-column-custom">
               {%- if h2_title != blank -%}
                 <p class="image-with-text__eyebrow t-section-headline {{ combined_text_alignment }}">{{ h2_title | escape }}</p>
               {%- endif -%}
@@ -293,9 +290,20 @@
   </div>
 </div>
 <style>
+    .kaadu-iw-image-wrap {
+      max-width: 600px;
+      max-height: 660px;
+    }
+    @media (max-width: 768px) {
+      .kaadu-iw-image-wrap {
+        max-width: 100%;
+        max-height: none;
+      }
+    }
+
     .custom-image-with-text-button-wrapper {
       flex-direction: row;
-      gap: 20px
+      gap: var(--space-4);
     }
     @media (max-width: 768px) {
       .custom-image-with-text-button-wrapper {
@@ -315,7 +323,7 @@
           background-repeat: no-repeat;
           border: none;
           cursor: pointer;
-          transition: transform 0.3s ease;
+          transition: transform 0.2s ease-out;
           position: relative;
           display: flex;
           align-items: center;
@@ -336,7 +344,7 @@
           font-family: fagies;
           font-size: 24px;
           font-weight: 400;
-          padding: {{ section.settings.button2_padding_topbottom }}px 24px;
+          padding: {{ section.settings.button2_padding_topbottom }}px var(--space-6);
         }
     @media (max-width: 768px) {
       .custom-shape-button-text {
@@ -348,7 +356,7 @@
       .normal-flex-half {
         display: flex;
         justify-content: center;
-        gap: 1.5rem; /* 24px - lg:gap-6 */
+        gap: var(--space-6);
       }
       .min-width-on-lg-screen {
         min-width: 460px;
