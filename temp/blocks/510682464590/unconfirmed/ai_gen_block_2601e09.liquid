@@ -1,6 +1,652 @@
+{% doc %}
+  @prompt
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Kaadu Market Chart</title>
+    <style>
+      *, *::before, *::after { box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: #ffffff;
+        color: #1a1a1a;
+      }
+      body {
+        padding: 16px;
+        min-height: 100vh;
+      }
+    
+      .kaadu-market-section {
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 16px;
+        background: transparent;
+      }
+      .kaadu-market-heading {
+        text-align: center;
+        margin: 0 0 16px;
+        font-size: clamp(18px, 4vw, 22px);
+        font-weight: 500;
+      }
+      .kaadu-market-section .kw {
+        position: relative;
+        width: 100%;
+        background: transparent;
+        padding: 6px 0;
+      }
+      .kaadu-market-section .kw-stage {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        min-height: 180px;
+        max-height: 520px;
+        overflow: hidden;
+      }
+      .kaadu-market-section .kw-stage canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      .kaadu-market-section .kw-badge {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        font-size: clamp(11px, 2.5vw, 13px);
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        z-index: 5;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        background: rgba(128, 128, 128, 0.15);
+        padding: 3px 8px;
+        border-radius: 4px;
+      }
+      .kaadu-market-section .kw-tags {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+        font-size: clamp(11px, 2.5vw, 13px);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .kaadu-market-section .kw-legend {
+        display: flex;
+        gap: clamp(12px, 4vw, 22px);
+        justify-content: center;
+        margin-top: 10px;
+        flex-wrap: wrap;
+      }
+      .kaadu-market-section .kw-leg {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: clamp(11px, 2.5vw, 13px);
+      }
+      .kaadu-market-section .kw-dot {
+        width: clamp(10px, 2.5vw, 12px);
+        height: clamp(10px, 2.5vw, 12px);
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+    
+      /* Small phones: taller aspect so the chart still has room */
+      @media (max-width: 480px) {
+        body { padding: 8px; }
+        .kaadu-market-section { padding: 8px; }
+        .kaadu-market-section .kw-stage {
+          aspect-ratio: 4 / 3;
+          min-height: 220px;
+        }
+      }
+      /* Landscape phones */
+      @media (max-width: 900px) and (orientation: landscape) {
+        .kaadu-market-section .kw-stage {
+          aspect-ratio: 16 / 9;
+          min-height: 180px;
+        }
+      }
+    </style>
+    </head>
+    <body>
+    
+    <div
+      class="kaadu-market-section"
+      data-kaadu-price="60"
+      data-market-min="21"
+      data-market-max="58"
+      data-price-min="10"
+      data-price-max="70"
+      data-sample-ms="180"
+      data-scroll-speed="44"
+      data-kaadu-color="#b6ff4a"
+      data-market-color="#AE0000"
+    >
+      <div class="kw">
+        <div class="kw-stage" data-stage>
+          <canvas data-canvas></canvas>
+          <div class="kw-badge" data-badge>RPS 60</div>
+        </div>
+    
+        <div class="kw-tags">
+          <span data-market-tag data-label="Marktpreis" style="color: #AE0000;">Marktpreis: 40</span>
+          <span data-kaadu-tag data-label="Kaadu Preis" style="color: #7fbd3f;">Kaadu Preis: 60</span>
+        </div>
+    
+        <div class="kw-legend">
+          <div class="kw-leg">
+            <span class="kw-dot" style="background: #AE0000;"></span>
+            Marktpreis
+          </div>
+          <div class="kw-leg">
+            <span class="kw-dot" style="background: #b6ff4a;"></span>
+            Kaadu Preis
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <script>
+    (function initKaaduMarket() {
+      function setup(root) {
+        if (root.__kwInitialized) return;
+        root.__kwInitialized = true;
+    
+        var stage = root.querySelector('[data-stage]');
+        var canvas = root.querySelector('[data-canvas]');
+        if (!stage || !canvas) return;
+        var ctx = canvas.getContext('2d');
+        var badge = root.querySelector('[data-badge]');
+        var marketTag = root.querySelector('[data-market-tag]');
+        var kaaduTag = root.querySelector('[data-kaadu-tag]');
+    
+        var KAADU_PRICE = parseFloat(root.dataset.kaaduPrice) || 60;
+        var MARKET_MIN = parseFloat(root.dataset.marketMin) || 21;
+        var MARKET_MAX = parseFloat(root.dataset.marketMax) || 58;
+        var PRICE_MIN = parseFloat(root.dataset.priceMin) || 10;
+        var PRICE_MAX = parseFloat(root.dataset.priceMax) || 70;
+        var SAMPLE_MS = parseFloat(root.dataset.sampleMs) || 180;
+        var PX_PER_SEC = parseFloat(root.dataset.scrollSpeed) || 44;
+        var KAADU_COLOR = root.dataset.kaaduColor || '#b6ff4a';
+        var MARKET_COLOR = root.dataset.marketColor || '#AE0000';
+    
+        var kaaduImg = new Image();
+        var kaaduReady = false;
+        kaaduImg.onload = function () { kaaduReady = true; };
+        kaaduImg.src =
+          'data:image/svg+xml;utf8,' +
+          encodeURIComponent(
+            '<svg 
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-market-chart-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 16px;
+    background: transparent;
+  }
+
+  .ai-market-chart-heading-{{ ai_gen_id }} {
+    text-align: center;
+    margin: 0 0 16px;
+    font-size: clamp(18px, 4vw, 22px);
+    font-weight: 500;
+    color: {{ block.settings.heading_color }};
+  }
+
+  .ai-market-chart-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    background: transparent;
+    padding: 6px 0;
+  }
+
+  .ai-market-chart-stage-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    min-height: 180px;
+    max-height: 520px;
+    overflow: hidden;
+  }
+
+  .ai-market-chart-stage-{{ ai_gen_id }} canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .ai-market-chart-badge-{{ ai_gen_id }} {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: clamp(11px, 2.5vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    z-index: 5;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    background: rgba(128, 128, 128, 0.15);
+    padding: 3px 8px;
+    border-radius: 4px;
+    color: {{ block.settings.text_color }};
+  }
+
+  .ai-market-chart-tags-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: clamp(11px, 2.5vw, 13px);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .ai-market-chart-legend-{{ ai_gen_id }} {
+    display: flex;
+    gap: clamp(12px, 4vw, 22px);
+    justify-content: center;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+
+  .ai-market-chart-leg-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: clamp(11px, 2.5vw, 13px);
+    color: {{ block.settings.text_color }};
+  }
+
+  .ai-market-chart-dot-{{ ai_gen_id }} {
+    width: clamp(10px, 2.5vw, 12px);
+    height: clamp(10px, 2.5vw, 12px);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 480px) {
+    .ai-market-chart-{{ ai_gen_id }} {
+      padding: 8px;
+    }
+    .ai-market-chart-stage-{{ ai_gen_id }} {
+      aspect-ratio: 4 / 3;
+      min-height: 220px;
+    }
+  }
+
+  @media (max-width: 900px) and (orientation: landscape) {
+    .ai-market-chart-stage-{{ ai_gen_id }} {
+      aspect-ratio: 16 / 9;
+      min-height: 180px;
+    }
+  }
+{% endstyle %}
+
+<kaadu-market-chart-{{ ai_gen_id }}
+  class="ai-market-chart-{{ ai_gen_id }}"
+  data-kaadu-price="{{ block.settings.kaadu_price }}"
+  data-market-min="{{ block.settings.market_min }}"
+  data-market-max="{{ block.settings.market_max }}"
+  data-price-min="{{ block.settings.price_min }}"
+  data-price-max="{{ block.settings.price_max }}"
+  data-sample-ms="{{ block.settings.sample_ms }}"
+  data-scroll-speed="{{ block.settings.scroll_speed }}"
+  data-kaadu-color="{{ block.settings.kaadu_color }}"
+  data-market-color="{{ block.settings.market_color }}"
+  {{ block.shopify_attributes }}
+>
+  {% if block.settings.heading != blank %}
+    <h2 class="ai-market-chart-heading-{{ ai_gen_id }}">{{ block.settings.heading }}</h2>
+  {% endif %}
+
+  <div class="ai-market-chart-wrapper-{{ ai_gen_id }}">
+    <div class="ai-market-chart-stage-{{ ai_gen_id }}" data-stage>
+      <canvas data-canvas></canvas>
+      <div class="ai-market-chart-badge-{{ ai_gen_id }}" data-badge>RPS 60</div>
+    </div>
+
+    <div class="ai-market-chart-tags-{{ ai_gen_id }}">
+      <span data-market-tag data-label="{{ block.settings.market_label }}" style="color: {{ block.settings.market_color }};">{{ block.settings.market_label }}: 40</span>
+      <span data-kaadu-tag data-label="{{ block.settings.kaadu_label }}" style="color: {{ block.settings.kaadu_color }};">{{ block.settings.kaadu_label }}: 60</span>
+    </div>
+
+    <div class="ai-market-chart-legend-{{ ai_gen_id }}">
+      <div class="ai-market-chart-leg-{{ ai_gen_id }}">
+        <span class="ai-market-chart-dot-{{ ai_gen_id }}" style="background: {{ block.settings.market_color }};"></span>
+        {{ block.settings.market_label }}
+      </div>
+      <div class="ai-market-chart-leg-{{ ai_gen_id }}">
+        <span class="ai-market-chart-dot-{{ ai_gen_id }}" style="background: {{ block.settings.kaadu_color }};"></span>
+        {{ block.settings.kaadu_label }}
+      </div>
+    </div>
+  </div>
+</kaadu-market-chart-{{ ai_gen_id }}>
+
+<script>
+(function() {
+  class KaaduMarketChart{{ ai_gen_id }} extends HTMLElement {
+    constructor() {
+      super();
+      this.__kwInitialized = false;
+    }
+
+    connectedCallback() {
+      if (this.__kwInitialized) return;
+      this.__kwInitialized = true;
+
+      var stage = this.querySelector('[data-stage]');
+      var canvas = this.querySelector('[data-canvas]');
+      if (!stage || !canvas) return;
+      var ctx = canvas.getContext('2d');
+      var badge = this.querySelector('[data-badge]');
+      var marketTag = this.querySelector('[data-market-tag]');
+      var kaaduTag = this.querySelector('[data-kaadu-tag]');
+
+      var KAADU_PRICE = parseFloat(this.dataset.kaaduPrice) || 60;
+      var MARKET_MIN = parseFloat(this.dataset.marketMin) || 21;
+      var MARKET_MAX = parseFloat(this.dataset.marketMax) || 58;
+      var PRICE_MIN = parseFloat(this.dataset.priceMin) || 10;
+      var PRICE_MAX = parseFloat(this.dataset.priceMax) || 70;
+      var SAMPLE_MS = parseFloat(this.dataset.sampleMs) || 180;
+      var PX_PER_SEC = parseFloat(this.dataset.scrollSpeed) || 44;
+      var KAADU_COLOR = this.dataset.kaaduColor || '#b6ff4a';
+      var MARKET_COLOR = this.dataset.marketColor || '#AE0000';
+
+      var kaaduImg = new Image();
+      var kaaduReady = false;
+      kaaduImg.onload = function () { kaaduReady = true; };
+      kaaduImg.src =
+        'data:image/svg+xml;utf8,' +
+        encodeURIComponent(
+          '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="' + KAADU_COLOR + '"/></svg>'
+        );
+
+      var marketImg = new Image();
+      var marketReady = false;
+      marketImg.onload = function () { marketReady = true; };
+      marketImg.src =
+        'data:image/svg+xml;utf8,' +
+        encodeURIComponent(
+          '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="' + MARKET_COLOR + '"/></svg>'
+        );
+
+      var dpr = window.devicePixelRatio || 1;
+      var w = 0, h = 0;
+
+      function resize() {
+        var rect = stage.getBoundingClientRect();
+        w = rect.width;
+        h = rect.height;
+        canvas.width = w * dpr;
+        canvas.height = h * dpr;
+        canvas.style.width = w + 'px';
+        canvas.style.height = h + 'px';
+        ctx.scale(dpr, dpr);
+      }
+
+      resize();
+      window.addEventListener('resize', resize);
+
+      var kaaduHistory = [];
+      var marketHistory = [];
+      var scrollX = 0;
+      var lastSample = Date.now();
+      var lastFrame = Date.now();
+      var fps = 0;
+      var fpsFrames = 0;
+      var fpsTime = 0;
+
+      function randomInRange(min, max) {
+        return Math.random() * (max - min) + min;
+      }
+
+      function mapPrice(price) {
+        return h - ((price - PRICE_MIN) / (PRICE_MAX - PRICE_MIN)) * h;
+      }
+
+      function samplePrices() {
+        var now = Date.now();
+        if (now - lastSample >= SAMPLE_MS) {
+          lastSample = now;
+          var marketPrice = randomInRange(MARKET_MIN, MARKET_MAX);
+          kaaduHistory.push({ x: scrollX, y: mapPrice(KAADU_PRICE) });
+          marketHistory.push({ x: scrollX, y: mapPrice(marketPrice) });
+
+          if (marketTag) {
+            var marketLabel = marketTag.getAttribute('data-label') || 'Marktpreis';
+            marketTag.textContent = marketLabel + ': ' + marketPrice.toFixed(0);
+          }
+          if (kaaduTag) {
+            var kaaduLabel = kaaduTag.getAttribute('data-label') || 'Kaadu Preis';
+            kaaduTag.textContent = kaaduLabel + ': ' + KAADU_PRICE.toFixed(0);
+          }
+        }
+      }
+
+      function drawLine(history, color, img, ready) {
+        if (history.length < 2) return;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        for (var i = 0; i < history.length; i++) {
+          var pt = history[i];
+          var x = w - (scrollX - pt.x);
+          if (i === 0) {
+            ctx.moveTo(x, pt.y);
+          } else {
+            ctx.lineTo(x, pt.y);
+          }
+        }
+        ctx.stroke();
+
+        if (ready && history.length > 0) {
+          var last = history[history.length - 1];
+          var x = w - (scrollX - last.x);
+          ctx.drawImage(img, x - 12, last.y - 12, 24, 24);
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, w, h);
+        drawLine(marketHistory, MARKET_COLOR, marketImg, marketReady);
+        drawLine(kaaduHistory, KAADU_COLOR, kaaduImg, kaaduReady);
+      }
+
+      function loop() {
+        var now = Date.now();
+        var dt = (now - lastFrame) / 1000;
+        lastFrame = now;
+
+        scrollX += PX_PER_SEC * dt;
+
+        kaaduHistory = kaaduHistory.filter(function (pt) {
+          return w - (scrollX - pt.x) > -50;
+        });
+        marketHistory = marketHistory.filter(function (pt) {
+          return w - (scrollX - pt.x) > -50;
+        });
+
+        samplePrices();
+        draw();
+
+        fpsFrames++;
+        fpsTime += dt;
+        if (fpsTime >= 1) {
+          fps = Math.round(fpsFrames / fpsTime);
+          if (badge) badge.textContent = 'RPS ' + fps;
+          fpsFrames = 0;
+          fpsTime = 0;
+        }
+
+        requestAnimationFrame(loop);
+      }
+
+      loop();
+    }
+  }
+
+  customElements.define('kaadu-market-chart-{{ ai_gen_id }}', KaaduMarketChart{{ ai_gen_id }});
+})();
+</script>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Market price chart",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "market_label",
+      "label": "Market price label",
+      "default": "Marktpreis"
+    },
+    {
+      "type": "text",
+      "id": "kaadu_label",
+      "label": "Kaadu price label",
+      "default": "Kaadu Preis"
+    },
+    {
+      "type": "header",
+      "content": "Price settings"
+    },
+    {
+      "type": "range",
+      "id": "kaadu_price",
+      "label": "Kaadu price",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "market_min",
+      "label": "Market minimum",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "default": 21
+    },
+    {
+      "type": "range",
+      "id": "market_max",
+      "label": "Market maximum",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "default": 58
+    },
+    {
+      "type": "range",
+      "id": "price_min",
+      "label": "Chart minimum",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "price_max",
+      "label": "Chart maximum",
+      "min": 50,
+      "max": 150,
+      "step": 5,
+      "default": 70
+    },
+    {
+      "type": "header",
+      "content": "Animation settings"
+    },
+    {
+      "type": "range",
+      "id": "sample_ms",
+      "label": "Sample interval",
+      "min": 100,
+      "max": 500,
+      "step": 20,
+      "unit": "ms",
+      "default": 180
+    },
+    {
+      "type": "range",
+      "id": "scroll_speed",
+      "label": "Scroll speed",
+      "min": 20,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "kaadu_color",
+      "label": "Kaadu line",
+      "default": "#b6ff4a"
+    },
+    {
+      "type": "color",
+      "id": "market_color",
+      "label": "Market line",
+      "default": "#AE0000"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    }
+  ],
+  "presets": [
+    {
+      "name": "Market price chart"
+    }
+  ]
+}
 {% endschema %}
