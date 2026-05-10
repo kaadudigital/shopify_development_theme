@@ -6743,7 +6743,9 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
 
 @font-face {
   font-family: 'Banter Grotesk';
-  src: url('BanterGrotesk-Regular.woff2') format('woff2');
+  src: url('BanterGrotesk-Semibold.woff2') format('woff2'),
+       url('BanterGrotesk-Semibold.woff') format('woff'),
+       url('BanterGrotesk-Semibold.otf') format('opentype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
