@@ -19,63 +19,6 @@
         "use_gradient_background": false
       }
     },
-    "custom_feature_infotile_bHa466": {
-      "type": "custom-feature-infotile",
-      "blocks": {
-        "info_tile_hGjRHh": {
-          "type": "info_tile",
-          "settings": {
-            "image": "shopify://shop_images/52f2f8584ac253803e2a8b475558b239c4b73ea3.jpg",
-            "heading": "arbeiter*innen",
-            "description": "Add details about this tile here.Frauen sind im Arbeitsmarkt in  Vazhakulam stark benachteiligt - selbst wenn sie einen Job erhalten  sind die Löhne horrend.",
-            "link": "",
-            "image_shape_override": "website_shape_star"
-          }
-        },
-        "info_tile_WGFFbq": {
-          "type": "info_tile",
-          "settings": {
-            "image": "shopify://shop_images/e63b0123caaca3f787cbbc233d99805d54c05dfc.jpg",
-            "heading": "bauerfamilien",
-            "description": "Mickrige Margen, gierige Zwischenhändler und ein volatiler Markt zerstören Existenzen.",
-            "link": "",
-            "image_shape_override": "website_shape_frame"
-          }
-        },
-        "info_tile_pLiUT7": {
-          "type": "info_tile",
-          "settings": {
-            "image": "shopify://shop_images/0686fa36cf114a87ce3c9b417185ca52c25b8003.jpg",
-            "heading": "erntehelfer*innen",
-            "description": "Knapp CHF 10 für einen ganzen Tag Ananas ernten in der Sonne -  keine Sozialleistungen oder Sicherheit",
-            "link": "",
-            "image_shape_override": "website_shape_pancake"
-          }
-        }
-      },
-      "block_order": [
-        "info_tile_hGjRHh",
-        "info_tile_WGFFbq",
-        "info_tile_pLiUT7"
-      ],
-      "name": "Custom Info Tiles",
-      "settings": {
-        "title": "die lieferkette leidet",
-        "subheading": "Unter den Teifpreisen im Supermarkt leidet nicht nur die Natur.. Die Ausbeutung im Globalen Süden ist tief verankert",
-        "display_on_card": false,
-        "layout": "grid",
-        "tiles_per_row_mobile": "1",
-        "tiles_per_row_desktop": 3,
-        "slideshow_focus": "center",
-        "mobile_slide_width": "three_fifths",
-        "desktop_slide_width": 40,
-        "autoscroll_mode": "0",
-        "tiles_aspect_ratio": "",
-        "image_shape": "",
-        "color_scheme": "scheme3",
-        "use_gradient_background": false
-      }
-    },
     "image_with_text_custom_nmQU4P": {
       "type": "image-with-text-custom",
       "blocks": {
@@ -122,6 +65,7 @@
         "image_size": "half",
         "disable_media_style": false,
         "title": "CRUNCH IN PROGRESS..",
+        "h2_title": "Image with text sub heading",
         "heading_size": "heading-feature",
         "richtext": "<p></p><p>Unsere Fabrik und Website sind noch im Aufbau. </p><p>Hinter den Kulissen arbeiten wir mit Hochdruck daran, alles für die Produktion vorzubereiten; <strong>fair, transparent und nachhaltig</strong><br/></p>",
         "text_alignment": "text-center",
@@ -131,6 +75,13 @@
         "button_link": "",
         "focus_element_id": "Email",
         "button_label": "WAITLIST BEITRETEN",
+        "button2_link_type": "url",
+        "button2_link": "",
+        "focus_element2_id": "",
+        "button2_label": "Second Button",
+        "button_text_color_desktop": "#ffffff",
+        "button_text_color_mobile": "#ffffff",
+        "button2_padding_topbottom": 20,
         "color_scheme": "",
         "use_gradient_background": false
       }
@@ -225,7 +176,6 @@
   },
   "order": [
     "main",
-    "custom_feature_infotile_bHa466",
     "image_with_text_custom_nmQU4P",
     "rich_text_custom_73EGTA",
     "email_input_bUKmWP"
