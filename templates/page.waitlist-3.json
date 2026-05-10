@@ -50,7 +50,7 @@
         "shape_divider_XHc7ti"
       ],
       "custom_css": [
-        "p {color: black;}",
+        "p, h3 {color: black;}",
         "@media (min-width: 990px) {.custom-btn-wrapper, .body {margin-top: 28px; }}"
       ],
       "name": "image with text custom",
