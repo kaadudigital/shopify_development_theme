@@ -1,0 +1,149 @@
+{%- liquid
+  assign crop = crop | default: settings.product_tiles_aspect_ratio
+  assign shape = shape | default: settings.product_tile_media_shape
+  
+  if block and block != blank and shape_override != blank
+    assign shape = shape_override
+  endif
+
+  unless loading
+    assign loading = 'lazy'
+  endunless
+
+  unless preload
+    assign preload = false
+  endunless
+
+  unless sizes
+    assign sizes = '100vw'
+  endunless
+
+  if odd_even == 'odd'
+    assign rotate = 5
+  else
+    assign rotate = -5
+  endif
+-%}
+
+{%- if block and block != blank -%}
+  {%- comment -%} Actual tile with content {%- endcomment -%}
+  <div class="info-tile relative {{ class }} {% if display_on_card %}text-scheme-text card{% endif %}">
+    <div class="info-tile__container {% if display_on_card %}bg-scheme-card card__surface {% if tiles_per_row_mobile == '2' %}p-2.5 lg:p-5{% else %}p-5{% endif %} h-full{% endif %}">
+      
+      {%- comment -%} Tile Image {%- endcomment -%}
+      {%- if block.settings.image != blank -%}
+        <div class="info-tile__media">
+          {%- if block.settings.link != blank -%}
+            <a href="{{ block.settings.link }}" class="block">
+          {%- endif -%}
+          
+          <div class="relative {% unless display_on_card %}{% if settings.media_shadow_direction contains 'top' %}pt-media-shadow{% else %}pb-media-shadow{% endif %}{% endunless %}">
+            {%- if shape == 'default' -%}
+              <div class="media-wrapper {{ crop }}">
+                {{- block.settings.image | image_url: width: 1200 | image_tag:
+                  loading: loading,
+                  sizes: sizes,
+                  widths: '300, 400, 500, 600, 800, 1000, 1200',
+                  class: 'object-cover w-full h-full',
+                  preload: preload
+                -}}
+              </div>
+            {%- else -%}
+              <div class="media-wrapper {% if crop == 'natural' %}relative{% else %}{{ crop }}{% endif %}">
+                {%- liquid
+                  if crop == 'aspect-w-1 aspect-h-1'
+                    assign viewbox = '0 0 100 100'
+                  elsif crop == 'aspect-w-4 aspect-h-3'
+                    assign viewbox = '0 0 400 300'
+                  elsif crop == 'aspect-w-3 aspect-h-4'
+                    assign viewbox = '0 0 300 400'
+                  else
+                    assign viewbox = '0 0 100 100'
+                  endif
+                -%}
+                <svg class="shape-svg absolute inset-0 w-full h-full {% if will_transform %}will-transform{% endif %}" 
+                     viewBox="{{ viewbox }}"
+                     xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <clipPath id="clip-{{ shape_id }}">
+                      <use href="#shape-{{ shape_id }}"></use>
+                    </clipPath>
+                  </defs>
+                  <image
+                    href="{{ block.settings.image | image_url: width: 1200 }}"
+                    width="100%"
+                    height="100%"
+                    preserveAspectRatio="xMidYMid slice"
+                    clip-path="url(#clip-{{ shape_id }})"
+                    loading="{{ loading }}"
+                  />
+                </svg>
+              </div>
+            {%- endif -%}
+          </div>
+          
+          {%- if block.settings.link != blank -%}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} Tile Content {%- endcomment -%}
+      <div class="info-tile__content mt-5 break-words {{ settings.product_tile_text_align }}">
+        {%- if block.settings.link != blank -%}
+          <a href="{{ block.settings.link }}" class="block">
+        {%- endif -%}
+        
+        {%- if block.settings.heading != blank -%}
+          <h3 class="font-heading text-lg">{{ block.settings.heading }}</h3>
+        {%- endif -%}
+        
+        {%- if block.settings.description != blank -%}
+          <div class="mt-2.5 text-scheme-text">
+            {{ block.settings.description }}
+          </div>
+        {%- endif -%}
+        
+        {%- if block.settings.link != blank -%}
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+{%- else -%}
+  {%- comment -%} Placeholder tile when no blocks added {%- endcomment -%}
+  <div class="info-tile {{ class }} {% if display_on_card %}text-scheme-text card{% endif %}">
+    <div class="{% if display_on_card %}bg-scheme-card card__surface p-5 h-full{% endif %}">
+      <div class="relative {% unless display_on_card %}{% if settings.media_shadow_direction contains 'top' %}pt-media-shadow{% else %}pb-media-shadow{% endif %}{% endunless %}">
+        {%- if shape == 'default' -%}
+          <div class="media-wrapper {{ crop }}">
+            <div class="bg-scheme-card w-full h-full flex items-center justify-center">
+              <svg class="w-16 h-16 text-scheme-text opacity-20" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+          </div>
+        {%- else -%}
+          <div class="media-wrapper {% if crop == 'natural' %}relative{% else %}{{ crop }}{% endif %}">
+            <svg class="shape-svg absolute inset-0 w-full h-full" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <clipPath id="clip-{{ shape_id }}">
+                  <use href="#shape-{{ shape_id }}"></use>
+                </clipPath>
+              </defs>
+              <rect width="100%" height="100%" fill="currentColor" opacity="0.1" clip-path="url(#clip-{{ shape_id }})"/>
+            </svg>
+          </div>
+        {%- endif -%}
+      </div>
+      
+      <div class="info-tile__content mt-5 text-center">
+        <h3 class="font-heading text-lg">{{ 'Tile Heading' }}</h3>
+        <div class="mt-2.5 text-scheme-text opacity-60">
+          Add a tile block to get started
+        </div>
+      </div>
+    </div>
+  </div>
+{%- endif -%}

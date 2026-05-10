@@ -1,0 +1,376 @@
+/* =============================================================
+   KAADU DESIGN TOKENS — Pass 1: Foundation
+   Source: Kaadu Design System v2 (Typography & Spacing Docs)
+   Loaded after base.bundle.css to override Shapes defaults
+   ============================================================= */
+
+/* ---------- FONT FACES (local fallback to ensure offline zip works) ---------- */
+@font-face {
+  font-family: 'Fagies';
+  src: url('fagies-webfont.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Banter Grotesk';
+  src: url('BanterGrotesk-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Banter Grotesk';
+  src: url('BanterGrotesk-Semibold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---------- TOKENS ---------- */
+:root {
+  /* — Fonts — */
+  --kaadu-font-display: 'Fagies', Helvetica, Arial, sans-serif;
+  --kaadu-font-heading: 'Banter Grotesk', Helvetica, Arial, sans-serif;
+  --kaadu-font-body:    'Banter Grotesk', Helvetica, Arial, sans-serif;
+
+  /* — Color palette (section backgrounds) — */
+  --kaadu-pink:   #FFC5FF;
+  --kaadu-cream:  #FFFFF5;
+  --kaadu-violet: #542A76;
+  --kaadu-sky:    #B7D9FF;
+  --kaadu-lime:   #ACFF64;
+  --kaadu-red:    #AE0000;
+  --kaadu-orange: #FF781E;
+  --kaadu-yellow: #EDF731;
+
+  /* — Foreground / neutral — */
+  --kaadu-black:    #0C0C0C;
+  --kaadu-pure-black: #000000;
+  --kaadu-grey:     #8C8C8C;
+
+  /* — Semantic background tokens (per design system §SECTION BACKGROUNDS) — */
+  --color-bg-hero:    var(--kaadu-pink);
+  --color-bg-light:   var(--kaadu-cream);
+  --color-bg-dark:    var(--kaadu-violet);
+  --color-bg-sky:     var(--kaadu-sky);
+  --color-bg-ticker:  var(--kaadu-lime);
+  --color-bg-mission: var(--kaadu-red);
+  --color-bg-orange:  var(--kaadu-orange);
+  --color-bg-yellow:  var(--kaadu-yellow);
+
+  /* — Spacing scale (4px base, multiples only) — */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+
+  /* — Border radius — */
+  --radius-sharp:   0px;
+  --radius-card:    12px;
+  --radius-sticker: 16px;
+  --radius-btn:     30px;
+  --radius-circle:  50%;
+
+  /* — Shadows — */
+  --shadow-sm:    0px 2px 7.6px 0px rgba(0,0,0,0.25);
+  --shadow-md:    0px 4px 4px 0px rgba(0,0,0,0.25);
+  --shadow-glow:  0px 0px 35px 0px rgba(0,0,0,0.10);
+  --shadow-hover: 0px 6px 8px 0px rgba(0,0,0,0.25);
+}
+
+/* ---------- OVERRIDE SHAPES FONT STACK VARIABLES ---------- */
+/* Shapes' base.bundle.css uses --heading-font-stack and --main-font-stack
+   set in layout/theme.liquid. We re-declare them here to point at our
+   brand fonts. Because kaadu-tokens.css loads AFTER base.bundle.css,
+   our values win. */
+:root {
+  --heading-font-stack: var(--kaadu-font-heading) !important;
+  --main-font-stack:    var(--kaadu-font-body)    !important;
+  --heading-font-weight: 700 !important;
+  --main-font-weight:    400 !important;
+}
+
+/* ---------- BASE: BODY ---------- */
+body {
+  font-family: var(--kaadu-font-body);
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 32px;
+  color: var(--kaadu-pure-black);
+}
+
+/* ---------- TYPOGRAPHY UTILITY CLASSES ----------
+   Use these as opt-in classes (e.g. <h1 class="kaadu-h1">) so we don't
+   nuke section-specific styling in this pass. Section rebuilds in
+   Pass 2+ will adopt these. */
+
+.kaadu-h1,
+.kaadu-display {
+  font-family: var(--kaadu-font-display);
+  font-weight: 400;
+  font-size: 64px;
+  line-height: 72px;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  color: var(--kaadu-red);
+}
+
+.kaadu-mega-ticker {
+  font-family: var(--kaadu-font-display);
+  font-weight: 400;
+  font-size: 156.83px;
+  line-height: 196.04px;
+  text-transform: uppercase;
+  color: var(--kaadu-violet);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.kaadu-h2 {
+  font-family: var(--kaadu-font-heading);
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 56px;
+  text-transform: uppercase;
+  color: var(--kaadu-black);
+  margin: 0 0 var(--space-4);
+}
+
+.kaadu-h3 {
+  font-family: var(--kaadu-font-heading);
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 32px;
+  text-transform: uppercase;
+  color: var(--kaadu-black);
+}
+
+.kaadu-h4 {
+  font-family: var(--kaadu-font-heading);
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 40px;
+  text-transform: uppercase;
+  color: var(--kaadu-black);
+}
+
+.kaadu-body {
+  font-family: var(--kaadu-font-body);
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 32px;
+  color: var(--kaadu-pure-black);
+}
+
+.kaadu-caption,
+.kaadu-small {
+  font-family: var(--kaadu-font-body);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--kaadu-grey);
+}
+
+.kaadu-footnote-bold {
+  font-family: var(--kaadu-font-body);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--kaadu-pure-black);
+}
+
+.kaadu-ticker {
+  font-family: var(--kaadu-font-display);
+  font-weight: 400;
+  font-size: 48px;
+  line-height: 196.036px;
+  text-transform: uppercase;
+  color: var(--kaadu-red);
+  white-space: nowrap;
+  padding: 0 var(--space-6);
+  background: var(--kaadu-lime);
+  border-top: 2px solid #000;
+  border-bottom: 2px solid #000;
+  overflow: hidden;
+  height: 90px;
+}
+
+.kaadu-price,
+.kaadu-number {
+  font-family: var(--kaadu-font-display);
+  font-weight: 400;
+  font-size: 36px;
+  line-height: 1;
+  color: var(--kaadu-red);
+}
+
+.kaadu-nav,
+.kaadu-overline {
+  font-family: var(--kaadu-font-heading);
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--kaadu-pure-black);
+}
+
+/* ---------- BUTTONS ----------
+   Three families per design system: blob (PNG), secondary pill, text+arrow.
+   Pass 1 ships the secondary pill and text+arrow only — blob CTAs need
+   the PNG asset files which arrive in a later pass. */
+
+/* Secondary pill button — Banter Grotesk 700, 30px radius, 2px black border */
+.btn-kaadu-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--kaadu-font-heading);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 24px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--kaadu-pure-black);
+  background: var(--kaadu-cream);
+  border: 2px solid #000;
+  border-radius: var(--radius-btn);
+  padding: 14px 28px;
+  height: 55px;
+  min-width: 219px;
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.btn-kaadu-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+.btn-kaadu-secondary:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Inverse pill — for use on dark/violet backgrounds */
+.btn-kaadu-secondary--inverse {
+  color: var(--kaadu-cream);
+  background: transparent;
+  border-color: var(--kaadu-cream);
+}
+
+/* Text + arrow link */
+.btn-kaadu-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+  text-decoration: none;
+  font-family: var(--kaadu-font-heading);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 24px;
+  text-transform: uppercase;
+  color: var(--kaadu-red);
+}
+.btn-kaadu-arrow--violet { color: var(--kaadu-violet); }
+.btn-kaadu-arrow .icon {
+  width: 32px;
+  height: 32px;
+  background-color: currentColor;
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M4 16h22M18 8l8 8-8 8' stroke='black' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/contain no-repeat;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M4 16h22M18 8l8 8-8 8' stroke='black' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/contain no-repeat;
+}
+
+/* ---------- BACKGROUND HELPERS ----------
+   Convenience classes for section background colors */
+.kaadu-bg-pink   { background-color: var(--kaadu-pink); }
+.kaadu-bg-cream  { background-color: var(--kaadu-cream); }
+.kaadu-bg-violet { background-color: var(--kaadu-violet); color: var(--kaadu-cream); }
+.kaadu-bg-sky    { background-color: var(--kaadu-sky); }
+.kaadu-bg-lime   { background-color: var(--kaadu-lime); }
+.kaadu-bg-red    { background-color: var(--kaadu-red); color: var(--kaadu-cream); }
+.kaadu-bg-orange { background-color: var(--kaadu-orange); color: var(--kaadu-cream); }
+.kaadu-bg-yellow { background-color: var(--kaadu-yellow); color: var(--kaadu-violet); }
+
+/* ---------- THEME-LEVEL FONT APPLICATION ----------
+   Apply the brand fonts to native theme heading elements WITHOUT
+   touching specific section markup. Sections in Pass 2+ will get
+   layout rebuilds; here we just want headings/body to render in
+   Fagies / Banter Grotesk across the storefront. */
+
+h1, .h1, [class*="heading-"][class*="--xl"] {
+  font-family: var(--kaadu-font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+h2, h3, h4, h5, h6,
+.h2, .h3, .h4, .h5, .h6 {
+  font-family: var(--kaadu-font-heading);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+p, li, dd, dt, span, label, input, textarea, select, button {
+  font-family: var(--kaadu-font-body);
+}
+
+/* ---------- MOBILE OVERRIDES ---------- */
+@media (max-width: 390px) {
+  .kaadu-h1,
+  .kaadu-display {
+    font-size: 48px;
+    line-height: 56px;
+  }
+  .kaadu-h2 {
+    font-size: 40px;
+    line-height: 44px;
+  }
+  .kaadu-h3 {
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .kaadu-h4 {
+    font-size: 24px;
+    line-height: 28px;
+  }
+  .kaadu-body {
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .kaadu-caption,
+  .kaadu-small,
+  .kaadu-footnote-bold {
+    font-size: 12px;
+    line-height: 16px;
+  }
+  .kaadu-ticker {
+    font-size: 28px;
+    line-height: 56px;
+    height: 56px;
+  }
+  .kaadu-nav,
+  .kaadu-overline {
+    font-size: 20px;
+    line-height: 32px;
+  }
+  body {
+    font-size: 16px;
+    line-height: 24px;
+  }
+}
+
+/* ---------- HEADING UPPERCASE GUARD ----------
+   The design system rule: Fagies is 400 only — never bold. */
+[style*="font-family"][style*="Fagies"],
+.kaadu-display,
+.kaadu-h1 {
+  font-weight: 400 !important;
+}

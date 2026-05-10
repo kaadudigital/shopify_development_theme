@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+@font-face { font-family:'Fagies'; src:url('../fonts/Fagies.ttf') format('truetype'); font-weight:400; font-display:swap; }
+@font-face { font-family:'Banter Grotesk'; src:url('../fonts/BanterGrotesk-Regular.woff2') format('woff2'); font-weight:400; font-display:swap; }
+@font-face { font-family:'Banter Grotesk'; src:url('../fonts/BanterGrotesk-Regular.woff2') format('woff2'); font-weight:700; font-display:swap; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#f0f0f0; padding:20px 24px; display:flex; gap:20px; flex-wrap:wrap; align-items:flex-start; }
+.meta { font-family:'Banter Grotesk',sans-serif; font-size:10px; color:#666; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px; }
+</style>
+</head>
+<body>
+
+<!-- Default text card -->
+<div>
+  <div class="meta">Default card</div>
+  <div style="
+    background:#FFFFF5; border:2px solid #000; border-radius:12px;
+    padding:20px; width:200px; box-shadow:0 4px 4px rgba(0,0,0,0.25);
+  ">
+    <div style="font-family:'Banter Grotesk',sans-serif;font-weight:700;font-size:13px;text-transform:uppercase;color:#AE0000;margin-bottom:6px;">Mango Snack</div>
+    <div style="font-family:'Banter Grotesk',sans-serif;font-size:14px;line-height:20px;color:#000;">Fair produziert, 100% Frucht. Radikal transparent.</div>
+  </div>
+</div>
+
+<!-- Product card -->
+<div>
+  <div class="meta">Product card</div>
+  <div style="
+    width:180px; border:2px solid #000; border-radius:12px;
+    overflow:hidden; box-shadow:0 4px 4px rgba(0,0,0,0.25);
+  ">
+    <div style="height:110px;background:#FFC5FF;display:flex;align-items:center;justify-content:center;">
+      <img src="../assets/stickers/banana-sticker.png" style="height:85px;object-fit:contain;">
+    </div>
+    <div style="padding:12px 14px;background:#FFFFF5;">
+      <div style="font-family:'Banter Grotesk',sans-serif;font-weight:700;font-size:13px;text-transform:uppercase;margin-bottom:4px;">Banana Chips</div>
+      <div style="font-family:'Fagies',sans-serif;font-size:20px;color:#AE0000;">CHF 6.90</div>
+    </div>
+  </div>
+</div>
+
+<!-- Impact stat card -->
+<div>
+  <div class="meta">Stat card</div>
+  <div style="
+    background:#FFFFF5; border:2px solid #000; border-radius:12px;
+    padding:16px 20px; box-shadow:0 4px 4px rgba(0,0,0,0.25); min-width:120px;
+  ">
+    <div style="font-family:'Fagies',sans-serif;font-size:36px;color:#AE0000;line-height:1;">30–40%</div>
+    <div style="font-family:'Banter Grotesk',sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;color:#542A76;margin-top:4px;">über Marktpreis</div>
+  </div>
+</div>
+
+<!-- Badge / pill -->
+<div>
+  <div class="meta">Impact badge</div>
+  <div style="
+    background:#ACFF64; border:2px solid #000; border-radius:30px;
+    padding:8px 18px; display:inline-block; box-shadow:0 2px 4px rgba(0,0,0,0.2);
+  ">
+    <div style="font-family:'Banter Grotesk',sans-serif;font-weight:700;font-size:13px;text-transform:uppercase;color:#000;">Radikaler Fair</div>
+  </div>
+  <br><br>
+  <div style="
+    background:#AE0000; border:2px solid #000; border-radius:30px;
+    padding:6px 14px; display:inline-block;
+  ">
+    <div style="font-family:'Banter Grotesk',sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;color:#FFFFF5;">Bestseller</div>
+  </div>
+</div>
+
+</body>
+</html>

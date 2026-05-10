@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #f0f0f0; font-family: 'DM Sans', sans-serif; padding: 20px; }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .swatch { width: 120px; }
+  .swatch-block { width: 120px; height: 80px; border: 1px solid rgba(0,0,0,0.08); }
+  .swatch-label { margin-top: 6px; font-size: 11px; line-height: 1.4; color: #333; }
+  .swatch-name { font-weight: 700; font-size: 12px; }
+  .swatch-hex  { font-size: 11px; color: #666; font-family: monospace; }
+</style>
+</head>
+<body>
+<div class="row">
+  <div class="swatch">
+    <div class="swatch-block" style="background:#AE0000;"></div>
+    <div class="swatch-label"><div class="swatch-name">Red</div><div class="swatch-hex">#AE0000</div></div>
+  </div>
+  <div class="swatch">
+    <div class="swatch-block" style="background:#542A76;"></div>
+    <div class="swatch-label"><div class="swatch-name">Violet</div><div class="swatch-hex">#542A76</div></div>
+  </div>
+  <div class="swatch">
+    <div class="swatch-block" style="background:#FFC5FF; border:1px solid #ddd;"></div>
+    <div class="swatch-label"><div class="swatch-name">Pink / Rose</div><div class="swatch-hex">#FFC5FF</div></div>
+  </div>
+  <div class="swatch">
+    <div class="swatch-block" style="background:#FF781E;"></div>
+    <div class="swatch-label"><div class="swatch-name">Orange</div><div class="swatch-hex">#FF781E</div></div>
+  </div>
+  <div class="swatch">
+    <div class="swatch-block" style="background:#FFFFF5; border:1px solid #ddd;"></div>
+    <div class="swatch-label"><div class="swatch-name">Cream</div><div class="swatch-hex">#FFFFF5</div></div>
+  </div>
+</div>
+</body>
+</html>

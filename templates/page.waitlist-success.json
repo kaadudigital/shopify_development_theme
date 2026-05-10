@@ -55,7 +55,7 @@
       "name": "Rich Text with Image",
       "settings": {
         "title": "YOU'RE IN!",
-        "heading_size": "custom-display-header",
+        "heading_size": "h1",
         "rich_text": "<p>Du bist jetzt auf der Liste ganz vorne mit dabei, wenn's losgeht.</p>",
         "image": "shopify://shop_images/Group_21.webp",
         "image_width": "full",

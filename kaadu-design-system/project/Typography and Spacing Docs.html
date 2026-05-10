@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaadu — Typography & Spacing Docs v2</title>
+<style>
+@font-face { font-family:'Fagies'; src:url('fonts/Fagies.ttf') format('truetype'); font-weight:400; font-display:swap; }
+@font-face { font-family:'Banter Grotesk'; src:url('fonts/BanterGrotesk-Regular.woff2') format('woff2'); font-weight:400; font-display:swap; }
+@font-face { font-family:'Banter Grotesk'; src:url('fonts/BanterGrotesk-Regular.woff2') format('woff2'); font-weight:700; font-display:swap; }
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --red:    #AE0000; --violet: #542A76; --pink:  #FFC5FF;
+  --cream:  #FFFFF5; --lime:   #ACFF64; --black: #000;
+  --orange: #FF781E; --yellow: #EDF731; --sky:   #B7D9FF;
+  --grey:   #8C8C8C; --lgrey:  #E6E6E6;
+  --fdisp:  'Fagies', Helvetica, Arial, sans-serif;
+  --fui:    'Banter Grotesk', Helvetica, Arial, sans-serif;
+}
+html { scroll-behavior: smooth; }
+body { background: #f2f2ec; font-family: var(--fui); color: #000; }
+
+/* ── NAV ── */
+.doc-nav {
+  position: sticky; top: 0; z-index: 50;
+  background: #000; border-bottom: 3px solid var(--red);
+  padding: 0 32px; display: flex; align-items: center; height: 52px;
+  gap: 0; overflow-x: auto; white-space: nowrap;
+}
+.doc-nav .brand { font-family: var(--fdisp); font-size: 20px; text-transform: uppercase; color: var(--red); padding-right: 28px; border-right: 1px solid #333; margin-right: 20px; flex-shrink:0; }
+.doc-nav a { font-family: var(--fui); font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,245,0.55); text-decoration: none; margin-right: 20px; flex-shrink:0; transition: color 0.12s; }
+.doc-nav a:hover { color: var(--cream); }
+
+/* ── PAGE ── */
+.page { max-width: 980px; margin: 0 auto; padding: 48px 32px 96px; }
+
+/* ── SECTION HEADER ── */
+.sec { margin-top: 72px; }
+.sec-title { font-family: var(--fdisp); font-size: 52px; text-transform: uppercase; color: var(--red); line-height: 1; }
+.sec-sub { font-family: var(--fui); font-size: 14px; color: var(--grey); margin-top: 6px; margin-bottom: 28px; padding-bottom: 14px; border-bottom: 2px solid #000; line-height: 1.5; }
+
+/* ── SPECIMEN CARD ── */
+.card { border: 2px solid #000; margin-bottom: 14px; }
+.card-head { background: #000; padding: 8px 16px; display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.card-name  { font-family: var(--fui); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--cream); }
+.card-spec  { font-family: 'Courier New', monospace; font-size: 11px; color: var(--lime); }
+.card-body  { padding: 24px; }
+.card-code  {
+  border-top: 1px solid #ddd; background: #181818;
+  padding: 14px 18px; font-family: 'Courier New', monospace;
+  font-size: 12px; line-height: 1.8; color: #ccc;
+  overflow-x: auto; white-space: pre;
+}
+/* syntax colouring */
+.k { color: #F8BC45; } /* key */
+.v { color: #ACFF64; } /* value */
+.s { color: #FFC5FF; } /* string */
+.c { color: #555;    } /* comment */
+
+/* ── TABLE ── */
+.tbl { width: 100%; border-collapse: collapse; margin-bottom: 28px; font-size: 13px; }
+.tbl th { background: #000; color: var(--cream); font-family: var(--fui); font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; padding: 9px 12px; text-align: left; border: 2px solid #000; }
+.tbl td { padding: 9px 12px; border: 1px solid #d8d8d0; background: var(--cream); vertical-align: top; line-height: 1.5; }
+.tbl tr:nth-child(even) td { background: #f5f5ec; }
+.mono { font-family: 'Courier New', monospace; font-size: 12px; color: var(--violet); }
+.val  { font-family: 'Courier New', monospace; font-size: 12px; color: var(--red); font-weight: 700; }
+
+/* ── SPACE VIZ ── */
+.sp-row { display: flex; align-items: center; gap: 14px; margin-bottom: 9px; }
+.sp-bar  { background: var(--red); height: 22px; flex-shrink: 0; }
+.sp-tok  { font-family: 'Courier New', monospace; font-size: 12px; color: var(--violet); font-weight: 700; }
+.sp-px   { font-family: 'Courier New', monospace; font-size: 12px; color: var(--grey); margin-left: 6px; }
+.sp-note { font-family: var(--fui); font-size: 12px; color: #666; margin-left: 6px; }
+
+/* ── RADIUS VIZ ── */
+.rad-row { display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 24px; }
+.rad-box  { background: var(--cream); border: 2px solid #000; width: 80px; height: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
+.rad-n  { font-family: 'Courier New', monospace; font-size: 13px; font-weight: 700; color: var(--red); }
+.rad-t  { font-family: var(--fui); font-size: 10px; text-transform: uppercase; color: var(--grey); }
+
+/* ── SHADOW VIZ ── */
+.shad-row { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 24px; }
+.shad-box { background: var(--cream); border: 2px solid #000; width: 130px; height: 90px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding: 10px; gap: 4px; }
+.shad-lbl { font-family: var(--fui); font-size: 10px; text-transform: uppercase; color: var(--grey); }
+
+/* ── BG PALETTE STRIP ── */
+.bg-strip { display: flex; margin-bottom: 28px; border: 2px solid #000; overflow: hidden; }
+.bg-chip  { flex: 1; height: 56px; display: flex; align-items: center; justify-content: center; }
+.bg-chip span { font-family: 'Courier New', monospace; font-size: 10px; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<nav class="doc-nav">
+  <span class="brand">Kaadu</span>
+  <a href="#fonts">Fonts</a>
+  <a href="#type-scale">Type Scale</a>
+  <a href="#buttons">Buttons</a>
+  <a href="#weights">Weights &amp; Styles</a>
+  <a href="#line-height">Line Heights</a>
+  <a href="#spacing">Spacing</a>
+  <a href="#padding">Padding</a>
+  <a href="#margins">Margins</a>
+  <a href="#radius">Radius</a>
+  <a href="#shadows">Shadows</a>
+  <a href="#bg">Backgrounds</a>
+</nav>
+
+<div class="page">
+
+  <!-- HERO -->
+  <div style="margin-top:48px;">
+    <div style="font-family:'Fagies',sans-serif;font-size:80px;text-transform:uppercase;color:var(--red);line-height:.95;margin-bottom:4px;">Typography</div>
+    <div style="font-family:'Fagies',sans-serif;font-size:80px;text-transform:uppercase;color:var(--violet);line-height:.95;margin-bottom:20px;">&amp; Spacing</div>
+    <p style="font-family:'Banter Grotesk',sans-serif;font-size:16px;line-height:26px;color:#444;max-width:560px;">Complete, Figma-accurate reference for every typographic token, spacing value, padding rule, button spec, radius and shadow in the Kaadu design system. Updated from source — v2.</p>
+  </div>
+
+  <!-- ════ FONTS ════ -->
+  <div class="sec" id="fonts">
+    <div class="sec-title">Fonts</div>
+    <div class="sec-sub">Two brand typefaces. Files live in <code>fonts/</code>. No web fallbacks beyond generic sans-serif should be used in production.</div>
+
+    <div class="card">
+      <div class="card-head">
+        <span class="card-name">Fagies — Display</span>
+        <span class="card-spec">Fagies.ttf · weight 400 only · role: H1, H2, prices, blob-button labels, mega-ticker</span>
+      </div>
+      <div class="card-body" style="background:var(--pink); padding:28px 32px;">
+        <div style="font-family:'Fagies',sans-serif;font-size:64px;line-height:80px;text-transform:uppercase;color:var(--red);">Snack Like You Give a Damn.</div>
+        <div style="font-family:'Fagies',sans-serif;font-size:32px;text-transform:uppercase;color:var(--violet);margin-top:12px;">Justice Never Tasted So Sweet</div>
+      </div>
+      <div class="card-code"><span class="c">/* @font-face — defined once in colors_and_type.css */</span>
+@font-face {
+  <span class="k">font-family</span>: <span class="s">'Fagies'</span>;
+  <span class="k">src</span>: url(<span class="s">'./fonts/Fagies.ttf'</span>) format(<span class="s">'truetype'</span>);
+  <span class="k">font-weight</span>: <span class="v">400</span>; <span class="c">/* only one weight exists — never set 700 on Fagies */</span>
+  <span class="k">font-display</span>: <span class="v">swap</span>;
+}
+
+<span class="c">/* CSS variable */</span>
+<span class="k">--font-display</span>: <span class="s">'Fagies'</span>, Helvetica, Arial, sans-serif;</div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <span class="card-name">Banter Grotesk — UI / Body</span>
+        <span class="card-spec">BanterGrotesk-Regular.woff2 · weights 400 + 700 · role: H3, body, captions, secondary buttons, nav</span>
+      </div>
+      <div class="card-body">
+        <div style="font-family:'Banter Grotesk',sans-serif;font-weight:700;font-size:32px;text-transform:uppercase;color:var(--violet);margin-bottom:10px;">Fairness für Kleinbauern — <span style="font-weight:400;font-size:24px;">Subheading Level</span></div>
+        <div style="font-family:'Banter Grotesk',sans-serif;font-weight:400;font-size:18px;line-height:28px;color:#000;max-width:540px;">100 % Frucht. 0 % Ausbeutung. Gefriergetrocknete Früchte – fair produziert, in der Ursprungsgemeinde verarbeitet, radikal transparent.</div>
+        <div style="font-family:'Banter Grotesk',sans-serif;font-weight:400;font-size:14px;line-height:20px;color:var(--grey);margin-top:8px;">* Alle Preise inkl. MwSt. Versand ab CHF 50 kostenlos.</div>
+      </div>
+      <div class="card-code">@font-face {
+  <span class="k">font-family</span>: <span class="s">'Banter Grotesk'</span>;
+  <span class="k">src</span>: url(<span class="s">'./fonts/BanterGrotesk-Regular.woff2'</span>) format(<span class="s">'woff2'</span>);
+  <span class="k">font-weight</span>: <span class="v">400</span>; <span class="c">/* Regular */</span>
+  <span class="k">font-display</span>: <span class="v">swap</span>;
+}
+@font-face {
+  <span class="k">font-family</span>: <span class="s">'Banter Grotesk'</span>;
+  <span class="k">src</span>: url(<span class="s">'./fonts/BanterGrotesk-Regular.woff2'</span>) format(<span class="s">'woff2'</span>);
+  <span class="k">font-weight</span>: <span class="v">700</span>; <span class="c">/* Semibold — maps to same file until Semibold .woff2 supplied */</span>
+  <span class="k">font-display</span>: <span class="v">swap</span>;
+}
+
+<span class="c">/* CSS variables */</span>
+<span class="k">--font-heading</span>: <span class="s">'Banter Grotesk'</span>, Helvetica, Arial, sans-serif;
+<span class="k">--font-body</span>:    <span class="s">'Banter Grotesk'</span>, Helvetica, Arial, sans-serif;</div>
+    </div>
+  </div>
+
+  <!-- ════ TYPE SCALE ════ -->
+  <div class="sec" id="type-scale">
+    <div class="sec-title">Type Scale</div>
+    <div class="sec-sub">All values from Figma source. H1 = 64/72, H2 = 48/56, H3 = 24/32, H4 = 32/40, Body = 24/32. Mobile overrides shown per token.</div>
+
+    <!-- H1 -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-name">H1 — Display Headline</span>
+        <span class="card-spec">Fagies 400 · 64px / 72px lh · uppercase · source: Section-1, Section-21, H1-DISPLAY-HEADLINE frame</span>
+      </div>
+      <div class="card-body" style="background:var(--pink);">
+        <div style="font-family:'Fagies',sans-serif;font-size:64px;line-height:72px;text-transform:uppercase;color:var(--red);">The Snacks That<br>Change Lives</div>
+      </div>
+      <div class="card-code"><span class="k">font-family</span>:    <span class="s">'Fagies'</span>, Helvetica, Arial, sans-serif;
+<span class="k">font-weight</span>:    <span class="v">400</span>;
+<span class="k">font-size</span>:      <span class="v">64px</span>;
+<span class="k">line-height</span>:    <span class="v">72px</span>;
+<span class="k">text-transform</span>: <span class="v">uppercase</span>;
+<span class="k">letter-spacing</span>: <span class="v">-0.01em</span>;
+<span class="k">color</span>:          <span class="v">#AE0000</span>; <span class="c">/* varies by section bg — see Color Pairings */</span>
+
+<span class="c">/* Mobile (max-width: 390px) — confirmed from Figma iPhone frames */</span>
+<span class="k">font-size</span>:   <span class="v">48px</span>;
+<span class="k">line-height</span>: <span class="v">56px</span>; <span class="c">/* Figma H1 Mobile: 48/56 */</span></div>
+    </div>
+
+    <!-- MEGA TICKER -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-name">Mega Ticker — Hero Banner Text</span>
+        <span class="card-spec">Fagies 400 · 156.83px / 196.04px lh · uppercase · source: Section-15 ("WIR SIND:")</span>
+      </div>
+      <div class="card-body" style="background:var(--yellow);overflow:hidden;padding:0;height:100px;display:flex;align-items:center;">
+        <div style="font-family:'Fagies',sans-serif;font-size:100px;text-transform:uppercase;color:var(--violet);white-space:nowrap;line-height:1;padding:0 16px;">WIR SIND: WIR SIND:</div>
+      </div>
+      <div class="card-code"><span class="c">/* Full-bleed oversized text used as decorative banner — clips at edges */</span>
+<span class="k">font-family</span>:    <span class="s">'Fagies'</span>, Helvetica, Arial, sans-serif;
+<span class="k">font-weight</span>:    <span class="v">400</span>;
+<span class="k">font-size</span>:      <span class="v">156.83px</span>;  <span class="c">/* exact Figma value */</span>
+<span class="k">line-height</span>:    <span class="v">196.04px</span>;
+<span class="k">text-transform</span>: <span class="v">uppercase</span>;
+<span class="k">color</span>:          <span class="v">#542A76</span>;   <span class="c">/* violet on yellow bg */</span>
+<span class="k">white-space</span>:    <span class="v">nowrap</span>;
+<span class="k">overflow</span>:       <span class="v">hidden</span>;</div>
+    </div>
+
+    <!-- H2 -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-name">H2 — Section Headline</span>
+        <span class="card-spec">Fagies 400 · 48px / 56px lh · uppercase · source: H2-Section-Headline frame</span>
+      </div>
+      <div class="card-body">
+        <div style="font-family:'Fagies',sans-serif;font-weight:400;font-size:48px;line-height:56px;text-transform:uppercase;color:#0c0c0c;">Marktpreise schwanken,<br>unsere nicht</div>
+      </div>
+      <div class="card-code"><span class="k">font-family</span>:    <span class="s">'Fagies'</span>, Helvetica, Arial, sans-serif;
+<span class="k">font-weight</span>:    <span class="v">400</span>;
+<span class="k">font-size</span>:      <span class="v">48px</span>;
+<span class="k">line-height</span>:    <span class="v">56px</span>;
+<span class="k">text-transform</span>: <span class="v">uppercase</span>;
+<span class="k">color</span>:          <span class="v">#0C0C0C</span>;
+
+<span class="c">/* Mobile (max-width: 390px) */</span>
+<span class="k">font-size</span>:   <span class="v">40px</span>; <span class="c">/* Figma H2 Mobile: 40/44 */</span>
+<span class="k">line-height</span>: <span class="v">44px</span>;</div>
+    </div>
+
+    <!-- H3 -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-name">H3 — Subheading</span>
+        <span class="card-spec">Banter Grotesk 700 · 24px / 32px lh · uppercase · source: H3-Subheading frame, Section-5</span>
+      </div>
+      <div class="card-body">
+        <div style="font-family:'Banter Grotesk',sans-serif;font-weight:700;font-size:24px;line-height:32px;text-transform:uppercase;color:#0c0c0c;">Starke Jobs für lokale Frauen</div>
+      </div>
+      <div class="card-code"><span class="k">font-family</span>:    <span class="s">'Banter Grotesk'</span>, Helvetica, Arial, sans-serif;
+<span class="k">font-weight</span>:    <span class="v">700</span>;
+<span class="k">font-size</span>:      <span class="v">24px</span>;
+<span class="k">line-height</span>:    <span class="v">32px</span>;
+<span class="k">text-transform</span>: <span class="v">uppercase</span>;
+
+<span class="c">/* Mobile (max-width: 390px) — Figma H3 Mobile: 16/24 */</span>
+<span class="k">font-size</span>:   <span class="v">16px</span>;
+<span class="k">line-height</span>: <span class="v">24px</span>;</div>
+    </div>
+
+    <!-- H4 -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-name">H4 — Sub-Section Heading</span>
+        <span class="card-spec">Banter Grotesk 700 · 32px / 40px lh · uppercase · source: H4 style</span>
+      </div>
+      <div class="card-body">
+        <div style="font-family:'Banter Grotesk',sans-serif;font-weight:700;font-size:32px;line-height:40px;text-transform:uppercase;color:#0c0c0c;">Marktpreise schwanken, unsere nicht</div>
+      </div>
+      <div class="card-code"><span class="k">font-family</span>:    <span class="s">'Banter Grotesk'</span>, Helvetica, Arial, sans-serif;
+<span class="k">font-weight</span>:    <span class="v">700</span>;
+<span class="k">font-size</span>:      <span class="v">32px</span>;
+<span class="k">line-height</span>:    <span class="v">40px</span>;
+<span class="k">text-transform</span>: <span class="v">uppercase</span>;
+
+<span class="c">/* Mobile (max-width: 390px) — Figma H4 Mobile: 24/28 */</span>
+<span class="k">font-size</span>:   <span class="v">24px</span>;
+<span class="k">line-height</span>: <span class="v">28px</span>;</div>
+    </div>
+
+    <!-- Body -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-name">Body Default — Paragraph</span>
+        <span class="card-spec">Banter Grotesk 400 · 24px / 32px lh · sentence case · source: Body-Default frame, all section body text</span>
+      </div>
+      <div class="card-body">
+        <div style="font-family:'Banter Grotesk',sans-serif;font-weight:400;font-size:24px;line-height:32px;color:#000;max-width:520px;">Kaadu zahlt Kleinbauern stabile, transparente Preise – deutlich über dem Markt. So schaffen wir Planungssicherheit und schützen sie vor Preisschwankungen. Umweltauflagen und faire Löhne für Erntehelfer sichern ganzheitliche Wirkung.</div>
+      </div>
+      <div class="card-code"><span class="k">font-family</span>: <span class="s">'Banter Grotesk'</span>, Helvetica, Arial, sans-serif;
+<span class="k">font-weight</span>: <span class="v">400</span>;
+<span class="k">font-size</span>:   <span class="v">24px</span>;
+<span class="k">line-height</span>: <span class="v">32px</span>;
+<span class="c">/* sentence case — NO text-transform */</span>
+
+<span class="c">/* Mobile (max-width: 390px) — Figma Body Mobile: 16/24 */</span>
+<span class="k">font-size</span>:   <span class="v">16px</span>;
+<span class="k">line-height</span>: <span class="v">24px</span>;</div>
+    </div>
+
+    <!-- Small -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-name">Small / Caption</span>
+        <span class="card-spec">Banter Grotesk 400 · 14px / 20px lh · source: Small-Text-Captions frame, footnotes in Section-16</span>
+      </div>
+      <div class="card-body">
+        <div style="font-family:'Banter Grotesk',sans-serif;font-weight:400;font-size:14px;line-height:20px;color:var(--grey);">* Alle Preise inkl. MwSt. Versand ab CHF 50 kostenlos.</div>
+        <div style="font-family:'Banter Grotesk',sans-serif;font-weight:700;font-size:14px;line-height:20px;color:#000;margin-top:6px;">* Im Vergleich zu vergleichbarer Arbeit in der Region Vazhakulam, Kerala.</div>
+      </div>
+      <div class="card-code"><span class="k">font-family</span>: <span class="s">'Banter Grotesk'</span>, Helvetica, Arial, sans-serif;
+<span class="k">font-weight</span>: <span class="v">400</span>;   <span class="c">/* or 700 for footnote-bold variant */</span>
+<span class="k">font-size</span>:   <span class="v">14px</span>;
+<span class="k">line-height</span>: <span class="v">20px</span>;
+<span class="k">color</span>:       <span class="v">#8C8C8C</span>; <span class="c">/* or #000 for bold footnote */</span>
+
+<span class="c">/* Mobile — unchanged; 14px remains readable at mobile sizes */</span>
+<span class="k">font-size</span>:   <span class="v">14px</span>;
+<span class="k">line-height</span>: <span class="v">20px</span>;</div>
+    </div>
+
+    <!-- Ticker marquee -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-name">Ticker / Marquee</span>
+        <span class="card-spec">Fagies 400 · 48px / 196px lh (centering) · uppercase · source: Section-2, Section-1 ticker strip</span>
+      </div>
+      <div class="card-body" style="background:var(--lime);padding:0;overflow:hidden;height:56px;display:flex;align-items:center;">
+        <div style="font-family:'Fagies',sans-serif;font-size:32px;text-transform:uppercase;color:var(--red);white-space:nowrap;padding:0 24px;line-height:56px;">ITS NOT FAIR! ITS NOT FAIR! ITS NOT FAIR! ITS NOT FAIR! ITS NOT FAIR! ITS NOT FAIR!</div>
+      </div>
+      <div class="card-code"><span class="k">font-family</span>:    <span class="s">'Fagies'</span>, Helvetica, Arial, sans-serif;
+<span class="k">font-weight</span>:    <span class="v">400</span>;
+<span class="k">font-size</span>:      <span class="v">48px</span>;           <span class="c">/* Section-2 source value */</span>
+<span class="k">line-height</span>:    <span class="v">196.036px</span>;     <span class="c">/* matches container; vertically centers text */</span>
+<span class="k">text-transform</span>: <span class="v">uppercase</span>;
+<span class="k">color</span>:          <span class="v">#AE0000</span>;
+<span class="k">white-space</span>:    <span class="v">nowrap</span>;
+<span class="k">padding</span>:        <span class="v">0 24px</span>;          <span class="c">/* per text node */</span>
+
+<span class="c">/* Container */</span>
+<span class="k">background-color</span>: <span class="v">#ACFF64</span>;
+<span class="k">border-top</span>:       <span class="v">2px solid #000</span>;
+<span class="k">border-bottom</span>:    <span class="v">2px solid #000</span>;
+<span class="k">overflow</span>:         <span class="v">hidden</span>;
+<span class="k">height</span>:           <span class="v">90px</span>;           <span class="c">/* Figma: ~90px tall strip */</span>
+
+<span class="c">/* Mobile (max-width: 390px) */</span>
+<span class="k">font-size</span>:   <span class="v">28px</span>; <span class="c">/* scale down to keep strip height ~56px on mobile */</span>
+<span class="k">line-height</span>: <span class="v">56px</span>;
+<span class="k">height</span>:      <span class="v">56px</span>; <span class="c">/* container shrinks accordingly */</span></div>
+    </div>
+
+    <!-- Price -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-name">Price / Impact Number</span>
+        <span class="card-spec">Fagies 400 · 36px / 1 lh · used for CHF prices, ₹ farmer wages, impact stats</span>
+      </div>
+      <div class="card-body" style="display:flex;gap:32px;align-items:baseline;flex-wrap:wrap;">
+        <span style="font-family:'Fagies',sans-serif;font-size:40px;color:var(--red);line-height:1;">CHF 7.90</span>
+        <span style="font-family:'Fagies',sans-serif;font-size:40px;color:var(--violet);line-height:1;">₹1000</span>
+        <span style="font-family:'Fagies',sans-serif;font-size:24px;color:var(--grey);line-height:1;">CHF 50</span>
+      </div>
+      <div class="card-code"><span class="k">font-family</span>: <span class="s">'Fagies'</span>, Helvetica, Arial, sans-serif;
+<span class="k">font-size</span>:   <span class="v">36px</span>;   <span class="c">/* primary price — desktop */</span>
+<span class="k">font-size</span>:   <span class="v">24px</span>;   <span class="c">/* inline / secondary price — desktop */</span>
+<span class="k">line-height</span>: <span class="v">1</span>;
+<span class="k">color</span>:       <span class="v">#AE0000</span>;
+
+<span class="c">/* Mobile — unchanged; Fagies numerals read well at these sizes */</span>
+<span class="k">font-size</span>:   <span class="v">36px</span>;   <span class="c">/* primary — keep large for impact */</span>
+<span class="k">font-size</span>:   <span class="v">20px</span>;   <span class="c">/* inline secondary */</span></div>
+    </div>
+
+    <!-- Nav label -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-name">Nav Label / Overline</span>
+        <span class="card-spec">Banter Grotesk 700 · 13px / 1 lh · uppercase · +0.08em tracking</span>
+      </div>
+      <div class="card-body" style="display:flex;gap:32px;align-items:center;">
+        {['Shop','Über uns','Impact','Blog'].map((l,i) => <span key={i} style="font-family:'Banter Grotesk',sans-serif;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:0.08em;color:#000;">{l}</span>)}
+        <span style="font-family:'Banter Grotesk',sans-serif;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:0.08em;color:var(--red);">Shop</span>
+        <span style="font-family:'Banter Grotesk',sans-serif;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:0.08em;color:#000;">Über uns</span>
+        <span style="font-family:'Banter Grotesk',sans-serif;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:0.08em;color:#000;">Impact</span>
+        <span style="font-family:'Banter Grotesk',sans-serif;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:0.08em;color:#000;">Blog</span>
+      </div>
+      <div class="card-code"><span class="k">font-family</span>:    <span class="s">'Banter Grotesk'</span>, Helvetica, Arial, sans-serif;
+<span class="k">font-weight</span>:    <span class="v">700</span>;
+<span class="k">font-size</span>:      <span class="v">13px</span>;
+<span class="k">line-height</span>:    <span class="v">1</span>;
+<span class="k">text-transform</span>: <span class="v">uppercase</span>;
+<span class="k">letter-spacing</span>: <span class="v">0.08em</span>;
+
+<span class="c">/* Mobile — confirmed from Figma iPhone 2: "ITS NOT FAIR!" overline label */</span>
+<span class="k">font-size</span>:   <span class="v">20px</span>; <span class="c">/* bumped up on mobile for tap-target legibility */</span>
+<span class="k">line-height</span>: <span class="v">32px</span>;</div>
+    </div>
+
+    <!-- Complete scale table -->
+    <table class="tbl">
+      <thead><tr><th>Role</th><th>Font</th><th>Weight</th><th>Size</th><th>Line-height</th><th>Mobile Size</th><th>Mobile lh</th><th>Transform</th><th>Color (default)</th></tr></thead>
+      <tbody>
+        <tr><td>H1 Display</td><td class="mono">Fagies</td><td class="val">400</td><td class="val">64px</td><td class="val">72px</td><td class="val">48px</td><td class="val">56px</td><td>uppercase</td><td class="mono">#AE0000</td></tr>
+        <tr><td>Mega Ticker</td><td class="mono">Fagies</td><td class="val">400</td><td class="val">156.83px</td><td class="val">196.04px</td><td class="val">—</td><td class="val">—</td><td>uppercase</td><td class="mono">#542A76</td></tr>
+        <tr><td>H2 Section</td><td class="mono">Fagies</td><td class="val">400</td><td class="val">48px</td><td class="val">56px</td><td class="val">40px</td><td class="val">44px</td><td>uppercase</td><td class="mono">#0C0C0C</td></tr>
+        <tr><td>H3 Subheading</td><td class="mono">Banter Grotesk</td><td class="val">700</td><td class="val">24px</td><td class="val">32px</td><td class="val">16px</td><td class="val">24px</td><td>uppercase</td><td class="mono">#0C0C0C</td></tr>
+        <tr><td>H4 Sub-Section</td><td class="mono">Banter Grotesk</td><td class="val">700</td><td class="val">32px</td><td class="val">40px</td><td class="val">24px</td><td class="val">28px</td><td>uppercase</td><td class="mono">#0C0C0C</td></tr>
+        <tr><td>Body Default</td><td class="mono">Banter Grotesk</td><td class="val">400</td><td class="val">24px</td><td class="val">32px</td><td class="val">16px</td><td class="val">24px</td><td>none</td><td class="mono">#000000</td></tr>
+        <tr><td>Caption / Small</td><td class="mono">Banter Grotesk</td><td class="val">400</td><td class="val">14px</td><td class="val">20px</td><td class="val">12px</td><td class="val">16px</td><td>none</td><td class="mono">#8C8C8C</td></tr>
+        <tr><td>Footnote bold</td><td class="mono">Banter Grotesk</td><td class="val">700</td><td class="val">14px</td><td class="val">20px</td><td class="val">12px</td><td class="val">16px</td><td>none</td><td class="mono">#000000</td></tr>
+        <tr><td>Ticker / Marquee</td><td class="mono">Fagies</td><td class="val">400</td><td class="val">48px</td><td class="val">196px</td><td class="val">28px</td><td class="val">56px</td><td>uppercase</td><td class="mono">#AE0000</td></tr>
+        <tr><td>Price / Number</td><td class="mono">Fagies</td><td class="val">400</td><td class="val">36px</td><td class="val">1</td><td class="val">36px</td><td class="val">1</td><td>none</td><td class="mono">#AE0000</td></tr>
+        <tr><td>Nav / Overline</td><td class="mono">Banter Grotesk</td><td class="val">700</td><td class="val">13px</td><td class="val">1</td><td class="val">20px</td><td class="val">32px</td><td>uppercase</td><td class="mono">#000000</td></tr>
+        <tr><td>Blob button label</td><td class="mono">Fagies</td><td class="val">400</td><td class="val">20px</td><td class="val">100px</td><td class="val">20px</td><td class="val">100px</td><td>uppercase</td><td class="mono">#AE0000</td></tr>
+        <tr><td>Secondary btn label</td><td class="mono">Banter Grotesk</td><td class="val">700</td><td class="val">18px</td><td class="val">24px</td><td class="val">18px</td><td class="val">24px</td><td>uppercase</td><td class="mono">#000000</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ════ BUTTONS ════ -->
+  <div class="sec" id="buttons">
+    <div class="sec-title">Buttons</div>
+    <div class="sec-sub">Two families: (1) Primary blob — Fagies font on a custom PNG blob shape. (2) Secondary pill — Banter Grotesk Semibold, border-radius 30px. All from Figma Page-4 components.</div>
+
+    <!-- Primary blob buttons -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-name">Primary Blob CTA — Font spec</span>
+        <span class="card-spec">Fagies 400 · 20px · lineHeight 100px (vertical centering) · uppercase</span>
+      </div>
+      <div class="card-body" style="background:#f0f0e8;display:flex;gap:24px;flex-wrap:wrap;align-items:center;">
+        <div style="position:relative;width:219px;height:100px;">
+          <img src="assets/buttons/btn-blob-2.png" style="position:absolute;left:0;top:0;width:219px;height:95px;object-fit:fill;">
+          <span style="position:absolute;left:39px;top:0;width:143px;height:100px;font-family:'Fagies',sans-serif;font-size:20px;text-align:center;line-height:100px;color:#AE0000;text-transform:uppercase;">Jetzt Kaufen</span>
+        </div>
+        <div style="position:relative;width:208px;height:117px;">
+          <img src="assets/buttons/btn-blob-1.png" style="position:absolute;left:0;top:0;width:208px;height:117px;object-fit:fill;">
+          <span style="position:absolute;left:32px;top:9px;width:143px;height:100px;font-family:'Fagies',sans-serif;font-size:20px;text-align:center;line-height:100px;color:#AE0000;text-transform:uppercase;">Jetzt Probieren</span>
+        </div>
+        <div style="position:relative;width:186px;height:100px;">
+          <img src="assets/buttons/btn-blob-4.png" style="position:absolute;left:0;top:0;width:186px;height:97px;object-fit:fill;">
+          <span style="position:absolute;left:21px;top:0;width:143px;height:100px;font-family:'Fagies',sans-serif;font-size:20px;text-align:center;line-height:100px;color:#ACFF64;text-transform:uppercase;">Shop Öffnen</span>
+        </div>
+      </div>
+      <div class="card-code"><span class="c">/* Primary CTA — blob PNG background + Fagies label */</span>
+.btn-blob {
+  <span class="k">position</span>:    <span class="v">relative</span>;
+  <span class="k">width</span>:        <span class="v">219px</span>;   <span class="c">/* Button 2 — most common */</span>
+  <span class="k">height</span>:       <span class="v">100px</span>;
+}
+.btn-blob-bg {
+  <span class="k">background</span>:   url(<span class="s">'assets/buttons/btn-blob-2.png'</span>) center / cover no-repeat;
+  <span class="k">width</span>: <span class="v">100%</span>; <span class="k">height</span>: <span class="v">95px</span>;
+}
+.btn-blob-label {
+  <span class="k">font-family</span>:    <span class="s">'Fagies'</span>, sans-serif;
+  <span class="k">font-weight</span>:    <span class="v">400</span>;
+  <span class="k">font-size</span>:      <span class="v">20px</span>;
+  <span class="k">line-height</span>:    <span class="v">100px</span>;   <span class="c">/* vertically centers text in blob height */</span>
+  <span class="k">text-align</span>:     <span class="v">center</span>;
+  <span class="k">text-transform</span>: <span class="v">uppercase</span>;
+  <span class="k">color</span>:          <span class="v">#AE0000</span>; <span class="c">/* red on most blobs */</span>
+  <span class="c">/* color: #ACFF64; — lime on Button 4 (dark blob variant) */</span>
+}
+
+<span class="c">/* Blob variants and sizes */</span>
+<span class="c">/* btn-blob-1.png: 208 × 117px  */</span>
+<span class="c">/* btn-blob-2.png: 219 × 95px   */</span>
+<span class="c">/* btn-blob-3.png: 201 × 123px  */</span>
+<span class="c">/* btn-blob-4.png: 186 × 97px   (lime text, not red) */</span></div>
+    </div>
+
+    <!-- Secondary pill -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-name">Secondary Pill Button</span>
+        <span class="card-spec">Banter Grotesk 700 · 18px / 24px · border-radius 30px · border 2px solid #000 · source: Property1SecondaryButton</span>
+      </div>
+      <div class="card-body" style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;">
+        <button style="font-family:'Banter Grotesk',sans-serif;font-weight:700;font-size:18px;line-height:24px;text-transform:uppercase;color:#000;background:#FFFFF5;border:2px solid #000;border-radius:30px;padding:14px 28px;box-shadow:0 4px 4px rgba(0,0,0,.25);cursor:pointer;letter-spacing:0.02em;">Shop Öffnen</button>
+        <button style="font-family:'Banter Grotesk',sans-serif;font-weight:700;font-size:18px;line-height:24px;text-transform:uppercase;color:#000;background:#FFFFF5;border:2px solid #000;border-radius:30px;padding:14px 28px;box-shadow:0 4px 4px rgba(0,0,0,.25);cursor:pointer;letter-spacing:0.02em;">Framework Ansehen</button>
+        <div style="background:#542A76;padding:16px;border-radius:8px;display:flex;gap:12px;align-items:center;">
+          <span style="font-family:'Banter Grotesk',sans-serif;font-size:10px;text-transform:uppercase;color:#FFC5FF;letter-spacing:.08em;">on dark:</span>
+          <button style="font-family:'Banter Grotesk',sans-serif;font-weight:700;font-size:18px;line-height:24px;text-transform:uppercase;color:#FFFFF5;background:transparent;border:2px solid #FFFFF5;border-radius:30px;padding:14px 28px;cursor:pointer;">Mehr Erfahren</button>
+        </div>
+      </div>
+      <div class="card-code"><span class="c">/* Secondary pill — Property 1=Secondary Button in Figma */</span>
+.btn-secondary {
+  <span class="k">font-family</span>:    <span class="s">'Banter Grotesk'</span>, Helvetica, Arial, sans-serif;
+  <span class="k">font-weight</span>:    <span class="v">700</span>;
+  <span class="k">font-size</span>:      <span class="v">18px</span>;
+  <span class="k">line-height</span>:    <span class="v">24px</span>;
+  <span class="k">text-transform</span>: <span class="v">uppercase</span>;
+  <span class="k">letter-spacing</span>: <span class="v">0.02em</span>;
+  <span class="k">color</span>:          <span class="v">#000000</span>;    <span class="c">/* black on cream bg */</span>
+  <span class="k">background</span>:     <span class="v">#FFFFF5</span>;    <span class="c">/* --color-cream */</span>
+  <span class="k">border</span>:         <span class="v">2px solid #000</span>;
+  <span class="k">border-radius</span>:  <span class="v">30px</span>;        <span class="c">/* pill */</span>
+  <span class="k">padding</span>:        <span class="v">14px 28px</span>;   <span class="c">/* 7px top/bottom to hit ~55px total height */</span>
+  <span class="k">box-shadow</span>:     <span class="v">0px 4px 4px 0px rgba(0,0,0,0.25)</span>;
+  <span class="k">height</span>:         <span class="v">55px</span>;        <span class="c">/* Figma exact height */</span>
+  <span class="k">min-width</span>:      <span class="v">219px</span>;       <span class="c">/* Figma default width */</span>
+  <span class="k">cursor</span>:         <span class="v">pointer</span>;
+}
+
+<span class="c">/* Hover state */</span>
+.btn-secondary:hover {
+  <span class="k">transform</span>:  <span class="v">translateY(-1px)</span>;
+  <span class="k">box-shadow</span>: <span class="v">0px 6px 6px 0px rgba(0,0,0,0.25)</span>;
+}
+
+<span class="c">/* On dark background — inverse variant */</span>
+.btn-secondary-inverse {
+  <span class="k">color</span>:       <span class="v">#FFFFF5</span>;
+  <span class="k">background</span>:  <span class="v">transparent</span>;
+  <span class="k">border-color</span>:<span class="v">#FFFFF5</span>;
+}</div>
+    </div>
+
+    <!-- Text + arrow link button -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-name">Text + Arrow Link Button</span>
+        <span class="card-spec">Banter Grotesk 700 · 18px / 24px · uppercase · with 32×32 SVG arrow icon · source: Section-16, SecondaryButton component</span>
+      </div>
+      <div class="card-body" style="display:flex;gap:32px;flex-wrap:wrap;align-items:center;">
+        <div style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+          <div style="width:32px;height:32px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <span style="color:#fff;font-size:16px;">→</span>
+          </div>
+          <span style="font-family:'Banter Grotesk',sans-serif;font-weight:700;font-size:18px;text-transform:uppercase;color:var(--red);line-height:24px;">Jetzt Unterstützen</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+          <div style="width:32px;height:32px;background:var(--violet);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <span style="color:#fff;font-size:16px;">→</span>
+          </div>
+          <span style="font-family:'Banter Grotesk',sans-serif;font-weight:700;font-size:18px;text-transform:uppercase;color:var(--violet);line-height:24px;">Mehr Erfahren</span>
+        </div>
+      </div>
+      <div class="card-code"><span class="c">/* Text + icon link — SecondaryButton component */</span>
+.btn-text-arrow {
+  <span class="k">display</span>:         <span class="v">flex</span>;
+  <span class="k">align-items</span>:     <span class="v">center</span>;
+  <span class="k">gap</span>:             <span class="v">8px</span>;
+  <span class="k">cursor</span>:          <span class="v">pointer</span>;
+}
+.btn-text-arrow .icon {
+  <span class="k">width</span>: <span class="v">32px</span>; <span class="k">height</span>: <span class="v">32px</span>;   <span class="c">/* SVG arrow, exact Figma size */</span>
+  <span class="k">background-color</span>: <span class="v">#AE0000</span>;  <span class="c">/* matches label color */</span>
+}
+.btn-text-arrow .label {
+  <span class="k">font-family</span>:    <span class="s">'Banter Grotesk'</span>, Helvetica, Arial, sans-serif;
+  <span class="k">font-weight</span>:    <span class="v">700</span>;
+  <span class="k">font-size</span>:      <span class="v">18px</span>;
+  <span class="k">line-height</span>:    <span class="v">24px</span>;
+  <span class="k">text-transform</span>: <span class="v">uppercase</span>;
+  <span class="k">color</span>:          <span class="v">#AE0000</span>; <span class="c">/* or #542A76 violet variant */</span>
+}</div>
+    </div>
+
+    <!-- button summary table -->
+    <table class="tbl">
+      <thead><tr><th>Button Type</th><th>Font</th><th>Size</th><th>Weight</th><th>Color</th><th>Height</th><th>Radius</th></tr></thead>
+      <tbody>
+        <tr><td>Blob CTA (btn-blob-1)</td><td class="mono">Fagies</td><td class="val">20px</td><td class="val">400</td><td class="mono">#AE0000 (red)</td><td class="val">117px</td><td>blob shape</td></tr>
+        <tr><td>Blob CTA (btn-blob-2)</td><td class="mono">Fagies</td><td class="val">20px</td><td class="val">400</td><td class="mono">#AE0000 (red)</td><td class="val">95px</td><td>blob shape</td></tr>
+        <tr><td>Blob CTA (btn-blob-3)</td><td class="mono">Fagies</td><td class="val">20px</td><td class="val">400</td><td class="mono">#AE0000 (red)</td><td class="val">123px</td><td>blob shape</td></tr>
+        <tr><td>Blob CTA (btn-blob-4)</td><td class="mono">Fagies</td><td class="val">20px</td><td class="val">400</td><td class="mono">#ACFF64 (lime)</td><td class="val">97px</td><td>blob shape</td></tr>
+        <tr><td>Secondary pill</td><td class="mono">Banter Grotesk</td><td class="val">18px</td><td class="val">700</td><td class="mono">#000 on #FFFFF5</td><td class="val">55px</td><td class="val">30px</td></tr>
+        <tr><td>Secondary pill (inverse)</td><td class="mono">Banter Grotesk</td><td class="val">18px</td><td class="val">700</td><td class="mono">#FFFFF5 on transparent</td><td class="val">55px</td><td class="val">30px</td></tr>
+        <tr><td>Text + arrow link</td><td class="mono">Banter Grotesk</td><td class="val">18px</td><td class="val">700</td><td class="mono">#AE0000 or #542A76</td><td>auto</td><td>n/a</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ════ WEIGHTS & STYLES ════ -->
+  <div class="sec" id="weights">
+    <div class="sec-title">Weights &amp; Styles</div>
+    <div class="sec-sub">Only two weights. No italic. No oblique. Never set font-weight: 700 on Fagies.</div>
+    <table class="tbl">
+      <thead><tr><th>Weight</th><th>Value</th><th>Font</th><th>Usage</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span style="font-family:'Fagies',sans-serif;font-size:22px;text-transform:uppercase;">Regular</span></td>
+          <td class="val">400</td><td class="mono">Fagies</td>
+          <td>All display — H1, prices, blob button labels, mega ticker, footer brand name</td>
+        </tr>
+        <tr>
+          <td><span style="font-family:'Banter Grotesk',sans-serif;font-weight:400;font-size:16px;">Regular</span></td>
+          <td class="val">400</td><td class="mono">Banter Grotesk</td>
+          <td>Body copy, paragraphs, captions, descriptions, plain nav text</td>
+        </tr>
+        <tr>
+          <td><span style="font-family:'Banter Grotesk',sans-serif;font-weight:700;font-size:16px;">Semibold</span></td>
+          <td class="val">700</td><td class="mono">Banter Grotesk</td>
+          <td>H2, H3, secondary button labels, nav links, footnotes bold, badges, overlines</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="card-code"><span class="c">/* Rule: Fagies → always 400 */</span>
+<span class="c">/* Rule: Banter Grotesk 400 → body text, descriptions */</span>
+<span class="c">/* Rule: Banter Grotesk 700 → anything that needs to shout — headings, buttons, labels */</span>
+
+<span class="c">/* Never: */</span>
+<span class="c">/* font-family: 'Fagies'; font-weight: 700;  ← no semibold Fagies exists */</span>
+<span class="c">/* font-style: italic; ← no italic defined for either font */</span></div>
+  </div>
+
+  <!-- ════ LINE HEIGHT ════ -->
+  <div class="sec" id="line-height">
+    <div class="sec-title">Line Heights</div>
+    <div class="sec-sub">Fixed pixel values from Figma source. Note: Figma uses lineHeight="100px" as a single-line vertical-centering trick — do not use this for flowing text.</div>
+    <table class="tbl">
+      <thead><tr><th>Role</th><th>font-size</th><th>line-height</th><th>Mobile size</th><th>Mobile lh</th><th>Ratio</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>H1 Display (desktop)</td><td class="val">64px</td><td class="val">72px</td><td class="val">48px</td><td class="val">56px</td><td>1.125 / 1.17</td><td>Figma H1 / H1 Mobile</td></tr>
+        <tr><td>Mega Ticker Banner</td><td class="val">156.83px</td><td class="val">196.04px</td><td class="val">—</td><td class="val">—</td><td>1.25</td><td>Decorative only — clips at container edge</td></tr>
+        <tr><td>H2 Section Headline</td><td class="val">48px</td><td class="val">56px</td><td class="val">40px</td><td class="val">44px</td><td>1.17 / 1.10</td><td>Figma H2 / H2 Mobile</td></tr>
+        <tr><td>H3 Subheading</td><td class="val">24px</td><td class="val">32px</td><td class="val">16px</td><td class="val">24px</td><td>1.33 / 1.50</td><td>Figma H3 / H3 Mobile</td></tr>
+        <tr><td>H4 Sub-Section</td><td class="val">32px</td><td class="val">40px</td><td class="val">24px</td><td class="val">28px</td><td>1.25 / 1.17</td><td>Figma H4 / H4 Mobile</td></tr>
+        <tr><td>Body Paragraph</td><td class="val">24px</td><td class="val">32px</td><td class="val">16px</td><td class="val">24px</td><td>1.33 / 1.50</td><td>Figma Body / Body Mobile</td></tr>
+        <tr><td>Caption / Small</td><td class="val">14px</td><td class="val">20px</td><td class="val">12px</td><td class="val">16px</td><td>1.43 / 1.33</td><td>Figma Small / Small Mobile</td></tr>
+        <tr><td>Nav / Overline label</td><td class="val">13px</td><td class="val">1</td><td class="val">20px</td><td class="val">32px</td><td>1.0 / 1.60</td><td>Mobile bumps for tap-target legibility — confirmed iPhone 2</td></tr>
+        <tr><td>Secondary btn label</td><td class="val">18px</td><td class="val">24px</td><td class="val">18px</td><td class="val">24px</td><td>1.33</td><td>Button height shrinks: 55px desktop → 48px mobile</td></tr>
+        <tr><td>Blob button label</td><td class="val">20px</td><td class="val">100px</td><td class="val">20px</td><td class="val">100px</td><td>5.0</td><td>Vertical centering trick — unchanged on mobile</td></tr>
+        <tr><td>Ticker Marquee</td><td class="val">48px</td><td class="val">196px</td><td class="val">28px</td><td class="val">56px</td><td>4.08 / 2.0</td><td>Mobile container shrinks to 56px</td></tr>
+        <tr><td>Price / Number</td><td class="val">36px</td><td class="val">1</td><td class="val">36px</td><td class="val">1</td><td>1.0</td><td>Unchanged — standalone number display</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ════ SPACING ════ -->
+  <div class="sec" id="spacing">
+    <div class="sec-title">Spacing Scale</div>
+    <div class="sec-sub">4px base unit. All margin, padding, and gap values must snap to this scale. No arbitrary values.</div>
+    <div style="margin-bottom:28px;">
+      <div class="sp-row"><div class="sp-bar" style="width:4px;"></div>  <span class="sp-tok">--space-1</span><span class="sp-px">4px</span>  <span class="sp-note">— icon-to-label gap, tiny insets</span></div>
+      <div class="sp-row"><div class="sp-bar" style="width:8px;"></div>  <span class="sp-tok">--space-2</span><span class="sp-px">8px</span>  <span class="sp-note">— tight stacking, badge padding vertical</span></div>
+      <div class="sp-row"><div class="sp-bar" style="width:12px;"></div> <span class="sp-tok">--space-3</span><span class="sp-px">12px</span> <span class="sp-note">— compact card inner padding, small gaps</span></div>
+      <div class="sp-row"><div class="sp-bar" style="width:16px;"></div> <span class="sp-tok">--space-4</span><span class="sp-px">16px</span> <span class="sp-note">— default card padding (mobile), grid gutter (mobile), margin-bottom H1→body</span></div>
+      <div class="sp-row"><div class="sp-bar" style="width:24px;"></div> <span class="sp-tok">--space-6</span><span class="sp-px">24px</span> <span class="sp-note">— grid gutter (desktop), ticker text padding, margin-bottom overline→H1</span></div>
+      <div class="sp-row"><div class="sp-bar" style="width:32px;"></div> <span class="sp-tok">--space-8</span><span class="sp-px">32px</span> <span class="sp-note">— section side padding, card padding (desktop), margin-bottom H1→body</span></div>
+      <div class="sp-row"><div class="sp-bar" style="width:48px;"></div> <span class="sp-tok">--space-12</span><span class="sp-px">48px</span><span class="sp-note">— section headline → section content, stat card group gaps</span></div>
+      <div class="sp-row"><div class="sp-bar" style="width:64px;"></div> <span class="sp-tok">--space-16</span><span class="sp-px">64px</span><span class="sp-note">— section vertical padding (desktop), large component gaps</span></div>
+      <div class="sp-row"><div class="sp-bar" style="width:80px;"></div> <span class="sp-tok">--space-20</span><span class="sp-px">80px</span><span class="sp-note">— section vertical padding (UI kit, from Figma)</span></div>
+      <div class="sp-row"><div class="sp-bar" style="width:96px;"></div> <span class="sp-tok">--space-24</span><span class="sp-px">96px</span><span class="sp-note">— large section separators</span></div>
+    </div>
+    <div class="card-code"><span class="c">/* Spacing tokens — colors_and_type.css */</span>
+--space-1:  <span class="v">4px</span>;
+--space-2:  <span class="v">8px</span>;
+--space-3:  <span class="v">12px</span>;
+--space-4:  <span class="v">16px</span>;
+--space-6:  <span class="v">24px</span>;
+--space-8:  <span class="v">32px</span>;
+--space-12: <span class="v">48px</span>;
+--space-16: <span class="v">64px</span>;
+--space-24: <span class="v">96px</span>;</div>
+  </div>
+
+  <!-- ════ PADDING ════ -->
+  <div class="sec" id="padding">
+    <div class="sec-title">Padding Rules</div>
+    <div class="sec-sub">Defined by component type. All values are multiples of 4px.</div>
+    <table class="tbl">
+      <thead><tr><th>Component</th><th>Padding</th><th>CSS</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Section (desktop)</td><td class="val">80px 32px</td><td class="mono">padding: 80px 32px</td><td>Figma sections ~978px tall — adjust for content</td></tr>
+        <tr><td>Section (mobile)</td><td class="val">40px 16px</td><td class="mono">padding: 40px 16px</td><td></td></tr>
+        <tr><td>Nav bar</td><td class="val">0 32px</td><td class="mono">padding: 0 32px; height: 64px</td><td>Fixed height, side padding only</td></tr>
+        <tr><td>Card default</td><td class="val">20px 24px</td><td class="mono">padding: 20px 24px</td><td></td></tr>
+        <tr><td>Product card — image area</td><td class="val">0</td><td class="mono">padding: 0</td><td>Full-bleed image</td></tr>
+        <tr><td>Product card — info area</td><td class="val">12px 16px</td><td class="mono">padding: 12px 16px</td><td></td></tr>
+        <tr><td>Blob button</td><td class="val">0</td><td class="mono">padding: 0</td><td>Label absolutely positioned inside blob image bounds</td></tr>
+        <tr><td>Secondary pill button</td><td class="val">~14px 28px</td><td class="mono">padding: 14px 28px</td><td>Results in 55px total height (Figma exact)</td></tr>
+        <tr><td>Nav pill (small)</td><td class="val">8px 18px</td><td class="mono">padding: 8px 18px</td><td></td></tr>
+        <tr><td>Badge / impact pill</td><td class="val">6px 14–18px</td><td class="mono">padding: 6px 16px</td><td></td></tr>
+        <tr><td>Ticker text node</td><td class="val">0 24px</td><td class="mono">padding: 0 24px</td><td>Per text span; container is full-bleed zero padding</td></tr>
+        <tr><td>Footer</td><td class="val">48px 32px 32px</td><td class="mono">padding: 48px 32px 32px</td><td>Less top than a full section</td></tr>
+        <tr><td>Container inner</td><td class="val">0 32px</td><td class="mono">max-width: 1200px; margin: 0 auto; padding: 0 32px</td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ════ MARGINS ════ -->
+  <div class="sec" id="margins">
+    <div class="sec-title">Margin Rules</div>
+    <div class="sec-sub">Vertical rhythm between elements within a content column. Use gap for flex/grid children rather than margin.</div>
+    <table class="tbl">
+      <thead><tr><th>From → To</th><th>Margin</th><th>CSS</th></tr></thead>
+      <tbody>
+        <tr><td>Overline / label → H1</td><td class="val">16px</td><td class="mono">margin-bottom: 16px</td></tr>
+        <tr><td>H1 → body copy</td><td class="val">24px</td><td class="mono">margin-bottom: 24px</td></tr>
+        <tr><td>H1 → subheading</td><td class="val">16px</td><td class="mono">margin-bottom: 16px</td></tr>
+        <tr><td>H2 → body</td><td class="val">16px</td><td class="mono">margin-bottom: 16px</td></tr>
+        <tr><td>Section headline → content block</td><td class="val">48–56px</td><td class="mono">margin-bottom: 48px</td></tr>
+        <tr><td>Body paragraph → next paragraph</td><td class="val">16px</td><td class="mono">margin-bottom: 16px</td></tr>
+        <tr><td>Body → CTA group</td><td class="val">32px</td><td class="mono">margin-bottom: 32px</td></tr>
+        <tr><td>Between buttons in a group</td><td class="val">16px</td><td class="mono">gap: 16px</td></tr>
+        <tr><td>Product grid gap</td><td class="val">24px</td><td class="mono">gap: 24px</td></tr>
+        <tr><td>Impact / stat card group</td><td class="val">16px</td><td class="mono">gap: 16px</td></tr>
+        <tr><td>Two-column impact layout</td><td class="val">48–64px</td><td class="mono">gap: 48px</td></tr>
+        <tr><td>List item dot → text</td><td class="val">10px</td><td class="mono">gap: 10px</td></tr>
+        <tr><td>Nav logo → links</td><td class="val">32px</td><td class="mono">gap: 32px (flex)</td></tr>
+      </tbody>
+    </table>
+    <div class="card-code"><span class="c">/* Typical content column rhythm */</span>
+.overline    { <span class="k">margin-bottom</span>: <span class="v">16px</span>; }
+h1           { <span class="k">margin-bottom</span>: <span class="v">24px</span>; }
+.lead        { <span class="k">margin-bottom</span>: <span class="v">32px</span>; }
+.btn-group   { <span class="k">display</span>: <span class="v">flex</span>; <span class="k">gap</span>: <span class="v">16px</span>; <span class="k">flex-wrap</span>: <span class="v">wrap</span>; }
+
+<span class="c">/* Grid gaps */</span>
+.product-grid { <span class="k">display</span>: <span class="v">grid</span>; <span class="k">grid-template-columns</span>: <span class="v">repeat(3, 1fr)</span>; <span class="k">gap</span>: <span class="v">24px</span>; }
+.impact-grid  { <span class="k">display</span>: <span class="v">grid</span>; <span class="k">grid-template-columns</span>: <span class="v">1fr 1fr</span>; <span class="k">gap</span>: <span class="v">64px</span>; }</div>
+  </div>
+
+  <!-- ════ RADIUS ════ -->
+  <div class="sec" id="radius">
+    <div class="sec-title">Border Radius</div>
+    <div class="sec-sub">Three values in use. No arbitrary radii.</div>
+    <div class="rad-row">
+      <div><div style="font-family:var(--fui);font-size:10px;text-transform:uppercase;color:#888;margin-bottom:8px;">0px</div><div class="rad-box" style="border-radius:0;"><span class="rad-n">0</span><span class="rad-t">sections</span></div></div>
+      <div><div style="font-family:var(--fui);font-size:10px;text-transform:uppercase;color:#888;margin-bottom:8px;">12px</div><div class="rad-box" style="border-radius:12px;"><span class="rad-n">12px</span><span class="rad-t">cards</span></div></div>
+      <div><div style="font-family:var(--fui);font-size:10px;text-transform:uppercase;color:#888;margin-bottom:8px;">16px</div><div class="rad-box" style="border-radius:16px;"><span class="rad-n">16px</span><span class="rad-t">sticker frames</span></div></div>
+      <div><div style="font-family:var(--fui);font-size:10px;text-transform:uppercase;color:#888;margin-bottom:8px;">30px</div><div class="rad-box" style="border-radius:30px;width:120px;"><span class="rad-n">30px</span><span class="rad-t">buttons, badges</span></div></div>
+      <div><div style="font-family:var(--fui);font-size:10px;text-transform:uppercase;color:#888;margin-bottom:8px;">50%</div><div class="rad-box" style="border-radius:50%;"><span class="rad-n">50%</span><span class="rad-t">dots, icons</span></div></div>
+    </div>
+    <div class="card-code">--radius-sharp:   <span class="v">0px</span>;   <span class="c">/* full-bleed sections, ticker bars */</span>
+--radius-card:    <span class="v">12px</span>;  <span class="c">/* product cards, data boxes */</span>
+--radius-sticker: <span class="v">16px</span>;  <span class="c">/* sticker/mascot frames */</span>
+--radius-btn:     <span class="v">30px</span>;  <span class="c">/* secondary pill buttons, badges, nav CTAs */</span>
+--radius-circle:  <span class="v">50%</span>;   <span class="c">/* impact indicator dots, icon circles */</span></div>
+  </div>
+
+  <!-- ════ SHADOWS ════ -->
+  <div class="sec" id="shadows">
+    <div class="sec-title">Shadows</div>
+    <div class="sec-sub">Three named shadows. From Figma source values exactly.</div>
+    <div class="shad-row">
+      <div>
+        <div style="font-family:var(--fui);font-size:10px;text-transform:uppercase;color:#888;margin-bottom:12px;">sm</div>
+        <div class="shad-box" style="box-shadow:0px 2px 7.6px 0px rgba(0,0,0,0.25);"><span class="shad-lbl">--shadow-sm</span></div>
+      </div>
+      <div>
+        <div style="font-family:var(--fui);font-size:10px;text-transform:uppercase;color:#888;margin-bottom:12px;">md</div>
+        <div class="shad-box" style="box-shadow:0px 4px 4px 0px rgba(0,0,0,0.25);"><span class="shad-lbl">--shadow-md</span></div>
+      </div>
+      <div>
+        <div style="font-family:var(--fui);font-size:10px;text-transform:uppercase;color:#888;margin-bottom:12px;">glow</div>
+        <div class="shad-box" style="box-shadow:0px 0px 35px 0px rgba(0,0,0,0.10);"><span class="shad-lbl">--shadow-glow</span></div>
+      </div>
+      <div>
+        <div style="font-family:var(--fui);font-size:10px;text-transform:uppercase;color:#888;margin-bottom:12px;">hover (md+)</div>
+        <div class="shad-box" style="box-shadow:0px 6px 8px 0px rgba(0,0,0,0.25);"><span class="shad-lbl">on hover</span></div>
+      </div>
+    </div>
+    <table class="tbl" style="margin-bottom:16px;">
+      <thead><tr><th>Token</th><th>Value</th><th>Used on</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">--shadow-sm</td><td class="val">0px 2px 7.6px 0px rgba(0,0,0,0.25)</td><td>Mobile elements, small components</td></tr>
+        <tr><td class="mono">--shadow-md</td><td class="val">0px 4px 4px 0px rgba(0,0,0,0.25)</td><td>Default: all buttons, cards, product tiles</td></tr>
+        <tr><td class="mono">--shadow-glow</td><td class="val">0px 0px 35px 0px rgba(0,0,0,0.10)</td><td>Hero product images, large imagery</td></tr>
+        <tr><td class="mono">hover state</td><td class="val">0px 6px 8px 0px rgba(0,0,0,0.25)</td><td>Deepened md — applied on :hover of buttons/cards</td></tr>
+      </tbody>
+    </table>
+    <div class="card-code">--shadow-sm:   <span class="v">0px 2px 7.6px 0px rgba(0,0,0,0.25)</span>;
+--shadow-md:   <span class="v">0px 4px 4px 0px rgba(0,0,0,0.25)</span>;
+--shadow-glow: <span class="v">0px 0px 35px 0px rgba(0,0,0,0.10)</span>;
+
+<span class="c">/* Button hover pattern */</span>
+.btn:hover  { <span class="k">transform</span>: <span class="v">translateY(-2px)</span>; <span class="k">box-shadow</span>: <span class="v">0px 6px 8px 0px rgba(0,0,0,0.25)</span>; }
+.btn:active { <span class="k">transform</span>: <span class="v">translateY(0)</span>;    <span class="k">box-shadow</span>: <span class="v">var(--shadow-sm)</span>; }
+<span class="c">/* transition: transform 0.15s ease, box-shadow 0.15s ease; */</span></div>
+  </div>
+
+  <!-- ════ BACKGROUNDS ════ -->
+  <div class="sec" id="bg">
+    <div class="sec-title">Section Backgrounds</div>
+    <div class="sec-sub">Sections alternate solid color blocks — no gradients. Confirmed from all Figma Webdesign sections.</div>
+
+    <div class="bg-strip">
+      <div class="bg-chip" style="background:#FFC5FF;flex:2;"><span style="color:#AE0000;">#FFC5FF</span></div>
+      <div class="bg-chip" style="background:#FFFFF5;"><span style="color:#AE0000;">#FFFFF5</span></div>
+      <div class="bg-chip" style="background:#542A76;"><span style="color:#FFC5FF;">#542A76</span></div>
+      <div class="bg-chip" style="background:#B7D9FF;"><span style="color:#542A76;">#B7D9FF</span></div>
+      <div class="bg-chip" style="background:#ACFF64;"><span style="color:#AE0000;">#ACFF64</span></div>
+      <div class="bg-chip" style="background:#AE0000;"><span style="color:#FFFFF5;">#AE0000</span></div>
+      <div class="bg-chip" style="background:#FF781E;"><span style="color:#FFFFF5;">#FF781E</span></div>
+      <div class="bg-chip" style="background:#EDF731;"><span style="color:#542A76;">#EDF731</span></div>
+    </div>
+
+    <table class="tbl">
+      <thead><tr><th>Background</th><th>Hex</th><th>Text color on this bg</th><th>Sections</th></tr></thead>
+      <tbody>
+        <tr><td>Light Pink / Rose</td><td class="val">#FFC5FF</td><td class="mono">#AE0000 (red) or #000</td><td>Hero (Section 1), mobile screens</td></tr>
+        <tr><td>Cream</td><td class="val">#FFFFF5</td><td class="mono">#AE0000 or #000</td><td>Product (Sections 9, 10, 21), light sections</td></tr>
+        <tr><td>Violet</td><td class="val">#542A76</td><td class="mono">#FFFFF5 (cream)</td><td>Jobs/Women (Section 6), CTAs (Section 9)</td></tr>
+        <tr><td>Sky Blue</td><td class="val">#B7D9FF</td><td class="mono">#542A76 (violet)</td><td>Fairness/Farmer (Section 5), Transparency (Section 20)</td></tr>
+        <tr><td>Lime Green</td><td class="val">#ACFF64</td><td class="mono">#AE0000 (red) or #000</td><td>Ticker bar, Radically Fair (Section 16)</td></tr>
+        <tr><td>Red</td><td class="val">#AE0000</td><td class="mono">#FFFFF5 (cream)</td><td>Mission (Section 12)</td></tr>
+        <tr><td>Orange</td><td class="val">#FF781E</td><td class="mono">#FFFFF5 (cream)</td><td>Community / Wirkung (Section 17)</td></tr>
+        <tr><td>Electric Yellow</td><td class="val">#EDF731</td><td class="mono">#542A76 (violet)</td><td>Mega ticker / "WIR SIND:" (Section 15)</td></tr>
+      </tbody>
+    </table>
+
+    <div class="card-code"><span class="c">/* Semantic background tokens */</span>
+--color-bg-hero:    <span class="v">#FFC5FF</span>;   <span class="c">/* pink */</span>
+--color-bg-light:   <span class="v">#FFFFF5</span>;   <span class="c">/* cream */</span>
+--color-bg-dark:    <span class="v">#542A76</span>;   <span class="c">/* violet */</span>
+--color-bg-sky:     <span class="v">#B7D9FF</span>;   <span class="c">/* sky blue */</span>
+--color-bg-ticker:  <span class="v">#ACFF64</span>;   <span class="c">/* lime */</span>
+--color-bg-mission: <span class="v">#AE0000</span>;   <span class="c">/* red section */</span>
+--color-bg-orange:  <span class="v">#FF781E</span>;   <span class="c">/* orange section */</span>
+--color-bg-yellow:  <span class="v">#EDF731</span>;   <span class="c">/* electric yellow */</span></div>
+  </div>
+
+  <div style="margin-top:80px;background:#000;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+    <div style="font-family:'Fagies',sans-serif;font-size:32px;text-transform:uppercase;color:var(--red);">Kaadu Design System</div>
+    <div style="font-family:'Banter Grotesk',sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,245,0.4);">v2 — sourced from Wireframe.fig</div>
+  </div>
+
+</div>
+</body>
+</html>

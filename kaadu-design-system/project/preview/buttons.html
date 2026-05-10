@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+@font-face { font-family:'Fagies'; src:url('../fonts/Fagies.ttf') format('truetype'); font-weight:400; font-display:swap; }
+@font-face { font-family:'Banter Grotesk'; src:url('../fonts/BanterGrotesk-Regular.woff2') format('woff2'); font-weight:400; font-display:swap; }
+@font-face { font-family:'Banter Grotesk'; src:url('../fonts/BanterGrotesk-Regular.woff2') format('woff2'); font-weight:700; font-display:swap; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#f0f0f0; padding:20px 24px; display:flex; gap:24px; align-items:flex-start; flex-wrap:wrap; }
+.group { display:flex; flex-direction:column; gap:10px; }
+.meta { font-family:'Banter Grotesk',sans-serif; font-size:10px; color:#666; text-transform:uppercase; letter-spacing:0.05em; }
+</style>
+</head>
+<body>
+
+<div class="group">
+  <div class="meta">Primary CTA — Fagies · Red text on Cream</div>
+  <button style="
+    font-family:'Fagies',sans-serif; font-weight:400; font-size:20px; text-transform:uppercase;
+    color:#AE0000; background:#FFFFF5; border:2px solid #000; border-radius:30px;
+    padding:16px 32px; box-shadow:0 4px 4px rgba(0,0,0,0.25); cursor:pointer; letter-spacing:0.02em;
+  ">Jetzt Probieren</button>
+  <button style="
+    font-family:'Fagies',sans-serif; font-weight:400; font-size:20px; text-transform:uppercase;
+    color:#542A76; background:#FFFFF5; border:2px solid #000; border-radius:30px;
+    padding:16px 32px; box-shadow:0 4px 4px rgba(0,0,0,0.25); cursor:pointer;
+  ">Probierpaket Bestellen</button>
+</div>
+
+<div class="group">
+  <div class="meta">Secondary — Banter Grotesk Semibold · Black text</div>
+  <button style="
+    font-family:'Banter Grotesk',sans-serif; font-weight:700; font-size:18px; text-transform:uppercase;
+    color:#000; background:#FFFFF5; border:2px solid #000; border-radius:30px;
+    padding:14px 28px; box-shadow:0 4px 4px rgba(0,0,0,0.25); cursor:pointer;
+  ">Shop Öffnen</button>
+  <button style="
+    font-family:'Banter Grotesk',sans-serif; font-weight:700; font-size:18px; text-transform:uppercase;
+    color:#000; background:#FFFFF5; border:2px solid #000; border-radius:30px;
+    padding:14px 28px; box-shadow:0 4px 4px rgba(0,0,0,0.25); cursor:pointer; opacity:0.45;
+  ">Disabled</button>
+</div>
+
+<div class="group" style="background:#542A76; padding:16px; border-radius:8px;">
+  <div class="meta" style="color:#FFC5FF;">On Dark bg — Cream text</div>
+  <button style="
+    font-family:'Banter Grotesk',sans-serif; font-weight:700; font-size:18px; text-transform:uppercase;
+    color:#FFFFF5; background:transparent; border:2px solid #FFFFF5; border-radius:30px;
+    padding:14px 28px; cursor:pointer;
+  ">Mehr Erfahren</button>
+</div>
+
+<div class="group" style="background:#AE0000; padding:16px; border-radius:8px;">
+  <div class="meta" style="color:#FFC5FF;">On Red bg</div>
+  <button style="
+    font-family:'Fagies',sans-serif; font-weight:400; font-size:20px; text-transform:uppercase;
+    color:#AE0000; background:#FFFFF5; border:2px solid #000; border-radius:30px;
+    padding:14px 28px; box-shadow:0 4px 4px rgba(0,0,0,0.25); cursor:pointer;
+  ">Jetzt Kaufen</button>
+</div>
+
+</body>
+</html>

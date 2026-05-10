@@ -1,0 +1,162 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "max_width": "medium",
+        "display_on_card": true,
+        "color_scheme": "scheme3",
+        "use_gradient_background": false
+      },
+      "custom_css": ["#MainContent { background-color: red;}"]
+    },
+    "image_with_text_custom_NCAqEp": {
+      "type": "image-with-text-custom",
+      "blocks": {
+        "shape_divider_WLthYc": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "below",
+            "target_section_color_scheme": "scheme3",
+            "style": "circles-3-patterned_1200x67",
+            "flip_horizontal": false,
+            "enable_animation": true,
+            "animation_direction": ""
+          }
+        },
+        "shape_divider_xR4akn": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "above",
+            "target_section_color_scheme": "scheme3",
+            "style": "circles-3-patterned_1200x67",
+            "flip_horizontal": false,
+            "enable_animation": true,
+            "animation_direction": ""
+          }
+        }
+      },
+      "block_order": [
+        "shape_divider_WLthYc",
+        "shape_divider_xR4akn"
+      ],
+      "custom_css": [
+        ".custom-btn__surface {background-color: white; color: black; padding: 16px 24px; border: solid 1.5px black; box-shadow: inset 0 0 0 1px black; font-weight: 600;}",
+        "h2,p {color: black;}",
+        "@media (max-width: 768px) {.custom-btn__surface {padding: 12px 20px; }}",
+        "@media (min-width: 768px) {.lgmt-8 {margin-top: 32px; }}",
+        "@media (prefers-reduced-motion: no-preference) {.shape-divider-svg-container.animate {animation-duration: 30s;}}"
+      ],
+      "name": "image with text custom",
+      "settings": {
+        "display_on_card": false,
+        "image": "shopify://shop_images/Group_10_4.png",
+        "crop": "",
+        "image_shape": "default",
+        "blob_type": 1,
+        "rotate_image": 0,
+        "image_position": "right",
+        "image_size": "half",
+        "disable_media_style": false,
+        "title": "Wir bauen auf... im doppelten Sinn!",
+        "heading_size": "heading-feature",
+        "richtext": "<p>Unsere Fabrik und Website sind noch im Aufbau. Hinter den Kulissen arbeiten wir mit Hochdruck daran, alles für den launch vorzubereiten; <strong>fair, transparent und nachhaltig.</strong></p>",
+        "text_alignment": "text-center",
+        "mobile_text_alignment": "text-center",
+        "mobile_layout_order": true,
+        "button_link_type": "focus_element",
+        "button_link": "",
+        "focus_element_id": "email-input-waitlistform1212",
+        "button_label": "Waitlist beitreiten",
+        "color_scheme": "scheme3",
+        "use_gradient_background": false
+      }
+    },
+    "rich_text_custom_eJRhft": {
+      "type": "rich-text-custom",
+      "custom_css": [
+        ".py-half-section-vertical-spacing {padding-bottom: 16px;}",
+        ".py-section-vertical-spacing {padding-bottom: 16px;}"
+      ],
+      "name": "rich text custom",
+      "settings": {
+        "title": "Pioniere profitieren!",
+        "heading_size": "heading-standard",
+        "subtitle": "",
+        "subtitle_size": "heading-standard",
+        "header_spacing": "mt-2",
+        "rich_text": "<p>Tritt der Waitlist bei und erhalte 50 % auf deine erste Bestellung nach dem Launch!</p>",
+        "display_on_card": false,
+        "content_width_desktop": "lg:w-2/3",
+        "button_link": "",
+        "button_label": "Shop Now",
+        "color_scheme": "scheme3",
+        "use_gradient_background": false
+      }
+    },
+    "email_input_JK8wkp": {
+      "type": "email-input",
+      "name": "Email Signup",
+      "settings": {
+        "background_color": "#ae0000",
+        "padding_top": 0,
+        "padding_bottom": 56,
+        "container_width": 1200,
+        "heading": "",
+        "heading_color": "#ffffff",
+        "heading_size": 16,
+        "placeholder_text": "E-Mail",
+        "input_background": "#ffffff",
+        "input_text_color": "#333333",
+        "placeholder_color": "#999999",
+        "input_border_color": "#000000",
+        "input_focus_border": "#000000",
+        "input_border_width": 3,
+        "input_border_radius": 30,
+        "input_padding": 16,
+        "input_font_size": 16,
+        "use_image_button": true,
+        "button_image": "shopify://shop_images/Vector.png",
+        "image_fit": "contain",
+        "button_width": 160,
+        "button_height": 90,
+        "image_hue_rotate": 0,
+        "image_saturation": 100,
+        "image_brightness": 100,
+        "button_text": "Beitreten",
+        "button_background": "#ae0000",
+        "button_text_color": "#ae0000",
+        "button_border_color": "#22c55e",
+        "button_border_width": 0,
+        "button_border_radius": 25,
+        "button_padding_x": 20,
+        "button_padding_y": 16,
+        "button_font_size": 16,
+        "button_font_weight": "600",
+        "text_shadow_x": 0,
+        "text_shadow_y": 0,
+        "text_shadow_blur": 0,
+        "text_shadow_color": "#000000",
+        "subtitle": "",
+        "subtitle_color": "#ffffff",
+        "subtitle_size": 14
+      }
+    }
+  },
+  "order": [
+    "main",
+    "image_with_text_custom_NCAqEp",
+    "rich_text_custom_eJRhft",
+    "email_input_JK8wkp"
+  ]
+}

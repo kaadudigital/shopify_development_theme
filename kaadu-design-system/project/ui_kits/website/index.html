@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaadu — Website</title>
+<style>
+@font-face { font-family:'Fagies'; src:url('../../fonts/Fagies.ttf') format('truetype'); font-weight:400; font-display:swap; }
+@font-face { font-family:'ThickHead'; src:url('../../fonts/THICKHEA.TTF') format('truetype'); font-weight:400; font-display:swap; }
+@font-face { font-family:'Banter Grotesk'; src:url('../../fonts/BanterGrotesk-Regular.woff2') format('woff2'); font-weight:400; font-display:swap; }
+@font-face { font-family:'Banter Grotesk'; src:url('../../fonts/BanterGrotesk-Regular.woff2') format('woff2'); font-weight:700; font-display:swap; }
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Banter Grotesk', sans-serif; background: #FFFFF5; overflow-x: hidden; }
+img { max-width: 100%; display: block; }
+a { text-decoration: none; }
+
+/* ── NAV ─────────────────────────────── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: #FFFFF5; border-bottom: 2px solid #000;
+  height: 60px; display: flex; align-items: center;
+  padding: 0 20px; justify-content: space-between;
+}
+.nav-logo {
+  font-family: 'Fagies', sans-serif; font-size: 22px;
+  text-transform: uppercase; color: #AE0000; letter-spacing: 0.02em;
+}
+.nav-links { display: none; gap: 28px; align-items: center; }
+.nav-link {
+  font-family: 'Banter Grotesk', sans-serif; font-weight: 700;
+  font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; color: #000;
+}
+.nav-link:hover { color: #AE0000; }
+.nav-cta {
+  background: #AE0000; color: #FFFFF5; border: 2px solid #000;
+  border-radius: 30px; padding: 7px 16px;
+  font-family: 'Banter Grotesk', sans-serif; font-weight: 700;
+  font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+.nav-hamburger {
+  background: none; border: none; cursor: pointer;
+  display: flex; flex-direction: column; gap: 5px; padding: 4px;
+}
+.nav-hamburger span { width: 24px; height: 2px; background: #000; display: block; transition: all 0.2s; }
+.nav-drawer {
+  display: none; position: fixed; top: 60px; left: 0; right: 0; bottom: 0;
+  background: #FFFFF5; z-index: 99; flex-direction: column;
+  padding: 32px 24px; gap: 24px; border-top: 2px solid #000;
+}
+.nav-drawer.open { display: flex; }
+.nav-drawer a {
+  font-family: 'Fagies', sans-serif; font-size: 36px;
+  text-transform: uppercase; color: #000; border-bottom: 1px solid #E6E6E6;
+  padding-bottom: 16px;
+}
+.nav-drawer a:hover { color: #AE0000; }
+
+/* ── TICKER ──────────────────────────── */
+.ticker { overflow: hidden; height: 72px; display: flex; align-items: center; border-top: 2px solid #000; border-bottom: 2px solid #000; }
+.ticker-inner { display: flex; white-space: nowrap; animation: ticker 18s linear infinite; }
+@keyframes ticker { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+.ticker-text {
+  font-family: 'ThickHead', 'Fagies', sans-serif; font-size: 44px;
+  text-transform: uppercase; padding: 0 24px; line-height: 72px; display: inline-block;
+}
+@media (min-width: 768px) {
+  .ticker { height: 80px; }
+  .ticker-text { font-size: 56px; line-height: 80px; }
+}
+
+/* ── HERO ────────────────────────────── */
+.hero {
+  background: #FFC5FF; padding-top: 60px;
+  min-height: 100svh; display: flex; align-items: center;
+  position: relative; overflow: hidden;
+}
+.hero-inner {
+  max-width: 1200px; margin: 0 auto; padding: 48px 20px;
+  display: flex; flex-direction: column; gap: 32px; width: 100%;
+}
+.hero-image {
+  width: 100%; max-width: 400px; margin: 0 auto;
+  aspect-ratio: 1;
+  background: #FFFFF5; border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+  border: 3px solid #000; overflow: hidden;
+  box-shadow: 5px 6px 0 #000;
+  display: flex; align-items: center; justify-content: center;
+}
+.hero-image-inner {
+  width: 100%; height: 100%; background: #FF781E;
+  display: flex; align-items: center; justify-content: center;
+}
+.hero-image-placeholder {
+  font-family: 'Fagies', sans-serif; font-size: 36px;
+  color: #FFFFF5; text-transform: uppercase;
+}
+.hero-content { display: flex; flex-direction: column; gap: 16px; }
+.hero-eyebrow {
+  font-family: 'Fagies', sans-serif; font-weight: 400;
+  font-size: 14px; text-transform: uppercase; letter-spacing: 0.08em; color: #542A76;
+}
+.hero-h1 {
+  font-family: 'Fagies', sans-serif; font-weight: 400;
+  font-size: 44px; line-height: 1.1; text-transform: uppercase;
+  color: #AE0000; letter-spacing: -0.01em;
+}
+.hero-body {
+  font-family: 'Banter Grotesk', sans-serif; font-size: 16px;
+  line-height: 26px; color: #000; max-width: 480px;
+}
+.hero-btns { display: flex; flex-direction: column; gap: 12px; }
+.btn-primary {
+  background: #FFFFF5; color: #AE0000; border: 2px solid #000;
+  border-radius: 30px; padding: 15px 28px;
+  font-family: 'Fagies', sans-serif; font-weight: 400; font-size: 18px;
+  text-transform: uppercase; box-shadow: 0 4px 4px rgba(0,0,0,0.25);
+  text-align: center; cursor: pointer; display: inline-block;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 8px rgba(0,0,0,0.25); }
+.btn-secondary {
+  background: transparent; color: #000; border: 2px solid #000;
+  border-radius: 30px; padding: 14px 28px;
+  font-family: 'Banter Grotesk', sans-serif; font-weight: 700; font-size: 16px;
+  text-transform: uppercase; box-shadow: 0 4px 4px rgba(0,0,0,0.25);
+  text-align: center; cursor: pointer; display: inline-block;
+  transition: transform 0.15s;
+}
+.btn-secondary:hover { transform: translateY(-2px); }
+
+/* ── IMPACT ──────────────────────────── */
+.section { padding: 56px 20px; }
+.section-inner { max-width: 1200px; margin: 0 auto; }
+.section-h2 {
+  font-family: 'Fagies', sans-serif; font-weight: 400;
+  font-size: 40px; line-height: 1.15; text-transform: uppercase;
+  text-align: center; margin-bottom: 12px;
+}
+.section-sub {
+  font-family: 'Banter Grotesk', sans-serif; font-weight: 700;
+  font-size: 14px; text-transform: uppercase; letter-spacing: 0.06em;
+  text-align: center; margin-bottom: 40px;
+}
+.two-col { display: flex; flex-direction: column; gap: 32px; }
+.stats-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+.stat-card {
+  background: #FFFFF5; border: 2px solid #000; border-radius: 12px;
+  padding: 14px 18px; box-shadow: 0 4px 4px rgba(0,0,0,0.25); flex: 1; min-width: 100px;
+}
+.stat-val { font-family: 'Fagies', sans-serif; font-size: 32px; color: #AE0000; line-height: 1; }
+.stat-label { font-family: 'Banter Grotesk', sans-serif; font-weight: 700; font-size: 11px; text-transform: uppercase; color: #542A76; margin-top: 4px; }
+.chart-box {
+  background: #FFFFF5; border: 3px solid #542A76; border-radius: 12px;
+  padding: 20px; box-shadow: 0 4px 4px rgba(0,0,0,0.25);
+}
+.chart-label { font-family: 'Banter Grotesk', sans-serif; font-weight: 700; font-size: 12px; text-transform: uppercase; color: #542A76; margin-bottom: 14px; }
+.bar-row { margin-bottom: 10px; }
+.bar-name { font-family: 'Banter Grotesk', sans-serif; font-size: 12px; font-weight: 700; color: #542A76; margin-bottom: 4px; }
+.bar-track { background: #E6E6E6; border-radius: 4px; height: 22px; overflow: hidden; border: 1px solid #000; }
+.bar-fill { height: 100%; border-radius: 4px; }
+
+/* ── WOMEN SECTION ───────────────────── */
+.impact-list { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+.impact-item { display: flex; align-items: center; gap: 10px; }
+.impact-dot { width: 14px; height: 14px; border-radius: 50%; background: #ACFF64; flex-shrink: 0; }
+.impact-item span { font-family: 'Banter Grotesk', sans-serif; font-weight: 700; font-size: 14px; color: #FFFFF5; text-transform: uppercase; }
+.photo-placeholder {
+  border-radius: 12px; border: 3px solid #000; overflow: hidden;
+  aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center;
+  background: #FFC5FF;
+}
+
+/* ── PRODUCTS ────────────────────────── */
+.product-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+.product-card {
+  border: 2px solid #000; border-radius: 12px; overflow: hidden;
+  box-shadow: 0 4px 4px rgba(0,0,0,0.25); cursor: pointer;
+  transition: transform 0.15s;
+}
+.product-card:hover { transform: translateY(-4px); }
+.product-thumb {
+  height: 180px; display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.product-badge {
+  position: absolute; top: 12px; right: 12px;
+  background: #AE0000; color: #FFFFF5; border: 2px solid #000;
+  border-radius: 30px; padding: 4px 12px;
+  font-family: 'Banter Grotesk', sans-serif; font-weight: 700;
+  font-size: 11px; text-transform: uppercase;
+}
+.product-info { padding: 14px 16px; background: #FFFFF5; }
+.product-name { font-family: 'Banter Grotesk', sans-serif; font-weight: 700; font-size: 14px; text-transform: uppercase; margin-bottom: 4px; }
+.product-price { font-family: 'Fagies', sans-serif; font-size: 22px; color: #AE0000; margin-bottom: 12px; }
+.product-btn {
+  width: 100%; background: #FFFFF5; color: #000;
+  border: 2px solid #000; border-radius: 30px; padding: 10px 0;
+  font-family: 'Banter Grotesk', sans-serif; font-weight: 700;
+  font-size: 13px; text-transform: uppercase; cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2); transition: background 0.15s, color 0.15s;
+}
+.product-btn:hover { background: #AE0000; color: #FFFFF5; border-color: #AE0000; }
+
+/* ── FOOTER ──────────────────────────── */
+.footer { background: #000; color: #FFFFF5; padding: 48px 20px 28px; border-top: 2px solid #AE0000; }
+.footer-inner { max-width: 1200px; margin: 0 auto; }
+.footer-brand { margin-bottom: 32px; }
+.footer-brand-name { font-family: 'Fagies', sans-serif; font-size: 28px; text-transform: uppercase; color: #AE0000; display: block; margin-bottom: 8px; }
+.footer-brand-sub { font-family: 'Banter Grotesk', sans-serif; font-size: 13px; line-height: 20px; color: #FFFFF5; opacity: 0.65; max-width: 260px; }
+.footer-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px; }
+.footer-col-title { font-family: 'Banter Grotesk', sans-serif; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: #FFFFF5; margin-bottom: 12px; }
+.footer-link { display: block; font-family: 'Banter Grotesk', sans-serif; font-size: 13px; color: #FFFFF5; opacity: 0.6; margin-bottom: 8px; }
+.footer-link:hover { opacity: 1; }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.12); padding-top: 18px; display: flex; flex-direction: column; gap: 10px; }
+.footer-copy { font-family: 'Banter Grotesk', sans-serif; font-size: 11px; color: #FFFFF5; opacity: 0.45; }
+.footer-socials { display: flex; gap: 16px; }
+.footer-social { font-family: 'Banter Grotesk', sans-serif; font-weight: 700; font-size: 11px; text-transform: uppercase; color: #FFFFF5; opacity: 0.55; letter-spacing: 0.05em; }
+.footer-social:hover { opacity: 1; }
+
+/* ── TABLET ──────────────────────────── */
+@media (min-width: 600px) {
+  .product-grid { grid-template-columns: 1fr 1fr; }
+  .footer-cols { grid-template-columns: repeat(3, 1fr); }
+  .hero-btns { flex-direction: row; }
+}
+
+/* ── DESKTOP ─────────────────────────── */
+@media (min-width: 900px) {
+  .nav { height: 64px; padding: 0 32px; }
+  .nav-links { display: flex; }
+  .nav-hamburger { display: none; }
+  .hero-inner { flex-direction: row; align-items: center; gap: 48px; padding: 80px 32px; }
+  .hero-image { max-width: 520px; flex: 0 0 48%; margin: 0; }
+  .hero-image-placeholder { font-size: 48px; }
+  .hero-h1 { font-size: 64px; line-height: 80px; }
+  .hero-body { font-size: 18px; line-height: 28px; }
+  .section { padding: 80px 32px; }
+  .section-h2 { font-size: 64px; line-height: 80px; }
+  .two-col { flex-direction: row; align-items: center; gap: 48px; }
+  .product-grid { grid-template-columns: repeat(3, 1fr); }
+  .footer-inner { display: grid; grid-template-columns: 2fr 3fr; gap: 48px; align-items: start; }
+  .footer-cols { grid-template-columns: repeat(3, 1fr); margin-bottom: 0; }
+  .footer-bottom { flex-direction: row; justify-content: space-between; align-items: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="#" class="nav-logo">Kaadu</a>
+  <div class="nav-links">
+    <a href="#" class="nav-link">Shop</a>
+    <a href="#impact" class="nav-link">Impact</a>
+    <a href="#" class="nav-link">Über uns</a>
+    <a href="#" class="nav-link">Blog</a>
+    <a href="#shop" class="nav-cta">Shop</a>
+  </div>
+  <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE DRAWER -->
+<div class="nav-drawer" id="drawer">
+  <a href="#" onclick="toggleMenu()">Shop</a>
+  <a href="#impact" onclick="toggleMenu()">Impact</a>
+  <a href="#" onclick="toggleMenu()">Über uns</a>
+  <a href="#" onclick="toggleMenu()">Blog</a>
+  <a href="#shop" class="btn-primary" onclick="toggleMenu()" style="text-align:center;margin-top:8px;">Jetzt Probieren</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-image">
+      <div class="hero-image-inner">
+        <span class="hero-image-placeholder">Kaadu</span>
+      </div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Gefriergetrocknete Früchte</div>
+      <h1 class="hero-h1">Snack Like You Give a Damn.</h1>
+      <p class="hero-body">100 % Frucht. 0 % Ausbeutung. Fair produziert, in der Ursprungsgemeinde verarbeitet, radikal transparent.</p>
+      <div class="hero-btns">
+        <a href="#shop" class="btn-primary">Jetzt Probieren</a>
+        <a href="#impact" class="btn-secondary">Mehr erfahren</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER 1 -->
+<div class="ticker" style="background:#ACFF64;">
+  <div class="ticker-inner">
+    <span class="ticker-text" style="color:#AE0000;">ITS NOT FAIR! ITS NOT FAIR! ITS NOT FAIR! ITS NOT FAIR! &nbsp;&nbsp;&nbsp;</span>
+    <span class="ticker-text" style="color:#AE0000;">ITS NOT FAIR! ITS NOT FAIR! ITS NOT FAIR! ITS NOT FAIR! &nbsp;&nbsp;&nbsp;</span>
+  </div>
+</div>
+
+<!-- IMPACT SECTION -->
+<section class="section" id="impact" style="background:#B7D9FF;">
+  <div class="section-inner">
+    <h2 class="section-h2" style="color:#542A76;">Fairness für Kleinbauern</h2>
+    <p class="section-sub" style="color:#542A76;">Marktpreise schwanken, unsere nicht</p>
+    <div class="two-col">
+      <div style="flex:1;">
+        <p style="font-family:'Banter Grotesk',sans-serif;font-size:17px;line-height:26px;color:#542A76;">
+          Kaadu zahlt Kleinbauern stabile, transparente Preise – deutlich über dem Markt. So schaffen wir Planungssicherheit und schützen sie vor Preisschwankungen.
+        </p>
+        <div class="stats-row">
+          <div class="stat-card"><div class="stat-val">30–40%</div><div class="stat-label">über Marktpreis</div></div>
+          <div class="stat-card"><div class="stat-val">100%</div><div class="stat-label">Höhere Löhne</div></div>
+          <div class="stat-card"><div class="stat-val">100%</div><div class="stat-label">Ownership Ziel</div></div>
+        </div>
+      </div>
+      <div style="flex:1;" class="chart-box">
+        <div class="chart-label">Preisstabilität</div>
+        <div class="bar-row">
+          <div class="bar-name">Marktpreis</div>
+          <div class="bar-track"><div class="bar-fill" style="width:60%;background:#AE0000;"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-name">Kaadu Preis</div>
+          <div class="bar-track"><div class="bar-fill" style="width:90%;background:#ACFF64;"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER 2 -->
+<div class="ticker" style="background:#542A76;">
+  <div class="ticker-inner">
+    <span class="ticker-text" style="color:#FFC5FF;">JUSTICE NEVER TASTED SO SWEET · JUSTICE NEVER TASTED SO SWEET · &nbsp;&nbsp;&nbsp;</span>
+    <span class="ticker-text" style="color:#FFC5FF;">JUSTICE NEVER TASTED SO SWEET · JUSTICE NEVER TASTED SO SWEET · &nbsp;&nbsp;&nbsp;</span>
+  </div>
+</div>
+
+<!-- WOMEN SECTION -->
+<section class="section" style="background:#542A76;">
+  <div class="section-inner">
+    <div class="two-col">
+      <div style="flex:1;">
+        <h2 class="section-h2" style="color:#FFFFF5;text-align:left;margin-bottom:16px;">Starke Jobs für lokale Frauen</h2>
+        <p style="font-family:'Banter Grotesk',sans-serif;font-weight:700;font-size:16px;line-height:26px;color:#FFFFF5;">
+          Wir beschäftigen gezielt Frauen aus einkommensschwachen Haushalten der Region.
+        </p>
+        <div class="impact-list">
+          <div class="impact-item"><div class="impact-dot"></div><span>Doppelter Lohn</span></div>
+          <div class="impact-item"><div class="impact-dot"></div><span>+ Boni &amp; Umsatzbeteiligung</span></div>
+          <div class="impact-item"><div class="impact-dot"></div><span>+ Mitarbeiter-Fonds</span></div>
+          <div class="impact-item"><div class="impact-dot"></div><span>+ Miteigentum (langfristig)</span></div>
+        </div>
+      </div>
+      <div style="flex:1;" class="photo-placeholder">
+        <span style="font-family:'Fagies',sans-serif;font-size:28px;color:#542A76;text-transform:uppercase;opacity:0.35;">Photo</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER 3 -->
+<div class="ticker" style="background:#ACFF64;">
+  <div class="ticker-inner">
+    <span class="ticker-text" style="color:#AE0000;">RADIKALER FAIR · RADIKALER FAIR · RADIKALER FAIR · &nbsp;&nbsp;&nbsp;</span>
+    <span class="ticker-text" style="color:#AE0000;">RADIKALER FAIR · RADIKALER FAIR · RADIKALER FAIR · &nbsp;&nbsp;&nbsp;</span>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<section class="section" id="shop" style="background:#FFFFF5;">
+  <div class="section-inner">
+    <h2 class="section-h2" style="color:#AE0000;margin-bottom:12px;">The Snacks That Change Lives</h2>
+    <p style="font-family:'Banter Grotesk',sans-serif;font-size:17px;line-height:26px;color:#000;text-align:center;margin-bottom:40px;">Ohne Stress, ohne Masse – dafür mit 100 % Fokus auf Qualität.</p>
+    <div class="product-grid">
+      <div class="product-card">
+        <div class="product-thumb" style="background:#FFC5FF;">
+          <span style="font-family:'Fagies',sans-serif;font-size:28px;color:#AE0000;text-transform:uppercase;opacity:0.5;">Mango</span>
+          <div class="product-badge">Bestseller</div>
+        </div>
+        <div class="product-info">
+          <div class="product-name">Mango Snack</div>
+          <div class="product-price">CHF 7.90</div>
+          <button class="product-btn">In den Warenkorb</button>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-thumb" style="background:#ACFF64;">
+          <span style="font-family:'Fagies',sans-serif;font-size:28px;color:#AE0000;text-transform:uppercase;opacity:0.5;">Banana</span>
+          <div class="product-badge">Neu</div>
+        </div>
+        <div class="product-info">
+          <div class="product-name">Banana Chips</div>
+          <div class="product-price">CHF 6.90</div>
+          <button class="product-btn">In den Warenkorb</button>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-thumb" style="background:#B7D9FF;">
+          <span style="font-family:'Fagies',sans-serif;font-size:28px;color:#542A76;text-transform:uppercase;opacity:0.5;">Mix</span>
+          <div class="product-badge">Spar-Set</div>
+        </div>
+        <div class="product-info">
+          <div class="product-name">Mix-Paket</div>
+          <div class="product-price">CHF 19.90</div>
+          <button class="product-btn">In den Warenkorb</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="footer-brand-name">Kaadu</span>
+      <span class="footer-brand-sub">Gefriergetrocknete Früchte — fair produziert, radikal transparent.</span>
+    </div>
+    <div>
+      <div class="footer-cols">
+        <div>
+          <div class="footer-col-title">Shop</div>
+          <a href="#" class="footer-link">Alle Produkte</a>
+          <a href="#" class="footer-link">Mango</a>
+          <a href="#" class="footer-link">Banana</a>
+          <a href="#" class="footer-link">Mix-Pakete</a>
+        </div>
+        <div>
+          <div class="footer-col-title">Über uns</div>
+          <a href="#" class="footer-link">Mission</a>
+          <a href="#" class="footer-link">Impact</a>
+          <a href="#" class="footer-link">Team</a>
+          <a href="#" class="footer-link">Blog</a>
+        </div>
+        <div>
+          <div class="footer-col-title">Info</div>
+          <a href="#" class="footer-link">Versand</a>
+          <a href="#" class="footer-link">Rückgabe</a>
+          <a href="#" class="footer-link">FAQ</a>
+          <a href="#" class="footer-link">Kontakt</a>
+        </div>
+      </div>
+      <div class="footer-bottom" style="margin-top:28px;">
+        <div class="footer-copy">© 2026 Kaadu. Justice never tasted so sweet.</div>
+        <div class="footer-socials">
+          <a href="#" class="footer-social">Instagram</a>
+          <a href="#" class="footer-social">TikTok</a>
+          <a href="#" class="footer-social">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "heroHeadlineSize": 62,
+  "heroBg": "#FFC5FF",
+  "eyebrowFont": "Banter Grotesk",
+  "tickerSpeed": 32,
+  "ctaLabel": "Jetzt Probieren"
+}/*EDITMODE-END*/;
+
+let tweaks = {...TWEAK_DEFAULTS};
+
+function applyTweaks() {
+  // Hero bg
+  document.querySelector('.hero').style.background = tweaks.heroBg;
+  // H1 size
+  document.querySelector('.hero-h1').style.fontSize = tweaks.heroHeadlineSize + 'px';
+  // Eyebrow font
+  document.querySelectorAll('.hero-eyebrow').forEach(el => {
+    el.style.fontFamily = `'${tweaks.eyebrowFont}', sans-serif`;
+  });
+  // Ticker speed
+  document.querySelectorAll('.ticker-inner').forEach(el => {
+    el.style.animationDuration = tweaks.tickerSpeed + 's';
+  });
+  // CTA label
+  document.querySelectorAll('.hero-btns .btn-primary').forEach(el => {
+    el.textContent = tweaks.ctaLabel;
+  });
+}
+
+// ── Tweaks panel ───────────────────────────────────────────────────
+function buildTweaksPanel() {
+  const panel = document.createElement('div');
+  panel.id = 'tweaks-panel';
+  panel.style.cssText = `
+    display:none; position:fixed; bottom:24px; right:24px; z-index:9999;
+    background:#FFFFF5; border:2px solid #000; border-radius:12px;
+    padding:20px 20px 16px; width:260px;
+    box-shadow:4px 4px 0 #000; font-family:'Banter Grotesk',sans-serif;
+  `;
+  panel.innerHTML = `
+    <div style="font-family:'Fagies',sans-serif;font-size:18px;text-transform:uppercase;color:#AE0000;margin-bottom:14px;letter-spacing:0.02em;">Tweaks</div>
+
+    <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#542A76;display:block;margin-bottom:4px;">Hero bg colour</label>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
+      ${['#FFC5FF','#ACFF64','#B7D9FF','#FFFFF5','#542A76'].map(c=>`
+        <div data-bg="${c}" onclick="setBg('${c}')" style="
+          width:28px;height:28px;border-radius:50%;background:${c};
+          border:2px solid #000;cursor:pointer;transition:transform 0.1s;
+        " title="${c}"></div>
+      `).join('')}
+    </div>
+
+    <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#542A76;display:block;margin-bottom:4px;">Headline size: <span id="hs-val">${TWEAK_DEFAULTS.heroHeadlineSize}px</span></label>
+    <input type="range" min="32" max="80" step="2" value="${TWEAK_DEFAULTS.heroHeadlineSize}" oninput="setHeadlineSize(this.value)" style="width:100%;accent-color:#AE0000;margin-bottom:14px;">
+
+    <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#542A76;display:block;margin-bottom:4px;">Eyebrow font</label>
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      ${['Fagies','Banter Grotesk'].map(f=>`
+        <button onclick="setEyebrowFont('${f}')" id="ef-${f.replace(' ','-')}" style="
+          flex:1;padding:6px 8px;border:2px solid #000;border-radius:20px;cursor:pointer;
+          font-family:'${f}',sans-serif;font-size:12px;text-transform:uppercase;
+          background:${tweaks.eyebrowFont===f?'#AE0000':'#FFFFF5'};
+          color:${tweaks.eyebrowFont===f?'#FFFFF5':'#000'};
+        ">${f==='Fagies'?'Fagies':'Grotesk'}</button>
+      `).join('')}
+    </div>
+
+    <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#542A76;display:block;margin-bottom:4px;">CTA label</label>
+    <input type="text" value="${TWEAK_DEFAULTS.ctaLabel}" oninput="setCtaLabel(this.value)" style="
+      width:100%;border:2px solid #000;border-radius:6px;padding:7px 10px;
+      font-family:'Banter Grotesk',sans-serif;font-size:13px;margin-bottom:14px;
+    ">
+
+    <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#542A76;display:block;margin-bottom:4px;">Ticker speed: <span id="ts-val">${TWEAK_DEFAULTS.tickerSpeed}s</span></label>
+    <input type="range" min="6" max="40" step="2" value="${TWEAK_DEFAULTS.tickerSpeed}" oninput="setTickerSpeed(this.value)" style="width:100%;accent-color:#AE0000;">
+  `;
+  document.body.appendChild(panel);
+}
+
+function setBg(c) {
+  tweaks.heroBg = c;
+  applyTweaks();
+  window.parent.postMessage({type:'__edit_mode_set_keys', edits:{heroBg:c}}, '*');
+}
+function setHeadlineSize(v) {
+  tweaks.heroHeadlineSize = +v;
+  document.getElementById('hs-val').textContent = v + 'px';
+  applyTweaks();
+  window.parent.postMessage({type:'__edit_mode_set_keys', edits:{heroHeadlineSize:+v}}, '*');
+}
+function setEyebrowFont(f) {
+  tweaks.eyebrowFont = f;
+  document.querySelectorAll('[id^="ef-"]').forEach(b => {
+    const active = b.id === 'ef-' + f.replace(' ','-');
+    b.style.background = active ? '#AE0000' : '#FFFFF5';
+    b.style.color = active ? '#FFFFF5' : '#000';
+  });
+  applyTweaks();
+  window.parent.postMessage({type:'__edit_mode_set_keys', edits:{eyebrowFont:f}}, '*');
+}
+function setCtaLabel(v) {
+  tweaks.ctaLabel = v;
+  applyTweaks();
+  window.parent.postMessage({type:'__edit_mode_set_keys', edits:{ctaLabel:v}}, '*');
+}
+function setTickerSpeed(v) {
+  tweaks.tickerSpeed = +v;
+  document.getElementById('ts-val').textContent = v + 's';
+  applyTweaks();
+  window.parent.postMessage({type:'__edit_mode_set_keys', edits:{tickerSpeed:+v}}, '*');
+}
+
+window.addEventListener('message', e => {
+  if (e.data?.type === '__activate_edit_mode') document.getElementById('tweaks-panel').style.display = 'block';
+  if (e.data?.type === '__deactivate_edit_mode') document.getElementById('tweaks-panel').style.display = 'none';
+});
+window.parent.postMessage({type:'__edit_mode_available'}, '*');
+
+document.addEventListener('DOMContentLoaded', () => {
+  buildTweaksPanel();
+  applyTweaks();
+});
+
+function toggleMenu() {
+  document.getElementById('drawer').classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+  const drawer = document.getElementById('drawer');
+  const hamburger = document.querySelector('.nav-hamburger');
+  if (drawer && drawer.classList.contains('open') && !drawer.contains(e.target) && !hamburger.contains(e.target)) {
+    drawer.classList.remove('open');
+  }
+});
+</script>
+  document.getElementById('drawer').classList.toggle('open');
+}
+// Close drawer on outside click
+document.addEventListener('click', function(e) {
+  const drawer = document.getElementById('drawer');
+  const hamburger = document.querySelector('.nav-hamburger');
+  if (drawer.classList.contains('open') && !drawer.contains(e.target) && !hamburger.contains(e.target)) {
+    drawer.classList.remove('open');
+  }
+});
+</script>
+</body>
+</html>

@@ -8,19 +8,19 @@
         
         {%- comment -%} First Header Line {%- endcomment -%}
         {% if section.settings.title != '' %}
-          <h2 class="inline-heading-rte font-heading {{ section.settings.heading_size }} heading-style break-words {{ settings.heading_drop_shadow_style }} custom-display-header">
+          <h2 class="inline-heading-rte font-heading {{ section.settings.heading_size }} heading-style break-words {{ settings.heading_drop_shadow_style }} h1">
             {{ section.settings.title }}
           </h2>
         {% endif %}
 
         {%- comment -%} Second Header Line {%- endcomment -%}
         {% if section.settings.subtitle != '' %}
-          <h3 class="inline-heading-rte font-heading {{ section.settings.subtitle_size }} heading-style break-words {{ settings.heading_drop_shadow_style }} custom-display-header {% if section.settings.title != '' %}{{ section.settings.header_spacing }}{% endif %}">
+          <h3 class="inline-heading-rte font-heading {{ section.settings.subtitle_size }} heading-style break-words {{ settings.heading_drop_shadow_style }} h1 {% if section.settings.title != '' %}{{ section.settings.header_spacing }}{% endif %}">
             {{ section.settings.subtitle }}
           </h3>
         {% endif %}
 
-        <div class="font-main {% if section.settings.title != '' or section.settings.subtitle != '' %}mt-5{% endif %} rte mx-auto leading-snug custom-body-xlarge">
+        <div class="font-main {% if section.settings.title != '' or section.settings.subtitle != '' %}mt-5{% endif %} rte mx-auto leading-snug h2">
           {{ section.settings.rich_text }}
         </div>
 

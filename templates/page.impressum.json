@@ -51,9 +51,9 @@
         "shape_divider_xR4akn"
       ],
       "custom_css": [
-        ".custom-btn__surface {background-color: white; color: black; padding: 16px 24px; border: solid 1.5px black; box-shadow: inset 0 0 0 1px black; font-weight: 600;}",
+        ".btn-secondary {background-color: white; color: black; padding: 16px 24px; border: solid 1.5px black; box-shadow: inset 0 0 0 1px black; font-weight: 600;}",
         "h2,p {color: black;}",
-        "@media (max-width: 768px) {.custom-btn__surface {padding: 12px 20px; }}",
+        "@media (max-width: 768px) {.btn-secondary {padding: 12px 20px; }}",
         "@media (min-width: 768px) {.lgmt-8 {margin-top: 32px; }}",
         "@media (prefers-reduced-motion: no-preference) {.shape-divider-svg-container.animate {animation-duration: 30s;}}"
       ],

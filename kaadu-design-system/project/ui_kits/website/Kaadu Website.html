@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaadu — Website UI Kit</title>
+<template id="__bundler_thumbnail">
+<svg viewBox="0 0 80 56" xmlns="http://www.w3.org/2000/svg">
+  <rect width="80" height="56" fill="#FFC5FF"/>
+  <rect x="8" y="8" width="64" height="8" rx="2" fill="#AE0000" opacity="0.9"/>
+  <rect x="8" y="22" width="40" height="18" rx="2" fill="#542A76"/>
+  <rect x="52" y="22" width="20" height="18" rx="2" fill="#ACFF64"/>
+  <rect x="8" y="44" width="64" height="6" rx="2" fill="#000" opacity="0.2"/>
+</svg>
+</template>
+<style>
+@font-face { font-family:'Fagies'; src:url('../../fonts/Fagies.ttf') format('truetype'); font-weight:400; font-display:swap; }
+@font-face { font-family:'Banter Grotesk'; src:url('../../fonts/BanterGrotesk-Regular.woff2') format('woff2'); font-weight:400; font-display:swap; }
+@font-face { font-family:'Banter Grotesk'; src:url('../../fonts/BanterGrotesk-Regular.woff2') format('woff2'); font-weight:700; font-display:swap; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Banter Grotesk', sans-serif; background: #FFFFF5; overflow-x: hidden; }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+// ─── NAV ────────────────────────────────────────────────────────────
+function KaaduNav({ cartCount = 0 }) {
+  const [menuOpen, setMenuOpen] = React.useState(false);
+  return (
+    <nav style={{
+      position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
+      background: '#FFFFF5', borderBottom: '2px solid #000',
+      height: 64, display: 'flex', alignItems: 'center',
+      padding: '0 32px', justifyContent: 'space-between',
+    }}>
+      <a href="#" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
+        <span style={{ fontFamily: "'Fagies', sans-serif", fontWeight: 400, fontSize: 22, textTransform: 'uppercase', color: '#AE0000', letterSpacing: '0.02em' }}>Kaadu</span>
+      </a>
+      <div style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
+        {['Shop', 'Über uns', 'Impact', 'Blog'].map(link => (
+          <a key={link} href="#" style={{ fontFamily: "'Banter Grotesk', sans-serif", fontWeight: 700, fontSize: 14, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#000', textDecoration: 'none' }}
+            onMouseEnter={e => e.target.style.color = '#AE0000'}
+            onMouseLeave={e => e.target.style.color = '#000'}
+          >{link}</a>
+        ))}
+      </div>
+      <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+        <a href="#shop" style={{
+          background: '#AE0000', color: '#FFFFF5', border: '2px solid #000',
+          borderRadius: 30, padding: '8px 18px',
+          fontFamily: "'Banter Grotesk', sans-serif", fontWeight: 700, fontSize: 13,
+          textTransform: 'uppercase', letterSpacing: '0.05em', textDecoration: 'none',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+        }}>Shop</a>
+      </div>
+    </nav>
+  );
+}
+
+// ─── TICKER ─────────────────────────────────────────────────────────
+function KaaduTicker({ text = "ITS NOT FAIR! ITS NOT FAIR! ITS NOT FAIR! ITS NOT FAIR! ", bg = "#ACFF64", color = "#AE0000" }) {
+  return (
+    <div style={{ background: bg, borderTop: '2px solid #000', borderBottom: '2px solid #000', overflow: 'hidden', height: 56, display: 'flex', alignItems: 'center' }}>
+      <style>{`@keyframes ticker { from { transform: translateX(0) } to { transform: translateX(-50%) } } .ticker-inner { display: flex; animation: ticker 18s linear infinite; white-space: nowrap; will-change: transform; }`}</style>
+      <div className="ticker-inner">
+        {[...Array(4)].map((_, i) => (
+          <span key={i} style={{ fontFamily: "'Fagies', sans-serif", fontWeight: 400, fontSize: 28, textTransform: 'uppercase', color, padding: '0 24px', lineHeight: '56px', display: 'inline-block' }}>{text}</span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── HERO ────────────────────────────────────────────────────────────
+function KaaduHero() {
+  return (
+    <section style={{ background: '#FFC5FF', minHeight: '100vh', paddingTop: 64, display: 'flex', alignItems: 'center', overflow: 'hidden', position: 'relative' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '64px 32px', width: '100%', display: 'flex', gap: 48, alignItems: 'center' }}>
+        <div style={{ flex: '0 0 50%', position: 'relative' }}>
+          <div style={{ width: '100%', aspectRatio: '1', maxWidth: 520, background: '#FFFFF5', borderRadius: '60% 40% 55% 45% / 50% 60% 40% 50%', border: '3px solid #000', overflow: 'hidden', boxShadow: '6px 8px 0 #000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: '100%', height: '100%', background: '#FF781E', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span style={{ fontFamily: "'Fagies', sans-serif", fontSize: 48, color: '#FFFFF5', textTransform: 'uppercase' }}>Kaadu</span>
+            </div>
+          </div>
+        </div>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontFamily: "'Banter Grotesk', sans-serif", fontWeight: 700, fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#542A76', marginBottom: 16 }}>Gefriergetrocknete Früchte</div>
+          <h1 style={{ fontFamily: "'Fagies', sans-serif", fontWeight: 400, fontSize: 64, lineHeight: '80px', textTransform: 'uppercase', color: '#AE0000', marginBottom: 24, letterSpacing: '-0.01em' }}>Snack Like You Give a Damn.</h1>
+          <p style={{ fontFamily: "'Banter Grotesk', sans-serif", fontSize: 18, lineHeight: '28px', color: '#000', marginBottom: 32, maxWidth: 480 }}>
+            100 % Frucht. 0 % Ausbeutung. Fair produziert, in der Ursprungsgemeinde verarbeitet, radikal transparent.
+          </p>
+          <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+            <a href="#shop" style={{ background: '#FFFFF5', color: '#AE0000', border: '2px solid #000', borderRadius: 30, padding: '16px 32px', fontFamily: "'Fagies', sans-serif", fontWeight: 400, fontSize: 20, textTransform: 'uppercase', textDecoration: 'none', boxShadow: '0 4px 4px rgba(0,0,0,0.25)' }}>Jetzt Probieren</a>
+            <a href="#impact" style={{ background: 'transparent', color: '#000', border: '2px solid #000', borderRadius: 30, padding: '16px 32px', fontFamily: "'Banter Grotesk', sans-serif", fontWeight: 700, fontSize: 18, textTransform: 'uppercase', textDecoration: 'none', boxShadow: '0 4px 4px rgba(0,0,0,0.25)' }}>Shop Öffnen</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── IMPACT ──────────────────────────────────────────────────────────
+function KaaduImpactSection() {
+  return (
+    <section id="impact" style={{ background: '#B7D9FF', padding: '80px 32px' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <h2 style={{ fontFamily: "'Fagies', sans-serif", fontWeight: 400, fontSize: 64, lineHeight: '80px', textTransform: 'uppercase', color: '#542A76', textAlign: 'center', marginBottom: 16 }}>Fairness für Kleinbauern</h2>
+        <p style={{ fontFamily: "'Banter Grotesk', sans-serif", fontWeight: 700, fontSize: 20, textTransform: 'uppercase', color: '#542A76', textAlign: 'center', marginBottom: 48 }}>Marktpreise schwanken, unsere nicht</p>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'center' }}>
+          <div>
+            <p style={{ fontFamily: "'Banter Grotesk', sans-serif", fontSize: 18, lineHeight: '28px', color: '#542A76', marginBottom: 32 }}>
+              Kaadu zahlt Kleinbauern stabile, transparente Preise – deutlich über dem Markt.
+            </p>
+            <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+              {[{ val: '30–40%', label: 'über Marktpreis' }, { val: '100%', label: 'Höhere Löhne' }, { val: '100%', label: 'Ownership Ziel' }].map(stat => (
+                <div key={stat.val} style={{ background: '#FFFFF5', border: '2px solid #000', borderRadius: 12, padding: '16px 20px', boxShadow: '0 4px 4px rgba(0,0,0,0.25)', minWidth: 120 }}>
+                  <div style={{ fontFamily: "'Fagies', sans-serif", fontSize: 36, color: '#AE0000', lineHeight: 1 }}>{stat.val}</div>
+                  <div style={{ fontFamily: "'Banter Grotesk', sans-serif", fontWeight: 700, fontSize: 12, textTransform: 'uppercase', color: '#542A76', marginTop: 4 }}>{stat.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div style={{ background: '#FFFFF5', border: '4px solid #542A76', borderRadius: 12, padding: 24, boxShadow: '0 4px 4px rgba(0,0,0,0.25)' }}>
+            <div style={{ fontFamily: "'Banter Grotesk', sans-serif", fontWeight: 700, fontSize: 14, textTransform: 'uppercase', color: '#542A76', marginBottom: 16 }}>Preisstabilität</div>
+            {[{ label: 'Marktpreis', val: 60, color: '#AE0000' }, { label: 'Kaadu Preis', val: 90, color: '#ACFF64' }].map(bar => (
+              <div key={bar.label} style={{ marginBottom: 12 }}>
+                <div style={{ fontFamily: "'Banter Grotesk', sans-serif", fontSize: 13, fontWeight: 700, color: '#542A76', marginBottom: 4 }}>{bar.label}</div>
+                <div style={{ background: '#E6E6E6', borderRadius: 4, height: 24, overflow: 'hidden', border: '1px solid #000' }}>
+                  <div style={{ background: bar.color, width: `${bar.val}%`, height: '100%', borderRadius: 4 }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function KaaduWomenSection() {
+  return (
+    <section style={{ background: '#542A76', padding: '80px 32px' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
+        <div>
+          <h2 style={{ fontFamily: "'Fagies', sans-serif", fontWeight: 400, fontSize: 64, lineHeight: '80px', textTransform: 'uppercase', color: '#FFFFF5', marginBottom: 24 }}>Starke Jobs für lokale Frauen</h2>
+          <p style={{ fontFamily: "'Banter Grotesk', sans-serif", fontWeight: 700, fontSize: 18, lineHeight: '28px', color: '#FFFFF5', marginBottom: 24 }}>Wir beschäftigen gezielt Frauen aus einkommensschwachen Haushalten der Region.</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {['Doppelter Lohn', '+ Boni & Umsatzbeteiligung', '+ Mitarbeiter-Fonds', '+ Miteigentum (langfristig)'].map(item => (
+              <div key={item} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{ width: 16, height: 16, borderRadius: '50%', background: '#ACFF64', flexShrink: 0 }} />
+                <span style={{ fontFamily: "'Banter Grotesk', sans-serif", fontWeight: 700, fontSize: 16, color: '#FFFFF5', textTransform: 'uppercase' }}>{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div style={{ background: '#FFC5FF', borderRadius: 16, border: '3px solid #000', aspectRatio: '4/3', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <span style={{ fontFamily: "'Fagies', sans-serif", fontSize: 32, color: '#542A76', textTransform: 'uppercase', opacity: 0.4 }}>Photo</span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── PRODUCTS ────────────────────────────────────────────────────────
+const PRODUCTS = [
+  { name: 'Mango Snack', price: 'CHF 7.90', badge: 'Bestseller', bg: '#FFC5FF' },
+  { name: 'Banana Chips', price: 'CHF 6.90', badge: 'Neu', bg: '#ACFF64' },
+  { name: 'Mix-Paket', price: 'CHF 19.90', badge: 'Spar-Set', bg: '#B7D9FF' },
+];
+
+function KaaduProductSection() {
+  return (
+    <section id="shop" style={{ background: '#FFFFF5', padding: '80px 32px' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <h2 style={{ fontFamily: "'Fagies', sans-serif", fontWeight: 400, fontSize: 64, lineHeight: '80px', textTransform: 'uppercase', color: '#AE0000', textAlign: 'center', marginBottom: 16 }}>The Snacks That Change Lives</h2>
+        <p style={{ fontFamily: "'Banter Grotesk', sans-serif", fontSize: 18, lineHeight: '28px', color: '#000', textAlign: 'center', marginBottom: 56 }}>Ohne Stress, ohne Masse – dafür mit 100 % Fokus auf Qualität.</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
+          {PRODUCTS.map(p => (
+            <div key={p.name} style={{ border: '2px solid #000', borderRadius: 12, overflow: 'hidden', boxShadow: '0 4px 4px rgba(0,0,0,0.25)', cursor: 'pointer' }}>
+              <div style={{ background: p.bg, height: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                <span style={{ fontFamily: "'Fagies', sans-serif", fontSize: 36, color: '#AE0000', textTransform: 'uppercase', opacity: 0.5 }}>{p.name}</span>
+                <div style={{ position: 'absolute', top: 12, right: 12, background: '#AE0000', color: '#FFFFF5', border: '2px solid #000', borderRadius: 30, padding: '4px 12px', fontFamily: "'Banter Grotesk', sans-serif", fontWeight: 700, fontSize: 12, textTransform: 'uppercase' }}>{p.badge}</div>
+              </div>
+              <div style={{ padding: '16px 20px', background: '#FFFFF5' }}>
+                <div style={{ fontFamily: "'Banter Grotesk', sans-serif", fontWeight: 700, fontSize: 16, textTransform: 'uppercase', marginBottom: 4 }}>{p.name}</div>
+                <div style={{ fontFamily: "'Fagies', sans-serif", fontSize: 24, color: '#AE0000', marginBottom: 12 }}>{p.price}</div>
+                <button style={{ width: '100%', background: '#FFFFF5', color: '#000', border: '2px solid #000', borderRadius: 30, padding: '10px 0', fontFamily: "'Banter Grotesk', sans-serif", fontWeight: 700, fontSize: 14, textTransform: 'uppercase', cursor: 'pointer', boxShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>In den Warenkorb</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── FOOTER ──────────────────────────────────────────────────────────
+function KaaduFooter() {
+  return (
+    <footer style={{ background: '#000', color: '#FFFFF5', padding: '48px 32px 32px', borderTop: '2px solid #AE0000' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 48, marginBottom: 48 }}>
+          <div>
+            <span style={{ fontFamily: "'Fagies', sans-serif", fontSize: 24, textTransform: 'uppercase', color: '#AE0000', display: 'block', marginBottom: 12 }}>Kaadu</span>
+            <p style={{ fontFamily: "'Banter Grotesk', sans-serif", fontSize: 14, lineHeight: '22px', color: '#FFFFF5', opacity: 0.7, maxWidth: 260 }}>Gefriergetrocknete Früchte — fair produziert, radikal transparent.</p>
+          </div>
+          {[
+            { title: 'Shop', links: ['Alle Produkte', 'Mango', 'Banana', 'Mix-Pakete'] },
+            { title: 'Über uns', links: ['Mission', 'Impact', 'Team', 'Blog'] },
+            { title: 'Info', links: ['Versand', 'Rückgabe', 'FAQ', 'Kontakt'] },
+          ].map(col => (
+            <div key={col.title}>
+              <div style={{ fontFamily: "'Banter Grotesk', sans-serif", fontWeight: 700, fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#FFFFF5', marginBottom: 14 }}>{col.title}</div>
+              {col.links.map(l => (
+                <a key={l} href="#" style={{ display: 'block', fontFamily: "'Banter Grotesk', sans-serif", fontSize: 14, color: '#FFFFF5', opacity: 0.65, textDecoration: 'none', marginBottom: 8 }}>{l}</a>
+              ))}
+            </div>
+          ))}
+        </div>
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.15)', paddingTop: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
+          <div style={{ fontFamily: "'Banter Grotesk', sans-serif", fontSize: 12, color: '#FFFFF5', opacity: 0.5 }}>© 2026 Kaadu. Justice never tasted so sweet.</div>
+          <div style={{ display: 'flex', gap: 16 }}>
+            {['Instagram', 'TikTok', 'LinkedIn'].map(s => (
+              <a key={s} href="#" style={{ fontFamily: "'Banter Grotesk', sans-serif", fontWeight: 700, fontSize: 12, textTransform: 'uppercase', color: '#FFFFF5', opacity: 0.6, textDecoration: 'none', letterSpacing: '0.05em' }}>{s}</a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+// ─── APP ─────────────────────────────────────────────────────────────
+function App() {
+  return (
+    <>
+      <KaaduNav cartCount={2} />
+      <KaaduHero />
+      <KaaduTicker text="ITS NOT FAIR! ITS NOT FAIR! ITS NOT FAIR! ITS NOT FAIR! " />
+      <KaaduImpactSection />
+      <KaaduTicker text="JUSTICE NEVER TASTED SO SWEET · JUSTICE NEVER TASTED SO SWEET · " bg="#542A76" color="#FFC5FF" />
+      <KaaduWomenSection />
+      <KaaduTicker text="RADIKALER FAIR · RADIKALER FAIR · RADIKALER FAIR · RADIKALER FAIR · " bg="#ACFF64" color="#AE0000" />
+      <KaaduProductSection />
+      <KaaduFooter />
+    </>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+</script>
+</body>
+</html>

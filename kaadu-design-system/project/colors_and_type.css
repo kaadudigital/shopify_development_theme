@@ -1,0 +1,291 @@
+/* ─────────────────────────────────────────────
+   KAADU DESIGN SYSTEM — Colors & Typography
+   Source: Figma "Wireframe.fig" + brand brief
+   ───────────────────────────────────────────── */
+
+/* ── FONTS ──────────────────────────────────────
+   IMPORTANT: Fagies and Banter Grotesk are custom
+   brand typefaces. Google Font substitutions used
+   below — see SUBSTITUTION NOTICE in README.md.
+
+   Fagies → "Rubik" (bold display, similar DNA)
+   Banter Grotesk → "DM Sans" (clean grotesque)
+   ─────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap');
+
+/* ── BRAND FONTS (supplied by Kaadu) ────────────── */
+
+@font-face {
+  font-family: 'Fagies';
+  src: url('./fonts/Fagies.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Banter Grotesk';
+  src: url('./fonts/BanterGrotesk-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Banter Grotesk';
+  src: url('./fonts/BanterGrotesk-Regular.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ThickHead kept as fallback */
+@font-face {
+  font-family: 'ThickHead';
+  src: url('./fonts/THICKHEA.TTF') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── COLOR TOKENS ───────────────────────────────── */
+:root {
+  /* Primary Palette */
+  --color-red:        #AE0000;   /* Primary Red — hero, CTAs, headlines */
+  --color-violet:     #542A76;   /* Radical Violet — dark sections, accents */
+  --color-pink:       #FFC5FF;   /* Light Pink / Radical Rose — hero bg, highlights */
+  --color-orange:     #FF781E;   /* Zetsy Orange — accent, product labels */
+  --color-cream:      #FFFFF5;   /* Off-White Cream — light section bg, text on dark */
+
+  /* Secondary Palette */
+  --color-lime:       #ACFF64;   /* Lime Green — data viz, tags, ticker bg */
+  --color-yellow:     #EDF731;   /* Electric Yellow — accent, highlights */
+  --color-sky:        #B7D9FF;   /* Sky Blue — section backgrounds */
+
+  /* Neutral / Dark */
+  --color-black:      #000000;
+  --color-near-black: #221F1F;
+  --color-dark-brown: #422A24;   /* Deep bg tones */
+  --color-mid-grey:   #8C8C8C;
+  --color-light-grey: #E6E6E6;
+
+  /* Semantic */
+  --color-bg-hero:        var(--color-pink);
+  --color-bg-section-alt: var(--color-violet);
+  --color-bg-light:       var(--color-cream);
+  --color-bg-ticker:      var(--color-lime);
+  --color-bg-sky:         var(--color-sky);
+
+  --color-text-primary:   var(--color-black);
+  --color-text-on-dark:   var(--color-cream);
+  --color-text-brand:     var(--color-red);
+  --color-text-violet:    var(--color-violet);
+
+  --color-cta-primary-bg:   var(--color-cream);   /* image-based blob button */
+  --color-cta-secondary-bg: var(--color-cream);
+  --color-cta-border:       var(--color-black);
+
+  /* ── SPACING SCALE (4px base) ───────────────── */
+  --space-0:   0px;
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:   12px;
+  --space-4:   16px;
+  --space-6:   24px;
+  --space-8:   32px;
+  --space-12:  48px;
+  --space-16:  64px;
+  --space-24:  96px;
+  --space-32:  128px;
+
+  /* ── LAYOUT ─────────────────────────────────── */
+  --container-max:       1200px;
+  --grid-cols-desktop:   12;
+  --grid-gutter-desktop: 24px;
+  --grid-cols-mobile:    6;
+  --grid-gutter-mobile:  16px;
+  --section-padding-v:   64px;
+  --section-padding-v-mobile: 32px;
+
+  /* ── BORDER RADIUS ───────────────────────────── */
+  --radius-btn:    30px;   /* pill buttons */
+  --radius-card:   12px;   /* cards */
+  --radius-sticker: 16px;  /* sticker/badge elements */
+
+  /* ── SHADOWS ─────────────────────────────────── */
+  --shadow-sm:   0px 2px 7.6px 0px rgba(0,0,0,0.25);
+  --shadow-md:   0px 4px 4px 0px rgba(0,0,0,0.25);
+  --shadow-glow: 0px 0px 35px 0px rgba(0,0,0,0.10);
+
+  /* ── TYPOGRAPHY FAMILIES ─────────────────────── */
+  --font-display:    'Fagies', 'ThickHead', Helvetica, Arial, sans-serif;
+  --font-heading:    'Banter Grotesk', 'DM Sans', Helvetica, Arial, sans-serif;
+  --font-body:       'Banter Grotesk', 'DM Sans', Helvetica, Arial, sans-serif;
+}
+
+/* ── TYPE SCALE ─────────────────────────────────── */
+
+/* H1 — Display Headline (Fagies / display) */
+.h1, h1 {
+  font-family:    var(--font-display);
+  font-weight:    400;             /* Fagies is Regular weight; display at 400 */
+  font-size:      72px;
+  line-height:    80px;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+
+/* H2 — Section Headline (Banter Grotesk Semibold) */
+.h2, h2 {
+  font-family:    var(--font-heading);
+  font-weight:    700;
+  font-size:      24px;
+  line-height:    32px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* Body Large */
+.body-large {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size:   18px;
+  line-height: 28px;
+}
+
+/* Body Default / Paragraph */
+.body, p {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size:   18px;
+  line-height: 28px;
+}
+
+/* Small / Caption */
+.caption, small {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size:   14px;
+  line-height: 20px;
+}
+
+/* Button / CTA */
+.btn-label {
+  font-family:    var(--font-heading);
+  font-weight:    700;
+  font-size:      18px;
+  line-height:    24px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* ── MOBILE OVERRIDES ────────────────────────────── */
+@media (max-width: 768px) {
+  .h1, h1 {
+    font-size:   48px;
+    line-height: 44px;
+  }
+  .body-large, .body, p {
+    font-size:   16px;
+    line-height: 24px;
+  }
+  .btn-label {
+    font-size: 16px;
+  }
+  :root {
+    --section-padding-v: var(--section-padding-v-mobile);
+  }
+}
+
+/* ── UTILITY CLASSES ─────────────────────────────── */
+.text-upper  { text-transform: uppercase; }
+.text-red    { color: var(--color-red); }
+.text-violet { color: var(--color-violet); }
+.text-cream  { color: var(--color-cream); }
+.text-black  { color: var(--color-black); }
+
+.bg-pink   { background-color: var(--color-pink); }
+.bg-violet { background-color: var(--color-violet); }
+.bg-cream  { background-color: var(--color-cream); }
+.bg-lime   { background-color: var(--color-lime); }
+.bg-sky    { background-color: var(--color-sky); }
+.bg-red    { background-color: var(--color-red); }
+
+/* ── BUTTON COMPONENTS ───────────────────────────── */
+
+/* Primary "blob" CTA — Fagies font, mimics wavy SVG button shape */
+.btn-primary {
+  display:         inline-flex;
+  align-items:     center;
+  justify-content: center;
+  padding:         16px 24px;
+  background-color: var(--color-cream);
+  border:          2px solid var(--color-black);
+  border-radius:   var(--radius-btn);
+  box-shadow:      var(--shadow-md);
+  font-family:     var(--font-display);
+  font-weight:     400;
+  font-size:       20px;
+  line-height:     24px;
+  text-transform:  uppercase;
+  color:           var(--color-red);
+  cursor:          pointer;
+  transition:      transform 0.15s ease, box-shadow 0.15s ease;
+  text-decoration: none;
+}
+.btn-primary:hover {
+  transform:  translateY(-2px);
+  box-shadow: 0px 6px 6px 0px rgba(0,0,0,0.25);
+}
+.btn-primary:active {
+  transform:  translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Secondary — pill button with border */
+.btn-secondary {
+  display:         inline-flex;
+  align-items:     center;
+  justify-content: center;
+  padding:         14px 24px;
+  background-color: var(--color-cream);
+  border:          2px solid var(--color-black);
+  border-radius:   var(--radius-btn);
+  box-shadow:      var(--shadow-md);
+  font-family:     var(--font-heading);
+  font-weight:     700;
+  font-size:       18px;
+  line-height:     24px;
+  text-transform:  uppercase;
+  color:           var(--color-black);
+  cursor:          pointer;
+  transition:      transform 0.15s ease, box-shadow 0.15s ease;
+  text-decoration: none;
+}
+.btn-secondary:hover {
+  background-color: var(--color-light-grey);
+  transform:  translateY(-1px);
+}
+.btn-secondary:active {
+  transform: translateY(0);
+}
+
+/* Inverse secondary — for dark bg sections */
+.btn-secondary-inverse {
+  background-color: transparent;
+  border-color:     var(--color-cream);
+  color:            var(--color-cream);
+}
+.btn-secondary-inverse:hover {
+  background-color: rgba(255,255,245,0.15);
+}
+
+/* ── CARD ────────────────────────────────────────── */
+.card {
+  background-color: var(--color-cream);
+  border:           2px solid var(--color-black);
+  border-radius:    var(--radius-card);
+  padding:          var(--space-8);
+  box-shadow:       var(--shadow-md);
+}

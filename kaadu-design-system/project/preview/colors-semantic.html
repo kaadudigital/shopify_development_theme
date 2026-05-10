@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #f0f0f0; font-family: 'DM Sans', sans-serif; padding: 20px; }
+  .pairs { display: flex; gap: 12px; flex-wrap: wrap; }
+  .pair { display: flex; width: 200px; border: 1px solid rgba(0,0,0,0.1); overflow: hidden; border-radius: 8px; }
+  .bg-chip { width: 60px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .fg-chip { padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; }
+  .pair-label { font-size: 11px; font-weight: 700; }
+  .pair-sub   { font-size: 10px; color: #888; font-family: monospace; }
+</style>
+</head>
+<body>
+<div class="pairs">
+  <div class="pair">
+    <div class="bg-chip" style="background:#FFC5FF;"><span style="font-size:10px;font-weight:700;color:#AE0000">Aa</span></div>
+    <div class="fg-chip"><div class="pair-label">Hero / Pink bg</div><div class="pair-sub">bg #FFC5FF · text #AE0000</div></div>
+  </div>
+  <div class="pair">
+    <div class="bg-chip" style="background:#542A76;"><span style="font-size:10px;font-weight:700;color:#FFFFF5">Aa</span></div>
+    <div class="fg-chip"><div class="pair-label">Violet bg</div><div class="pair-sub">bg #542A76 · text #FFFFF5</div></div>
+  </div>
+  <div class="pair">
+    <div class="bg-chip" style="background:#FFFFF5;"><span style="font-size:10px;font-weight:700;color:#AE0000">Aa</span></div>
+    <div class="fg-chip"><div class="pair-label">Cream bg</div><div class="pair-sub">bg #FFFFF5 · text #AE0000</div></div>
+  </div>
+  <div class="pair">
+    <div class="bg-chip" style="background:#ACFF64;"><span style="font-size:10px;font-weight:700;color:#AE0000">Aa</span></div>
+    <div class="fg-chip"><div class="pair-label">Ticker / Lime bg</div><div class="pair-sub">bg #ACFF64 · text #AE0000</div></div>
+  </div>
+  <div class="pair">
+    <div class="bg-chip" style="background:#B7D9FF;"><span style="font-size:10px;font-weight:700;color:#542A76">Aa</span></div>
+    <div class="fg-chip"><div class="pair-label">Sky bg</div><div class="pair-sub">bg #B7D9FF · text #542A76</div></div>
+  </div>
+</div>
+</body>
+</html>

@@ -7,23 +7,23 @@
       <div class="{% if section.settings.display_on_card %}card__surface p-5 lg:p-10{% endif %} relative z-shape-divider mx-auto text-center">
 
         {% if section.settings.title != '' %}
-          <h2 class="font-heading {{ section.settings.heading_size }} heading-style break-words custom-display-header {{ settings.heading_drop_shadow_style }}">
+          <h2 class="font-heading {{ section.settings.heading_size }} heading-style break-words h1 {{ settings.heading_drop_shadow_style }}">
             {{ section.settings.title }}
           </h2>
         {% endif %}
         {% if section.settings.title2 != '' %}
-          <h2 class="font-heading {{ section.settings.heading_size }} heading-style break-words custom-display-header {{ settings.heading_drop_shadow_style }}">
+          <h2 class="font-heading {{ section.settings.heading_size }} heading-style break-words h1 {{ settings.heading_drop_shadow_style }}">
             {{ section.settings.title2 }}
           </h2>
         {% endif %}
         {% if section.settings.title3 != '' %}
-          <h2 class="font-heading {{ section.settings.heading_size }} heading-style break-words custom-display-header  {{ settings.heading_drop_shadow_style }}">
+          <h2 class="font-heading {{ section.settings.heading_size }} heading-style break-words h1  {{ settings.heading_drop_shadow_style }}">
             {{ section.settings.title3 }}
           </h2>
         {% endif %}
 
         {% if section.settings.subheading != '' %}
-          <h3 class="{% if section.settings.title != '' %}mt-3{% endif %} font-main custom-body-xlarge richtext-main ">
+          <h3 class="{% if section.settings.title != '' %}mt-3{% endif %} font-main h2 richtext-main ">
             {{ section.settings.subheading }}
           </h3>
         {% endif %}
@@ -45,7 +45,7 @@
         {%- endif -%}
 
         {%- comment -%} Body text below image {%- endcomment -%}
-        <div class="mt-5 mx-auto leading-snug font-main custom-body-xlarge">
+        <div class="mt-5 mx-auto leading-snug font-main h2">
           {{ section.settings.rich_text }}
         </div>
 
@@ -129,7 +129,7 @@
           "label": "t:common.options.standard.label"
         },
         {
-          "value": "custom-display-header",
+          "value": "h1",
           "label": "t:common.options.feature.label"
         }
       ],

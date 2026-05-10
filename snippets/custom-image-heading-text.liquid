@@ -92,16 +92,16 @@
   <div class=" flex flex-col items-center {% if display_on_card %}card{% endif %}">
     {% if title != '' %}
       <div class="mb-5">
-        {% comment %} add custom-display-header to have big customised heading {% endcomment %}
-        <h2 class="inline-heading-rte font-heading {{ text_alignment_mobile }} {{ desktop_text_alignment }}  {{ heading_size }} heading-style custom-display-header {{ settings.heading_drop_shadow_style }} break-words ">
+        {% comment %} add h1 to have big customised heading {% endcomment %}
+        <h2 class="inline-heading-rte font-heading {{ text_alignment_mobile }} {{ desktop_text_alignment }}  {{ heading_size }} heading-style h1 {{ settings.heading_drop_shadow_style }} break-words ">
           {{ title }}
         </h2>
       </div>
     {% endif %}
     {% if subheading != '' %}
       <div class="mb-5">
-        {% comment %} add custom-display-header to have big customised heading {% endcomment %}
-        <div class="inline-heading-rte {{ text_alignment_mobile }} {{ desktop_text_alignment }}  custom-body-xlarge richtext-main break-words ">
+        {% comment %} add h1 to have big customised heading {% endcomment %}
+        <div class="inline-heading-rte {{ text_alignment_mobile }} {{ desktop_text_alignment }}  h2 richtext-main break-words ">
           {{ subheading }}
         </div>
       </div>
@@ -139,18 +139,18 @@
         <div class="flex items-center {{ text_width_desktop }}">
           <div class="{{ text_alignment_mobile }} {{ desktop_text_alignment }} w-full">
             {% if richtext_main != '' %}
-              <div class="rte mt-5 max-w-2xl custom-body-xlarge richtext-main {{ mobile_mx }} {{ desktop_mx }}">
+              <div class="rte mt-5 max-w-2xl h2 richtext-main {{ mobile_mx }} {{ desktop_mx }}">
                 {{ richtext_main }}
               </div>
             {% endif %}
-            <div class="rte mt-5 max-w-2xl custom-body-xlarge {{ mobile_mx }} {{ desktop_mx }}">
+            <div class="rte mt-5 max-w-2xl h2 {{ mobile_mx }} {{ desktop_mx }}">
               {{ richtext }}
             </div>
 
             {%- if button_link != blank and button_label != '' -%}
               <div class="mt-5">
                 <a href="{{ button_link }}" class="custom-btn inline-block">
-                  <span class="push-btn__surface custom-btn__surface">{{ button_label }}</span>
+                  <span class="push-btn__surface btn-secondary">{{ button_label }}</span>
                 </a>
               </div>
             {%- endif -%}
@@ -160,8 +160,8 @@
     </div>
     {% if conclusion_heading != '' %}
       <div class="mt-10">
-        {% comment %} add custom-display-header to have big customised heading {% endcomment %}
-        <div class="inline-heading-rte {{ text_alignment_mobile }} {{ desktop_text_alignment }}  custom-body-xlarge richtext-main break-words ">
+        {% comment %} add h1 to have big customised heading {% endcomment %}
+        <div class="inline-heading-rte {{ text_alignment_mobile }} {{ desktop_text_alignment }}  h2 richtext-main break-words ">
           {{ conclusion_heading }}
         </div>
       </div>

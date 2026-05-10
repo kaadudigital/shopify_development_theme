@@ -103,13 +103,13 @@
 >
   <div class="section-content relative z-10 py-section-vertical-spacing {% unless layout == 'carousel' %}px-section w-full max-w-site mx-auto{% endunless %}">
     {% if section.settings.title != '' %}
-      <h2 class="inline-heading-rte font-heading heading-standard heading-style custom-display-header break-words text-center {{ settings.heading_drop_shadow_style }}">
+      <h2 class="inline-heading-rte font-heading heading-standard heading-style h1 break-words text-center {{ settings.heading_drop_shadow_style }}">
         {{ section.settings.title }}
       </h2>
     {% endif %}
 
     {% if section.settings.subheading != '' %}
-      <div class="rte mx-auto mt-5 max-w-md text-center custom-body-xlarge">
+      <div class="rte mx-auto mt-5 max-w-md text-center h2">
         {{ section.settings.subheading }}
       </div>
     {%- endif -%}

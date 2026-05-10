@@ -94,7 +94,7 @@
   {%- if section.settings.body_text != blank or section.settings.button_label != blank -%}
     <div class="hero-body-card {% if section.settings.body_display_on_card %}bg-scheme-card text-scheme-card-text rounded p-4{% endif %} {{ section.settings.text_alignment }}">
       {%- if section.settings.body_text != blank -%}
-        <div class="rte custom-body-xlarge ">{{ section.settings.body_text }}</div>
+        <div class="rte h2 ">{{ section.settings.body_text }}</div>
       {%- endif -%}
 
       {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
