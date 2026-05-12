@@ -6999,7 +6999,23 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
   .btn-secondary {
     padding: 12px 20px;
     font-size: 16px;
+    box-shadow: var(--shadow-md);
   }
+}
+
+/* Lock Kaadu design-system drop shadow when these classes are combined with
+   legacy theme classes (e.g. .push-btn__surface, which sets its own inset
+   box-shadow earlier in the cascade). Higher specificity (0,0,2,0) keeps the
+   drop shadow visible at every breakpoint, including mobile. */
+.push-btn__surface.btn-primary,
+.push-btn__surface.btn-secondary {
+  box-shadow: var(--shadow-md);
+}
+.push-btn__surface.btn-primary:hover {
+  box-shadow: 0px 6px 6px 0px rgba(0,0,0,0.25);
+}
+.push-btn__surface.btn-primary:active {
+  box-shadow: var(--shadow-sm);
 }
 
 /* ── CARDS ────────────────────────────────────────────────────── */
