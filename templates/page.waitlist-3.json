@@ -27,7 +27,7 @@
           "settings": {
             "target_section": "above",
             "target_section_color_scheme": "scheme3",
-            "style": "circles-3-patterned_1200x67",
+            "style": "circles-2-patterned_1200x35",
             "flip_horizontal": false,
             "enable_animation": true,
             "animation_direction": ""
@@ -38,7 +38,7 @@
           "settings": {
             "target_section": "below",
             "target_section_color_scheme": "scheme2",
-            "style": "circles-3-patterned_1200x67",
+            "style": "circles-2-patterned_1200x35",
             "flip_horizontal": false,
             "enable_animation": true,
             "animation_direction": ""
