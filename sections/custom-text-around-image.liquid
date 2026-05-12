@@ -1262,6 +1262,32 @@
           ]
         },
         {
+          "type": "header",
+          "content": "Mobile divider"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_mobile_style",
+          "label": "Use a different style on mobile",
+          "info": "When enabled, the mobile divider style will be used on viewports under 768px."
+        },
+        {
+          "type": "select",
+          "id": "style_mobile",
+          "label": "Mobile Divider Style",
+          "default": "waves-1-patterned_1200x20",
+          "options": [
+            { "value": "waves-1-patterned_1200x20", "label": "Waves 1", "group": "Patterned" },
+            { "value": "waves-2-patterned_1200x43", "label": "Waves 2", "group": "Patterned" },
+            { "value": "zig-zag-1-patterned_1200x21", "label": "Zig Zag", "group": "Patterned" },
+            { "value": "tilt-1-shape_1440x101", "label": "Tilt", "group": "Shape" },
+            { "value": "curve-shape_1440x149", "label": "Curve", "group": "Shape" },
+            { "value": "curve-inverse-shape_1440x149", "label": "Curve Inverse", "group": "Shape" },
+            { "value": "triangle-shape_1400x145", "label": "Triangle", "group": "Shape" },
+            { "value": "clouds-shape_1400x161", "label": "Clouds", "group": "Shape" }
+          ]
+        },
+        {
           "type": "checkbox",
           "id": "flip_horizontal",
           "label": "Flip Horizontal"

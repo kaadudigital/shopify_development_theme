@@ -1,9 +1,22 @@
 {%- liquid
   assign color_scheme = block.settings.target_section_color_scheme
-  assign style = block.settings.style | split: '_' | first
-  assign dimensions = block.settings.style | split: '_' | last | split: 'x'
-  assign width = dimensions[0] | plus: 0.0
-  assign height = dimensions[1] | plus: 0.0
+
+  assign desktop_full_style = block.settings.style
+  assign desktop_style = desktop_full_style | split: '_' | first
+  assign desktop_dims = desktop_full_style | split: '_' | last | split: 'x'
+  assign desktop_width = desktop_dims[0] | plus: 0.0
+  assign desktop_height = desktop_dims[1] | plus: 0.0
+
+  assign mobile_override = false
+  if block.settings.enable_mobile_style and block.settings.style_mobile != blank
+    assign mobile_override = true
+    assign mobile_full_style = block.settings.style_mobile
+    assign mobile_style = mobile_full_style | split: '_' | first
+    assign mobile_dims = mobile_full_style | split: '_' | last | split: 'x'
+    assign mobile_width = mobile_dims[0] | plus: 0.0
+    assign mobile_height = mobile_dims[1] | plus: 0.0
+  endif
+
   if block.settings.flip_horizontal
     assign scale_x = 'scaleX(-1)'
     assign duplicated_transform = 'translateX(-100%)'
@@ -22,11 +35,10 @@
     assign section_class = 'absolute bottom-0 left-0 w-full'
     assign padding_position = 'padding-bottom'
   endif
-  assign count = 1
-  if block.settings.enable_animation
-    if block.settings.style contains 'patterned'
-      assign count = 2
-    endif
+
+  assign viewports = 'desktop' | split: ','
+  if mobile_override
+    assign viewports = 'mobile,desktop' | split: ','
   endif
 -%}
 
@@ -42,11 +54,37 @@
   {{ block.shopify_attributes }}
 >
   <div class="shape-divider-transform-reset">
+    {%- for viewport in viewports -%}
+    {%- liquid
+      if viewport == 'mobile'
+        assign style = mobile_style
+        assign width = mobile_width
+        assign height = mobile_height
+        assign full_style = mobile_full_style
+        assign vp_visibility_class = 'md:hidden'
+      else
+        assign style = desktop_style
+        assign width = desktop_width
+        assign height = desktop_height
+        assign full_style = desktop_full_style
+        if mobile_override
+          assign vp_visibility_class = 'hidden md:block'
+        else
+          assign vp_visibility_class = ''
+        endif
+      endif
+
+      assign count = 1
+      if block.settings.enable_animation and full_style contains 'patterned'
+        assign count = 2
+      endif
+    -%}
+    <div class="{{ vp_visibility_class }}">
     <div
       {% if block.settings.enable_animation %}
         x-ref="animation-container"
       {% endif %}
-      class="shape-divider-svg-container relative left-0 flex min-w-full {% if block.settings.enable_animation %}{% unless block.settings.style contains 'patterned' %}animate-sway{% else %}animate{% endunless %} {{ block.settings.animation_direction }}{% endif %} {{ margin_class }}"
+      class="shape-divider-svg-container relative left-0 flex min-w-full {% if block.settings.enable_animation %}{% unless full_style contains 'patterned' %}animate-sway{% else %}animate{% endunless %} {{ block.settings.animation_direction }}{% endif %} {{ margin_class }}"
       style="padding-top: {{ height | divided_by: width | times: 100.0 }}%;"
     >
       {%- for i in (1..count) -%}
@@ -153,6 +191,8 @@
         </div>
       {%- endfor -%}
     </div>
+    </div>
+    {%- endfor -%}
   </div>
 </div>
 {% if block.settings.enable_animation %}
@@ -172,13 +212,38 @@
   #shopify-section-{{ section.id }} > section,
   #shopify-section-{{ section.id }} > footer,
   #shopify-section-{{ section.id }} [data-related-products-section] {
-    {{ padding_position }}: {{ height | divided_by: width | times: 100.0 }}%;
+    {{ padding_position }}: {% if mobile_override %}{{ mobile_height | divided_by: mobile_width | times: 100.0 }}%{% else %}{{ desktop_height | divided_by: desktop_width | times: 100.0 }}%{% endif %};
   }
+  {%- if mobile_override %}
+  @media (min-width: 768px) {
+    #shopify-section-{{ section.id }} > data-island,
+    #shopify-section-{{ section.id }} > section,
+    #shopify-section-{{ section.id }} > footer,
+    #shopify-section-{{ section.id }} [data-related-products-section] {
+      {{ padding_position }}: {{ desktop_height | divided_by: desktop_width | times: 100.0 }}%;
+    }
+  }
+  {%- endif -%}
   {%- endunless -%}
 
-  {%- if block.settings.enable_animation and block.settings.style contains 'shape' -%}
+  {%- if block.settings.enable_animation -%}
+    {%- if mobile_override -%}
+      {%- if desktop_full_style contains 'shape' %}
+  @media (min-width: 768px) {
+    #shape-divider-{{ block.id }} { width: calc(100vw + 200px); }
+  }
+      {%- endif -%}
+      {%- if mobile_full_style contains 'shape' %}
+  @media (max-width: 767.98px) {
+    #shape-divider-{{ block.id }} { width: calc(100vw + 200px); }
+  }
+      {%- endif -%}
+    {%- else -%}
+      {%- if desktop_full_style contains 'shape' %}
   #shape-divider-{{ block.id }} {
     width: calc(100vw + 200px);
   }
+      {%- endif -%}
+    {%- endif -%}
   {%- endif -%}
 </style>

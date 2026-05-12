@@ -1871,6 +1871,16 @@
               }
             }
           },
+          "mobile_header": {
+            "content": "Mobile divider"
+          },
+          "enable_mobile_style": {
+            "label": "Use a different style on mobile",
+            "info": "When enabled, the divider below will be used on viewports under 768px."
+          },
+          "style_mobile": {
+            "label": "Mobile style"
+          },
           "flip_horizontal": {
             "label": "Flip horizontal"
           },
