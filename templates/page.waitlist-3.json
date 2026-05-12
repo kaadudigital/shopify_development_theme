@@ -97,11 +97,8 @@
       ],
       "name": "rich text custom",
       "settings": {
-        "title": "",
-        "heading_size": "heading-feature",
-        "subtitle": "Pioniere profitieren!",
-        "subtitle_size": "heading-standard",
-        "header_spacing": "mt-1",
+        "h2_title": "PIONIERE PROFITIEREN",
+        "title": "waitlist[br]beitreten",
         "rich_text": "<p>Tritt der Waitlist bei und erhalte 50 % <br/>auf deine erste Bestellung nach dem Launch!</p>",
         "display_on_card": false,
         "content_width_desktop": "lg:w-2/3",
