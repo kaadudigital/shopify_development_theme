@@ -61,14 +61,14 @@
         assign width = mobile_width
         assign height = mobile_height
         assign full_style = mobile_full_style
-        assign vp_visibility_class = 'md:hidden'
+        assign vp_visibility_class = 'shape-divider-vp shape-divider-vp--mobile'
       else
         assign style = desktop_style
         assign width = desktop_width
         assign height = desktop_height
         assign full_style = desktop_full_style
         if mobile_override
-          assign vp_visibility_class = 'hidden md:block'
+          assign vp_visibility_class = 'shape-divider-vp shape-divider-vp--desktop'
         else
           assign vp_visibility_class = ''
         endif
@@ -206,6 +206,15 @@
   #shape-divider-{{ block.id }} svg:nth-child(2) {
     transform: translate3d(0, 0, 0) {{ scale_x }} {{ scale_y }} {{ duplicated_transform }};
   }
+
+  {%- if mobile_override %}
+  #shape-divider-{{ block.id }} .shape-divider-vp--desktop { display: none; }
+  #shape-divider-{{ block.id }} .shape-divider-vp--mobile { display: block; }
+  @media (min-width: 768px) {
+    #shape-divider-{{ block.id }} .shape-divider-vp--mobile { display: none; }
+    #shape-divider-{{ block.id }} .shape-divider-vp--desktop { display: block; }
+  }
+  {%- endif -%}
 
   {%- unless no_padding -%}
   #shopify-section-{{ section.id }} > data-island,
