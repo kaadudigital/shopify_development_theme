@@ -4,30 +4,28 @@
 >
   <div class="section-content px-section py-section-vertical-spacing">
     <div class="mx-auto max-w-site {{ section.settings.content_width_desktop }} {% if section.settings.display_on_card %}card{% endif %}">
-      <div class="{% if section.settings.display_on_card %}card__surface p-5 lg:p-10{% endif %} relative z-shape-divider mx-auto text-center">
+      <div class="{% if section.settings.display_on_card %}card__surface p-4 lg:p-8{% endif %} relative z-shape-divider mx-auto text-center">
         
-        {%- comment -%} First Header Line {%- endcomment -%}
-        {% if section.settings.title != '' %}
-          <h2 class="inline-heading-rte font-heading {{ section.settings.heading_size }} heading-style break-words {{ settings.heading_drop_shadow_style }} h1">
-            {{ section.settings.title }}
+        {%- comment -%} Eyebrow (small heading above the main H2) {%- endcomment -%}
+        {%- if section.settings.h2_title != blank -%}
+          <h3 class="image-with-text__eyebrow h3">{{ section.settings.h2_title | escape }}</h3>
+        {%- endif -%}
+
+        {%- comment -%} Main Heading — design-system H2 (refer to Figma node 878:82) {%- endcomment -%}
+        {%- if section.settings.title != blank -%}
+          <h2 class="h2">
+            {{ section.settings.title | escape | replace: '[br]', '<br>' | replace: '[nbsp]', '&nbsp;' }}
           </h2>
-        {% endif %}
+        {%- endif -%}
 
-        {%- comment -%} Second Header Line {%- endcomment -%}
-        {% if section.settings.subtitle != '' %}
-          <h3 class="inline-heading-rte font-heading {{ section.settings.subtitle_size }} heading-style break-words {{ settings.heading_drop_shadow_style }} h1 {% if section.settings.title != '' %}{{ section.settings.header_spacing }}{% endif %}">
-            {{ section.settings.subtitle }}
-          </h3>
-        {% endif %}
-
-        <div class="font-main {% if section.settings.title != '' or section.settings.subtitle != '' %}mt-5{% endif %} rte mx-auto leading-snug h2">
+        <div class="font-main {% if section.settings.title != blank or section.settings.h2_title != blank %}mt-6{% endif %} rte mx-auto leading-snug h2">
           {{ section.settings.rich_text }}
         </div>
 
         {%- if section.settings.button_link != blank
           and section.settings.button_label != ''
         -%}
-          <div class="mt-5">
+          <div class="mt-6">
             <a
               href="{{ section.settings.button_link }}"
               class="push-btn inline-block"
@@ -74,77 +72,17 @@
       "content": "Header Settings"
     },
     {
+      "type": "text",
+      "id": "h2_title",
+      "label": "Eyebrow (small heading above main heading)",
+      "info": "Optional. Shown as a smaller H3 above the main heading."
+    },
+    {
       "type": "inline_richtext",
       "id": "title",
-      "label": "First heading",
+      "label": "Main heading",
+      "info": "Use [br] for a line break, [nbsp] for an extra space.",
       "default": "Main Heading"
-    },
-    {
-      "type": "select",
-      "id": "heading_size",
-      "label": "First heading size",
-      "options": [
-        {
-          "value": "heading-standard",
-          "label": "t:common.options.standard.label"
-        },
-        {
-          "value": "heading-feature",
-          "label": "t:common.options.feature.label"
-        }
-      ],
-      "default": "heading-feature"
-    },
-    {
-      "type": "inline_richtext",
-      "id": "subtitle",
-      "label": "Second heading",
-      "default": "Subtitle",
-      "info": "Optional second line heading"
-    },
-    {
-      "type": "select",
-      "id": "subtitle_size",
-      "label": "Second heading size",
-      "options": [
-        {
-          "value": "heading-standard",
-          "label": "t:common.options.standard.label"
-        },
-        {
-          "value": "heading-feature",
-          "label": "t:common.options.feature.label"
-        }
-      ],
-      "default": "heading-standard"
-    },
-    {
-      "type": "select",
-      "id": "header_spacing",
-      "label": "Spacing between headers",
-      "options": [
-        {
-          "value": "mt-1",
-          "label": "Extra Small"
-        },
-        {
-          "value": "mt-2",
-          "label": "Small"
-        },
-        {
-          "value": "mt-3",
-          "label": "Medium"
-        },
-        {
-          "value": "mt-4",
-          "label": "Large"
-        },
-        {
-          "value": "mt-5",
-          "label": "Extra Large"
-        }
-      ],
-      "default": "mt-2"
     },
     {
       "type": "header",
