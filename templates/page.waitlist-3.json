@@ -50,7 +50,7 @@
         "shape_divider_XHc7ti"
       ],
       "custom_css": [
-        "p, h3 {color: black;}",
+        "p,h3 {color: black;}",
         "@media (min-width: 990px) {.custom-btn-wrapper, .body {margin-top: 28px; }}"
       ],
       "name": "image with text custom",
@@ -64,7 +64,7 @@
         "image_position": "right",
         "image_size": "half",
         "disable_media_style": false,
-        "title": "CRUNCH IN PROGRESS..",
+        "title": "CRUNCH IN[nbsp] [br]PROGRESS..",
         "h2_title": "Image with text sub heading",
         "heading_size": "heading-feature",
         "richtext": "<p></p><p>Unsere Fabrik und Website sind noch im Aufbau. </p><p>Hinter den Kulissen arbeiten wir mit Hochdruck daran, alles für die Produktion vorzubereiten; <strong>fair, transparent und nachhaltig</strong><br/></p>",
