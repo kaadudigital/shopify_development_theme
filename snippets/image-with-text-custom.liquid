@@ -92,7 +92,7 @@
             {%- endif -%}
             {% if title != '' %}
               <h1 class="inline-heading-rte font-subheading {{ heading_size }} heading-style {{ settings.heading_drop_shadow_style }} break-words {{ combined_text_alignment }} h1 ">
-                {{ title | newline_to_br }}
+                {{ title | escape | replace: '[br]', '<br>' | replace: '[nbsp]', '&nbsp;' }}
               </h1>
             {% endif %}
           </div>
@@ -137,7 +137,7 @@
                 {%- endif -%}
                 {% if title != '' %}
                   <h1 class="inline-heading-rte font-subheading {{ heading_size }} heading-style {{ settings.heading_drop_shadow_style }} break-words {{ combined_text_alignment }} h1">
-                    {{ title | newline_to_br }}
+                    {{ title | escape | replace: '[br]', '<br>' | replace: '[nbsp]', '&nbsp;' }}
                   </h1>
                 {% endif %}
               </div>
@@ -231,7 +231,7 @@
               {%- endif -%}
               {% if title != '' %}
                 <h1 class="inline-heading-rte font-subheading {{ heading_size }} heading-style {{ settings.heading_drop_shadow_style }} break-words {{ combined_text_alignment }} h1 ">
-                  {{ title | newline_to_br }}
+                  {{ title | escape | replace: '[br]', '<br>' | replace: '[nbsp]', '&nbsp;' }}
                 </h1>
               {% endif %}
 
