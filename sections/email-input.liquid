@@ -27,18 +27,15 @@
           class="email-signup-submit"
           aria-label="{{ section.settings.button_text | default: 'Submit' | escape }}"
         >
-          <svg class="email-signup-submit__burst" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
-            <polygon
-              points="50,5 58.54,18.12 72.5,11.03 73.33,26.67 88.97,27.5 81.88,41.46 95,50 81.88,58.54 88.97,72.5 73.33,73.33 72.5,88.97 58.54,81.88 50,95 41.46,81.88 27.5,88.97 26.67,73.33 11.03,72.5 18.12,58.54 5,50 18.12,41.46 11.03,27.5 26.67,26.67 27.5,11.03 41.46,18.12"
+          <svg class="email-signup-submit__burst" viewBox="0 0 78 73" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M77.4617 33.3842C77.717 36.9325 67.6423 39.4471 66.7504 42.7188C65.8352 46.0756 73.2364 53.3107 71.2989 56.1732C69.3735 59.0178 59.8399 54.8969 57.0897 57.0507C54.4081 59.1509 56.1888 69.3978 52.896 70.6516C49.7463 71.8509 44.2411 63.0567 40.685 63.314C37.1289 63.5714 32.9397 73.0673 29.6509 72.334C26.2127 71.5673 26.5081 61.1701 23.5536 59.4779C20.5236 57.7424 11.6786 63.1934 9.36597 60.6555C7.03879 58.1017 13.3276 49.8758 11.9414 46.6856C10.5903 43.5763 0.260099 42.5384 0.00480744 38.9902C-0.250484 35.4419 9.82414 32.9272 10.7161 29.6555C11.6312 26.2988 4.23007 19.0637 6.16757 16.2012C8.09298 13.3566 17.6266 17.4775 20.3768 15.3236C23.0584 13.2235 21.2777 2.97659 24.5705 1.72278C27.7202 0.523441 33.2254 9.31768 36.7815 9.06031C40.3376 8.80294 44.5268 -0.69294 47.8156 0.0404044C51.2538 0.807061 50.9584 11.2042 53.9129 12.8965C56.9429 14.632 65.7878 9.18094 68.1005 11.7188C70.4277 14.2726 64.1389 22.4985 65.5251 25.6887C66.8762 28.7981 77.2064 29.836 77.4617 33.3842Z"
               fill="var(--color-lime)"
-              stroke="var(--color-black)"
-              stroke-width="2"
-              stroke-linejoin="round"
             />
             <path
-              d="M 34 50 L 64 50 M 55 40 L 67 50 L 55 60"
+              d="M 24 36.5 L 50 36.5 M 42 28 L 53 36.5 L 42 45"
               stroke="var(--color-violet)"
-              stroke-width="7"
+              stroke-width="5.5"
               stroke-linecap="round"
               stroke-linejoin="round"
               fill="none"
@@ -121,22 +118,21 @@
 
   #shopify-section-{{ section.id }} .email-signup-submit {
     flex: 0 0 auto;
-    width: 76px;
-    height: 76px;
+    width: 80px;
+    aspect-ratio: 78 / 73;
     padding: 0;
     background: transparent;
     border: 0;
     cursor: pointer;
-    transform: rotate(-8deg);
     transition: transform 0.15s ease;
   }
 
   #shopify-section-{{ section.id }} .email-signup-submit:hover {
-    transform: rotate(-8deg) translateY(-2px) scale(1.04);
+    transform: translateY(-2px) scale(1.04);
   }
 
   #shopify-section-{{ section.id }} .email-signup-submit:active {
-    transform: rotate(-8deg) translateY(0) scale(1);
+    transform: translateY(0) scale(1);
   }
 
   #shopify-section-{{ section.id }} .email-signup-submit:focus-visible {
@@ -177,7 +173,6 @@
     }
     #shopify-section-{{ section.id }} .email-signup-submit {
       width: 64px;
-      height: 64px;
     }
     #shopify-section-{{ section.id }} .email-signup-wrapper {
       gap: var(--space-3);
