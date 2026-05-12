@@ -333,7 +333,28 @@
       }
 
       #{{ section.id }} .section-content-custom-padding {
-        padding: 40px 20px;
+        padding: var(--space-6) var(--space-4);
+      }
+
+      @media (min-width: 768px) {
+        #{{ section.id }} .section-content-custom-padding {
+          padding: var(--space-12) var(--space-6);
+        }
+      }
+
+      /* Hide menu buttons toggle */
+      #{{ section.id }}.hide-menu-buttons .header-left,
+      #{{ section.id }}.hide-menu-buttons .header-right {
+        display: none !important;
+      }
+
+      #{{ section.id }}.hide-menu-buttons .header-content-wrapper {
+        justify-content: center;
+      }
+
+      #{{ section.id }}.hide-menu-buttons .responsive-logo-container {
+        position: static;
+        transform: none;
       }
   /* Dim all items when any item is hovered */
   #{{ section.id }} .menu-overlay.active .menu-content nav ul:hover li a {
@@ -466,7 +487,7 @@
 {%- if section.settings.home_page_only == false or template.name == 'index' -%}
   <section
     id="{{ section.id }}"
-    class="relative bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %} {{ border_classes }}"
+    class="relative bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %} {% if section.settings.hide_menu_buttons %}hide-menu-buttons{% endif %} {{ border_classes }}"
     data-color-scheme="{{ section.settings.color_scheme }}"
     role="banner"
   >
@@ -794,6 +815,13 @@
     {
       "type": "header",
       "content": "Menu Items"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_menu_buttons",
+      "label": "Hide all menu buttons (desktop and mobile)",
+      "info": "Hides the menu, shop, and cart buttons on both desktop and mobile. Use when you want a logo-only header.",
+      "default": false
     },
     {
       "type": "text",
