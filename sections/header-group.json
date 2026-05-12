@@ -78,6 +78,7 @@
     },
     "free_shipping_bar_jXrXVB": {
       "type": "free-shipping-bar",
+      "disabled": true,
       "name": "t:sections.free_shipping_bar.name",
       "settings": {
         "display": "static",
