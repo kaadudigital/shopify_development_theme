@@ -6833,13 +6833,22 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
 .h1 {
   font-family: var(--font-display) !important;
   font-weight: 400 !important;
-  font-size: 72px !important;
-  line-height: 80px !important;
+  font-size: 64px !important;
+  line-height: 72px !important;
   text-transform: uppercase;
   letter-spacing: -0.01em;
 }
 
 .h2 {
+  font-family: var(--font-heading) !important;
+  font-weight: 700 !important;
+  font-size: 24px !important;
+  line-height: 32px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.h3 {
   font-family: var(--font-heading) !important;
   font-weight: 700 !important;
   font-size: 24px !important;
@@ -6858,8 +6867,8 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
 .body {
   font-family: var(--font-body) !important;
   font-weight: 400 !important;
-  font-size: 18px !important;
-  line-height: 28px !important;
+  font-size: 24px !important;
+  line-height: 32px !important;
 }
 
 .caption {
@@ -6881,7 +6890,11 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
 @media (max-width: 768px) {
   .h1 {
     font-size: 48px !important;
-    line-height: 44px !important;
+    line-height: 56px !important;
+  }
+  .h3 {
+    font-size: 16px !important;
+    line-height: 24px !important;
   }
   .body-large,
   .body {
@@ -6956,6 +6969,7 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
   font-weight: 700;
   font-size: 18px;
   line-height: 24px;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
   color: var(--color-black);
   cursor: pointer;
@@ -7004,5 +7018,5 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
 }
 
 .image-with-text__eyebrow {
-  margin: 0 0 8px;
+  margin: 0 0 16px;
 }

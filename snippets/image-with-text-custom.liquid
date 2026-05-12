@@ -81,14 +81,14 @@
 
 <div class="relative z-10 mx-auto max-w-site px-section">
   <div class="{% if display_on_card %}card{% endif %}">
-    <div class="{% if display_on_card %}card__surface p-5 lg:p-10{% endif %} section-content relative z-10 mx-auto">
-      <div class="grid grid-flow-row-dense grid-cols-1 gap-4 lg:grid-cols-12 {% if image_size == 'half' and image_position == 'right' %}reverse-flex-half{% elsif image_size == 'half' %}normal-flex-half{% endif %}">
+    <div class="{% if display_on_card %}card__surface p-5 lg:p-8{% endif %} section-content relative z-10 mx-auto">
+      <div class="grid grid-flow-row-dense grid-cols-1 gap-4 lg:gap-6 lg:grid-cols-12 {% if image_size == 'half' and image_position == 'right' %}reverse-flex-half{% elsif image_size == 'half' %}normal-flex-half{% endif %}">
         {%- comment -%} Mobile Layout when mobile_layout_order is enabled {%- endcomment -%}
         {%- if mobile_layout_order -%}
           {%- comment -%} Mobile: Heading first {%- endcomment -%}
           <div class="mx-auto col-span-1 lg:hidden {{ mobile_heading_order }}">
             {%- if h2_title != blank -%}
-              <h3 class="image-with-text__eyebrow h2 {{ combined_text_alignment }}">{{ h2_title | escape }}</h3>
+              <h3 class="image-with-text__eyebrow h3 {{ combined_text_alignment }}">{{ h2_title | escape }}</h3>
             {%- endif -%}
             {% if title != '' %}
               <h1 class="inline-heading-rte font-subheading {{ heading_size }} heading-style {{ settings.heading_drop_shadow_style }} break-words {{ combined_text_alignment }} h1 ">
@@ -133,7 +133,7 @@
               {%- comment -%} Desktop: Heading shown here {%- endcomment -%}
               <div class="mx-auto hidden lg:block">
                 {%- if h2_title != blank -%}
-                  <h3 class="image-with-text__eyebrow h2 {{ combined_text_alignment }}">{{ h2_title | escape }}</h3>
+                  <h3 class="image-with-text__eyebrow h3 {{ combined_text_alignment }}">{{ h2_title | escape }}</h3>
                 {%- endif -%}
                 {% if title != '' %}
                   <h1 class="inline-heading-rte font-subheading {{ heading_size }} heading-style {{ settings.heading_drop_shadow_style }} break-words {{ combined_text_alignment }} h1">
@@ -145,12 +145,12 @@
 
               {%- comment -%} Mobile: Text content {%- endcomment -%}
               {% comment %} <div class="rte mt-5 max-w-2xl {{ combined_text_alignment }} {{ mobile_text_order }} {% if text_alignment contains 'center' %}lg:mx-auto{% elsif text_alignment contains 'right' %}lg:ml-auto{% endif %} {% if mobile_text_alignment contains 'center' %}mx-auto lg:mx-0{% elsif mobile_text_alignment contains 'right' %}ml-auto lg:ml-0{% endif %}"> {% endcomment %}
-              <div class="rte    max-w-2xl {{ mobile_text_order }} {{ combined_text_alignment }} lg:mt-6 mt-3 body">
+              <div class="rte    max-w-2xl {{ mobile_text_order }} {{ combined_text_alignment }} lg:mt-6 mt-4 body">
                 {{ richtext }}
               </div>
-              <div class=" mt-5 flex items-center custom-image-with-text-button-wrapper {{ mobile_button_order }} {{ combined_text_alignment }} lgmt-8  ">
+              <div class="mt-6 lg:mt-8 flex items-center custom-image-with-text-button-wrapper {{ mobile_button_order }} {{ combined_text_alignment }}">
                 {%- if button2_link_type == 'url' and button2_link != blank and button2_label != '' -%}
-                  <div class="mt-5">
+                  <div>
                     <a href="{{ button2_link }}">
                       <button class="custom-shape-button">
                         <span class="custom-shape-button-text">
@@ -161,7 +161,7 @@
                   </div>
                 {%- endif -%}
                 {%- if button2_link_type == 'focus_element' and focus_element2_id != blank -%}
-                  <div class=" mt-5 lg:mt-6 custom-btn-wrapper">
+                  <div class="custom-btn-wrapper">
                     <button
                       onclick="console.log('Focus Element ID: {{ focus_element2_id }}'); document.getElementById('{{focus_element2_id}}')?.focus()"
                       class="inline-block custom-btn custom-shape-button"
@@ -173,14 +173,14 @@
                   </div>
                 {%- endif -%}
                 {%- if button_link_type == 'url' and button_link != blank and button_label != '' -%}
-                  <div class="mt-5">
-                    <a href="{{ button_link }}" class=" inline-block custom-btn">
+                  <div>
+                    <a href="{{ button_link }}" class="inline-block custom-btn">
                       <span class="push-btn__surface btn-secondary">{{ button_label }}</span>
                     </a>
                   </div>
                 {%- endif -%}
                 {%- if button_link_type == 'focus_element' and focus_element_id != blank -%}
-                  <div class=" mt-5 lg:mt-6 custom-btn-wrapper">
+                  <div class="custom-btn-wrapper">
                     <button
                       onclick="console.log('Focus Element ID: {{ focus_element_id }}'); document.getElementById('{{focus_element_id}}')?.focus()"
                       class="inline-block custom-btn"
@@ -227,7 +227,7 @@
           <div class="flex items-center {{ text_width_desktop }} {% if image_size == 'half'%}min-width-on-lg-screen{% endif %} ">
             <div class="mx-auto w-full center-flex-column-custom">
               {%- if h2_title != blank -%}
-                <h3 class="image-with-text__eyebrow h2 {{ combined_text_alignment }}">{{ h2_title | escape }}</h3>
+                <h3 class="image-with-text__eyebrow h3 {{ combined_text_alignment }}">{{ h2_title | escape }}</h3>
               {%- endif -%}
               {% if title != '' %}
                 <h1 class="inline-heading-rte font-subheading {{ heading_size }} heading-style {{ settings.heading_drop_shadow_style }} break-words {{ combined_text_alignment }} h1 ">
@@ -236,13 +236,13 @@
               {% endif %}
 
               {% comment %} <div class="rte mt-5 max-w-2xl {{ combined_text_alignment }} {% if text_alignment contains 'center' %}lg:mx-auto{% elsif text_alignment contains 'right' %}lg:ml-auto{% endif %} {% if mobile_text_alignment contains 'center' %}mx-auto lg:mx-0{% elsif mobile_text_alignment contains 'right' %}ml-auto lg:ml-0{% endif %}"> {% endcomment %}
-              <div class="rte   max-w-2xl {{ combined_text_alignment }} lg:mt-6 mt-3 body ">
+              <div class="rte   max-w-2xl {{ combined_text_alignment }} lg:mt-6 mt-4 body ">
                 {{ richtext }}
               </div>
 
-              <div class=" mt-5 flex  items-center custom-image-with-text-button-wrapper {{ combined_text_alignment }} lgmt-8  ">
+              <div class="mt-6 lg:mt-8 flex items-center custom-image-with-text-button-wrapper {{ combined_text_alignment }}">
                  {%- if button2_link_type == 'url' and button2_link != blank and button2_label != '' -%}
-                  <div class="mt-5">
+                  <div>
                     <a href="{{ button2_link }}">
                       <button class="custom-shape-button">
                         <span class="custom-shape-button-text">
@@ -253,7 +253,7 @@
                   </div>
                 {%- endif -%}
                 {%- if button2_link_type == 'focus_element' and focus_element2_id != blank -%}
-                  <div class=" mt-5 lg:mt-6 custom-btn-wrapper">
+                  <div class="custom-btn-wrapper">
                     <button
                       onclick="console.log('Focus Element ID: {{ focus_element2_id }}'); document.getElementById('{{focus_element2_id}}')?.focus()"
                       class="inline-block custom-btn custom-shape-button"
@@ -265,14 +265,14 @@
                   </div>
                 {%- endif -%}
                 {%- if button_link_type == 'url' and button_link != blank and button_label != '' -%}
-                  <div class="mt-5">
-                    <a href="{{ button_link }}" class=" inline-block custom-btn">
+                  <div>
+                    <a href="{{ button_link }}" class="inline-block custom-btn">
                       <span class="push-btn__surface btn-secondary">{{ button_label }}</span>
                     </a>
                   </div>
                 {%- endif -%}
                 {%- if button_link_type == 'focus_element' and focus_element_id != blank -%}
-                  <div class=" mt-5 lg:mt-6 custom-btn-wrapper">
+                  <div class="custom-btn-wrapper">
                     <button
                       onclick="console.log('Focus Element ID: {{ focus_element_id }}'); document.getElementById('{{focus_element_id}}')?.focus()"
                       class="inline-block custom-btn"
@@ -341,9 +341,12 @@
     {%- endif -%}
   .custom-shape-button-text {
           color: {{ button_text_color_desktop | default: '#AE0000' }};
-          font-family: fagies;
-          font-size: 24px;
+          font-family: var(--font-display);
+          font-size: 20px;
           font-weight: 400;
+          line-height: 24px;
+          text-transform: uppercase;
+          letter-spacing: 0.02em;
           padding: {{ section.settings.button2_padding_topbottom }}px var(--space-6);
         }
     @media (max-width: 768px) {
@@ -365,7 +368,7 @@
       .reverse-flex-half {
         display: flex;
         justify-content: center;
-        gap: 1.5rem;
+        gap: var(--space-6);
         flex-direction: row-reverse;
       }
     }
@@ -373,7 +376,7 @@
     @media (min-width: 1280px) {
       .normal-flex-half,
       .reverse-flex-half {
-        gap: 2rem; /* 32px - xl:gap-8 */
+        gap: var(--space-8);
       }
     }
 </style>
