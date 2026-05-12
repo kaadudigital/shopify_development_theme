@@ -40,9 +40,9 @@
           "settings": {
             "target_section": "below",
             "target_section_color_scheme": "scheme2",
-            "style": "circles-2-patterned_1200x35",
-            "enable_mobile_style": false,
-            "style_mobile": "waves-1-patterned_1200x20",
+            "style": "circles-2.5-patterned_1200x54",
+            "enable_mobile_style": true,
+            "style_mobile": "circles-3-patterned_1200x67",
             "flip_horizontal": false,
             "enable_animation": true,
             "animation_direction": ""
