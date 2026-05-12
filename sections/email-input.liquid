@@ -1,65 +1,57 @@
 <!-- Section HTML -->
 <div class="email-signup-section">
-  <div class="container" style="max-width: {{ section.settings.container_width }}px; margin: 0 auto;">
+  <div class="email-signup-container">
     {% if section.settings.heading != blank %}
-      <h2 class="email-signup-heading" style="color: {{ section.settings.heading_color }}; font-size: {{ section.settings.heading_size }}px; text-align: center; margin-bottom: 30px;">
+      <h2 class="email-signup-heading h2">
         {{ section.settings.heading }}
       </h2>
     {% endif %}
-    
-    <!-- ✅ Wrap everything inside a proper Shopify contact form -->
-    <form method="post" action="/contact#contact_form" accept-charset="UTF-8" class="contact-form" id="contact_form">
+
+    <form method="post" action="/contact#contact_form" accept-charset="UTF-8" class="contact-form email-signup-form" id="contact_form">
       <input type="hidden" name="form_type" value="customer">
       <input type="hidden" name="contact[tags]" value="waitlist">
       <input type="hidden" name="utf8" value="✓">
 
       <div class="email-signup-wrapper">
-        <input 
-          type="email" 
-          name="contact[email]" 
+        <input
+          type="email"
+          name="contact[email]"
           placeholder="{{ section.settings.placeholder_text }}"
           id="Email"
-          class="email-input body"
+          class="email-signup-input body"
           required
-          style="
-            flex: 1;
-            padding: {{ section.settings.input_padding }}px;
-            border: {{ section.settings.input_border_width }}px solid {{ section.settings.input_border_color }};
-            border-radius: {{ section.settings.input_border_radius }}px;
-            background-color: {{ section.settings.input_background }};
-            color: {{ section.settings.input_text_color }};
-            font-size: {{ section.settings.input_font_size }}px;
-            height: 60px;
-            outline: none;
-            box-shadow: none;
-          "
         />
 
-        {% if section.settings.use_image_button and section.settings.button_image != blank %}
-          <button 
-            type="submit"
-            class="custom-image-button submit-button"
-          >
-            <span class="btn-label btn-label custom-image-span ">
-              {{ section.settings.button_text }}
-            </span>
-          </button>
-        {% else %}
-          <button 
-            type="submit"
-            class="submit-button"
-          >
-            {{ section.settings.button_text }}
-          </button>
-        {% endif %}
+        <button
+          type="submit"
+          class="email-signup-submit"
+          aria-label="{{ section.settings.button_text | default: 'Submit' | escape }}"
+        >
+          <svg class="email-signup-submit__burst" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+            <polygon
+              points="50,5 58.54,18.12 72.5,11.03 73.33,26.67 88.97,27.5 81.88,41.46 95,50 81.88,58.54 88.97,72.5 73.33,73.33 72.5,88.97 58.54,81.88 50,95 41.46,81.88 27.5,88.97 26.67,73.33 11.03,72.5 18.12,58.54 5,50 18.12,41.46 11.03,27.5 26.67,26.67 27.5,11.03 41.46,18.12"
+              fill="var(--color-lime)"
+              stroke="var(--color-black)"
+              stroke-width="2"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M 34 50 L 64 50 M 55 40 L 67 50 L 55 60"
+              stroke="var(--color-violet)"
+              stroke-width="7"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              fill="none"
+            />
+          </svg>
+        </button>
       </div>
-      <div class="form-message" style="display: none; text-align: center; margin-top: 15px; padding: 15px; border-radius: 8px;"></div>
 
+      <div class="email-signup-message caption" hidden></div>
     </form>
-    <!-- ✅ End Shopify-compatible form -->
 
     {% if section.settings.subtitle != blank %}
-      <p class="email-signup-subtitle" style="color: {{ section.settings.subtitle_color }}; font-size: {{ section.settings.subtitle_size }}px; text-align: center; margin-top: 20px;">
+      <p class="email-signup-subtitle caption">
         {{ section.settings.subtitle }}
       </p>
     {% endif %}
@@ -67,83 +59,131 @@
 </div>
 
 
-<style>
-  .email-signup-section {
-    background-color: {{ section.settings.background_color }};
-    padding: {{ section.settings.padding_top }}px 20px {{ section.settings.padding_bottom }}px;
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    --es-bg: {{ section.settings.background_color }};
+    --es-heading: {{ section.settings.heading_color }};
+    --es-subtitle: {{ section.settings.subtitle_color }};
+    --es-input-bg: {{ section.settings.input_background }};
+    --es-input-text: {{ section.settings.input_text_color }};
+    --es-input-border: {{ section.settings.input_border_color }};
+    --es-input-focus: {{ section.settings.input_focus_border }};
+    --es-placeholder: {{ section.settings.placeholder_color }};
   }
 
-  .custom-image-span {
-    color: {{ section.settings.button_text_color }}; 
-    font-size: {{ section.settings.button_font_size }}px !important;
-    text-shadow: {{ section.settings.text_shadow_x }}px {{ section.settings.text_shadow_y }}px {{ section.settings.text_shadow_blur }}px {{ section.settings.text_shadow_color }};
-    transition: color 0.3s ease;
-    z-index: 2;
-    position: relative;
+  #shopify-section-{{ section.id }} .email-signup-section {
+    background-color: var(--es-bg);
+    padding: {{ section.settings.padding_top }}px var(--space-4) {{ section.settings.padding_bottom }}px;
   }
 
-  .email-signup-wrapper {
+  #shopify-section-{{ section.id }} .email-signup-container {
+    max-width: {{ section.settings.container_width }}px;
+    margin-inline: auto;
+  }
+
+  #shopify-section-{{ section.id }} .email-signup-heading {
+    color: var(--es-heading);
+    text-align: center;
+    margin: 0 0 var(--space-8);
+  }
+
+  #shopify-section-{{ section.id }} .email-signup-wrapper {
     display: flex;
-    align-items: center; 
+    align-items: center;
     justify-content: center;
-    flex-wrap: wrap;
-    gap: 20px;
+    gap: var(--space-4);
     max-width: 600px;
     margin: 0 auto;
   }
 
-  /* FIX 1: button_height and button_width now applied to both button types via shared .submit-button rule */
-  /* FIX 2: button_border_radius now also applied to .custom-image-button */
-  .submit-button {
-    height: {{ section.settings.button_height }}px;
-    min-width: {{ section.settings.button_width }}px;
-    width: {{ section.settings.button_width }}px;
-    border-radius: {{ section.settings.button_border_radius }}px;
+  #shopify-section-{{ section.id }} .email-signup-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 64px;
+    padding: var(--space-4) var(--space-8);
+    background-color: var(--es-input-bg);
+    color: var(--es-input-text);
+    border: 2px solid var(--es-input-border);
+    border-radius: var(--radius-btn);
+    outline: none;
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  #shopify-section-{{ section.id }} .email-signup-input::placeholder {
+    color: var(--es-placeholder);
+  }
+
+  #shopify-section-{{ section.id }} .email-signup-input:focus-visible {
+    border-color: var(--es-input-focus);
+    box-shadow: 0 0 0 3px {{ section.settings.input_focus_border }}33;
+  }
+
+  #shopify-section-{{ section.id }} .email-signup-submit {
+    flex: 0 0 auto;
+    width: 76px;
+    height: 76px;
+    padding: 0;
+    background: transparent;
+    border: 0;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transform: rotate(-8deg);
+    transition: transform 0.15s ease;
   }
 
-  .custom-image-button {
-    background-image: url('{{ section.settings.button_image | img_url: 'master' }}');
-    background-size: {{ section.settings.image_fit }};
-    background-position: center;
-    background-repeat: no-repeat;
-    background-color: {{ section.settings.button_background }};
-    border: none;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    filter: hue-rotate({{ section.settings.image_hue_rotate }}deg) saturate({{ section.settings.image_saturation }}%) brightness({{ section.settings.image_brightness }}%);
+  #shopify-section-{{ section.id }} .email-signup-submit:hover {
+    transform: rotate(-8deg) translateY(-2px) scale(1.04);
   }
 
-  .submit-button:not(.custom-image-button) {
-    background-color: {{ section.settings.button_background }};
-    color: {{ section.settings.button_text_color }};
-    border: {{ section.settings.button_border_width }}px solid {{ section.settings.button_border_color }};
-    padding: {{ section.settings.button_padding_y }}px {{ section.settings.button_padding_x }}px;
-    font-size: {{ section.settings.button_font_size }}px;
+  #shopify-section-{{ section.id }} .email-signup-submit:active {
+    transform: rotate(-8deg) translateY(0) scale(1);
   }
 
-  /* FIX 3: input_font_size now applied to the email input */
-  .email-input {
-    font-size: {{ section.settings.input_font_size }}px;
+  #shopify-section-{{ section.id }} .email-signup-submit:focus-visible {
+    outline: 3px solid var(--color-cream);
+    outline-offset: 4px;
+    border-radius: 50%;
   }
 
-  .email-input::placeholder {
-    color: {{ section.settings.placeholder_color }};
+  #shopify-section-{{ section.id }} .email-signup-submit__burst {
+    width: 100%;
+    height: 100%;
+    display: block;
+    filter: drop-shadow(var(--shadow-sm));
   }
-  
-  .email-input:focus {
-    border-color: {{ section.settings.input_focus_border }};
-    box-shadow: 0 0 0 2px {{ section.settings.input_focus_border }}33;
+
+  #shopify-section-{{ section.id }} .email-signup-subtitle {
+    color: var(--es-subtitle);
+    text-align: center;
+    margin: var(--space-6) 0 0;
   }
-  
+
+  #shopify-section-{{ section.id }} .email-signup-message {
+    text-align: center;
+    margin-top: var(--space-4);
+  }
+
   @media (max-width: 768px) {
-
+    #shopify-section-{{ section.id }} .email-signup-section {
+      padding-top: calc({{ section.settings.padding_top }}px / 2);
+      padding-bottom: calc({{ section.settings.padding_bottom }}px / 2);
+    }
+    #shopify-section-{{ section.id }} .email-signup-heading {
+      margin-bottom: var(--space-6);
+    }
+    #shopify-section-{{ section.id }} .email-signup-input {
+      height: 56px;
+      padding: var(--space-3) var(--space-6);
+    }
+    #shopify-section-{{ section.id }} .email-signup-submit {
+      width: 64px;
+      height: 64px;
+    }
+    #shopify-section-{{ section.id }} .email-signup-wrapper {
+      gap: var(--space-3);
+    }
   }
-</style>
+{%- endstyle -%}
 
 <script>
   // Show success message after form submission
