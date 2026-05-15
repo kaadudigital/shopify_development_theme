@@ -33,12 +33,24 @@
               fill="var(--color-lime)"
             />
             <path
+              class="email-signup-submit__arrow"
               d="M 24 36.5 L 50 36.5 M 42 28 L 53 36.5 L 42 45"
               stroke="var(--color-violet)"
               stroke-width="5.5"
               stroke-linecap="round"
               stroke-linejoin="round"
               fill="none"
+            />
+            <circle
+              class="email-signup-submit__spinner"
+              cx="39"
+              cy="36.5"
+              r="11"
+              fill="none"
+              stroke="var(--color-violet)"
+              stroke-width="5.5"
+              stroke-linecap="round"
+              stroke-dasharray="52 17"
             />
           </svg>
         </button>
@@ -148,6 +160,31 @@
     filter: drop-shadow(var(--shadow-sm));
   }
 
+  #shopify-section-{{ section.id }} .email-signup-submit__spinner {
+    display: none;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  #shopify-section-{{ section.id }} .email-signup-submit.is-loading {
+    pointer-events: none;
+    cursor: default;
+  }
+
+  #shopify-section-{{ section.id }} .email-signup-submit.is-loading .email-signup-submit__arrow {
+    display: none;
+  }
+
+  #shopify-section-{{ section.id }} .email-signup-submit.is-loading .email-signup-submit__spinner {
+    display: block;
+    animation: es-spin 0.75s linear infinite;
+  }
+
+  @keyframes es-spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
   #shopify-section-{{ section.id }} .email-signup-subtitle {
     color: var(--es-subtitle);
     text-align: center;
@@ -196,6 +233,16 @@
     pathParts[pathParts.length - 1] = 'waitlist-success';
     window.location.replace(pathParts.join('/'));
   }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('.email-signup-form');
+    if (!form) return;
+    const btn = form.querySelector('.email-signup-submit');
+    form.addEventListener('submit', function () {
+      btn.classList.add('is-loading');
+      btn.disabled = true;
+    });
+  });
 </script>
 
   {%- liquid
