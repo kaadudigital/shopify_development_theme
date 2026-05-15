@@ -6863,6 +6863,21 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
   letter-spacing: 0.02em;
 }
 
+.h4-subsection-heading {
+  font-family: "bantergroteskregular";
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 40px;
+}
+
+/* Mobile (max-width: 390px) — Figma H4 Mobile: 24/28 */
+@media (max-width: 390px) {
+  .h4-subsection-heading {
+    font-size: 24px;
+    line-height: 28px;
+  }
+}
+
 .body-large {
   font-family: var(--font-body) !important;
   font-weight: 400 !important;

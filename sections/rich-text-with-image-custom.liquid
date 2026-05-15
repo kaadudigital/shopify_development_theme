@@ -5,10 +5,13 @@
   <div class="section-content px-section py-section-vertical-spacing">
     <div class="mx-auto max-w-site {{ section.settings.content_width_desktop }} {% if section.settings.display_on_card %}card{% endif %}">
       <div class="{% if section.settings.display_on_card %}card__surface p-5 lg:p-10{% endif %} relative z-shape-divider mx-auto text-center">
+        {%- if section.settings.h2_title != blank -%}
+          <h3 class="image-with-text__eyebrow h3">{{ section.settings.h2_title | escape }}</h3>
+        {%- endif -%}
         {% if section.settings.title != '' %}
-          <h2 class="inline-heading-rte font-heading  {{ section.settings.heading_size }} heading-style break-words {{ settings.heading_drop_shadow_style }} ">
-            {{ section.settings.title }}
-          </h2>
+          <h1 class="inline-heading-rte font-subheading {{ section.settings.heading_size }} heading-style {{ settings.heading_drop_shadow_style }} break-words h1">
+            {{ section.settings.title | escape | replace: '[br]', '<br>' | replace: '[nbsp]', '&nbsp;' }}
+          </h1>
         {% endif %}
 
         <div class=" {% if section.settings.title != '' %}mt-5{% endif %} mx-auto leading-snug font-main h2">
@@ -77,10 +80,17 @@
   "name": "Rich Text with Image",
   "settings": [
     {
-      "type": "inline_richtext",
+      "type": "text",
       "id": "title",
       "label": "t:common.settings.title.label",
+      "info": "Use [br] for a line break, [nbsp] for an extra space.",
       "default": "Heading"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "h2_title",
+      "label": "sub heading",
+      "default": ""
     },
     {
       "type": "select",
