@@ -54,18 +54,18 @@
         "shape_divider_M3bmrq"
       ],
       "custom_css": [
-        "p, h3 {color: black;}"
+        "p,h3 {color: black;}"
       ],
       "name": "Rich Text with Image",
       "settings": {
-        "title": "YOU'RE IN!",
-        "h2_title": "Welcome to the Club",
+        "title": "Welcome to the Club.",
+        "h2_title": "YOU'RE IN!",
         "heading_size": "h1",
-        "rich_text": "<p>Du bist jetzt auf der Liste ganz vorne mit dabei, wenn's losgeht.</p>",
+        "rich_text": "<p>Du bist jetzt auf der Liste ganz vorne mit dabei, wenn’s losgeht.</p>",
         "image": "shopify://shop_images/Ziel-Juno.svg",
-        "image_width": "md",
+        "image_width": "sm",
         "display_on_card": false,
-        "content_width_desktop": "lg:w-full",
+        "content_width_desktop": "lg:w-1/2",
         "button_link": "",
         "button_label": "Shop Now",
         "color_scheme": "scheme1",
