@@ -128,9 +128,7 @@
       "block_order": [
         "shape_divider_T4zwY7"
       ],
-      "custom_css": [
-        "@media (max-width: 767px) {.custom-image-button {max-width: 25px; height: 45px; } .email-signup-wrapper {gap: 0px; } .email-signup-section {padding-bottom: 48px; }}"
-      ],
+      "custom_css": [],
       "name": "Email Signup",
       "settings": {
         "background_color": "#ae0000",
