@@ -54,7 +54,7 @@
         "shape_divider_M3bmrq"
       ],
       "custom_css": [
-        "p {color: black;}"
+        "p, h3 {color: black;}"
       ],
       "name": "Rich Text with Image",
       "settings": {
