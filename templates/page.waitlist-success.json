@@ -58,10 +58,10 @@
       ],
       "name": "Rich Text with Image",
       "settings": {
-        "title": "Welcome to the Club.",
-        "h2_title": "YOU'RE IN!",
+        "title": "Almost there...",
+        "h2_title": "E-Mail Bestätigen",
         "heading_size": "h1",
-        "rich_text": "<p>Du bist jetzt auf der Liste ganz vorne mit dabei, wenn’s losgeht.</p>",
+        "rich_text": "<p>Nur noch die E-Mail bestätigen <br/>und schon bist du babei! </p>",
         "image": "shopify://shop_images/Ziel-Juno.svg",
         "image_width": "sm",
         "display_on_card": false,
