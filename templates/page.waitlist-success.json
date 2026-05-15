@@ -27,9 +27,9 @@
           "settings": {
             "target_section": "above",
             "target_section_color_scheme": "scheme3",
-            "style": "circles-3-patterned_1200x67",
-            "enable_mobile_style": false,
-            "style_mobile": "waves-1-patterned_1200x20",
+            "style": "circles-2.5-patterned_1200x54",
+            "enable_mobile_style": true,
+            "style_mobile": "circles-3-patterned_1200x67",
             "flip_horizontal": false,
             "enable_animation": false,
             "animation_direction": ""
