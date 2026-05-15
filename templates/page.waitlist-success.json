@@ -59,7 +59,7 @@
       "name": "Rich Text with Image",
       "settings": {
         "title": "Almost there...",
-        "h2_title": "E-Mail Bestätigen",
+        "h2_title": "Anmeldung Bestätigen",
         "heading_size": "h1",
         "rich_text": "<p>Nur noch die E-Mail bestätigen <br/>und schon bist du babei! </p>",
         "image": "shopify://shop_images/Ziel-Juno.svg",
