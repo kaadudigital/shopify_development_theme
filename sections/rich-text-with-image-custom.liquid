@@ -4,7 +4,7 @@
 >
   <div class="section-content px-section py-section-vertical-spacing">
     <div class="mx-auto max-w-site {{ section.settings.content_width_desktop }} {% if section.settings.display_on_card %}card{% endif %}">
-      <div class="{% if section.settings.display_on_card %}card__surface p-5 lg:p-10{% endif %} relative z-shape-divider mx-auto text-center">
+      <div class="{% if section.settings.display_on_card %}card__surface p-5 lg:p-8{% endif %} relative z-shape-divider mx-auto text-center">
         {%- if section.settings.h2_title != blank -%}
           <h3 class="image-with-text__eyebrow h3">{{ section.settings.h2_title | escape }}</h3>
         {%- endif -%}
@@ -14,13 +14,13 @@
           </h1>
         {% endif %}
 
-        <div class=" {% if section.settings.title != '' %}mt-5{% endif %} mx-auto leading-snug font-main h2">
+        <div class="rte {% if section.settings.title != '' %}mt-4 lg:mt-6{% endif %} mx-auto body">
           {{ section.settings.rich_text }}
         </div>
 
         {%- comment -%} Image below text {%- endcomment -%}
         {%- if section.settings.image != blank -%}
-          <div class="mt-8 flex justify-center">
+          <div class="mt-6 lg:mt-8 flex justify-center">
             <div class="{% if section.settings.image_width != 'full' %}max-w-{{ section.settings.image_width }}{% endif %}">
               {{
                 section.settings.image
@@ -37,12 +37,12 @@
         {%- if section.settings.button_link != blank
           and section.settings.button_label != ''
         -%}
-          <div class="mt-5">
+          <div class="mt-6 lg:mt-8">
             <a
               href="{{ section.settings.button_link }}"
-              class="push-btn inline-block"
+              class="inline-block custom-btn"
             >
-              <span class="push-btn__surface">
+              <span class="push-btn__surface btn-secondary">
                 {{- section.settings.button_label -}}
               </span>
             </a>
@@ -89,7 +89,7 @@
     {
       "type": "inline_richtext",
       "id": "h2_title",
-      "label": "sub heading",
+      "label": "Eyebrow text",
       "default": ""
     },
     {

@@ -3814,6 +3814,12 @@ input[type='text'],
     letter-spacing: 0;
   }
 
+.btn-text-arrow-label {
+    font-family:    "bantergroteskregular", Helvetica, Arial, sans-serif;
+    font-weight:    700;
+    font-size:      18px;
+    line-height:    24px;
+}
 
 .font-main {
     font-family: var(--main-font-stack);
