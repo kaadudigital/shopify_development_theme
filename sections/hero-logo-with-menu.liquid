@@ -45,7 +45,6 @@
       }
 
       .custom-menu-button {
-        margin-left: 20px;
         background-image: url('{{ section.settings.menu_button_image | img_url: 'master' }}');
         transform: rotate(-3.94deg);
       }
@@ -67,16 +66,17 @@
       .custom-cart-button {
         background-image: url('{{ section.settings.cart_icon_image | img_url: 'master' }}');
         transform: rotate(-9.53deg);
-        padding: 24px;
+        padding: var(--space-6);
       }
 
       .custom-menu-button-text,
       .custom-shop-button-text {
-        color: #AE0000;
-        font-family: fagies;
+        color: var(--color-red);
+        font-family: var(--font-display);
         font-size: 24px;
+        line-height: 32px;
         font-weight: 400;
-        padding: 20px 24px;
+        padding: var(--space-4) var(--space-6);
       }
 
       /* Menu button text container for animation */
@@ -204,7 +204,7 @@
         justify-self: end;
         display: flex;
         align-items: center;
-        gap: 1rem;
+        gap: var(--space-4);
       }
 
       .responsive-logo-container {
@@ -251,7 +251,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 2rem;
+        padding: var(--space-8);
         color: rgb(var(--color-scheme-text));
       }
 
@@ -263,8 +263,7 @@
       }
 
       #{{ section.id }} .menu-content nav ul li {
-        margin: 1.5rem 0;
-        font-size: 3rem;
+        margin: var(--space-6) 0;
       }
     /* Menu items - closing animation (top to bottom) */
     #{{ section.id }} .menu-content nav ul li a {
@@ -275,7 +274,7 @@
       opacity: 0;
       transition: transform 0.65s cubic-bezier(0.215, 0.61, 0.355, 1) 0ms,
                   opacity 0.65s cubic-bezier(0.215, 0.61, 0.355, 1) 0ms;
-      font-family: fagies;
+      font-family: var(--font-display);
     }
 
 
@@ -308,16 +307,15 @@
       /* Close button */
       #{{ section.id }} .menu-close-button {
         position: absolute;
-        top: 2rem;
-        right: 2rem;
+        top: var(--space-8);
+        right: var(--space-8);
         background: none;
         border: none;
-        font-size: 2rem;
         color: rgb(var(--color-scheme-text));
         cursor: pointer;
         z-index: 10;
-        width: 50px;
-        height: 50px;
+        width: var(--space-12);
+        height: var(--space-12);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -393,13 +391,12 @@
 
 
         #{{ section.id }} .header-right {
-          gap: 0.5rem;
+          gap: var(--space-2);
           display: none;
         }
 
         #{{ section.id }} .menu-content nav ul li {
-          font-size: 2rem;
-          margin: 1rem 0;
+          margin: var(--space-4) 0;
         }
 
         /* Show hamburger, hide custom menu button */
@@ -421,12 +418,8 @@
         }
 
         #{{ section.id }} .header-cart-icon {
-          width: 50px;
-          height: 50px;
-        }
-
-        #{{ section.id }} .menu-content nav ul li {
-          font-size: 2.5rem;
+          width: var(--space-12);
+          height: var(--space-12);
         }
       }
 
@@ -442,8 +435,8 @@
         }
 
         #{{ section.id }} .header-cart-icon {
-          width: 60px;
-          height: 60px;
+          width: var(--space-16);
+          height: var(--space-16);
         }
       }
 
