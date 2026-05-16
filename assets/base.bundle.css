@@ -6877,8 +6877,8 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
   line-height: 40px;
 }
 
-/* Mobile (max-width: 390px) — Figma H4 Mobile: 24/28 */
-@media (max-width: 390px) {
+/* Mobile (max-width: 480px) — Figma H4 Mobile: 24/28 */
+@media (max-width: 480px) {
   .h4-subsection-heading {
     font-size: 24px;
     line-height: 28px;
