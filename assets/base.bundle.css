@@ -5276,7 +5276,7 @@ html.js .no-js {
 
 @media (prefers-reduced-motion: no-preference) {
   .shape-divider-svg-container.animate {
-    animation: divider 15s cubic-bezier(0.36, 0.45, 0.63, 0.53) infinite;
+    animation: divider 60s cubic-bezier(0.36, 0.45, 0.63, 0.53) infinite;
   }
 
   .shape-divider-svg-container.animate.reverse {
