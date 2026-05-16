@@ -8,18 +8,25 @@
     <link rel="canonical" href="{{ canonical_url }}">
     <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
     {%- liquid
+      assign clean_path = request.path | downcase | append: '/'
       assign is_allowed_path = false
       if template.name == 'page' and page.handle == 'waitlist'
         assign is_allowed_path = true
       elsif template.name == 'page' and page.handle == 'waitlist-success'
         assign is_allowed_path = true
-      elsif template.name == 'policy'
-        assign policy_path = request.path | downcase
-        if policy_path contains 'privacy-policy' or policy_path contains 'contact-information'
-          assign is_allowed_path = true
-        endif
-      endif
-      if request.path contains '/challenge'
+      elsif clean_path contains '/pages/waitlist-success/'
+        assign is_allowed_path = true
+      elsif clean_path contains '/pages/waitlist/'
+        assign is_allowed_path = true
+      elsif clean_path contains '/policies/privacy-policy/'
+        assign is_allowed_path = true
+      elsif clean_path contains '/policies/contact-information/'
+        assign is_allowed_path = true
+      elsif clean_path contains '/challenge/'
+        assign is_allowed_path = true
+      elsif clean_path contains '/checkpoint/'
+        assign is_allowed_path = true
+      elsif clean_path contains '/captcha/'
         assign is_allowed_path = true
       endif
     -%}
