@@ -31,7 +31,7 @@
             "enable_mobile_style": true,
             "style_mobile": "circles-3-patterned_1200x67",
             "flip_horizontal": false,
-            "enable_animation": false,
+            "enable_animation": true,
             "animation_direction": ""
           }
         },
