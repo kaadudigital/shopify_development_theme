@@ -7,22 +7,27 @@
     <meta name="theme-color" content="#542A76">
     <link rel="canonical" href="{{ canonical_url }}">
     <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
-        {%- unless template.name == 'policy' or page.handle contains 'waitlist' or request.path contains '/challenge' -%}
-  
-  {% comment %} <script>
-    (function() {
-      var path = window.location.pathname.toLowerCase();
-      var search = window.location.search.toLowerCase();
-      var isWaitlist = path.indexOf('/pages/waitlist') !== -1;
-      var isPolicy = path.indexOf('/policies/') !== -1;
-      var isChallenge = path.indexOf('/challenge') !== -1 || search.indexOf('challenge') !== -1;
-      
-      if (!isWaitlist && !isPolicy && !isChallenge) {
-        window.location.replace('/pages/waitlist');
-      }
-    })();
-  </script> {% endcomment %}
-{%- endunless -%}
+    {%- liquid
+      assign is_allowed_path = false
+      if template.name == 'page' and page.handle == 'waitlist'
+        assign is_allowed_path = true
+      elsif template.name == 'page' and page.handle == 'waitlist-success'
+        assign is_allowed_path = true
+      elsif template.name == 'policy'
+        assign policy_path = request.path | downcase
+        if policy_path contains 'privacy-policy' or policy_path contains 'contact-information'
+          assign is_allowed_path = true
+        endif
+      endif
+      if request.path contains '/challenge'
+        assign is_allowed_path = true
+      endif
+    -%}
+    {%- if is_allowed_path == false and request.design_mode == false -%}
+      <meta name="robots" content="noindex,nofollow">
+      <meta http-equiv="refresh" content="0; url=/pages/waitlist">
+      <script>window.location.replace('/pages/waitlist');</script>
+    {%- endif -%}
 
     {%- liquid
       assign main_font = settings.type_main_font
