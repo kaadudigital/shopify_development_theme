@@ -7064,3 +7064,20 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
 .image-with-text__eyebrow {
   margin: 0 0 16px;
 }
+
+/* No horizontal scroll at page level on any Kaadu page.
+   Root cause: shape_divider blocks are rendered as siblings of <footer>
+   (sections/custom-footer.liquid line 154, after </footer> on line 145),
+   so they sit outside <main class="overflow-hidden">. Combined with
+   `transform: scale(1.01, 1)` on .shape-divider, they bleed ~0.5% past
+   the viewport on each side and trip body scrollWidth.
+   `clip` (rather than `hidden`) avoids creating a scroll container,
+   so descendant `position: sticky` continues to work. We can't push the
+   clip onto the footer-group wrapper itself: overflow-x: clip promotes
+   overflow-y to auto, which would clip the divider's intentional vertical
+   bleed up into the section above. */
+html,
+body {
+  overflow-x: hidden;
+  overflow-x: clip;
+}
