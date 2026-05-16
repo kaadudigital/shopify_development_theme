@@ -71,7 +71,9 @@
       "block_order": [
         "shape_divider_aPNFjV"
       ],
-      "custom_css": [],
+      "custom_css": [
+        "@media (max-width: 390px) {.h4-subsection-heading {font-size: 16px; line-height: 24px; } .btn-text-arrow-label {font-size: 12px; line-height: 24px; font-weight: 400; }}"
+      ],
       "name": "Custom Footer",
       "settings": {
         "email": "HELLO@KAADU.CH",
