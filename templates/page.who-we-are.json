@@ -110,7 +110,8 @@
         "background_pattern_qQXdyT"
       ],
       "custom_css": [
-        ".hero-bg-image {z-index: 5;}"
+        ".hero-bg-image {z-index: 5;}",
+        "#sticker-sticker_AktdGQ {z-index: 2;}"
       ],
       "name": "Custom Sticker Heading",
       "settings": {
