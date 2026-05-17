@@ -21,6 +21,22 @@
     },
     "custom_image_section_4KAdPE": {
       "type": "custom-image-section",
+      "blocks": {
+        "background_pattern_qQXdyT": {
+          "type": "background_pattern",
+          "settings": {
+            "type": "custom_rectangles",
+            "color": "text",
+            "size": 112,
+            "opacity": 100,
+            "enable_parallax": false,
+            "parallax_speed": 3
+          }
+        }
+      },
+      "block_order": [
+        "background_pattern_qQXdyT"
+      ],
       "name": "Custom Sticker Heading",
       "settings": {
         "section_height_desktop": 710,
