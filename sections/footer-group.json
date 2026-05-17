@@ -82,7 +82,7 @@
         "tiktok_url": "https://www.tiktok.com/@eatkaadu",
         "show_footer_links": true,
         "link_1_text": "Impressum",
-        "link_1_url": "shopify://policies/contact-information",
+        "link_1_url": "https://www.kaadu.ch/policies/legal-notice",
         "link_2_text": "Datenschutz",
         "link_2_url": "shopify://policies/privacy-policy",
         "color_scheme": "scheme3"
