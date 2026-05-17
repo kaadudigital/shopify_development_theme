@@ -22,6 +22,29 @@
     "custom_image_section_4KAdPE": {
       "type": "custom-image-section",
       "blocks": {
+        "sticker_L3LpEL": {
+          "type": "sticker",
+          "settings": {
+            "width": 190,
+            "half_width_on_mobile": true,
+            "text": "Sticker",
+            "shape": "star_1",
+            "sticker_font_size": "1.563rem",
+            "image": "shopify://shop_images/appealing_banana.png",
+            "horizontal_position": 30,
+            "vertical_position": 87,
+            "horizontal_position_sm": 80,
+            "vertical_position_sm": 80,
+            "rotate": -8,
+            "show_sticker_on_mobile": true,
+            "show_sticker_on_desktop": true,
+            "rotation_animation": "none",
+            "enable_parallax": false,
+            "parallax_speed": 3,
+            "color_scheme": "scheme1",
+            "color": "bg-scheme-accent-1 text-scheme-accent-1-contrast"
+          }
+        },
         "sticker_AktdGQ": {
           "type": "sticker",
           "settings": {
@@ -81,6 +104,7 @@
         }
       },
       "block_order": [
+        "sticker_L3LpEL",
         "sticker_AktdGQ",
         "sticker_WEPkY9",
         "background_pattern_qQXdyT"
