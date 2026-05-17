@@ -41,6 +41,7 @@
       "settings": {
         "section_height_desktop": 710,
         "section_height_mobile": 400,
+        "background_image": "shopify://shop_images/aunty_and_uncle.png",
         "image_width_desktop": 495,
         "image_scale_mobile": 60,
         "image_x_desktop": 25,
@@ -54,7 +55,7 @@
         "header_display_on_card": true,
         "header_x_desktop": 50,
         "header_y_desktop": 20,
-        "header_x_mobile": 55,
+        "header_x_mobile": 50,
         "header_y_mobile": 35,
         "body_text": "",
         "body_display_on_card": false,
