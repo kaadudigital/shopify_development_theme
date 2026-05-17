@@ -22,6 +22,29 @@
     "custom_image_section_4KAdPE": {
       "type": "custom-image-section",
       "blocks": {
+        "sticker_AktdGQ": {
+          "type": "sticker",
+          "settings": {
+            "width": 240,
+            "half_width_on_mobile": true,
+            "text": "Sticker",
+            "shape": "star_1",
+            "sticker_font_size": "1.563rem",
+            "image": "shopify://shop_images/Radically_fair.png",
+            "horizontal_position": 50,
+            "vertical_position": 48,
+            "horizontal_position_sm": 80,
+            "vertical_position_sm": 80,
+            "rotate": 0,
+            "show_sticker_on_mobile": true,
+            "show_sticker_on_desktop": true,
+            "rotation_animation": "none",
+            "enable_parallax": false,
+            "parallax_speed": 3,
+            "color_scheme": "scheme1",
+            "color": "bg-scheme-accent-1 text-scheme-accent-1-contrast"
+          }
+        },
         "sticker_WEPkY9": {
           "type": "sticker",
           "settings": {
@@ -58,6 +81,7 @@
         }
       },
       "block_order": [
+        "sticker_AktdGQ",
         "sticker_WEPkY9",
         "background_pattern_qQXdyT"
       ],
