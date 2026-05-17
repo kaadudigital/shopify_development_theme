@@ -25,17 +25,17 @@
         "sticker_WEPkY9": {
           "type": "sticker",
           "settings": {
-            "width": 200,
+            "width": 180,
             "half_width_on_mobile": true,
             "text": "Sticker",
             "shape": "star_1",
             "sticker_font_size": "1.953rem",
             "image": "shopify://shop_images/Kaadu_wordmark_red_RGB.svg",
-            "horizontal_position": 74,
-            "vertical_position": 73,
+            "horizontal_position": 73,
+            "vertical_position": 74,
             "horizontal_position_sm": 80,
             "vertical_position_sm": 80,
-            "rotate": 0,
+            "rotate": 20,
             "show_sticker_on_mobile": true,
             "show_sticker_on_desktop": true,
             "rotation_animation": "none",
@@ -60,6 +60,9 @@
       "block_order": [
         "sticker_WEPkY9",
         "background_pattern_qQXdyT"
+      ],
+      "custom_css": [
+        "#sticker-sticker_WEPkY9 {}"
       ],
       "name": "Custom Sticker Heading",
       "settings": {
