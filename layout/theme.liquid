@@ -22,6 +22,8 @@
         assign is_allowed_path = true
       elsif clean_path contains '/policies/contact-information/'
         assign is_allowed_path = true
+      elsif clean_path contains '/policies/legal-notice/'
+        assign is_allowed_path = true
       elsif clean_path contains '/challenge/'
         assign is_allowed_path = true
       elsif clean_path contains '/checkpoint/'
