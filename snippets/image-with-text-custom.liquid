@@ -400,16 +400,6 @@
         gap: var(--space-6);
         flex-direction: row-reverse;
       }
-
-      /* image_size == 'half': both columns share the row equally.
-         Overrides .kaadu-iw-image-wrap's 600px cap and the text column's
-         460px min-width, which would otherwise produce uneven sides. */
-      .normal-flex-half > *,
-      .reverse-flex-half > * {
-        flex: 1 1 0;
-        min-width: 0;
-        max-width: none;
-      }
     }
 
     @media (min-width: 1280px) {
