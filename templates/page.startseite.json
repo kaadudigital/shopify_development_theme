@@ -103,7 +103,7 @@
           "settings": {
             "image": "shopify://shop_images/52f2f8584ac253803e2a8b475558b239c4b73ea3.jpg",
             "heading": "ARBEITER*INNEN",
-            "description": "Frauen sind im Arbeitsmarkt in  Vazhakulam stark benachteiligt - selbst wenn sie einen Job erhalten  sind die Löhne horrend.",
+            "description": "Frauen sind im Arbeitsmarkt in Vazhakulam stark benachteiligt - selbst wenn sie einen Job erhalten  sind die Löhne horrend.",
             "link": "",
             "image_shape_override": "website_shape_star"
           }
@@ -113,7 +113,7 @@
           "settings": {
             "image": "shopify://shop_images/e63b0123caaca3f787cbbc233d99805d54c05dfc.jpg",
             "heading": "BAUERFAMILIEN",
-            "description": "Mickrige Margen, gierige Zwischenhändler und ein volatiler Markt zerstören Existenzen.",
+            "description": "Mickrige Margen, gierige Zwischenhändler und einvolatiler Markt zerstörenExistenzen.",
             "link": "",
             "image_shape_override": "website_shape_cloud"
           }
@@ -123,7 +123,7 @@
           "settings": {
             "image": "shopify://shop_images/0686fa36cf114a87ce3c9b417185ca52c25b8003.jpg",
             "heading": "ERNTEHELFER*INNEN",
-            "description": "Knapp CHF 10 für einen ganzen Tag Ananas ernten in der Sonne -  keine Sozialleistungen oder Sicherheit",
+            "description": "Knapp CHF 10 für einen ganzen Tag Ananas ernten in der Sonne - keine Sozialleistungen oder Sicherheit",
             "link": "",
             "image_shape_override": "website_shape_pancake"
           }
@@ -137,7 +137,7 @@
       "name": "Custom Info Tiles",
       "settings": {
         "title": "DIE LIEFERKETTE LEIDET",
-        "subheading": "Unter den Teifpreisen im Supermarkt leidet nicht nur die Natur.. Die Ausbeutung im Globalen Süden ist tief verankert",
+        "subheading": "Unter den Teifpreisen im Supermarkt leidet nicht nur die Natur..Die Ausbeutung im Globalen Süden ist tief verankert",
         "display_on_card": false,
         "layout": "grid",
         "tiles_per_row_mobile": "1",
@@ -236,8 +236,8 @@
         "subheading": "<p><strong>JEDER KANN DAVON REDEN DAS SIE TRANSPARENT SIND; WIR LEGEN ES OFFEN</strong></p>",
         "conclusion_heading": "<p><strong>DER IMPACT JEDES RAPPENS WIRD TRANSPARENT OFFENGELEGT</strong></p>",
         "heading_size": "heading-feature",
-        "richtext_main": "<p><strong>MARKTPREISE SCHWANKEN, UNSERE NICHT</strong></p>",
-        "richtext": "<p>Kaadu zahlt Kleinbauern stabile, transparente Preise – deutlich über dem Markt.<br/><br/></p>",
+        "richtext_main": "<p><strong>MARKTPREISE SCHWANKEN,UNSERE NICHT</strong></p>",
+        "richtext": "<p>Kaadu zahlt Kleinbauern stabile, transparentePreise – deutlich über dem Markt.<br/><br/></p>",
         "text_alignment": "text-center",
         "text_alignment_mobile": "text-center",
         "button_link": "shopify://pages/contact",
