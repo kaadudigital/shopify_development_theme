@@ -60,7 +60,7 @@
         "richtext": "<p>100% Frucht. 0% Ausbeutung.</p><p>Gefriergetrocknete Früchte; fair produziert, in der Ursprungsgemeinde verarbeitet, radikal transparent.<br/><br/></p>",
         "text_alignment": "text-left",
         "mobile_text_alignment": "text-center",
-        "mobile_layout_order": true,
+        "mobile_layout_order": false,
         "button_link_type": "url",
         "button_link": "shopify://pages/contact",
         "focus_element_id": "",
