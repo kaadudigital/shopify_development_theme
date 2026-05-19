@@ -309,6 +309,33 @@
       .custom-image-with-text-button-wrapper {
         flex-direction: column;
       }
+      /* Each button wrapper (plain <div> or .custom-btn-wrapper) fills the row */
+      .custom-image-with-text-button-wrapper > * {
+        width: 100%;
+      }
+      /* Primary "blob" shape button: lean look, background stretches edge-to-edge */
+      .custom-image-with-text-button-wrapper .custom-shape-button {
+        width: 100%;
+        aspect-ratio: 335 / 53;
+        background-size: 100% 100%;
+      }
+      /* Drop the desktop vertical padding so the aspect-ratio governs height */
+      .custom-image-with-text-button-wrapper .custom-shape-button-text {
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+      /* Secondary pill (.custom-btn wrapping .push-btn__surface) fills the row.
+         The :not() guard avoids hitting the focus-element variant that doubles
+         as .custom-shape-button. */
+      .custom-image-with-text-button-wrapper .custom-btn:not(.custom-shape-button) {
+        display: block;
+        width: 100%;
+      }
+      .custom-image-with-text-button-wrapper .custom-btn:not(.custom-shape-button) .push-btn__surface {
+        display: block;
+        width: 100%;
+        text-align: center;
+      }
     }
 
 
