@@ -86,7 +86,7 @@
         {%- comment -%} Mobile Layout when mobile_layout_order is enabled {%- endcomment -%}
         {%- if mobile_layout_order -%}
           {%- comment -%} Mobile: Heading first {%- endcomment -%}
-          <div class="mx-auto col-span-1 lg:hidden {{ mobile_heading_order }}">
+          <div class="w-full col-span-1 lg:hidden {{ mobile_heading_order }}">
             {%- if h2_title != blank -%}
               <h3 class="image-with-text__eyebrow h3 {{ combined_text_alignment }}">{{ h2_title | escape }}</h3>
             {%- endif -%}
@@ -131,7 +131,7 @@
           <div class="flex items-center {{ text_width_desktop }} {% if image_size == 'half'%}min-width-on-lg-screen{% endif %}">
             <div class="w-full center-flex-column-custom">
               {%- comment -%} Desktop: Heading shown here {%- endcomment -%}
-              <div class="mx-auto hidden lg:block">
+              <div class="w-full hidden lg:block">
                 {%- if h2_title != blank -%}
                   <h3 class="image-with-text__eyebrow h3 {{ combined_text_alignment }}">{{ h2_title | escape }}</h3>
                 {%- endif -%}
@@ -145,7 +145,7 @@
 
               {%- comment -%} Mobile: Text content {%- endcomment -%}
               {% comment %} <div class="rte mt-5 max-w-2xl {{ combined_text_alignment }} {{ mobile_text_order }} {% if text_alignment contains 'center' %}lg:mx-auto{% elsif text_alignment contains 'right' %}lg:ml-auto{% endif %} {% if mobile_text_alignment contains 'center' %}mx-auto lg:mx-0{% elsif mobile_text_alignment contains 'right' %}ml-auto lg:ml-0{% endif %}"> {% endcomment %}
-              <div class="rte    max-w-2xl {{ mobile_text_order }} {{ combined_text_alignment }} lg:mt-6 mt-4 body">
+              <div class="rte w-full {{ mobile_text_order }} {{ combined_text_alignment }} lg:mt-6 mt-4 body">
                 {{ richtext }}
               </div>
               <div class="mt-6 lg:mt-8 flex items-center custom-image-with-text-button-wrapper {{ mobile_button_order }} {{ combined_text_alignment }}">
@@ -236,7 +236,7 @@
               {% endif %}
 
               {% comment %} <div class="rte mt-5 max-w-2xl {{ combined_text_alignment }} {% if text_alignment contains 'center' %}lg:mx-auto{% elsif text_alignment contains 'right' %}lg:ml-auto{% endif %} {% if mobile_text_alignment contains 'center' %}mx-auto lg:mx-0{% elsif mobile_text_alignment contains 'right' %}ml-auto lg:ml-0{% endif %}"> {% endcomment %}
-              <div class="rte   max-w-2xl {{ combined_text_alignment }} lg:mt-6 mt-4 body ">
+              <div class="rte w-full {{ combined_text_alignment }} lg:mt-6 mt-4 body ">
                 {{ richtext }}
               </div>
 
@@ -315,7 +315,9 @@
     .center-flex-column-custom {
       display: flex;
       flex-direction: column;
-      align-items: center;
+      /* No align-items: center — children stretch to column width so that
+         text-align on h3/h1/body lines up at the same x position. */
+      align-items: stretch;
     }
     .custom-shape-button {
           background-size: contain;
