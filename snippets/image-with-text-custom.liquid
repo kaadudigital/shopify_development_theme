@@ -54,6 +54,18 @@
     assign preload = false
   endunless
 
+  # Resolve mobile button labels — fall back to the desktop label when blank
+  if button_label_mobile != blank
+    assign button_label_mobile_display = button_label_mobile
+  else
+    assign button_label_mobile_display = button_label
+  endif
+  if button2_label_mobile != blank
+    assign button2_label_mobile_display = button2_label_mobile
+  else
+    assign button2_label_mobile_display = button2_label
+  endif
+
   # Handle text alignment for mobile vs desktop
   if mobile_text_alignment != blank
     assign mobile_text_class = mobile_text_alignment
@@ -154,7 +166,7 @@
                     <a href="{{ button2_link }}">
                       <button class="custom-shape-button">
                         <span class="custom-shape-button-text">
-                          {{ button2_label }}
+                          <span class="kaadu-iw-label--mobile">{{ button2_label_mobile_display }}</span><span class="kaadu-iw-label--desktop">{{ button2_label }}</span>
                         </span>
                       </button>
                     </a>
@@ -167,7 +179,7 @@
                       class="inline-block custom-btn custom-shape-button"
                     >
                       <span class="custom-shape-button-text">
-                        {{ button2_label }}
+                        <span class="kaadu-iw-label--mobile">{{ button2_label_mobile_display }}</span><span class="kaadu-iw-label--desktop">{{ button2_label }}</span>
                       </span>
                     </button>
                   </div>
@@ -175,7 +187,7 @@
                 {%- if button_link_type == 'url' and button_link != blank and button_label != '' -%}
                   <div>
                     <a href="{{ button_link }}" class="inline-block custom-btn">
-                      <span class="push-btn__surface btn-secondary">{{ button_label }}</span>
+                      <span class="push-btn__surface btn-secondary"><span class="kaadu-iw-label--mobile">{{ button_label_mobile_display }}</span><span class="kaadu-iw-label--desktop">{{ button_label }}</span></span>
                     </a>
                   </div>
                 {%- endif -%}
@@ -185,7 +197,7 @@
                       onclick="console.log('Focus Element ID: {{ focus_element_id }}'); document.getElementById('{{focus_element_id}}')?.focus()"
                       class="inline-block custom-btn"
                     >
-                      <span class="push-btn__surface btn-secondary btn-label">{{ button_label }}</span>
+                      <span class="push-btn__surface btn-secondary btn-label"><span class="kaadu-iw-label--mobile">{{ button_label_mobile_display }}</span><span class="kaadu-iw-label--desktop">{{ button_label }}</span></span>
                     </button>
                   </div>
                 {%- endif -%}
@@ -246,7 +258,7 @@
                     <a href="{{ button2_link }}">
                       <button class="custom-shape-button">
                         <span class="custom-shape-button-text">
-                          {{ button2_label }}
+                          <span class="kaadu-iw-label--mobile">{{ button2_label_mobile_display }}</span><span class="kaadu-iw-label--desktop">{{ button2_label }}</span>
                         </span>
                       </button>
                     </a>
@@ -259,7 +271,7 @@
                       class="inline-block custom-btn custom-shape-button"
                     >
                       <span class="custom-shape-button-text">
-                        {{ button2_label }}
+                        <span class="kaadu-iw-label--mobile">{{ button2_label_mobile_display }}</span><span class="kaadu-iw-label--desktop">{{ button2_label }}</span>
                       </span>
                     </button>
                   </div>
@@ -267,7 +279,7 @@
                 {%- if button_link_type == 'url' and button_link != blank and button_label != '' -%}
                   <div>
                     <a href="{{ button_link }}" class="inline-block custom-btn">
-                      <span class="push-btn__surface btn-secondary">{{ button_label }}</span>
+                      <span class="push-btn__surface btn-secondary"><span class="kaadu-iw-label--mobile">{{ button_label_mobile_display }}</span><span class="kaadu-iw-label--desktop">{{ button_label }}</span></span>
                     </a>
                   </div>
                 {%- endif -%}
@@ -277,7 +289,7 @@
                       onclick="console.log('Focus Element ID: {{ focus_element_id }}'); document.getElementById('{{focus_element_id}}')?.focus()"
                       class="inline-block custom-btn"
                     >
-                      <span class="push-btn__surface btn-secondary btn-label">{{ button_label }}</span>
+                      <span class="push-btn__surface btn-secondary btn-label"><span class="kaadu-iw-label--mobile">{{ button_label_mobile_display }}</span><span class="kaadu-iw-label--desktop">{{ button_label }}</span></span>
                     </button>
                   </div>
                 {%- endif -%}
@@ -317,7 +329,7 @@
       flex-direction: row;
       gap: var(--space-4);
     }
-    @media (max-width: 768px) {
+    @media (max-width: 490px) {
       .custom-image-with-text-button-wrapper {
         flex-direction: column;
       }
@@ -374,7 +386,7 @@
           {%- endif -%}
     }
     {%- if button2_image_mobile != blank -%}
-    @media (max-width: 768px) {
+    @media (max-width: 490px) {
       .custom-shape-button {
         background-image: url('{{ button2_image_mobile | image_url: width: 600 }}');
       }
@@ -390,10 +402,26 @@
           letter-spacing: 0.02em;
           padding: {{ section.settings.button2_padding_topbottom }}px var(--space-6);
         }
-    @media (max-width: 768px) {
+    @media (max-width: 490px) {
       .custom-shape-button-text {
         color: {{ button_text_color_mobile | default: '#AE0000' }};
+        font-family: var(--font-body);
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 24px;
+        letter-spacing: 0;
+        text-align: center;
+        vertical-align: middle;
       }
+    }
+
+    /* Label-content swap shares the 490px breakpoint with the button
+       styling/layout rules above so all three flip together. */
+    .kaadu-iw-label--mobile { display: none; }
+    .kaadu-iw-label--desktop { display: inline; }
+    @media (max-width: 490px) {
+      .kaadu-iw-label--mobile { display: inline; }
+      .kaadu-iw-label--desktop { display: none; }
     }
 
     @media (min-width: 1024px) {
