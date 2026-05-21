@@ -1,0 +1,136 @@
+# Minimal theme-check config: schema / JSON validation + basic Liquid syntax only.
+# Run with: shopify theme check
+# Docs: https://shopify.dev/docs/storefronts/themes/tools/theme-check
+
+root: "."
+
+ignore:
+  - node_modules/**
+  - kaadu-design-system/**
+  - "**/*.pdf"
+  - "**/*.docx"
+  - "**/*.html"
+
+# --- Schema / JSON validation (catches the empty-default issue) ---
+ValidSchema:
+  enabled: true
+ValidSchemaName:
+  enabled: true
+ValidSchemaTranslations:
+  enabled: true
+ValidJSON:
+  enabled: true
+ValidLocalBlocks:
+  enabled: true
+ValidSettingsKey:
+  enabled: true
+ValidBlockTarget:
+  enabled: true
+ValidVisibleIf:
+  enabled: true
+UniqueSettingId:
+  enabled: true
+UniqueStaticBlockId:
+  enabled: true
+JSONSyntaxError:
+  enabled: true
+JSONMissingBlock:
+  enabled: true
+SchemaPresetsBlockOrder:
+  enabled: true
+SchemaPresetsStaticBlocks:
+  enabled: true
+LiquidFreeSettings:
+  enabled: true
+
+# --- Basic Liquid / HTML syntax ---
+LiquidHTMLSyntaxError:
+  enabled: true
+UnclosedHTMLElement:
+  enabled: true
+
+# --- Everything else: off (minimal mode) ---
+AssetPreload:
+  enabled: false
+BlockIdUsage:
+  enabled: false
+CdnPreconnect:
+  enabled: false
+ContentForHeaderModification:
+  enabled: false
+DeprecateBgsizes:
+  enabled: false
+DeprecateLazysizes:
+  enabled: false
+DeprecatedFilter:
+  enabled: false
+DeprecatedFontsOnSectionsAndBlocks:
+  enabled: false
+DeprecatedFontsOnSettingsSchema:
+  enabled: false
+DeprecatedTag:
+  enabled: false
+DuplicateContentForArguments:
+  enabled: false
+DuplicateRenderSnippetArguments:
+  enabled: false
+EmptyBlockContent:
+  enabled: false
+HardcodedRoutes:
+  enabled: false
+ImgWidthAndHeight:
+  enabled: false
+MatchingTranslations:
+  enabled: false
+MissingAsset:
+  enabled: false
+MissingContentForArguments:
+  enabled: false
+MissingRenderSnippetArguments:
+  enabled: false
+MissingTemplate:
+  enabled: false
+OrphanedSnippet:
+  enabled: false
+PaginationSize:
+  enabled: false
+ParserBlockingScript:
+  enabled: false
+RemoteAsset:
+  enabled: false
+RequiredLayoutThemeObject:
+  enabled: false
+ReservedDocParamNames:
+  enabled: false
+StaticStylesheetAndJavascriptTags:
+  enabled: false
+TranslationKeyExists:
+  enabled: false
+UndefinedObject:
+  enabled: false
+UniqueDocParamNames:
+  enabled: false
+UnknownFilter:
+  enabled: false
+UnrecognizedContentForArguments:
+  enabled: false
+UnrecognizedRenderSnippetArguments:
+  enabled: false
+UnsupportedDocTag:
+  enabled: false
+UnusedAssign:
+  enabled: false
+UnusedDocParam:
+  enabled: false
+ValidContentForArgumentTypes:
+  enabled: false
+ValidContentForArguments:
+  enabled: false
+ValidDocParamTypes:
+  enabled: false
+ValidHTMLTranslation:
+  enabled: false
+ValidRenderSnippetArgumentTypes:
+  enabled: false
+VariableName:
+  enabled: false

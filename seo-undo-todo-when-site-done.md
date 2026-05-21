@@ -1,0 +1,1 @@
+Recommended next step: in Google Search Console, resubmit the Shopify-generated sitemap so non-waitlist URLs get re-crawled (the old Disallow: / had them de-indexed).
