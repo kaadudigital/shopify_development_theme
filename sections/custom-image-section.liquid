@@ -48,7 +48,7 @@
     .section-{{ section.id }} .hero-bg-image {
       left: {{ section.settings.image_x_mobile }}%;
       top: {{ section.settings.image_y_mobile }}%;
-      width: calc({{ section.settings.image_width_desktop }}px * {{ section.settings.image_scale_mobile | divided_by: 100.0 }});
+      width: {{ section.settings.image_width_mobile }}px;
       max-width: 100%;
     }
 
@@ -68,24 +68,46 @@
   class="section-{{ section.id }} bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %} relative overflow-hidden"
   data-color-scheme="{{ section.settings.color_scheme }}"
 >
-  {%- if section.settings.background_image != blank -%}
-    <img
-      class="hero-bg-image"
-      src="{{ section.settings.background_image | image_url: width: section.settings.image_width_desktop }}"
-      alt="{{ section.settings.background_image.alt | escape }}"
-      width="{{ section.settings.image_width_desktop }}"
-      height="auto"
-      {% if preload %}
-        loading="eager" fetchpriority="high"
-      {% else %}
-        loading="lazy"
-      {% endif %}
-    >
+  {%- if section.settings.background_image != blank or section.settings.background_image_mobile != blank -%}
+    {%- assign desktop_image = section.settings.background_image -%}
+    {%- assign mobile_image = section.settings.background_image_mobile | default: desktop_image -%}
+    {%- if desktop_image == blank -%}
+      {%- assign desktop_image = mobile_image -%}
+    {%- endif -%}
+    <picture>
+      {%- if mobile_image != blank -%}
+        <source
+          media="(max-width: 768px)"
+          srcset="{{ mobile_image | image_url: width: 800, format: 'webp' }}"
+          type="image/webp"
+        >
+        <source
+          media="(max-width: 768px)"
+          srcset="{{ mobile_image | image_url: width: 800 }}"
+        >
+      {%- endif -%}
+      <source
+        srcset="{{ desktop_image | image_url: width: section.settings.image_width_desktop, format: 'webp' }}"
+        type="image/webp"
+      >
+      <img
+        class="hero-bg-image"
+        src="{{ desktop_image | image_url: width: section.settings.image_width_desktop }}"
+        alt="{{ desktop_image.alt | escape }}"
+        width="{{ desktop_image.width }}"
+        height="{{ desktop_image.height }}"
+        {% if preload %}
+          loading="eager" fetchpriority="high"
+        {% else %}
+          loading="lazy"
+        {% endif %}
+      >
+    </picture>
   {%- endif -%}
 
   {%- if section.settings.heading != blank -%}
     <div class="hero-header-card {% if section.settings.header_display_on_card %}bg-scheme-card text-scheme-card-text rounded p-4{% endif %} {{ section.settings.text_alignment_header }}">
-      <{{ section.settings.heading_tag }} class="{{ section.settings.heading_size }} font-heading  ">
+      <{{ section.settings.heading_tag }} class="h1">
         {{ section.settings.heading }}
       </{{ section.settings.heading_tag }}>
     </div>
@@ -94,7 +116,7 @@
   {%- if section.settings.body_text != blank or section.settings.button_label != blank -%}
     <div class="hero-body-card {% if section.settings.body_display_on_card %}bg-scheme-card text-scheme-card-text rounded p-4{% endif %} {{ section.settings.text_alignment }}">
       {%- if section.settings.body_text != blank -%}
-        <div class="rte h2 ">{{ section.settings.body_text }}</div>
+        <div class="rte body-large">{{ section.settings.body_text }}</div>
       {%- endif -%}
 
       {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
@@ -163,7 +185,13 @@
     {
       "type": "image_picker",
       "id": "background_image",
-      "label": "Image"
+      "label": "Image (desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image_mobile",
+      "label": "Image (mobile)",
+      "info": "Optional — falls back to the desktop image when blank."
     },
     {
       "type": "range",
@@ -177,14 +205,13 @@
     },
     {
       "type": "range",
-      "id": "image_scale_mobile",
-      "label": "Image scale (mobile)",
-      "min": 10,
-      "max": 100,
-      "step": 5,
-      "unit": "%",
-      "default": 60,
-      "info": "Scales down the desktop width by this percentage on mobile"
+      "id": "image_width_mobile",
+      "label": "Image width (mobile)",
+      "min": 80,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "default": 300
     },
     {
       "type": "header",
@@ -248,22 +275,13 @@
       "type": "select",
       "id": "heading_tag",
       "label": "Heading tag",
+      "info": "Only one H1 per page (the hero). Use H2 elsewhere.",
       "options": [
         { "value": "h1", "label": "H1" },
         { "value": "h2", "label": "H2" },
         { "value": "h3", "label": "H3" }
       ],
       "default": "h2"
-    },
-    {
-      "type": "select",
-      "id": "heading_size",
-      "label": "Heading size",
-      "options": [
-        { "value": "heading-standard", "label": "Standard" },
-        { "value": "heading-feature", "label": "Feature" }
-      ],
-      "default": "heading-feature"
     },
     {
       "type": "select",
