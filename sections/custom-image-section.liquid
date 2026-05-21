@@ -49,7 +49,7 @@
       left: {{ section.settings.image_x_mobile }}%;
       top: {{ section.settings.image_y_mobile }}%;
       width: {{ section.settings.image_width_mobile }}px;
-      max-width: none;
+      max-width: 100%;
     }
 
     .section-{{ section.id }} .hero-header-card {
@@ -76,15 +76,14 @@
     {%- endif -%}
     <picture>
       {%- if mobile_image != blank -%}
-        {%- assign mobile_src_width = section.settings.image_width_mobile | times: 2 | at_most: 2400 -%}
         <source
           media="(max-width: 768px)"
-          srcset="{{ mobile_image | image_url: width: mobile_src_width, format: 'webp' }}"
+          srcset="{{ mobile_image | image_url: width: 800, format: 'webp' }}"
           type="image/webp"
         >
         <source
           media="(max-width: 768px)"
-          srcset="{{ mobile_image | image_url: width: mobile_src_width }}"
+          srcset="{{ mobile_image | image_url: width: 800 }}"
         >
       {%- endif -%}
       <source
@@ -209,7 +208,7 @@
       "id": "image_width_mobile",
       "label": "Image width (mobile)",
       "min": 80,
-      "max": 1600,
+      "max": 800,
       "step": 10,
       "unit": "px",
       "default": 300
