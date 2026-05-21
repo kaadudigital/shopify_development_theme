@@ -22,75 +22,6 @@
     "custom_image_section_4KAdPE": {
       "type": "custom-image-section",
       "blocks": {
-        "sticker_L3LpEL": {
-          "type": "sticker",
-          "settings": {
-            "width": 190,
-            "half_width_on_mobile": true,
-            "text": "Sticker",
-            "shape": "star_1",
-            "sticker_font_size": "1.563rem",
-            "image": "shopify://shop_images/appealing_banana.png",
-            "horizontal_position": 30,
-            "vertical_position": 87,
-            "horizontal_position_sm": 19,
-            "vertical_position_sm": 91,
-            "rotate": -8,
-            "show_sticker_on_mobile": true,
-            "show_sticker_on_desktop": true,
-            "rotation_animation": "none",
-            "enable_parallax": false,
-            "parallax_speed": 3,
-            "color_scheme": "scheme1",
-            "color": "bg-scheme-accent-1 text-scheme-accent-1-contrast"
-          }
-        },
-        "sticker_AktdGQ": {
-          "type": "sticker",
-          "settings": {
-            "width": 240,
-            "half_width_on_mobile": true,
-            "text": "Sticker",
-            "shape": "star_1",
-            "sticker_font_size": "1.563rem",
-            "image": "shopify://shop_images/Radically_fair.png",
-            "horizontal_position": 51,
-            "vertical_position": 48,
-            "horizontal_position_sm": 53,
-            "vertical_position_sm": 68,
-            "rotate": 0,
-            "show_sticker_on_mobile": true,
-            "show_sticker_on_desktop": true,
-            "rotation_animation": "none",
-            "enable_parallax": false,
-            "parallax_speed": 3,
-            "color_scheme": "scheme1",
-            "color": "bg-scheme-accent-1 text-scheme-accent-1-contrast"
-          }
-        },
-        "sticker_WEPkY9": {
-          "type": "sticker",
-          "settings": {
-            "width": 180,
-            "half_width_on_mobile": true,
-            "text": "Sticker",
-            "shape": "star_1",
-            "sticker_font_size": "1.953rem",
-            "image": "shopify://shop_images/Kaadu_wordmark_red_RGB.svg",
-            "horizontal_position": 73,
-            "vertical_position": 74,
-            "horizontal_position_sm": 85,
-            "vertical_position_sm": 80,
-            "rotate": 20,
-            "show_sticker_on_mobile": true,
-            "show_sticker_on_desktop": true,
-            "rotation_animation": "none",
-            "enable_parallax": false,
-            "parallax_speed": 3,
-            "color_scheme": "scheme1",
-            "color": "bg-scheme-accent-1 text-scheme-accent-1-contrast"
-          }
-        },
         "background_pattern_qQXdyT": {
           "type": "background_pattern",
           "settings": {
@@ -104,9 +35,6 @@
         }
       },
       "block_order": [
-        "sticker_L3LpEL",
-        "sticker_AktdGQ",
-        "sticker_WEPkY9",
         "background_pattern_qQXdyT"
       ],
       "custom_css": [
@@ -117,7 +45,7 @@
       "settings": {
         "section_height_desktop": 710,
         "section_height_mobile": 510,
-        "background_image": "shopify://shop_images/aunty_and_uncle.png",
+        "background_image": "shopify://shop_images/Aunty_Uncle_Section_Desktop.webp",
         "image_width_desktop": 825,
         "image_scale_mobile": 60,
         "image_x_desktop": 50,
