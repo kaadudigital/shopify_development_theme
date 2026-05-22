@@ -114,10 +114,11 @@
         "image_7FYarq": {
           "type": "image",
           "settings": {
+            "image": "shopify://shop_images/e63b0123caaca3f787cbbc233d99805d54c05dfc.jpg",
             "crop": "",
-            "image_shape": "default",
-            "heading": "Heading",
-            "caption": "Use this text to share information about your brand with your customers.",
+            "image_shape": "website_shape_cloud",
+            "heading": "BAUERFAMILIEN",
+            "caption": "Mickrige Margen, gierige Zwischenhändler und einvolatiler Markt zerstörenExistenzen.",
             "button_text": "",
             "url": ""
           }
