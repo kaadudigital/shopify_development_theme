@@ -96,6 +96,70 @@
         "use_gradient_background": false
       }
     },
+    "custom_image_focus_carousel_XtKKQC": {
+      "type": "custom-image-focus-carousel",
+      "blocks": {
+        "image_4pVDca": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/52f2f8584ac253803e2a8b475558b239c4b73ea3.jpg",
+            "crop": "",
+            "image_shape": "default",
+            "heading": "Heading",
+            "caption": "Use this text to share information about your brand with your customers.",
+            "button_text": "",
+            "url": ""
+          }
+        },
+        "image_7FYarq": {
+          "type": "image",
+          "settings": {
+            "crop": "",
+            "image_shape": "default",
+            "heading": "Heading",
+            "caption": "Use this text to share information about your brand with your customers.",
+            "button_text": "",
+            "url": ""
+          }
+        },
+        "image_nKw4WK": {
+          "type": "image",
+          "settings": {
+            "crop": "",
+            "image_shape": "default",
+            "heading": "Heading",
+            "caption": "Use this text to share information about your brand with your customers.",
+            "button_text": "",
+            "url": ""
+          }
+        }
+      },
+      "block_order": [
+        "image_4pVDca",
+        "image_7FYarq",
+        "image_nKw4WK"
+      ],
+      "name": "custom focus carousel",
+      "settings": {
+        "eyebrow": "DAS PROLEM",
+        "title": "Bildfokus Karussell",
+        "title2": "",
+        "title3": "",
+        "subheading": "Use this text to share information about your collection.",
+        "desktop_extended_layout": true,
+        "enlarge_active_slide": true,
+        "disable_media_style": false,
+        "button_link_type": "url",
+        "button_link": "",
+        "focus_element_id": "",
+        "button_label": "Shop Now",
+        "button_padding_topbottom": 20,
+        "mobile_slide_width": "three_fifths",
+        "desktop_slide_width": 40,
+        "color_scheme": "scheme3",
+        "use_gradient_background": false
+      }
+    },
     "custom_feature_infotile_ejghiA": {
       "type": "custom-feature-infotile",
       "blocks": {
@@ -338,10 +402,12 @@
       ],
       "name": "custom focus carousel",
       "settings": {
+        "eyebrow": "",
         "title": "Image focus carousel",
         "title2": "second line title",
         "title3": "",
         "subheading": "Use this text to share information about your collection.",
+        "desktop_extended_layout": false,
         "enlarge_active_slide": true,
         "disable_media_style": false,
         "button_link_type": "url",
@@ -701,6 +767,7 @@
     "main",
     "image_with_text_custom_nmQU4P",
     "scrolling_text_j9kYtA",
+    "custom_image_focus_carousel_XtKKQC",
     "custom_feature_infotile_ejghiA",
     "custom_image_section_anwQpJ",
     "custom_image_heading_text_4H93px",
