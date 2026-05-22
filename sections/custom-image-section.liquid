@@ -62,6 +62,12 @@
       top: {{ section.settings.body_y_mobile }}%;
     }
   }
+
+  @media (max-width: 490px) {
+        .section-{{ section.id }} .hero-header-card { 
+          width: 90%;
+        }
+  }
 {% endstyle %}
 
 <section
