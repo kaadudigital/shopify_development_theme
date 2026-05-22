@@ -154,17 +154,17 @@
         </div>
       {%- endif -%}
       {% if block.settings.heading != '' %}
-        <{{ block_heading_level }} class="font-heading heading-secondary break-words">
+        <{{ block_heading_level }} class="font-heading heading-secondary break-words mt-6">
           {{- block.settings.heading -}}
         </{{ block_heading_level }}>
       {% endif %}
       {%- if block.settings.caption != '' -%}
-        <div class="inline-rte {% if block.settings.heading != '' %}mt-2.5{% endif %}">
+        <div class="inline-rte {% if block.settings.heading != '' %}mt-4{% endif %}">
           {{ block.settings.caption }}
         </div>
       {%- endif -%}
       {% if block.settings.url and block.settings.button_text != '' %}
-        <div class="relative z-10 mt-5">
+        <div class="relative z-10 mt-8">
           <a href="{{ block.settings.url }}" class="push-btn inline-block">
             <span class="push-btn__surface">{{- block.settings.button_text -}}</span>
           </a>
@@ -193,7 +193,7 @@
         </{{ block_heading_level }}>
       {% endif %}
       {%- if block.settings.caption != '' -%}
-        <div class="inline-rte {% if block.settings.heading != '' %}mt-2.5{% endif %}">
+        <div class="inline-rte {% if block.settings.heading != '' %}mt-4{% endif %}">
           {{ block.settings.caption }}
         </div>
       {%- endif -%}
@@ -203,7 +203,7 @@
         <a href="{{ block.settings.url }}" class="absolute inset-0 z-10"></a>
       {%- endif -%}
       {% if block.settings.url and block.settings.button_text != '' %}
-        <div class="relative z-10 mt-5">
+        <div class="relative z-10 mt-8">
           <a
             href="{{ block.settings.url }}"
             class="push-btn inline-block"
@@ -290,8 +290,8 @@
       {{ list_items }}
     </ul>
   </div>
-  <div class="splide__arrows items-top mt-5 px-section">
-    <div class="grid gap-5 lg:gap-0 {% if section.settings.focused_slide_source != 'none' %} lg:grid-cols-[1fr_var(--desktop-slide-width)_1fr] {%  endif %}">
+  <div class="splide__arrows items-top mt-6 px-section">
+    <div class="grid gap-4 lg:gap-0 {% if section.settings.focused_slide_source != 'none' %} lg:grid-cols-[1fr_var(--desktop-slide-width)_1fr] {%  endif %}">
       {%- if section.settings.focused_slide_source != 'none' -%}
         <div
           class="flex flex-col lg:col-start-2"
