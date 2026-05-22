@@ -1,9 +1,25 @@
 <section
-  class="bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %}"
+  class="scrolling-text-section bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %}"
   data-color-scheme="{{ section.settings.color_scheme }}"
 >
-  {%- render 'scrolling-text', class: 'py-2.5' %}
+  {%- render 'scrolling-text',
+    class: 'py-2.5',
+    text_class: 'h1'
+  -%}
 </section>
+
+{%- style -%}
+  #shopify-section-{{ section.id }} .scrolling-text-section {
+    --scrolling-text-shape-size: {{ section.settings.shape_size }}em;
+  }
+  #shopify-section-{{ section.id }} .scrolling-text-section .h1 {
+    letter-spacing: -0.01em;
+  }
+  #shopify-section-{{ section.id }} .scrolling-text__shape-svg {
+    height: var(--scrolling-text-shape-size);
+    width: var(--scrolling-text-shape-size);
+  }
+{%- endstyle -%}
 
 {% schema %}
 {
@@ -17,7 +33,7 @@
       "type": "text",
       "id": "text",
       "label": "t:common.settings.text.label",
-      "default": "Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store."
+      "default": "ITS NOT FAIR!"
     },
     {
       "type": "checkbox",
@@ -25,6 +41,10 @@
       "default": true,
       "label": "t:common.settings.repeat_text.label",
       "info": "t:common.settings.repeat_text.info"
+    },
+    {
+      "type": "header",
+      "content": "Shape between text"
     },
     {
       "type": "select",
@@ -63,56 +83,30 @@
       "default": "10_point_star"
     },
     {
+      "type": "range",
+      "id": "shape_size",
+      "min": 0.2,
+      "max": 1.5,
+      "step": 0.1,
+      "unit": "em",
+      "label": "Shape size",
+      "info": "Relative to the text height (1em = headline height).",
+      "default": 0.6
+    },
+    {
       "type": "checkbox",
       "id": "animate_shape_between_text",
       "default": true,
       "label": "t:common.settings.animate_shape_between_text.label"
     },
     {
+      "type": "header",
+      "content": "Link & motion"
+    },
+    {
       "type": "url",
       "id": "link",
       "label": "t:common.settings.link.label"
-    },
-    {
-      "type": "select",
-      "id": "font",
-      "label": "t:common.settings.font.label",
-      "options": [
-        {
-          "value": "font-heading heading-secondary",
-          "label": "t:common.options.heading.label"
-        },
-        {
-          "value": "body",
-          "label": "t:common.options.body.label"
-        }
-      ],
-      "default": "font-heading heading-secondary"
-    },
-    {
-      "type": "checkbox",
-      "id": "apply_effects",
-      "label": "t:common.settings.apply_effects.label",
-      "default": false,
-      "info": "t:common.settings.apply_effects.info"
-    },
-    {
-      "type": "range",
-      "id": "mobile_text_scale",
-      "min": -2,
-      "max": 7,
-      "step": 1,
-      "label": "t:common.settings.mobile_text_scale.label",
-      "default": 2
-    },
-    {
-      "type": "range",
-      "id": "desktop_text_scale",
-      "min": -2,
-      "max": 11,
-      "step": 1,
-      "label": "t:common.settings.desktop_text_scale.label",
-      "default": 4
     },
     {
       "type": "range",

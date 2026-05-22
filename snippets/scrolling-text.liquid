@@ -25,7 +25,9 @@
     assign content_class = 'grow-0 shrink-0'
   endif
 
-  if section.settings.mobile_text_scale and section.settings.desktop_text_scale
+  if text_class != blank
+    assign text_size_class = text_class
+  elsif section.settings.mobile_text_scale and section.settings.desktop_text_scale
     capture text_size_class
       render 'type-scale-classes', mobile_text_scale: section.settings.mobile_text_scale, desktop_text_scale: section.settings.desktop_text_scale
     endcapture
@@ -40,7 +42,7 @@
       <span class="{{ text_size_class }} {% if font contains 'heading' and section.settings.apply_effects %}heading-effects{% endif %}">{{ text }}</span>
       {%- if shape_between_text != 'none' -%}
         <span class="flex-shrink-0 px-2 text-current">
-          <svg class="h-4 w-4 {% if section.settings.animate_shape_between_text %}rotate-anim{% endif %}{% if shape_between_text == 'triangle' %} origin-[50%_66.66%]{% endif %}" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg class="scrolling-text__shape-svg h-4 w-4 {% if section.settings.animate_shape_between_text %}rotate-anim{% endif %}{% if shape_between_text == 'triangle' %} origin-[50%_66.66%]{% endif %}" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
             {%- case shape_between_text -%}
               {%- when 'circle' -%}
                 <circle cx="100" cy="100" r="95" fill="currentColor"/>
