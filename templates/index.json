@@ -102,6 +102,7 @@
         "image_4pVDca": {
           "type": "image",
           "settings": {
+            "image": "shopify://shop_images/52f2f8584ac253803e2a8b475558b239c4b73ea3.jpg",
             "crop": "",
             "image_shape": "default",
             "heading": "Heading",
