@@ -104,7 +104,7 @@
           "settings": {
             "image": "shopify://shop_images/52f2f8584ac253803e2a8b475558b239c4b73ea3.jpg",
             "crop": "",
-            "image_shape": "default",
+            "image_shape": "website_shape_star",
             "heading": "ARBEITER*INNEN",
             "caption": "Frauen sind im Arbeitsmarkt in Vazhakulam stark benachteiligt - selbst wenn sie einen Job erhalten  sind die Löhne horrend.",
             "button_text": "",
@@ -154,7 +154,7 @@
         "focus_element_id": "",
         "button_label": "Shop Now",
         "button_padding_topbottom": 20,
-        "mobile_slide_width": "three_fifths",
+        "mobile_slide_width": "full_width",
         "desktop_slide_width": 40,
         "color_scheme": "scheme3",
         "use_gradient_background": false
