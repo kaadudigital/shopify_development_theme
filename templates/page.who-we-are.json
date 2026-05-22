@@ -27,7 +27,7 @@
           "settings": {
             "type": "custom_rectangles",
             "color": "text",
-            "size": 112,
+            "size": 144,
             "opacity": 100,
             "enable_parallax": false,
             "parallax_speed": 3
