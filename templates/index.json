@@ -131,36 +131,12 @@
             "button_text": "",
             "url": ""
           }
-        },
-        "image_BgH9YD": {
-          "type": "image",
-          "settings": {
-            "crop": "",
-            "image_shape": "default",
-            "heading": "Heading",
-            "caption": "Use this text to share information about your brand with your customers.",
-            "button_text": "",
-            "url": ""
-          }
-        },
-        "image_nHcqkL": {
-          "type": "image",
-          "settings": {
-            "crop": "",
-            "image_shape": "default",
-            "heading": "Heading",
-            "caption": "Use this text to share information about your brand with your customers.",
-            "button_text": "",
-            "url": ""
-          }
         }
       },
       "block_order": [
         "image_4pVDca",
         "image_7FYarq",
-        "image_nKw4WK",
-        "image_BgH9YD",
-        "image_nHcqkL"
+        "image_nKw4WK"
       ],
       "name": "custom focus carousel",
       "settings": {
@@ -169,7 +145,7 @@
         "title2": "",
         "title3": "",
         "subheading": "Use this text to share information about your collection.",
-        "desktop_extended_layout": false,
+        "desktop_extended_layout": true,
         "enlarge_active_slide": true,
         "disable_media_style": false,
         "button_link_type": "url",
