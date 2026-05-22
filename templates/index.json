@@ -86,7 +86,7 @@
       "settings": {
         "text": "ITS NOT FAIR!",
         "repeat_text": true,
-        "shape_between_text": "10_point_star",
+        "shape_between_text": "custom_star",
         "shape_size": 1.5,
         "animate_shape_between_text": true,
         "link": "",
