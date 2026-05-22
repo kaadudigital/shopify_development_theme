@@ -7081,3 +7081,22 @@ body {
   overflow-x: hidden;
   overflow-x: clip;
 }
+
+/* ── FOCUS CAROUSEL — DESKTOP EXTENDED (3-COLUMN GRID) ──────── */
+.focus-carousel__extended-grid {
+  display: none;
+}
+@media (min-width: 769px) {
+  .focus-carousel__extended-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-8);
+    padding-inline: var(--space-8);
+  }
+  .focus-carousel__extended-item {
+    text-align: center;
+  }
+  .focus-carousel__splide-desktop-hidden {
+    display: none;
+  }
+}
