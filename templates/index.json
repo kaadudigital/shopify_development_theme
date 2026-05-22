@@ -129,8 +129,8 @@
             "image": "shopify://shop_images/0686fa36cf114a87ce3c9b417185ca52c25b8003.jpg",
             "crop": "",
             "image_shape": "website_shape_pancake",
-            "heading": "Heading",
-            "caption": "Use this text to share information about your brand with your customers.",
+            "heading": "ERNTEHELFER*INNEN",
+            "caption": "Knapp CHF 10 für einen ganzen Tag Ananas ernten in der Sonne -  keine Sozialleistungen oder Sicherheit",
             "button_text": "",
             "url": ""
           }
@@ -158,63 +158,6 @@
         "button_padding_topbottom": 20,
         "mobile_slide_width": "full_width",
         "desktop_slide_width": 40,
-        "color_scheme": "scheme3",
-        "use_gradient_background": false
-      }
-    },
-    "custom_feature_infotile_ejghiA": {
-      "type": "custom-feature-infotile",
-      "blocks": {
-        "info_tile_GCgT3b": {
-          "type": "info_tile",
-          "settings": {
-            "image": "shopify://shop_images/52f2f8584ac253803e2a8b475558b239c4b73ea3.jpg",
-            "heading": "ARBEITER*INNEN",
-            "description": "Frauen sind im Arbeitsmarkt in Vazhakulam stark benachteiligt - selbst wenn sie einen Job erhalten  sind die Löhne horrend.",
-            "link": "",
-            "image_shape_override": "website_shape_star"
-          }
-        },
-        "info_tile_nHi4xQ": {
-          "type": "info_tile",
-          "settings": {
-            "image": "shopify://shop_images/e63b0123caaca3f787cbbc233d99805d54c05dfc.jpg",
-            "heading": "BAUERFAMILIEN",
-            "description": "Mickrige Margen, gierige Zwischenhändler und einvolatiler Markt zerstörenExistenzen.",
-            "link": "",
-            "image_shape_override": "website_shape_cloud"
-          }
-        },
-        "info_tile_Nfc8T6": {
-          "type": "info_tile",
-          "settings": {
-            "image": "shopify://shop_images/0686fa36cf114a87ce3c9b417185ca52c25b8003.jpg",
-            "heading": "ERNTEHELFER*INNEN",
-            "description": "Knapp CHF 10 für einen ganzen Tag Ananas ernten in der Sonne - keine Sozialleistungen oder Sicherheit",
-            "link": "",
-            "image_shape_override": "website_shape_pancake"
-          }
-        }
-      },
-      "block_order": [
-        "info_tile_GCgT3b",
-        "info_tile_nHi4xQ",
-        "info_tile_Nfc8T6"
-      ],
-      "name": "Custom Info Tiles",
-      "settings": {
-        "title": "DIE LIEFERKETTE LEIDET",
-        "subheading": "Unter den Teifpreisen im Supermarkt leidet nicht nur die Natur..Die Ausbeutung im Globalen Süden ist tief verankert",
-        "display_on_card": false,
-        "layout": "grid",
-        "tiles_per_row_mobile": "1",
-        "tiles_per_row_desktop": 3,
-        "slideshow_focus": "center",
-        "mobile_slide_width": "three_fifths",
-        "desktop_slide_width": 40,
-        "autoscroll_mode": "0",
-        "tiles_aspect_ratio": "",
-        "image_shape": "",
         "color_scheme": "scheme3",
         "use_gradient_background": false
       }
@@ -770,7 +713,6 @@
     "image_with_text_custom_nmQU4P",
     "scrolling_text_j9kYtA",
     "custom_image_focus_carousel_XtKKQC",
-    "custom_feature_infotile_ejghiA",
     "custom_image_section_anwQpJ",
     "custom_image_heading_text_4H93px",
     "custom_rich_text_with_image_aY8WDA",
