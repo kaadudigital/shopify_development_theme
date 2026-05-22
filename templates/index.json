@@ -126,8 +126,9 @@
         "image_nKw4WK": {
           "type": "image",
           "settings": {
+            "image": "shopify://shop_images/0686fa36cf114a87ce3c9b417185ca52c25b8003.jpg",
             "crop": "",
-            "image_shape": "default",
+            "image_shape": "website_shape_bun",
             "heading": "Heading",
             "caption": "Use this text to share information about your brand with your customers.",
             "button_text": "",
