@@ -44,7 +44,7 @@
       "name": "Custom Sticker Heading",
       "settings": {
         "section_height_desktop": 710,
-        "section_height_mobile": 620,
+        "section_height_mobile": 520,
         "background_image": "shopify://shop_images/Aunty_Uncle_Section_Desktop.webp",
         "background_image_mobile": "shopify://shop_images/Aunty_Uncle_Section_Mobile.webp",
         "image_width_desktop": 1005,
@@ -60,7 +60,7 @@
         "header_x_desktop": 50,
         "header_y_desktop": 20,
         "header_x_mobile": 50,
-        "header_y_mobile": 25,
+        "header_y_mobile": 30,
         "body_text": "",
         "body_display_on_card": false,
         "text_alignment": "text-left",
