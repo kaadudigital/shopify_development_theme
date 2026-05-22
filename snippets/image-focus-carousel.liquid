@@ -154,12 +154,12 @@
         </div>
       {%- endif -%}
       {% if block.settings.heading != '' %}
-        <{{ block_heading_level }} class="font-heading heading-secondary break-words mt-6">
+        <{{ block_heading_level }} class="h4-subsection-heading break-words mt-6">
           {{- block.settings.heading -}}
         </{{ block_heading_level }}>
       {% endif %}
       {%- if block.settings.caption != '' -%}
-        <div class="inline-rte {% if block.settings.heading != '' %}mt-4{% endif %}">
+        <div class="inline-rte body {% if block.settings.heading != '' %}mt-4{% endif %}">
           {{ block.settings.caption }}
         </div>
       {%- endif -%}
@@ -188,12 +188,12 @@
       id="Section-{{ section.id }}-CaptionContainer-label-{{ forloop.index0 }}"
     >
       {% if block.settings.heading != '' %}
-        <{{ block_heading_level }} class="font-heading heading-secondary break-words">
+        <{{ block_heading_level }} class="h4-subsection-heading break-words">
           {{- block.settings.heading -}}
         </{{ block_heading_level }}>
       {% endif %}
       {%- if block.settings.caption != '' -%}
-        <div class="inline-rte {% if block.settings.heading != '' %}mt-4{% endif %}">
+        <div class="inline-rte body {% if block.settings.heading != '' %}mt-4{% endif %}">
           {{ block.settings.caption }}
         </div>
       {%- endif -%}
