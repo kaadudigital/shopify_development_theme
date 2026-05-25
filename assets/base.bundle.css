@@ -3518,7 +3518,7 @@ input[type='text'],
 }
 
 .font-bold {
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .font-main {
@@ -7011,7 +7011,7 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
   border-radius: var(--radius-btn);
   box-shadow: var(--shadow-md);
   font-family: var(--font-heading);
-  font-weight: 700;
+  font-weight: 600;
   font-size: 18px;
   line-height: 24px;
   letter-spacing: 0.02em;
