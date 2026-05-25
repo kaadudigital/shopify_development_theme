@@ -6875,7 +6875,7 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
 
 .h3 {
   font-family: var(--font-heading) !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   font-size: 24px !important;
   line-height: 32px !important;
   text-transform: uppercase;
