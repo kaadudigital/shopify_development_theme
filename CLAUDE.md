@@ -132,27 +132,29 @@ Each utility sets both `background-color` and a contrast-safe `color`. Don't pai
 
 | Role | Font | Weight | Transform |
 |---|---|---|---|
-| Display / H1 | Fagies | Regular (400) | uppercase |
-| Headings / H2 | Banter Grotesk | Semibold (700) | uppercase |
-| Body | Banter Grotesk | Regular (400) | none |
-| Buttons / CTAs | Banter Grotesk | Semibold (700) | uppercase |
+| Display / H1 + H2 | Fagies (`--font-display`) | Regular (400) | uppercase |
+| Sub-headings (H3 / H4) | Banter Grotesk (`--font-heading`) | Semibold (700) | uppercase |
+| Body | Banter Grotesk (`--font-body`) | Regular (400) | none |
+| Buttons / CTAs | Banter Grotesk (`--font-heading`) | Semibold (700) | uppercase |
 
 Fonts live in [assets/](assets/) (`Fagies.ttf`, `BanterGrotesk-Regular.woff2`, `THICKHEA.TTF` as a Fagies fallback) and are loaded via `@font-face` in [base.bundle.css](assets/base.bundle.css). System fallback: `Helvetica, Arial, sans-serif`.
 
 ### Canonical Type Classes
 
-Apply typography through these classes only. **Do not invent one-off font sizes.** If a new size is genuinely needed, add it in [base.bundle.css](assets/base.bundle.css) and name it semantically.
+Apply typography through these classes only. **Do not invent one-off font sizes.** If a new size is genuinely needed, add it in [base.bundle.css](assets/base.bundle.css) and name it semantically. The implemented definitions in [base.bundle.css](assets/base.bundle.css) are the source of truth — this table mirrors them.
 
-| Class | Desktop | Mobile | Line-height (D/M) | Font | Use |
+| Class | Desktop (size/lh) | Mobile (size/lh) | Mobile breakpoint | Font | Use |
 |---|---|---|---|---|---|
-| `.h1` | 72px | 48px | 80px / 44px | Fagies Regular | Hero / page H1 |
-| `.h2` | 24px | 24px | 32px / 32px | Banter Grotesk Semibold | Section H2 |
-| `.body-large` | 18px | 16px | 28px / 24px | Banter Grotesk Regular | Lead copy, product descriptions |
-| `.body` | 18px | 16px | 28px / 24px | Banter Grotesk Regular | Standard body text |
-| `.caption` | 14px | 14px | 20px / 20px | Banter Grotesk Regular | Captions, disclaimers, labels |
-| `.btn-label` | 18px | 16px | 24px / 24px | Banter Grotesk Semibold | Inline button/label typography |
+| `.h1` | 64 / 72 | 48 / 56 | ≤ 768px | Fagies Regular | Hero / page H1 |
+| `.h2` | 48 / 56 | 40 / 44 | ≤ 768px | Fagies Regular | Section H2 |
+| `.h3` | 24 / 32 | 16 / 24 | ≤ 768px | Banter Grotesk Semibold | Tertiary heading |
+| `.h4-subsection-heading` | 32 / 40 | 24 / 28 | ≤ 480px | Banter Grotesk Semibold | Sub-section heading (e.g. carousel slide titles) |
+| `.body-large` | 18 / 28 | 16 / 24 | ≤ 768px | Banter Grotesk Regular | Lead copy, product descriptions |
+| `.body` | 24 / 32 | 16 / 24 | ≤ 768px | Banter Grotesk Regular | Standard body text |
+| `.caption` | 14 / 20 | 14 / 20 | — | Banter Grotesk Regular | Captions, disclaimers, labels |
+| `.btn-label` | 18 / 24 | 16 / 24 | ≤ 768px | Banter Grotesk Semibold | Inline button/label typography |
 
-`.h1`, `.h2`, and `.btn-label` carry `text-transform: uppercase` automatically. These are class selectors only — they do not auto-apply to raw `<h1>`/`<h2>` elements, so always opt in explicitly: `<div class="h1">…</div>` or `<h1 class="h1">…</h1>`.
+`.h1`, `.h2`, `.h3`, `.h4-subsection-heading`, and `.btn-label` carry `text-transform: uppercase` automatically. These are class selectors only — they do not auto-apply to raw `<h1>`/`<h2>` elements, so always opt in explicitly: `<div class="h1">…</div>` or `<h1 class="h1">…</h1>`.
 
 Minimum rendered text size: **14px**.
 
