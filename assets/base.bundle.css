@@ -6884,7 +6884,7 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
 
 .h4-subsection-heading {
   font-family: var(--font-heading) !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   font-size: 32px !important;
   line-height: 40px !important;
   text-transform: uppercase;
@@ -6920,7 +6920,7 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
 
 .btn-label {
   font-family: var(--font-heading) !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   font-size: 18px !important;
   line-height: 24px !important;
   text-transform: uppercase;
