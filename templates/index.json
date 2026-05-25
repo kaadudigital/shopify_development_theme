@@ -164,34 +164,6 @@
     },
     "custom_image_section_anwQpJ": {
       "type": "custom-image-section",
-      "blocks": {
-        "sticker_mLTpGH": {
-          "type": "sticker",
-          "settings": {
-            "width": 150,
-            "half_width_on_mobile": true,
-            "text": "Sticker",
-            "shape": "star_1",
-            "sticker_font_size": "1.563rem",
-            "image": "shopify://shop_images/cutie_pineaple_rose_1.svg",
-            "horizontal_position": 67,
-            "vertical_position": 28,
-            "horizontal_position_sm": 88,
-            "vertical_position_sm": 18,
-            "rotate": 28,
-            "show_sticker_on_mobile": true,
-            "show_sticker_on_desktop": true,
-            "rotation_animation": "none",
-            "enable_parallax": false,
-            "parallax_speed": 3,
-            "color_scheme": "scheme1",
-            "color": "bg-scheme-accent-1 text-scheme-accent-1-contrast"
-          }
-        }
-      },
-      "block_order": [
-        "sticker_mLTpGH"
-      ],
       "custom_css": [
         "@media (max-width: 768px) {.hero-bg-image {transform: translate(-50%, -50%) rotate(-34.89deg); transform-origin: center center; z-index: 6; }}"
       ],
@@ -218,11 +190,11 @@
         "heading_sticker_image": "shopify://shop_images/cutie_pineaple_rose_1.svg",
         "heading_sticker_width_desktop": 120,
         "heading_sticker_width_mobile": 80,
-        "heading_sticker_rotate": -10,
+        "heading_sticker_rotate": 25,
         "heading_sticker_x_desktop": 100,
         "heading_sticker_y_desktop": 0,
-        "heading_sticker_x_mobile": 100,
-        "heading_sticker_y_mobile": 0,
+        "heading_sticker_x_mobile": 85,
+        "heading_sticker_y_mobile": -5,
         "body_text": "",
         "body_display_on_card": false,
         "text_alignment": "text-left",
