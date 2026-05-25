@@ -165,7 +165,8 @@
     "custom_image_section_anwQpJ": {
       "type": "custom-image-section",
       "custom_css": [
-        "@media (max-width: 768px) {.hero-bg-image {transform: translate(-50%, -50%) rotate(-34.89deg); transform-origin: center center; z-index: 6; }}"
+        ".hero-bg-image {z-index: 6;}",
+        "@media (max-width: 768px) {.hero-bg-image {transform: translate(-50%, -50%) rotate(-34.89deg); transform-origin: center center; }}"
       ],
       "name": "Custom Sticker Heading",
       "settings": {
