@@ -6854,6 +6854,7 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
   line-height: 100px !important;
   letter-spacing: 0 !important;
   text-align: center;
+  text-transform: uppercase;
   vertical-align: middle;
 }
 
