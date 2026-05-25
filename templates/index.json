@@ -193,7 +193,7 @@
         "sticker_mLTpGH"
       ],
       "custom_css": [
-        ".hero-bg-image {transform: rotate(-34.89deg); z-index: 6;}"
+        "@media (max-width: 768px) {.hero-bg-image {transform: rotate(-34.89deg); z-index: 6;}}"
       ],
       "name": "Custom Sticker Heading",
       "settings": {
