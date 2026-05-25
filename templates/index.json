@@ -193,7 +193,7 @@
         "sticker_mLTpGH"
       ],
       "custom_css": [
-        "@media (max-width: 768px) {.hero-bg-image {transform: rotate(-34.89deg); z-index: 6; }}"
+        "@media (max-width: 768px) {.hero-bg-image {transform: translate(-50%, -50%) rotate(-34.89deg); transform-origin: center center; z-index: 6; }}"
       ],
       "name": "Custom Sticker Heading",
       "settings": {
@@ -204,8 +204,8 @@
         "image_width_mobile": 460,
         "image_x_desktop": 25,
         "image_y_desktop": 53,
-        "image_x_mobile": 0,
-        "image_y_mobile": 40,
+        "image_x_mobile": 50,
+        "image_y_mobile": 80,
         "heading": "unsere[br] crunchys[br] verändern[br] alles",
         "heading_tag": "h3",
         "heading_style": "mega-heading",
@@ -214,7 +214,7 @@
         "header_x_desktop": 55,
         "header_y_desktop": 57,
         "header_x_mobile": 50,
-        "header_y_mobile": 40,
+        "header_y_mobile": 27,
         "heading_sticker_width_desktop": 120,
         "heading_sticker_width_mobile": 80,
         "heading_sticker_rotate": -10,
