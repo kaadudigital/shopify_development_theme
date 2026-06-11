@@ -3518,7 +3518,7 @@ input[type='text'],
 }
 
 .font-bold {
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .font-main {
@@ -6753,7 +6753,7 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
   src: url('BanterGrotesk-Semibold.woff2') format('woff2'),
        url('BanterGrotesk-Semibold.woff') format('woff'),
        url('BanterGrotesk-Semibold.otf') format('opentype');
-  font-weight: 700;
+  font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
@@ -6854,6 +6854,7 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
   line-height: 100px !important;
   letter-spacing: 0 !important;
   text-align: center;
+  text-transform: uppercase;
   vertical-align: middle;
 }
 
@@ -6874,7 +6875,7 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
 
 .h3 {
   font-family: var(--font-heading) !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   font-size: 24px !important;
   line-height: 32px !important;
   text-transform: uppercase;
@@ -6883,7 +6884,7 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
 
 .h4-subsection-heading {
   font-family: var(--font-heading) !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   font-size: 32px !important;
   line-height: 40px !important;
   text-transform: uppercase;
@@ -6919,7 +6920,7 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
 
 .btn-label {
   font-family: var(--font-heading) !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   font-size: 18px !important;
   line-height: 24px !important;
   text-transform: uppercase;
@@ -7010,7 +7011,7 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
   border-radius: var(--radius-btn);
   box-shadow: var(--shadow-md);
   font-family: var(--font-heading);
-  font-weight: 700;
+  font-weight: 600;
   font-size: 18px;
   line-height: 24px;
   letter-spacing: 0.02em;
