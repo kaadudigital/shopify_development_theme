@@ -1,4 +1,3 @@
-{% comment %}theme-check-disable MissingTemplate{% endcomment %}
 {%- liquid
   if display_on_card
     assign desktop_sizes_base = 'calc(100vw - 5rem)'
@@ -89,25 +88,35 @@
 {%- render 'shape-defs', shape: image_shape, shape_id: section_id, index: index, blob_type: blob_type -%}
 
 <div class="relative z-10 mx-auto max-w-site px-section">
-  <div class=" flex flex-col items-center {% if display_on_card %}card{% endif %}">
-    {% if title != '' %}
-      <div class="mb-5">
-        {% comment %} add h1 to have big customised heading {% endcomment %}
-        <h2 class="inline-heading-rte font-heading {{ text_alignment_mobile }} {{ desktop_text_alignment }}  {{ heading_size }} heading-style h1 {{ settings.heading_drop_shadow_style }} break-words ">
-          {{ title }}
-        </h2>
+  <div class="flex flex-col items-center {% if display_on_card %}card{% endif %}">
+    {%- if eyebrow != blank or title != '' or subheading != '' -%}
+      <div class="kaadu-iht__header w-full">
+        {%- if eyebrow != blank -%}
+          <h3 class="kaadu-iht__eyebrow h3 break-words {{ text_alignment_mobile }} {{ desktop_text_alignment }}">
+            {{ eyebrow | escape }}
+          </h3>
+        {%- endif -%}
+        {%- if title != '' -%}
+          {%- if heading_level == 'h1' -%}
+            <h1 class="kaadu-iht__heading inline-heading-rte h1 heading-style {{ settings.heading_drop_shadow_style }} break-words {{ text_alignment_mobile }} {{ desktop_text_alignment }}">
+              {{ title }}
+            </h1>
+          {%- else -%}
+            <h2 class="kaadu-iht__heading inline-heading-rte h2 heading-style {{ settings.heading_drop_shadow_style }} break-words {{ text_alignment_mobile }} {{ desktop_text_alignment }}">
+              {{ title }}
+            </h2>
+          {%- endif -%}
+        {%- endif -%}
+        {%- if subheading != '' -%}
+          <div class="kaadu-iht__subheading rte h3 break-words {{ text_alignment_mobile }} {{ desktop_text_alignment }}">
+            {{ subheading }}
+          </div>
+        {%- endif -%}
       </div>
-    {% endif %}
-    {% if subheading != '' %}
-      <div class="mb-5">
-        {% comment %} add h1 to have big customised heading {% endcomment %}
-        <div class="inline-heading-rte {{ text_alignment_mobile }} {{ desktop_text_alignment }}  h2 richtext-main break-words ">
-          {{ subheading }}
-        </div>
-      </div>
-    {% endif %}
-    <div class="{% if display_on_card %}card__surface p-5  lg:p-10{% endif %} section-content text_alignment  relative z-10 mx-auto mt-10">
-      <div class="grid grid-flow-row-dense grid-cols-1 gap-10 lg:grid-cols-12">
+    {%- endif -%}
+
+    <div class="{% if display_on_card %}card__surface p-5 lg:p-10{% endif %} kaadu-iht__content section-content relative z-10 mx-auto w-full">
+      <div class="kaadu-iht__grid grid grid-flow-row-dense grid-cols-1 lg:grid-cols-12">
         <div class="{{ image_width_desktop }}">
           {%- if image != blank -%}
             {%- render 'media-image',
@@ -138,17 +147,19 @@
         </div>
         <div class="flex items-center {{ text_width_desktop }}">
           <div class="{{ text_alignment_mobile }} {{ desktop_text_alignment }} w-full">
-            {% if richtext_main != '' %}
-              <div class="rte mt-5 max-w-2xl h2 richtext-main {{ mobile_mx }} {{ desktop_mx }}">
+            {%- if richtext_main != '' -%}
+              <div class="kaadu-iht__kicker rte h4-subsection-heading break-words max-w-2xl {{ mobile_mx }} {{ desktop_mx }}">
                 {{ richtext_main }}
               </div>
-            {% endif %}
-            <div class="rte mt-5 max-w-2xl h2 {{ mobile_mx }} {{ desktop_mx }}">
-              {{ richtext }}
-            </div>
+            {%- endif -%}
+            {%- if richtext != '' -%}
+              <div class="kaadu-iht__body rte body max-w-2xl {{ mobile_mx }} {{ desktop_mx }}">
+                {{ richtext }}
+              </div>
+            {%- endif -%}
 
             {%- if button_link != blank and button_label != '' -%}
-              <div class="mt-5">
+              <div class="kaadu-iht__cta">
                 <a href="{{ button_link }}" class="custom-btn inline-block">
                   <span class="push-btn__surface btn-secondary">{{ button_label }}</span>
                 </a>
@@ -158,20 +169,52 @@
         </div>
       </div>
     </div>
-    {% if conclusion_heading != '' %}
-      <div class="mt-10">
-        {% comment %} add h1 to have big customised heading {% endcomment %}
-        <div class="inline-heading-rte {{ text_alignment_mobile }} {{ desktop_text_alignment }}  h2 richtext-main break-words ">
-          {{ conclusion_heading }}
-        </div>
+
+    {%- if conclusion_heading != '' -%}
+      <div class="kaadu-iht__conclusion rte h3 break-words w-full {{ text_alignment_mobile }} {{ desktop_text_alignment }}">
+        {{ conclusion_heading }}
       </div>
-    {% endif %}
+    {%- endif -%}
   </div>
 </div>
 
 <style>
-  .richtext-main {
-     font-size: calc(1em + 2px);
-     text-transform: uppercase;
-   }
+  /* Vertical rhythm per Kaadu Typography & Spacing Docs — mobile first,
+     desktop overrides at 769px. All values from the --space-* scale. */
+  .kaadu-iht__eyebrow {
+    margin: 0 0 var(--space-4); /* overline → headline: 16px */
+  }
+  .kaadu-iht__heading {
+    margin: 0;
+  }
+  .kaadu-iht__subheading {
+    margin-top: var(--space-4); /* headline → subheading: 16px */
+  }
+  .kaadu-iht__content {
+    margin-top: var(--space-6); /* section headline → content: 48px desktop, half on mobile */
+  }
+  .kaadu-iht__grid {
+    gap: var(--space-4); /* grid gutter: 16px mobile */
+  }
+  .kaadu-iht__kicker {
+    margin-bottom: var(--space-4); /* heading → body: 16px */
+  }
+  .kaadu-iht__cta {
+    margin-top: var(--space-8); /* body → CTA group: 32px */
+  }
+  .kaadu-iht__conclusion {
+    margin-top: var(--space-6);
+  }
+
+  @media (min-width: 769px) {
+    .kaadu-iht__content {
+      margin-top: var(--space-12);
+    }
+    .kaadu-iht__grid {
+      gap: var(--space-6); /* grid gutter: 24px desktop */
+    }
+    .kaadu-iht__conclusion {
+      margin-top: var(--space-12);
+    }
+  }
 </style>

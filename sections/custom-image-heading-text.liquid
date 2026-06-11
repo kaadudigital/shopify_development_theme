@@ -22,14 +22,15 @@
       blob_type: section.settings.blob_type,
       crop: section.settings.crop,
       rotate_image: section.settings.rotate_image,
+      eyebrow: section.settings.eyebrow,
       title: section.settings.title,
+      heading_level: section.settings.heading_level,
       subheading: section.settings.subheading,
       conclusion_heading: section.settings.conclusion_heading,
       richtext_main: section.settings.richtext_main,
       richtext: section.settings.richtext,
       button_link: section.settings.button_link,
       button_label: section.settings.button_label,
-      heading_size: section.settings.heading_size,
       container_id: section.id,
       disable_media_style: section.settings.disable_media_style,
       preload: preload
@@ -571,10 +572,33 @@
       "content": "t:common.settings.header_content"
     },
     {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "info": "Short overline above the heading (H3 — Subheading style)"
+    },
+    {
       "type": "inline_richtext",
       "id": "title",
       "label": "t:sections.image_with_text.settings.title.label",
       "default": "Image with text"
+    },
+    {
+      "type": "select",
+      "id": "heading_level",
+      "label": "Heading style",
+      "options": [
+        {
+          "value": "h1",
+          "label": "H1 — Display Headline"
+        },
+        {
+          "value": "h2",
+          "label": "H2 — Section Headline"
+        }
+      ],
+      "default": "h2",
+      "info": "Use H1 only once per page (hero section)"
     },
     {
       "type": "richtext",
@@ -585,22 +609,6 @@
       "type": "richtext",
       "id": "conclusion_heading",
       "label": "conclusion sub heading"
-    },
-    {
-      "type": "select",
-      "id": "heading_size",
-      "label": "t:sections.image_with_text.settings.heading_size.label",
-      "options": [
-        {
-          "value": "heading-standard",
-          "label": "t:common.options.standard.label"
-        },
-        {
-          "value": "heading-feature",
-          "label": "t:common.options.feature.label"
-        }
-      ],
-      "default": "heading-feature"
     },
     {
       "type": "richtext",
