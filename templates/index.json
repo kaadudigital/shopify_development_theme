@@ -223,15 +223,16 @@
         "image_position": "right",
         "image_size": "half",
         "disable_media_style": false,
+        "eyebrow": "MARKTPREISE SCHWANKEN,UNSERE NICHT",
         "title": "Fairness für klein bauern",
-        "subheading": "<p><strong>JEDER KANN DAVON REDEN DAS SIE TRANSPARENT SIND; WIR LEGEN ES OFFEN</strong></p>",
-        "conclusion_heading": "<p><strong>DER IMPACT JEDES RAPPENS WIRD TRANSPARENT OFFENGELEGT</strong></p>",
-        "richtext_main": "<p><strong>MARKTPREISE SCHWANKEN,UNSERE NICHT</strong></p>",
-        "richtext": "<p>Kaadu zahlt Kleinbauern stabile, transparentePreise – deutlich über dem Markt.<br/><br/></p>",
+        "heading_level": "h2",
+        "subheading": "",
+        "conclusion_heading": "",
+        "richtext": "<p>Kaadu zahlt Kleinbauern stabile, transparente Preise – deutlich über dem Markt.<br/><br/>So schaffen wir Planungssicherheit und schützen sie vor Preisschwankungen. Umweltauflagen und faire Löhne für Erntehelfer sichern ganzheitliche Wirkung.</p>",
         "text_alignment": "text-center",
         "text_alignment_mobile": "text-center",
         "button_link": "shopify://pages/contact",
-        "button_label": "BERICHTE ANSEHEN",
+        "button_label": "SHOP ÖFFNEN",
         "color_scheme": "scheme-389c794f-4614-44af-93cb-cbbfec11d15a",
         "use_gradient_background": false
       }
