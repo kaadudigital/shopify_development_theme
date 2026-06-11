@@ -147,11 +147,6 @@
         </div>
         <div class="flex items-center {{ text_width_desktop }}">
           <div class="{{ text_alignment_mobile }} {{ desktop_text_alignment }} w-full">
-            {%- if richtext_main != '' -%}
-              <div class="kaadu-iht__kicker rte h4-subsection-heading break-words max-w-2xl {{ mobile_mx }} {{ desktop_mx }}">
-                {{ richtext_main }}
-              </div>
-            {%- endif -%}
             {%- if richtext != '' -%}
               <div class="kaadu-iht__body rte body max-w-2xl {{ mobile_mx }} {{ desktop_mx }}">
                 {{ richtext }}
@@ -195,9 +190,6 @@
   }
   .kaadu-iht__grid {
     gap: var(--space-4); /* grid gutter: 16px mobile */
-  }
-  .kaadu-iht__kicker {
-    margin-bottom: var(--space-4); /* heading → body: 16px */
   }
   .kaadu-iht__cta {
     margin-top: var(--space-8); /* body → CTA group: 32px */
