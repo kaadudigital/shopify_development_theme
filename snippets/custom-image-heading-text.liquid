@@ -96,7 +96,7 @@
 
 {%- render 'shape-defs', shape: image_shape, shape_id: section_id, index: index, blob_type: blob_type -%}
 
-<div class="relative z-10 mx-auto max-w-site px-section">
+<div class="kaadu-iht__container relative z-10 mx-auto max-w-site px-section">
   <div class="flex flex-col items-center {% if display_on_card %}card{% endif %}">
     {%- if eyebrow != blank or title != '' or subheading != '' -%}
       <div class="kaadu-iht__header w-full">
@@ -183,6 +183,13 @@
 </div>
 
 <style>
+  /* Content never grows past the design-system container (1200px) —
+     on wider viewports the section background stays full-bleed while
+     the grid centres and whitespace absorbs the extra width. */
+  .kaadu-iht__container {
+    max-width: var(--container-max);
+  }
+
   /* Vertical rhythm per Kaadu Typography & Spacing Docs — mobile first,
      desktop overrides at 769px. All values from the --space-* scale. */
   .kaadu-iht__eyebrow {
