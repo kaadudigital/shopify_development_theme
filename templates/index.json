@@ -226,10 +226,12 @@
         "eyebrow": "MARKTPREISE SCHWANKEN,UNSERE NICHT",
         "title": "Fairness für klein bauern",
         "heading_level": "h2",
+        "heading_alignment": "text-center",
+        "heading_alignment_mobile": "text-center",
         "subheading": "",
         "conclusion_heading": "",
         "richtext": "<p>Kaadu zahlt Kleinbauern stabile, transparente Preise – deutlich über dem Markt.<br/><br/>So schaffen wir Planungssicherheit und schützen sie vor Preisschwankungen. Umweltauflagen und faire Löhne für Erntehelfer sichern ganzheitliche Wirkung.</p>",
-        "text_alignment": "text-center",
+        "text_alignment": "text-left",
         "text_alignment_mobile": "text-center",
         "button_link": "shopify://pages/contact",
         "button_label": "SHOP ÖFFNEN",
