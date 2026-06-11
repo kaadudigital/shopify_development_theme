@@ -25,6 +25,8 @@
       eyebrow: section.settings.eyebrow,
       title: section.settings.title,
       heading_level: section.settings.heading_level,
+      heading_alignment: section.settings.heading_alignment,
+      heading_alignment_mobile: section.settings.heading_alignment_mobile,
       subheading: section.settings.subheading,
       conclusion_heading: section.settings.conclusion_heading,
       richtext: section.settings.richtext,
@@ -598,6 +600,47 @@
       ],
       "default": "h2",
       "info": "Use H1 only once per page (hero section)"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading alignment",
+      "info": "Applies to the eyebrow and heading only",
+      "options": [
+        {
+          "value": "text-left",
+          "label": "t:common.options.left.label"
+        },
+        {
+          "value": "text-center",
+          "label": "t:common.options.center.label"
+        },
+        {
+          "value": "text-right",
+          "label": "t:common.options.right.label"
+        }
+      ],
+      "default": "text-center"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment_mobile",
+      "label": "Heading alignment for mobile",
+      "options": [
+        {
+          "value": "text-left",
+          "label": "t:common.options.left.label"
+        },
+        {
+          "value": "text-center",
+          "label": "t:common.options.center.label"
+        },
+        {
+          "value": "text-right",
+          "label": "t:common.options.right.label"
+        }
+      ],
+      "default": "text-center"
     },
     {
       "type": "richtext",

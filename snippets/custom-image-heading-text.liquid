@@ -66,6 +66,15 @@
   # mobile class is used as-is, desktop class gets lg: prefix
   assign desktop_text_alignment = text_alignment | replace: 'text-', 'lg:text-'
 
+  # Eyebrow + heading align independently of the body text alignment
+  if heading_alignment == blank
+    assign heading_alignment = text_alignment
+  endif
+  if heading_alignment_mobile == blank
+    assign heading_alignment_mobile = text_alignment_mobile
+  endif
+  assign desktop_heading_alignment = heading_alignment | replace: 'text-', 'lg:text-'
+
   # mx-auto / ml-auto logic for mobile
   if text_alignment_mobile contains 'center'
     assign mobile_mx = 'mx-auto'
@@ -92,17 +101,17 @@
     {%- if eyebrow != blank or title != '' or subheading != '' -%}
       <div class="kaadu-iht__header w-full">
         {%- if eyebrow != blank -%}
-          <h3 class="kaadu-iht__eyebrow h3 break-words {{ text_alignment_mobile }} {{ desktop_text_alignment }}">
+          <h3 class="kaadu-iht__eyebrow h3 break-words {{ heading_alignment_mobile }} {{ desktop_heading_alignment }}">
             {{ eyebrow | escape }}
           </h3>
         {%- endif -%}
         {%- if title != '' -%}
           {%- if heading_level == 'h1' -%}
-            <h1 class="kaadu-iht__heading inline-heading-rte h1 heading-style {{ settings.heading_drop_shadow_style }} break-words {{ text_alignment_mobile }} {{ desktop_text_alignment }}">
+            <h1 class="kaadu-iht__heading inline-heading-rte h1 heading-style {{ settings.heading_drop_shadow_style }} break-words {{ heading_alignment_mobile }} {{ desktop_heading_alignment }}">
               {{ title }}
             </h1>
           {%- else -%}
-            <h2 class="kaadu-iht__heading inline-heading-rte h2 heading-style {{ settings.heading_drop_shadow_style }} break-words {{ text_alignment_mobile }} {{ desktop_text_alignment }}">
+            <h2 class="kaadu-iht__heading inline-heading-rte h2 heading-style {{ settings.heading_drop_shadow_style }} break-words {{ heading_alignment_mobile }} {{ desktop_heading_alignment }}">
               {{ title }}
             </h2>
           {%- endif -%}
