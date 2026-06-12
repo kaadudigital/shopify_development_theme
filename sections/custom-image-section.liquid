@@ -12,6 +12,17 @@
     min-height: {{ section.settings.section_height_desktop }}px;
   }
 
+  /* Positioning container capped at the design-system width (1200px).
+     The image and cards anchor their % coordinates to this box instead
+     of the viewport, so the layout stops spreading on wide displays
+     while the section background stays full-bleed. */
+  .section-{{ section.id }} .kaadu-is__container {
+    position: relative;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    min-height: inherit;
+  }
+
   .section-{{ section.id }} .hero-bg-image {
     position: absolute;
     left: {{ section.settings.image_x_desktop }}%;
@@ -97,6 +108,7 @@
   class="section-{{ section.id }} bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %} relative overflow-hidden"
   data-color-scheme="{{ section.settings.color_scheme }}"
 >
+  <div class="kaadu-is__container">
   {%- if section.settings.background_image != blank or section.settings.background_image_mobile != blank -%}
     {%- assign desktop_image = section.settings.background_image -%}
     {%- assign mobile_image = section.settings.background_image_mobile | default: desktop_image -%}
@@ -167,6 +179,7 @@
       {%- endif -%}
     </div>
   {%- endif -%}
+  </div>
 
   {%- liquid
     for block in section.blocks
