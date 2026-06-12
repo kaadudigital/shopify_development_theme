@@ -13,7 +13,7 @@
   class="relative overflow-hidden bg-scheme-background  text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %} overflow-hidden"
   data-color-scheme="{{ section.settings.color_scheme }}"
 >
-  <div class="section-content relative z-10 py-section-vertical-spacing">
+  <div class="kaadu-ifc__container section-content relative z-10 py-section-vertical-spacing">
     {% if section.settings.eyebrow != '' %}
       <h3 class="image-with-text__eyebrow h3 text-center">{{ section.settings.eyebrow | escape }}</h3>
     {% endif %}
@@ -85,6 +85,14 @@
 </section>
 
 <style>
+    /* Content never grows past the design-system container (1200px) —
+       on wider viewports the section background stays full-bleed while
+       the headings, carousel, and button centre with auto margins. */
+    .kaadu-ifc__container {
+      max-width: var(--container-max);
+      margin-inline: auto;
+    }
+
     .custom-image-with-text-button-wrapper {
       flex-direction: row;
       gap: 20px
