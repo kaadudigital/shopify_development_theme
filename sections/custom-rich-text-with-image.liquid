@@ -1,78 +1,106 @@
+{%- style -%}
+  #shopify-section-{{ section.id }} .kaadu-rtwi__outer {
+    padding-block: var(--space-8);
+    padding-inline: var(--space-4);
+  }
+  #shopify-section-{{ section.id }} .kaadu-rtwi__card-surface {
+    padding: var(--space-6);
+  }
+  #shopify-section-{{ section.id }} .kaadu-rtwi__eyebrow {
+    margin-bottom: var(--space-4);
+  }
+  #shopify-section-{{ section.id }} .kaadu-rtwi__heading {
+    margin: 0;
+  }
+  #shopify-section-{{ section.id }} .kaadu-rtwi__heading + .kaadu-rtwi__heading {
+    margin-top: var(--space-2);
+  }
+  #shopify-section-{{ section.id }} .kaadu-rtwi__subheading {
+    margin-top: var(--space-6);
+  }
+  #shopify-section-{{ section.id }} .kaadu-rtwi__image {
+    margin-top: var(--space-8);
+  }
+  #shopify-section-{{ section.id }} .kaadu-rtwi__body {
+    margin-top: var(--space-6);
+  }
+  #shopify-section-{{ section.id }} .kaadu-rtwi__cta {
+    margin-top: var(--space-8);
+  }
+  @media (min-width: 769px) {
+    #shopify-section-{{ section.id }} .kaadu-rtwi__outer {
+      padding-block: var(--section-padding-v);
+      padding-inline: var(--space-6);
+    }
+    #shopify-section-{{ section.id }} .kaadu-rtwi__card-surface {
+      padding: var(--space-8);
+    }
+  }
+{%- endstyle -%}
+
 <section
-  class="relative overflow-hidden bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %} "
+  class="relative overflow-hidden bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %}"
   data-color-scheme="{{ section.settings.color_scheme }}"
 >
-  <div class="section-content px-section py-section-vertical-spacing">
+  <div class="kaadu-rtwi__outer">
     <div class="mx-auto max-w-site {{ section.settings.content_width_desktop }} {% if section.settings.display_on_card %}card{% endif %}">
-      <div class="{% if section.settings.display_on_card %}card__surface p-5 lg:p-10{% endif %} relative z-shape-divider mx-auto text-center">
+      <div class="{% if section.settings.display_on_card %}card__surface kaadu-rtwi__card-surface{% endif %} relative z-shape-divider mx-auto text-center">
 
-        {% if section.settings.title != '' %}
-          <h2 class="font-heading {{ section.settings.heading_size }} heading-style break-words h1 {{ settings.heading_drop_shadow_style }}">
-            {{ section.settings.title }}
-          </h2>
-        {% endif %}
-        {% if section.settings.title2 != '' %}
-          <h2 class="font-heading {{ section.settings.heading_size }} heading-style break-words h1 {{ settings.heading_drop_shadow_style }}">
-            {{ section.settings.title2 }}
-          </h2>
-        {% endif %}
-        {% if section.settings.title3 != '' %}
-          <h2 class="font-heading {{ section.settings.heading_size }} heading-style break-words h1  {{ settings.heading_drop_shadow_style }}">
-            {{ section.settings.title3 }}
-          </h2>
-        {% endif %}
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="kaadu-rtwi__eyebrow h3">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
 
-        {% if section.settings.subheading != '' %}
-          <h3 class="{% if section.settings.title != '' %}mt-3{% endif %} font-main h2 richtext-main ">
-            {{ section.settings.subheading }}
-          </h3>
-        {% endif %}
+        {%- if section.settings.title != blank -%}
+          <h2 class="kaadu-rtwi__heading h1">{{ section.settings.title }}</h2>
+        {%- endif -%}
+        {%- if section.settings.title2 != blank -%}
+          <h2 class="kaadu-rtwi__heading h1">{{ section.settings.title2 }}</h2>
+        {%- endif -%}
+        {%- if section.settings.title3 != blank -%}
+          <h2 class="kaadu-rtwi__heading h1">{{ section.settings.title3 }}</h2>
+        {%- endif -%}
 
-        {%- comment -%} Image below heading & subheading {%- endcomment -%}
+        {%- if section.settings.subheading != blank -%}
+          <div class="kaadu-rtwi__subheading rte h3">{{ section.settings.subheading }}</div>
+        {%- endif -%}
+
         {%- if section.settings.image != blank -%}
-          <div class="mt-8 flex justify-center">
+          <div class="kaadu-rtwi__image flex justify-center">
             <div class="{% if section.settings.image_width != 'full' %}max-w-{{ section.settings.image_width }}{% endif %}">
-              {{
-                section.settings.image
-                | image_url: width: 1500
-                | image_tag:
-                  class: 'h-auto',
-                  loading: 'lazy',
-                  sizes: '(min-width: 990px) 800px, 90vw'
-              }}
+              <picture>
+                {%- if section.settings.image_mobile != blank -%}
+                  <source
+                    media="(max-width: 768px)"
+                    srcset="{{ section.settings.image_mobile | image_url: width: 800 }}"
+                  >
+                {%- endif -%}
+                {{
+                  section.settings.image
+                  | image_url: width: 1500
+                  | image_tag:
+                    class: 'h-auto',
+                    loading: 'lazy',
+                    sizes: '(min-width: 990px) 800px, 90vw'
+                }}
+              </picture>
             </div>
           </div>
         {%- endif -%}
 
-        {%- comment -%} Body text below image {%- endcomment -%}
-        <div class="mt-5 mx-auto leading-snug font-main h2">
-          {{ section.settings.rich_text }}
-        </div>
+        {%- if section.settings.rich_text != blank -%}
+          <div class="kaadu-rtwi__body rte body">{{ section.settings.rich_text }}</div>
+        {%- endif -%}
 
-        {%- if section.settings.button_link != blank
-          and section.settings.button_label != ''
-        -%}
-          <div class="mt-5">
-            <a
-              href="{{ section.settings.button_link }}"
-              class="push-btn inline-block"
-            >
-              <span class="push-btn__surface">
-                {{- section.settings.button_label -}}
-              </span>
+        {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+          <div class="kaadu-rtwi__cta">
+            <a href="{{ section.settings.button_link }}" class="{{ section.settings.button_style }}">
+              {{ section.settings.button_label }}
             </a>
           </div>
         {%- endif -%}
       </div>
     </div>
   </div>
-
-<style>
-  .richtext-main {
-     font-size: calc(1em + 2px);
-     text-transform: uppercase;
-   }
-</style>
 
 
   {%- liquid
@@ -103,6 +131,12 @@
   "name": "Custom Rich Text Image",
   "settings": [
     {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "info": "Small label displayed above the heading in H3 style."
+    },
+    {
       "type": "inline_richtext",
       "id": "title",
       "label": "t:common.settings.title.label",
@@ -117,28 +151,12 @@
     {
       "type": "inline_richtext",
       "id": "title3",
-      "label": "t:common.settings.title.label",
-    },
-    {
-      "type": "select",
-      "id": "heading_size",
-      "label": "t:common.settings.heading_size.label",
-      "options": [
-        {
-          "value": "heading-standard",
-          "label": "t:common.options.standard.label"
-        },
-        {
-          "value": "h1",
-          "label": "t:common.options.feature.label"
-        }
-      ],
-      "default": "heading-standard"
+      "label": "t:common.settings.title.label"
     },
     {
       "type": "richtext",
       "id": "subheading",
-      "label": "Subheading",
+      "label": "Subheading"
     },
     {
       "id": "rich_text",
@@ -153,7 +171,13 @@
     {
       "type": "image_picker",
       "id": "image",
-      "label": "Image"
+      "label": "Image (desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Image (mobile)",
+      "info": "Optional. Shown on screens ≤ 768px. Falls back to the desktop image when not set."
     },
     {
       "type": "select",
@@ -231,6 +255,16 @@
       "id": "button_label",
       "label": "t:common.settings.button_label.label",
       "default": "Shop Now"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "options": [
+        { "value": "btn-primary", "label": "Primary (blob CTA)" },
+        { "value": "btn-secondary", "label": "Secondary (pill)" }
+      ],
+      "default": "btn-secondary"
     },
     {
       "type": "header",
