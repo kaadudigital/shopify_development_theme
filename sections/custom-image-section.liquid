@@ -29,7 +29,7 @@
     top: {{ section.settings.image_y_desktop }}%;
     width: {{ section.settings.image_width_desktop }}px;
     height: auto;
-    z-index: 1;
+    z-index: 5;
     transform: translate(-50%, -50%);
   }
 
@@ -38,7 +38,7 @@
     left: {{ section.settings.header_x_desktop }}%;
     top: {{ section.settings.header_y_desktop }}%;
     transform: translate(-50%, -50%);
-    z-index: 3;
+    z-index: 2;
     max-width: 90%;
   }
 
@@ -58,8 +58,13 @@
     z-index: 4;
   }
 
-  .section-{{ section.id }} .hero-subheading-row {
-    margin-top: var(--space-2);
+  .section-{{ section.id }} .hero-subheading-card {
+    position: absolute;
+    left: {{ section.settings.subheading_x_desktop }}%;
+    top: {{ section.settings.subheading_y_desktop }}%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    max-width: 90%;
   }
 
   .section-{{ section.id }} .hero-subheading-wrap {
@@ -151,12 +156,18 @@
       left: {{ section.settings.body_x_mobile }}%;
       top: {{ section.settings.body_y_mobile }}%;
     }
+
+    .section-{{ section.id }} .hero-subheading-card {
+      left: {{ section.settings.subheading_x_mobile }}%;
+      top: {{ section.settings.subheading_y_mobile }}%;
+    }
   }
 
   @media (max-width: 490px) {
-        .section-{{ section.id }} .hero-header-card { 
-          width: 90%;
-        }
+    .section-{{ section.id }} .hero-header-card,
+    .section-{{ section.id }} .hero-subheading-card {
+      width: 90%;
+    }
   }
 {% endstyle %}
 
@@ -202,54 +213,53 @@
     </picture>
   {%- endif -%}
 
-  {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
+  {%- if section.settings.heading != blank -%}
     <div class="hero-header-card {% if section.settings.header_display_on_card %}bg-scheme-card text-scheme-card-text rounded p-4{% endif %} {{ section.settings.text_alignment_header }}">
-      {%- if section.settings.heading != blank -%}
-        <div class="hero-heading-wrap">
-          <{{ section.settings.heading_tag }} class="{{ section.settings.heading_style }}">
-            {{ section.settings.heading | replace: '[br]', '<br>' | replace: '[nbsp]', '&nbsp;' }}
-          </{{ section.settings.heading_tag }}>
-          {%- if section.settings.heading_sticker_image != blank -%}
-            <img
-              class="hero-heading-sticker"
-              src="{{ section.settings.heading_sticker_image | image_url: width: 600 }}"
-              alt="{{ section.settings.heading_sticker_image.alt | escape }}"
-              width="{{ section.settings.heading_sticker_image.width }}"
-              height="{{ section.settings.heading_sticker_image.height }}"
-              loading="lazy"
-            >
-          {%- endif -%}
-        </div>
-      {%- endif -%}
-      {%- if section.settings.subheading != blank -%}
-        <div class="hero-subheading-row">
-        <div class="hero-subheading-wrap {% if section.settings.subheading_display_on_card %}bg-scheme-card text-scheme-card-text rounded p-4{% endif %}">
-          <p class="h4-subsection-heading">
-            {{ section.settings.subheading | replace: '[br]', '<br>' | replace: '[nbsp]', '&nbsp;' }}
-          </p>
-          {%- if section.settings.subheading_sticker_image != blank -%}
-            <img
-              class="hero-subheading-sticker"
-              src="{{ section.settings.subheading_sticker_image | image_url: width: 600 }}"
-              alt="{{ section.settings.subheading_sticker_image.alt | escape }}"
-              width="{{ section.settings.subheading_sticker_image.width }}"
-              height="{{ section.settings.subheading_sticker_image.height }}"
-              loading="lazy"
-            >
-          {%- endif -%}
-          {%- if section.settings.subheading_sticker_2_image != blank -%}
-            <img
-              class="hero-subheading-sticker hero-subheading-sticker--2"
-              src="{{ section.settings.subheading_sticker_2_image | image_url: width: 600 }}"
-              alt="{{ section.settings.subheading_sticker_2_image.alt | escape }}"
-              width="{{ section.settings.subheading_sticker_2_image.width }}"
-              height="{{ section.settings.subheading_sticker_2_image.height }}"
-              loading="lazy"
-            >
-          {%- endif -%}
-        </div>
-        </div>
-      {%- endif -%}
+      <div class="hero-heading-wrap">
+        <{{ section.settings.heading_tag }} class="{{ section.settings.heading_style }}">
+          {{ section.settings.heading | replace: '[br]', '<br>' | replace: '[nbsp]', '&nbsp;' }}
+        </{{ section.settings.heading_tag }}>
+        {%- if section.settings.heading_sticker_image != blank -%}
+          <img
+            class="hero-heading-sticker"
+            src="{{ section.settings.heading_sticker_image | image_url: width: 600 }}"
+            alt="{{ section.settings.heading_sticker_image.alt | escape }}"
+            width="{{ section.settings.heading_sticker_image.width }}"
+            height="{{ section.settings.heading_sticker_image.height }}"
+            loading="lazy"
+          >
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- if section.settings.subheading != blank -%}
+    <div class="hero-subheading-card {% if section.settings.subheading_display_on_card %}bg-scheme-card text-scheme-card-text rounded p-4{% endif %} {{ section.settings.text_alignment_header }}">
+      <div class="hero-subheading-wrap">
+        <p class="h4-subsection-heading">
+          {{ section.settings.subheading | replace: '[br]', '<br>' | replace: '[nbsp]', '&nbsp;' }}
+        </p>
+        {%- if section.settings.subheading_sticker_image != blank -%}
+          <img
+            class="hero-subheading-sticker"
+            src="{{ section.settings.subheading_sticker_image | image_url: width: 600 }}"
+            alt="{{ section.settings.subheading_sticker_image.alt | escape }}"
+            width="{{ section.settings.subheading_sticker_image.width }}"
+            height="{{ section.settings.subheading_sticker_image.height }}"
+            loading="lazy"
+          >
+        {%- endif -%}
+        {%- if section.settings.subheading_sticker_2_image != blank -%}
+          <img
+            class="hero-subheading-sticker hero-subheading-sticker--2"
+            src="{{ section.settings.subheading_sticker_2_image | image_url: width: 600 }}"
+            alt="{{ section.settings.subheading_sticker_2_image.alt | escape }}"
+            width="{{ section.settings.subheading_sticker_2_image.width }}"
+            height="{{ section.settings.subheading_sticker_2_image.height }}"
+            loading="lazy"
+          >
+        {%- endif -%}
+      </div>
     </div>
   {%- endif -%}
 
@@ -515,6 +525,54 @@
       "step": 1,
       "unit": "%",
       "default": 35
+    },
+    {
+      "type": "header",
+      "content": "Sub-heading Card Position — Desktop"
+    },
+    {
+      "type": "range",
+      "id": "subheading_x_desktop",
+      "label": "Horizontal position",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 65
+    },
+    {
+      "type": "range",
+      "id": "subheading_y_desktop",
+      "label": "Vertical position",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 55
+    },
+    {
+      "type": "header",
+      "content": "Sub-heading Card Position — Mobile"
+    },
+    {
+      "type": "range",
+      "id": "subheading_x_mobile",
+      "label": "Horizontal position",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 55
+    },
+    {
+      "type": "range",
+      "id": "subheading_y_mobile",
+      "label": "Vertical position",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 50
     },
     {
       "type": "header",
