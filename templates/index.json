@@ -351,10 +351,10 @@
       "type": "custom-rich-text-with-image",
       "name": "Custom Rich Text Image",
       "settings": {
+        "eyebrow": "",
         "title": "Starke Job",
         "title2": "Für Lokale Frauen",
         "title3": "",
-        "heading_size": "heading-standard",
         "subheading": "",
         "rich_text": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>",
         "image": "shopify://shop_images/strong-job-women-graph.webp",
@@ -363,7 +363,32 @@
         "content_width_desktop": "lg:w-2/3",
         "button_link": "",
         "button_label": "Shop Now",
+        "button_style": "btn-secondary",
         "color_scheme": "scheme3",
+        "use_gradient_background": false
+      }
+    },
+    "custom_rich_text_with_image_yBcjeG": {
+      "type": "custom-rich-text-with-image",
+      "custom_css": [
+        "p {color: black;}"
+      ],
+      "name": "Custom Rich Text Image",
+      "settings": {
+        "eyebrow": "20% OFF YOUR FIRST CRUNCH",
+        "title": "UNSER JOURNEY HAT  ERST BEGONNEN",
+        "title2": "",
+        "title3": "",
+        "subheading": "",
+        "rich_text": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>",
+        "image": "shopify://shop_images/strong-job-women-graph.webp",
+        "image_width": "md",
+        "display_on_card": false,
+        "content_width_desktop": "lg:w-2/3",
+        "button_link": "",
+        "button_label": "Shop Now",
+        "button_style": "btn-secondary",
+        "color_scheme": "scheme5",
         "use_gradient_background": false
       }
     },
@@ -809,6 +834,7 @@
     "custom_image_heading_text_4H93px",
     "custom_image_section_Mafcmn",
     "custom_rich_text_with_image_aY8WDA",
+    "custom_rich_text_with_image_yBcjeG",
     "custom_image_focus_carousel_AGiAMj",
     "custom_video_NyCJ7Q",
     "email_input_dMpqpt",
