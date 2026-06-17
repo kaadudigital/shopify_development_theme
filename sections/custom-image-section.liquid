@@ -78,6 +78,13 @@
     z-index: 4;
   }
 
+  .section-{{ section.id }} .hero-subheading-sticker--2 {
+    left: {{ section.settings.subheading_sticker_2_x_desktop }}%;
+    top: {{ section.settings.subheading_sticker_2_y_desktop }}%;
+    width: {{ section.settings.subheading_sticker_2_width_desktop }}px;
+    transform: translate(-50%, -50%) rotate({{ section.settings.subheading_sticker_2_rotate }}deg);
+  }
+
   .section-{{ section.id }} .hero-body-card {
     position: absolute;
     left: {{ section.settings.body_x_desktop }}%;
@@ -96,7 +103,6 @@
       left: {{ section.settings.image_x_mobile }}%;
       top: {{ section.settings.image_y_mobile }}%;
       width: {{ section.settings.image_width_mobile }}px;
-      max-width: unset;
       max-width: none;
     }
 
@@ -116,6 +122,30 @@
       top: {{ section.settings.subheading_sticker_y_mobile }}%;
       width: {{ section.settings.subheading_sticker_width_mobile }}px;
     }
+
+    .section-{{ section.id }} .hero-subheading-sticker--2 {
+      left: {{ section.settings.subheading_sticker_2_x_mobile }}%;
+      top: {{ section.settings.subheading_sticker_2_y_mobile }}%;
+      width: {{ section.settings.subheading_sticker_2_width_mobile }}px;
+    }
+
+    {%- unless section.settings.heading_sticker_show_mobile %}
+    .section-{{ section.id }} .hero-heading-sticker {
+      display: none;
+    }
+    {% endunless -%}
+
+    {%- unless section.settings.subheading_sticker_show_mobile %}
+    .section-{{ section.id }} .hero-subheading-sticker:not(.hero-subheading-sticker--2) {
+      display: none;
+    }
+    {% endunless -%}
+
+    {%- unless section.settings.subheading_sticker_2_show_mobile %}
+    .section-{{ section.id }} .hero-subheading-sticker--2 {
+      display: none;
+    }
+    {% endunless -%}
 
     .section-{{ section.id }} .hero-body-card {
       left: {{ section.settings.body_x_mobile }}%;
@@ -193,7 +223,7 @@
       {%- endif -%}
       {%- if section.settings.subheading != blank -%}
         <div class="hero-subheading-row">
-        <div class="hero-subheading-wrap">
+        <div class="hero-subheading-wrap {% if section.settings.subheading_display_on_card %}bg-scheme-card text-scheme-card-text rounded p-4{% endif %}">
           <p class="h4-subsection-heading">
             {{ section.settings.subheading | replace: '[br]', '<br>' | replace: '[nbsp]', '&nbsp;' }}
           </p>
@@ -204,6 +234,16 @@
               alt="{{ section.settings.subheading_sticker_image.alt | escape }}"
               width="{{ section.settings.subheading_sticker_image.width }}"
               height="{{ section.settings.subheading_sticker_image.height }}"
+              loading="lazy"
+            >
+          {%- endif -%}
+          {%- if section.settings.subheading_sticker_2_image != blank -%}
+            <img
+              class="hero-subheading-sticker hero-subheading-sticker--2"
+              src="{{ section.settings.subheading_sticker_2_image | image_url: width: 600 }}"
+              alt="{{ section.settings.subheading_sticker_2_image.alt | escape }}"
+              width="{{ section.settings.subheading_sticker_2_image.width }}"
+              height="{{ section.settings.subheading_sticker_2_image.height }}"
               loading="lazy"
             >
           {%- endif -%}
@@ -220,7 +260,7 @@
       {%- endif -%}
 
       {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
-        <a href="{{ section.settings.button_link }}" class="btn mt-4 inline-block">
+        <a href="{{ section.settings.button_link }}" class="{{ section.settings.button_style }} mt-4">
           {{ section.settings.button_label }}
         </a>
       {%- endif -%}
@@ -422,6 +462,13 @@
       "default": false
     },
     {
+      "type": "checkbox",
+      "id": "subheading_display_on_card",
+      "label": "Display sub-heading on card",
+      "info": "Wraps the sub-heading in its own card, independent of the setting above.",
+      "default": false
+    },
+    {
       "type": "header",
       "content": "Header Position — Desktop"
     },
@@ -508,6 +555,12 @@
       "step": 5,
       "unit": "deg",
       "default": -10
+    },
+    {
+      "type": "checkbox",
+      "id": "heading_sticker_show_mobile",
+      "label": "Show on mobile",
+      "default": true
     },
     {
       "type": "header",
@@ -598,6 +651,12 @@
       "default": -10
     },
     {
+      "type": "checkbox",
+      "id": "subheading_sticker_show_mobile",
+      "label": "Show on mobile",
+      "default": true
+    },
+    {
       "type": "header",
       "content": "Sub-heading Sticker Position — Desktop"
     },
@@ -644,6 +703,100 @@
       "step": 5,
       "unit": "%",
       "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Sub-heading Sticker 2",
+      "info": "Optional second sticker positioned relative to the sub-heading element."
+    },
+    {
+      "type": "image_picker",
+      "id": "subheading_sticker_2_image",
+      "label": "Sticker image"
+    },
+    {
+      "type": "range",
+      "id": "subheading_sticker_2_width_desktop",
+      "label": "Sticker width (desktop)",
+      "min": 20,
+      "max": 400,
+      "step": 5,
+      "unit": "px",
+      "default": 120
+    },
+    {
+      "type": "range",
+      "id": "subheading_sticker_2_width_mobile",
+      "label": "Sticker width (mobile)",
+      "min": 20,
+      "max": 300,
+      "step": 5,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "subheading_sticker_2_rotate",
+      "label": "Sticker rotation",
+      "min": -180,
+      "max": 180,
+      "step": 5,
+      "unit": "deg",
+      "default": 10
+    },
+    {
+      "type": "checkbox",
+      "id": "subheading_sticker_2_show_mobile",
+      "label": "Show on mobile",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Sub-heading Sticker 2 Position — Desktop"
+    },
+    {
+      "type": "range",
+      "id": "subheading_sticker_2_x_desktop",
+      "label": "Horizontal position",
+      "min": -100,
+      "max": 200,
+      "step": 5,
+      "unit": "%",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "subheading_sticker_2_y_desktop",
+      "label": "Vertical position",
+      "min": -100,
+      "max": 200,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Sub-heading Sticker 2 Position — Mobile"
+    },
+    {
+      "type": "range",
+      "id": "subheading_sticker_2_x_mobile",
+      "label": "Horizontal position",
+      "min": -100,
+      "max": 200,
+      "step": 5,
+      "unit": "%",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "subheading_sticker_2_y_mobile",
+      "label": "Vertical position",
+      "min": -100,
+      "max": 200,
+      "step": 5,
+      "unit": "%",
+      "default": 100
     },
     {
       "type": "header",
@@ -733,6 +886,16 @@
       "id": "button_label",
       "label": "Button label",
       "default": "Shop Now"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "options": [
+        { "value": "btn-primary", "label": "Primary (blob CTA)" },
+        { "value": "btn-secondary", "label": "Secondary (pill)" }
+      ],
+      "default": "btn-secondary"
     },
     {
       "type": "header",
