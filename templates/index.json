@@ -261,6 +261,22 @@
     },
     "custom_image_section_Mafcmn": {
       "type": "custom-image-section",
+      "blocks": {
+        "background_pattern_NKpgdA": {
+          "type": "background_pattern",
+          "settings": {
+            "type": "custom_rectangles",
+            "color": "text",
+            "size": 104,
+            "opacity": 100,
+            "enable_parallax": false,
+            "parallax_speed": 3
+          }
+        }
+      },
+      "block_order": [
+        "background_pattern_NKpgdA"
+      ],
       "name": "Custom Sticker Heading",
       "settings": {
         "section_height_desktop": 800,
