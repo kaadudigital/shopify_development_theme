@@ -109,6 +109,8 @@
     justify-content: center;
     width: auto;
     aspect-ratio: unset;
+    min-height: 56px;
+    min-width: 140px;
   }
   #shopify-section-{{ section.id }} .email-signup-submit__bg {
     position: absolute;
@@ -173,8 +175,12 @@
     #shopify-section-{{ section.id }} .email-signup-wrapper {
       gap: var(--space-6);
     }
-    #shopify-section-{{ section.id }} .email-signup-submit {
+    #shopify-section-{{ section.id }} .email-signup-submit:not(.email-signup-submit--image) {
       width: 80px;
+    }
+    #shopify-section-{{ section.id }} .email-signup-submit--image {
+      min-height: 64px;
+      min-width: 180px;
     }
   }
 {%- endstyle -%}
