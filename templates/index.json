@@ -403,7 +403,7 @@
         "button_text": "ANMELDEN",
         "button_image_mobile": "shopify://shop_images/right_arrow_in_spiky_cloud.svg",
         "button_text_mobile": "",
-        "button_label_padding": 8,
+        "button_label_padding": 68,
         "padding_top": "none",
         "bg_class": "bg-lime",
         "color_scheme": "scheme5"
