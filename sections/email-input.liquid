@@ -1,6 +1,4 @@
 {%- assign btn_text_mob = section.settings.button_text_mobile -%}
-{%- assign has_btn_img = section.settings.button_image != blank -%}
-{%- assign has_btn_img_mob = section.settings.button_image_mobile != blank -%}
 
 {%- style -%}
   #shopify-section-{{ section.id }} .email-signup-section {
@@ -121,6 +119,12 @@
     justify-content: center;
     pointer-events: none;
     padding-inline: var(--space-6);
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 1;
+    text-align: center;
+    text-transform: uppercase;
   }
   #shopify-section-{{ section.id }} .email-signup-submit__label--mobile {
     display: none;
@@ -153,6 +157,9 @@
     #shopify-section-{{ section.id }} .email-signup-input {
       height: 64px;
       padding: var(--space-4) var(--space-8);
+    }
+    #shopify-section-{{ section.id }} .email-signup-wrapper {
+      gap: var(--space-6);
     }
     #shopify-section-{{ section.id }} .email-signup-submit {
       width: 80px;
@@ -193,12 +200,12 @@
 
         <button
           type="submit"
-          class="email-signup-submit{% if has_btn_img %} email-signup-submit--image{% endif %}"
+          class="email-signup-submit{% if section.settings.button_image != blank %} email-signup-submit--image{% endif %}"
           aria-label="{{ section.settings.button_text | default: 'Abonnieren' | escape }}"
         >
-          {%- if has_btn_img -%}
+          {%- if section.settings.button_image != blank -%}
             <picture>
-              {%- if has_btn_img_mob -%}
+              {%- if section.settings.button_image_mobile != blank -%}
                 <source
                   media="(max-width: 768px)"
                   srcset="{{ section.settings.button_image_mobile | image_url: width: 280 }}"
