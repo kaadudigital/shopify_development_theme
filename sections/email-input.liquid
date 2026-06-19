@@ -26,7 +26,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--space-4);
+    gap: var(--space-2);
     max-width: 600px;
     margin-inline: auto;
   }
@@ -105,30 +105,27 @@
   #shopify-section-{{ section.id }} .email-signup-submit--image {
     position: relative;
     display: inline-flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
     width: auto;
     aspect-ratio: unset;
-    min-height: 56px;
-    min-width: 140px;
+    padding: 0;
   }
   #shopify-section-{{ section.id }} .email-signup-submit__bg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: fill;
     display: block;
+    height: 56px;
+    width: auto;
+    object-fit: contain;
   }
   #shopify-section-{{ section.id }} .email-signup-submit__label {
-    position: relative;
+    position: absolute;
+    inset: 0;
     z-index: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     pointer-events: none;
     padding-inline: {{ section.settings.button_label_padding }}px;
-    padding-block: var(--space-3);
     font-family: var(--font-display);
     font-weight: 400;
     font-size: 20px;
@@ -136,6 +133,7 @@
     text-align: center;
     text-transform: uppercase;
     white-space: nowrap;
+    color: {{ section.settings.button_text_color }};
   }
   #shopify-section-{{ section.id }} .email-signup-submit__label--mobile {
     display: none;
@@ -178,9 +176,8 @@
     #shopify-section-{{ section.id }} .email-signup-submit:not(.email-signup-submit--image) {
       width: 80px;
     }
-    #shopify-section-{{ section.id }} .email-signup-submit--image {
-      min-height: 64px;
-      min-width: 180px;
+    #shopify-section-{{ section.id }} .email-signup-submit--image .email-signup-submit__bg {
+      height: 64px;
     }
   }
 {%- endstyle -%}
@@ -370,6 +367,12 @@
       "label": "Button text",
       "default": "Abonnieren",
       "info": "Shown over the image (if set). Always used as the accessible aria-label."
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#000000"
     },
     {
       "type": "header",
