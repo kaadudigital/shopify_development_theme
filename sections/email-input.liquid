@@ -119,7 +119,7 @@
     align-items: center;
     justify-content: center;
     pointer-events: none;
-    padding-inline: var(--space-6);
+    padding-inline: {{ section.settings.button_label_padding }}px;
     font-family: var(--font-display);
     font-weight: 400;
     font-size: 20px;
@@ -222,7 +222,7 @@
               >
             </picture>
             {%- if section.settings.button_text != blank -%}
-              <span class="email-signup-submit__label btn-label" aria-hidden="true">
+              <span class="email-signup-submit__label" aria-hidden="true">
                 <span class="email-signup-submit__label--desktop">{{ section.settings.button_text }}</span>
                 {%- if btn_text_mob != blank -%}
                   <span class="email-signup-submit__label--mobile">{{ btn_text_mob }}</span>
@@ -368,6 +368,16 @@
       "id": "button_text_mobile",
       "label": "Button text (mobile)",
       "info": "Falls back to desktop button text when blank."
+    },
+    {
+      "type": "range",
+      "id": "button_label_padding",
+      "label": "Button text horizontal padding",
+      "min": 8,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 32
     },
     {
       "type": "header",
