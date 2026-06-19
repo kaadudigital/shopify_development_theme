@@ -1,13 +1,182 @@
-<!-- Section HTML -->
-<div class="email-signup-section">
-  <div class="email-signup-container">
-    {% if section.settings.heading != blank %}
-      <h2 class="email-signup-heading h2">
-        {{ section.settings.heading }}
-      </h2>
-    {% endif %}
+{%- assign btn_text_mob = section.settings.button_text_mobile -%}
+{%- assign has_btn_img = section.settings.button_image != blank -%}
+{%- assign has_btn_img_mob = section.settings.button_image_mobile != blank -%}
 
-    <form method="post" action="/contact#contact_form" accept-charset="UTF-8" class="contact-form email-signup-form" id="contact_form">
+{%- style -%}
+  #shopify-section-{{ section.id }} .email-signup-section {
+    position: relative;
+    overflow: hidden;
+    padding-block: var(--space-8);
+    padding-inline: var(--space-4);
+  }
+  #shopify-section-{{ section.id }} .email-signup-container {
+    max-width: var(--container-max);
+    margin-inline: auto;
+  }
+  #shopify-section-{{ section.id }} .email-signup-heading {
+    text-align: center;
+    margin: 0 0 var(--space-6);
+  }
+  #shopify-section-{{ section.id }} .email-signup-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    max-width: 600px;
+    margin-inline: auto;
+  }
+  #shopify-section-{{ section.id }} .email-signup-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 56px;
+    padding: var(--space-3) var(--space-6);
+    background-color: var(--color-cream);
+    color: var(--color-near-black);
+    border: 2px solid var(--color-black);
+    border-radius: var(--radius-btn);
+    outline: none;
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.15s ease-out, box-shadow 0.15s ease-out;
+  }
+  #shopify-section-{{ section.id }} .email-signup-input::placeholder {
+    color: var(--color-mid-grey);
+  }
+  #shopify-section-{{ section.id }} .email-signup-input:focus-visible {
+    border-color: var(--color-violet);
+    outline: 3px solid var(--color-cream);
+    outline-offset: 2px;
+  }
+
+  /* --- Submit: SVG burst (default, no image set) --- */
+  #shopify-section-{{ section.id }} .email-signup-submit {
+    flex: 0 0 auto;
+    width: 64px;
+    aspect-ratio: 78 / 73;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    transition: transform 0.15s ease-out;
+  }
+  #shopify-section-{{ section.id }} .email-signup-submit:hover {
+    transform: translateY(-2px) scale(1.05);
+  }
+  #shopify-section-{{ section.id }} .email-signup-submit:active {
+    transform: translateY(0) scale(1);
+  }
+  #shopify-section-{{ section.id }} .email-signup-submit:focus-visible {
+    outline: 3px solid var(--color-cream);
+    outline-offset: 4px;
+    border-radius: 50%;
+  }
+  #shopify-section-{{ section.id }} .email-signup-submit__burst {
+    width: 100%;
+    height: 100%;
+    display: block;
+    filter: drop-shadow(var(--shadow-sm));
+  }
+  #shopify-section-{{ section.id }} .email-signup-submit__spinner {
+    display: none;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  #shopify-section-{{ section.id }} .email-signup-submit.is-loading {
+    pointer-events: none;
+    cursor: default;
+  }
+  #shopify-section-{{ section.id }} .email-signup-submit.is-loading .email-signup-submit__arrow {
+    display: none;
+  }
+  #shopify-section-{{ section.id }} .email-signup-submit.is-loading .email-signup-submit__spinner {
+    display: block;
+    animation: es-spin 0.75s linear infinite;
+  }
+  @keyframes es-spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  /* --- Submit: custom image mode --- */
+  #shopify-section-{{ section.id }} .email-signup-submit--image {
+    position: relative;
+    width: auto;
+    aspect-ratio: unset;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #shopify-section-{{ section.id }} .email-signup-submit__bg {
+    display: block;
+    max-height: 56px;
+    max-width: 200px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+  #shopify-section-{{ section.id }} .email-signup-submit__label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    padding-inline: var(--space-6);
+  }
+  #shopify-section-{{ section.id }} .email-signup-submit__label--mobile {
+    display: none;
+  }
+
+  {%- if btn_text_mob != blank -%}
+    @media (max-width: 768px) {
+      #shopify-section-{{ section.id }} .email-signup-submit__label--desktop { display: none; }
+      #shopify-section-{{ section.id }} .email-signup-submit__label--mobile { display: flex; }
+    }
+  {%- endif -%}
+
+  #shopify-section-{{ section.id }} .email-signup-subtitle {
+    text-align: center;
+    margin: var(--space-6) 0 0;
+  }
+  #shopify-section-{{ section.id }} .email-signup-message {
+    text-align: center;
+    margin-top: var(--space-4);
+  }
+
+  @media (min-width: 769px) {
+    #shopify-section-{{ section.id }} .email-signup-section {
+      padding-block: var(--section-padding-v);
+      padding-inline: var(--space-6);
+    }
+    #shopify-section-{{ section.id }} .email-signup-heading {
+      margin-bottom: var(--space-8);
+    }
+    #shopify-section-{{ section.id }} .email-signup-input {
+      height: 64px;
+      padding: var(--space-4) var(--space-8);
+    }
+    #shopify-section-{{ section.id }} .email-signup-submit {
+      width: 80px;
+    }
+    #shopify-section-{{ section.id }} .email-signup-submit__bg {
+      max-height: 64px;
+      max-width: 240px;
+    }
+  }
+{%- endstyle -%}
+
+<section class="email-signup-section {{ section.settings.bg_class }}" id="section-{{ section.id }}">
+  <div class="email-signup-container">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="email-signup-heading h2">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+
+    <form
+      method="post"
+      action="/contact#contact_form"
+      accept-charset="UTF-8"
+      class="contact-form email-signup-form"
+      id="contact_form"
+    >
       <input type="hidden" name="form_type" value="customer">
       <input type="hidden" name="contact[tags]" value="waitlist">
       <input type="hidden" name="utf8" value="✓">
@@ -20,213 +189,100 @@
           id="Email"
           class="email-signup-input body"
           required
-        />
+        >
 
         <button
           type="submit"
-          class="email-signup-submit"
-          aria-label="{{ section.settings.button_text | default: 'Submit' | escape }}"
+          class="email-signup-submit{% if has_btn_img %} email-signup-submit--image{% endif %}"
+          aria-label="{{ section.settings.button_text | default: 'Abonnieren' | escape }}"
         >
-          <svg class="email-signup-submit__burst" viewBox="0 0 78 73" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M77.4617 33.3842C77.717 36.9325 67.6423 39.4471 66.7504 42.7188C65.8352 46.0756 73.2364 53.3107 71.2989 56.1732C69.3735 59.0178 59.8399 54.8969 57.0897 57.0507C54.4081 59.1509 56.1888 69.3978 52.896 70.6516C49.7463 71.8509 44.2411 63.0567 40.685 63.314C37.1289 63.5714 32.9397 73.0673 29.6509 72.334C26.2127 71.5673 26.5081 61.1701 23.5536 59.4779C20.5236 57.7424 11.6786 63.1934 9.36597 60.6555C7.03879 58.1017 13.3276 49.8758 11.9414 46.6856C10.5903 43.5763 0.260099 42.5384 0.00480744 38.9902C-0.250484 35.4419 9.82414 32.9272 10.7161 29.6555C11.6312 26.2988 4.23007 19.0637 6.16757 16.2012C8.09298 13.3566 17.6266 17.4775 20.3768 15.3236C23.0584 13.2235 21.2777 2.97659 24.5705 1.72278C27.7202 0.523441 33.2254 9.31768 36.7815 9.06031C40.3376 8.80294 44.5268 -0.69294 47.8156 0.0404044C51.2538 0.807061 50.9584 11.2042 53.9129 12.8965C56.9429 14.632 65.7878 9.18094 68.1005 11.7188C70.4277 14.2726 64.1389 22.4985 65.5251 25.6887C66.8762 28.7981 77.2064 29.836 77.4617 33.3842Z"
-              fill="var(--color-lime)"
-            />
-            <path
-              class="email-signup-submit__arrow"
-              d="M 24 36.5 L 50 36.5 M 42 28 L 53 36.5 L 42 45"
-              stroke="var(--color-violet)"
-              stroke-width="5.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              fill="none"
-            />
-            <circle
-              class="email-signup-submit__spinner"
-              cx="39"
-              cy="36.5"
-              r="11"
-              fill="none"
-              stroke="var(--color-violet)"
-              stroke-width="5.5"
-              stroke-linecap="round"
-              stroke-dasharray="52 17"
-            />
-          </svg>
+          {%- if has_btn_img -%}
+            <picture>
+              {%- if has_btn_img_mob -%}
+                <source
+                  media="(max-width: 768px)"
+                  srcset="{{ section.settings.button_image_mobile | image_url: width: 280 }}"
+                >
+              {%- endif -%}
+              <img
+                src="{{ section.settings.button_image | image_url: width: 480 }}"
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                class="email-signup-submit__bg"
+              >
+            </picture>
+            {%- if section.settings.button_text != blank -%}
+              <span class="email-signup-submit__label btn-label" aria-hidden="true">
+                <span class="email-signup-submit__label--desktop">{{ section.settings.button_text }}</span>
+                {%- if btn_text_mob != blank -%}
+                  <span class="email-signup-submit__label--mobile">{{ btn_text_mob }}</span>
+                {%- endif -%}
+              </span>
+            {%- endif -%}
+          {%- else -%}
+            <svg class="email-signup-submit__burst" viewBox="0 0 78 73" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M77.4617 33.3842C77.717 36.9325 67.6423 39.4471 66.7504 42.7188C65.8352 46.0756 73.2364 53.3107 71.2989 56.1732C69.3735 59.0178 59.8399 54.8969 57.0897 57.0507C54.4081 59.1509 56.1888 69.3978 52.896 70.6516C49.7463 71.8509 44.2411 63.0567 40.685 63.314C37.1289 63.5714 32.9397 73.0673 29.6509 72.334C26.2127 71.5673 26.5081 61.1701 23.5536 59.4779C20.5236 57.7424 11.6786 63.1934 9.36597 60.6555C7.03879 58.1017 13.3276 49.8758 11.9414 46.6856C10.5903 43.5763 0.260099 42.5384 0.00480744 38.9902C-0.250484 35.4419 9.82414 32.9272 10.7161 29.6555C11.6312 26.2988 4.23007 19.0637 6.16757 16.2012C8.09298 13.3566 17.6266 17.4775 20.3768 15.3236C23.0584 13.2235 21.2777 2.97659 24.5705 1.72278C27.7202 0.523441 33.2254 9.31768 36.7815 9.06031C40.3376 8.80294 44.5268 -0.69294 47.8156 0.0404044C51.2538 0.807061 50.9584 11.2042 53.9129 12.8965C56.9429 14.632 65.7878 9.18094 68.1005 11.7188C70.4277 14.2726 64.1389 22.4985 65.5251 25.6887C66.8762 28.7981 77.2064 29.836 77.4617 33.3842Z"
+                fill="var(--color-lime)"
+              />
+              <path
+                class="email-signup-submit__arrow"
+                d="M 24 36.5 L 50 36.5 M 42 28 L 53 36.5 L 42 45"
+                stroke="var(--color-violet)"
+                stroke-width="5.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                fill="none"
+              />
+              <circle
+                class="email-signup-submit__spinner"
+                cx="39"
+                cy="36.5"
+                r="11"
+                fill="none"
+                stroke="var(--color-violet)"
+                stroke-width="5.5"
+                stroke-linecap="round"
+                stroke-dasharray="52 17"
+              />
+            </svg>
+          {%- endif -%}
         </button>
       </div>
 
       <div class="email-signup-message caption" hidden></div>
     </form>
 
-    {% if section.settings.subtitle != blank %}
-      <p class="email-signup-subtitle caption">
-        {{ section.settings.subtitle }}
-      </p>
-    {% endif %}
+    {%- if section.settings.subtitle != blank -%}
+      <p class="email-signup-subtitle caption">{{ section.settings.subtitle }}</p>
+    {%- endif -%}
   </div>
-</div>
 
+  {%- liquid
+    for block in section.blocks
+      case block.type
+        when 'background_shape'
+          render 'block-background-shape', block: block
+        when 'background_pattern'
+          render 'block-background-pattern', block: block, scheme: section.settings.color_scheme
+      endcase
+    endfor
+  -%}
+</section>
 
-{%- style -%}
-  #shopify-section-{{ section.id }} {
-    --es-bg: {{ section.settings.background_color }};
-    --es-heading: {{ section.settings.heading_color }};
-    --es-subtitle: {{ section.settings.subtitle_color }};
-    --es-input-bg: {{ section.settings.input_background }};
-    --es-input-text: {{ section.settings.input_text_color }};
-    --es-input-border: {{ section.settings.input_border_color }};
-    --es-input-focus: {{ section.settings.input_focus_border }};
-    --es-placeholder: {{ section.settings.placeholder_color }};
-  }
-
-  #shopify-section-{{ section.id }} .email-signup-section {
-    background-color: var(--es-bg);
-    padding: {{ section.settings.padding_top }}px var(--space-4) {{ section.settings.padding_bottom }}px;
-  }
-
-  #shopify-section-{{ section.id }} .email-signup-container {
-    max-width: {{ section.settings.container_width }}px;
-    margin-inline: auto;
-  }
-
-  #shopify-section-{{ section.id }} .email-signup-heading {
-    color: var(--es-heading);
-    text-align: center;
-    margin: 0 0 var(--space-8);
-  }
-
-  #shopify-section-{{ section.id }} .email-signup-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-4);
-    max-width: 600px;
-    margin: 0 auto;
-  }
-
-  #shopify-section-{{ section.id }} .email-signup-input {
-    flex: 1 1 auto;
-    min-width: 0;
-    height: 64px;
-    padding: var(--space-4) var(--space-8);
-    background-color: var(--es-input-bg);
-    color: var(--es-input-text);
-    border: 2px solid var(--es-input-border);
-    border-radius: var(--radius-btn);
-    outline: none;
-    box-shadow: var(--shadow-sm);
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
-  }
-
-  #shopify-section-{{ section.id }} .email-signup-input::placeholder {
-    color: var(--es-placeholder);
-  }
-
-  #shopify-section-{{ section.id }} .email-signup-input:focus-visible {
-    border-color: var(--es-input-focus);
-    box-shadow: 0 0 0 3px {{ section.settings.input_focus_border }}33;
-  }
-
-  #shopify-section-{{ section.id }} .email-signup-submit {
-    flex: 0 0 auto;
-    width: 80px;
-    aspect-ratio: 78 / 73;
-    padding: 0;
-    background: transparent;
-    border: 0;
-    cursor: pointer;
-    transition: transform 0.15s ease;
-  }
-
-  #shopify-section-{{ section.id }} .email-signup-submit:hover {
-    transform: translateY(-2px) scale(1.04);
-  }
-
-  #shopify-section-{{ section.id }} .email-signup-submit:active {
-    transform: translateY(0) scale(1);
-  }
-
-  #shopify-section-{{ section.id }} .email-signup-submit:focus-visible {
-    outline: 3px solid var(--color-cream);
-    outline-offset: 4px;
-    border-radius: 50%;
-  }
-
-  #shopify-section-{{ section.id }} .email-signup-submit__burst {
-    width: 90%;
-    height: 90%;
-    display: block;
-    filter: drop-shadow(var(--shadow-sm));
-  }
-
-  #shopify-section-{{ section.id }} .email-signup-submit__spinner {
-    display: none;
-    transform-box: fill-box;
-    transform-origin: center;
-  }
-
-  #shopify-section-{{ section.id }} .email-signup-submit.is-loading {
-    pointer-events: none;
-    cursor: default;
-  }
-
-  #shopify-section-{{ section.id }} .email-signup-submit.is-loading .email-signup-submit__arrow {
-    display: none;
-  }
-
-  #shopify-section-{{ section.id }} .email-signup-submit.is-loading .email-signup-submit__spinner {
-    display: block;
-    animation: es-spin 0.75s linear infinite;
-  }
-
-  @keyframes es-spin {
-    from { transform: rotate(0deg); }
-    to   { transform: rotate(360deg); }
-  }
-
-  #shopify-section-{{ section.id }} .email-signup-subtitle {
-    color: var(--es-subtitle);
-    text-align: center;
-    margin: var(--space-6) 0 0;
-  }
-
-  #shopify-section-{{ section.id }} .email-signup-message {
-    text-align: center;
-    margin-top: var(--space-4);
-  }
-
-  @media (max-width: 768px) {
-    #shopify-section-{{ section.id }} .email-signup-section {
-      padding-top: calc({{ section.settings.padding_top }}px / 2);
-      padding-bottom: calc({{ section.settings.padding_bottom }}px / 2);
-    }
-    #shopify-section-{{ section.id }} .email-signup-heading {
-      margin-bottom: var(--space-6);
-    }
-    #shopify-section-{{ section.id }} .email-signup-input {
-      height: 56px;
-      padding: var(--space-2) var(--space-4);
-      font-size: 14px !important;
-      line-height: 20px !important;
-      max-width: 220px;
-    }
-    #shopify-section-{{ section.id }} .email-signup-submit {
-      width: 56px;
-    }
-    #shopify-section-{{ section.id }} .email-signup-wrapper {
-      gap: var(--space-4);
-      max-width: 340px;
-    }
-    #shopify-section-{{ section.id }} .email-signup-submit__burst {
-    width: 105%;
-    height: 105%;
-  }
-  }
-{%- endstyle -%}
+{%- liquid
+  assign stickers = section.blocks | where: 'type', 'sticker'
+  assign shape_dividers = section.blocks | where: 'type', 'shape_divider'
+  for sticker in stickers
+    render 'block-sticker', block: sticker
+  endfor
+  for shape_divider in shape_dividers
+    render 'block-shape-divider', block: shape_divider
+  endfor
+-%}
 
 <script>
-  // Show success message after form submission
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.get('customer_posted') === 'true') {
     const pathParts = window.location.pathname.split('/');
@@ -245,395 +301,89 @@
   });
 </script>
 
-  {%- liquid
-    for block in section.blocks
-      case block.type
-        when 'background_shape'
-          render 'block-background-shape', block: block
-        when 'background_pattern'
-          render 'block-background-pattern', block: block, scheme: section.settings.color_scheme
-      endcase
-    endfor
-  -%}
-
-{%- liquid
-  assign stickers = section.blocks | where: 'type', 'sticker'
-  assign shape_dividers = section.blocks | where: 'type', 'shape_divider'
-  for sticker in stickers
-    render 'block-sticker', block: sticker
-  endfor
-  for shape_divider in shape_dividers
-    render 'block-shape-divider', block: shape_divider
-  endfor
--%}
-
-<!-- Section Schema -->
 {% schema %}
 {
   "name": "Email Signup",
   "settings": [
     {
       "type": "header",
-      "content": "Section Settings"
-    },
-    {
-      "type": "color",
-      "id": "background_color",
-      "label": "Background Color",
-      "default": "#dc2626"
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "label": "Top Padding",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "default": 60
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "label": "Bottom Padding",
-      "min": 0,
-      "max": 200,
-      "step": 4,
-      "default": 60
-    },
-    {
-      "type": "range",
-      "id": "container_width",
-      "label": "Container Width",
-      "min": 800,
-      "max": 1400,
-      "step": 50,
-      "default": 1200
-    },
-    {
-      "type": "header",
-      "content": "Heading"
+      "content": "Content"
     },
     {
       "type": "text",
       "id": "heading",
-      "label": "Heading Text",
-      "default": "Stay Updated"
-    },
-    {
-      "type": "color",
-      "id": "heading_color",
-      "label": "Heading Color",
-      "default": "#ffffff"
-    },
-    {
-      "type": "range",
-      "id": "heading_size",
-      "label": "Heading Size",
-      "min": 16,
-      "max": 48,
-      "step": 2,
-      "default": 32
-    },
-    {
-      "type": "header",
-      "content": "Email Input"
-    },
-    {
-      "type": "text",
-      "id": "placeholder_text",
-      "label": "Placeholder Text",
-      "default": "Enter your email address"
-    },
-    {
-      "type": "color",
-      "id": "input_background",
-      "label": "Input Background",
-      "default": "#ffffff"
-    },
-    {
-      "type": "color",
-      "id": "input_text_color",
-      "label": "Input Text Color",
-      "default": "#333333"
-    },
-    {
-      "type": "color",
-      "id": "placeholder_color",
-      "label": "Placeholder Color",
-      "default": "#999999"
-    },
-    {
-      "type": "color",
-      "id": "input_border_color",
-      "label": "Input Border Color",
-      "default": "#dddddd"
-    },
-    {
-      "type": "color",
-      "id": "input_focus_border",
-      "label": "Input Focus Border Color",
-      "default": "#007cba"
-    },
-    {
-      "type": "range",
-      "id": "input_border_width",
-      "label": "Input Border Width",
-      "min": 0,
-      "max": 5,
-      "step": 1,
-      "default": 1
-    },
-    {
-      "type": "range",
-      "id": "input_border_radius",
-      "label": "Input Border Radius",
-      "min": 0,
-      "max": 30,
-      "step": 1,
-      "default": 25
-    },
-    {
-      "type": "range",
-      "id": "input_padding",
-      "label": "Input Padding",
-      "min": 10,
-      "max": 30,
-      "step": 2,
-      "default": 20
-    },
-    {
-      "type": "range",
-      "id": "input_font_size",
-      "label": "Input Font Size",
-      "min": 12,
-      "max": 20,
-      "step": 1,
-      "default": 16
-    },
-    {
-      "type": "header",
-      "content": "Button Settings"
-    },
-    {
-      "type": "checkbox",
-      "id": "use_image_button",
-      "label": "Use Custom Image Button",
-      "default": false,
-      "info": "Enable to use a custom image as the button background"
-    },
-    {
-      "type": "image_picker",
-      "id": "button_image",
-      "label": "Button Background Image",
-      "info": "Upload an image to use as the button shape/background"
-    },
-    {
-      "type": "select",
-      "id": "image_fit",
-      "label": "Image Fit",
-      "options": [
-        {
-          "value": "contain",
-          "label": "Contain (fit entire image)"
-        },
-        {
-          "value": "cover",
-          "label": "Cover (fill button area)"
-        },
-        {
-          "value": "100% 100%",
-          "label": "Stretch (fill exactly)"
-        }
-      ],
-      "default": "contain"
-    },
-    {
-      "type": "range",
-      "id": "button_width",
-      "label": "Button Width",
-      "min": 100,
-      "max": 300,
-      "step": 10,
-      "default": 160
-    },
-    {
-      "type": "range",
-      "id": "button_height",
-      "label": "Button Height",
-      "min": 40,
-      "max": 100,
-      "step": 5,
-      "default": 60
-    },
-    {
-      "type": "header",
-      "content": "Image Color Adjustments"
-    },
-    {
-      "type": "range",
-      "id": "image_hue_rotate",
-      "label": "Image Hue Rotation",
-      "min": 0,
-      "max": 360,
-      "step": 10,
-      "default": 0,
-      "info": "Rotate the colors of the image"
-    },
-    {
-      "type": "range",
-      "id": "image_saturation",
-      "label": "Image Saturation",
-      "min": 0,
-      "max": 200,
-      "step": 10,
-      "default": 100,
-      "info": "Adjust color intensity (100 = normal)"
-    },
-    {
-      "type": "range",
-      "id": "image_brightness",
-      "label": "Image Brightness",
-      "min": 0,
-      "max": 200,
-      "step": 10,
-      "default": 100,
-      "info": "Adjust brightness (100 = normal)"
-    },
-    {
-      "type": "header",
-      "content": "Button Text"
-    },
-    {
-      "type": "text",
-      "id": "button_text",
-      "label": "Button Text",
-      "default": "Subscribe"
-    },
-    {
-      "type": "color",
-      "id": "button_background",
-      "label": "Button Background (fallback)",
-      "default": "#22c55e",
-      "info": "Used as background color behind the image"
-    },
-    {
-      "type": "color",
-      "id": "button_text_color",
-      "label": "Button Text Color",
-      "default": "#ffffff"
-    },
-    {
-      "type": "color",
-      "id": "button_border_color",
-      "label": "Button Border Color",
-      "default": "#22c55e"
-    },
-    {
-      "type": "range",
-      "id": "button_border_width",
-      "label": "Button Border Width",
-      "min": 0,
-      "max": 5,
-      "step": 1,
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "button_border_radius",
-      "label": "Button Border Radius",
-      "min": 0,
-      "max": 30,
-      "step": 1,
-      "default": 25
-    },
-    {
-      "type": "range",
-      "id": "button_padding_x",
-      "label": "Button Horizontal Padding",
-      "min": 15,
-      "max": 40,
-      "step": 5,
-      "default": 30
-    },
-    {
-      "type": "range",
-      "id": "button_padding_y",
-      "label": "Button Vertical Padding",
-      "min": 10,
-      "max": 25,
-      "step": 1,
-      "default": 18
-    },
-    {
-      "type": "range",
-      "id": "button_font_size",
-      "label": "Button Font Size",
-      "min": 8,
-      "max": 32,
-      "step": 1,
-      "default": 24
-    },
-    {
-      "type": "header",
-      "content": "Text Shadow (for image buttons)"
-    },
-    {
-      "type": "range",
-      "id": "text_shadow_x",
-      "label": "Shadow Horizontal Offset",
-      "min": -5,
-      "max": 5,
-      "step": 1,
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "text_shadow_y",
-      "label": "Shadow Vertical Offset",
-      "min": -5,
-      "max": 5,
-      "step": 1,
-      "default": 1
-    },
-    {
-      "type": "range",
-      "id": "text_shadow_blur",
-      "label": "Shadow Blur",
-      "min": 0,
-      "max": 10,
-      "step": 1,
-      "default": 2
-    },
-    {
-      "type": "color",
-      "id": "text_shadow_color",
-      "label": "Shadow Color",
-      "default": "#000000"
-    },
-    {
-      "type": "header",
-      "content": "Subtitle"
+      "label": "Heading",
+      "default": "Bleib auf dem Laufenden"
     },
     {
       "type": "text",
       "id": "subtitle",
-      "label": "Subtitle Text",
-      "default": "Join our newsletter for updates"
+      "label": "Subtitle",
+      "default": "20% Rabatt auf deine erste Bestellung"
     },
     {
-      "type": "color",
-      "id": "subtitle_color",
-      "label": "Subtitle Color",
-      "default": "#ffffff"
+      "type": "text",
+      "id": "placeholder_text",
+      "label": "Input placeholder",
+      "default": "deine@email.com"
     },
     {
-      "type": "range",
-      "id": "subtitle_size",
-      "label": "Subtitle Size",
-      "min": 12,
-      "max": 24,
-      "step": 1,
-      "default": 14
+      "type": "header",
+      "content": "Button — Desktop"
+    },
+    {
+      "type": "image_picker",
+      "id": "button_image",
+      "label": "Button image",
+      "info": "Optional. Replaces the default burst icon. Use a blob PNG from the design system."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Abonnieren",
+      "info": "Shown over the image (if set). Always used as the accessible aria-label."
+    },
+    {
+      "type": "header",
+      "content": "Button — Mobile"
+    },
+    {
+      "type": "image_picker",
+      "id": "button_image_mobile",
+      "label": "Button image (mobile)",
+      "info": "Optional. Falls back to the desktop image when not set."
+    },
+    {
+      "type": "text",
+      "id": "button_text_mobile",
+      "label": "Button text (mobile)",
+      "info": "Falls back to desktop button text when blank."
+    },
+    {
+      "type": "header",
+      "content": "t:common.settings.header_color"
+    },
+    {
+      "type": "select",
+      "id": "bg_class",
+      "label": "Background color",
+      "options": [
+        { "value": "bg-violet", "label": "Radical Violet (recommended for newsletter)" },
+        { "value": "bg-red", "label": "Brand Red" },
+        { "value": "bg-cream", "label": "Off-White Cream" },
+        { "value": "bg-pink", "label": "Light Pink" },
+        { "value": "bg-sky", "label": "Sky Blue" },
+        { "value": "bg-lime", "label": "Lime Green" }
+      ],
+      "default": "bg-violet"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme1",
+      "label": "t:common.settings.color_scheme.label",
+      "info": "Used by background pattern blocks."
     }
   ],
   "blocks": [
@@ -682,183 +432,13 @@
               "group": "t:common.blocks.background_pattern.settings.type.options.group_shapes"
             },
             {
-              "value": "triangle",
-              "label": "t:common.options.triangles.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_shapes"
-            },
-            {
               "value": "polka_dot",
               "label": "t:common.options.polka_dot.label",
               "group": "t:common.blocks.background_pattern.settings.type.options.group_shapes"
             },
             {
-              "value": "polka_dot_triangles",
-              "label": "t:common.options.polka_dot_triangles.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_shapes"
-            },
-            {
-              "value": "plus",
-              "label": "t:common.options.plus.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_shapes"
-            },
-            {
-              "value": "cross",
-              "label": "t:common.options.cross.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_shapes"
-            },
-            {
-              "value": "squares",
-              "label": "t:common.options.squares.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_shapes"
-            },
-            {
-              "value": "vertical_stripes",
-              "label": "t:common.options.vertical_stripes.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_stripes"
-            },
-            {
-              "value": "horizontal_stripes",
-              "label": "t:common.blocks.background_pattern.settings.type.options.horizontal_stripes.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_stripes"
-            },
-            {
-              "value": "diagonal_stripes",
-              "label": "t:common.options.diagonal_stripes.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_stripes"
-            },
-            {
-              "value": "checkerboard",
-              "label": "t:common.options.checkerboard.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
-            },
-            {
-              "value": "corner_triangle",
-              "label": "t:common.options.corner_triangle.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
-            },
-            {
-              "value": "diamonds",
-              "label": "t:common.options.diamonds.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
-            },
-            {
-              "value": "scales",
-              "label": "t:common.options.scales.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
-            },
-            {
-              "value": "alternating_pinwheel",
-              "label": "t:common.options.alternating_pinwheel.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
-            },
-            {
-              "value": "windmill",
-              "label": "t:common.options.windmill.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
-            },
-            {
-              "value": "origami",
-              "label": "t:common.options.origami.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
-            },
-            {
-              "value": "argyle",
-              "label": "t:common.options.argyle.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
-            },
-            {
-              "value": "chevrons_1",
-              "label": "t:common.options.chevrons_1.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
-            },
-            {
-              "value": "chevrons_2",
-              "label": "t:common.options.chevrons_2.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
-            },
-            {
-              "value": "connected_circles",
-              "label": "t:common.options.connected_circles.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
-            },
-            {
-              "value": "alternating_triangles",
-              "label": "t:common.options.alternating_triangles.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
-            },
-            {
-              "value": "waves_geometric",
-              "label": "t:common.options.waves.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
-            },
-            {
-              "value": "hexagons_geometric",
-              "label": "t:common.options.hexagons.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
-            },
-            {
-              "value": "squiggle",
-              "label": "t:common.options.squiggle.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
-            },
-            {
-              "value": "zig_zag_geometric",
-              "label": "t:common.options.zig_zag.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
-            },
-            {
-              "value": "squiggles",
-              "label": "t:common.options.squiggles.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
-            },
-            {
               "value": "sprinkles",
               "label": "t:common.blocks.background_pattern.settings.type.options.sprinkles.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
-            },
-            {
-              "value": "8bit",
-              "label": "t:common.options.8bit.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
-            },
-            {
-              "value": "3d_cube",
-              "label": "t:common.blocks.background_pattern.settings.type.options.3d_cube.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
-            },
-            {
-              "value": "bubbles",
-              "label": "t:common.blocks.background_pattern.settings.type.options.bubbles.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
-            },
-            {
-              "value": "macaroni",
-              "label": "t:common.options.macaroni.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
-            },
-            {
-              "value": "leaves",
-              "label": "t:common.options.leaves.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
-            },
-            {
-              "value": "bricks",
-              "label": "t:common.options.bricks.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
-            },
-            {
-              "value": "herringbone_1",
-              "label": "t:common.options.herringbone_1.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
-            },
-            {
-              "value": "herringbone_2",
-              "label": "t:common.options.herringbone_2.label",
-              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
-            },
-            {
-              "value": "interlocking_hexagons",
-              "label": "t:common.options.interlocking_hexagons.label",
               "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
             },
             {
@@ -874,30 +454,11 @@
           "label": "t:common.blocks.background_pattern.settings.color.label",
           "default": "text",
           "options": [
-            {
-              "value": "text",
-              "label": "t:common.options.text.label"
-            },
-            {
-              "value": "accent-1",
-              "label": "t:common.options.accent_1.label"
-            },
-            {
-              "value": "accent-2",
-              "label": "t:common.options.accent_2.label"
-            },
-            {
-              "value": "card",
-              "label": "t:common.options.card.label"
-            },
-            {
-              "value": "background",
-              "label": "t:common.options.background.label"
-            },
-            {
-              "value": "gradient",
-              "label": "t:common.options.gradient.label"
-            }
+            { "value": "text", "label": "t:common.options.text.label" },
+            { "value": "accent-1", "label": "t:common.options.accent_1.label" },
+            { "value": "accent-2", "label": "t:common.options.accent_2.label" },
+            { "value": "card", "label": "t:common.options.card.label" },
+            { "value": "background", "label": "t:common.options.background.label" }
           ]
         },
         {
@@ -952,356 +513,9 @@
           "label": "t:common.blocks.background_shape.settings.shape.label",
           "default": "square",
           "options": [
-            {
-              "value": "square",
-              "label": "t:common.blocks.background_shape.settings.shape.options.square.label",
-              "group": "t:common.groups.basic"
-            },
-            {
-              "value": "circle",
-              "label": "t:common.blocks.background_shape.settings.shape.options.circle.label",
-              "group": "t:common.groups.basic"
-            },
-            {
-              "value": "oval",
-              "label": "t:common.blocks.background_shape.settings.shape.options.oval.label",
-              "group": "t:common.groups.basic"
-            },
-            {
-              "value": "triangle",
-              "label": "t:common.blocks.background_shape.settings.shape.options.triangle.label",
-              "group": "t:common.groups.basic"
-            },
-            {
-              "value": "pentagon",
-              "label": "t:common.options.pentagon.label",
-              "group": "t:common.groups.polygons"
-            },
-            {
-              "value": "hexagon",
-              "label": "t:common.options.hexagon.label",
-              "group": "t:common.groups.polygons"
-            },
-            {
-              "value": "heptagon",
-              "label": "t:common.options.heptagon.label",
-              "group": "t:common.groups.polygons"
-            },
-            {
-              "value": "octagon",
-              "label": "t:common.options.octagon.label",
-              "group": "t:common.groups.polygons"
-            },
-            {
-              "value": "nonagon",
-              "label": "t:common.options.nonagon.label",
-              "group": "t:common.groups.polygons"
-            },
-            {
-              "value": "decagon",
-              "label": "t:common.options.decagon.label",
-              "group": "t:common.groups.polygons"
-            },
-            {
-              "value": "rounded_pentagon",
-              "label": "t:common.options.rounded_pentagon.label",
-              "group": "t:common.groups.polygons"
-            },
-            {
-              "value": "rounded_hexagon",
-              "label": "t:common.options.rounded_hexagon.label",
-              "group": "t:common.groups.polygons"
-            },
-            {
-              "value": "rounded_heptagon",
-              "label": "t:common.options.rounded_heptagon.label",
-              "group": "t:common.groups.polygons"
-            },
-            {
-              "value": "rounded_octagon",
-              "label": "t:common.options.rounded_octagon.label",
-              "group": "t:common.groups.polygons"
-            },
-            {
-              "value": "rounded_nonagon",
-              "label": "t:common.options.rounded_nonagon.label",
-              "group": "t:common.groups.polygons"
-            },
-            {
-              "value": "rounded_decagon",
-              "label": "t:common.options.rounded_decagon.label",
-              "group": "t:common.groups.polygons"
-            },
-            {
-              "value": "star_1",
-              "label": "t:common.options.star_1.label",
-              "group": "t:common.groups.stars"
-            },
-            {
-              "value": "star_2",
-              "label": "t:common.options.star_2.label",
-              "group": "t:common.groups.stars"
-            },
-            {
-              "value": "star_3",
-              "label": "t:common.options.star_3.label",
-              "group": "t:common.groups.stars"
-            },
-            {
-              "value": "star_4",
-              "label": "t:common.options.star_4.label",
-              "group": "t:common.groups.stars"
-            },
-            {
-              "value": "star_5",
-              "label": "t:common.options.star_5.label",
-              "group": "t:common.groups.stars"
-            },
-            {
-              "value": "star_6",
-              "label": "t:common.options.star_6.label",
-              "group": "t:common.groups.stars"
-            },
-            {
-              "value": "abstract_star_1",
-              "label": "t:common.options.abstract_star_1.label",
-              "group": "t:common.groups.stars"
-            },
-            {
-              "value": "abstract_star_2",
-              "label": "t:common.options.abstract_star_2.label",
-              "group": "t:common.groups.stars"
-            },
-            {
-              "value": "abstract_star_3",
-              "label": "t:common.options.abstract_star_3.label",
-              "group": "t:common.groups.stars"
-            },
-            {
-              "value": "scalloped_circle_1",
-              "label": "t:common.options.scalloped_circle_1.label",
-              "group": "t:common.groups.scalloped_circles"
-            },
-            {
-              "value": "scalloped_circle_2",
-              "label": "t:common.options.scalloped_circle_2.label",
-              "group": "t:common.groups.scalloped_circles"
-            },
-            {
-              "value": "scalloped_circle_3",
-              "label": "t:common.options.scalloped_circle_3.label",
-              "group": "t:common.groups.scalloped_circles"
-            },
-            {
-              "value": "scalloped_circle_4",
-              "label": "t:common.options.scalloped_circle_4.label",
-              "group": "t:common.groups.scalloped_circles"
-            },
-            {
-              "value": "scalloped_circle_5",
-              "label": "t:common.options.scalloped_circle_5.label",
-              "group": "t:common.groups.scalloped_circles"
-            },
-            {
-              "value": "scalloped_circle_6",
-              "label": "t:common.options.scalloped_circle_6.label",
-              "group": "t:common.groups.scalloped_circles"
-            },
-            {
-              "value": "parallelogram",
-              "label": "t:common.options.parallelogram.label",
-              "group": "t:common.groups.square"
-            },
-            {
-              "value": "squircle",
-              "label": "t:common.options.squircle.label",
-              "group": "t:common.groups.square"
-            },
-            {
-              "value": "scalloped_square_1",
-              "label": "t:common.options.scalloped_square_1.label",
-              "group": "t:common.groups.square"
-            },
-            {
-              "value": "scalloped_square_2",
-              "label": "t:common.options.scalloped_square_2.label",
-              "group": "t:common.groups.square"
-            },
-            {
-              "value": "leaf",
-              "label": "t:common.options.leaf.label",
-              "group": "t:common.groups.square"
-            },
-            {
-              "value": "clipped_square",
-              "label": "t:common.options.clipped.label",
-              "group": "t:common.groups.square"
-            },
-            {
-              "value": "convex_square",
-              "label": "t:common.options.convex.label",
-              "group": "t:common.groups.square"
-            },
-            {
-              "value": "twisted_square",
-              "label": "t:common.options.twisted.label",
-              "group": "t:common.groups.square"
-            },
-            {
-              "value": "trapeze",
-              "label": "t:common.options.trapeze.label",
-              "group": "t:common.groups.square"
-            },
-            {
-              "value": "pinched",
-              "label": "t:common.options.pinched.label",
-              "group": "t:common.groups.square"
-            },
-            {
-              "value": "pixelated",
-              "label": "t:common.options.pixelated.label",
-              "group": "t:common.groups.square"
-            },
-            {
-              "value": "overlapped",
-              "label": "t:common.options.overlapped.label",
-              "group": "t:common.groups.square"
-            },
-            {
-              "value": "zig_zag",
-              "label": "t:common.options.zig_zag.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "zig_zag_tear",
-              "label": "t:common.options.zig_zag_tear.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "wave_tear",
-              "label": "t:common.options.wave_tear.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "flower",
-              "label": "t:common.options.flower.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "flower_bloom",
-              "label": "t:common.options.flower_bloom.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "concave",
-              "label": "t:common.options.concave.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "flag",
-              "label": "t:common.options.flag.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "abstract_oval",
-              "label": "t:common.options.abstract_oval.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "cross",
-              "label": "t:common.options.cross.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "quatrefoil",
-              "label": "t:common.options.quatrefoil.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "quadrant",
-              "label": "t:common.options.quadrant.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "wind",
-              "label": "t:common.options.wind.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "windmill",
-              "label": "t:common.options.windmill.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "heart",
-              "label": "t:common.options.heart.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "mirrored_pyramids",
-              "label": "t:common.options.mirrored_pyramids.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "plus",
-              "label": "t:common.options.plus.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "double_pill_1",
-              "label": "t:common.options.double_pill_1.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "double_pill_2",
-              "label": "t:common.options.double_pill_2.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "triple_pill_1",
-              "label": "t:common.options.triple_pill_1.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "triple_pill_2",
-              "label": "t:common.options.triple_pill_2.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "crown",
-              "label": "t:common.options.crown.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "stair",
-              "label": "t:common.options.stair.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "pancake_stack",
-              "label": "t:common.options.pancake_stack.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "asterisk",
-              "label": "t:common.options.asterisk.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "overlapping_squares",
-              "label": "t:common.options.overlapping_squares.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "brush_stroke",
-              "label": "t:common.options.brush_stroke.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "blob",
-              "label": "t:common.options.blob.label",
-              "group": "t:common.groups.variable"
-            }
+            { "value": "square", "label": "t:common.blocks.background_shape.settings.shape.options.square.label", "group": "t:common.groups.basic" },
+            { "value": "circle", "label": "t:common.blocks.background_shape.settings.shape.options.circle.label", "group": "t:common.groups.basic" },
+            { "value": "blob", "label": "t:common.options.blob.label", "group": "t:common.groups.variable" }
           ]
         },
         {
@@ -1379,26 +593,6 @@
         },
         {
           "type": "header",
-          "content": "t:common.settings.header_animation"
-        },
-        {
-          "type": "checkbox",
-          "id": "enable_parallax",
-          "label": "t:common.blocks.background_shape.settings.enable_parallax.label",
-          "default": false,
-          "info": "t:common.blocks.background_shape.settings.enable_parallax.info"
-        },
-        {
-          "type": "range",
-          "id": "parallax_speed",
-          "min": 1,
-          "max": 10,
-          "step": 1,
-          "label": "t:common.settings.parallax_speed.label",
-          "default": 3
-        },
-        {
-          "type": "header",
           "content": "t:common.settings.header_color"
         },
         {
@@ -1413,30 +607,11 @@
           "label": "t:common.settings.background_color.label",
           "default": "accent-1",
           "options": [
-            {
-              "value": "text",
-              "label": "t:common.options.text.label"
-            },
-            {
-              "value": "accent-1",
-              "label": "t:common.options.accent_1.label"
-            },
-            {
-              "value": "accent-2",
-              "label": "t:common.options.accent_2.label"
-            },
-            {
-              "value": "card",
-              "label": "t:common.options.card.label"
-            },
-            {
-              "value": "background",
-              "label": "t:common.options.background.label"
-            },
-            {
-              "value": "gradient",
-              "label": "t:common.options.gradient.label"
-            }
+            { "value": "text", "label": "t:common.options.text.label" },
+            { "value": "accent-1", "label": "t:common.options.accent_1.label" },
+            { "value": "accent-2", "label": "t:common.options.accent_2.label" },
+            { "value": "card", "label": "t:common.options.card.label" },
+            { "value": "background", "label": "t:common.options.background.label" }
           ]
         }
       ]
@@ -1473,270 +648,10 @@
           "id": "shape",
           "label": "t:common.blocks.sticker.settings.shape.label",
           "options": [
-            {
-              "value": "fit_to_text",
-              "label": "t:common.blocks.sticker.settings.shape.options.fit_to_text.label"
-            },
-            {
-              "value": "circle",
-              "label": "t:common.options.circle.label",
-              "group": "t:common.groups.basic"
-            },
-            {
-              "value": "pentagon",
-              "label": "t:common.options.pentagon.label",
-              "group": "t:common.groups.polygons"
-            },
-            {
-              "value": "hexagon",
-              "label": "t:common.options.hexagon.label",
-              "group": "t:common.groups.polygons"
-            },
-            {
-              "value": "heptagon",
-              "label": "t:common.options.heptagon.label",
-              "group": "t:common.groups.polygons"
-            },
-            {
-              "value": "octagon",
-              "label": "t:common.options.octagon.label",
-              "group": "t:common.groups.polygons"
-            },
-            {
-              "value": "nonagon",
-              "label": "t:common.options.nonagon.label",
-              "group": "t:common.groups.polygons"
-            },
-            {
-              "value": "decagon",
-              "label": "t:common.options.decagon.label",
-              "group": "t:common.groups.polygons"
-            },
-            {
-              "value": "rounded_pentagon",
-              "label": "t:common.options.rounded_pentagon.label",
-              "group": "t:common.groups.polygons"
-            },
-            {
-              "value": "rounded_hexagon",
-              "label": "t:common.options.rounded_hexagon.label",
-              "group": "t:common.groups.polygons"
-            },
-            {
-              "value": "rounded_heptagon",
-              "label": "t:common.options.rounded_heptagon.label",
-              "group": "t:common.groups.polygons"
-            },
-            {
-              "value": "rounded_octagon",
-              "label": "t:common.options.rounded_octagon.label",
-              "group": "t:common.groups.polygons"
-            },
-            {
-              "value": "rounded_nonagon",
-              "label": "t:common.options.rounded_nonagon.label",
-              "group": "t:common.groups.polygons"
-            },
-            {
-              "value": "rounded_decagon",
-              "label": "t:common.options.rounded_decagon.label",
-              "group": "t:common.groups.polygons"
-            },
-            {
-              "value": "star_1",
-              "label": "t:common.options.star_1.label",
-              "group": "t:common.groups.stars"
-            },
-            {
-              "value": "star_2",
-              "label": "t:common.options.star_2.label",
-              "group": "t:common.groups.stars"
-            },
-            {
-              "value": "star_3",
-              "label": "t:common.options.star_3.label",
-              "group": "t:common.groups.stars"
-            },
-            {
-              "value": "star_4",
-              "label": "t:common.options.star_4.label",
-              "group": "t:common.groups.stars"
-            },
-            {
-              "value": "star_5",
-              "label": "t:common.options.star_5.label",
-              "group": "t:common.groups.stars"
-            },
-            {
-              "value": "star_6",
-              "label": "t:common.options.star_6.label",
-              "group": "t:common.groups.stars"
-            },
-            {
-              "value": "scalloped_circle_1",
-              "label": "t:common.options.scalloped_circle_1.label",
-              "group": "t:common.groups.scalloped_circles"
-            },
-            {
-              "value": "scalloped_circle_2",
-              "label": "t:common.options.scalloped_circle_2.label",
-              "group": "t:common.groups.scalloped_circles"
-            },
-            {
-              "value": "scalloped_circle_3",
-              "label": "t:common.options.scalloped_circle_3.label",
-              "group": "t:common.groups.scalloped_circles"
-            },
-            {
-              "value": "scalloped_circle_4",
-              "label": "t:common.options.scalloped_circle_4.label",
-              "group": "t:common.groups.scalloped_circles"
-            },
-            {
-              "value": "scalloped_circle_5",
-              "label": "t:common.options.scalloped_circle_5.label",
-              "group": "t:common.groups.scalloped_circles"
-            },
-            {
-              "value": "scalloped_circle_6",
-              "label": "t:common.options.scalloped_circle_6.label",
-              "group": "t:common.groups.scalloped_circles"
-            },
-            {
-              "value": "parallelogram",
-              "label": "t:common.options.parallelogram.label",
-              "group": "t:common.groups.square"
-            },
-            {
-              "value": "squircle",
-              "label": "t:common.options.squircle.label",
-              "group": "t:common.groups.square"
-            },
-            {
-              "value": "scalloped_square_1",
-              "label": "t:common.options.scalloped_square_1.label",
-              "group": "t:common.groups.square"
-            },
-            {
-              "value": "scalloped_square_2",
-              "label": "t:common.options.scalloped_square_2.label",
-              "group": "t:common.groups.square"
-            },
-            {
-              "value": "leaf",
-              "label": "t:common.options.leaf.label",
-              "group": "t:common.groups.square"
-            },
-            {
-              "value": "clipped_square",
-              "label": "t:common.options.clipped.label",
-              "group": "t:common.groups.square"
-            },
-            {
-              "value": "convex_square",
-              "label": "t:common.options.convex.label",
-              "group": "t:common.groups.square"
-            },
-            {
-              "value": "twisted_square",
-              "label": "t:common.options.twisted.label",
-              "group": "t:common.groups.square"
-            },
-            {
-              "value": "trapeze",
-              "label": "t:common.options.trapeze.label",
-              "group": "t:common.groups.square"
-            },
-            {
-              "value": "pinched",
-              "label": "t:common.options.pinched.label",
-              "group": "t:common.groups.square"
-            },
-            {
-              "value": "pixelated",
-              "label": "t:common.options.pixelated.label",
-              "group": "t:common.groups.square"
-            },
-            {
-              "value": "overlapped",
-              "label": "t:common.options.overlapped.label",
-              "group": "t:common.groups.square"
-            },
-            {
-              "value": "ellipse",
-              "label": "t:common.options.ellipse.label",
-              "group": "t:common.groups.wide"
-            },
-            {
-              "value": "diamond_wide",
-              "label": "t:common.options.diamond.label",
-              "group": "t:common.groups.wide"
-            },
-            {
-              "value": "rounded_diamond_wide",
-              "label": "t:common.options.rounded_diamond.label",
-              "group": "t:common.groups.wide"
-            },
-            {
-              "value": "triangle_wide",
-              "label": "t:common.options.triangle.label",
-              "group": "t:common.groups.wide"
-            },
-            {
-              "value": "hexagon_wide",
-              "label": "t:common.options.hexagon.label",
-              "group": "t:common.groups.wide"
-            },
-            {
-              "value": "rounded_hexagon_wide",
-              "label": "t:common.options.rounded_hexagon.label",
-              "group": "t:common.groups.wide"
-            },
-            {
-              "value": "uneven_star_wide",
-              "label": "t:common.options.uneven_star.label",
-              "group": "t:common.groups.wide"
-            },
-            {
-              "value": "star_wide",
-              "label": "t:common.options.star.label",
-              "group": "t:common.groups.wide"
-            },
-            {
-              "value": "semicircle",
-              "label": "t:common.options.semicircle.label",
-              "group": "t:common.groups.wide"
-            },
-            {
-              "value": "eye",
-              "label": "t:common.options.eye.label",
-              "group": "t:common.groups.wide"
-            },
-            {
-              "value": "parallelogram_wide",
-              "label": "t:common.options.parallelogram.label",
-              "group": "t:common.groups.wide"
-            },
-            {
-              "value": "ribbon",
-              "label": "t:common.options.ribbon.label",
-              "group": "t:common.groups.wide"
-            },
-            {
-              "value": "ticket_stub",
-              "label": "t:common.options.ticket_stub.label",
-              "group": "t:common.groups.wide"
-            },
-            {
-              "value": "wave_ribbon",
-              "label": "t:common.options.wave_ribbon.label",
-              "group": "t:common.groups.wide"
-            },
-            {
-              "value": "zig_zag_ribbon",
-              "label": "t:common.options.zig_zag_ribbon.label",
-              "group": "t:common.groups.wide"
-            }
+            { "value": "fit_to_text", "label": "t:common.blocks.sticker.settings.shape.options.fit_to_text.label" },
+            { "value": "circle", "label": "t:common.options.circle.label", "group": "t:common.groups.basic" },
+            { "value": "star_1", "label": "t:common.options.star_1.label", "group": "t:common.groups.stars" },
+            { "value": "star_2", "label": "t:common.options.star_2.label", "group": "t:common.groups.stars" }
           ],
           "default": "star_1"
         },
@@ -1745,26 +660,11 @@
           "id": "sticker_font_size",
           "label": "t:common.settings.sticker_font_size.label",
           "options": [
-            {
-              "value": "1rem",
-              "label": "t:common.options.extra_small.label"
-            },
-            {
-              "value": "1.25rem",
-              "label": "t:common.options.small.label"
-            },
-            {
-              "value": "1.563rem",
-              "label": "t:common.options.medium.label"
-            },
-            {
-              "value": "1.953rem",
-              "label": "t:common.options.large.label"
-            },
-            {
-              "value": "2.441rem",
-              "label": "t:common.options.extra_large.label"
-            }
+            { "value": "1rem", "label": "t:common.options.extra_small.label" },
+            { "value": "1.25rem", "label": "t:common.options.small.label" },
+            { "value": "1.563rem", "label": "t:common.options.medium.label" },
+            { "value": "1.953rem", "label": "t:common.options.large.label" },
+            { "value": "2.441rem", "label": "t:common.options.extra_large.label" }
           ],
           "default": "1.563rem",
           "info": "t:common.settings.sticker_font_size.info"
@@ -1841,18 +741,9 @@
           "id": "rotation_animation",
           "label": "t:common.blocks.sticker.settings.rotation_animation.label",
           "options": [
-            {
-              "value": "none",
-              "label": "t:common.blocks.sticker.settings.rotation_animation.options.no_rotation.label"
-            },
-            {
-              "value": "constantly_rotate",
-              "label": "t:common.blocks.sticker.settings.rotation_animation.options.constantly_rotate.label"
-            },
-            {
-              "value": "rotate_when_scrolling",
-              "label": "t:common.blocks.sticker.settings.rotation_animation.options.rotate_only_when_page_is_scrolling.label"
-            }
+            { "value": "none", "label": "t:common.blocks.sticker.settings.rotation_animation.options.no_rotation.label" },
+            { "value": "constantly_rotate", "label": "t:common.blocks.sticker.settings.rotation_animation.options.constantly_rotate.label" },
+            { "value": "rotate_when_scrolling", "label": "t:common.blocks.sticker.settings.rotation_animation.options.rotate_only_when_page_is_scrolling.label" }
           ],
           "default": "none"
         },
@@ -1888,30 +779,11 @@
           "label": "t:common.settings.background_color.label",
           "default": "bg-scheme-accent-1 text-scheme-accent-1-contrast",
           "options": [
-            {
-              "value": "bg-scheme-text text-scheme-text-contrast",
-              "label": "t:common.options.text.label"
-            },
-            {
-              "value": "bg-scheme-accent-1 text-scheme-accent-1-contrast",
-              "label": "t:common.options.accent_1.label"
-            },
-            {
-              "value": "bg-scheme-accent-2 text-scheme-accent-2-contrast",
-              "label": "t:common.options.accent_2.label"
-            },
-            {
-              "value": "bg-scheme-card text-scheme-card-text",
-              "label": "t:common.options.card.label"
-            },
-            {
-              "value": "bg-scheme-background text-scheme-text",
-              "label": "t:common.options.background.label"
-            },
-            {
-              "value": "bg-scheme-gradient text-scheme-text",
-              "label": "t:common.options.gradient.label"
-            }
+            { "value": "bg-scheme-text text-scheme-text-contrast", "label": "t:common.options.text.label" },
+            { "value": "bg-scheme-accent-1 text-scheme-accent-1-contrast", "label": "t:common.options.accent_1.label" },
+            { "value": "bg-scheme-accent-2 text-scheme-accent-2-contrast", "label": "t:common.options.accent_2.label" },
+            { "value": "bg-scheme-card text-scheme-card-text", "label": "t:common.options.card.label" },
+            { "value": "bg-scheme-background text-scheme-text", "label": "t:common.options.background.label" }
           ]
         }
       ]
@@ -1927,14 +799,8 @@
           "id": "target_section",
           "default": "above",
           "options": [
-            {
-              "value": "above",
-              "label": "t:common.blocks.shape_divider.settings.target_section.options.section_above.label"
-            },
-            {
-              "value": "below",
-              "label": "t:common.blocks.shape_divider.settings.target_section.options.section_below.label"
-            }
+            { "value": "above", "label": "t:common.blocks.shape_divider.settings.target_section.options.section_above.label" },
+            { "value": "below", "label": "t:common.blocks.shape_divider.settings.target_section.options.section_below.label" }
           ],
           "info": "t:common.blocks.shape_divider.settings.target_section.info"
         },
@@ -1951,314 +817,11 @@
           "id": "style",
           "default": "waves-1-patterned_1200x20",
           "options": [
-            {
-              "value": "waves-1-patterned_1200x20",
-              "label": "t:common.blocks.shape_divider.settings.style.options.waves_1.label",
-              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
-            },
-            {
-              "value": "waves-2-patterned_1200x43",
-              "label": "t:common.blocks.shape_divider.settings.style.options.waves_2.label",
-              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
-            },
-            {
-              "value": "waves-3-patterned_1200x84",
-              "label": "t:common.blocks.shape_divider.settings.style.options.waves_3.label",
-              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
-            },
-            {
-              "value": "zig-zag-1-patterned_1200x21",
-              "label": "t:common.blocks.shape_divider.settings.style.options.zig_zag_1.label",
-              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
-            },
-            {
-              "value": "zig-zag-2-patterned_1200x37",
-              "label": "t:common.blocks.shape_divider.settings.style.options.zig_zag_2.label",
-              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
-            },
-            {
-              "value": "zig-zag-3-patterned_1200x65",
-              "label": "t:common.blocks.shape_divider.settings.style.options.zig_zag_3.label",
-              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
-            },
-            {
-              "value": "circles-1-patterned_1200x16",
-              "label": "t:common.blocks.shape_divider.settings.style.options.circles_1.label",
-              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
-            },
-            {
-              "value": "circles-2-patterned_1200x35",
-              "label": "t:common.blocks.shape_divider.settings.style.options.circles_2.label",
-              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
-            },
-            {
-              "value": "circles-2.5-patterned_1200x54",
-              "label": "t:common.blocks.shape_divider.settings.style.options.circles_2_5.label",
-              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
-            },
-            {
-              "value": "circles-3-patterned_1200x67",
-              "label": "t:common.blocks.shape_divider.settings.style.options.circles_3.label",
-              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
-            },
-            {
-              "value": "spikes-1-patterned_1200x132",
-              "label": "t:common.blocks.shape_divider.settings.style.options.spikes_1.label",
-              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
-            },
-            {
-              "value": "spikes-2-patterned_1200x132",
-              "label": "t:common.blocks.shape_divider.settings.style.options.spikes_2.label",
-              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
-            },
-            {
-              "value": "tilt-1-shape_1440x101",
-              "label": "t:common.blocks.shape_divider.settings.style.options.tilt_1.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "tilt-2-shape_1440x180",
-              "label": "t:common.blocks.shape_divider.settings.style.options.tilt_2.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "tilt-3-shape_1440x293",
-              "label": "t:common.blocks.shape_divider.settings.style.options.tilt_3.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "waves-1-shape_1440x261",
-              "label": "t:common.blocks.shape_divider.settings.style.options.waves_1.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "waves-2-shape_1440x330",
-              "label": "t:common.blocks.shape_divider.settings.style.options.waves_2.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "mountains-1-shape_1440x293",
-              "label": "t:common.blocks.shape_divider.settings.style.options.mountains_1.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "mountains-2-shape_1440x325",
-              "label": "t:common.blocks.shape_divider.settings.style.options.mountains_2.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "curve-shape_1440x149",
-              "label": "t:common.blocks.shape_divider.settings.style.options.curve.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "curve-inverse-shape_1440x149",
-              "label": "t:common.blocks.shape_divider.settings.style.options.curve_inverse.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "steps-1-shape_1400x105",
-              "label": "t:common.blocks.shape_divider.settings.style.options.steps_1.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "steps-2-shape_1400x105",
-              "label": "t:common.blocks.shape_divider.settings.style.options.steps_2.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "arrow-1-shape_1400x33",
-              "label": "t:common.blocks.shape_divider.settings.style.options.arrow_1.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "arrow-2-shape_1400x73",
-              "label": "t:common.blocks.shape_divider.settings.style.options.arrow_2.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "offset-ovals-shape_1400x155",
-              "label": "t:common.blocks.shape_divider.settings.style.options.offset_ovals.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "triangle-shape_1400x145",
-              "label": "t:common.blocks.shape_divider.settings.style.options.triangle.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "triangle-asymmetrical-shape_1400x145",
-              "label": "t:common.blocks.shape_divider.settings.style.options.triangle_asymmetrical.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "clouds-shape_1400x161",
-              "label": "t:common.blocks.shape_divider.settings.style.options.clouds.label",
-              "group": "t:common.settings.shape.label"
-            }
-          ]
-        },
-        {
-          "type": "header",
-          "content": "t:common.blocks.shape_divider.settings.mobile_header.content"
-        },
-        {
-          "type": "checkbox",
-          "id": "enable_mobile_style",
-          "label": "t:common.blocks.shape_divider.settings.enable_mobile_style.label",
-          "info": "t:common.blocks.shape_divider.settings.enable_mobile_style.info"
-        },
-        {
-          "type": "select",
-          "label": "t:common.blocks.shape_divider.settings.style_mobile.label",
-          "id": "style_mobile",
-          "default": "waves-1-patterned_1200x20",
-          "options": [
-            {
-              "value": "waves-1-patterned_1200x20",
-              "label": "t:common.blocks.shape_divider.settings.style.options.waves_1.label",
-              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
-            },
-            {
-              "value": "waves-2-patterned_1200x43",
-              "label": "t:common.blocks.shape_divider.settings.style.options.waves_2.label",
-              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
-            },
-            {
-              "value": "waves-3-patterned_1200x84",
-              "label": "t:common.blocks.shape_divider.settings.style.options.waves_3.label",
-              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
-            },
-            {
-              "value": "zig-zag-1-patterned_1200x21",
-              "label": "t:common.blocks.shape_divider.settings.style.options.zig_zag_1.label",
-              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
-            },
-            {
-              "value": "zig-zag-2-patterned_1200x37",
-              "label": "t:common.blocks.shape_divider.settings.style.options.zig_zag_2.label",
-              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
-            },
-            {
-              "value": "zig-zag-3-patterned_1200x65",
-              "label": "t:common.blocks.shape_divider.settings.style.options.zig_zag_3.label",
-              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
-            },
-            {
-              "value": "circles-1-patterned_1200x16",
-              "label": "t:common.blocks.shape_divider.settings.style.options.circles_1.label",
-              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
-            },
-            {
-              "value": "circles-2-patterned_1200x35",
-              "label": "t:common.blocks.shape_divider.settings.style.options.circles_2.label",
-              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
-            },
-            {
-              "value": "circles-2.5-patterned_1200x54",
-              "label": "t:common.blocks.shape_divider.settings.style.options.circles_2_5.label",
-              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
-            },
-            {
-              "value": "circles-3-patterned_1200x67",
-              "label": "t:common.blocks.shape_divider.settings.style.options.circles_3.label",
-              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
-            },
-            {
-              "value": "spikes-1-patterned_1200x132",
-              "label": "t:common.blocks.shape_divider.settings.style.options.spikes_1.label",
-              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
-            },
-            {
-              "value": "spikes-2-patterned_1200x132",
-              "label": "t:common.blocks.shape_divider.settings.style.options.spikes_2.label",
-              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
-            },
-            {
-              "value": "tilt-1-shape_1440x101",
-              "label": "t:common.blocks.shape_divider.settings.style.options.tilt_1.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "tilt-2-shape_1440x180",
-              "label": "t:common.blocks.shape_divider.settings.style.options.tilt_2.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "tilt-3-shape_1440x293",
-              "label": "t:common.blocks.shape_divider.settings.style.options.tilt_3.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "waves-1-shape_1440x261",
-              "label": "t:common.blocks.shape_divider.settings.style.options.waves_1.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "waves-2-shape_1440x330",
-              "label": "t:common.blocks.shape_divider.settings.style.options.waves_2.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "mountains-1-shape_1440x293",
-              "label": "t:common.blocks.shape_divider.settings.style.options.mountains_1.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "mountains-2-shape_1440x325",
-              "label": "t:common.blocks.shape_divider.settings.style.options.mountains_2.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "curve-shape_1440x149",
-              "label": "t:common.blocks.shape_divider.settings.style.options.curve.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "curve-inverse-shape_1440x149",
-              "label": "t:common.blocks.shape_divider.settings.style.options.curve_inverse.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "steps-1-shape_1400x105",
-              "label": "t:common.blocks.shape_divider.settings.style.options.steps_1.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "steps-2-shape_1400x105",
-              "label": "t:common.blocks.shape_divider.settings.style.options.steps_2.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "arrow-1-shape_1400x33",
-              "label": "t:common.blocks.shape_divider.settings.style.options.arrow_1.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "arrow-2-shape_1400x73",
-              "label": "t:common.blocks.shape_divider.settings.style.options.arrow_2.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "offset-ovals-shape_1400x155",
-              "label": "t:common.blocks.shape_divider.settings.style.options.offset_ovals.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "triangle-shape_1400x145",
-              "label": "t:common.blocks.shape_divider.settings.style.options.triangle.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "triangle-asymmetrical-shape_1400x145",
-              "label": "t:common.blocks.shape_divider.settings.style.options.triangle_asymmetrical.label",
-              "group": "t:common.settings.shape.label"
-            },
-            {
-              "value": "clouds-shape_1400x161",
-              "label": "t:common.blocks.shape_divider.settings.style.options.clouds.label",
-              "group": "t:common.settings.shape.label"
-            }
+            { "value": "waves-1-patterned_1200x20", "label": "t:common.blocks.shape_divider.settings.style.options.waves_1.label", "group": "t:common.blocks.shape_divider.settings.style.group_patterned" },
+            { "value": "waves-2-patterned_1200x43", "label": "t:common.blocks.shape_divider.settings.style.options.waves_2.label", "group": "t:common.blocks.shape_divider.settings.style.group_patterned" },
+            { "value": "tilt-1-shape_1440x101", "label": "t:common.blocks.shape_divider.settings.style.options.tilt_1.label", "group": "t:common.settings.shape.label" },
+            { "value": "waves-1-shape_1440x261", "label": "t:common.blocks.shape_divider.settings.style.options.waves_1.label", "group": "t:common.settings.shape.label" },
+            { "value": "curve-shape_1440x149", "label": "t:common.blocks.shape_divider.settings.style.options.curve.label", "group": "t:common.settings.shape.label" }
           ]
         },
         {
@@ -2281,14 +844,8 @@
           "id": "animation_direction",
           "label": "t:common.blocks.shape_divider.settings.animation_direction.label",
           "options": [
-            {
-              "value": "",
-              "label": "t:common.options.right_to_left.label"
-            },
-            {
-              "value": "reverse",
-              "label": "t:common.options.left_to_right.label"
-            }
+            { "value": "", "label": "t:common.options.right_to_left.label" },
+            { "value": "reverse", "label": "t:common.options.left_to_right.label" }
           ],
           "default": ""
         }
