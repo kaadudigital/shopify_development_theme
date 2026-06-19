@@ -1,6 +1,4 @@
 {%- assign btn_text_mob = section.settings.button_text_mobile -%}
-{%- assign has_btn_img = section.settings.button_image != blank -%}
-{%- assign has_btn_img_mob = section.settings.button_image_mobile != blank -%}
 
 {%- style -%}
   #shopify-section-{{ section.id }} .email-signup-section {
@@ -193,12 +191,12 @@
 
         <button
           type="submit"
-          class="email-signup-submit{% if has_btn_img %} email-signup-submit--image{% endif %}"
+          class="email-signup-submit{% if section.settings.button_image != blank %} email-signup-submit--image{% endif %}"
           aria-label="{{ section.settings.button_text | default: 'Abonnieren' | escape }}"
         >
-          {%- if has_btn_img -%}
+          {%- if section.settings.button_image != blank -%}
             <picture>
-              {%- if has_btn_img_mob -%}
+              {%- if section.settings.button_image_mobile != blank -%}
                 <source
                   media="(max-width: 768px)"
                   srcset="{{ section.settings.button_image_mobile | image_url: width: 280 }}"
