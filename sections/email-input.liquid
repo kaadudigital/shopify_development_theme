@@ -1,16 +1,10 @@
 {%- assign btn_text_mob = section.settings.button_text_mobile -%}
 
 {%- style -%}
-  {%- if section.settings.padding_top == 'none' -%}
-  #shopify-section-{{ section.id }} {
-    padding-top: 0 !important;
-    margin-top: 0 !important;
-  }
-  {%- endif -%}
   #shopify-section-{{ section.id }} .email-signup-section {
     position: relative;
     overflow: hidden;
-    padding-block-start: {%- if section.settings.padding_top == 'none' -%}0{%- elsif section.settings.padding_top == 'small' -%}var(--space-4){%- else -%}var(--space-8){%- endif -%};
+    padding-block-start: {%- if section.settings.padding_top == 'none' -%}var(--space-2){%- elsif section.settings.padding_top == 'small' -%}var(--space-4){%- else -%}var(--space-8){%- endif -%};
     padding-block-end: var(--space-8);
     padding-inline: var(--space-4);
   }
@@ -158,7 +152,7 @@
 
   @media (min-width: 769px) {
     #shopify-section-{{ section.id }} .email-signup-section {
-      padding-block-start: {%- if section.settings.padding_top == 'none' -%}0{%- elsif section.settings.padding_top == 'small' -%}var(--space-8){%- else -%}var(--section-padding-v){%- endif -%};
+      padding-block-start: {%- if section.settings.padding_top == 'none' -%}var(--space-2){%- elsif section.settings.padding_top == 'small' -%}var(--space-8){%- else -%}var(--section-padding-v){%- endif -%};
       padding-block-end: var(--section-padding-v);
       padding-inline: var(--space-6);
     }
@@ -419,7 +413,7 @@
       "id": "padding_top",
       "label": "Top spacing",
       "options": [
-        { "value": "none", "label": "None — attach to section above" },
+        { "value": "none", "label": "Very small" },
         { "value": "small", "label": "Small" },
         { "value": "default", "label": "Default (Recommended)" }
       ],
