@@ -1,6 +1,12 @@
 {%- assign btn_text_mob = section.settings.button_text_mobile -%}
 
 {%- style -%}
+  {%- if section.settings.padding_top == 'none' -%}
+  #shopify-section-{{ section.id }} {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+  }
+  {%- endif -%}
   #shopify-section-{{ section.id }} .email-signup-section {
     position: relative;
     overflow: hidden;
@@ -32,7 +38,7 @@
     background-color: var(--color-cream);
     color: var(--color-near-black);
     border: 2px solid var(--color-black);
-    border-radius: var(--radius-btn);
+    border-radius: {%- if section.settings.input_square -%}0{%- else -%}var(--radius-btn){%- endif -%};
     outline: none;
     box-shadow: var(--shadow-sm);
     transition: border-color 0.15s ease-out, box-shadow 0.15s ease-out;
@@ -98,45 +104,49 @@
   /* --- Submit: custom image mode --- */
   #shopify-section-{{ section.id }} .email-signup-submit--image {
     position: relative;
-    width: auto;
-    aspect-ratio: unset;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    width: auto;
+    aspect-ratio: unset;
   }
   #shopify-section-{{ section.id }} .email-signup-submit__bg {
-    display: block;
-    max-height: 56px;
-    max-width: 200px;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-  }
-  #shopify-section-{{ section.id }} .email-signup-submit__label {
     position: absolute;
     inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    display: block;
+  }
+  #shopify-section-{{ section.id }} .email-signup-submit__label {
+    position: relative;
+    z-index: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     pointer-events: none;
     padding-inline: {{ section.settings.button_label_padding }}px;
+    padding-block: var(--space-3);
     font-family: var(--font-display);
     font-weight: 400;
     font-size: 20px;
     line-height: 1;
     text-align: center;
     text-transform: uppercase;
+    white-space: nowrap;
   }
   #shopify-section-{{ section.id }} .email-signup-submit__label--mobile {
     display: none;
   }
 
-  {%- if btn_text_mob != blank -%}
-    @media (max-width: 768px) {
+  @media (max-width: 768px) {
+    {%- if btn_text_mob != blank -%}
       #shopify-section-{{ section.id }} .email-signup-submit__label--desktop { display: none; }
       #shopify-section-{{ section.id }} .email-signup-submit__label--mobile { display: flex; }
-    }
-  {%- endif -%}
+    {%- else -%}
+      #shopify-section-{{ section.id }} .email-signup-submit__label { display: none; }
+    {%- endif -%}
+  }
 
   #shopify-section-{{ section.id }} .email-signup-subtitle {
     text-align: center;
@@ -165,10 +175,6 @@
     }
     #shopify-section-{{ section.id }} .email-signup-submit {
       width: 80px;
-    }
-    #shopify-section-{{ section.id }} .email-signup-submit__bg {
-      max-height: 64px;
-      max-width: 240px;
     }
   }
 {%- endstyle -%}
@@ -337,6 +343,12 @@
       "default": "deine@email.com"
     },
     {
+      "type": "checkbox",
+      "id": "input_square",
+      "label": "Square input corners",
+      "default": false
+    },
+    {
       "type": "header",
       "content": "Button — Desktop"
     },
@@ -367,7 +379,7 @@
       "type": "text",
       "id": "button_text_mobile",
       "label": "Button text (mobile)",
-      "info": "Falls back to desktop button text when blank."
+      "info": "Leave blank to hide button text on mobile entirely."
     },
     {
       "type": "range",
