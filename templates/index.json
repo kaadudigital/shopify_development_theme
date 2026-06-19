@@ -402,11 +402,12 @@
         "input_square": true,
         "button_image": "shopify://shop_images/06d3f155e99649c6ad8f552f17b4bec9ac475189.png",
         "button_text": "ANMELDEN",
-        "button_text_color": "#AE0000",
+        "button_text_color": "#ae0000",
+        "button_image_width": 128,
         "button_image_mobile": "shopify://shop_images/right_arrow_in_spiky_cloud.svg",
         "button_text_mobile": "",
-        "button_label_padding": 8,
-        "padding_top": "none",
+        "button_image_width_mobile": 64,
+        "padding_top": "small",
         "bg_class": "bg-lime",
         "color_scheme": "scheme5"
       }
