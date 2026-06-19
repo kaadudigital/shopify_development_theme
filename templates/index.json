@@ -406,7 +406,7 @@
         "button_image_width": 128,
         "button_image_mobile": "shopify://shop_images/right_arrow_in_spiky_cloud.svg",
         "button_text_mobile": "",
-        "button_image_width_mobile": 160,
+        "button_image_width_mobile": 64,
         "padding_top": "none",
         "bg_class": "bg-lime",
         "color_scheme": "scheme5"
