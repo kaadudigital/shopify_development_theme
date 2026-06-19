@@ -4,7 +4,8 @@
   #shopify-section-{{ section.id }} .email-signup-section {
     position: relative;
     overflow: hidden;
-    padding-block: var(--space-8);
+    padding-block-start: {%- if section.settings.padding_top == 'none' -%}0{%- elsif section.settings.padding_top == 'small' -%}var(--space-4){%- else -%}var(--space-8){%- endif -%};
+    padding-block-end: var(--space-8);
     padding-inline: var(--space-4);
   }
   #shopify-section-{{ section.id }} .email-signup-container {
@@ -148,7 +149,8 @@
 
   @media (min-width: 769px) {
     #shopify-section-{{ section.id }} .email-signup-section {
-      padding-block: var(--section-padding-v);
+      padding-block-start: {%- if section.settings.padding_top == 'none' -%}0{%- elsif section.settings.padding_top == 'small' -%}var(--space-8){%- else -%}var(--section-padding-v){%- endif -%};
+      padding-block-end: var(--section-padding-v);
       padding-inline: var(--space-6);
     }
     #shopify-section-{{ section.id }} .email-signup-heading {
@@ -366,6 +368,21 @@
       "id": "button_text_mobile",
       "label": "Button text (mobile)",
       "info": "Falls back to desktop button text when blank."
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "options": [
+        { "value": "none", "label": "None — attach to section above" },
+        { "value": "small", "label": "Small" },
+        { "value": "default", "label": "Default (Recommended)" }
+      ],
+      "default": "default"
     },
     {
       "type": "header",
