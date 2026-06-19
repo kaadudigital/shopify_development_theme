@@ -523,6 +523,26 @@
     "custom_text_around_image_VxwP3K": {
       "type": "custom-text-around-image",
       "blocks": {
+        "sticker_LkXBmz": {
+          "type": "sticker",
+          "settings": {
+            "width": 150,
+            "half_width_on_mobile": true,
+            "text": "Sticker",
+            "shape": "star_1",
+            "sticker_font_size": "1.563rem",
+            "horizontal_position": 50,
+            "vertical_position": 60,
+            "rotate": 0,
+            "show_sticker_on_mobile": true,
+            "show_sticker_on_desktop": true,
+            "rotation_animation": "none",
+            "enable_parallax": false,
+            "parallax_speed": 3,
+            "color_scheme": "scheme1",
+            "color": "bg-scheme-accent-1 text-scheme-accent-1-contrast"
+          }
+        },
         "richtext_g9kaXP": {
           "type": "richtext",
           "settings": {
@@ -534,12 +554,12 @@
             "text": "<p>Weil reif geerntetes Obst intensiver schmeckt.</p>",
             "text_font_size": 14,
             "text_color": "#333333",
-            "text_alignment": "left",
+            "text_alignment": "center",
             "offset_desktop_dir": "left",
             "offset_desktop_px": 0,
             "offset_mobile_dir": "right",
             "offset_mobile_px": 0,
-            "block_bg_color": "",
+            "block_bg_color": "#FFFFFF",
             "block_padding": 0,
             "block_border_radius": 0
           }
@@ -651,6 +671,7 @@
         }
       },
       "block_order": [
+        "sticker_LkXBmz",
         "richtext_g9kaXP",
         "richtext_WcXd7w",
         "richtext_XaMzGn",
