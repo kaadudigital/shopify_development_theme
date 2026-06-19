@@ -404,7 +404,7 @@
         "button_image_mobile": "shopify://shop_images/right_arrow_in_spiky_cloud.svg",
         "button_text_mobile": "",
         "button_label_padding": 8,
-        "padding_top": "small",
+        "padding_top": "none",
         "bg_class": "bg-lime",
         "color_scheme": "scheme5"
       }
