@@ -99,6 +99,19 @@
     "custom_image_focus_carousel_XtKKQC": {
       "type": "custom-image-focus-carousel",
       "blocks": {
+        "shape_divider_JPU89L": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "below",
+            "target_section_color_scheme": "scheme6",
+            "style": "circles-2.5-patterned_1200x54",
+            "enable_mobile_style": false,
+            "style_mobile": "circles-2.5-patterned_1200x54",
+            "flip_horizontal": false,
+            "enable_animation": false,
+            "animation_direction": ""
+          }
+        },
         "image_4pVDca": {
           "type": "image",
           "settings": {
@@ -137,17 +150,18 @@
         }
       },
       "block_order": [
+        "shape_divider_JPU89L",
         "image_4pVDca",
         "image_7FYarq",
         "image_nKw4WK"
       ],
       "name": "custom focus carousel",
       "settings": {
-        "eyebrow": "DAS PROLEM",
+        "eyebrow": "Ausbeutung ist tief verankert",
         "title": "DIE LIEFERKETTE LEIDET",
         "title2": "",
         "title3": "",
-        "subheading": "Unter den Teifpreisen im Supermarkt leidet nicht nur die Natur.. Die Ausbeutung im Globalen Süden ist tief verankert",
+        "subheading": "Unter den Tiefpreisen im Supermarkt leidet nicht nur die Natur.",
         "desktop_extended_layout": true,
         "enlarge_active_slide": true,
         "disable_media_style": false,
@@ -164,6 +178,24 @@
     },
     "custom_image_section_anwQpJ": {
       "type": "custom-image-section",
+      "blocks": {
+        "shape_divider_HHiMPK": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "below",
+            "target_section_color_scheme": "scheme-389c794f-4614-44af-93cb-cbbfec11d15a",
+            "style": "circles-2.5-patterned_1200x54",
+            "enable_mobile_style": true,
+            "style_mobile": "circles-3-patterned_1200x67",
+            "flip_horizontal": false,
+            "enable_animation": true,
+            "animation_direction": ""
+          }
+        }
+      },
+      "block_order": [
+        "shape_divider_HHiMPK"
+      ],
       "custom_css": [
         ".hero-bg-image {z-index: 6;}",
         "@media (max-width: 768px) {.hero-bg-image {transform: translate(-50%, -50%) rotate(-34.89deg); transform-origin: center center; }}"
@@ -176,7 +208,7 @@
         "image_width_desktop": 885,
         "image_width_mobile": 460,
         "image_x_desktop": 25,
-        "image_y_desktop": 53,
+        "image_y_desktop": 57,
         "image_x_mobile": 50,
         "image_y_mobile": 75,
         "heading": "unsere[br] crunchys[br] verändern[br] alles",
@@ -559,7 +591,7 @@
             "offset_desktop_px": 0,
             "offset_mobile_dir": "right",
             "offset_mobile_px": 0,
-            "block_bg_color": "#FFFFFF",
+            "block_bg_color": "#ffffff",
             "block_padding": 0,
             "block_border_radius": 0
           }
@@ -817,6 +849,70 @@
         "color_scheme": "",
         "use_gradient_background": false
       }
+    },
+    "featured_product_zzj8MW": {
+      "type": "featured-product",
+      "blocks": {
+        "title_4c7jXj": {
+          "type": "title",
+          "settings": {
+            "display_on_card": false,
+            "text_align": "text-left"
+          }
+        },
+        "price_b9aQUy": {
+          "type": "price",
+          "settings": {
+            "display_on_card": false,
+            "show_on_sale_sticker": false,
+            "text_align": "text-left"
+          }
+        },
+        "variant_picker_iwDeHh": {
+          "type": "variant_picker",
+          "settings": {
+            "display_on_card": false,
+            "option_style": "drop_down",
+            "full_width_buttons": false,
+            "hide_option_labels": true,
+            "enable_color_swatches": false
+          }
+        },
+        "buy_buttons_kP9qBY": {
+          "type": "buy_buttons",
+          "settings": {
+            "display_on_card": false,
+            "show_price": false,
+            "enable_payment_button": true,
+            "show_pickup_availability": true,
+            "show_gift_card_recipient": false
+          }
+        }
+      },
+      "block_order": [
+        "title_4c7jXj",
+        "price_b9aQUy",
+        "variant_picker_iwDeHh",
+        "buy_buttons_kP9qBY"
+      ],
+      "name": "t:sections.featured_product.name",
+      "settings": {
+        "title": "",
+        "product": "bananen-crunchys",
+        "crop": "",
+        "image_shape": "default",
+        "media_mobile_width": "w-full",
+        "desktop_media_width": "lg:col-span-6_lg:col-span-6",
+        "enable_video_looping": true,
+        "thumbnails_position": "left",
+        "thumbnail_crop": "aspect-w-1 aspect-h-1",
+        "thumbnail_shape": "default",
+        "hide_media_shadow": false,
+        "thumbnail_size": "standard",
+        "show_thumbnails_on_mobile": false,
+        "color_scheme": "",
+        "use_gradient_background": false
+      }
     }
   },
   "order": [
@@ -833,6 +929,7 @@
     "custom_image_focus_carousel_AGiAMj",
     "custom_video_NyCJ7Q",
     "custom_text_around_image_VxwP3K",
-    "image_with_highlights_mU9j66"
+    "image_with_highlights_mU9j66",
+    "featured_product_zzj8MW"
   ]
 }
