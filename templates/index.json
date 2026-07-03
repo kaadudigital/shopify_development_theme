@@ -882,6 +882,28 @@
             "text_align": "text-left"
           }
         },
+        "icon_row_VzLTAM": {
+          "type": "icon_row",
+          "settings": {
+            "display_on_card": false,
+            "uppercase_text": false,
+            "icon_alignment": "justify-start",
+            "icon_thickness": 1.5,
+            "background_color": "bg-transparent text-scheme-text",
+            "show_border": true,
+            "icon_size": "h-10 w-10",
+            "icon_1": "globe",
+            "text_1": "Row item",
+            "icon_2": "truck",
+            "text_2": "Row item",
+            "icon_3": "washing",
+            "text_3": "Row item",
+            "icon_4": "heart",
+            "text_4": "Row item",
+            "icon_5": "ruler",
+            "text_5": "Row item"
+          }
+        },
         "variant_picker_iwDeHh": {
           "type": "variant_picker",
           "settings": {
@@ -906,6 +928,7 @@
       "block_order": [
         "title_4c7jXj",
         "price_b9aQUy",
+        "icon_row_VzLTAM",
         "variant_picker_iwDeHh",
         "buy_buttons_kP9qBY"
       ],
@@ -927,6 +950,30 @@
         "color_scheme": "",
         "use_gradient_background": false
       }
+    },
+    "featured_collection_d8jhDg": {
+      "type": "featured-collection",
+      "name": "t:sections.featured_collection.name",
+      "settings": {
+        "title": "Featured collection",
+        "subheading": "Use this text to share information about your collection.",
+        "collection": "",
+        "no_products": 4,
+        "show_view_all": false,
+        "enable_quick_buy": false,
+        "display_on_card": false,
+        "layout": "grid",
+        "products_per_row_mobile": "1",
+        "products_per_row_desktop": 4,
+        "slideshow_focus": "center",
+        "mobile_slide_width": "three_fifths",
+        "desktop_slide_width": 40,
+        "autoscroll_mode": "1",
+        "product_tiles_aspect_ratio": "",
+        "image_shape": "",
+        "color_scheme": "",
+        "use_gradient_background": false
+      }
     }
   },
   "order": [
@@ -944,6 +991,7 @@
     "custom_video_NyCJ7Q",
     "custom_text_around_image_VxwP3K",
     "image_with_highlights_mU9j66",
-    "featured_product_zzj8MW"
+    "featured_product_zzj8MW",
+    "featured_collection_d8jhDg"
   ]
 }
