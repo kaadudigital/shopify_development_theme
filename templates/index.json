@@ -298,6 +298,19 @@
     "custom_image_section_Mafcmn": {
       "type": "custom-image-section",
       "blocks": {
+        "shape_divider_Ui9e84": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "below",
+            "target_section_color_scheme": "scheme3",
+            "style": "circles-2.5-patterned_1200x54",
+            "enable_mobile_style": true,
+            "style_mobile": "circles-3-patterned_1200x67",
+            "flip_horizontal": false,
+            "enable_animation": true,
+            "animation_direction": ""
+          }
+        },
         "background_pattern_NKpgdA": {
           "type": "background_pattern",
           "settings": {
@@ -311,6 +324,7 @@
         }
       },
       "block_order": [
+        "shape_divider_Ui9e84",
         "background_pattern_NKpgdA"
       ],
       "name": "Custom Sticker Heading",
