@@ -335,14 +335,28 @@
       .custom-image-with-text-button-wrapper {
         flex-direction: column;
       }
-      /* Each button wrapper (plain <div> or .custom-btn-wrapper) fills the row */
+      /* Each button wrapper (plain <div> or .custom-btn-wrapper) fills the row,
+         and lays its child out on the axis set by the section's text alignment
+         now that the blob button below no longer forces its own 100% width */
       .custom-image-with-text-button-wrapper > * {
         width: 100%;
+        display: flex;
       }
-      /* Primary "blob" shape button: full width, height follows the actual
-         image's aspect ratio so it's never stretched or squashed */
+      .custom-image-with-text-button-wrapper.text-left > * {
+        justify-content: flex-start;
+      }
+      .custom-image-with-text-button-wrapper.text-center > * {
+        justify-content: center;
+      }
+      .custom-image-with-text-button-wrapper.text-right > * {
+        justify-content: flex-end;
+      }
+      /* Primary "blob" shape button: sized from its text + padding, with the
+         image's real aspect ratio applied so it scales as one undistorted
+         unit — grows/shrinks with the padding setting instead of a fixed box */
       .custom-image-with-text-button-wrapper .custom-shape-button {
-        width: 100%;
+        display: inline-flex;
+        width: auto;
         {%- if shape_button_source_mobile != blank -%}
         aspect-ratio: {{ shape_button_source_mobile.aspect_ratio }};
         {%- endif -%}
