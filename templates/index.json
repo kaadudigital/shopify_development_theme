@@ -71,11 +71,11 @@
         "focus_element2_id": "",
         "button2_label": "JETZT PROBIEREN",
         "button2_label_mobile": "PROBIERPAKET BESTELLEN",
-        "button2_image": "shopify://shop_images/cropped_long.png",
-        "button2_image_mobile": "shopify://shop_images/cropped_long.png",
+        "button2_image": "shopify://shop_images/WhatsApp_Image_2026-07-15_at_23.06.17.jpg",
+        "button2_image_mobile": "shopify://shop_images/WhatsApp_Image_2026-07-15_at_23.06.17.jpg",
         "button_text_color_desktop": "#ae0000",
         "button_text_color_mobile": "#542a76",
-        "button2_padding_topbottom": 56,
+        "button2_padding_topbottom": 4,
         "color_scheme": "",
         "use_gradient_background": false
       }
