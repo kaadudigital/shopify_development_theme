@@ -72,7 +72,7 @@
         "button2_label": "JETZT PROBIEREN",
         "button2_label_mobile": "PROBIERPAKET BESTELLEN",
         "button2_image": "shopify://shop_images/Vector_1.png",
-        "button2_image_mobile": "shopify://shop_images/custom-image-button-green-long.png",
+        "button2_image_mobile": "shopify://shop_images/cropped_long.png",
         "button_text_color_desktop": "#ae0000",
         "button_text_color_mobile": "#542a76",
         "button2_padding_topbottom": 56,
@@ -593,6 +593,7 @@
           "type": "richtext",
           "settings": {
             "heading": "VOLLES AROMA – WEIL REIF GEERNTET",
+            "body_text": "<p>Use this text to describe a feature or benefit.</p>",
             "text_alignment": "center"
           }
         },
@@ -600,6 +601,7 @@
           "type": "richtext",
           "settings": {
             "heading": "KNUSPRIG, LUFTIG, LEICHT",
+            "body_text": "<p>Use this text to describe a feature or benefit.</p>",
             "text_alignment": "right"
           }
         },
@@ -607,6 +609,7 @@
           "type": "richtext",
           "settings": {
             "heading": "100 % FRUCHT – OHNE ZUSÄTZE",
+            "body_text": "<p>Use this text to describe a feature or benefit.</p>",
             "text_alignment": "left"
           }
         },
@@ -614,6 +617,7 @@
           "type": "richtext",
           "settings": {
             "heading": "SCHONENDE TROCKNUNG = MEHR NÄHRSTOFFE",
+            "body_text": "<p>Use this text to describe a feature or benefit.</p>",
             "text_alignment": "right"
           }
         },
@@ -621,6 +625,7 @@
           "type": "richtext",
           "settings": {
             "heading": "SCHONENDE TROCKNUNG",
+            "body_text": "<p>Use this text to describe a feature or benefit.</p>",
             "text_alignment": "left"
           }
         },
@@ -628,6 +633,7 @@
           "type": "richtext",
           "settings": {
             "heading": "UNPROFITABLE FRÜCHTE GERETTET",
+            "body_text": "<p>Use this text to describe a feature or benefit.</p>",
             "text_alignment": "right"
           }
         }
@@ -645,9 +651,11 @@
       "settings": {
         "title": "GEFRIERGETROCKNETER",
         "heading_alignment": "center",
+        "body_text": "",
         "main_image": "shopify://shop_images/ring_pineappl.webp",
         "button_label": "Jetzt Probieren",
         "button_link": "shopify://pages/contact",
+        "bg_class": "bg-pink",
         "padding_top": 60,
         "padding_bottom": 60,
         "color_scheme": ""
