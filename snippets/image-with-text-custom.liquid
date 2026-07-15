@@ -348,10 +348,9 @@
         {%- endif -%}
         background-size: contain;
       }
-      /* Drop the desktop vertical padding so the aspect-ratio governs height */
       .custom-image-with-text-button-wrapper .custom-shape-button-text {
-        padding-top: 0;
-        padding-bottom: 0;
+        padding-top: {{ section.settings.button2_padding_topbottom_mobile }}px;
+        padding-bottom: {{ section.settings.button2_padding_topbottom_mobile }}px;
       }
       /* Secondary pill (.custom-btn wrapping .push-btn__surface) fills the row.
          The :not() guard avoids hitting the focus-element variant that doubles
@@ -405,8 +404,14 @@
           line-height: 24px;
           text-transform: uppercase;
           letter-spacing: 0.02em;
-          padding: {{ section.settings.button2_padding_topbottom }}px var(--space-6);
+          padding: 0 var(--space-6);
         }
+    @media (min-width: 491px) {
+      .custom-shape-button-text {
+        padding-top: {{ section.settings.button2_padding_topbottom }}px;
+        padding-bottom: {{ section.settings.button2_padding_topbottom }}px;
+      }
+    }
     @media (max-width: 490px) {
       .custom-shape-button-text {
         color: {{ button_text_color_mobile | default: '#AE0000' }};
