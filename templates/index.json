@@ -143,7 +143,7 @@
             "crop": "",
             "image_shape": "website_shape_pancake",
             "heading": "ERNTEHELFER*INNEN",
-            "caption": "Knapp CHF 10 für einen ganzen Tag Ananas ernten in der Sonne -  keine Sozialleistungen oder Sicherheit",
+            "caption": "Knapp CHF 10 für einen ganzen Tag Ananas ernten in der Sonne - keine Sozialleistungen oder Sicherheit",
             "button_text": "",
             "url": ""
           }
@@ -286,7 +286,7 @@
         "heading_alignment_mobile": "text-center",
         "subheading": "",
         "conclusion_heading": "",
-        "richtext": "<p>Kaadu zahlt Kleinbauern stabile, transparente Preise – deutlich über dem Markt.<br/><br/>So schaffen wir Planungssicherheit und schützen sie vor Preisschwankungen. Umweltauflagen und faire Löhne für Erntehelfer sichern ganzheitliche Wirkung.</p>",
+        "richtext": "<p>Kaadu zahlt Kleinbauern stabile, transparentePreise – deutlich über dem Markt.<br/><br/>So schaffen wir Planungssicherheit undschützen sie vor Preisschwankungen.Umweltauflagen und faire Löhne fürErntehelfer sichern ganzheitliche Wirkung.</p>",
         "text_alignment": "text-left",
         "text_alignment_mobile": "text-center",
         "button_link": "shopify://pages/contact",
@@ -341,7 +341,7 @@
         "heading": "",
         "heading_tag": "h2",
         "heading_style": "h2",
-        "subheading": "«Zum ersten Mal zählt nicht nur meine Arbeit,  sondern auch meine Stimme.» ",
+        "subheading": "«Zum ersten Mal zählt nicht nur meine Arbeit, sondern auch meine Stimme.»",
         "text_alignment_header": "text-center",
         "header_display_on_card": true,
         "subheading_display_on_card": true,
@@ -422,7 +422,7 @@
       "name": "Custom Rich Text Image",
       "settings": {
         "eyebrow": "20% OFF YOUR FIRST CRUNCH",
-        "title": "UNSER JOURNEY HAT  ERST BEGONNEN",
+        "title": "UNSER JOURNEY HAT ERST BEGONNEN",
         "title2": "",
         "title3": "",
         "subheading": "",
@@ -593,126 +593,42 @@
           "type": "richtext",
           "settings": {
             "heading": "VOLLES AROMA – WEIL REIF GEERNTET",
-            "heading_font_size": 18,
-            "heading_font_weight": "700",
-            "heading_font_family": "inherit",
-            "heading_color": "#ae0000",
-            "text": "<p>Weil reif geerntetes Obst intensiver schmeckt.</p>",
-            "text_font_size": 14,
-            "text_color": "#333333",
-            "text_alignment": "center",
-            "offset_desktop_dir": "left",
-            "offset_desktop_px": 0,
-            "offset_mobile_dir": "right",
-            "offset_mobile_px": 0,
-            "block_bg_color": "#ffffff",
-            "block_padding": 0,
-            "block_border_radius": 0
+            "text_alignment": "center"
           }
         },
         "richtext_WcXd7w": {
           "type": "richtext",
           "settings": {
             "heading": "KNUSPRIG, LUFTIG, LEICHT",
-            "heading_font_size": 18,
-            "heading_font_weight": "700",
-            "heading_font_family": "inherit",
-            "heading_color": "#ae0000",
-            "text": "<p>Einzigartiger Biss durch schonende Trocknung.</p>",
-            "text_font_size": 14,
-            "text_color": "#333333",
-            "text_alignment": "right",
-            "offset_desktop_dir": "right",
-            "offset_desktop_px": 0,
-            "offset_mobile_dir": "right",
-            "offset_mobile_px": 0,
-            "block_bg_color": "",
-            "block_padding": 0,
-            "block_border_radius": 0
+            "text_alignment": "right"
           }
         },
         "richtext_XaMzGn": {
           "type": "richtext",
           "settings": {
             "heading": "100 % FRUCHT – OHNE ZUSÄTZE",
-            "heading_font_size": 18,
-            "heading_font_weight": "700",
-            "heading_font_family": "inherit",
-            "heading_color": "#ae0000",
-            "text": "<p>Keine Zusatzstoffe, keine Kompromisse.</p>",
-            "text_font_size": 14,
-            "text_color": "#333333",
-            "text_alignment": "left",
-            "offset_desktop_dir": "right",
-            "offset_desktop_px": 0,
-            "offset_mobile_dir": "right",
-            "offset_mobile_px": 0,
-            "block_bg_color": "",
-            "block_padding": 0,
-            "block_border_radius": 0
+            "text_alignment": "left"
           }
         },
         "richtext_w3ajYx": {
           "type": "richtext",
           "settings": {
-            "heading": "SCHONENDE TROCKNUNG<br> = MEHR NÄHRSTOFFE",
-            "heading_font_size": 18,
-            "heading_font_weight": "700",
-            "heading_font_family": "inherit",
-            "heading_color": "#ae0000",
-            "text": "<p>Vitamine und Mineralstoffe bleiben erhalten.</p>",
-            "text_font_size": 14,
-            "text_color": "#333333",
-            "text_alignment": "right",
-            "offset_desktop_dir": "right",
-            "offset_desktop_px": 0,
-            "offset_mobile_dir": "right",
-            "offset_mobile_px": 0,
-            "block_bg_color": "",
-            "block_padding": 0,
-            "block_border_radius": 0
+            "heading": "SCHONENDE TROCKNUNG = MEHR NÄHRSTOFFE",
+            "text_alignment": "right"
           }
         },
         "richtext_z6Rwha": {
           "type": "richtext",
           "settings": {
             "heading": "SCHONENDE TROCKNUNG",
-            "heading_font_size": 18,
-            "heading_font_weight": "700",
-            "heading_font_family": "inherit",
-            "heading_color": "#ae0000",
-            "text": "<p>Gefriergetrocknet für maximale Qualität.</p>",
-            "text_font_size": 14,
-            "text_color": "#333333",
-            "text_alignment": "left",
-            "offset_desktop_dir": "right",
-            "offset_desktop_px": 0,
-            "offset_mobile_dir": "right",
-            "offset_mobile_px": 0,
-            "block_bg_color": "",
-            "block_padding": 0,
-            "block_border_radius": 0
+            "text_alignment": "left"
           }
         },
         "richtext_kwdVQ4": {
           "type": "richtext",
           "settings": {
             "heading": "UNPROFITABLE FRÜCHTE GERETTET",
-            "heading_font_size": 18,
-            "heading_font_weight": "700",
-            "heading_font_family": "inherit",
-            "heading_color": "#ae0000",
-            "text": "<p>Wir verwerten Früchte, die sonst weggeworfen würden.</p>",
-            "text_font_size": 14,
-            "text_color": "#333333",
-            "text_alignment": "right",
-            "offset_desktop_dir": "right",
-            "offset_desktop_px": 0,
-            "offset_mobile_dir": "right",
-            "offset_mobile_px": 0,
-            "block_bg_color": "",
-            "block_padding": 0,
-            "block_border_radius": 0
+            "text_alignment": "right"
           }
         }
       },
@@ -728,45 +644,13 @@
       "name": "Image + 6 Richtext Blocks",
       "settings": {
         "title": "GEFRIERGETROCKNETER",
-        "title2": "GENUSS",
-        "title3": "",
         "heading_alignment": "center",
-        "heading_color": "#ae0000",
-        "heading_size": 48,
-        "subheading": "Ohne Stress, ohne Masse – dafür mit 100 % Fokus auf Qualität.",
-        "subheading_color": "#333333",
-        "subheading_size": 16,
-        "subheading_margin_top": 16,
-        "subheading_max_width": 600,
         "main_image": "shopify://shop_images/ring_pineappl.webp",
-        "image_dimension_type": "width",
-        "image_width": 500,
-        "image_height": 500,
-        "section_bg_color": "#ffb3d9",
-        "padding_top": 60,
-        "padding_bottom": 60,
-        "content_margin_top": 40,
-        "content_height_desktop": 600,
-        "content_height_mobile": 480,
-        "grid_max_width": 1100,
-        "grid_gap": 24,
-        "button_link_type": "url",
         "button_label": "Jetzt Probieren",
         "button_link": "shopify://pages/contact",
-        "focus_element_id": "",
-        "button_image": "shopify://shop_images/Vector_1.png",
-        "button_bg_color": "#7cfc00",
-        "button_text_color": "#ae0000",
-        "button_font_family": "fagies, sans-serif",
-        "button_font_size": 24,
-        "button_font_weight": "400",
-        "button_padding_tb": 36,
-        "button_padding_lr": 32,
-        "button_border_radius": 8,
-        "button_margin_top": 24,
-        "button_alignment": "center",
-        "color_scheme": "",
-        "use_gradient_background": false
+        "padding_top": 60,
+        "padding_bottom": 60,
+        "color_scheme": ""
       }
     },
     "image_with_highlights_mU9j66": {
