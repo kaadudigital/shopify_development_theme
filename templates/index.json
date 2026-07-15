@@ -592,7 +592,7 @@
         "richtext_g9kaXP": {
           "type": "richtext",
           "settings": {
-            "heading": "<p>VOLLES AROMA – WEIL REIF GEERNTET</p>",
+            "heading": "VOLLES AROMA – WEIL REIF GEERNTET",
             "heading_font_size": 18,
             "heading_font_weight": "700",
             "heading_font_family": "inherit",
@@ -613,7 +613,7 @@
         "richtext_WcXd7w": {
           "type": "richtext",
           "settings": {
-            "heading": "<p>KNUSPRIG, LUFTIG, LEICHT</p>",
+            "heading": "KNUSPRIG, LUFTIG, LEICHT",
             "heading_font_size": 18,
             "heading_font_weight": "700",
             "heading_font_family": "inherit",
@@ -634,7 +634,7 @@
         "richtext_XaMzGn": {
           "type": "richtext",
           "settings": {
-            "heading": "<p>100 % FRUCHT – OHNE ZUSÄTZE</p>",
+            "heading": "100 % FRUCHT – OHNE ZUSÄTZE",
             "heading_font_size": 18,
             "heading_font_weight": "700",
             "heading_font_family": "inherit",
@@ -655,7 +655,7 @@
         "richtext_w3ajYx": {
           "type": "richtext",
           "settings": {
-            "heading": "<p>SCHONENDE TROCKNUNG</p><p> = MEHR NÄHRSTOFFE</p>",
+            "heading": "SCHONENDE TROCKNUNG<br> = MEHR NÄHRSTOFFE",
             "heading_font_size": 18,
             "heading_font_weight": "700",
             "heading_font_family": "inherit",
@@ -676,7 +676,7 @@
         "richtext_z6Rwha": {
           "type": "richtext",
           "settings": {
-            "heading": "<p>SCHONENDE TROCKNUNG</p>",
+            "heading": "SCHONENDE TROCKNUNG",
             "heading_font_size": 18,
             "heading_font_weight": "700",
             "heading_font_family": "inherit",
@@ -697,7 +697,7 @@
         "richtext_kwdVQ4": {
           "type": "richtext",
           "settings": {
-            "heading": "<p>UNPROFITABLE FRÜCHTE GERETTET</p>",
+            "heading": "UNPROFITABLE FRÜCHTE GERETTET",
             "heading_font_size": 18,
             "heading_font_weight": "700",
             "heading_font_family": "inherit",
