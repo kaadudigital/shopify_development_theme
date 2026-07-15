@@ -54,6 +54,8 @@
     assign preload = false
   endunless
 
+  assign shape_button_source_mobile = button2_image_mobile | default: button2_image
+
   # Resolve mobile button labels — fall back to the desktop label when blank
   if button_label_mobile != blank
     assign button_label_mobile_display = button_label_mobile
@@ -337,11 +339,14 @@
       .custom-image-with-text-button-wrapper > * {
         width: 100%;
       }
-      /* Primary "blob" shape button: lean look, background stretches edge-to-edge */
+      /* Primary "blob" shape button: full width, height follows the actual
+         image's aspect ratio so it's never stretched or squashed */
       .custom-image-with-text-button-wrapper .custom-shape-button {
         width: 100%;
-        aspect-ratio: 335 / 53;
-        background-size: 100% 100%;
+        {%- if shape_button_source_mobile != blank -%}
+        aspect-ratio: {{ shape_button_source_mobile.aspect_ratio }};
+        {%- endif -%}
+        background-size: contain;
       }
       /* Drop the desktop vertical padding so the aspect-ratio governs height */
       .custom-image-with-text-button-wrapper .custom-shape-button-text {
