@@ -335,36 +335,24 @@
       .custom-image-with-text-button-wrapper {
         flex-direction: column;
       }
-      /* Each button wrapper (plain <div> or .custom-btn-wrapper) fills the row,
-         and lays its child out on the axis set by the section's text alignment
-         now that the blob button below no longer forces its own 100% width */
+      /* Each button wrapper (plain <div> or .custom-btn-wrapper) fills the row */
       .custom-image-with-text-button-wrapper > * {
         width: 100%;
-        display: flex;
       }
-      .custom-image-with-text-button-wrapper.text-left > * {
-        justify-content: flex-start;
-      }
-      .custom-image-with-text-button-wrapper.text-center > * {
-        justify-content: center;
-      }
-      .custom-image-with-text-button-wrapper.text-right > * {
-        justify-content: flex-end;
-      }
-      /* Primary "blob" shape button: sized from its text + padding, with the
-         image's real aspect ratio applied so it scales as one undistorted
-         unit — grows/shrinks with the padding setting instead of a fixed box */
+      /* Primary "blob" shape button: always full width on mobile, height
+         follows the source image's real aspect ratio so it's never
+         stretched or squashed. The desktop padding setting never applies
+         here — mobile has no padding control of its own. */
       .custom-image-with-text-button-wrapper .custom-shape-button {
-        display: inline-flex;
-        width: auto;
+        width: 100%;
         {%- if shape_button_source_mobile != blank -%}
         aspect-ratio: {{ shape_button_source_mobile.aspect_ratio }};
         {%- endif -%}
         background-size: contain;
       }
       .custom-image-with-text-button-wrapper .custom-shape-button-text {
-        padding-top: {{ section.settings.button2_padding_topbottom_mobile }}px;
-        padding-bottom: {{ section.settings.button2_padding_topbottom_mobile }}px;
+        padding-top: 0;
+        padding-bottom: 0;
       }
       /* Secondary pill (.custom-btn wrapping .push-btn__surface) fills the row.
          The :not() guard avoids hitting the focus-element variant that doubles
