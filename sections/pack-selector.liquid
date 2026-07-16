@@ -1,8 +1,8 @@
-<div class="pack-selector" style="background: #f9c6d0; padding: 24px 16px; font-family: sans-serif;">
-  <p style="font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #222; margin-bottom: 12px;">
+<div class="pack-selector" style="background: #f9c6d0;">
+  <p class="pack-selector__heading">
     {{ section.settings.title }}
   </p>
-  <div class="pack-selector__grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+  <div class="pack-selector__grid">
 
     {% assign cards = "1,2,3,4" | split: "," %}
     {% for i in cards %}
@@ -20,38 +20,18 @@
         class="pack-card"
         data-index="{{ i }}"
         onclick="selectPack('{{ i }}')"
-        style="
-          position: relative;
-          background: #fff;
-          border: 2px solid #ddd;
-          border-radius: 14px;
-          padding: 14px 12px;
-          cursor: pointer;
-          transition: background 0.2s, border-color 0.2s;
-        "
       >
         {% if card_badge != blank %}
-          <span style="
-            position: absolute;
-            top: -10px;
-            right: 10px;
-            background: #8b0000;
-            color: #fff;
-            font-size: 10px;
-            font-weight: 700;
-            padding: 3px 10px;
-            border-radius: 20px;
-            letter-spacing: 1px;
-          ">{{ card_badge }}</span>
+          <span class="pack-card__badge">{{ card_badge }}</span>
         {% endif %}
 
-        <div style="font-size: 13px; font-weight: 700; color: #222; text-transform: uppercase;">
+        <div class="pack-card__name">
           {{ card_name }}
         </div>
-        <div style="font-size: 20px; font-weight: 900; color: #cc0000; margin: 4px 0;">
+        <div class="pack-card__price">
           {{ card_price }}
         </div>
-        <div style="font-size: 11px; color: #444;">
+        <div class="pack-card__subtitle">
           {{ card_subtitle }}
         </div>
       </div>
@@ -59,6 +39,72 @@
 
   </div>
 </div>
+
+<style>
+  .pack-selector {
+    padding: var(--space-6) var(--space-4);
+    font-family: var(--font-body);
+  }
+  .pack-selector__heading {
+    font-family: var(--font-heading);
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-near-black);
+    margin: 0 0 var(--space-3);
+  }
+  .pack-selector__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+    max-width: 480px;
+  }
+  .pack-card {
+    position: relative;
+    background: var(--color-cream);
+    border: 2px solid var(--color-black);
+    border-radius: var(--radius-card);
+    padding: var(--space-4) var(--space-3);
+    cursor: pointer;
+    transition: background 0.2s ease-out;
+  }
+  .pack-card__badge {
+    position: absolute;
+    top: -14px;
+    right: 10px;
+    background: var(--color-red);
+    color: var(--color-cream);
+    font-family: var(--font-heading);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border: 2px solid var(--color-black);
+    border-radius: var(--radius-btn);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .pack-card__name {
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-near-black);
+    text-transform: uppercase;
+  }
+  .pack-card__price {
+    font-family: var(--font-heading);
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--color-red);
+    margin: var(--space-1) 0;
+  }
+  .pack-card__subtitle {
+    font-family: var(--font-body);
+    font-size: 12px;
+    color: var(--color-near-black);
+  }
+</style>
 
 <script>
   // TODO: Replace these dummy variant IDs with your real Shopify variant IDs
@@ -71,13 +117,11 @@
 
   function selectPack(index) {
     document.querySelectorAll('.pack-card').forEach(function(card) {
-      card.style.background = '#fff';
-      card.style.borderColor = '#ddd';
+      card.style.background = '';
     });
     var selected = document.querySelector('.pack-card[data-index="' + index + '"]');
     if (selected) {
-      selected.style.background = '#aaee44';
-      selected.style.borderColor = '#aaee44';
+      selected.style.background = 'var(--color-lime)';
     }
     var variantInput = document.getElementById('selected-variant-id');
     if (variantInput) {
