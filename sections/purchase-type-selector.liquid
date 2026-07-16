@@ -68,9 +68,34 @@
       </div>
     </div>
   </div>
+
+  <!-- TODO: Add your cart form here or in a separate section below these two -->
+  <form action="/cart/add" method="post" style="margin-top: 16px;">
+    <input type="hidden" name="id" id="selected-variant-id" value="22222222222">
+    <input type="hidden" name="selling_plan" id="selected-selling-plan" value="">
+    <input type="hidden" name="quantity" value="1">
+    <button type="submit" style="
+      width: 100%;
+      background: #aaee44;
+      color: #222;
+      font-size: 16px;
+      font-weight: 800;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 50px;
+      padding: 16px;
+      cursor: pointer;
+      letter-spacing: 1px;
+    ">
+      {{ section.settings.button_label }}
+    </button>
+  </form>
 </div>
 
 <script>
+  // TODO: Replace this dummy selling plan ID with your real selling plan ID from your subscription app
+  var subscriptionSellingPlanId = '99999999999';
+
   function selectPurchase(option) {
     document.querySelectorAll('.purchase-option').forEach(function(el) {
       el.style.background = '#fff';
@@ -79,6 +104,7 @@
       dot.style.borderColor = '#aaa';
       dot.innerHTML = '';
     });
+
     var selected = document.querySelector('.purchase-option[data-option="' + option + '"]');
     if (selected) {
       selected.style.background = '#e8f542';
@@ -87,7 +113,14 @@
       dot.style.borderColor = '#cc0000';
       dot.innerHTML = '<div style="width:10px;height:10px;border-radius:50%;background:#cc0000;margin:auto;margin-top:3px;"></div>';
     }
+
+    var sellingPlanInput = document.getElementById('selected-selling-plan');
+    if (sellingPlanInput) {
+      sellingPlanInput.value = (option === 2) ? subscriptionSellingPlanId : '';
+    }
   }
+
+  document.addEventListener('DOMContentLoaded', function() { selectPurchase(1); });
 </script>
 
 {% schema %}
@@ -98,7 +131,8 @@
     { "type": "text", "id": "option1_title", "label": "Option 1 Title", "default": "EINMALIG KAUFEN" },
     { "type": "text", "id": "option1_subtitle", "label": "Option 1 Subtitle", "default": "Ohne Verpflichtung, jederzeit nachbestellen." },
     { "type": "text", "id": "option2_title", "label": "Option 2 Title", "default": "CRUNCH-ABO — SPAR 10%" },
-    { "type": "text", "id": "option2_subtitle", "label": "Option 2 Subtitle", "default": "Lieferung alle 4 oder 8 Wochen · gratis Versand · jederzeit pausierbar oder kündbar." }
+    { "type": "text", "id": "option2_subtitle", "label": "Option 2 Subtitle", "default": "Lieferung alle 4 oder 8 Wochen · gratis Versand · jederzeit pausierbar oder kündbar." },
+    { "type": "text", "id": "button_label", "label": "Button Label", "default": "IN DEN WARENKORB" }
   ],
   "presets": [{ "name": "Purchase Type Selector" }]
 }
