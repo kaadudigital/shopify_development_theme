@@ -19,6 +19,29 @@
         "use_gradient_background": false
       }
     },
+    "pack_selector_cEiAYy": {
+      "type": "pack-selector",
+      "name": "Pack Selector",
+      "settings": {
+        "title": "WÄHL DEINE MENGE",
+        "card1_name": "1ER PACK",
+        "card1_price": "CHF 3.95",
+        "card1_subtitle": "Zum Probieren",
+        "card1_badge": "",
+        "card2_name": "3ER PACK",
+        "card2_price": "CHF 11.10",
+        "card2_subtitle": "Spar 6% · CHF 3.70/Pack",
+        "card2_badge": "",
+        "card3_name": "6ER PACK",
+        "card3_price": "CHF 20.50",
+        "card3_subtitle": "Spar 13% · CHF 3.42/Pack",
+        "card3_badge": "BELIEBT",
+        "card4_name": "12ER CRUNCH BOX",
+        "card4_price": "CHF 37.90",
+        "card4_subtitle": "Spar 20% · gratis Versand",
+        "card4_badge": "BESTER DEAL"
+      }
+    },
     "custom_feature_infotile_knJnMQ": {
       "type": "custom-feature-infotile",
       "blocks": {
@@ -55,6 +78,7 @@
         "info_tile_T69BfP",
         "info_tile_A7QDkH"
       ],
+      "custom_css": [],
       "name": "Custom Info Tiles",
       "settings": {
         "eyebrow": "eyebrow",
@@ -925,6 +949,7 @@
   },
   "order": [
     "main",
+    "pack_selector_cEiAYy",
     "custom_feature_infotile_knJnMQ",
     "image_with_text_custom_nmQU4P",
     "scrolling_text_j9kYtA",
