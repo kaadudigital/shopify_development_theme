@@ -7099,6 +7099,14 @@ body {
   overflow-x: clip;
 }
 
+/* ── INFO TILE — vertical rhythm per Kaadu Typography & Spacing Docs ── */
+.info-tile__content {
+  margin-top: var(--space-4); /* media → content: 16px */
+}
+.info-tile__description {
+  margin-top: var(--space-2); /* heading → description: 8px */
+}
+
 /* ── FOCUS CAROUSEL — DESKTOP EXTENDED (3-COLUMN GRID) ──────── */
 .focus-carousel__extended-grid {
   display: none;

@@ -102,15 +102,25 @@
   data-color-scheme="{{ section.settings.color_scheme }}"
 >
   <div class="section-content relative z-10 py-section-vertical-spacing {% unless layout == 'carousel' %}px-section w-full max-w-site mx-auto{% endunless %}">
-    {% if section.settings.title != '' %}
-      <h2 class="inline-heading-rte font-heading heading-standard heading-style h1 break-words text-center {{ settings.heading_drop_shadow_style }}">
-        {{ section.settings.title }}
-      </h2>
-    {% endif %}
+    {%- if section.settings.eyebrow != blank or section.settings.title != '' or section.settings.subheading != '' -%}
+      <div class="info-tiles__header w-full">
+        {%- if section.settings.eyebrow != blank -%}
+          <h3 class="info-tiles__eyebrow h3 break-words text-center">
+            {{ section.settings.eyebrow | escape }}
+          </h3>
+        {%- endif -%}
 
-    {% if section.settings.subheading != '' %}
-      <div class="rte mx-auto mt-5 max-w-md text-center h2">
-        {{ section.settings.subheading }}
+        {%- if section.settings.title != '' -%}
+          <h2 class="info-tiles__heading inline-heading-rte h1 heading-style break-words text-center {{ settings.heading_drop_shadow_style }}">
+            {{ section.settings.title }}
+          </h2>
+        {%- endif -%}
+
+        {%- if section.settings.subheading != '' -%}
+          <div class="info-tiles__subheading rte body mx-auto max-w-md text-center">
+            {{ section.settings.subheading }}
+          </div>
+        {%- endif -%}
       </div>
     {%- endif -%}
 
@@ -118,7 +128,7 @@
       {% if layout == 'carousel' %}
         id="slideshow-{{ section.id }}"
       {% endif %}
-      class="{% if section.settings.title != '' %}section-content-top-margin{% endif %} {% if layout == 'carousel' %}splide{% endif %}"
+      class="{% if section.settings.eyebrow != blank or section.settings.title != '' or section.settings.subheading != '' %}info-tiles__content{% endif %} {% if layout == 'carousel' %}splide{% endif %}"
     >
       <div class="{% if layout == 'carousel' %}splide__track overflow-visible {% if settings.product_tiles_scatter %}splide__track--scattered{% endif %} {% if section.settings.display_on_card %}{% if settings.card_shadow_direction contains 'top' %}with-top-card-shadow{% else %}with-bottom-card-shadow{% endif %}{% endif %}{% endif %}">
         <ul class="{% if layout == 'carousel' %}splide__list{% endif %} {% if layout == 'grid' %}grid gap-theme {% if mobile_grid_cols == '2' %}grid-cols-2{% else %}grid-cols-1{% endif %} {{ desktop_grid_cols }}{% endif %}">
@@ -299,6 +309,29 @@
     </div>
   </div>
 
+  <style>
+    /* Vertical rhythm per Kaadu Typography & Spacing Docs — mobile first,
+       desktop overrides at 769px. All values from the --space-* scale. */
+    .info-tiles__eyebrow {
+      margin: 0 0 var(--space-4); /* overline → headline: 16px */
+    }
+    .info-tiles__heading {
+      margin: 0;
+    }
+    .info-tiles__subheading {
+      margin-top: var(--space-4); /* headline → subheading: 16px */
+    }
+    .info-tiles__content {
+      margin-top: var(--space-6); /* header → tiles: 24px mobile */
+    }
+
+    @media (min-width: 769px) {
+      .info-tiles__content {
+        margin-top: var(--space-12); /* header → tiles: 48px desktop */
+      }
+    }
+  </style>
+
   {%- liquid
     for block in section.blocks
       case block.type
@@ -326,6 +359,12 @@
 {
   "name": "Custom Info Tiles",
   "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "info": "Short overline above the heading (H3 — Subheading style)"
+    },
     {
       "type": "inline_richtext",
       "id": "title",

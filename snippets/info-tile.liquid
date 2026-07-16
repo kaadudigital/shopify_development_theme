@@ -89,17 +89,17 @@
       {%- endif -%}
 
       {%- comment -%} Tile Content {%- endcomment -%}
-      <div class="info-tile__content mt-5 break-words {{ settings.product_tile_text_align }}">
+      <div class="info-tile__content break-words {{ settings.product_tile_text_align }}">
         {%- if block.settings.link != blank -%}
           <a href="{{ block.settings.link }}" class="block">
         {%- endif -%}
-        
+
         {%- if block.settings.heading != blank -%}
-          <h3 class="font-heading text-lg">{{ block.settings.heading }}</h3>
+          <h3 class="info-tile__heading h3">{{ block.settings.heading }}</h3>
         {%- endif -%}
-        
+
         {%- if block.settings.description != blank -%}
-          <div class="mt-2.5 text-scheme-text">
+          <div class="info-tile__description body text-scheme-text">
             {{ block.settings.description }}
           </div>
         {%- endif -%}
@@ -138,9 +138,9 @@
         {%- endif -%}
       </div>
       
-      <div class="info-tile__content mt-5 text-center">
-        <h3 class="font-heading text-lg">{{ 'Tile Heading' }}</h3>
-        <div class="mt-2.5 text-scheme-text opacity-60">
+      <div class="info-tile__content text-center">
+        <h3 class="info-tile__heading h3">{{ 'Tile Heading' }}</h3>
+        <div class="info-tile__description body text-scheme-text opacity-60">
           Add a tile block to get started
         </div>
       </div>
