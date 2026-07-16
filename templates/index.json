@@ -57,6 +57,7 @@
       ],
       "name": "Custom Info Tiles",
       "settings": {
+        "eyebrow": "eyebrow",
         "title": "Custom Info Tiles",
         "subheading": "Share information using custom tiles",
         "display_on_card": true,
