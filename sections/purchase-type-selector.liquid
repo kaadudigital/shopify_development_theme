@@ -1,0 +1,105 @@
+<div class="purchase-selector" style="background: #f9c6d0; padding: 24px 16px; font-family: sans-serif;">
+  <p style="font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #222; margin-bottom: 12px;">
+    {{ section.settings.title }}
+  </p>
+
+  <div
+    class="purchase-option"
+    data-option="1"
+    onclick="selectPurchase(1)"
+    style="
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: #e8f542;
+      border: 2px solid #e8f542;
+      border-radius: 14px;
+      padding: 16px;
+      cursor: pointer;
+      margin-bottom: 10px;
+      transition: background 0.2s;
+    "
+  >
+    <div class="radio-dot" style="
+      width: 20px; height: 20px; border-radius: 50%;
+      border: 2px solid #cc0000; background: #fff;
+      flex-shrink: 0; margin-top: 2px; display: flex;
+      align-items: center; justify-content: center;
+    ">
+      <div style="width: 10px; height: 10px; border-radius: 50%; background: #cc0000;"></div>
+    </div>
+    <div>
+      <div style="font-size: 14px; font-weight: 800; color: #222; text-transform: uppercase;">
+        {{ section.settings.option1_title }}
+      </div>
+      <div style="font-size: 12px; color: #444; margin-top: 4px;">
+        {{ section.settings.option1_subtitle }}
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="purchase-option"
+    data-option="2"
+    onclick="selectPurchase(2)"
+    style="
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: #fff;
+      border: 2px solid #ddd;
+      border-radius: 14px;
+      padding: 16px;
+      cursor: pointer;
+      transition: background 0.2s;
+    "
+  >
+    <div class="radio-dot" style="
+      width: 20px; height: 20px; border-radius: 50%;
+      border: 2px solid #aaa; background: #fff;
+      flex-shrink: 0; margin-top: 2px;
+    "></div>
+    <div>
+      <div style="font-size: 14px; font-weight: 800; color: #222; text-transform: uppercase;">
+        {{ section.settings.option2_title }}
+      </div>
+      <div style="font-size: 12px; color: #444; margin-top: 4px;">
+        {{ section.settings.option2_subtitle }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function selectPurchase(option) {
+    document.querySelectorAll('.purchase-option').forEach(function(el) {
+      el.style.background = '#fff';
+      el.style.borderColor = '#ddd';
+      var dot = el.querySelector('.radio-dot');
+      dot.style.borderColor = '#aaa';
+      dot.innerHTML = '';
+    });
+    var selected = document.querySelector('.purchase-option[data-option="' + option + '"]');
+    if (selected) {
+      selected.style.background = '#e8f542';
+      selected.style.borderColor = '#e8f542';
+      var dot = selected.querySelector('.radio-dot');
+      dot.style.borderColor = '#cc0000';
+      dot.innerHTML = '<div style="width:10px;height:10px;border-radius:50%;background:#cc0000;margin:auto;margin-top:3px;"></div>';
+    }
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Purchase Type Selector",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Section Title", "default": "EINMALIG ODER IM ABO" },
+    { "type": "text", "id": "option1_title", "label": "Option 1 Title", "default": "EINMALIG KAUFEN" },
+    { "type": "text", "id": "option1_subtitle", "label": "Option 1 Subtitle", "default": "Ohne Verpflichtung, jederzeit nachbestellen." },
+    { "type": "text", "id": "option2_title", "label": "Option 2 Title", "default": "CRUNCH-ABO — SPAR 10%" },
+    { "type": "text", "id": "option2_subtitle", "label": "Option 2 Subtitle", "default": "Lieferung alle 4 oder 8 Wochen · gratis Versand · jederzeit pausierbar oder kündbar." }
+  ],
+  "presets": [{ "name": "Purchase Type Selector" }]
+}
+{% endschema %}
