@@ -19,6 +19,60 @@
         "use_gradient_background": false
       }
     },
+    "custom_feature_infotile_knJnMQ": {
+      "type": "custom-feature-infotile",
+      "blocks": {
+        "info_tile_HBLN3L": {
+          "type": "info_tile",
+          "settings": {
+            "heading": "Tile Heading",
+            "description": "Add details about this tile here.",
+            "link": "",
+            "image_shape_override": "default"
+          }
+        },
+        "info_tile_T69BfP": {
+          "type": "info_tile",
+          "settings": {
+            "heading": "Tile Heading",
+            "description": "Add details about this tile here.",
+            "link": "",
+            "image_shape_override": "default"
+          }
+        },
+        "info_tile_A7QDkH": {
+          "type": "info_tile",
+          "settings": {
+            "heading": "Tile Heading",
+            "description": "Add details about this tile here.",
+            "link": "",
+            "image_shape_override": "default"
+          }
+        }
+      },
+      "block_order": [
+        "info_tile_HBLN3L",
+        "info_tile_T69BfP",
+        "info_tile_A7QDkH"
+      ],
+      "name": "Custom Info Tiles",
+      "settings": {
+        "title": "Custom Info Tiles",
+        "subheading": "Share information using custom tiles",
+        "display_on_card": true,
+        "layout": "grid",
+        "tiles_per_row_mobile": "1",
+        "tiles_per_row_desktop": 3,
+        "slideshow_focus": "center",
+        "mobile_slide_width": "three_fifths",
+        "desktop_slide_width": 40,
+        "autoscroll_mode": "0",
+        "tiles_aspect_ratio": "",
+        "image_shape": "",
+        "color_scheme": "",
+        "use_gradient_background": false
+      }
+    },
     "image_with_text_custom_nmQU4P": {
       "type": "image-with-text-custom",
       "blocks": {
@@ -870,6 +924,7 @@
   },
   "order": [
     "main",
+    "custom_feature_infotile_knJnMQ",
     "image_with_text_custom_nmQU4P",
     "scrolling_text_j9kYtA",
     "custom_image_focus_carousel_XtKKQC",
