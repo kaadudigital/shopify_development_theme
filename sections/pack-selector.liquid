@@ -1,8 +1,9 @@
 <div class="pack-selector" style="background: #f9c6d0;">
-  <p class="pack-selector__heading">
-    {{ section.settings.title }}
-  </p>
-  <div class="pack-selector__grid">
+  <div class="pack-selector__inner">
+    <p class="pack-selector__heading">
+      {{ section.settings.title }}
+    </p>
+    <div class="pack-selector__grid">
 
     {% assign cards = "1,2,3,4" | split: "," %}
     {% for i in cards %}
@@ -37,6 +38,7 @@
       </div>
     {% endfor %}
 
+    </div>
   </div>
 </div>
 
@@ -44,6 +46,16 @@
   .pack-selector {
     padding: var(--space-6) var(--space-4);
     font-family: var(--font-body);
+  }
+  .pack-selector__inner {
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  @media (min-width: 769px) {
+    .pack-selector__inner {
+      /* 672px (previous desktop width) + 30% */
+      max-width: 874px;
+    }
   }
   .pack-selector__heading {
     font-family: var(--font-heading);
@@ -59,14 +71,6 @@
     grid-template-columns: 1fr 1fr;
     column-gap: var(--space-3);
     row-gap: var(--space-6);
-    max-width: 480px;
-    margin: 0 auto;
-  }
-  @media (min-width: 769px) {
-    .pack-selector__grid {
-      /* 672px (previous desktop width) + 30% */
-      max-width: 874px;
-    }
   }
   .pack-card {
     position: relative;
