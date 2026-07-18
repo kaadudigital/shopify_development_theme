@@ -20,8 +20,8 @@
       }
     },
     "pack_selector_cEiAYy": {
-      "type": "pack-selector",
-      "name": "Pack Selector",
+      "type": "custom-packaging-selector",
+      "name": "Custom Packaging Selector",
       "settings": {
         "title": "WÄHL DEINE MENGE",
         "card1_name": "1ER PACK",

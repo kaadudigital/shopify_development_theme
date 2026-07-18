@@ -23,11 +23,27 @@
   else
     assign rotate = -5
   endif
+
+  if block and block != blank
+    assign borderless = block.settings.borderless
+    assign square_corners = block.settings.square_corners
+  else
+    assign borderless = true
+    assign square_corners = true
+  endif
+
+  assign card_modifier_class = ''
+  if borderless
+    assign card_modifier_class = card_modifier_class | append: ' info-tile--borderless'
+  endif
+  if square_corners
+    assign card_modifier_class = card_modifier_class | append: ' info-tile--square'
+  endif
 -%}
 
 {%- if block and block != blank -%}
   {%- comment -%} Actual tile with content {%- endcomment -%}
-  <div class="info-tile relative {{ class }} {% if display_on_card %}text-scheme-text card{% endif %}">
+  <div class="info-tile relative {{ class }} {% if display_on_card %}text-scheme-text card{{ card_modifier_class }}{% endif %}">
     <div class="info-tile__container {% if display_on_card %}bg-scheme-card card__surface {% if tiles_per_row_mobile == '2' %}p-2.5 lg:p-5{% else %}p-5{% endif %} h-full{% endif %}">
       
       {%- comment -%} Tile Image {%- endcomment -%}
@@ -113,7 +129,7 @@
 
 {%- else -%}
   {%- comment -%} Placeholder tile when no blocks added {%- endcomment -%}
-  <div class="info-tile {{ class }} {% if display_on_card %}text-scheme-text card{% endif %}">
+  <div class="info-tile {{ class }} {% if display_on_card %}text-scheme-text card{{ card_modifier_class }}{% endif %}">
     <div class="{% if display_on_card %}bg-scheme-card card__surface p-5 h-full{% endif %}">
       <div class="relative {% unless display_on_card %}{% if settings.media_shadow_direction contains 'top' %}pt-media-shadow{% else %}pb-media-shadow{% endif %}{% endunless %}">
         {%- if shape == 'default' -%}

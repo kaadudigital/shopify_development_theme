@@ -7106,6 +7106,17 @@ body {
 .info-tile__description {
   margin-top: var(--space-2); /* heading → description: 8px */
 }
+/* Per-tile border/radius overrides. !important needed: .card__surface's
+   border comes from the theme-wide --card-border-radius/-width settings
+   vars, which these per-block toggles must win over. */
+.info-tile--borderless.card,
+.info-tile--borderless .card__surface {
+  border-width: 0 !important;
+}
+.info-tile--square.card,
+.info-tile--square .card__surface {
+  border-radius: 0 !important;
+}
 
 /* ── FOCUS CAROUSEL — DESKTOP EXTENDED (3-COLUMN GRID) ──────── */
 .focus-carousel__extended-grid {

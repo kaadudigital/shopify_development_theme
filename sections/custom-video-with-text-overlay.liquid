@@ -104,48 +104,6 @@
         <a href="{{ section.settings.cta_url }}" class="absolute inset-0 z-20"></a>
       {%- endif -%}
 
-      <div class="{% if section.settings.style == 'inset' %}max-w-site px-5 lg:px-10 mx-auto{% else %}bg-scheme-text/80{% endif %}">
-        <div
-          class="{{ container_class }}{% if section.settings.style == 'inset' %} media media--css-only{% else %} relative{% endif %} banner-section-content--h"
-          {% if custom_aspect_h %}
-            style="--custom-aspect-h: {{ custom_aspect_h }}"
-          {% endif %}
-        >
-          <data-island
-            class="contents"
-            x-data="HTMLVideo"
-            @play="play"
-            @pause="pause"
-            on="before:visible"
-          >
-            {% if video != blank %}
-              {{
-                video
-                | video_tag:
-                  class: video_size_class,
-                  image_size: '2000x',
-                  loading: 'lazy',
-                  controls: false,
-                  autoplay: true,
-                  muted: true,
-                  loop: true,
-                  playsinline: true,
-                  x-ref: 'video'
-              }}
-            {% else %}
-              <video x-ref="video" autoplay playsinline muted class="{{ video_size_class }}">
-                <source src="{{ 'placeholder-video.mp4' | asset_url }}" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-            {% endif %}
-
-            {%- if section.settings.enable_overlay -%}
-              <div class="kaadu-video-overlay" aria-hidden="true"></div>
-            {%- endif -%}
-          </data-island>
-        </div>
-      </div>
-
       <div
         class="px-section py-section-vertical-spacing {{ content_class }} z-20 text-scheme-text {{ section.settings.place_content }} {{ section.settings.text_align }} {% if section.settings.style == 'inset' %}max-w-site mx-auto{% endif %}"
       >
@@ -185,6 +143,48 @@
               {{ content }}
             </div>
           </div>
+        </div>
+      </div>
+
+      <div class="{% if section.settings.style == 'inset' %}max-w-site px-5 lg:px-10 mx-auto{% else %}bg-scheme-text/80{% endif %}">
+        <div
+          class="{{ container_class }}{% if section.settings.style == 'inset' %} media media--css-only{% else %} relative{% endif %} banner-section-content--h"
+          {% if custom_aspect_h %}
+            style="--custom-aspect-h: {{ custom_aspect_h }}"
+          {% endif %}
+        >
+          <data-island
+            class="contents"
+            x-data="HTMLVideo"
+            @play="play"
+            @pause="pause"
+            on="before:visible"
+          >
+            {% if video != blank %}
+              {{
+                video
+                | video_tag:
+                  class: video_size_class,
+                  image_size: '2000x',
+                  loading: 'lazy',
+                  controls: false,
+                  autoplay: true,
+                  muted: true,
+                  loop: true,
+                  playsinline: true,
+                  x-ref: 'video'
+              }}
+            {% else %}
+              <video x-ref="video" autoplay playsinline muted class="{{ video_size_class }}">
+                <source src="{{ 'placeholder-video.mp4' | asset_url }}" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            {% endif %}
+
+            {%- if section.settings.enable_overlay -%}
+              <div class="kaadu-video-overlay" aria-hidden="true"></div>
+            {%- endif -%}
+          </data-island>
         </div>
       </div>
     </data-island>
