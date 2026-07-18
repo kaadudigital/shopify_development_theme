@@ -345,11 +345,41 @@
           }
         </script>
         <style>
-          @media (min-width: 990px) {
-            #slideshow-{{ section.id }} .splide__slide {
-              width: {{ section.settings.desktop_slide_width }}%;
+          {%- if layout_desktop == 'carousel' -%}
+            @media (min-width: 990px) {
+              #slideshow-{{ section.id }} .splide__slide {
+                width: {{ section.settings.desktop_slide_width }}%;
+              }
             }
-          }
+          {%- endif -%}
+
+          /* !important overrides Splide's own bundled CSS (.splide__list /
+             .splide__slide in base.bundle.css), which otherwise wins the
+             cascade over the plain lg:grid / lg:w-auto utility classes on
+             these same elements regardless of source order once Splide's
+             "is-initialized" state classes are involved. */
+          {%- if layout_mobile == 'grid' -%}
+            @media (max-width: 989px) {
+              #slideshow-{{ section.id }} .splide__list {
+                display: grid !important;
+                grid-template-columns: repeat({% if mobile_grid_cols == '2' %}2{% else %}1{% endif %}, minmax(0, 1fr));
+              }
+              #slideshow-{{ section.id }} .splide__slide {
+                width: auto !important;
+              }
+            }
+          {%- endif -%}
+          {%- if layout_desktop == 'grid' -%}
+            @media (min-width: 990px) {
+              #slideshow-{{ section.id }} .splide__list {
+                display: grid !important;
+                grid-template-columns: repeat({{ section.settings.tiles_per_row_desktop }}, minmax(0, 1fr));
+              }
+              #slideshow-{{ section.id }} .splide__slide {
+                width: auto !important;
+              }
+            }
+          {%- endif -%}
         </style>
       {%- endif -%}
     </div>
