@@ -39,22 +39,43 @@
         "card4_name": "12ER CRUNCH BOX",
         "card4_price": "CHF 37.90",
         "card4_subtitle": "Spar 20% · gratis Versand",
-        "card4_badge": "BESTER DEAL"
-      }
-    },
-    "purchase_type_selector_T8j6Yz": {
-      "type": "purchase-type-selector",
-      "name": "Purchase Type Selector",
-      "settings": {
-        "title": "EINMALIG ODER IM ABO",
+        "card4_badge": "BESTER DEAL",
+        "show_purchase_type": true,
+        "purchase_type_title": "EINMALIG ODER IM ABO",
         "option1_title": "EINMALIG KAUFEN",
         "option1_subtitle": "Ohne Verpflichtung, jederzeit nachbestellen.",
         "option2_title": "CRUNCH-ABO — SPAR 10%",
         "option2_subtitle": "Lieferung alle 4 oder 8 Wochen · gratis Versand · jederzeit pausierbar oder kündbar.",
         "button_label": "IN DEN WARENKORB",
+        "button_image": "shopify://shop_images/06d3f155e99649c6ad8f552f17b4bec9ac475189.png",
+        "button_scale_desktop": 15,
+        "button_scale_mobile": 10,
         "button_text_color_desktop": "#222222",
         "button_text_color_mobile": "#222222",
         "button_padding_topbottom": 16
+      }
+    },
+    "custom_video_with_text_overlay_BWrhtb": {
+      "type": "custom-video-with-text-overlay",
+      "name": "Custom Video Text Overlay",
+      "settings": {
+        "crop": "vertical",
+        "crop_desktop": "widescreen",
+        "enable_overlay": true,
+        "overlay_color": "#f00707",
+        "overlay_opacity": 5,
+        "display_on_card": false,
+        "display_content_below_image_on_mobile": true,
+        "style": "full",
+        "place_content": "place-content-center-center",
+        "text_align": "text-center",
+        "title": "Video with text overlay",
+        "heading_tag": "h2",
+        "richtext": "",
+        "cta_url": "",
+        "cta_text": "Shop Now",
+        "color_scheme": "",
+        "use_gradient_background": false
       }
     },
     "custom_feature_infotile_knJnMQ": {
@@ -965,7 +986,7 @@
   "order": [
     "main",
     "pack_selector_cEiAYy",
-    "purchase_type_selector_T8j6Yz",
+    "custom_video_with_text_overlay_BWrhtb",
     "custom_feature_infotile_knJnMQ",
     "image_with_text_custom_nmQU4P",
     "scrolling_text_j9kYtA",
