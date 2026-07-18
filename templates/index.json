@@ -49,7 +49,7 @@
         "button_label": "IN DEN WARENKORB",
         "button_image": "shopify://shop_images/06d3f155e99649c6ad8f552f17b4bec9ac475189.png",
         "button_scale_desktop": 15,
-        "button_scale_mobile": 100,
+        "button_scale_mobile": 10,
         "button_text_color_desktop": "#222222",
         "button_text_color_mobile": "#222222",
         "button_padding_topbottom": 16
