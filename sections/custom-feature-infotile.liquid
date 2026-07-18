@@ -163,12 +163,16 @@
       <div class="{% if use_splide %}splide__track overflow-visible {% if settings.product_tiles_scatter %}splide__track--scattered{% endif %} {% if section.settings.display_on_card %}{% if settings.card_shadow_direction contains 'top' %}with-top-card-shadow{% else %}with-bottom-card-shadow{% endif %}{% endif %}{% endif %}">
         <ul class="
           {% if use_splide %}splide__list{% endif %}
-          {% if layout_mobile == 'grid' %}grid gap-theme {% if mobile_grid_cols == '2' %}grid-cols-2{% else %}grid-cols-1{% endif %}{% endif %}
+          {% if layout_mobile == 'grid' or layout_desktop == 'grid' %}gap-theme{% endif %}
+          {% if layout_mobile == 'grid' %}grid {% if mobile_grid_cols == '2' %}grid-cols-2{% else %}grid-cols-1{% endif %}{% endif %}
           {% if layout_desktop == 'grid' %}{{ desktop_grid_cols }}{% if layout_mobile != 'grid' %} lg:grid{% endif %}{% endif %}
         ">
           {%- for block in section.blocks -%}
             <li
-              class="{% if use_splide %}splide__slide {{ mobile_slide_width }}{% endif %}"
+              class="
+                {% if use_splide %}splide__slide{% if layout_mobile == 'carousel' %} {{ mobile_slide_width }}{% endif %}{% endif %}
+                {% if layout_desktop == 'grid' %}lg:w-auto{% endif %}
+              "
               {{ block.shopify_attributes }}
             >
               {%- liquid
@@ -248,7 +252,10 @@
           {%- else -%}
             {%- comment -%} Placeholder when no blocks added {%- endcomment -%}
             {% for i in (1..3) %}
-              <li class="{% if use_splide %}splide__slide {{ mobile_slide_width }}{% endif %}">
+              <li class="
+                {% if use_splide %}splide__slide{% if layout_mobile == 'carousel' %} {{ mobile_slide_width }}{% endif %}{% endif %}
+                {% if layout_desktop == 'grid' %}lg:w-auto{% endif %}
+              ">
                 {%- liquid
                   if settings.product_tiles_scatter
                     if use_splide
