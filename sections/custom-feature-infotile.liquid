@@ -11,7 +11,8 @@
   endif
 
   assign mobile_grid_cols = section.settings.tiles_per_row_mobile
-  assign layout = section.settings.layout
+  assign layout_mobile = section.settings.layout_mobile
+  assign layout_desktop = section.settings.layout_desktop
 
   case section.settings.tiles_per_row_desktop
     when 2
@@ -33,37 +34,67 @@
 
   assign tiles_count = section.blocks.size
 
+  # A carousel needs more than one slide to make sense.
   if tiles_count == 1
-    assign layout = 'grid'
+    assign layout_mobile = 'grid'
+    assign layout_desktop = 'grid'
+  endif
+
+  # Splide is mounted whenever either breakpoint wants a carousel. Its
+  # "destroy" option (declarative, mediaQuery-driven — see the
+  # slideshow-options JSON below) unmounts/remounts it exactly at the
+  # 990px breakpoint already used for sizing elsewhere in this file, so
+  # the two layout settings can be configured independently without any
+  # hand-rolled resize/JS branching.
+  assign use_splide = false
+  if layout_mobile == 'carousel' or layout_desktop == 'carousel'
+    assign use_splide = true
+  endif
+
+  assign splide_destroy_mobile = true
+  if layout_mobile == 'carousel'
+    assign splide_destroy_mobile = false
+  endif
+
+  assign splide_destroy_desktop = true
+  if layout_desktop == 'carousel'
+    assign splide_destroy_desktop = false
   endif
 
   assign eager_loading_limit = mobile_grid_cols | plus: 0 | default: 1
 
-  if layout == 'grid'
+  if layout_desktop == 'grid'
     if section.settings.display_on_card
       assign desktop_sizes = 'calc((100vw / ' | append: section.settings.tiles_per_row_desktop | append: ') - 2.5rem)'
+    else
+      assign desktop_sizes = 'calc(100vw / ' | append: section.settings.tiles_per_row_desktop | append: ')'
+    endif
+  else
+    if section.settings.display_on_card
+      assign desktop_sizes = 'calc(' | append: section.settings.desktop_slide_width | append: 'vw - 2.5rem)'
+    else
+      assign desktop_sizes = section.settings.desktop_slide_width | append: 'vw'
+    endif
+  endif
 
+  if layout_mobile == 'grid'
+    if section.settings.display_on_card
       if section.settings.tiles_per_row_mobile == '2'
         assign mobile_sizes = 'calc((100vw / ' | append: section.settings.tiles_per_row_mobile | append: ') - 1.25rem)'
       else
         assign mobile_sizes = 'calc((100vw / ' | append: section.settings.tiles_per_row_mobile | append: ') - 2.5rem)'
       endif
     else
-      assign desktop_sizes = 'calc(100vw / ' | append: section.settings.tiles_per_row_desktop | append: ')'
       assign mobile_sizes = 'calc(100vw / ' | append: section.settings.tiles_per_row_mobile | append: ')'
     endif
   else
     if section.settings.display_on_card
-      assign desktop_sizes = 'calc(' | append: section.settings.desktop_slide_width | append: 'vw - 2.5rem)'
-
       if mobile_slide_width == 'w-3/5'
         assign mobile_sizes = 'calc(60vw - 2.5rem)'
       else
         assign mobile_sizes = 'calc(100vw - 2.5rem)'
       endif
     else
-      assign desktop_sizes = section.settings.desktop_slide_width | append: 'vw'
-
       if mobile_slide_width == 'w-3/5'
         assign mobile_sizes = '60vw'
       else
@@ -74,10 +105,7 @@
 
   assign sizes = '(min-width: 990px) ' | append: desktop_sizes | append: ', ' | append: mobile_sizes
 
-  assign will_transform = false
-  if layout == 'carousel'
-    assign will_transform = true
-  endif
+  assign will_transform = use_splide
 -%}
 
 {%- comment -%} Generate shape definitions for all tiles {%- endcomment -%}
@@ -101,7 +129,9 @@
   class="relative overflow-hidden bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %}"
   data-color-scheme="{{ section.settings.color_scheme }}"
 >
-  <div class="section-content relative z-10 py-section-vertical-spacing {% unless layout == 'carousel' %}px-section w-full max-w-site mx-auto{% endunless %}">
+  <div class="section-content relative z-10 py-section-vertical-spacing
+    {% if layout_mobile == 'grid' %}px-section w-full max-w-site mx-auto{% endif %}
+    {% if layout_desktop == 'grid' %}lg:px-section lg:w-full lg:max-w-site lg:mx-auto{% else %}lg:px-0 lg:w-full lg:max-w-none lg:mx-0{% endif %}">
     {%- if section.settings.eyebrow != blank or section.settings.title != '' or section.settings.subheading != '' -%}
       <div class="info-tiles__header w-full">
         {%- if section.settings.eyebrow != blank -%}
@@ -125,21 +155,25 @@
     {%- endif -%}
 
     <div
-      {% if layout == 'carousel' %}
+      {% if use_splide %}
         id="slideshow-{{ section.id }}"
       {% endif %}
-      class="{% if section.settings.eyebrow != blank or section.settings.title != '' or section.settings.subheading != '' %}info-tiles__content{% endif %} {% if layout == 'carousel' %}splide{% endif %}"
+      class="{% if section.settings.eyebrow != blank or section.settings.title != '' or section.settings.subheading != '' %}info-tiles__content{% endif %} {% if use_splide %}splide{% endif %}"
     >
-      <div class="{% if layout == 'carousel' %}splide__track overflow-visible {% if settings.product_tiles_scatter %}splide__track--scattered{% endif %} {% if section.settings.display_on_card %}{% if settings.card_shadow_direction contains 'top' %}with-top-card-shadow{% else %}with-bottom-card-shadow{% endif %}{% endif %}{% endif %}">
-        <ul class="{% if layout == 'carousel' %}splide__list{% endif %} {% if layout == 'grid' %}grid gap-theme {% if mobile_grid_cols == '2' %}grid-cols-2{% else %}grid-cols-1{% endif %} {{ desktop_grid_cols }}{% endif %}">
+      <div class="{% if use_splide %}splide__track overflow-visible {% if settings.product_tiles_scatter %}splide__track--scattered{% endif %} {% if section.settings.display_on_card %}{% if settings.card_shadow_direction contains 'top' %}with-top-card-shadow{% else %}with-bottom-card-shadow{% endif %}{% endif %}{% endif %}">
+        <ul class="
+          {% if use_splide %}splide__list{% endif %}
+          {% if layout_mobile == 'grid' %}grid gap-theme {% if mobile_grid_cols == '2' %}grid-cols-2{% else %}grid-cols-1{% endif %}{% endif %}
+          {% if layout_desktop == 'grid' %}{{ desktop_grid_cols }}{% if layout_mobile != 'grid' %} lg:grid{% endif %}{% endif %}
+        ">
           {%- for block in section.blocks -%}
             <li
-              class="{% if layout == 'carousel' %}splide__slide {{ mobile_slide_width }}{% endif %}"
+              class="{% if use_splide %}splide__slide {{ mobile_slide_width }}{% endif %}"
               {{ block.shopify_attributes }}
             >
               {%- liquid
                 if settings.product_tiles_scatter
-                  if layout == 'carousel'
+                  if use_splide
                     capture class
                       cycle '-mt-4 ', 'mt-4 '
                     endcapture
@@ -214,10 +248,10 @@
           {%- else -%}
             {%- comment -%} Placeholder when no blocks added {%- endcomment -%}
             {% for i in (1..3) %}
-              <li class="{% if layout == 'carousel' %}splide__slide {{ mobile_slide_width }}{% endif %}">
+              <li class="{% if use_splide %}splide__slide {{ mobile_slide_width }}{% endif %}">
                 {%- liquid
                   if settings.product_tiles_scatter
-                    if layout == 'carousel'
+                    if use_splide
                       capture class
                         cycle '-translate-y-4 ', 'translate-y-4 '
                       endcapture
@@ -265,13 +299,17 @@
         </ul>
       </div>
 
-      {%- if layout == 'carousel' -%}
-        <div class="splide__arrows mt-5 flex items-center justify-center px-section">
+      {%- if use_splide -%}
+        <div class="splide__arrows mt-5 items-center justify-center px-section
+          {% if layout_mobile == 'grid' %}hidden{% else %}flex{% endif %}
+          {% if layout_desktop == 'grid' %}lg:hidden{% else %}lg:flex{% endif %}
+        ">
           {%- render 'splide-navigation' %}
         </div>
         <script class="slideshow-options" type="application/json">
           {
             "mediaQuery": "min",
+            "destroy": {{ splide_destroy_mobile }},
             "arrows": true,
             "pagination": false,
             "rewind": true,
@@ -289,6 +327,7 @@
             },
             "breakpoints": {
               "990": {
+                "destroy": {{ splide_destroy_desktop }},
                 "gap": "2.5rem",
                 "padding": {
                   "left": "2.5rem",
@@ -388,8 +427,24 @@
     },
     {
       "type": "select",
-      "id": "layout",
-      "label": "Layout",
+      "id": "layout_mobile",
+      "label": "Layout (mobile)",
+      "default": "carousel",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "carousel",
+          "label": "Carousel"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "layout_desktop",
+      "label": "Layout (desktop)",
       "default": "grid",
       "options": [
         {
@@ -408,7 +463,7 @@
     },
     {
       "type": "paragraph",
-      "content": "These settings only apply when layout is set to Grid"
+      "content": "These settings only apply on breakpoints where Layout is set to Grid"
     },
     {
       "type": "select",
@@ -441,7 +496,7 @@
     },
     {
       "type": "paragraph",
-      "content": "These settings only apply when layout is set to Carousel"
+      "content": "These settings only apply on breakpoints where Layout is set to Carousel"
     },
     {
       "type": "select",
@@ -631,6 +686,13 @@
           "label": "Square corners (no radius)",
           "default": true,
           "info": "Removes the tile's corner rounding"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_shadow",
+          "label": "Shadow",
+          "default": false,
+          "info": "Adds a drop shadow behind the tile"
         },
         {
           "type": "select",

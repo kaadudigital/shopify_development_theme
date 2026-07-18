@@ -27,9 +27,11 @@
   if block and block != blank
     assign borderless = block.settings.borderless
     assign square_corners = block.settings.square_corners
+    assign enable_shadow = block.settings.enable_shadow
   else
     assign borderless = true
     assign square_corners = true
+    assign enable_shadow = false
   endif
 
   assign card_modifier_class = ''
@@ -39,6 +41,9 @@
   if square_corners
     assign card_modifier_class = card_modifier_class | append: ' info-tile--square'
   endif
+  unless enable_shadow
+    assign card_modifier_class = card_modifier_class | append: ' info-tile--no-shadow'
+  endunless
 -%}
 
 {%- if block and block != blank -%}

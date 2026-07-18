@@ -7117,6 +7117,16 @@ body {
 .info-tile--square .card__surface {
   border-radius: 0 !important;
 }
+/* Suppresses both shadow sources on .card: the Kaadu DS box-shadow
+   above, and the Shapes theme's ::before/::after offset-shadow layer
+   (driven by the theme-wide card_drop_shadow_size setting). */
+.info-tile--no-shadow.card {
+  box-shadow: none !important;
+}
+.info-tile--no-shadow.card::before,
+.info-tile--no-shadow.card::after {
+  display: none !important;
+}
 
 /* ── FOCUS CAROUSEL — DESKTOP EXTENDED (3-COLUMN GRID) ──────── */
 .focus-carousel__extended-grid {

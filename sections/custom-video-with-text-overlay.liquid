@@ -54,25 +54,18 @@
     assign content_max_width = 'max-w-lg'
   endif
 
-  if section.settings.display_content_below_image_on_mobile
-    assign content_class = 'lg:grid lg:absolute lg:inset-0 lg:w-full lg:h-full'
-    assign content_inset_class = 'max-w-site lg:py-5 lg:px-section mx-auto'
-    assign card_container_class = 'lg:card'
-    assign card_content_class = 'lg:card__surface lg:py-8 lg:px-8'
-  else
-    assign content_class = 'grid absolute inset-0 w-full h-full'
-    assign content_inset_class = 'max-w-site py-5 px-section mx-auto'
-    assign card_container_class = 'card'
-    assign card_content_class = 'card__surface py-5 lg:py-8 px-5 lg:px-8'
-  endif
+  assign content_class = 'grid absolute inset-0 w-full h-full'
+  assign content_inset_class = 'max-w-site py-5 px-section mx-auto'
+  assign card_container_class = 'card'
+  assign card_content_class = 'card__surface py-5 lg:py-8 px-5 lg:px-8'
 
   case section.settings.text_align
     when 'text-left'
-      assign mobile_content_below_media_align = 'justify-start'
+      assign content_align = 'justify-start'
     when 'text-center'
-      assign mobile_content_below_media_align = 'justify-center'
+      assign content_align = 'justify-center'
     when 'text-right'
-      assign mobile_content_below_media_align = 'justify-end'
+      assign content_align = 'justify-end'
   endcase
 -%}
 
@@ -127,18 +120,8 @@
           {% endif %}
         {%- endcapture -%}
 
-        <div class="flex {{ mobile_content_below_media_align }} {% if section.settings.style == 'inset' %}{{ content_inset_class }}{% endif %}">
-          {%- unless section.settings.display_content_below_image_on_mobile == false -%}
-            <div class="lg:hidden {% if section.settings.display_on_card == true %}{{ card_container_class }}{% endif %} {{ content_max_width }}">
-              <div class="break-words {% if section.settings.display_on_card == true %}{{ card_content_class }}{% endif %}">
-                {{ content }}
-              </div>
-            </div>
-          {%- endunless -%}
-
-          <div
-            class="{% unless section.settings.display_content_below_image_on_mobile == false %}hidden lg:block{% endunless %} {% if section.settings.display_on_card == true %}{{ card_container_class }}{% endif %} {{ content_max_width }} text-scheme-text"
-          >
+        <div class="flex {{ content_align }} {% if section.settings.style == 'inset' %}{{ content_inset_class }}{% endif %}">
+          <div class="{% if section.settings.display_on_card == true %}{{ card_container_class }}{% endif %} {{ content_max_width }} text-scheme-text">
             <div class="break-words {% if section.settings.display_on_card == true %}{{ card_content_class }}{% endif %}">
               {{ content }}
             </div>
@@ -289,12 +272,6 @@
       "id": "display_on_card",
       "label": "t:common.settings.display_on_card.label",
       "default": false
-    },
-    {
-      "type": "checkbox",
-      "id": "display_content_below_image_on_mobile",
-      "label": "t:common.settings.display_content_below_image_on_mobile.label",
-      "default": true
     },
     {
       "type": "select",
