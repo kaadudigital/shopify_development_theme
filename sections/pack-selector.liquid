@@ -1,3 +1,17 @@
+{%- liquid
+  assign button_scale = section.settings.button_scale | default: 100
+
+  if section.settings.button_image != blank
+    assign button_desktop_width = section.settings.button_image.width | times: button_scale | divided_by: 100
+  endif
+
+  if section.settings.button_image_mobile != blank
+    assign button_mobile_width = section.settings.button_image_mobile.width | times: button_scale | divided_by: 100
+  elsif section.settings.button_image != blank
+    assign button_mobile_width = button_desktop_width
+  endif
+-%}
+
 <div class="pack-selector" style="background: #f9c6d0;">
   <div class="pack-selector__inner">
     <p class="pack-selector__heading h3">
@@ -39,6 +53,92 @@
     {% endfor %}
 
     </div>
+
+    {%- if section.settings.show_purchase_type -%}
+      <div class="pack-selector__purchase-type">
+        <p class="pack-selector__heading h3">
+          {{ section.settings.purchase_type_title }}
+        </p>
+
+        <div
+          class="purchase-option"
+          data-option="1"
+          onclick="selectPurchase(1)"
+          style="
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: #e8f542;
+            border: 2px solid #e8f542;
+            border-radius: 14px;
+            padding: 16px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            transition: background 0.2s;
+          "
+        >
+          <div class="radio-dot" style="
+            width: 20px; height: 20px; border-radius: 50%;
+            border: 2px solid #cc0000; background: #fff;
+            flex-shrink: 0; margin-top: 2px; display: flex;
+            align-items: center; justify-content: center;
+          ">
+            <div style="width: 10px; height: 10px; border-radius: 50%; background: #cc0000;"></div>
+          </div>
+          <div>
+            <div style="font-size: 14px; font-weight: 800; color: #222; text-transform: uppercase;">
+              {{ section.settings.option1_title }}
+            </div>
+            <div style="font-size: 12px; color: #444; margin-top: 4px;">
+              {{ section.settings.option1_subtitle }}
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="purchase-option"
+          data-option="2"
+          onclick="selectPurchase(2)"
+          style="
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: #fff;
+            border: 2px solid #ddd;
+            border-radius: 14px;
+            padding: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+          "
+        >
+          <div class="radio-dot" style="
+            width: 20px; height: 20px; border-radius: 50%;
+            border: 2px solid #aaa; background: #fff;
+            flex-shrink: 0; margin-top: 2px;
+          "></div>
+          <div>
+            <div style="font-size: 14px; font-weight: 800; color: #222; text-transform: uppercase;">
+              {{ section.settings.option2_title }}
+            </div>
+            <div style="font-size: 12px; color: #444; margin-top: 4px;">
+              {{ section.settings.option2_subtitle }}
+            </div>
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+
+    <!-- TODO: Add your cart form here or in a separate section below -->
+    <form action="/cart/add" method="post" class="pack-selector__form">
+      <input type="hidden" name="id" id="selected-variant-id" value="22222222222">
+      {%- if section.settings.show_purchase_type -%}
+        <input type="hidden" name="selling_plan" id="selected-selling-plan" value="">
+      {%- endif -%}
+      <input type="hidden" name="quantity" value="1">
+      <button type="submit" class="pack-selector__submit">
+        <span class="pack-selector__submit-text">{{ section.settings.button_label }}</span>
+      </button>
+    </form>
   </div>
 </div>
 
@@ -112,6 +212,78 @@
     line-height: 1.4;
     color: var(--color-near-black);
   }
+
+  .pack-selector__purchase-type {
+    margin-top: var(--space-6);
+  }
+
+  .pack-selector__form {
+    margin-top: var(--space-6);
+    text-align: center;
+  }
+  .pack-selector__submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease-out;
+    position: relative;
+    {%- if section.settings.button_image != blank -%}
+      background-image: url('{{ section.settings.button_image | image_url: width: 800 }}');
+      aspect-ratio: {{ section.settings.button_image.aspect_ratio }};
+      width: {{ button_desktop_width }}px;
+    {%- else -%}
+      background: var(--color-lime);
+      border-radius: var(--radius-btn);
+      padding: var(--space-4) var(--space-8);
+    {%- endif -%}
+  }
+  .pack-selector__submit:hover {
+    transform: translateY(-2px);
+  }
+  {%- if section.settings.button_image != blank -%}
+    @media (max-width: 490px) {
+      .pack-selector__submit {
+        {%- if section.settings.button_image_mobile != blank -%}
+          background-image: url('{{ section.settings.button_image_mobile | image_url: width: 600 }}');
+          aspect-ratio: {{ section.settings.button_image_mobile.aspect_ratio }};
+        {%- endif -%}
+        width: {{ button_mobile_width }}px;
+      }
+    }
+  {%- endif -%}
+  .pack-selector__submit-text {
+    color: {{ section.settings.button_text_color_desktop | default: '#222222' }};
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 24px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    padding: 0 var(--space-6);
+  }
+  @media (min-width: 491px) {
+    .pack-selector__submit-text {
+      padding-top: {{ section.settings.button_padding_topbottom | default: 16 }}px;
+      padding-bottom: {{ section.settings.button_padding_topbottom | default: 16 }}px;
+    }
+  }
+  @media (max-width: 490px) {
+    .pack-selector__submit-text {
+      color: {{ section.settings.button_text_color_mobile | default: '#222222' }};
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 24px;
+      letter-spacing: 0;
+      text-align: center;
+    }
+  }
 </style>
 
 <script>
@@ -122,6 +294,9 @@
     '3': '33333333333',
     '4': '44444444444'
   };
+
+  // TODO: Replace this dummy selling plan ID with your real selling plan ID from your subscription app
+  var subscriptionSellingPlanId = '99999999999';
 
   function selectPack(index) {
     document.querySelectorAll('.pack-card').forEach(function(card) {
@@ -137,7 +312,36 @@
     }
   }
 
-  document.addEventListener('DOMContentLoaded', function() { selectPack('2'); });
+  function selectPurchase(option) {
+    document.querySelectorAll('.purchase-option').forEach(function(el) {
+      el.style.background = '#fff';
+      el.style.borderColor = '#ddd';
+      var dot = el.querySelector('.radio-dot');
+      dot.style.borderColor = '#aaa';
+      dot.innerHTML = '';
+    });
+
+    var selected = document.querySelector('.purchase-option[data-option="' + option + '"]');
+    if (selected) {
+      selected.style.background = '#e8f542';
+      selected.style.borderColor = '#e8f542';
+      var dot = selected.querySelector('.radio-dot');
+      dot.style.borderColor = '#cc0000';
+      dot.innerHTML = '<div style="width:10px;height:10px;border-radius:50%;background:#cc0000;margin:auto;margin-top:3px;"></div>';
+    }
+
+    var sellingPlanInput = document.getElementById('selected-selling-plan');
+    if (sellingPlanInput) {
+      sellingPlanInput.value = (option === 2) ? subscriptionSellingPlanId : '';
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    selectPack('2');
+    if (document.querySelector('.purchase-option')) {
+      selectPurchase(1);
+    }
+  });
 </script>
 
 {% schema %}
@@ -160,7 +364,22 @@
     { "type": "text", "id": "card4_name", "label": "Card 4 Name", "default": "12ER CRUNCH BOX" },
     { "type": "text", "id": "card4_price", "label": "Card 4 Price", "default": "CHF 37.90" },
     { "type": "text", "id": "card4_subtitle", "label": "Card 4 Subtitle", "default": "Spar 20% · gratis Versand" },
-    { "type": "text", "id": "card4_badge", "label": "Card 4 Badge", "default": "BESTER DEAL" }
+    { "type": "text", "id": "card4_badge", "label": "Card 4 Badge", "default": "BESTER DEAL" },
+    { "type": "header", "content": "Payment Type" },
+    { "type": "checkbox", "id": "show_purchase_type", "label": "Show payment type options", "default": true, "info": "Turn off if this product doesn't offer a subscription option" },
+    { "type": "text", "id": "purchase_type_title", "label": "Payment Type Title", "default": "EINMALIG ODER IM ABO" },
+    { "type": "text", "id": "option1_title", "label": "Option 1 Title", "default": "EINMALIG KAUFEN" },
+    { "type": "text", "id": "option1_subtitle", "label": "Option 1 Subtitle", "default": "Ohne Verpflichtung, jederzeit nachbestellen." },
+    { "type": "text", "id": "option2_title", "label": "Option 2 Title", "default": "CRUNCH-ABO — SPAR 10%" },
+    { "type": "text", "id": "option2_subtitle", "label": "Option 2 Subtitle", "default": "Lieferung alle 4 oder 8 Wochen · gratis Versand · jederzeit pausierbar oder kündbar." },
+    { "type": "header", "content": "Submit Button" },
+    { "type": "text", "id": "button_label", "label": "Button Label", "default": "IN DEN WARENKORB" },
+    { "type": "image_picker", "id": "button_image", "label": "Button Image (desktop)", "info": "Optional. Renders at the image's original size (scaled below). Falls back to a lime pill button when empty." },
+    { "type": "image_picker", "id": "button_image_mobile", "label": "Button Image (mobile)", "info": "Optional. Falls back to the desktop image when empty." },
+    { "type": "range", "id": "button_scale", "label": "Button Size", "min": 25, "max": 150, "step": 5, "unit": "%", "default": 100, "info": "Scales the button image from its original size, keeping its aspect ratio" },
+    { "type": "color", "id": "button_text_color_desktop", "label": "Button Text Color (desktop)", "default": "#222222" },
+    { "type": "color", "id": "button_text_color_mobile", "label": "Button Text Color (mobile)", "default": "#222222" },
+    { "type": "range", "id": "button_padding_topbottom", "label": "Button Vertical Padding (desktop)", "min": 0, "max": 40, "step": 2, "unit": "px", "default": 16 }
   ],
   "presets": [{ "name": "Pack Selector" }]
 }
