@@ -42,6 +42,21 @@
         "card4_badge": "BESTER DEAL"
       }
     },
+    "purchase_type_selector_T8j6Yz": {
+      "type": "purchase-type-selector",
+      "name": "Purchase Type Selector",
+      "settings": {
+        "title": "EINMALIG ODER IM ABO",
+        "option1_title": "EINMALIG KAUFEN",
+        "option1_subtitle": "Ohne Verpflichtung, jederzeit nachbestellen.",
+        "option2_title": "CRUNCH-ABO — SPAR 10%",
+        "option2_subtitle": "Lieferung alle 4 oder 8 Wochen · gratis Versand · jederzeit pausierbar oder kündbar.",
+        "button_label": "IN DEN WARENKORB",
+        "button_text_color_desktop": "#222222",
+        "button_text_color_mobile": "#222222",
+        "button_padding_topbottom": 16
+      }
+    },
     "custom_feature_infotile_knJnMQ": {
       "type": "custom-feature-infotile",
       "blocks": {
@@ -950,6 +965,7 @@
   "order": [
     "main",
     "pack_selector_cEiAYy",
+    "purchase_type_selector_T8j6Yz",
     "custom_feature_infotile_knJnMQ",
     "image_with_text_custom_nmQU4P",
     "scrolling_text_j9kYtA",
