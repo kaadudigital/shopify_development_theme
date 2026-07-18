@@ -65,7 +65,6 @@
         "overlay_color": "#f00707",
         "overlay_opacity": 5,
         "display_on_card": false,
-        "display_content_below_image_on_mobile": true,
         "style": "full",
         "place_content": "place-content-center-center",
         "text_align": "text-center",
@@ -87,6 +86,9 @@
             "heading": "Tile Heading",
             "description": "Add details about this tile here.",
             "link": "",
+            "borderless": true,
+            "square_corners": true,
+            "enable_shadow": false,
             "image_shape_override": "default"
           }
         },
@@ -96,6 +98,9 @@
             "heading": "Tile Heading",
             "description": "Add details about this tile here.",
             "link": "",
+            "borderless": true,
+            "square_corners": true,
+            "enable_shadow": false,
             "image_shape_override": "default"
           }
         },
@@ -105,6 +110,9 @@
             "heading": "Tile Heading",
             "description": "Add details about this tile here.",
             "link": "",
+            "borderless": true,
+            "square_corners": true,
+            "enable_shadow": false,
             "image_shape_override": "default"
           }
         }
@@ -121,12 +129,13 @@
         "title": "Custom Info Tiles",
         "subheading": "Share information using custom tiles",
         "display_on_card": true,
-        "layout": "grid",
-        "tiles_per_row_mobile": "1",
+        "layout_mobile": "carousel",
+        "layout_desktop": "grid",
+        "tiles_per_row_mobile": "2",
         "tiles_per_row_desktop": 3,
         "slideshow_focus": "center",
         "mobile_slide_width": "three_fifths",
-        "desktop_slide_width": 40,
+        "desktop_slide_width": 35,
         "autoscroll_mode": "0",
         "tiles_aspect_ratio": "",
         "image_shape": "",
