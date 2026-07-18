@@ -2,41 +2,53 @@
   <p class="pack-selector__heading">
     {{ section.settings.title }}
   </p>
-  <div class="pack-selector__grid">
+  <div class="pack-selector__body">
+    <div class="pack-selector__grid">
 
-    {% assign cards = "1,2,3,4" | split: "," %}
-    {% for i in cards %}
-      {% assign card_name_key = "card" | append: i | append: "_name" %}
-      {% assign card_price_key = "card" | append: i | append: "_price" %}
-      {% assign card_subtitle_key = "card" | append: i | append: "_subtitle" %}
-      {% assign card_badge_key = "card" | append: i | append: "_badge" %}
+      {% assign cards = "1,2,3,4" | split: "," %}
+      {% for i in cards %}
+        {% assign card_name_key = "card" | append: i | append: "_name" %}
+        {% assign card_price_key = "card" | append: i | append: "_price" %}
+        {% assign card_subtitle_key = "card" | append: i | append: "_subtitle" %}
+        {% assign card_badge_key = "card" | append: i | append: "_badge" %}
 
-      {% assign card_name = section.settings[card_name_key] %}
-      {% assign card_price = section.settings[card_price_key] %}
-      {% assign card_subtitle = section.settings[card_subtitle_key] %}
-      {% assign card_badge = section.settings[card_badge_key] %}
+        {% assign card_name = section.settings[card_name_key] %}
+        {% assign card_price = section.settings[card_price_key] %}
+        {% assign card_subtitle = section.settings[card_subtitle_key] %}
+        {% assign card_badge = section.settings[card_badge_key] %}
 
-      <div
-        class="pack-card"
-        data-index="{{ i }}"
-        onclick="selectPack('{{ i }}')"
-      >
-        {% if card_badge != blank %}
-          <span class="pack-card__badge">{{ card_badge }}</span>
-        {% endif %}
+        <div
+          class="pack-card"
+          data-index="{{ i }}"
+          data-name="{{ card_name | escape }}"
+          data-price="{{ card_price | escape }}"
+          data-subtitle="{{ card_subtitle | escape }}"
+          onclick="selectPack('{{ i }}')"
+        >
+          {% if card_badge != blank %}
+            <span class="pack-card__badge">{{ card_badge }}</span>
+          {% endif %}
 
-        <div class="pack-card__name">
-          {{ card_name }}
+          <div class="pack-card__name">
+            {{ card_name }}
+          </div>
+          <div class="pack-card__price">
+            {{ card_price }}
+          </div>
+          <div class="pack-card__subtitle">
+            {{ card_subtitle }}
+          </div>
         </div>
-        <div class="pack-card__price">
-          {{ card_price }}
-        </div>
-        <div class="pack-card__subtitle">
-          {{ card_subtitle }}
-        </div>
-      </div>
-    {% endfor %}
+      {% endfor %}
 
+    </div>
+
+    <div class="pack-selector__detail" id="pack-selector-detail">
+      <div class="pack-selector__detail-label">{{ section.settings.detail_label | default: 'Deine Auswahl' }}</div>
+      <div class="pack-selector__detail-name" id="pack-detail-name"></div>
+      <div class="pack-selector__detail-price" id="pack-detail-price"></div>
+      <div class="pack-selector__detail-subtitle" id="pack-detail-subtitle"></div>
+    </div>
   </div>
 </div>
 
@@ -54,11 +66,77 @@
     color: var(--color-near-black);
     margin: 0 0 var(--space-3);
   }
+  .pack-selector__body {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-6);
+  }
   .pack-selector__grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-3);
+    column-gap: var(--space-3);
+    row-gap: var(--space-6);
     max-width: 480px;
+    flex-shrink: 0;
+  }
+  @media (min-width: 769px) {
+    .pack-selector__grid {
+      max-width: 672px;
+    }
+  }
+  .pack-selector__detail {
+    display: none;
+  }
+  @media (min-width: 769px) {
+    .pack-selector__detail {
+      display: block;
+      flex: 1;
+      min-width: 0;
+      padding-top: var(--space-2);
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    .pack-selector__detail.is-visible {
+      animation: pack-selector-detail-in 0.35s ease-out forwards;
+    }
+  }
+  @keyframes pack-selector-detail-in {
+    from {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  .pack-selector__detail-label {
+    font-family: var(--font-body);
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-near-black);
+    opacity: 0.6;
+    margin-bottom: var(--space-1);
+  }
+  .pack-selector__detail-name {
+    font-family: var(--font-heading);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-near-black);
+    text-transform: uppercase;
+  }
+  .pack-selector__detail-price {
+    font-family: var(--font-heading);
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--color-red);
+    margin: var(--space-1) 0;
+  }
+  .pack-selector__detail-subtitle {
+    font-family: var(--font-body);
+    font-size: 15px;
+    color: var(--color-near-black);
   }
   .pack-card {
     position: relative;
@@ -101,7 +179,8 @@
   }
   .pack-card__subtitle {
     font-family: var(--font-body);
-    font-size: 12px;
+    font-size: 14px;
+    line-height: 1.4;
     color: var(--color-near-black);
   }
 </style>
@@ -122,6 +201,18 @@
     var selected = document.querySelector('.pack-card[data-index="' + index + '"]');
     if (selected) {
       selected.style.background = 'var(--color-lime)';
+
+      document.getElementById('pack-detail-name').textContent = selected.dataset.name || '';
+      document.getElementById('pack-detail-price').textContent = selected.dataset.price || '';
+      document.getElementById('pack-detail-subtitle').textContent = selected.dataset.subtitle || '';
+
+      var detail = document.getElementById('pack-selector-detail');
+      if (detail) {
+        detail.classList.remove('is-visible');
+        // eslint-disable-next-line no-unused-expressions
+        void detail.offsetWidth; // restart the animation on every selection change
+        detail.classList.add('is-visible');
+      }
     }
     var variantInput = document.getElementById('selected-variant-id');
     if (variantInput) {
@@ -137,6 +228,7 @@
   "name": "Pack Selector",
   "settings": [
     { "type": "text", "id": "title", "label": "Section Title", "default": "WÄHL DEINE MENGE" },
+    { "type": "text", "id": "detail_label", "label": "Selected Detail Label", "default": "Deine Auswahl" },
     { "type": "text", "id": "card1_name", "label": "Card 1 Name", "default": "1ER PACK" },
     { "type": "text", "id": "card1_price", "label": "Card 1 Price", "default": "CHF 3.95" },
     { "type": "text", "id": "card1_subtitle", "label": "Card 1 Subtitle", "default": "Zum Probieren" },
