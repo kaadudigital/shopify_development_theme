@@ -153,6 +153,9 @@
               disable_media_style: disable_media_style
             -%}
           {%- endif -%}
+          {%- if image_caption != blank -%}
+            <p class="kaadu-iht__image-caption caption">{{ image_caption | escape }}</p>
+          {%- endif -%}
         </div>
         <div class="flex items-center {{ text_width_desktop }}">
           <div class="{{ text_alignment_mobile }} {{ desktop_text_alignment }} w-full">
@@ -206,6 +209,9 @@
   }
   .kaadu-iht__grid {
     gap: var(--space-4); /* grid gutter: 16px mobile */
+  }
+  .kaadu-iht__image-caption {
+    margin-top: var(--space-2);
   }
   .kaadu-iht__cta {
     margin-top: var(--space-8); /* body → CTA group: 32px */

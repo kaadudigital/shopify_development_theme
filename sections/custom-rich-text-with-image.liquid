@@ -23,6 +23,10 @@
   #shopify-section-{{ section.id }} .kaadu-rtwi__image {
     margin-top: var(--space-8);
   }
+  #shopify-section-{{ section.id }} .kaadu-rtwi__image-caption {
+    margin-top: var(--space-2);
+    text-align: center;
+  }
   #shopify-section-{{ section.id }} .kaadu-rtwi__body {
     margin-top: var(--space-6);
   }
@@ -85,6 +89,9 @@
                     sizes: '(min-width: 990px) 800px, 90vw'
                 }}
               </picture>
+              {%- if section.settings.image_caption != blank -%}
+                <p class="kaadu-rtwi__image-caption caption">{{ section.settings.image_caption | escape }}</p>
+              {%- endif -%}
             </div>
           </div>
         {%- endif -%}
@@ -180,6 +187,12 @@
       "id": "image_mobile",
       "label": "Image (mobile)",
       "info": "Optional. Shown on screens ≤ 768px. Falls back to the desktop image when not set."
+    },
+    {
+      "type": "text",
+      "id": "image_caption",
+      "label": "Image caption",
+      "info": "Optional. Displayed below the image in Small / Caption style."
     },
     {
       "type": "select",

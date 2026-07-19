@@ -13,6 +13,7 @@
     {%- render 'image-with-text-custom',
       display_on_card: section.settings.display_on_card,
       image: section.settings.image,
+      image_caption: section.settings.image_caption,
       image_position: section.settings.image_position,
       text_alignment: section.settings.text_alignment,
       mobile_text_alignment: section.settings.mobile_text_alignment,
@@ -87,6 +88,12 @@
       "type": "image_picker",
       "id": "image",
       "label": "t:common.settings.image.label"
+    },
+    {
+      "type": "text",
+      "id": "image_caption",
+      "label": "Image caption",
+      "info": "Optional. Displayed below the image in Small / Caption style."
     },
     {
       "type": "select",

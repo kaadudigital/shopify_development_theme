@@ -139,6 +139,9 @@
                 disable_media_style: disable_media_style
               -%}
             {%- endif -%}
+            {%- if image_caption != blank -%}
+              <p class="kaadu-iw-image-caption caption">{{ image_caption | escape }}</p>
+            {%- endif -%}
           </div>
 
           {%- comment -%} Text content column {%- endcomment -%}
@@ -236,6 +239,9 @@
                 disable_media_style: disable_media_style
               -%}
             {%- endif -%}
+            {%- if image_caption != blank -%}
+              <p class="kaadu-iw-image-caption caption">{{ image_caption | escape }}</p>
+            {%- endif -%}
           </div>
 
           <div class="kaadu-iw-text-wrap flex items-center {{ text_width_desktop }} {% if image_size == 'half'%}min-width-on-lg-screen{% endif %} ">
@@ -307,6 +313,9 @@
     .kaadu-iw-image-wrap {
       max-width: 600px;
       max-height: 660px;
+    }
+    .kaadu-iw-image-caption {
+      margin-top: var(--space-2);
     }
     @media (max-width: 768px) {
       .kaadu-iw-image-wrap {
