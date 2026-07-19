@@ -19,6 +19,58 @@
         "use_gradient_background": false
       }
     },
+    "kaadu_custom_distribution_mkKaw6": {
+      "type": "kaadu-custom-distribution",
+      "blocks": {
+        "option_link_xBV6FU": {
+          "type": "option_link",
+          "settings": {
+            "heading": "Wieso machen wir das?",
+            "text": "Die kaputte Lieferkette, vier Mechanismen der Ausbeutung — und wie unsere Crunchys alles verändern.",
+            "link": "",
+            "background": "lime"
+          }
+        },
+        "option_link_rRhh3g": {
+          "type": "option_link",
+          "settings": {
+            "heading": "Transparenz",
+            "text": "Alle Zahlen: Löhne, Preise, Reports, Audits. Jeder kann von Transparenz reden — wir legen sie offen.",
+            "link": "",
+            "background": "sky"
+          }
+        },
+        "option_link_FVfFUh": {
+          "type": "option_link",
+          "settings": {
+            "heading": "Über uns",
+            "text": "Wie ein Familienbesuch in Vazhakulam 2022 zum Modell für eine neue Art von Handel wurde.",
+            "link": "",
+            "background": "yellow"
+          }
+        },
+        "option_link_PC6zmU": {
+          "type": "option_link",
+          "settings": {
+            "heading": "Ananas Crunchys",
+            "text": "Nachschub sichern — einzeln, im Bundle oder im Crunch-Abo mit 10% Rabatt.",
+            "link": "",
+            "background": "orange"
+          }
+        }
+      },
+      "block_order": [
+        "option_link_xBV6FU",
+        "option_link_rRhh3g",
+        "option_link_FVfFUh",
+        "option_link_PC6zmU"
+      ],
+      "name": "Distribution Section",
+      "settings": {
+        "title": "Tiefer eintauchen",
+        "color_scheme": ""
+      }
+    },
     "pack_selector_cEiAYy": {
       "type": "custom-packaging-selector",
       "name": "Custom Packaging Selector",
@@ -998,6 +1050,7 @@
   },
   "order": [
     "main",
+    "kaadu_custom_distribution_mkKaw6",
     "pack_selector_cEiAYy",
     "custom_video_with_text_overlay_BWrhtb",
     "custom_feature_infotile_knJnMQ",
