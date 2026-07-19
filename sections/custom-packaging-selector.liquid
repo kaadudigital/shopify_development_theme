@@ -13,7 +13,10 @@
   endif
 -%}
 
-<div class="pack-selector" style="background: #f9c6d0;">
+<div
+  class="pack-selector bg-scheme-background text-scheme-text"
+  data-color-scheme="{{ section.settings.color_scheme }}"
+>
   <div class="pack-selector__inner">
     <p class="pack-selector__heading h3">
       {{ section.settings.title }}
@@ -381,7 +384,9 @@
     { "type": "range", "id": "button_scale_mobile", "label": "Button Size (mobile)", "min": 5, "max": 150, "step": 5, "unit": "%", "default": 100, "info": "Scales the button image from its original size, keeping its aspect ratio" },
     { "type": "color", "id": "button_text_color_desktop", "label": "Button Text Color (desktop)", "default": "#222222" },
     { "type": "color", "id": "button_text_color_mobile", "label": "Button Text Color (mobile)", "default": "#222222" },
-    { "type": "range", "id": "button_padding_topbottom", "label": "Button Vertical Padding (desktop)", "min": 0, "max": 40, "step": 2, "unit": "px", "default": 16 }
+    { "type": "range", "id": "button_padding_topbottom", "label": "Button Vertical Padding (desktop)", "min": 0, "max": 40, "step": 2, "unit": "px", "default": 16 },
+    { "type": "header", "content": "Color" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme1" }
   ],
   "presets": [{ "name": "Custom Packaging Selector" }]
 }
