@@ -42,7 +42,7 @@
     }
 
     #shopify-section-{{ section.id }} .kaadu-distribution__container {
-      max-width: var(--container-max);
+      max-width: 480px;
       margin-inline: auto;
       padding-inline: var(--space-4);
     }
@@ -109,6 +109,8 @@
 
     @media (min-width: 769px) {
       #shopify-section-{{ section.id }} .kaadu-distribution__container {
+        /* Matches custom-packaging-selector.liquid's .pack-selector__inner desktop width */
+        max-width: 874px;
         padding-inline: var(--space-6);
       }
 
