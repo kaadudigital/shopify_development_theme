@@ -129,11 +129,9 @@
   class="relative overflow-hidden bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %}"
   data-color-scheme="{{ section.settings.color_scheme }}"
 >
-  <div class="section-content relative z-10 py-section-vertical-spacing
-    {% if layout_mobile == 'grid' %}px-section w-full max-w-site mx-auto{% endif %}
-    {% if layout_desktop == 'grid' %}lg:px-section lg:w-full lg:max-w-site lg:mx-auto{% else %}lg:px-0 lg:w-full lg:max-w-none lg:mx-0{% endif %}">
+  <div class="section-content relative z-10 py-section-vertical-spacing">
     {%- if section.settings.eyebrow != blank or section.settings.title != '' or section.settings.subheading != '' -%}
-      <div class="info-tiles__header w-full">
+      <div class="info-tiles__header w-full max-w-site mx-auto px-section">
         {%- if section.settings.eyebrow != blank -%}
           <h3 class="info-tiles__eyebrow h3 break-words text-center">
             {{ section.settings.eyebrow | escape }}
@@ -158,7 +156,9 @@
       {% if use_splide %}
         id="slideshow-{{ section.id }}"
       {% endif %}
-      class="{% if section.settings.eyebrow != blank or section.settings.title != '' or section.settings.subheading != '' %}info-tiles__content{% endif %} {% if use_splide %}splide{% endif %}"
+      class="{% if section.settings.eyebrow != blank or section.settings.title != '' or section.settings.subheading != '' %}info-tiles__content{% endif %} {% if use_splide %}splide{% endif %}
+        {% if layout_mobile == 'grid' %}px-section w-full max-w-site mx-auto{% endif %}
+        {% if layout_desktop == 'grid' %}lg:px-section lg:w-full lg:max-w-site lg:mx-auto{% else %}lg:px-0 lg:w-full lg:max-w-none lg:mx-0{% endif %}"
     >
       <div class="{% if use_splide %}splide__track overflow-visible {% if settings.product_tiles_scatter %}splide__track--scattered{% endif %} {% if section.settings.display_on_card %}{% if settings.card_shadow_direction contains 'top' %}with-top-card-shadow{% else %}with-bottom-card-shadow{% endif %}{% endif %}{% endif %}">
         <ul class="
