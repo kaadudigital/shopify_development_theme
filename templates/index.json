@@ -171,6 +171,7 @@
       "settings": {
         "display_on_card": false,
         "image": "shopify://shop_images/product_in_star_background.png",
+        "image_caption": "The whole caption is manages by yon",
         "crop": "",
         "image_shape": "default",
         "blob_type": 1,
@@ -396,6 +397,7 @@
       "settings": {
         "display_on_card": false,
         "image": "shopify://shop_images/fairness_graph.webp",
+        "image_caption": "",
         "crop": "",
         "image_shape": "default",
         "blob_type": 1,
@@ -528,6 +530,7 @@
         "subheading": "",
         "rich_text": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>",
         "image": "shopify://shop_images/strong-job-women-graph.webp",
+        "image_caption": "",
         "image_width": "md",
         "display_on_card": false,
         "content_width_desktop": "lg:w-2/3",
@@ -552,6 +555,7 @@
         "subheading": "",
         "rich_text": "<p>Perfektion ist nicht unser Ziel – Veränderung schon.Begleite uns auf dem Weg zu radikaler Fairness.</p>",
         "image": "shopify://shop_images/Extra_Mascots-06.svg",
+        "image_caption": "",
         "image_width": "md",
         "display_on_card": false,
         "content_width_desktop": "lg:w-2/3",
