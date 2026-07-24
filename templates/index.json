@@ -253,7 +253,7 @@
         "button2_image_mobile": "shopify://shop_images/small_cloud_mobile.svg",
         "button_text_color_desktop": "#ae0000",
         "button_text_color_mobile": "#000000",
-        "button2_width_desktop": 200,
+        "button2_width_desktop": 230,
         "button2_width_mobile": 390,
         "color_scheme": "",
         "use_gradient_background": false
