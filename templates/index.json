@@ -252,7 +252,7 @@
         "button2_image": "shopify://shop_images/greenclouddesktop.png",
         "button2_image_mobile": "shopify://shop_images/small_cloud_mobile.svg",
         "button_text_color_desktop": "#ae0000",
-        "button_text_color_mobile": "#542a76",
+        "button_text_color_mobile": "#000000",
         "button2_padding_topbottom": 36,
         "color_scheme": "",
         "use_gradient_background": false
