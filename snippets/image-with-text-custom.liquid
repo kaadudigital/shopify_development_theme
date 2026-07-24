@@ -168,7 +168,7 @@
               </div>
               <div class="mt-6 lg:mt-8 flex items-center custom-image-with-text-button-wrapper {{ mobile_button_order }} {{ combined_text_alignment }}">
                 {%- if button2_link_type == 'url' and button2_link != blank and button2_label != '' -%}
-                  <div>
+                  <div class="custom-shape-button-wrap">
                     <a href="{{ button2_link }}">
                       <button class="custom-shape-button">
                         <span class="custom-shape-button-text">
@@ -179,7 +179,7 @@
                   </div>
                 {%- endif -%}
                 {%- if button2_link_type == 'focus_element' and focus_element2_id != blank -%}
-                  <div class="custom-btn-wrapper">
+                  <div class="custom-btn-wrapper custom-shape-button-wrap">
                     <button
                       onclick="console.log('Focus Element ID: {{ focus_element2_id }}'); document.getElementById('{{focus_element2_id}}')?.focus()"
                       class="inline-block custom-btn custom-shape-button"
@@ -263,7 +263,7 @@
 
               <div class="mt-6 lg:mt-8 flex items-center custom-image-with-text-button-wrapper {{ combined_text_alignment }}">
                  {%- if button2_link_type == 'url' and button2_link != blank and button2_label != '' -%}
-                  <div>
+                  <div class="custom-shape-button-wrap">
                     <a href="{{ button2_link }}">
                       <button class="custom-shape-button">
                         <span class="custom-shape-button-text">
@@ -274,7 +274,7 @@
                   </div>
                 {%- endif -%}
                 {%- if button2_link_type == 'focus_element' and focus_element2_id != blank -%}
-                  <div class="custom-btn-wrapper">
+                  <div class="custom-btn-wrapper custom-shape-button-wrap">
                     <button
                       onclick="console.log('Focus Element ID: {{ focus_element2_id }}'); document.getElementById('{{focus_element2_id}}')?.focus()"
                       class="inline-block custom-btn custom-shape-button"
@@ -349,6 +349,12 @@
       /* Each button wrapper (plain <div> or .custom-btn-wrapper) fills the row */
       .custom-image-with-text-button-wrapper > * {
         width: 100%;
+      }
+      /* Shape button's own wrapper centers it horizontally regardless of
+         the configured width, since the button no longer fills the row. */
+      .custom-image-with-text-button-wrapper .custom-shape-button-wrap {
+        display: flex;
+        justify-content: center;
       }
       /* Primary "blob" shape button: sized via the mobile width setting,
          height follows the source image's real aspect ratio so it's never
