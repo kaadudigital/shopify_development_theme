@@ -104,7 +104,8 @@
         "button_scale_mobile": 10,
         "button_text_color_desktop": "#222222",
         "button_text_color_mobile": "#222222",
-        "button_padding_topbottom": 16
+        "button_padding_topbottom": 16,
+        "color_scheme": ""
       }
     },
     "custom_video_with_text_overlay_BWrhtb": {
@@ -248,11 +249,11 @@
         "focus_element2_id": "",
         "button2_label": "JETZT PROBIEREN",
         "button2_label_mobile": "PROBIERPAKET BESTELLEN",
-        "button2_image": "shopify://shop_images/WhatsApp_Image_2026-07-15_at_23.06.17.jpg",
-        "button2_image_mobile": "shopify://shop_images/WhatsApp_Image_2026-07-15_at_23.06.17.jpg",
+        "button2_image": "shopify://shop_images/so.png",
+        "button2_image_mobile": "shopify://shop_images/so.png",
         "button_text_color_desktop": "#ae0000",
         "button_text_color_mobile": "#542a76",
-        "button2_padding_topbottom": 4,
+        "button2_padding_topbottom": 36,
         "color_scheme": "",
         "use_gradient_background": false
       }
