@@ -55,6 +55,7 @@
   endunless
 
   assign shape_button_source_mobile = button2_image_mobile | default: button2_image
+  assign shape_button_source_desktop = button2_image
 
   # Resolve mobile button labels — fall back to the desktop label when blank
   if button_label_mobile != blank
@@ -349,12 +350,12 @@
       .custom-image-with-text-button-wrapper > * {
         width: 100%;
       }
-      /* Primary "blob" shape button: always full width on mobile, height
-         follows the source image's real aspect ratio so it's never
-         stretched or squashed. The desktop padding setting never applies
-         here — mobile has no padding control of its own. */
+      /* Primary "blob" shape button: sized via the mobile width setting,
+         height follows the source image's real aspect ratio so it's never
+         stretched or squashed on resize. */
       .custom-image-with-text-button-wrapper .custom-shape-button {
-        width: 100%;
+        width: {{ button2_width_mobile | default: 150 }}px;
+        max-width: 100%;
         {%- if shape_button_source_mobile != blank -%}
         aspect-ratio: {{ shape_button_source_mobile.aspect_ratio }};
         {%- endif -%}
@@ -397,6 +398,10 @@
           display: flex;
           align-items: center;
           justify-content: center;
+          width: {{ button2_width_desktop | default: 200 }}px;
+          {%- if shape_button_source_desktop != blank -%}
+          aspect-ratio: {{ shape_button_source_desktop.aspect_ratio }};
+          {%- endif -%}
           {%- if button2_image != blank -%}
           background-image: url('{{ button2_image | image_url: width: 800 }}');
           {%- endif -%}
@@ -418,12 +423,6 @@
           letter-spacing: 0.02em;
           padding: 0 var(--space-6);
         }
-    @media (min-width: 491px) {
-      .custom-shape-button-text {
-        padding-top: {{ section.settings.button2_padding_topbottom }}px;
-        padding-bottom: {{ section.settings.button2_padding_topbottom }}px;
-      }
-    }
     @media (max-width: 490px) {
       .custom-shape-button-text {
         color: {{ button_text_color_mobile | default: '#AE0000' }};
