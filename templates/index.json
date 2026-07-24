@@ -249,12 +249,12 @@
         "focus_element2_id": "",
         "button2_label": "JETZT PROBIEREN",
         "button2_label_mobile": "PROBIERPAKET BESTELLEN",
-        "button2_image": "shopify://shop_images/greenclouddesktop.png",
-        "button2_image_mobile": "shopify://shop_images/small_cloud_mobile.svg",
-        "button_text_color_desktop": "#ae0000",
-        "button_text_color_mobile": "#F0F7F1",
+        "button2_image": "shopify://shop_images/Artboard151.svg",
+        "button2_image_mobile": "shopify://shop_images/Artboard151.svg",
+        "button_text_color_desktop": "#FFFFFF",
+        "button_text_color_mobile": "#f0f7f1",
         "button2_width_desktop": 230,
-        "button2_width_mobile": 390,
+        "button2_width_mobile": 320,
         "color_scheme": "",
         "use_gradient_background": false
       }
