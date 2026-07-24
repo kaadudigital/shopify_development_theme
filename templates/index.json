@@ -250,7 +250,7 @@
         "button2_label": "JETZT PROBIEREN",
         "button2_label_mobile": "PROBIERPAKET BESTELLEN",
         "button2_image": "shopify://shop_images/greenclouddesktop.png",
-        "button2_image_mobile": "shopify://shop_images/so.png",
+        "button2_image_mobile": "shopify://shop_images/small_cloud_mobile.svg",
         "button_text_color_desktop": "#ae0000",
         "button_text_color_mobile": "#542a76",
         "button2_padding_topbottom": 36,
