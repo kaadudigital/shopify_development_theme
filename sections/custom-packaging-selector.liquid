@@ -21,48 +21,61 @@
   <div class="pack-selector__layout">
 
     {%- comment -%} Product media / gallery {%- endcomment -%}
+    {%- assign product_image_media = product.media | where: 'media_type', 'image' -%}
     <div class="pack-media">
-      {%- if product != blank and product.media.size > 0 -%}
+      {%- if product != blank and product_image_media.size > 0 -%}
         <div class="pack-media__main">
-          {%- for media in product.media -%}
-            {%- if media.media_type == 'image' -%}
-              <div class="pack-media__mainItem{% if forloop.first %} is-active{% endif %}" data-media-index="{{ media.id }}">
-                <picture>
-                  <source srcset="{{ media | image_url: width: 1200, format: 'webp' }}" type="image/webp">
-                  <img
-                    src="{{ media | image_url: width: 1200 }}"
-                    alt="{{ media.alt | default: product.title | escape }}"
-                    width="{{ media.width }}"
-                    height="{{ media.height }}"
-                    class="pack-media__mainImg"
-                    {%- if forloop.first and section.index == 1 -%}
-                      loading="eager" fetchpriority="high"
-                    {%- else -%}
-                      loading="lazy"
-                    {%- endif -%}
-                  >
-                </picture>
-              </div>
-            {%- endif -%}
+          {%- for media in product_image_media -%}
+            <div class="pack-media__mainItem{% if forloop.first %} is-active{% endif %}" data-media-index="{{ media.id }}">
+              <picture>
+                <source srcset="{{ media | image_url: width: 1200, format: 'webp' }}" type="image/webp">
+                <img
+                  src="{{ media | image_url: width: 1200 }}"
+                  alt="{{ media.alt | default: product.title | escape }}"
+                  width="{{ media.width }}"
+                  height="{{ media.height }}"
+                  class="pack-media__mainImg"
+                  {%- if forloop.first and section.index == 1 -%}
+                    loading="eager" fetchpriority="high"
+                  {%- else -%}
+                    loading="lazy"
+                  {%- endif -%}
+                >
+              </picture>
+            </div>
           {%- endfor -%}
+          {%- if product_image_media.size > 1 -%}
+            <button type="button" class="pack-media__nav pack-media__nav--prev" aria-label="{{ 'Previous image' | escape }}" onclick="packSelector.navigateMedia(-1)">
+              <svg width="18" height="17" viewBox="0 0 18 17" fill="none" aria-hidden="true"><path d="M16.577 9.806h1.062V7.68h-1.062v2.126zM.954 7.992a1.001 1.001 0 0 0 0 1.502l6.76 6.76a1.001 1.001 0 1 0 1.503-1.502L3.208 8.743l6.009-6.01A1.001 1.001 0 1 0 7.714 1.23L.954 7.993zM16.577 7.68H1.705v2.126h14.872V7.68z" fill="currentColor"/></svg>
+            </button>
+            <button type="button" class="pack-media__nav pack-media__nav--next" aria-label="{{ 'Next image' | escape }}" onclick="packSelector.navigateMedia(1)">
+              <svg width="18" height="17" viewBox="0 0 18 17" fill="none" aria-hidden="true"><path d="M1.75 7.46H.687v2.125H1.75V7.46zm15.622 1.813a1.001 1.001 0 0 0 0-1.502L10.612 1.01a1.001 1.001 0 1 0-1.502 1.502l6.009 6.01-6.009 6.01a1.001 1.001 0 1 0 1.502 1.502l6.76-6.76zM1.75 9.584h14.871V7.46H1.75v2.126z" fill="currentColor"/></svg>
+            </button>
+          {%- endif -%}
         </div>
 
         <div class="pack-media__thumbs">
-          {%- for media in product.media -%}
-            {%- if media.media_type == 'image' -%}
-              <button
-                type="button"
-                class="pack-media__thumb{% if forloop.first %} is-active{% endif %}"
-                data-media-index="{{ media.id }}"
-                aria-label="{{ product.title | escape }} — {{ 'Image' }} {{ forloop.index }}"
-                onclick="packSelector.selectMedia('{{ media.id }}')"
-              >
-                <img src="{{ media | image_url: width: 160 }}" alt="" width="80" height="80" loading="lazy">
-              </button>
-            {%- endif -%}
+          {%- for media in product_image_media -%}
+            <button
+              type="button"
+              class="pack-media__thumb{% if forloop.first %} is-active{% endif %}"
+              data-media-index="{{ media.id }}"
+              aria-label="{{ product.title | escape }} — {{ 'Image' }} {{ forloop.index }}"
+              onclick="packSelector.selectMedia('{{ media.id }}')"
+            >
+              <img src="{{ media | image_url: width: 160 }}" alt="" width="80" height="80" loading="lazy">
+            </button>
           {%- endfor -%}
         </div>
       {%- else -%}
+        {%- assign manual_media_count = 0 -%}
+        {%- for i in media_indexes -%}
+          {%- assign media_key = "gallery_image_" | append: i -%}
+          {%- assign media_image = section.settings[media_key] -%}
+          {%- if media_image != blank -%}
+            {%- assign manual_media_count = manual_media_count | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
         <div class="pack-media__main">
           {%- for i in media_indexes -%}
             {%- assign media_key = "gallery_image_" | append: i -%}
@@ -87,6 +100,14 @@
               </div>
             {%- endif -%}
           {%- endfor -%}
+          {%- if manual_media_count > 1 -%}
+            <button type="button" class="pack-media__nav pack-media__nav--prev" aria-label="{{ 'Previous image' | escape }}" onclick="packSelector.navigateMedia(-1)">
+              <svg width="18" height="17" viewBox="0 0 18 17" fill="none" aria-hidden="true"><path d="M16.577 9.806h1.062V7.68h-1.062v2.126zM.954 7.992a1.001 1.001 0 0 0 0 1.502l6.76 6.76a1.001 1.001 0 1 0 1.503-1.502L3.208 8.743l6.009-6.01A1.001 1.001 0 1 0 7.714 1.23L.954 7.993zM16.577 7.68H1.705v2.126h14.872V7.68z" fill="currentColor"/></svg>
+            </button>
+            <button type="button" class="pack-media__nav pack-media__nav--next" aria-label="{{ 'Next image' | escape }}" onclick="packSelector.navigateMedia(1)">
+              <svg width="18" height="17" viewBox="0 0 18 17" fill="none" aria-hidden="true"><path d="M1.75 7.46H.687v2.125H1.75V7.46zm15.622 1.813a1.001 1.001 0 0 0 0-1.502L10.612 1.01a1.001 1.001 0 1 0-1.502 1.502l6.009 6.01-6.009 6.01a1.001 1.001 0 1 0 1.502 1.502l6.76-6.76zM1.75 9.584h14.871V7.46H1.75v2.126z" fill="currentColor"/></svg>
+            </button>
+          {%- endif -%}
         </div>
 
         <div class="pack-media__thumbs">
@@ -157,7 +178,7 @@
     </div>
 
     {%- comment -%} Frequency / subscription {%- endcomment -%}
-    <p class="pack-selector__subheading caption">{{ section.settings.frequency_label }}</p>
+    <p class="pack-selector__heading h3">{{ section.settings.frequency_label }}</p>
 
     <div class="pack-frequency">
       <button
@@ -228,10 +249,10 @@
               <span class="pack-subscribe__title h3">{{ section.settings.subscribe_title }}</span>
             </span>
             <span class="pack-subscribe__price">
-              {%- if section.settings.subscribe_price_original != blank -%}
-                <span class="pack-subscribe__price-original">{{ section.settings.subscribe_price_original }}</span>
+              {%- if section.settings.tier1_price_original != blank -%}
+                <span class="pack-subscribe__price-original">{{ section.settings.tier1_price_original }}</span>
               {%- endif -%}
-              <span class="pack-subscribe__price-current">{{ section.settings.subscribe_price_current }}</span>
+              <span class="pack-subscribe__price-current">{{ section.settings.tier1_price_current }}</span>
             </span>
           </span>
 
@@ -336,8 +357,12 @@
       <input type="hidden" name="id" id="selected-variant-id" value="">
       <input type="hidden" name="selling_plan" id="selected-selling-plan" value="">
 
-      <div class="pack-qty pack-qty--{{ section.settings.qty_border_style }}">
-        {%- if section.settings.qty_border_style == 'cloud' -%}
+      {%- liquid
+        assign qty_shape_desktop = section.settings.qty_border_style_desktop | default: 'cloud'
+        assign qty_shape_mobile = section.settings.qty_border_style_mobile | default: 'dashed'
+      -%}
+      <div class="pack-qty" data-shape-desktop="{{ qty_shape_desktop }}" data-shape-mobile="{{ qty_shape_mobile }}">
+        {%- if qty_shape_desktop == 'cloud' or qty_shape_mobile == 'cloud' -%}
           <svg class="pack-qty__frame" viewBox="0 0 150 78" preserveAspectRatio="xMidYMid meet" fill="none" aria-hidden="true">
             <mask id="pack-qty-cloud-mask-{{ section.id }}" fill="#fff">
               <path d="M44.521 5.209a8.256 8.256 0 0 1 2.935-3.69 8.43 8.43 0 0 1 9.103-.352 8.28 8.28 0 0 1 3.218 3.452 8.28 8.28 0 0 1 3.218-3.45 8.43 8.43 0 0 1 9.102.351 8.257 8.257 0 0 1 2.933 3.69 8.256 8.256 0 0 1 2.935-3.69 8.43 8.43 0 0 1 9.103-.352 8.28 8.28 0 0 1 3.218 3.452 8.265 8.265 0 0 1 2.932-3.277A8.427 8.427 0 0 1 101.752 1a8.295 8.295 0 0 1 3.192 3.031A8.302 8.302 0 0 1 108.14.998a8.43 8.43 0 0 1 8.537.344 8.275 8.275 0 0 1 2.934 3.277A8.299 8.299 0 0 1 123.524.8a8.447 8.447 0 0 1 5.472-.584 8.359 8.359 0 0 1 4.65 2.904 8.17 8.17 0 0 1 1.809 5.132c0 .07-.007.144-.007.215a8.39 8.39 0 0 1 3.157-1.542 8.456 8.456 0 0 1 3.52-.12 8.407 8.407 0 0 1 3.257 1.322 8.284 8.284 0 0 1 2.415 2.531 8.138 8.138 0 0 1 .812 6.75 8.216 8.216 0 0 1-1.748 3.02 8.344 8.344 0 0 1-2.853 2.04 8.319 8.319 0 0 1 3.728 3.184 8.158 8.158 0 0 1-.397 9.29 8.336 8.336 0 0 1-3.986 2.864 8.337 8.337 0 0 1 3.986 2.864 8.158 8.158 0 0 1 .397 9.29 8.318 8.318 0 0 1-3.728 3.185 8.35 8.35 0 0 1 2.876 2.06 8.214 8.214 0 0 1 1.748 3.054 8.142 8.142 0 0 1-.893 6.798 8.294 8.294 0 0 1-2.479 2.513 8.453 8.453 0 0 1-6.86 1.06 8.388 8.388 0 0 1-3.139-1.644 8.175 8.175 0 0 1-1.613 6.904 8.357 8.357 0 0 1-4.651 2.906 8.443 8.443 0 0 1-5.473-.585 8.295 8.295 0 0 1-3.913-3.823 8.265 8.265 0 0 1-2.932 3.282 8.427 8.427 0 0 1-8.541.343 8.291 8.291 0 0 1-3.193-3.036 8.28 8.28 0 0 1-3.191 3.036 8.42 8.42 0 0 1-8.537-.343 8.259 8.259 0 0 1-2.93-3.282 8.27 8.27 0 0 1-3.215 3.46 8.421 8.421 0 0 1-9.11-.352 8.247 8.247 0 0 1-2.93-3.699 8.248 8.248 0 0 1-2.931 3.698 8.421 8.421 0 0 1-9.11.353 8.272 8.272 0 0 1-3.214-3.46 8.27 8.27 0 0 1-3.215 3.46 8.421 8.421 0 0 1-9.11-.352 8.247 8.247 0 0 1-2.93-3.699 8.248 8.248 0 0 1-2.931 3.699 8.422 8.422 0 0 1-9.11.353 8.272 8.272 0 0 1-3.215-3.461 8.299 8.299 0 0 1-3.915 3.823 8.449 8.449 0 0 1-5.475.587 8.364 8.364 0 0 1-4.654-2.906 8.177 8.177 0 0 1-1.809-5.135c.003-.552.06-1.102.17-1.643a8.391 8.391 0 0 1-3.154 1.56 8.456 8.456 0 0 1-3.524.136 8.41 8.41 0 0 1-3.266-1.313 8.29 8.29 0 0 1-2.426-2.527 8.142 8.142 0 0 1-.826-6.757 8.217 8.217 0 0 1 1.747-3.025 8.347 8.347 0 0 1 2.856-2.043 8.316 8.316 0 0 1-3.726-3.184 8.159 8.159 0 0 1 .395-9.29 8.34 8.34 0 0 1 3.985-2.865 8.34 8.34 0 0 1-3.985-2.864 8.158 8.158 0 0 1-.396-9.29 8.315 8.315 0 0 1 3.727-3.185 8.346 8.346 0 0 1-2.833-2.026 8.218 8.218 0 0 1-1.744-2.994 8.144 8.144 0 0 1 .76-6.713 8.285 8.285 0 0 1 2.37-2.54 8.407 8.407 0 0 1 3.216-1.358 8.456 8.456 0 0 1 3.498.061 8.398 8.398 0 0 1 3.166 1.47c0-.04-.007-.08-.007-.12a8.18 8.18 0 0 1 1.813-5.13A8.367 8.367 0 0 1 19.88.213a8.452 8.452 0 0 1 5.471.584 8.302 8.302 0 0 1 3.916 3.818 8.28 8.28 0 0 1 3.218-3.452 8.43 8.43 0 0 1 9.103.351 8.256 8.256 0 0 1 2.935 3.69l-.003.005Z"/>
@@ -498,7 +523,6 @@
     aspect-ratio: 4 / 5;
     overflow: hidden;
     background: var(--color-cream);
-    box-shadow: var(--shadow-sm);
   }
   .pack-media__mainItem {
     display: none;
@@ -513,6 +537,32 @@
     height: 100%;
     object-fit: cover;
   }
+  .pack-media__nav {
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    background: var(--color-cream);
+    border: 2px solid var(--color-black);
+    color: var(--color-near-black);
+    cursor: pointer;
+    transition: transform 0.15s ease-out;
+  }
+  .pack-media__nav:hover {
+    transform: translateY(-50%) scale(1.05);
+  }
+  .pack-media__nav--prev {
+    left: var(--space-3);
+  }
+  .pack-media__nav--next {
+    right: var(--space-3);
+  }
   .pack-media__thumbs {
     display: flex;
     flex-wrap: wrap;
@@ -525,11 +575,11 @@
     overflow: hidden;
     cursor: pointer;
     background: var(--color-cream);
-    box-shadow: var(--shadow-sm);
+    border: 2px solid var(--color-black);
     flex-shrink: 0;
   }
   .pack-media__thumb.is-active {
-    box-shadow: 0 0 0 2px var(--color-red);
+    border-color: var(--color-red);
   }
   .pack-media__thumb img {
     width: 100%;
@@ -586,12 +636,6 @@
     color: var(--color-near-black);
     margin: 0 0 var(--space-4);
   }
-  .pack-selector__subheading {
-    color: var(--color-near-black);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    margin: 0 0 var(--space-2);
-  }
 
   /* Purchase options */
   .pack-selector__options {
@@ -606,7 +650,6 @@
     gap: var(--space-3);
     width: 100%;
     background: var(--color-cream);
-    box-shadow: var(--shadow-sm);
     padding: var(--space-3) var(--space-4);
     cursor: pointer;
     font-family: inherit;
@@ -659,7 +702,6 @@
     flex-direction: column;
     width: 100%;
     background: var(--color-cream);
-    box-shadow: var(--shadow-sm);
     padding: var(--space-4);
     cursor: pointer;
     font-family: inherit;
@@ -742,16 +784,17 @@
     justify-content: space-between;
     gap: var(--space-2) var(--space-3);
     background: var(--color-cream);
+    border: 2px solid var(--color-black);
     padding: var(--space-3) var(--space-4);
     cursor: pointer;
-    transition: background 0.15s ease-out, box-shadow 0.15s ease-out;
+    transition: background 0.15s ease-out, border-color 0.15s ease-out;
   }
   .pack-subscribe[aria-checked="true"] .pack-tier {
     background: var(--color-yellow);
   }
   .pack-subscribe[aria-checked="true"] .pack-tier[aria-checked="true"] {
     background: var(--color-cream);
-    box-shadow: var(--shadow-sm);
+    border-color: var(--color-red);
   }
   .pack-tier__info {
     display: flex;
@@ -837,7 +880,6 @@
     gap: var(--space-1);
     width: 100%;
     background: var(--color-cream);
-    box-shadow: var(--shadow-sm);
     padding: var(--space-3) var(--space-4);
     cursor: pointer;
     font-family: inherit;
@@ -914,21 +956,46 @@
     gap: var(--space-2);
     padding: var(--space-2) var(--space-3);
   }
-  .pack-qty--dashed {
-    border: 2px dashed var(--color-black);
-  }
-  .pack-qty--cloud {
-    aspect-ratio: 150 / 78;
-    justify-content: center;
-    padding: var(--space-3) var(--space-6);
-  }
   .pack-qty__frame {
+    display: none;
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     color: var(--color-black);
     pointer-events: none;
+  }
+  @media (max-width: 768px) {
+    .pack-qty[data-shape-mobile="dashed"] {
+      border: 2px dashed var(--color-black);
+      aspect-ratio: auto;
+      padding: var(--space-2) var(--space-3);
+    }
+    .pack-qty[data-shape-mobile="cloud"] {
+      border: none;
+      aspect-ratio: 150 / 78;
+      justify-content: center;
+      padding: var(--space-3) var(--space-6);
+    }
+    .pack-qty[data-shape-mobile="cloud"] .pack-qty__frame {
+      display: block;
+    }
+  }
+  @media (min-width: 769px) {
+    .pack-qty[data-shape-desktop="dashed"] {
+      border: 2px dashed var(--color-black);
+      aspect-ratio: auto;
+      padding: var(--space-2) var(--space-3);
+    }
+    .pack-qty[data-shape-desktop="cloud"] {
+      border: none;
+      aspect-ratio: 150 / 78;
+      justify-content: center;
+      padding: var(--space-3) var(--space-6);
+    }
+    .pack-qty[data-shape-desktop="cloud"] .pack-qty__frame {
+      display: block;
+    }
   }
   .pack-qty__label,
   .pack-qty__btn,
@@ -1037,6 +1104,19 @@
       setOrRemoveSpan(priceRow, 'pack-tier__badge', data.save, null);
     }
 
+    function syncSubscribeHeaderFromTier(tierId) {
+      var tierEl = document.querySelector('.pack-tier[data-tier="' + tierId + '"]');
+      var headerContainer = document.querySelector('.pack-subscribe__price');
+      var headerCurrent = document.querySelector('.pack-subscribe__price-current');
+      if (!tierEl || !headerContainer || !headerCurrent) return;
+
+      var tierOriginalEl = tierEl.querySelector('.pack-tier__price-original');
+      var tierCurrentEl = tierEl.querySelector('.pack-tier__price-current');
+
+      setOrRemoveSpan(headerContainer, 'pack-subscribe__price-original', tierOriginalEl ? tierOriginalEl.textContent : null, headerCurrent);
+      if (tierCurrentEl) headerCurrent.textContent = tierCurrentEl.textContent;
+    }
+
     function updatePricesForVariant(variantId) {
       if (!pricingData) return;
 
@@ -1057,15 +1137,7 @@
         if (data) updateTierPricing(tierEl, data);
       });
 
-      if (firstPlanId && variantPlans[firstPlanId]) {
-        var headerData = variantPlans[firstPlanId];
-        var headerContainer = document.querySelector('.pack-subscribe__price');
-        var headerCurrent = document.querySelector('.pack-subscribe__price-current');
-        if (headerContainer) {
-          setOrRemoveSpan(headerContainer, 'pack-subscribe__price-original', headerData.compareAtPrice, headerCurrent);
-        }
-        if (headerCurrent) headerCurrent.textContent = headerData.price;
-      }
+      syncSubscribeHeaderFromTier(state.tier || firstPlanId);
     }
 
     function selectOption(index) {
@@ -1098,6 +1170,7 @@
       });
       state.tier = tier;
       selectFrequency('subscribe');
+      syncSubscribeHeaderFromTier(tier);
     }
 
     function selectMedia(index) {
@@ -1107,6 +1180,17 @@
       document.querySelectorAll('.pack-media__thumb').forEach(function (el) {
         el.classList.toggle('is-active', el.getAttribute('data-media-index') === index);
       });
+    }
+
+    function navigateMedia(direction) {
+      var items = document.querySelectorAll('.pack-media__mainItem');
+      if (items.length < 2) return;
+      var currentIndex = 0;
+      items.forEach(function (el, i) {
+        if (el.classList.contains('is-active')) currentIndex = i;
+      });
+      var nextIndex = (currentIndex + direction + items.length) % items.length;
+      selectMedia(items[nextIndex].getAttribute('data-media-index'));
     }
 
     function changeQty(delta) {
@@ -1146,6 +1230,7 @@
       selectFrequency: selectFrequency,
       selectTier: selectTier,
       selectMedia: selectMedia,
+      navigateMedia: navigateMedia,
       changeQty: changeQty
     };
   })();
@@ -1186,8 +1271,7 @@
     { "type": "text", "id": "frequency_label", "label": "Frequency Label", "default": "WÄHLE DEIN ABO" },
 
     { "type": "text", "id": "subscribe_title", "label": "Subscribe Title", "default": "ABO & SPAREN" },
-    { "type": "text", "id": "subscribe_price_original", "label": "Subscribe Original Price (strikethrough)", "default": "CHF 37.90" },
-    { "type": "text", "id": "subscribe_price_current", "label": "Subscribe Current Price", "default": "CHF 32.20" },
+    { "type": "paragraph", "content": "The price shown next to the title always mirrors whichever tier is currently selected (defaults to Tier 1) — it updates automatically and isn't set separately." },
 
     { "type": "text", "id": "tier1_title", "label": "Tier 1 Title", "default": "GELEGENTLICHER SNACKER" },
     { "type": "text", "id": "tier1_subtitle", "label": "Tier 1 Subtitle", "default": "Lieferung alle 8 Wochen" },
@@ -1227,13 +1311,23 @@
     { "type": "number", "id": "qty_default", "label": "Default Quantity", "default": 1 },
     {
       "type": "select",
-      "id": "qty_border_style",
-      "label": "Quantity Stepper Border",
+      "id": "qty_border_style_desktop",
+      "label": "Quantity Stepper Shape (desktop)",
       "options": [
         { "value": "dashed", "label": "Dashed pill" },
         { "value": "cloud", "label": "Cloud (scalloped)" }
       ],
       "default": "cloud"
+    },
+    {
+      "type": "select",
+      "id": "qty_border_style_mobile",
+      "label": "Quantity Stepper Shape (mobile)",
+      "options": [
+        { "value": "dashed", "label": "Dashed pill" },
+        { "value": "cloud", "label": "Cloud (scalloped)" }
+      ],
+      "default": "dashed"
     },
 
     { "type": "header", "content": "Submit Button" },
