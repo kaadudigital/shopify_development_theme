@@ -250,11 +250,11 @@
         "button2_label": "JETZT PROBIEREN",
         "button2_label_mobile": "PROBIERPAKET BESTELLEN",
         "button2_image": "shopify://shop_images/Artboard151.svg",
-        "button2_image_mobile": "shopify://shop_images/Artboard151.svg",
-        "button_text_color_desktop": "#FFFFFF",
+        "button2_image_mobile": "shopify://shop_images/Artboard12.svg",
+        "button_text_color_desktop": "#ffffff",
         "button_text_color_mobile": "#f0f7f1",
         "button2_width_desktop": 230,
-        "button2_width_mobile": 320,
+        "button2_width_mobile": 360,
         "color_scheme": "",
         "use_gradient_background": false
       }
