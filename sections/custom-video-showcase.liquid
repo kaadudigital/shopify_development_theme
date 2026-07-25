@@ -1,0 +1,606 @@
+{%- comment -%}
+  Custom Video Showcase Section
+  A large looping background video with a custom mouse-follow "play" cursor;
+  clicking opens a modal with an embedded video (YouTube/Vimeo) when configured,
+  otherwise toggles inline play/pause. Outer frame shape and cursor icon are
+  both merchant-customisable via uploaded SVG/image assets, defaulting to the
+  standard rounded-card frame and play-triangle cursor.
+{%- endcomment -%}
+
+{%- liquid
+  assign section_id = 'custom-video-showcase-' | append: section.id
+  assign has_frame_mask = false
+  if section.settings.frame_shape != blank
+    assign has_frame_mask = true
+  endif
+  assign has_bg_video = false
+  if section.settings.background_video != blank
+    assign has_bg_video = true
+  endif
+-%}
+
+<section
+  class="custom-video-showcase bg-{{ section.settings.background }}"
+  id="{{ section_id }}"
+  data-video-showcase
+>
+  <div class="custom-video-showcase__container">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="custom-video-showcase__heading h2">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+
+    <div class="custom-video-showcase__frame">
+      <button
+        type="button"
+        class="custom-video-showcase__wrapper{% if has_frame_mask %} custom-video-showcase__wrapper--masked{% endif %}"
+        data-video-wrapper
+        aria-label="{{ section.settings.cursor_label | default: 'Video abspielen' | escape }}"
+      >
+        <span class="custom-video-showcase__cursor" data-cursor aria-hidden="true">
+          <span class="custom-video-showcase__cursor-content">
+            {%- if section.settings.cursor_icon != blank -%}
+              <img
+                class="custom-video-showcase__cursor-icon custom-video-showcase__cursor-icon--custom"
+                src="{{ section.settings.cursor_icon | image_url: width: 64 }}"
+                width="24"
+                height="24"
+                alt=""
+                loading="lazy"
+              >
+            {%- else -%}
+              <span class="custom-video-showcase__cursor-icon">{%- render 'kaadu-icon-play' -%}</span>
+            {%- endif -%}
+            <span class="custom-video-showcase__cursor-label btn-label">{{ section.settings.cursor_label | default: 'Video abspielen' }}</span>
+          </span>
+        </span>
+
+        <span class="custom-video-showcase__control" data-control aria-hidden="true">
+          {%- render 'kaadu-icon-play' -%}
+        </span>
+
+        {%- if has_bg_video -%}
+          <video
+            class="custom-video-showcase__video"
+            data-video
+            autoplay
+            loop
+            muted
+            playsinline
+            {% if section.settings.poster_image != blank %}poster="{{ section.settings.poster_image | image_url: width: 1600 }}"{% endif %}
+            width="1920"
+            height="1080"
+          >
+            {%- for source in section.settings.background_video.sources -%}
+              {%- if source.format == 'mp4' -%}
+                <source src="{{ source.url }}" type="{{ source.mime_type }}">
+              {%- endif -%}
+            {%- endfor -%}
+          </video>
+        {%- elsif section.settings.poster_image != blank -%}
+          <img
+            class="custom-video-showcase__video custom-video-showcase__video--static"
+            src="{{ section.settings.poster_image | image_url: width: 1600 }}"
+            alt="{{ section.settings.poster_image.alt | default: '' | escape }}"
+            width="{{ section.settings.poster_image.width }}"
+            height="{{ section.settings.poster_image.height }}"
+            loading="{% if section.index == 1 %}eager{% else %}lazy{% endif %}"
+            {% if section.index == 1 %}fetchpriority="high"{% endif %}
+          >
+        {%- endif -%}
+      </button>
+    </div>
+
+    {%- if section.settings.description != blank -%}
+      <div class="custom-video-showcase__description body-large">{{ section.settings.description }}</div>
+    {%- endif -%}
+  </div>
+
+  {%- if section.settings.modal_video_url != blank -%}
+    <dialog class="custom-video-showcase__dialog" data-modal aria-label="{{ section.settings.cursor_label | default: 'Video' | escape }}">
+      <div class="custom-video-showcase__dialog-backdrop" data-close-btn></div>
+      <div class="custom-video-showcase__dialog-inner">
+        <div class="custom-video-showcase__dialog-content">
+          <button type="button" class="custom-video-showcase__dialog-close" data-close-btn aria-label="Video schliessen">
+            {%- render 'kaadu-icon-close' -%}
+          </button>
+          <div class="custom-video-showcase__dialog-body" data-dialog-body></div>
+        </div>
+      </div>
+    </dialog>
+  {%- endif -%}
+
+  {%- style -%}
+    #{{ section_id }} {
+      padding: var(--section-padding-v) 0;
+      --frame-radius: var(--radius-card);
+      {%- if has_frame_mask -%}
+        --frame-mask: url('{{ section.settings.frame_shape | image_url: width: 1200 }}');
+      {%- endif -%}
+    }
+
+    #{{ section_id }} .custom-video-showcase__container {
+      max-width: var(--container-max);
+      margin-inline: auto;
+      padding-inline: var(--space-4);
+    }
+
+    #{{ section_id }} .custom-video-showcase__heading {
+      margin: 0 0 var(--space-6);
+    }
+
+    #{{ section_id }} .custom-video-showcase__frame {
+      width: 100%;
+    }
+
+    #{{ section_id }} .custom-video-showcase__wrapper {
+      display: block;
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      margin: 0;
+      padding: 0;
+      border: none;
+      overflow: hidden;
+      cursor: none;
+      border-radius: var(--frame-radius);
+      background: var(--color-black);
+    }
+
+    #{{ section_id }} .custom-video-showcase__wrapper--masked {
+      border-radius: 0;
+      -webkit-mask-image: var(--frame-mask);
+      mask-image: var(--frame-mask);
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      mask-position: center;
+      -webkit-mask-size: 100% 100%;
+      mask-size: 100% 100%;
+    }
+
+    #{{ section_id }} .custom-video-showcase__wrapper:focus-visible {
+      outline: 3px solid var(--color-violet);
+      outline-offset: 3px;
+    }
+
+    #{{ section_id }} .custom-video-showcase__video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+    }
+
+    #{{ section_id }} .custom-video-showcase__control {
+      position: absolute;
+      right: var(--space-4);
+      bottom: var(--space-4);
+      width: 48px;
+      height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.4);
+      color: var(--color-cream);
+      transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+      pointer-events: none;
+    }
+
+    #{{ section_id }} .custom-video-showcase__wrapper:hover .custom-video-showcase__control {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+
+    #{{ section_id }} .custom-video-showcase__cursor {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 10;
+      pointer-events: none;
+      will-change: transform;
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0);
+    }
+
+    #{{ section_id }} .custom-video-showcase__cursor-content {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      white-space: nowrap;
+      background: var(--color-cream);
+      color: var(--color-near-black);
+      border: 2px solid var(--color-black);
+      border-radius: var(--radius-btn);
+      box-shadow: var(--shadow-sm);
+      padding: var(--space-3) var(--space-4) var(--space-3) var(--space-3);
+    }
+
+    #{{ section_id }} .custom-video-showcase__cursor-icon {
+      display: inline-flex;
+      flex-shrink: 0;
+      color: var(--color-red);
+    }
+
+    #{{ section_id }} .custom-video-showcase__cursor-icon--custom {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+    }
+
+    #{{ section_id }} .custom-video-showcase__cursor-label {
+      margin: 0;
+    }
+
+    #{{ section_id }} .custom-video-showcase__description {
+      max-width: 720px;
+      margin-block-start: var(--space-8);
+    }
+
+    #{{ section_id }} .custom-video-showcase__dialog {
+      block-size: 100%;
+      inline-size: 100%;
+      max-block-size: none;
+      max-inline-size: none;
+      color: inherit;
+      background: transparent;
+      border: none;
+      padding: 0;
+    }
+
+    #{{ section_id }} .custom-video-showcase__dialog::backdrop {
+      background: transparent;
+    }
+
+    #{{ section_id }} .custom-video-showcase__dialog-backdrop {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: var(--color-black);
+      opacity: 0;
+      transition: opacity 0.2s ease-out;
+    }
+
+    #{{ section_id }} .custom-video-showcase__dialog-inner {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      block-size: 100%;
+      inline-size: 100%;
+      padding-inline: var(--space-4);
+    }
+
+    #{{ section_id }} .custom-video-showcase__dialog-content {
+      position: relative;
+      width: 100%;
+      max-width: 1200px;
+      aspect-ratio: 16 / 9;
+      opacity: 0;
+      transition: opacity 0.3s ease-out;
+    }
+
+    #{{ section_id }} .custom-video-showcase__dialog.active .custom-video-showcase__dialog-backdrop {
+      opacity: 0.85;
+    }
+
+    #{{ section_id }} .custom-video-showcase__dialog.active .custom-video-showcase__dialog-content {
+      opacity: 1;
+    }
+
+    #{{ section_id }} .custom-video-showcase__dialog-close {
+      position: absolute;
+      top: -56px;
+      right: 0;
+      z-index: 3;
+      width: 48px;
+      height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-cream);
+      border: 2px solid var(--color-black);
+      border-radius: 50%;
+      color: var(--color-near-black);
+      cursor: pointer;
+    }
+
+    #{{ section_id }} .custom-video-showcase__dialog-close:focus-visible {
+      outline: 3px solid var(--color-violet);
+      outline-offset: 3px;
+    }
+
+    #{{ section_id }} .custom-video-showcase__dialog-body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      border-radius: var(--radius-card);
+      background: var(--color-black);
+    }
+
+    #{{ section_id }} .custom-video-showcase__dialog-body iframe {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      #{{ section_id }} {
+        padding: var(--space-8) 0;
+      }
+
+      #{{ section_id }} .custom-video-showcase__cursor,
+      #{{ section_id }} .custom-video-showcase__wrapper {
+        cursor: pointer;
+      }
+
+      #{{ section_id }} .custom-video-showcase__description {
+        margin-block-start: var(--space-4);
+      }
+    }
+  {%- endstyle -%}
+</section>
+
+<script>
+  (function () {
+    var section = document.getElementById('{{ section_id }}');
+    if (!section || section._customVideoShowcaseInit) return;
+    section._customVideoShowcaseInit = true;
+
+    var wrapper = section.querySelector('[data-video-wrapper]');
+    var video = section.querySelector('[data-video]');
+    var cursor = section.querySelector('[data-cursor]');
+    var dialog = section.querySelector('[data-modal]');
+    var dialogBody = section.querySelector('[data-dialog-body]');
+    if (!wrapper) return;
+
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var isCoarsePointer = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+    var modalUrl = {{ section.settings.modal_video_url | default: '' | json }};
+    var modalOpen = false;
+    var cursorVisible = false;
+    var raf = null;
+    var targetX = 0;
+    var targetY = 0;
+    var currentX = 0;
+    var currentY = 0;
+
+    function playVideo() {
+      if (!video) return;
+      video.muted = true;
+      var p = video.play();
+      if (p !== undefined) p.catch(function () {});
+    }
+
+    function pauseVideo() {
+      if (video) video.pause();
+    }
+
+    if (video && !reduceMotion && 'IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            playVideo();
+          } else {
+            pauseVideo();
+          }
+        });
+      }, { threshold: 0.1 });
+      observer.observe(wrapper);
+    } else if (video) {
+      playVideo();
+    }
+
+    function showCursor() {
+      if (cursorVisible || !cursor || isCoarsePointer || reduceMotion) return;
+      cursorVisible = true;
+      cursor.style.opacity = '1';
+      cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+    }
+
+    function hideCursor() {
+      if (!cursorVisible || !cursor) return;
+      cursorVisible = false;
+      cursor.style.opacity = '0';
+      cursor.style.transform = 'translate(-50%, -50%) scale(0)';
+    }
+
+    function tick() {
+      currentX += (targetX - currentX) * 0.25;
+      currentY += (targetY - currentY) * 0.25;
+      if (cursor) cursor.style.left = currentX + 'px';
+      if (cursor) cursor.style.top = currentY + 'px';
+      raf = requestAnimationFrame(tick);
+    }
+
+    if (!isCoarsePointer && !reduceMotion) {
+      wrapper.addEventListener('mousemove', function (e) {
+        var rect = wrapper.getBoundingClientRect();
+        targetX = e.clientX - rect.left;
+        targetY = e.clientY - rect.top;
+        if (!raf) raf = requestAnimationFrame(tick);
+      });
+
+      wrapper.addEventListener('mouseenter', showCursor);
+      wrapper.addEventListener('mouseleave', hideCursor);
+    }
+
+    function sanitizeModalUrl(url) {
+      var out = url;
+      if (out.indexOf('watch?v=') > -1) {
+        var videoId = out.split('v=')[1].split('&')[0];
+        out = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&mute=0';
+      } else if (out.indexOf('youtube.com/embed/') > -1 || out.indexOf('youtu.be/') > -1) {
+        if (out.indexOf('youtu.be/') > -1) {
+          out = 'https://www.youtube.com/embed/' + out.split('youtu.be/')[1].split('?')[0];
+        }
+        var ytSeparator = out.indexOf('?') > -1 ? '&' : '?';
+        if (out.indexOf('autoplay=') === -1) out += ytSeparator + 'autoplay=1&mute=0';
+      } else if (out.indexOf('vimeo.com/') > -1 && out.indexOf('player.vimeo.com') === -1) {
+        var vimeoId = out.split('vimeo.com/')[1].split('?')[0].split('/')[0];
+        out = 'https://player.vimeo.com/video/' + vimeoId + '?autoplay=1&muted=0';
+      } else if (out.indexOf('player.vimeo.com') > -1 && out.indexOf('autoplay=') === -1) {
+        var vSeparator = out.indexOf('?') > -1 ? '&' : '?';
+        out += vSeparator + 'autoplay=1&muted=0';
+      }
+      return out;
+    }
+
+    function openModal() {
+      if (!dialog || !dialogBody || !modalUrl) return;
+      var autoplaySrc = sanitizeModalUrl(modalUrl);
+      dialogBody.innerHTML =
+        '<iframe src="' + autoplaySrc + '" title="' +
+        {{ section.settings.cursor_label | default: 'Video' | json }} +
+        '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
+      dialog.showModal();
+      modalOpen = true;
+      pauseVideo();
+      setTimeout(function () {
+        dialog.classList.add('active');
+      }, 20);
+    }
+
+    function closeModal() {
+      if (!dialog) return;
+      dialog.close();
+    }
+
+    if (dialog) {
+      dialog.addEventListener('close', function () {
+        dialog.classList.remove('active');
+        if (dialogBody) dialogBody.innerHTML = '';
+        modalOpen = false;
+        playVideo();
+      });
+
+      dialog.querySelectorAll('[data-close-btn]').forEach(function (btn) {
+        btn.addEventListener('click', closeModal);
+      });
+    }
+
+    wrapper.addEventListener('click', function () {
+      if (modalUrl && dialog) {
+        openModal();
+        return;
+      }
+      if (!video) return;
+      if (video.paused) {
+        video.muted = false;
+        playVideo();
+      } else {
+        pauseVideo();
+      }
+    });
+
+    wrapper.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        wrapper.click();
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Video Showcase",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Gefriergetrocknete Früchte — fair produziert, in der Ursprungsgemeinde verarbeitet, radikal transparent.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Video"
+    },
+    {
+      "type": "video",
+      "id": "background_video",
+      "label": "Background video",
+      "info": "Self-hosted, looping, muted. Uploaded MP4 plays automatically while in view."
+    },
+    {
+      "type": "image_picker",
+      "id": "poster_image",
+      "label": "Poster / fallback image",
+      "info": "Shown before the video loads, and used instead of the video if none is uploaded."
+    },
+    {
+      "type": "video_url",
+      "id": "modal_video_url",
+      "label": "Modal video URL",
+      "accept": ["youtube", "vimeo"],
+      "info": "Optional. If set, clicking the video opens this video in a modal. If left blank, clicking toggles play/pause on the background video instead."
+    },
+    {
+      "type": "header",
+      "content": "Custom frame shape"
+    },
+    {
+      "type": "image_picker",
+      "id": "frame_shape",
+      "label": "Frame shape (SVG or PNG)",
+      "info": "Optional. Upload a solid black-on-transparent SVG/PNG silhouette to mask the video into a custom blob/brand shape. Leave blank for the standard rounded-card frame."
+    },
+    {
+      "type": "header",
+      "content": "Custom cursor"
+    },
+    {
+      "type": "text",
+      "id": "cursor_label",
+      "label": "Cursor label",
+      "default": "Video abspielen"
+    },
+    {
+      "type": "image_picker",
+      "id": "cursor_icon",
+      "label": "Cursor icon (SVG or PNG)",
+      "info": "Optional. Replaces the default play-triangle icon inside the mouse-follow cursor bubble."
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "select",
+      "id": "background",
+      "label": "Background color",
+      "options": [
+        { "value": "pink", "label": "Pink" },
+        { "value": "violet", "label": "Violet" },
+        { "value": "cream", "label": "Cream" },
+        { "value": "sky", "label": "Sky" },
+        { "value": "lime", "label": "Lime" },
+        { "value": "red", "label": "Red" },
+        { "value": "yellow", "label": "Yellow" },
+        { "value": "orange", "label": "Orange" }
+      ],
+      "default": "cream"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video Showcase",
+      "settings": {
+        "description": "<p>Gefriergetrocknete Früchte — fair produziert, in der Ursprungsgemeinde verarbeitet, radikal transparent.</p>",
+        "cursor_label": "Video abspielen",
+        "background": "cream"
+      }
+    }
+  ]
+}
+{% endschema %}
