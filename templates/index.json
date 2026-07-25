@@ -27,8 +27,7 @@
         "description": "<p>Gefriergetrocknete Früchte — fair produziert, in der Ursprungsgemeinde verarbeitet, radikal transparent.</p>",
         "background_video": "shopify://files/videos/sample.mp4",
         "modal_video_url": "https://www.youtube.com/watch?v=o4hGIwTBdZs",
-        "cursor_label": "Video abspielen",
-        "background": "cream"
+        "cursor_label": "Video abspielen"
       }
     },
     "kaadu_custom_distribution_mkKaw6": {
@@ -144,6 +143,7 @@
         "ingredients_label": "Zutaten",
         "ingredients_content": "",
         "nutrition_label": "Nährwerte",
+        "nutrition_content_type": "text",
         "nutrition_content": "",
         "shipping_label": "Versand",
         "shipping_content": "",
