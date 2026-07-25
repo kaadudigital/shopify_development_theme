@@ -18,7 +18,7 @@
         {%- if block.type == 'option_link' -%}
           <a
             href="{{ block.settings.link | default: '#' }}"
-            class="kaadu-distribution__item bg-{{ block.settings.background }}"
+            class="kaadu-distribution__item bg-{{ block.settings.background }}{% if block.settings.show_border %} kaadu-distribution__item--bordered{% endif %}{% if block.settings.rounded_corners %} kaadu-distribution__item--rounded{% endif %}"
             {{ block.shopify_attributes }}
           >
             <div class="kaadu-distribution__item-row">
@@ -60,13 +60,21 @@
 
     #shopify-section-{{ section.id }} .kaadu-distribution__item {
       display: block;
-      border: 2px solid var(--color-black);
-      border-radius: var(--radius-card);
+      border: none;
+      border-radius: 0;
       box-shadow: var(--shadow-md);
       padding: var(--space-6);
       text-decoration: none;
       color: inherit;
       transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+    }
+
+    #shopify-section-{{ section.id }} .kaadu-distribution__item--bordered {
+      border: 2px solid var(--color-black);
+    }
+
+    #shopify-section-{{ section.id }} .kaadu-distribution__item--rounded {
+      border-radius: var(--radius-card);
     }
 
     #shopify-section-{{ section.id }} .kaadu-distribution__item:hover,
@@ -180,6 +188,22 @@
             { "value": "cream", "label": "Cream" }
           ],
           "default": "lime"
+        },
+        {
+          "type": "header",
+          "content": "Border"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_border",
+          "label": "Show border",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "rounded_corners",
+          "label": "Rounded corners",
+          "default": false
         }
       ]
     }

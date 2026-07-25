@@ -1,16 +1,6 @@
 {%- liquid
-  assign button_scale_desktop = section.settings.button_scale_desktop | default: 100
-  assign button_scale_mobile = section.settings.button_scale_mobile | default: 100
-
-  if section.settings.button_image != blank
-    assign button_desktop_width = section.settings.button_image.width | times: button_scale_desktop | divided_by: 100
-  endif
-
-  if section.settings.button_image_mobile != blank
-    assign button_mobile_width = section.settings.button_image_mobile.width | times: button_scale_mobile | divided_by: 100
-  elsif section.settings.button_image != blank
-    assign button_mobile_width = section.settings.button_image.width | times: button_scale_mobile | divided_by: 100
-  endif
+  assign purchase_options = "1,2,3" | split: ","
+  assign tiers = "1,2,3" | split: ","
 -%}
 
 <div
@@ -21,126 +11,148 @@
     <p class="pack-selector__heading h3">
       {{ section.settings.title }}
     </p>
-    <div class="pack-selector__grid">
 
-    {% assign cards = "1,2,3,4" | split: "," %}
-    {% for i in cards %}
-      {% assign card_name_key = "card" | append: i | append: "_name" %}
-      {% assign card_price_key = "card" | append: i | append: "_price" %}
-      {% assign card_subtitle_key = "card" | append: i | append: "_subtitle" %}
-      {% assign card_badge_key = "card" | append: i | append: "_badge" %}
-
-      {% assign card_name = section.settings[card_name_key] %}
-      {% assign card_price = section.settings[card_price_key] %}
-      {% assign card_subtitle = section.settings[card_subtitle_key] %}
-      {% assign card_badge = section.settings[card_badge_key] %}
-
-      <div
-        class="pack-card"
-        data-index="{{ i }}"
-        onclick="selectPack('{{ i }}')"
-      >
-        {% if card_badge != blank %}
-          <span class="pack-card__badge">{{ card_badge }}</span>
-        {% endif %}
-
-        <div class="pack-card__name">
-          {{ card_name }}
-        </div>
-        <div class="pack-card__price">
-          {{ card_price }}
-        </div>
-        <div class="pack-card__subtitle">
-          {{ card_subtitle }}
-        </div>
-      </div>
-    {% endfor %}
-
+    {%- comment -%} Purchase options (pack size) {%- endcomment -%}
+    <div class="pack-selector__options" role="radiogroup" aria-label="{{ section.settings.options_label | escape }}">
+      {%- for i in purchase_options -%}
+        {%- assign option_label = section.settings["option" | append: i | append: "_label"] -%}
+        {%- if option_label != blank -%}
+          <button
+            type="button"
+            class="pack-option"
+            data-index="{{ i }}"
+            data-variant-id="{{ section.settings["option" | append: i | append: "_variant_id"] }}"
+            role="radio"
+            aria-checked="false"
+            onclick="packSelector.selectOption('{{ i }}')"
+          >
+            <span class="pack-option__check" aria-hidden="true"></span>
+            <span class="pack-option__label">{{ option_label }}</span>
+          </button>
+        {%- endif -%}
+      {%- endfor -%}
     </div>
 
-    {%- if section.settings.show_purchase_type -%}
-      <div class="pack-selector__purchase-type">
-        <p class="pack-selector__heading h3">
-          {{ section.settings.purchase_type_title }}
-        </p>
+    {%- comment -%} Frequency / subscription {%- endcomment -%}
+    <p class="pack-selector__subheading caption">{{ section.settings.frequency_label }}</p>
 
-        <div
-          class="purchase-option"
-          data-option="1"
-          onclick="selectPurchase(1)"
-          style="
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            background: #e8f542;
-            border: 2px solid #e8f542;
-            border-radius: 14px;
-            padding: 16px;
-            cursor: pointer;
-            margin-bottom: 10px;
-            transition: background 0.2s;
-          "
-        >
-          <div class="radio-dot" style="
-            width: 20px; height: 20px; border-radius: 50%;
-            border: 2px solid #cc0000; background: #fff;
-            flex-shrink: 0; margin-top: 2px; display: flex;
-            align-items: center; justify-content: center;
-          ">
-            <div style="width: 10px; height: 10px; border-radius: 50%; background: #cc0000;"></div>
-          </div>
-          <div>
-            <div style="font-size: 14px; font-weight: 800; color: #222; text-transform: uppercase;">
-              {{ section.settings.option1_title }}
-            </div>
-            <div style="font-size: 12px; color: #444; margin-top: 4px;">
-              {{ section.settings.option1_subtitle }}
-            </div>
-          </div>
-        </div>
+    <div class="pack-frequency">
+      <button
+        type="button"
+        class="pack-subscribe"
+        data-frequency="subscribe"
+        role="radio"
+        aria-checked="false"
+        onclick="packSelector.selectFrequency('subscribe')"
+      >
+        <span class="pack-subscribe__header">
+          <span class="pack-subscribe__title-row">
+            <span class="pack-subscribe__check" aria-hidden="true"></span>
+            <span class="pack-subscribe__title h3">{{ section.settings.subscribe_title }}</span>
+          </span>
+          <span class="pack-subscribe__price">
+            {%- if section.settings.subscribe_price_original != blank -%}
+              <span class="pack-subscribe__price-original">{{ section.settings.subscribe_price_original }}</span>
+            {%- endif -%}
+            <span class="pack-subscribe__price-current">{{ section.settings.subscribe_price_current }}</span>
+          </span>
+        </span>
 
-        <div
-          class="purchase-option"
-          data-option="2"
-          onclick="selectPurchase(2)"
-          style="
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            background: #fff;
-            border: 2px solid #ddd;
-            border-radius: 14px;
-            padding: 16px;
-            cursor: pointer;
-            transition: background 0.2s;
-          "
-        >
-          <div class="radio-dot" style="
-            width: 20px; height: 20px; border-radius: 50%;
-            border: 2px solid #aaa; background: #fff;
-            flex-shrink: 0; margin-top: 2px;
-          "></div>
-          <div>
-            <div style="font-size: 14px; font-weight: 800; color: #222; text-transform: uppercase;">
-              {{ section.settings.option2_title }}
-            </div>
-            <div style="font-size: 12px; color: #444; margin-top: 4px;">
-              {{ section.settings.option2_subtitle }}
-            </div>
-          </div>
-        </div>
-      </div>
-    {%- endif -%}
+        <span class="pack-subscribe__tiers">
+          {%- for i in tiers -%}
+            {%- assign tier_title = section.settings["tier" | append: i | append: "_title"] -%}
+            {%- if tier_title != blank -%}
+              {%- assign tier_subtitle = section.settings["tier" | append: i | append: "_subtitle"] -%}
+              {%- assign tier_price_original = section.settings["tier" | append: i | append: "_price_original"] -%}
+              {%- assign tier_price_current = section.settings["tier" | append: i | append: "_price_current"] -%}
+              {%- assign tier_price_unit = section.settings["tier" | append: i | append: "_price_unit"] -%}
+              {%- assign tier_save = section.settings["tier" | append: i | append: "_save_badge"] -%}
+              {%- assign tier_selling_plan = section.settings["tier" | append: i | append: "_selling_plan_id"] -%}
+              <span
+                class="pack-tier"
+                data-tier="{{ i }}"
+                data-selling-plan="{{ tier_selling_plan }}"
+                role="radio"
+                aria-checked="false"
+                tabindex="0"
+                onclick="event.stopPropagation(); packSelector.selectTier('{{ i }}')"
+                onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();packSelector.selectTier('{{ i }}');}"
+              >
+                <span class="pack-tier__info">
+                  <span class="pack-tier__title">{{ tier_title }}</span>
+                  {%- if tier_subtitle != blank -%}
+                    <span class="pack-tier__subtitle caption">{{ tier_subtitle }}</span>
+                  {%- endif -%}
+                </span>
+                <span class="pack-tier__pricing">
+                  <span class="pack-tier__price-row">
+                    {%- if tier_price_original != blank -%}
+                      <span class="pack-tier__price-original">{{ tier_price_original }}</span>
+                    {%- endif -%}
+                    <span class="pack-tier__price-current">{{ tier_price_current }}</span>
+                    {%- if tier_save != blank -%}
+                      <span class="pack-tier__badge">{{ tier_save }}</span>
+                    {%- endif -%}
+                  </span>
+                  {%- if tier_price_unit != blank -%}
+                    <span class="pack-tier__price-unit caption">{{ tier_price_unit }}</span>
+                  {%- endif -%}
+                </span>
+              </span>
+            {%- endif -%}
+          {%- endfor -%}
+        </span>
 
-    <!-- TODO: Add your cart form here or in a separate section below -->
+        {%- if section.settings.benefit1_text != blank or section.settings.benefit2_text != blank or section.settings.benefit3_text != blank -%}
+          <span class="pack-subscribe__benefits">
+            {%- for benefit in (1..3) -%}
+              {%- assign benefit_text = section.settings["benefit" | append: benefit | append: "_text"] -%}
+              {%- if benefit_text != blank -%}
+                <span class="pack-subscribe__benefit">
+                  <svg class="pack-subscribe__benefit-icon" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 0L7.4 4.6L12 6L7.4 7.4L6 12L4.6 7.4L0 6L4.6 4.6Z" fill="currentColor"/></svg>
+                  {{ benefit_text }}
+                </span>
+              {%- endif -%}
+            {%- endfor -%}
+          </span>
+        {%- endif -%}
+      </button>
+
+      <button
+        type="button"
+        class="pack-onetime"
+        data-frequency="onetime"
+        role="radio"
+        aria-checked="false"
+        onclick="packSelector.selectFrequency('onetime')"
+      >
+        <span class="pack-onetime__row">
+          <span class="pack-onetime__title-row">
+            <span class="pack-onetime__check" aria-hidden="true"></span>
+            <span class="pack-onetime__title h3">{{ section.settings.onetime_title }}</span>
+          </span>
+          <span class="pack-onetime__price">{{ section.settings.onetime_price }}</span>
+        </span>
+        {%- if section.settings.onetime_caption != blank -%}
+          <span class="pack-onetime__caption caption">{{ section.settings.onetime_caption }}</span>
+        {%- endif -%}
+      </button>
+    </div>
+
+    {%- comment -%} Quantity + Add to cart {%- endcomment -%}
     <form action="/cart/add" method="post" class="pack-selector__form">
-      <input type="hidden" name="id" id="selected-variant-id" value="22222222222">
-      {%- if section.settings.show_purchase_type -%}
-        <input type="hidden" name="selling_plan" id="selected-selling-plan" value="">
-      {%- endif -%}
-      <input type="hidden" name="quantity" value="1">
-      <button type="submit" class="pack-selector__submit">
-        <span class="pack-selector__submit-text">{{ section.settings.button_label }}</span>
+      <input type="hidden" name="id" id="selected-variant-id" value="">
+      <input type="hidden" name="selling_plan" id="selected-selling-plan" value="">
+
+      <div class="pack-qty">
+        <span class="pack-qty__label caption">{{ section.settings.qty_label }}</span>
+        <button type="button" class="pack-qty__btn" aria-label="{{ 'products.product.quantity.decrease_html' | t: product: '' | default: 'Decrease quantity' | escape }}" onclick="packSelector.changeQty(-1)">&minus;</button>
+        <input type="number" name="quantity" id="pack-qty-input" class="pack-qty__input" value="{{ section.settings.qty_default | default: 1 }}" min="1" inputmode="numeric">
+        <button type="button" class="pack-qty__btn" aria-label="{{ 'products.product.quantity.increase_html' | t: product: '' | default: 'Increase quantity' | escape }}" onclick="packSelector.changeQty(1)">+</button>
+      </div>
+
+      <button type="submit" class="btn-primary pack-selector__submit">
+        {{ section.settings.button_label }}
       </button>
     </form>
   </div>
@@ -157,195 +169,453 @@
   }
   @media (min-width: 769px) {
     .pack-selector__inner {
-      /* 672px (previous desktop width) + 30% */
-      max-width: 874px;
+      max-width: 640px;
     }
   }
   .pack-selector__heading {
     color: var(--color-near-black);
-    margin: 0 0 var(--space-3);
+    margin: 0 0 var(--space-4);
   }
-  .pack-selector__grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: var(--space-3);
-    row-gap: var(--space-6);
+  .pack-selector__subheading {
+    color: var(--color-near-black);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 0 0 var(--space-2);
   }
-  .pack-card {
-    position: relative;
+
+  /* Purchase options */
+  .pack-selector__options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+  }
+  .pack-option {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
     background: var(--color-cream);
     border: 2px solid var(--color-black);
     border-radius: var(--radius-card);
-    padding: var(--space-4) var(--space-3);
+    padding: var(--space-3) var(--space-4);
     cursor: pointer;
-    transition: background 0.2s ease-out;
+    font-family: inherit;
+    text-align: left;
+    transition: background 0.15s ease-out;
   }
-  .pack-card__badge {
-    position: absolute;
-    top: -14px;
-    right: 10px;
-    background: var(--color-red);
-    color: var(--color-cream);
-    font-family: var(--font-heading);
-    font-size: 11px;
-    font-weight: 700;
-    padding: 4px 12px;
+  .pack-option__check {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
     border: 2px solid var(--color-black);
+    border-radius: 4px;
+    background: var(--color-cream);
+    position: relative;
+  }
+  .pack-option[aria-checked="true"] {
+    background: var(--color-lime);
+  }
+  .pack-option[aria-checked="true"] .pack-option__check {
+    background: var(--color-black);
+  }
+  .pack-option[aria-checked="true"] .pack-option__check::after {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 1px;
+    width: 5px;
+    height: 10px;
+    border: solid var(--color-cream);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  .pack-option__label {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--color-near-black);
+    text-transform: uppercase;
+  }
+
+  /* Frequency block */
+  .pack-frequency {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+  }
+
+  .pack-subscribe {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background: var(--color-yellow);
+    border: 2px solid var(--color-black);
+    border-radius: var(--radius-card);
+    padding: var(--space-4);
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+    gap: var(--space-4);
+  }
+  .pack-subscribe__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+  .pack-subscribe__title-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .pack-subscribe__check {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--color-black);
+    border-radius: 4px;
+    background: var(--color-cream);
+    position: relative;
+  }
+  .pack-subscribe[aria-checked="true"] .pack-subscribe__check {
+    background: var(--color-black);
+  }
+  .pack-subscribe[aria-checked="true"] .pack-subscribe__check::after {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 1px;
+    width: 5px;
+    height: 10px;
+    border: solid var(--color-cream);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  .pack-subscribe__title {
+    margin: 0;
+    color: var(--color-near-black);
+  }
+  .pack-subscribe__price {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    font-family: var(--font-heading);
+    font-weight: 700;
+  }
+  .pack-subscribe__price-original {
+    color: var(--color-mid-grey);
+    text-decoration: line-through;
+    font-size: 16px;
+  }
+  .pack-subscribe__price-current {
+    color: var(--color-near-black);
+    font-size: 20px;
+  }
+
+  .pack-subscribe__tiers {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .pack-tier {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    background: var(--color-yellow);
+    border: 2px solid var(--color-black);
+    border-radius: var(--radius-card);
+    padding: var(--space-3) var(--space-4);
+    cursor: pointer;
+    transition: background 0.15s ease-out;
+  }
+  .pack-tier[aria-checked="true"] {
+    background: var(--color-cream);
+  }
+  .pack-tier__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .pack-tier__title {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--color-near-black);
+    text-transform: uppercase;
+  }
+  .pack-tier__subtitle {
+    color: var(--color-near-black);
+  }
+  .pack-tier__pricing {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+  }
+  .pack-tier__price-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  .pack-tier__price-original {
+    color: var(--color-mid-grey);
+    text-decoration: line-through;
+    font-family: var(--font-heading);
+    font-size: 13px;
+  }
+  .pack-tier__price-current {
+    color: var(--color-near-black);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .pack-tier__badge {
+    background: var(--color-pink);
+    color: var(--color-black);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 11px;
+    padding: 2px 10px;
     border-radius: var(--radius-btn);
-    letter-spacing: 0.03em;
     text-transform: uppercase;
     white-space: nowrap;
   }
-  .pack-card__name {
-    font-family: var(--font-heading);
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--color-near-black);
-    text-transform: uppercase;
-  }
-  .pack-card__price {
-    font-family: var(--font-heading);
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--color-red);
-    margin: var(--space-1) 0;
-  }
-  .pack-card__subtitle {
-    font-family: var(--font-body);
-    font-size: 14px;
-    line-height: 1.4;
+  .pack-tier__price-unit {
     color: var(--color-near-black);
   }
 
-  .pack-selector__purchase-type {
-    margin-top: var(--space-6);
+  .pack-subscribe__benefits {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
   }
-
-  .pack-selector__form {
-    margin-top: var(--space-6);
-    text-align: center;
-  }
-  .pack-selector__submit {
-    display: inline-flex;
+  .pack-subscribe__benefit {
+    display: flex;
     align-items: center;
-    justify-content: center;
-    max-width: 100%;
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    border: none;
+    gap: var(--space-2);
+    font-size: 14px;
+    color: var(--color-near-black);
+  }
+  .pack-subscribe__benefit-icon {
+    flex-shrink: 0;
+    color: var(--color-red);
+  }
+
+  .pack-onetime {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    width: 100%;
+    background: var(--color-cream);
+    border: 2px solid var(--color-black);
+    border-radius: var(--radius-card);
+    padding: var(--space-3) var(--space-4);
     cursor: pointer;
-    transition: transform 0.2s ease-out;
+    font-family: inherit;
+    text-align: left;
+  }
+  .pack-onetime[aria-checked="true"] {
+    background: var(--color-lime);
+  }
+  .pack-onetime__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+  .pack-onetime__title-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .pack-onetime__check {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--color-black);
+    border-radius: 4px;
+    background: var(--color-cream);
     position: relative;
-    {%- if section.settings.button_image != blank -%}
-      background-image: url('{{ section.settings.button_image | image_url: width: 800 }}');
-      aspect-ratio: {{ section.settings.button_image.aspect_ratio }};
-      width: {{ button_desktop_width }}px;
-    {%- else -%}
-      background: var(--color-lime);
-      border-radius: var(--radius-btn);
-      padding: var(--space-4) var(--space-8);
-    {%- endif -%}
   }
-  .pack-selector__submit:hover {
-    transform: translateY(-2px);
+  .pack-onetime[aria-checked="true"] .pack-onetime__check {
+    background: var(--color-black);
   }
-  {%- if section.settings.button_image != blank -%}
-    @media (max-width: 490px) {
-      .pack-selector__submit {
-        {%- if section.settings.button_image_mobile != blank -%}
-          background-image: url('{{ section.settings.button_image_mobile | image_url: width: 600 }}');
-          aspect-ratio: {{ section.settings.button_image_mobile.aspect_ratio }};
-        {%- endif -%}
-        width: {{ button_mobile_width }}px;
-      }
-    }
-  {%- endif -%}
-  .pack-selector__submit-text {
-    color: {{ section.settings.button_text_color_desktop | default: '#222222' }};
-    font-family: var(--font-display);
-    font-size: 20px;
-    font-weight: 400;
-    line-height: 24px;
+  .pack-onetime[aria-checked="true"] .pack-onetime__check::after {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 1px;
+    width: 5px;
+    height: 10px;
+    border: solid var(--color-cream);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  .pack-onetime__title {
+    margin: 0;
+    color: var(--color-near-black);
+  }
+  .pack-onetime__price {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--color-near-black);
+  }
+  .pack-onetime__caption {
+    color: var(--color-red);
+    padding-left: calc(20px + var(--space-3));
+  }
+
+  /* Qty + submit */
+  .pack-selector__form {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+  .pack-qty {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    border: 2px dashed var(--color-black);
+    border-radius: var(--radius-btn);
+    padding: var(--space-2) var(--space-3);
+  }
+  .pack-qty__label {
+    color: var(--color-near-black);
     text-transform: uppercase;
-    letter-spacing: 0.02em;
-    padding: 0 var(--space-6);
+    margin-right: var(--space-1);
   }
-  @media (min-width: 491px) {
-    .pack-selector__submit-text {
-      padding-top: {{ section.settings.button_padding_topbottom | default: 16 }}px;
-      padding-bottom: {{ section.settings.button_padding_topbottom | default: 16 }}px;
+  .pack-qty__btn {
+    width: 32px;
+    height: 32px;
+    min-width: 48px;
+    min-height: 32px;
+    border: none;
+    background: transparent;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--color-near-black);
+    cursor: pointer;
+    line-height: 1;
+  }
+  .pack-qty__input {
+    width: 32px;
+    border: none;
+    background: transparent;
+    text-align: center;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--color-near-black);
+    -moz-appearance: textfield;
+  }
+  .pack-qty__input::-webkit-outer-spin-button,
+  .pack-qty__input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .pack-selector__submit {
+    flex: 1 1 auto;
+    min-width: 200px;
+  }
+
+  @media (max-width: 480px) {
+    .pack-selector__form {
+      flex-direction: column;
+      align-items: stretch;
     }
-  }
-  @media (max-width: 490px) {
-    .pack-selector__submit-text {
-      color: {{ section.settings.button_text_color_mobile | default: '#222222' }};
-      font-family: var(--font-body);
-      font-weight: 600;
-      font-size: 16px;
-      line-height: 24px;
-      letter-spacing: 0;
-      text-align: center;
+    .pack-qty {
+      justify-content: center;
     }
   }
 </style>
 
 <script>
-  // TODO: Replace these dummy variant IDs with your real Shopify variant IDs
-  var packVariantIds = {
-    '1': '11111111111',
-    '2': '22222222222',
-    '3': '33333333333',
-    '4': '44444444444'
-  };
+  window.packSelector = (function () {
+    var state = { option: null, frequency: null, tier: null };
 
-  // TODO: Replace this dummy selling plan ID with your real selling plan ID from your subscription app
-  var subscriptionSellingPlanId = '99999999999';
+    function optionButtons() {
+      return document.querySelectorAll('.pack-option');
+    }
 
-  function selectPack(index) {
-    document.querySelectorAll('.pack-card').forEach(function(card) {
-      card.style.background = '';
+    function selectOption(index) {
+      optionButtons().forEach(function (btn) {
+        btn.setAttribute('aria-checked', btn.getAttribute('data-index') === index ? 'true' : 'false');
+      });
+      state.option = index;
+      updateVariant();
+    }
+
+    function selectFrequency(frequency) {
+      var subscribe = document.querySelector('.pack-subscribe');
+      var onetime = document.querySelector('.pack-onetime');
+      if (subscribe) subscribe.setAttribute('aria-checked', frequency === 'subscribe' ? 'true' : 'false');
+      if (onetime) onetime.setAttribute('aria-checked', frequency === 'onetime' ? 'true' : 'false');
+
+      state.frequency = frequency;
+
+      if (frequency === 'subscribe' && !state.tier) {
+        var firstTier = document.querySelector('.pack-tier');
+        if (firstTier) selectTier(firstTier.getAttribute('data-tier'));
+      }
+      updateVariant();
+    }
+
+    function selectTier(tier) {
+      document.querySelectorAll('.pack-tier').forEach(function (el) {
+        el.setAttribute('aria-checked', el.getAttribute('data-tier') === tier ? 'true' : 'false');
+      });
+      state.tier = tier;
+      selectFrequency('subscribe');
+    }
+
+    function changeQty(delta) {
+      var input = document.getElementById('pack-qty-input');
+      if (!input) return;
+      var next = (parseInt(input.value, 10) || 1) + delta;
+      if (next < 1) next = 1;
+      input.value = next;
+    }
+
+    function updateVariant() {
+      var variantInput = document.getElementById('selected-variant-id');
+      var sellingPlanInput = document.getElementById('selected-selling-plan');
+      var selectedOption = document.querySelector('.pack-option[aria-checked="true"]');
+
+      if (variantInput) {
+        variantInput.value = selectedOption ? selectedOption.getAttribute('data-variant-id') : '';
+      }
+      if (sellingPlanInput) {
+        if (state.frequency === 'subscribe' && state.tier) {
+          var tierEl = document.querySelector('.pack-tier[data-tier="' + state.tier + '"]');
+          sellingPlanInput.value = tierEl ? (tierEl.getAttribute('data-selling-plan') || '') : '';
+        } else {
+          sellingPlanInput.value = '';
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var firstOption = document.querySelector('.pack-option');
+      if (firstOption) selectOption(firstOption.getAttribute('data-index'));
+      selectFrequency('subscribe');
     });
-    var selected = document.querySelector('.pack-card[data-index="' + index + '"]');
-    if (selected) {
-      selected.style.background = 'var(--color-lime)';
-    }
-    var variantInput = document.getElementById('selected-variant-id');
-    if (variantInput) {
-      variantInput.value = packVariantIds[index] || '';
-    }
-  }
 
-  function selectPurchase(option) {
-    document.querySelectorAll('.purchase-option').forEach(function(el) {
-      el.style.background = '#fff';
-      el.style.borderColor = '#ddd';
-      var dot = el.querySelector('.radio-dot');
-      dot.style.borderColor = '#aaa';
-      dot.innerHTML = '';
-    });
-
-    var selected = document.querySelector('.purchase-option[data-option="' + option + '"]');
-    if (selected) {
-      selected.style.background = '#e8f542';
-      selected.style.borderColor = '#e8f542';
-      var dot = selected.querySelector('.radio-dot');
-      dot.style.borderColor = '#cc0000';
-      dot.innerHTML = '<div style="width:10px;height:10px;border-radius:50%;background:#cc0000;margin:auto;margin-top:3px;"></div>';
-    }
-
-    var sellingPlanInput = document.getElementById('selected-selling-plan');
-    if (sellingPlanInput) {
-      sellingPlanInput.value = (option === 2) ? subscriptionSellingPlanId : '';
-    }
-  }
-
-  document.addEventListener('DOMContentLoaded', function() {
-    selectPack('2');
-    if (document.querySelector('.purchase-option')) {
-      selectPurchase(1);
-    }
-  });
+    return {
+      selectOption: selectOption,
+      selectFrequency: selectFrequency,
+      selectTier: selectTier,
+      changeQty: changeQty
+    };
+  })();
 </script>
 
 {% schema %}
@@ -353,38 +623,63 @@
   "name": "Custom Packaging Selector",
   "settings": [
     { "type": "text", "id": "title", "label": "Section Title", "default": "WÄHL DEINE MENGE" },
-    { "type": "text", "id": "card1_name", "label": "Card 1 Name", "default": "1ER PACK" },
-    { "type": "text", "id": "card1_price", "label": "Card 1 Price", "default": "CHF 3.95" },
-    { "type": "text", "id": "card1_subtitle", "label": "Card 1 Subtitle", "default": "Zum Probieren" },
-    { "type": "text", "id": "card1_badge", "label": "Card 1 Badge (leave empty for none)" },
-    { "type": "text", "id": "card2_name", "label": "Card 2 Name", "default": "3ER PACK" },
-    { "type": "text", "id": "card2_price", "label": "Card 2 Price", "default": "CHF 11.10" },
-    { "type": "text", "id": "card2_subtitle", "label": "Card 2 Subtitle", "default": "Spar 6% · CHF 3.70/Pack" },
-    { "type": "text", "id": "card2_badge", "label": "Card 2 Badge (leave empty for none)"},
-    { "type": "text", "id": "card3_name", "label": "Card 3 Name", "default": "6ER PACK" },
-    { "type": "text", "id": "card3_price", "label": "Card 3 Price", "default": "CHF 20.50" },
-    { "type": "text", "id": "card3_subtitle", "label": "Card 3 Subtitle", "default": "Spar 13% · CHF 3.42/Pack" },
-    { "type": "text", "id": "card3_badge", "label": "Card 3 Badge", "default": "BELIEBT" },
-    { "type": "text", "id": "card4_name", "label": "Card 4 Name", "default": "12ER CRUNCH BOX" },
-    { "type": "text", "id": "card4_price", "label": "Card 4 Price", "default": "CHF 37.90" },
-    { "type": "text", "id": "card4_subtitle", "label": "Card 4 Subtitle", "default": "Spar 20% · gratis Versand" },
-    { "type": "text", "id": "card4_badge", "label": "Card 4 Badge", "default": "BESTER DEAL" },
-    { "type": "header", "content": "Payment Type" },
-    { "type": "checkbox", "id": "show_purchase_type", "label": "Show payment type options", "default": true, "info": "Turn off if this product doesn't offer a subscription option" },
-    { "type": "text", "id": "purchase_type_title", "label": "Payment Type Title", "default": "EINMALIG ODER IM ABO" },
-    { "type": "text", "id": "option1_title", "label": "Option 1 Title", "default": "EINMALIG KAUFEN" },
-    { "type": "text", "id": "option1_subtitle", "label": "Option 1 Subtitle", "default": "Ohne Verpflichtung, jederzeit nachbestellen." },
-    { "type": "text", "id": "option2_title", "label": "Option 2 Title", "default": "CRUNCH-ABO — SPAR 10%" },
-    { "type": "text", "id": "option2_subtitle", "label": "Option 2 Subtitle", "default": "Lieferung alle 4 oder 8 Wochen · gratis Versand · jederzeit pausierbar oder kündbar." },
+
+    { "type": "header", "content": "Purchase Options" },
+    { "type": "text", "id": "options_label", "label": "Options group label (accessibility)", "default": "Purchase options" },
+    { "type": "text", "id": "option1_label", "label": "Option 1 Label", "default": "6ER PACK" },
+    { "type": "text", "id": "option1_variant_id", "label": "Option 1 Variant ID" },
+    { "type": "text", "id": "option2_label", "label": "Option 2 Label", "default": "9ER PACK" },
+    { "type": "text", "id": "option2_variant_id", "label": "Option 2 Variant ID" },
+    { "type": "text", "id": "option3_label", "label": "Option 3 Label (leave empty for none)" },
+    { "type": "text", "id": "option3_variant_id", "label": "Option 3 Variant ID" },
+
+    { "type": "header", "content": "Frequency" },
+    { "type": "text", "id": "frequency_label", "label": "Frequency Label", "default": "WÄHLE DEIN ABO" },
+
+    { "type": "text", "id": "subscribe_title", "label": "Subscribe Title", "default": "ABO & SPAREN" },
+    { "type": "text", "id": "subscribe_price_original", "label": "Subscribe Original Price (strikethrough)", "default": "CHF 37.90" },
+    { "type": "text", "id": "subscribe_price_current", "label": "Subscribe Current Price", "default": "CHF 32.20" },
+
+    { "type": "text", "id": "tier1_title", "label": "Tier 1 Title", "default": "GELEGENTLICHER SNACKER" },
+    { "type": "text", "id": "tier1_subtitle", "label": "Tier 1 Subtitle", "default": "Lieferung alle 8 Wochen" },
+    { "type": "text", "id": "tier1_price_original", "label": "Tier 1 Original Price", "default": "CHF 37.90" },
+    { "type": "text", "id": "tier1_price_current", "label": "Tier 1 Current Price", "default": "CHF 36.00" },
+    { "type": "text", "id": "tier1_price_unit", "label": "Tier 1 Per-unit Price", "default": "CHF 3.00/Pack" },
+    { "type": "text", "id": "tier1_save_badge", "label": "Tier 1 Save Badge", "default": "SPAR 5%" },
+    { "type": "text", "id": "tier1_selling_plan_id", "label": "Tier 1 Selling Plan ID" },
+
+    { "type": "text", "id": "tier2_title", "label": "Tier 2 Title", "default": "ÜBERZEUGTER SNACKER" },
+    { "type": "text", "id": "tier2_subtitle", "label": "Tier 2 Subtitle", "default": "Lieferung alle 4 Wochen" },
+    { "type": "text", "id": "tier2_price_original", "label": "Tier 2 Original Price", "default": "CHF 37.90" },
+    { "type": "text", "id": "tier2_price_current", "label": "Tier 2 Current Price", "default": "CHF 32.20" },
+    { "type": "text", "id": "tier2_price_unit", "label": "Tier 2 Per-unit Price", "default": "CHF 2.68/Pack" },
+    { "type": "text", "id": "tier2_save_badge", "label": "Tier 2 Save Badge", "default": "SPAR 15%" },
+    { "type": "text", "id": "tier2_selling_plan_id", "label": "Tier 2 Selling Plan ID" },
+
+    { "type": "text", "id": "tier3_title", "label": "Tier 3 Title", "default": "VOLL DABEI SNACKER" },
+    { "type": "text", "id": "tier3_subtitle", "label": "Tier 3 Subtitle", "default": "Lieferung alle 2 Wochen" },
+    { "type": "text", "id": "tier3_price_original", "label": "Tier 3 Original Price", "default": "CHF 37.90" },
+    { "type": "text", "id": "tier3_price_current", "label": "Tier 3 Current Price", "default": "CHF 30.30" },
+    { "type": "text", "id": "tier3_price_unit", "label": "Tier 3 Per-unit Price", "default": "CHF 2.53/Pack" },
+    { "type": "text", "id": "tier3_save_badge", "label": "Tier 3 Save Badge", "default": "SPAR 20%" },
+    { "type": "text", "id": "tier3_selling_plan_id", "label": "Tier 3 Selling Plan ID" },
+
+    { "type": "text", "id": "benefit1_text", "label": "Benefit 1", "default": "Gratis Versand" },
+    { "type": "text", "id": "benefit2_text", "label": "Benefit 2", "default": "Jederzeit pausieren, kündigen oder verschieben" },
+    { "type": "text", "id": "benefit3_text", "label": "Benefit 3", "default": "30 Tage Geld-zurück-Garantie" },
+
+    { "type": "header", "content": "One Time Purchase" },
+    { "type": "text", "id": "onetime_title", "label": "One Time Purchase Title", "default": "EINMALIG KAUFEN" },
+    { "type": "text", "id": "onetime_price", "label": "One Time Purchase Price", "default": "CHF 37.90" },
+    { "type": "text", "id": "onetime_caption", "label": "One Time Purchase Caption", "default": "Kein gratis Versand" },
+
+    { "type": "header", "content": "Quantity" },
+    { "type": "text", "id": "qty_label", "label": "Quantity Label", "default": "MENGE:" },
+    { "type": "number", "id": "qty_default", "label": "Default Quantity", "default": 1 },
+
     { "type": "header", "content": "Submit Button" },
     { "type": "text", "id": "button_label", "label": "Button Label", "default": "IN DEN WARENKORB" },
-    { "type": "image_picker", "id": "button_image", "label": "Button Image (desktop)", "info": "Optional. Renders at the image's original size (scaled below). Falls back to a lime pill button when empty." },
-    { "type": "image_picker", "id": "button_image_mobile", "label": "Button Image (mobile)", "info": "Optional. Falls back to the desktop image when empty." },
-    { "type": "range", "id": "button_scale_desktop", "label": "Button Size (desktop)", "min": 5, "max": 150, "step": 5, "unit": "%", "default": 100, "info": "Scales the button image from its original size, keeping its aspect ratio" },
-    { "type": "range", "id": "button_scale_mobile", "label": "Button Size (mobile)", "min": 5, "max": 150, "step": 5, "unit": "%", "default": 100, "info": "Scales the button image from its original size, keeping its aspect ratio" },
-    { "type": "color", "id": "button_text_color_desktop", "label": "Button Text Color (desktop)", "default": "#222222" },
-    { "type": "color", "id": "button_text_color_mobile", "label": "Button Text Color (mobile)", "default": "#222222" },
-    { "type": "range", "id": "button_padding_topbottom", "label": "Button Vertical Padding (desktop)", "min": 0, "max": 40, "step": 2, "unit": "px", "default": 16 },
+
     { "type": "header", "content": "Color" },
     { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme1" }
   ],
