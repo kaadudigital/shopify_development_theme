@@ -19,6 +19,16 @@
         "use_gradient_background": false
       }
     },
+    "custom_video_showcase_yWKW93": {
+      "type": "custom-video-showcase",
+      "name": "Custom Video Showcase",
+      "settings": {
+        "heading": "",
+        "description": "<p>Gefriergetrocknete Früchte — fair produziert, in der Ursprungsgemeinde verarbeitet, radikal transparent.</p>",
+        "cursor_label": "Video abspielen",
+        "background": "cream"
+      }
+    },
     "kaadu_custom_distribution_mkKaw6": {
       "type": "kaadu-custom-distribution",
       "blocks": {
@@ -1082,6 +1092,7 @@
   },
   "order": [
     "main",
+    "custom_video_showcase_yWKW93",
     "kaadu_custom_distribution_mkKaw6",
     "pack_selector_cEiAYy",
     "custom_video_with_text_overlay_BWrhtb",
