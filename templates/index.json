@@ -28,7 +28,9 @@
             "heading": "Wieso machen wir das?",
             "text": "Die kaputte Lieferkette, vier Mechanismen der Ausbeutung — und wie unsere Crunchys alles verändern.",
             "link": "",
-            "background": "lime"
+            "background": "lime",
+            "show_border": false,
+            "rounded_corners": false
           }
         },
         "option_link_rRhh3g": {
@@ -37,7 +39,9 @@
             "heading": "Transparenz",
             "text": "Alle Zahlen: Löhne, Preise, Reports, Audits. Jeder kann von Transparenz reden — wir legen sie offen.",
             "link": "",
-            "background": "sky"
+            "background": "sky",
+            "show_border": false,
+            "rounded_corners": false
           }
         },
         "option_link_FVfFUh": {
@@ -46,7 +50,9 @@
             "heading": "Über uns",
             "text": "Wie ein Familienbesuch in Vazhakulam 2022 zum Modell für eine neue Art von Handel wurde.",
             "link": "",
-            "background": "yellow"
+            "background": "yellow",
+            "show_border": false,
+            "rounded_corners": false
           }
         },
         "option_link_PC6zmU": {
@@ -55,7 +61,9 @@
             "heading": "Ananas Crunchys",
             "text": "Nachschub sichern — einzeln, im Bundle oder im Crunch-Abo mit 10% Rabatt.",
             "link": "",
-            "background": "orange"
+            "background": "orange",
+            "show_border": false,
+            "rounded_corners": false
           }
         }
       },
@@ -76,7 +84,57 @@
       "name": "Custom Packaging Selector",
       "settings": {
         "title": "WÄHL DEINE MENGE",
+        "gallery_image_1": "shopify://shop_images/ChatGPTImage31.Marz2025_13_40_20.png",
+        "gallery_image_2": "shopify://shop_images/ChatGPT_Image_31._Marz_2025_14_50_15.png",
+        "gallery_image_3": "shopify://shop_images/Adobe_Express_-_file.png",
+        "options_label": "Purchase options",
+        "option1_label": "6ER PACK",
+        "option1_variant_id": "",
+        "option2_label": "9ER PACK",
+        "option2_variant_id": "",
+        "option3_label": "",
+        "option3_variant_id": "",
+        "frequency_label": "WÄHLE DEIN ABO",
+        "subscribe_title": "ABO & SPAREN",
+        "subscribe_price_original": "CHF 37.90",
+        "subscribe_price_current": "CHF 32.20",
+        "tier1_title": "GELEGENTLICHER SNACKER",
+        "tier1_subtitle": "Lieferung alle 8 Wochen",
+        "tier1_price_original": "CHF 37.90",
+        "tier1_price_current": "CHF 36.00",
+        "tier1_price_unit": "CHF 3.00/Pack",
+        "tier1_save_badge": "SPAR 5%",
+        "tier1_selling_plan_id": "",
+        "tier2_title": "ÜBERZEUGTER SNACKER",
+        "tier2_subtitle": "Lieferung alle 4 Wochen",
+        "tier2_price_original": "CHF 37.90",
+        "tier2_price_current": "CHF 32.20",
+        "tier2_price_unit": "CHF 2.68/Pack",
+        "tier2_save_badge": "SPAR 15%",
+        "tier2_selling_plan_id": "",
+        "tier3_title": "VOLL DABEI SNACKER",
+        "tier3_subtitle": "Lieferung alle 2 Wochen",
+        "tier3_price_original": "CHF 37.90",
+        "tier3_price_current": "CHF 30.30",
+        "tier3_price_unit": "CHF 2.53/Pack",
+        "tier3_save_badge": "SPAR 20%",
+        "tier3_selling_plan_id": "",
+        "benefit1_text": "Gratis Versand",
+        "benefit2_text": "Jederzeit pausieren, kündigen oder verschieben",
+        "benefit3_text": "30 Tage Geld-zurück-Garantie",
+        "onetime_title": "EINMALIG KAUFEN",
+        "onetime_price": "CHF 37.90",
+        "onetime_caption": "Kein gratis Versand",
+        "qty_label": "MENGE:",
+        "qty_default": 1,
+        "qty_border_style": "cloud",
         "button_label": "IN DEN WARENKORB",
+        "ingredients_label": "Zutaten",
+        "ingredients_content": "",
+        "nutrition_label": "Nährwerte",
+        "nutrition_content": "",
+        "shipping_label": "Versand",
+        "shipping_content": "",
         "color_scheme": ""
       }
     },
