@@ -25,6 +25,8 @@
       "settings": {
         "heading": "",
         "description": "<p>Gefriergetrocknete Früchte — fair produziert, in der Ursprungsgemeinde verarbeitet, radikal transparent.</p>",
+        "background_video": "shopify://files/videos/sample.mp4",
+        "modal_video_url": "https://www.youtube.com/watch?v=o4hGIwTBdZs",
         "cursor_label": "Video abspielen",
         "background": "cream"
       }
