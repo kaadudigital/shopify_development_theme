@@ -1,12 +1,62 @@
 {%- liquid
   assign purchase_options = "1,2,3" | split: ","
   assign tiers = "1,2,3" | split: ","
+  assign media_indexes = "1,2,3,4,5,6" | split: ","
 -%}
 
 <div
   class="pack-selector bg-scheme-background text-scheme-text"
   data-color-scheme="{{ section.settings.color_scheme }}"
 >
+  <div class="pack-selector__layout">
+
+    {%- comment -%} Product media / gallery {%- endcomment -%}
+    <div class="pack-media">
+      <div class="pack-media__main">
+        {%- for i in media_indexes -%}
+          {%- assign media_key = "gallery_image_" | append: i -%}
+          {%- assign media_image = section.settings[media_key] -%}
+          {%- if media_image != blank -%}
+            <div class="pack-media__mainItem{% if forloop.first %} is-active{% endif %}" data-media-index="{{ i }}">
+              <picture>
+                <source srcset="{{ media_image | image_url: width: 1200, format: 'webp' }}" type="image/webp">
+                <img
+                  src="{{ media_image | image_url: width: 1200 }}"
+                  alt="{{ media_image.alt | default: section.settings.title | escape }}"
+                  width="{{ media_image.width }}"
+                  height="{{ media_image.height }}"
+                  class="pack-media__mainImg"
+                  {%- if forloop.first and section.index == 1 -%}
+                    loading="eager" fetchpriority="high"
+                  {%- else -%}
+                    loading="lazy"
+                  {%- endif -%}
+                >
+              </picture>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+      <div class="pack-media__thumbs">
+        {%- for i in media_indexes -%}
+          {%- assign media_key = "gallery_image_" | append: i -%}
+          {%- assign media_image = section.settings[media_key] -%}
+          {%- if media_image != blank -%}
+            <button
+              type="button"
+              class="pack-media__thumb{% if forloop.first %} is-active{% endif %}"
+              data-media-index="{{ i }}"
+              aria-label="{{ section.settings.title | escape }} — {{ 'Image' }} {{ forloop.index }}"
+              onclick="packSelector.selectMedia('{{ i }}')"
+            >
+              <img src="{{ media_image | image_url: width: 160 }}" alt="" width="80" height="80" loading="lazy">
+            </button>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
   <div class="pack-selector__inner">
     <p class="pack-selector__heading h3">
       {{ section.settings.title }}
@@ -155,7 +205,12 @@
       <input type="hidden" name="id" id="selected-variant-id" value="">
       <input type="hidden" name="selling_plan" id="selected-selling-plan" value="">
 
-      <div class="pack-qty">
+      <div class="pack-qty pack-qty--{{ section.settings.qty_border_style }}">
+        {%- if section.settings.qty_border_style == 'cloud' -%}
+          <svg class="pack-qty__frame" viewBox="-2 -8 204 76" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M 30 0 Q 47.5 -6 65 0 Q 82.5 6 100 0 Q 117.5 -6 135 0 Q 152.5 6 170 0 C 186.6 0 200 13.4 200 30 C 200 46.6 186.6 60 170 60 Q 152.5 66 135 60 Q 117.5 54 100 60 Q 82.5 66 65 60 Q 47.5 54 30 60 C 13.4 60 0 46.6 0 30 C 0 13.4 13.4 0 30 0 Z" />
+          </svg>
+        {%- endif -%}
         <span class="pack-qty__label caption">{{ section.settings.qty_label }}</span>
         <button type="button" class="pack-qty__btn" aria-label="{{ 'products.product.quantity.decrease_html' | t: product: '' | default: 'Decrease quantity' | escape }}" onclick="packSelector.changeQty(-1)">&minus;</button>
         <input type="number" name="quantity" id="pack-qty-input" class="pack-qty__input" value="{{ section.settings.qty_default | default: 1 }}" min="1" inputmode="numeric">
@@ -166,6 +221,40 @@
         {{ section.settings.button_label }}
       </button>
     </form>
+
+    {%- comment -%} Ingredients / Nutrition / Shipping accordion {%- endcomment -%}
+    {%- if section.settings.ingredients_content != blank or section.settings.nutrition_content != blank or section.settings.shipping_content != blank -%}
+      <div class="pack-accordion">
+        {%- if section.settings.ingredients_content != blank -%}
+          <details class="pack-accordion__item">
+            <summary class="pack-accordion__summary">
+              <span class="pack-accordion__label h3">{{ section.settings.ingredients_label }}</span>
+              <svg class="pack-accordion__icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 4L7 10L13 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </summary>
+            <div class="pack-accordion__panel body-large">{{ section.settings.ingredients_content }}</div>
+          </details>
+        {%- endif -%}
+        {%- if section.settings.nutrition_content != blank -%}
+          <details class="pack-accordion__item">
+            <summary class="pack-accordion__summary">
+              <span class="pack-accordion__label h3">{{ section.settings.nutrition_label }}</span>
+              <svg class="pack-accordion__icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 4L7 10L13 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </summary>
+            <div class="pack-accordion__panel body-large">{{ section.settings.nutrition_content }}</div>
+          </details>
+        {%- endif -%}
+        {%- if section.settings.shipping_content != blank -%}
+          <details class="pack-accordion__item">
+            <summary class="pack-accordion__summary">
+              <span class="pack-accordion__label h3">{{ section.settings.shipping_label }}</span>
+              <svg class="pack-accordion__icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 4L7 10L13 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </summary>
+            <div class="pack-accordion__panel body-large">{{ section.settings.shipping_content }}</div>
+          </details>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
   </div>
 </div>
 
@@ -174,14 +263,122 @@
     padding: var(--space-6) var(--space-4);
     font-family: var(--font-body);
   }
+  .pack-selector__layout {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+  @media (min-width: 769px) {
+    .pack-selector__layout {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: var(--space-8);
+      align-items: start;
+    }
+  }
   .pack-selector__inner {
     max-width: 480px;
     margin: 0 auto;
+    width: 100%;
   }
   @media (min-width: 769px) {
     .pack-selector__inner {
       max-width: 640px;
+      margin: 0;
     }
+  }
+
+  /* Product media */
+  .pack-media {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .pack-media__main {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    border: 2px solid var(--color-black);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    background: var(--color-cream);
+  }
+  .pack-media__mainItem {
+    display: none;
+    position: absolute;
+    inset: 0;
+  }
+  .pack-media__mainItem.is-active {
+    display: block;
+  }
+  .pack-media__mainImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .pack-media__thumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .pack-media__thumb {
+    width: 64px;
+    height: 64px;
+    padding: 0;
+    border: 2px solid var(--color-black);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--color-cream);
+    flex-shrink: 0;
+  }
+  .pack-media__thumb.is-active {
+    border-color: var(--color-red);
+    box-shadow: var(--shadow-sm);
+  }
+  .pack-media__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Accordion */
+  .pack-accordion {
+    margin-top: var(--space-8);
+    border-top: 2px solid var(--color-black);
+  }
+  .pack-accordion__item {
+    border-bottom: 2px solid var(--color-black);
+  }
+  .pack-accordion__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-4) 0;
+    cursor: pointer;
+    list-style: none;
+  }
+  .pack-accordion__summary::-webkit-details-marker {
+    display: none;
+  }
+  .pack-accordion__label {
+    margin: 0;
+    color: var(--color-near-black);
+  }
+  .pack-accordion__icon {
+    flex-shrink: 0;
+    color: var(--color-near-black);
+    transition: transform 0.2s ease-out;
+  }
+  .pack-accordion__item[open] .pack-accordion__icon {
+    transform: rotate(180deg);
+  }
+  .pack-accordion__panel {
+    padding: 0 0 var(--space-4);
+    color: var(--color-near-black);
   }
   .pack-selector__heading {
     color: var(--color-near-black);
@@ -261,7 +458,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    background: var(--color-yellow);
+    background: var(--color-cream);
     border: 2px solid var(--color-black);
     border-radius: var(--radius-card);
     padding: var(--space-4);
@@ -269,6 +466,10 @@
     font-family: inherit;
     text-align: left;
     gap: var(--space-4);
+    transition: background 0.15s ease-out;
+  }
+  .pack-subscribe[aria-checked="true"] {
+    background: var(--color-yellow);
   }
   .pack-subscribe__header {
     display: flex;
@@ -336,14 +537,17 @@
     align-items: center;
     justify-content: space-between;
     gap: var(--space-3);
-    background: var(--color-yellow);
+    background: var(--color-cream);
     border: 2px solid var(--color-black);
     border-radius: var(--radius-card);
     padding: var(--space-3) var(--space-4);
     cursor: pointer;
     transition: background 0.15s ease-out;
   }
-  .pack-tier[aria-checked="true"] {
+  .pack-subscribe[aria-checked="true"] .pack-tier {
+    background: var(--color-yellow);
+  }
+  .pack-subscribe[aria-checked="true"] .pack-tier[aria-checked="true"] {
     background: var(--color-cream);
   }
   .pack-tier__info {
@@ -490,12 +694,34 @@
     flex-wrap: wrap;
   }
   .pack-qty {
+    position: relative;
     display: flex;
     align-items: center;
     gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+  }
+  .pack-qty--dashed {
     border: 2px dashed var(--color-black);
     border-radius: var(--radius-btn);
-    padding: var(--space-2) var(--space-3);
+  }
+  .pack-qty--cloud {
+    padding: var(--space-3) var(--space-4);
+  }
+  .pack-qty__frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    fill: var(--color-cream);
+    stroke: var(--color-black);
+    stroke-width: 2;
+    pointer-events: none;
+  }
+  .pack-qty__label,
+  .pack-qty__btn,
+  .pack-qty__input {
+    position: relative;
+    z-index: 1;
   }
   .pack-qty__label {
     color: var(--color-near-black);
@@ -588,6 +814,15 @@
       selectFrequency('subscribe');
     }
 
+    function selectMedia(index) {
+      document.querySelectorAll('.pack-media__mainItem').forEach(function (el) {
+        el.classList.toggle('is-active', el.getAttribute('data-media-index') === index);
+      });
+      document.querySelectorAll('.pack-media__thumb').forEach(function (el) {
+        el.classList.toggle('is-active', el.getAttribute('data-media-index') === index);
+      });
+    }
+
     function changeQty(delta) {
       var input = document.getElementById('pack-qty-input');
       if (!input) return;
@@ -624,6 +859,7 @@
       selectOption: selectOption,
       selectFrequency: selectFrequency,
       selectTier: selectTier,
+      selectMedia: selectMedia,
       changeQty: changeQty
     };
   })();
@@ -634,6 +870,14 @@
   "name": "Custom Packaging Selector",
   "settings": [
     { "type": "text", "id": "title", "label": "Section Title", "default": "WÄHL DEINE MENGE" },
+
+    { "type": "header", "content": "Product Media" },
+    { "type": "image_picker", "id": "gallery_image_1", "label": "Main Image" },
+    { "type": "image_picker", "id": "gallery_image_2", "label": "Gallery Image 2" },
+    { "type": "image_picker", "id": "gallery_image_3", "label": "Gallery Image 3" },
+    { "type": "image_picker", "id": "gallery_image_4", "label": "Gallery Image 4" },
+    { "type": "image_picker", "id": "gallery_image_5", "label": "Gallery Image 5" },
+    { "type": "image_picker", "id": "gallery_image_6", "label": "Gallery Image 6" },
 
     { "type": "header", "content": "Purchase Options" },
     { "type": "text", "id": "options_label", "label": "Options group label (accessibility)", "default": "Purchase options" },
@@ -687,9 +931,31 @@
     { "type": "header", "content": "Quantity" },
     { "type": "text", "id": "qty_label", "label": "Quantity Label", "default": "MENGE:" },
     { "type": "number", "id": "qty_default", "label": "Default Quantity", "default": 1 },
+    {
+      "type": "select",
+      "id": "qty_border_style",
+      "label": "Quantity Stepper Border",
+      "options": [
+        { "value": "dashed", "label": "Dashed pill" },
+        { "value": "cloud", "label": "Cloud (scalloped)" }
+      ],
+      "default": "cloud"
+    },
 
     { "type": "header", "content": "Submit Button" },
     { "type": "text", "id": "button_label", "label": "Button Label", "default": "IN DEN WARENKORB" },
+
+    { "type": "header", "content": "Ingredients" },
+    { "type": "text", "id": "ingredients_label", "label": "Ingredients Label", "default": "Zutaten" },
+    { "type": "richtext", "id": "ingredients_content", "label": "Ingredients Content" },
+
+    { "type": "header", "content": "Nutrition Facts" },
+    { "type": "text", "id": "nutrition_label", "label": "Nutrition Facts Label", "default": "Nährwerte" },
+    { "type": "richtext", "id": "nutrition_content", "label": "Nutrition Facts Content" },
+
+    { "type": "header", "content": "Shipping" },
+    { "type": "text", "id": "shipping_label", "label": "Shipping Label", "default": "Versand" },
+    { "type": "richtext", "id": "shipping_content", "label": "Shipping Content" },
 
     { "type": "header", "content": "Color" },
     { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme1" }
