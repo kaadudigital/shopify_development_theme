@@ -1,7 +1,17 @@
 {%- liquid
+  assign product = all_products[section.settings.product]
   assign purchase_options = "1,2,3" | split: ","
   assign tiers = "1,2,3" | split: ","
   assign media_indexes = "1,2,3,4,5,6" | split: ","
+
+  assign default_variant = blank
+  assign has_selling_plans = false
+  if product != blank
+    assign default_variant = product.selected_or_first_available_variant
+    if default_variant != blank and default_variant.selling_plan_allocations.size > 0
+      assign has_selling_plans = true
+    endif
+  endif
 -%}
 
 <div
@@ -12,49 +22,91 @@
 
     {%- comment -%} Product media / gallery {%- endcomment -%}
     <div class="pack-media">
-      <div class="pack-media__main">
-        {%- for i in media_indexes -%}
-          {%- assign media_key = "gallery_image_" | append: i -%}
-          {%- assign media_image = section.settings[media_key] -%}
-          {%- if media_image != blank -%}
-            <div class="pack-media__mainItem{% if forloop.first %} is-active{% endif %}" data-media-index="{{ i }}">
-              <picture>
-                <source srcset="{{ media_image | image_url: width: 1200, format: 'webp' }}" type="image/webp">
-                <img
-                  src="{{ media_image | image_url: width: 1200 }}"
-                  alt="{{ media_image.alt | default: section.settings.title | escape }}"
-                  width="{{ media_image.width }}"
-                  height="{{ media_image.height }}"
-                  class="pack-media__mainImg"
-                  {%- if forloop.first and section.index == 1 -%}
-                    loading="eager" fetchpriority="high"
-                  {%- else -%}
-                    loading="lazy"
-                  {%- endif -%}
-                >
-              </picture>
-            </div>
-          {%- endif -%}
-        {%- endfor -%}
-      </div>
+      {%- if product != blank and product.media.size > 0 -%}
+        <div class="pack-media__main">
+          {%- for media in product.media -%}
+            {%- if media.media_type == 'image' -%}
+              <div class="pack-media__mainItem{% if forloop.first %} is-active{% endif %}" data-media-index="{{ media.id }}">
+                <picture>
+                  <source srcset="{{ media | image_url: width: 1200, format: 'webp' }}" type="image/webp">
+                  <img
+                    src="{{ media | image_url: width: 1200 }}"
+                    alt="{{ media.alt | default: product.title | escape }}"
+                    width="{{ media.width }}"
+                    height="{{ media.height }}"
+                    class="pack-media__mainImg"
+                    {%- if forloop.first and section.index == 1 -%}
+                      loading="eager" fetchpriority="high"
+                    {%- else -%}
+                      loading="lazy"
+                    {%- endif -%}
+                  >
+                </picture>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
 
-      <div class="pack-media__thumbs">
-        {%- for i in media_indexes -%}
-          {%- assign media_key = "gallery_image_" | append: i -%}
-          {%- assign media_image = section.settings[media_key] -%}
-          {%- if media_image != blank -%}
-            <button
-              type="button"
-              class="pack-media__thumb{% if forloop.first %} is-active{% endif %}"
-              data-media-index="{{ i }}"
-              aria-label="{{ section.settings.title | escape }} — {{ 'Image' }} {{ forloop.index }}"
-              onclick="packSelector.selectMedia('{{ i }}')"
-            >
-              <img src="{{ media_image | image_url: width: 160 }}" alt="" width="80" height="80" loading="lazy">
-            </button>
-          {%- endif -%}
-        {%- endfor -%}
-      </div>
+        <div class="pack-media__thumbs">
+          {%- for media in product.media -%}
+            {%- if media.media_type == 'image' -%}
+              <button
+                type="button"
+                class="pack-media__thumb{% if forloop.first %} is-active{% endif %}"
+                data-media-index="{{ media.id }}"
+                aria-label="{{ product.title | escape }} — {{ 'Image' }} {{ forloop.index }}"
+                onclick="packSelector.selectMedia('{{ media.id }}')"
+              >
+                <img src="{{ media | image_url: width: 160 }}" alt="" width="80" height="80" loading="lazy">
+              </button>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- else -%}
+        <div class="pack-media__main">
+          {%- for i in media_indexes -%}
+            {%- assign media_key = "gallery_image_" | append: i -%}
+            {%- assign media_image = section.settings[media_key] -%}
+            {%- if media_image != blank -%}
+              <div class="pack-media__mainItem{% if forloop.first %} is-active{% endif %}" data-media-index="{{ i }}">
+                <picture>
+                  <source srcset="{{ media_image | image_url: width: 1200, format: 'webp' }}" type="image/webp">
+                  <img
+                    src="{{ media_image | image_url: width: 1200 }}"
+                    alt="{{ media_image.alt | default: section.settings.title | escape }}"
+                    width="{{ media_image.width }}"
+                    height="{{ media_image.height }}"
+                    class="pack-media__mainImg"
+                    {%- if forloop.first and section.index == 1 -%}
+                      loading="eager" fetchpriority="high"
+                    {%- else -%}
+                      loading="lazy"
+                    {%- endif -%}
+                  >
+                </picture>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+
+        <div class="pack-media__thumbs">
+          {%- for i in media_indexes -%}
+            {%- assign media_key = "gallery_image_" | append: i -%}
+            {%- assign media_image = section.settings[media_key] -%}
+            {%- if media_image != blank -%}
+              <button
+                type="button"
+                class="pack-media__thumb{% if forloop.first %} is-active{% endif %}"
+                data-media-index="{{ i }}"
+                aria-label="{{ section.settings.title | escape }} — {{ 'Image' }} {{ forloop.index }}"
+                onclick="packSelector.selectMedia('{{ i }}')"
+              >
+                <img src="{{ media_image | image_url: width: 160 }}" alt="" width="80" height="80" loading="lazy">
+              </button>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
     </div>
 
   <div class="pack-selector__inner">
@@ -64,26 +116,44 @@
 
     {%- comment -%} Purchase options (pack size) {%- endcomment -%}
     <div class="pack-selector__options" role="radiogroup" aria-label="{{ section.settings.options_label | escape }}">
-      {%- for i in purchase_options -%}
-        {%- assign option_label_key = "option" | append: i | append: "_label" -%}
-        {%- assign option_variant_key = "option" | append: i | append: "_variant_id" -%}
-        {%- assign option_label = section.settings[option_label_key] -%}
-        {%- assign option_variant_id = section.settings[option_variant_key] -%}
-        {%- if option_label != blank -%}
+      {%- if product != blank and product.variants.size > 0 -%}
+        {%- for variant in product.variants -%}
           <button
             type="button"
             class="pack-option"
-            data-index="{{ i }}"
-            data-variant-id="{{ option_variant_id }}"
+            data-index="{{ variant.id }}"
+            data-variant-id="{{ variant.id }}"
             role="radio"
             aria-checked="false"
-            onclick="packSelector.selectOption('{{ i }}')"
+            {% unless variant.available %}disabled{% endunless %}
+            onclick="packSelector.selectOption('{{ variant.id }}')"
           >
             <span class="pack-option__check" aria-hidden="true"></span>
-            <span class="pack-option__label">{{ option_label }}</span>
+            <span class="pack-option__label">{{ variant.title }}</span>
           </button>
-        {%- endif -%}
-      {%- endfor -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in purchase_options -%}
+          {%- assign option_label_key = "option" | append: i | append: "_label" -%}
+          {%- assign option_variant_key = "option" | append: i | append: "_variant_id" -%}
+          {%- assign option_label = section.settings[option_label_key] -%}
+          {%- assign option_variant_id = section.settings[option_variant_key] -%}
+          {%- if option_label != blank -%}
+            <button
+              type="button"
+              class="pack-option"
+              data-index="{{ i }}"
+              data-variant-id="{{ option_variant_id }}"
+              role="radio"
+              aria-checked="false"
+              onclick="packSelector.selectOption('{{ i }}')"
+            >
+              <span class="pack-option__check" aria-hidden="true"></span>
+              <span class="pack-option__label">{{ option_label }}</span>
+            </button>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
     </div>
 
     {%- comment -%} Frequency / subscription {%- endcomment -%}
@@ -98,70 +168,125 @@
         aria-checked="false"
         onclick="packSelector.selectFrequency('subscribe')"
       >
-        <span class="pack-subscribe__header">
-          <span class="pack-subscribe__title-row">
-            <span class="pack-subscribe__check" aria-hidden="true"></span>
-            <span class="pack-subscribe__title h3">{{ section.settings.subscribe_title }}</span>
+        {%- if has_selling_plans -%}
+          {%- assign first_allocation = default_variant.selling_plan_allocations.first -%}
+          <span class="pack-subscribe__header">
+            <span class="pack-subscribe__title-row">
+              <span class="pack-subscribe__check" aria-hidden="true"></span>
+              <span class="pack-subscribe__title h3">{{ section.settings.subscribe_title }}</span>
+            </span>
+            <span class="pack-subscribe__price">
+              {%- if first_allocation.compare_at_price > first_allocation.price -%}
+                <span class="pack-subscribe__price-original">{{ first_allocation.compare_at_price | money }}</span>
+              {%- endif -%}
+              <span class="pack-subscribe__price-current">{{ first_allocation.price | money }}</span>
+            </span>
           </span>
-          <span class="pack-subscribe__price">
-            {%- if section.settings.subscribe_price_original != blank -%}
-              <span class="pack-subscribe__price-original">{{ section.settings.subscribe_price_original }}</span>
-            {%- endif -%}
-            <span class="pack-subscribe__price-current">{{ section.settings.subscribe_price_current }}</span>
-          </span>
-        </span>
 
-        <span class="pack-subscribe__tiers">
-          {%- for i in tiers -%}
-            {%- assign tier_title_key = "tier" | append: i | append: "_title" -%}
-            {%- assign tier_title = section.settings[tier_title_key] -%}
-            {%- if tier_title != blank -%}
-              {%- assign tier_subtitle_key = "tier" | append: i | append: "_subtitle" -%}
-              {%- assign tier_price_original_key = "tier" | append: i | append: "_price_original" -%}
-              {%- assign tier_price_current_key = "tier" | append: i | append: "_price_current" -%}
-              {%- assign tier_price_unit_key = "tier" | append: i | append: "_price_unit" -%}
-              {%- assign tier_save_key = "tier" | append: i | append: "_save_badge" -%}
-              {%- assign tier_selling_plan_key = "tier" | append: i | append: "_selling_plan_id" -%}
-              {%- assign tier_subtitle = section.settings[tier_subtitle_key] -%}
-              {%- assign tier_price_original = section.settings[tier_price_original_key] -%}
-              {%- assign tier_price_current = section.settings[tier_price_current_key] -%}
-              {%- assign tier_price_unit = section.settings[tier_price_unit_key] -%}
-              {%- assign tier_save = section.settings[tier_save_key] -%}
-              {%- assign tier_selling_plan = section.settings[tier_selling_plan_key] -%}
+          <span class="pack-subscribe__tiers">
+            {%- for allocation in default_variant.selling_plan_allocations -%}
+              {%- assign tier_save = '' -%}
+              {%- if allocation.compare_at_price > allocation.price -%}
+                {%- assign tier_discount = allocation.compare_at_price | minus: allocation.price -%}
+                {%- assign tier_save_percent = tier_discount | times: 100.0 | divided_by: allocation.compare_at_price | round -%}
+                {%- assign tier_save = 'Save ' | append: tier_save_percent | append: '%' -%}
+              {%- endif -%}
               <span
                 class="pack-tier"
-                data-tier="{{ i }}"
-                data-selling-plan="{{ tier_selling_plan }}"
+                data-tier="{{ allocation.selling_plan.id }}"
+                data-selling-plan="{{ allocation.selling_plan.id }}"
                 role="radio"
                 aria-checked="false"
                 tabindex="0"
-                onclick="event.stopPropagation(); packSelector.selectTier('{{ i }}')"
-                onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();packSelector.selectTier('{{ i }}');}"
+                onclick="event.stopPropagation(); packSelector.selectTier('{{ allocation.selling_plan.id }}')"
+                onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();packSelector.selectTier('{{ allocation.selling_plan.id }}');}"
               >
                 <span class="pack-tier__info">
-                  <span class="pack-tier__title">{{ tier_title }}</span>
-                  {%- if tier_subtitle != blank -%}
-                    <span class="pack-tier__subtitle caption">{{ tier_subtitle }}</span>
+                  <span class="pack-tier__title">{{ allocation.selling_plan.name }}</span>
+                  {%- if allocation.selling_plan.description != blank -%}
+                    <span class="pack-tier__subtitle caption">{{ allocation.selling_plan.description }}</span>
                   {%- endif -%}
                 </span>
                 <span class="pack-tier__pricing">
                   <span class="pack-tier__price-row">
-                    {%- if tier_price_original != blank -%}
-                      <span class="pack-tier__price-original">{{ tier_price_original }}</span>
+                    {%- if allocation.compare_at_price > allocation.price -%}
+                      <span class="pack-tier__price-original">{{ allocation.compare_at_price | money }}</span>
                     {%- endif -%}
-                    <span class="pack-tier__price-current">{{ tier_price_current }}</span>
+                    <span class="pack-tier__price-current">{{ allocation.price | money }}</span>
                     {%- if tier_save != blank -%}
                       <span class="pack-tier__badge">{{ tier_save }}</span>
                     {%- endif -%}
                   </span>
-                  {%- if tier_price_unit != blank -%}
-                    <span class="pack-tier__price-unit caption">{{ tier_price_unit }}</span>
-                  {%- endif -%}
                 </span>
               </span>
-            {%- endif -%}
-          {%- endfor -%}
-        </span>
+            {%- endfor -%}
+          </span>
+        {%- else -%}
+          <span class="pack-subscribe__header">
+            <span class="pack-subscribe__title-row">
+              <span class="pack-subscribe__check" aria-hidden="true"></span>
+              <span class="pack-subscribe__title h3">{{ section.settings.subscribe_title }}</span>
+            </span>
+            <span class="pack-subscribe__price">
+              {%- if section.settings.subscribe_price_original != blank -%}
+                <span class="pack-subscribe__price-original">{{ section.settings.subscribe_price_original }}</span>
+              {%- endif -%}
+              <span class="pack-subscribe__price-current">{{ section.settings.subscribe_price_current }}</span>
+            </span>
+          </span>
+
+          <span class="pack-subscribe__tiers">
+            {%- for i in tiers -%}
+              {%- assign tier_title_key = "tier" | append: i | append: "_title" -%}
+              {%- assign tier_title = section.settings[tier_title_key] -%}
+              {%- if tier_title != blank -%}
+                {%- assign tier_subtitle_key = "tier" | append: i | append: "_subtitle" -%}
+                {%- assign tier_price_original_key = "tier" | append: i | append: "_price_original" -%}
+                {%- assign tier_price_current_key = "tier" | append: i | append: "_price_current" -%}
+                {%- assign tier_price_unit_key = "tier" | append: i | append: "_price_unit" -%}
+                {%- assign tier_save_key = "tier" | append: i | append: "_save_badge" -%}
+                {%- assign tier_selling_plan_key = "tier" | append: i | append: "_selling_plan_id" -%}
+                {%- assign tier_subtitle = section.settings[tier_subtitle_key] -%}
+                {%- assign tier_price_original = section.settings[tier_price_original_key] -%}
+                {%- assign tier_price_current = section.settings[tier_price_current_key] -%}
+                {%- assign tier_price_unit = section.settings[tier_price_unit_key] -%}
+                {%- assign tier_save = section.settings[tier_save_key] -%}
+                {%- assign tier_selling_plan = section.settings[tier_selling_plan_key] -%}
+                <span
+                  class="pack-tier"
+                  data-tier="{{ i }}"
+                  data-selling-plan="{{ tier_selling_plan }}"
+                  role="radio"
+                  aria-checked="false"
+                  tabindex="0"
+                  onclick="event.stopPropagation(); packSelector.selectTier('{{ i }}')"
+                  onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();packSelector.selectTier('{{ i }}');}"
+                >
+                  <span class="pack-tier__info">
+                    <span class="pack-tier__title">{{ tier_title }}</span>
+                    {%- if tier_subtitle != blank -%}
+                      <span class="pack-tier__subtitle caption">{{ tier_subtitle }}</span>
+                    {%- endif -%}
+                  </span>
+                  <span class="pack-tier__pricing">
+                    <span class="pack-tier__price-row">
+                      {%- if tier_price_original != blank -%}
+                        <span class="pack-tier__price-original">{{ tier_price_original }}</span>
+                      {%- endif -%}
+                      <span class="pack-tier__price-current">{{ tier_price_current }}</span>
+                      {%- if tier_save != blank -%}
+                        <span class="pack-tier__badge">{{ tier_save }}</span>
+                      {%- endif -%}
+                    </span>
+                    {%- if tier_price_unit != blank -%}
+                      <span class="pack-tier__price-unit caption">{{ tier_price_unit }}</span>
+                    {%- endif -%}
+                  </span>
+                </span>
+              {%- endif -%}
+            {%- endfor -%}
+          </span>
+        {%- endif -%}
 
         {%- if section.settings.benefit1_text != blank or section.settings.benefit2_text != blank or section.settings.benefit3_text != blank -%}
           <span class="pack-subscribe__benefits">
@@ -192,7 +317,13 @@
             <span class="pack-onetime__check" aria-hidden="true"></span>
             <span class="pack-onetime__title h3">{{ section.settings.onetime_title }}</span>
           </span>
-          <span class="pack-onetime__price">{{ section.settings.onetime_price }}</span>
+          <span class="pack-onetime__price">
+            {%- if default_variant != blank -%}
+              {{ default_variant.price | money }}
+            {%- else -%}
+              {{ section.settings.onetime_price }}
+            {%- endif -%}
+          </span>
         </span>
         {%- if section.settings.onetime_caption != blank -%}
           <span class="pack-onetime__caption caption">{{ section.settings.onetime_caption }}</span>
@@ -207,7 +338,7 @@
 
       <div class="pack-qty pack-qty--{{ section.settings.qty_border_style }}">
         {%- if section.settings.qty_border_style == 'cloud' -%}
-          <svg class="pack-qty__frame" viewBox="0 0 150 78" preserveAspectRatio="none" fill="none" aria-hidden="true">
+          <svg class="pack-qty__frame" viewBox="0 0 150 78" preserveAspectRatio="xMidYMid meet" fill="none" aria-hidden="true">
             <mask id="pack-qty-cloud-mask-{{ section.id }}" fill="#fff">
               <path d="M44.521 5.209a8.256 8.256 0 0 1 2.935-3.69 8.43 8.43 0 0 1 9.103-.352 8.28 8.28 0 0 1 3.218 3.452 8.28 8.28 0 0 1 3.218-3.45 8.43 8.43 0 0 1 9.102.351 8.257 8.257 0 0 1 2.933 3.69 8.256 8.256 0 0 1 2.935-3.69 8.43 8.43 0 0 1 9.103-.352 8.28 8.28 0 0 1 3.218 3.452 8.265 8.265 0 0 1 2.932-3.277A8.427 8.427 0 0 1 101.752 1a8.295 8.295 0 0 1 3.192 3.031A8.302 8.302 0 0 1 108.14.998a8.43 8.43 0 0 1 8.537.344 8.275 8.275 0 0 1 2.934 3.277A8.299 8.299 0 0 1 123.524.8a8.447 8.447 0 0 1 5.472-.584 8.359 8.359 0 0 1 4.65 2.904 8.17 8.17 0 0 1 1.809 5.132c0 .07-.007.144-.007.215a8.39 8.39 0 0 1 3.157-1.542 8.456 8.456 0 0 1 3.52-.12 8.407 8.407 0 0 1 3.257 1.322 8.284 8.284 0 0 1 2.415 2.531 8.138 8.138 0 0 1 .812 6.75 8.216 8.216 0 0 1-1.748 3.02 8.344 8.344 0 0 1-2.853 2.04 8.319 8.319 0 0 1 3.728 3.184 8.158 8.158 0 0 1-.397 9.29 8.336 8.336 0 0 1-3.986 2.864 8.337 8.337 0 0 1 3.986 2.864 8.158 8.158 0 0 1 .397 9.29 8.318 8.318 0 0 1-3.728 3.185 8.35 8.35 0 0 1 2.876 2.06 8.214 8.214 0 0 1 1.748 3.054 8.142 8.142 0 0 1-.893 6.798 8.294 8.294 0 0 1-2.479 2.513 8.453 8.453 0 0 1-6.86 1.06 8.388 8.388 0 0 1-3.139-1.644 8.175 8.175 0 0 1-1.613 6.904 8.357 8.357 0 0 1-4.651 2.906 8.443 8.443 0 0 1-5.473-.585 8.295 8.295 0 0 1-3.913-3.823 8.265 8.265 0 0 1-2.932 3.282 8.427 8.427 0 0 1-8.541.343 8.291 8.291 0 0 1-3.193-3.036 8.28 8.28 0 0 1-3.191 3.036 8.42 8.42 0 0 1-8.537-.343 8.259 8.259 0 0 1-2.93-3.282 8.27 8.27 0 0 1-3.215 3.46 8.421 8.421 0 0 1-9.11-.352 8.247 8.247 0 0 1-2.93-3.699 8.248 8.248 0 0 1-2.931 3.698 8.421 8.421 0 0 1-9.11.353 8.272 8.272 0 0 1-3.214-3.46 8.27 8.27 0 0 1-3.215 3.46 8.421 8.421 0 0 1-9.11-.352 8.247 8.247 0 0 1-2.93-3.699 8.248 8.248 0 0 1-2.931 3.699 8.422 8.422 0 0 1-9.11.353 8.272 8.272 0 0 1-3.215-3.461 8.299 8.299 0 0 1-3.915 3.823 8.449 8.449 0 0 1-5.475.587 8.364 8.364 0 0 1-4.654-2.906 8.177 8.177 0 0 1-1.809-5.135c.003-.552.06-1.102.17-1.643a8.391 8.391 0 0 1-3.154 1.56 8.456 8.456 0 0 1-3.524.136 8.41 8.41 0 0 1-3.266-1.313 8.29 8.29 0 0 1-2.426-2.527 8.142 8.142 0 0 1-.826-6.757 8.217 8.217 0 0 1 1.747-3.025 8.347 8.347 0 0 1 2.856-2.043 8.316 8.316 0 0 1-3.726-3.184 8.159 8.159 0 0 1 .395-9.29 8.34 8.34 0 0 1 3.985-2.865 8.34 8.34 0 0 1-3.985-2.864 8.158 8.158 0 0 1-.396-9.29 8.315 8.315 0 0 1 3.727-3.185 8.346 8.346 0 0 1-2.833-2.026 8.218 8.218 0 0 1-1.744-2.994 8.144 8.144 0 0 1 .76-6.713 8.285 8.285 0 0 1 2.37-2.54 8.407 8.407 0 0 1 3.216-1.358 8.456 8.456 0 0 1 3.498.061 8.398 8.398 0 0 1 3.166 1.47c0-.04-.007-.08-.007-.12a8.18 8.18 0 0 1 1.813-5.13A8.367 8.367 0 0 1 19.88.213a8.452 8.452 0 0 1 5.471.584 8.302 8.302 0 0 1 3.916 3.818 8.28 8.28 0 0 1 3.218-3.452 8.43 8.43 0 0 1 9.103.351 8.256 8.256 0 0 1 2.935 3.69l-.003.005Z"/>
             </mask>
@@ -284,6 +415,42 @@
   </div>
 </div>
 
+{%- if product != blank -%}
+  <script type="application/ld+json">
+    {{ product | structured_data }}
+  </script>
+
+  <script type="application/json" id="pack-selector-pricing-{{ section.id }}">
+    {
+      "onetime": {
+        {%- for variant in product.variants -%}
+          "{{ variant.id }}": {{ variant.price | money | strip_html | json }}{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      }{%- if has_selling_plans -%},
+      "subscriptions": {
+        {%- for variant in product.variants -%}
+          "{{ variant.id }}": {
+            {%- for allocation in variant.selling_plan_allocations -%}
+              {%- assign tier_save = '' -%}
+              {%- if allocation.compare_at_price > allocation.price -%}
+                {%- assign tier_discount = allocation.compare_at_price | minus: allocation.price -%}
+                {%- assign tier_save_percent = tier_discount | times: 100.0 | divided_by: allocation.compare_at_price | round -%}
+                {%- assign tier_save = 'Save ' | append: tier_save_percent | append: '%' -%}
+              {%- endif -%}
+              "{{ allocation.selling_plan.id }}": {
+                "price": {{ allocation.price | money | strip_html | json }},
+                "compareAtPrice": {% if allocation.compare_at_price > allocation.price %}{{ allocation.compare_at_price | money | strip_html | json }}{% else %}null{% endif %},
+                "save": {% if tier_save != blank %}{{ tier_save | json }}{% else %}null{% endif %}
+              }{% unless forloop.last %},{% endunless %}
+            {%- endfor -%}
+          }{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      }
+      {%- endif -%}
+    }
+  </script>
+{%- endif -%}
+
 <style>
   .pack-selector {
     padding: var(--space-6) var(--space-4);
@@ -329,10 +496,9 @@
     position: relative;
     width: 100%;
     aspect-ratio: 4 / 5;
-    border: 2px solid var(--color-black);
-    border-radius: var(--radius-card);
     overflow: hidden;
     background: var(--color-cream);
+    box-shadow: var(--shadow-sm);
   }
   .pack-media__mainItem {
     display: none;
@@ -356,16 +522,14 @@
     width: 64px;
     height: 64px;
     padding: 0;
-    border: 2px solid var(--color-black);
-    border-radius: var(--radius-card);
     overflow: hidden;
     cursor: pointer;
     background: var(--color-cream);
+    box-shadow: var(--shadow-sm);
     flex-shrink: 0;
   }
   .pack-media__thumb.is-active {
-    border-color: var(--color-red);
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 0 0 2px var(--color-red);
   }
   .pack-media__thumb img {
     width: 100%;
@@ -442,8 +606,7 @@
     gap: var(--space-3);
     width: 100%;
     background: var(--color-cream);
-    border: 2px solid var(--color-black);
-    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-sm);
     padding: var(--space-3) var(--space-4);
     cursor: pointer;
     font-family: inherit;
@@ -455,7 +618,6 @@
     width: 20px;
     height: 20px;
     border: 2px solid var(--color-black);
-    border-radius: 4px;
     background: var(--color-cream);
     position: relative;
   }
@@ -497,8 +659,7 @@
     flex-direction: column;
     width: 100%;
     background: var(--color-cream);
-    border: 2px solid var(--color-black);
-    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-sm);
     padding: var(--space-4);
     cursor: pointer;
     font-family: inherit;
@@ -530,7 +691,6 @@
     width: 20px;
     height: 20px;
     border: 2px solid var(--color-black);
-    border-radius: 4px;
     background: var(--color-cream);
     position: relative;
   }
@@ -582,17 +742,16 @@
     justify-content: space-between;
     gap: var(--space-2) var(--space-3);
     background: var(--color-cream);
-    border: 2px solid var(--color-black);
-    border-radius: var(--radius-card);
     padding: var(--space-3) var(--space-4);
     cursor: pointer;
-    transition: background 0.15s ease-out;
+    transition: background 0.15s ease-out, box-shadow 0.15s ease-out;
   }
   .pack-subscribe[aria-checked="true"] .pack-tier {
     background: var(--color-yellow);
   }
   .pack-subscribe[aria-checked="true"] .pack-tier[aria-checked="true"] {
     background: var(--color-cream);
+    box-shadow: var(--shadow-sm);
   }
   .pack-tier__info {
     display: flex;
@@ -648,7 +807,6 @@
     font-weight: 700;
     font-size: 11px;
     padding: 2px 10px;
-    border-radius: var(--radius-btn);
     text-transform: uppercase;
     white-space: nowrap;
   }
@@ -679,8 +837,7 @@
     gap: var(--space-1);
     width: 100%;
     background: var(--color-cream);
-    border: 2px solid var(--color-black);
-    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-sm);
     padding: var(--space-3) var(--space-4);
     cursor: pointer;
     font-family: inherit;
@@ -710,7 +867,6 @@
     width: 20px;
     height: 20px;
     border: 2px solid var(--color-black);
-    border-radius: 4px;
     background: var(--color-cream);
     position: relative;
   }
@@ -760,10 +916,11 @@
   }
   .pack-qty--dashed {
     border: 2px dashed var(--color-black);
-    border-radius: var(--radius-btn);
   }
   .pack-qty--cloud {
-    padding: var(--space-4) var(--space-6);
+    aspect-ratio: 150 / 78;
+    justify-content: center;
+    padding: var(--space-3) var(--space-6);
   }
   .pack-qty__frame {
     position: absolute;
@@ -835,8 +992,80 @@
   window.packSelector = (function () {
     var state = { option: null, frequency: null, tier: null };
 
+    var pricingData = null;
+    {%- if product != blank -%}
+      (function () {
+        var script = document.getElementById('pack-selector-pricing-{{ section.id }}');
+        if (script) {
+          try {
+            pricingData = JSON.parse(script.textContent);
+          } catch (e) {
+            pricingData = null;
+          }
+        }
+      })();
+    {%- endif -%}
+
     function optionButtons() {
       return document.querySelectorAll('.pack-option');
+    }
+
+    function setOrRemoveSpan(row, className, text, insertBeforeEl) {
+      var el = row.querySelector('.' + className);
+      if (text) {
+        if (!el) {
+          el = document.createElement('span');
+          el.className = className;
+          if (insertBeforeEl) {
+            row.insertBefore(el, insertBeforeEl);
+          } else {
+            row.appendChild(el);
+          }
+        }
+        el.textContent = text;
+      } else if (el) {
+        el.remove();
+      }
+    }
+
+    function updateTierPricing(tierEl, data) {
+      var priceRow = tierEl.querySelector('.pack-tier__price-row');
+      if (!priceRow) return;
+      var currentEl = priceRow.querySelector('.pack-tier__price-current');
+      setOrRemoveSpan(priceRow, 'pack-tier__price-original', data.compareAtPrice, currentEl);
+      if (currentEl) currentEl.textContent = data.price;
+      setOrRemoveSpan(priceRow, 'pack-tier__badge', data.save, null);
+    }
+
+    function updatePricesForVariant(variantId) {
+      if (!pricingData) return;
+
+      var onetimePrice = document.querySelector('.pack-onetime__price');
+      if (onetimePrice && pricingData.onetime && pricingData.onetime[variantId] !== undefined) {
+        onetimePrice.textContent = pricingData.onetime[variantId];
+      }
+
+      if (!pricingData.subscriptions || !pricingData.subscriptions[variantId]) return;
+      var variantPlans = pricingData.subscriptions[variantId];
+      var tierEls = document.querySelectorAll('.pack-tier');
+      var firstPlanId = null;
+
+      tierEls.forEach(function (tierEl, i) {
+        var planId = tierEl.getAttribute('data-tier');
+        if (i === 0) firstPlanId = planId;
+        var data = variantPlans[planId];
+        if (data) updateTierPricing(tierEl, data);
+      });
+
+      if (firstPlanId && variantPlans[firstPlanId]) {
+        var headerData = variantPlans[firstPlanId];
+        var headerContainer = document.querySelector('.pack-subscribe__price');
+        var headerCurrent = document.querySelector('.pack-subscribe__price-current');
+        if (headerContainer) {
+          setOrRemoveSpan(headerContainer, 'pack-subscribe__price-original', headerData.compareAtPrice, headerCurrent);
+        }
+        if (headerCurrent) headerCurrent.textContent = headerData.price;
+      }
     }
 
     function selectOption(index) {
@@ -845,6 +1074,7 @@
       });
       state.option = index;
       updateVariant();
+      updatePricesForVariant(index);
     }
 
     function selectFrequency(frequency) {
@@ -926,6 +1156,14 @@
   "name": "Custom Packaging Selector",
   "settings": [
     { "type": "text", "id": "title", "label": "Section Title", "default": "WÄHL DEINE MENGE" },
+
+    { "type": "header", "content": "Product" },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product",
+      "info": "When set, purchase options, prices, subscription tiers and gallery images are pulled live from this product's variants, selling plans and media — the fields below are used only as a fallback when no product is selected."
+    },
 
     { "type": "header", "content": "Product Media" },
     { "type": "image_picker", "id": "gallery_image_1", "label": "Main Image" },

@@ -13,6 +13,10 @@
   if section.settings.frame_shape != blank
     assign has_frame_mask = true
   endif
+  assign has_cursor_mask = false
+  if section.settings.cursor_shape != blank
+    assign has_cursor_mask = true
+  endif
   assign has_bg_video = false
   if section.settings.background_video != blank
     assign has_bg_video = true
@@ -20,9 +24,10 @@
 -%}
 
 <section
-  class="custom-video-showcase bg-{{ section.settings.background }}"
+  class="custom-video-showcase bg-scheme-background text-scheme-text"
   id="{{ section_id }}"
   data-video-showcase
+  data-color-scheme="{{ section.settings.color_scheme }}"
 >
   <div class="custom-video-showcase__container">
     {%- if section.settings.heading != blank -%}
@@ -37,7 +42,7 @@
         aria-label="{{ section.settings.cursor_label | default: 'Video abspielen' | escape }}"
       >
         <span class="custom-video-showcase__cursor" data-cursor aria-hidden="true">
-          <span class="custom-video-showcase__cursor-content">
+          <span class="custom-video-showcase__cursor-content{% if has_cursor_mask %} custom-video-showcase__cursor-content--masked{% endif %}">
             {%- if section.settings.cursor_icon != blank -%}
               <img
                 class="custom-video-showcase__cursor-icon custom-video-showcase__cursor-icon--custom"
@@ -115,6 +120,9 @@
       --frame-radius: var(--radius-card);
       {%- if has_frame_mask -%}
         --frame-mask: url('{{ section.settings.frame_shape | image_url: width: 1200 }}');
+      {%- endif -%}
+      {%- if has_cursor_mask -%}
+        --cursor-mask: url('{{ section.settings.cursor_shape | image_url: width: 400 }}');
       {%- endif -%}
     }
 
@@ -214,6 +222,20 @@
       border-radius: var(--radius-btn);
       box-shadow: var(--shadow-sm);
       padding: var(--space-3) var(--space-4) var(--space-3) var(--space-3);
+    }
+
+    #{{ section_id }} .custom-video-showcase__cursor-content--masked {
+      border: none;
+      box-shadow: none;
+      border-radius: 0;
+      -webkit-mask-image: var(--cursor-mask);
+      mask-image: var(--cursor-mask);
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      mask-position: center;
+      -webkit-mask-size: 100% 100%;
+      mask-size: 100% 100%;
     }
 
     #{{ section_id }} .custom-video-showcase__cursor-icon {
@@ -572,24 +594,20 @@
       "info": "Optional. Replaces the default play-triangle icon inside the mouse-follow cursor bubble."
     },
     {
+      "type": "image_picker",
+      "id": "cursor_shape",
+      "label": "Cursor shape (SVG or PNG)",
+      "info": "Optional. Upload a solid black-on-transparent SVG/PNG silhouette to mask the cursor bubble into a custom blob/brand shape. Leave blank for the standard pill shape."
+    },
+    {
       "type": "header",
       "content": "Color"
     },
     {
-      "type": "select",
-      "id": "background",
-      "label": "Background color",
-      "options": [
-        { "value": "pink", "label": "Pink" },
-        { "value": "violet", "label": "Violet" },
-        { "value": "cream", "label": "Cream" },
-        { "value": "sky", "label": "Sky" },
-        { "value": "lime", "label": "Lime" },
-        { "value": "red", "label": "Red" },
-        { "value": "yellow", "label": "Yellow" },
-        { "value": "orange", "label": "Orange" }
-      ],
-      "default": "cream"
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme1"
     }
   ],
   "presets": [
@@ -598,7 +616,7 @@
       "settings": {
         "description": "<p>Gefriergetrocknete Früchte — fair produziert, in der Ursprungsgemeinde verarbeitet, radikal transparent.</p>",
         "cursor_label": "Video abspielen",
-        "background": "cream"
+        "color_scheme": "scheme1"
       }
     }
   ]
