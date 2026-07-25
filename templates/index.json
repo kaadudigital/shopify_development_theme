@@ -27,7 +27,9 @@
         "description": "<p>Gefriergetrocknete Früchte — fair produziert, in der Ursprungsgemeinde verarbeitet, radikal transparent.</p>",
         "background_video": "shopify://files/videos/sample.mp4",
         "modal_video_url": "https://www.youtube.com/watch?v=o4hGIwTBdZs",
-        "cursor_label": "Video abspielen"
+        "cursor_label": "Video abspielen",
+        "cursor_shape": "shopify://shop_images/Artboard12.svg",
+        "color_scheme": "scheme1"
       }
     },
     "kaadu_custom_distribution_mkKaw6": {
@@ -95,6 +97,7 @@
       "name": "Custom Packaging Selector",
       "settings": {
         "title": "WÄHL DEINE MENGE",
+        "product": "",
         "gallery_image_1": "shopify://shop_images/ChatGPTImage31.Marz2025_13_40_20.png",
         "gallery_image_2": "shopify://shop_images/ChatGPT_Image_31._Marz_2025_14_50_15.png",
         "gallery_image_3": "shopify://shop_images/Adobe_Express_-_file.png",
