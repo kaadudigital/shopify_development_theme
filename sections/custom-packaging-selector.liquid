@@ -15,6 +15,7 @@
 -%}
 
 <div
+  id="{{ section.id }}"
   class="pack-selector bg-scheme-background text-scheme-text"
   data-color-scheme="{{ section.settings.color_scheme }}"
 >
@@ -360,7 +361,29 @@
       {%- liquid
         assign qty_shape_desktop = section.settings.qty_border_style_desktop | default: 'cloud'
         assign qty_shape_mobile = section.settings.qty_border_style_mobile | default: 'dashed'
+
+        assign qty_custom_image_desktop = section.settings.qty_shape_image_desktop
+        assign qty_custom_image_mobile = section.settings.qty_shape_image_mobile
+
+        if qty_shape_desktop == 'custom' and qty_custom_image_desktop == blank
+          assign qty_shape_desktop = 'dashed'
+        endif
+        if qty_shape_mobile == 'custom' and qty_custom_image_mobile == blank
+          assign qty_shape_mobile = 'dashed'
+        endif
       -%}
+      {%- if qty_shape_desktop == 'custom' or qty_shape_mobile == 'custom' -%}
+        {%- style -%}
+          #{{ section.id }} {
+            {%- if qty_shape_desktop == 'custom' -%}
+              --qty-shape-desktop: url('{{ qty_custom_image_desktop | image_url: width: 400 }}');
+            {%- endif -%}
+            {%- if qty_shape_mobile == 'custom' -%}
+              --qty-shape-mobile: url('{{ qty_custom_image_mobile | image_url: width: 400 }}');
+            {%- endif -%}
+          }
+        {%- endstyle -%}
+      {%- endif -%}
       <div class="pack-qty" data-shape-desktop="{{ qty_shape_desktop }}" data-shape-mobile="{{ qty_shape_mobile }}">
         {%- if qty_shape_desktop == 'cloud' or qty_shape_mobile == 'cloud' -%}
           <svg class="pack-qty__frame" viewBox="0 0 150 78" preserveAspectRatio="xMidYMid meet" fill="none" aria-hidden="true">
@@ -369,6 +392,12 @@
             </mask>
             <path d="M44.521 5.209a8.256 8.256 0 0 1 2.935-3.69 8.43 8.43 0 0 1 9.103-.352 8.28 8.28 0 0 1 3.218 3.452 8.28 8.28 0 0 1 3.218-3.45 8.43 8.43 0 0 1 9.102.351 8.257 8.257 0 0 1 2.933 3.69 8.256 8.256 0 0 1 2.935-3.69 8.43 8.43 0 0 1 9.103-.352 8.28 8.28 0 0 1 3.218 3.452 8.265 8.265 0 0 1 2.932-3.277A8.427 8.427 0 0 1 101.752 1a8.295 8.295 0 0 1 3.192 3.031A8.302 8.302 0 0 1 108.14.998a8.43 8.43 0 0 1 8.537.344 8.275 8.275 0 0 1 2.934 3.277A8.299 8.299 0 0 1 123.524.8a8.447 8.447 0 0 1 5.472-.584 8.359 8.359 0 0 1 4.65 2.904 8.17 8.17 0 0 1 1.809 5.132c0 .07-.007.144-.007.215a8.39 8.39 0 0 1 3.157-1.542 8.456 8.456 0 0 1 3.52-.12 8.407 8.407 0 0 1 3.257 1.322 8.284 8.284 0 0 1 2.415 2.531 8.138 8.138 0 0 1 .812 6.75 8.216 8.216 0 0 1-1.748 3.02 8.344 8.344 0 0 1-2.853 2.04 8.319 8.319 0 0 1 3.728 3.184 8.158 8.158 0 0 1-.397 9.29 8.336 8.336 0 0 1-3.986 2.864 8.337 8.337 0 0 1 3.986 2.864 8.158 8.158 0 0 1 .397 9.29 8.318 8.318 0 0 1-3.728 3.185 8.35 8.35 0 0 1 2.876 2.06 8.214 8.214 0 0 1 1.748 3.054 8.142 8.142 0 0 1-.893 6.798 8.294 8.294 0 0 1-2.479 2.513 8.453 8.453 0 0 1-6.86 1.06 8.388 8.388 0 0 1-3.139-1.644 8.175 8.175 0 0 1-1.613 6.904 8.357 8.357 0 0 1-4.651 2.906 8.443 8.443 0 0 1-5.473-.585 8.295 8.295 0 0 1-3.913-3.823 8.265 8.265 0 0 1-2.932 3.282 8.427 8.427 0 0 1-8.541.343 8.291 8.291 0 0 1-3.193-3.036 8.28 8.28 0 0 1-3.191 3.036 8.42 8.42 0 0 1-8.537-.343 8.259 8.259 0 0 1-2.93-3.282 8.27 8.27 0 0 1-3.215 3.46 8.421 8.421 0 0 1-9.11-.352 8.247 8.247 0 0 1-2.93-3.699 8.248 8.248 0 0 1-2.931 3.698 8.421 8.421 0 0 1-9.11.353 8.272 8.272 0 0 1-3.214-3.46 8.27 8.27 0 0 1-3.215 3.46 8.421 8.421 0 0 1-9.11-.352 8.247 8.247 0 0 1-2.93-3.699 8.248 8.248 0 0 1-2.931 3.699 8.422 8.422 0 0 1-9.11.353 8.272 8.272 0 0 1-3.215-3.461 8.299 8.299 0 0 1-3.915 3.823 8.449 8.449 0 0 1-5.475.587 8.364 8.364 0 0 1-4.654-2.906 8.177 8.177 0 0 1-1.809-5.135c.003-.552.06-1.102.17-1.643a8.391 8.391 0 0 1-3.154 1.56 8.456 8.456 0 0 1-3.524.136 8.41 8.41 0 0 1-3.266-1.313 8.29 8.29 0 0 1-2.426-2.527 8.142 8.142 0 0 1-.826-6.757 8.217 8.217 0 0 1 1.747-3.025 8.347 8.347 0 0 1 2.856-2.043 8.316 8.316 0 0 1-3.726-3.184 8.159 8.159 0 0 1 .395-9.29 8.34 8.34 0 0 1 3.985-2.865 8.34 8.34 0 0 1-3.985-2.864 8.158 8.158 0 0 1-.396-9.29 8.315 8.315 0 0 1 3.727-3.185 8.346 8.346 0 0 1-2.833-2.026 8.218 8.218 0 0 1-1.744-2.994 8.144 8.144 0 0 1 .76-6.713 8.285 8.285 0 0 1 2.37-2.54 8.407 8.407 0 0 1 3.216-1.358 8.456 8.456 0 0 1 3.498.061 8.398 8.398 0 0 1 3.166 1.47c0-.04-.007-.08-.007-.12a8.18 8.18 0 0 1 1.813-5.13A8.367 8.367 0 0 1 19.88.213a8.452 8.452 0 0 1 5.471.584 8.302 8.302 0 0 1 3.916 3.818 8.28 8.28 0 0 1 3.218-3.452 8.43 8.43 0 0 1 9.103.351 8.256 8.256 0 0 1 2.935 3.69l-.003.005Z" stroke="currentColor" stroke-width="2" mask="url(#pack-qty-cloud-mask-{{ section.id }})"/>
           </svg>
+        {%- endif -%}
+        {%- if qty_shape_desktop == 'custom' -%}
+          <span class="pack-qty__shape pack-qty__shape--desktop" aria-hidden="true"></span>
+        {%- endif -%}
+        {%- if qty_shape_mobile == 'custom' -%}
+          <span class="pack-qty__shape pack-qty__shape--mobile" aria-hidden="true"></span>
         {%- endif -%}
         <span class="pack-qty__label caption">{{ section.settings.qty_label }}</span>
         <button type="button" class="pack-qty__btn" aria-label="{{ 'products.product.quantity.decrease_html' | t: product: '' | default: 'Decrease quantity' | escape }}" onclick="packSelector.changeQty(-1)">&minus;</button>
@@ -965,6 +994,13 @@
     color: var(--color-black);
     pointer-events: none;
   }
+  .pack-qty__shape {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: var(--color-cream);
+    pointer-events: none;
+  }
   @media (max-width: 768px) {
     .pack-qty[data-shape-mobile="dashed"] {
       border: 2px dashed var(--color-black);
@@ -979,6 +1015,23 @@
     }
     .pack-qty[data-shape-mobile="cloud"] .pack-qty__frame {
       display: block;
+    }
+    .pack-qty[data-shape-mobile="custom"] {
+      border: none;
+      aspect-ratio: 150 / 78;
+      justify-content: center;
+      padding: var(--space-3) var(--space-6);
+    }
+    .pack-qty[data-shape-mobile="custom"] .pack-qty__shape--mobile {
+      display: block;
+      -webkit-mask-image: var(--qty-shape-mobile);
+      mask-image: var(--qty-shape-mobile);
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      mask-position: center;
+      -webkit-mask-size: 100% 100%;
+      mask-size: 100% 100%;
     }
   }
   @media (min-width: 769px) {
@@ -995,6 +1048,23 @@
     }
     .pack-qty[data-shape-desktop="cloud"] .pack-qty__frame {
       display: block;
+    }
+    .pack-qty[data-shape-desktop="custom"] {
+      border: none;
+      aspect-ratio: 150 / 78;
+      justify-content: center;
+      padding: var(--space-3) var(--space-6);
+    }
+    .pack-qty[data-shape-desktop="custom"] .pack-qty__shape--desktop {
+      display: block;
+      -webkit-mask-image: var(--qty-shape-desktop);
+      mask-image: var(--qty-shape-desktop);
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      mask-position: center;
+      -webkit-mask-size: 100% 100%;
+      mask-size: 100% 100%;
     }
   }
   .pack-qty__label,
@@ -1315,20 +1385,24 @@
       "label": "Quantity Stepper Shape (desktop)",
       "options": [
         { "value": "dashed", "label": "Dashed pill" },
-        { "value": "cloud", "label": "Cloud (scalloped)" }
+        { "value": "cloud", "label": "Cloud (scalloped)" },
+        { "value": "custom", "label": "Custom (uploaded image)" }
       ],
       "default": "cloud"
     },
+    { "type": "image_picker", "id": "qty_shape_image_desktop", "label": "Quantity Stepper Custom Shape (desktop)", "info": "Used when Shape (desktop) is set to Custom. Upload a solid black-on-transparent SVG/PNG silhouette. Falls back to Dashed pill if empty." },
     {
       "type": "select",
       "id": "qty_border_style_mobile",
       "label": "Quantity Stepper Shape (mobile)",
       "options": [
         { "value": "dashed", "label": "Dashed pill" },
-        { "value": "cloud", "label": "Cloud (scalloped)" }
+        { "value": "cloud", "label": "Cloud (scalloped)" },
+        { "value": "custom", "label": "Custom (uploaded image)" }
       ],
       "default": "dashed"
     },
+    { "type": "image_picker", "id": "qty_shape_image_mobile", "label": "Quantity Stepper Custom Shape (mobile)", "info": "Used when Shape (mobile) is set to Custom. Upload a solid black-on-transparent SVG/PNG silhouette. Falls back to Dashed pill if empty." },
 
     { "type": "header", "content": "Submit Button" },
     { "type": "text", "id": "button_label", "label": "Button Label", "default": "IN DEN WARENKORB" },
