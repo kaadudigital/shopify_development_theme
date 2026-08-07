@@ -642,9 +642,10 @@
     "custom_rich_text_with_image_yBcjeG": {
       "type": "custom-rich-text-with-image",
       "custom_css": [
+        "p {color: black;}",
         ".kaadu-rtwi__image {position: relative; transform: translateX(-10px);}",
         ".kaadu-rtwi__outer {padding-bottom: 16px;}",
-        "@media screen and (max-width: 767px) and (orientation: portrait) {.kaadu-rtwi__outer {padding-bottom: 12px;}}"
+        "@media screen and (max-width: 767px) and (orientation: portrait) {.kaadu-rtwi__outer {padding-bottom: 12px; }}"
       ],
       "name": "Custom Rich Text Image",
       "settings": {
