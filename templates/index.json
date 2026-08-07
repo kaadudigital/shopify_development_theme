@@ -668,10 +668,7 @@
     },
     "email_input_dMpqpt": {
       "type": "email-input",
-      "custom_css": [
-        ".kaadu-rtwi__outer {padding-bottom: 16px;}",
-        "@media screen and (max-width: 767px) and (orientation: portrait) {.kaadu-rtwi__outer {padding-bottom: 2px;}}"
-      ],
+      "custom_css": [],
       "name": "Email Signup",
       "settings": {
         "heading": "",
@@ -685,7 +682,7 @@
         "button_image_mobile": "shopify://shop_images/right_arrow_in_spiky_cloud.svg",
         "button_text_mobile": "",
         "button_image_width_mobile": 64,
-        "padding_top": "none",
+        "padding_top": "small",
         "bg_class": "bg-lime",
         "color_scheme": "scheme5"
       }
