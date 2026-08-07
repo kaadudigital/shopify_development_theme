@@ -1,0 +1,556 @@
+{%- comment -%}
+  Kaadu — Problem / Stakeholder Section
+  "Wer profitiert von Kaadu?" — an accessible tab component. Each stakeholder
+  is a repeatable block (label doubles as the tab button + panel heading);
+  clicking a tab swaps the panel below (image, copy, lime highlight box).
+  See Figma node 322:203.
+{%- endcomment -%}
+
+<section
+  class="kaadu-problem bg-{{ section.settings.background_color }}"
+  data-color-scheme="{{ section.settings.color_scheme }}"
+>
+  <div class="kaadu-problem__container">
+
+    {%- if section.settings.eyebrow_tag != blank -%}
+      <span class="kaadu-problem__eyebrow-tag caption">{{ section.settings.eyebrow_tag | escape }}</span>
+    {%- endif -%}
+
+    {%- if section.settings.heading_line1 != blank or section.settings.heading_line2 != blank -%}
+      <h2 class="kaadu-problem__heading h2">
+        {%- if section.settings.heading_line1 != blank -%}
+          <span class="kaadu-problem__heading-line kaadu-problem__heading-line--violet">{{ section.settings.heading_line1 | escape }}</span>
+        {%- endif -%}
+        {%- if section.settings.heading_line2 != blank -%}
+          <span class="kaadu-problem__heading-line kaadu-problem__heading-line--red">{{ section.settings.heading_line2 | escape }}</span>
+        {%- endif -%}
+      </h2>
+    {%- endif -%}
+
+    {%- if section.settings.intro_text != blank -%}
+      <div class="kaadu-problem__intro rte body-large">{{ section.settings.intro_text }}</div>
+    {%- endif -%}
+
+    {%- assign stakeholders = section.blocks | where: 'type', 'stakeholder' -%}
+
+    {%- if stakeholders.size > 0 -%}
+      <div class="kaadu-problem__tabs" role="tablist" aria-label="{{ 'sections.kaadu_problem.tablist_label' | t: default: 'Zielgruppe auswählen' }}">
+        {%- for block in stakeholders -%}
+          <button
+            type="button"
+            id="{{ section.id }}-tab-{{ block.id }}"
+            class="kaadu-problem__tab btn-label"
+            role="tab"
+            aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+            aria-controls="{{ section.id }}-panel-{{ block.id }}"
+            tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
+            data-kaadu-problem-tab
+            {{ block.shopify_attributes }}
+          >
+            {{ block.settings.label | escape }}
+          </button>
+        {%- endfor -%}
+      </div>
+
+      <div class="kaadu-problem__panels" aria-live="polite">
+        {%- for block in stakeholders -%}
+          <div
+            id="{{ section.id }}-panel-{{ block.id }}"
+            class="kaadu-problem__panel{% if forloop.first %} is-active{% endif %}"
+            role="tabpanel"
+            aria-labelledby="{{ section.id }}-tab-{{ block.id }}"
+            {% unless forloop.first %}hidden{% endunless %}
+            data-kaadu-problem-panel
+            {{ block.shopify_attributes }}
+          >
+            <div class="kaadu-problem__media">
+              <div class="kaadu-problem__frame">
+                {%- if block.settings.image != blank -%}
+                  {%- assign image_alt_text = block.settings.image_alt | default: block.settings.label | escape -%}
+                  <picture>
+                    {%- if block.settings.image_mobile != blank -%}
+                      <source
+                        media="(max-width: 768px)"
+                        srcset="{{ block.settings.image_mobile | image_url: width: 800 }}"
+                      >
+                    {%- endif -%}
+                    {{
+                      block.settings.image
+                      | image_url: width: 1200
+                      | image_tag:
+                        class: 'kaadu-problem__img',
+                        loading: 'lazy',
+                        alt: image_alt_text,
+                        width: block.settings.image.width,
+                        height: block.settings.image.height,
+                        sizes: '(min-width: 769px) 500px, 90vw'
+                    }}
+                  </picture>
+                {%- else -%}
+                  <div class="kaadu-problem__img-placeholder" aria-hidden="true"></div>
+                {%- endif -%}
+
+                {%- if block.settings.sticker_text != blank -%}
+                  <div
+                    class="kaadu-problem__sticker caption"
+                    style="--kaadu-problem-sticker-rotate: {{ block.settings.sticker_rotate }}deg;"
+                  >
+                    {{ block.settings.sticker_text | escape }}
+                  </div>
+                {%- endif -%}
+              </div>
+            </div>
+
+            <div class="kaadu-problem__content">
+              {%- if block.settings.eyebrow != blank -%}
+                <p class="kaadu-problem__panel-eyebrow btn-label">{{ block.settings.eyebrow | escape }}</p>
+              {%- endif -%}
+
+              <h3 class="kaadu-problem__panel-heading h4-subsection-heading">{{ block.settings.label | escape }}</h3>
+
+              {%- if block.settings.body_text != blank -%}
+                <div class="kaadu-problem__panel-body rte body">{{ block.settings.body_text }}</div>
+              {%- endif -%}
+
+              {%- if block.settings.highlight_text != blank -%}
+                <div class="kaadu-problem__highlight">
+                  <div class="kaadu-problem__highlight-text rte body-large">{{ block.settings.highlight_text }}</div>
+                </div>
+              {%- endif -%}
+
+              {%- if block.settings.disclaimer_text != blank -%}
+                <p class="kaadu-problem__disclaimer caption">{{ block.settings.disclaimer_text | escape }}</p>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  {%- style -%}
+    #shopify-section-{{ section.id }} .kaadu-problem__container {
+      max-width: var(--container-max);
+      margin-inline: auto;
+      padding-block: var(--section-padding-v);
+      padding-inline: var(--space-4);
+    }
+
+    #shopify-section-{{ section.id }} .kaadu-problem__eyebrow-tag {
+      display: inline-block;
+      background-color: var(--color-red);
+      color: var(--color-cream);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--space-2);
+    }
+
+    #shopify-section-{{ section.id }} .kaadu-problem__heading {
+      margin: var(--space-4) 0 0;
+    }
+
+    #shopify-section-{{ section.id }} .kaadu-problem__heading-line {
+      display: block;
+    }
+
+    #shopify-section-{{ section.id }} .kaadu-problem__heading-line--violet {
+      color: var(--color-violet);
+    }
+
+    #shopify-section-{{ section.id }} .kaadu-problem__heading-line--red {
+      color: var(--color-red);
+    }
+
+    #shopify-section-{{ section.id }} .kaadu-problem__intro {
+      margin-top: var(--space-4);
+      max-width: 640px;
+      color: var(--color-near-black);
+    }
+
+    #shopify-section-{{ section.id }} .kaadu-problem__tabs {
+      margin-top: var(--space-6);
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-3);
+    }
+
+    #shopify-section-{{ section.id }} .kaadu-problem__tab {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background-color: var(--color-cream);
+      color: var(--color-red);
+      border: 2px solid var(--color-red);
+      border-radius: var(--radius-btn);
+      box-shadow: var(--shadow-md);
+      padding: var(--space-3) var(--space-4);
+      cursor: pointer;
+      transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+    }
+
+    #shopify-section-{{ section.id }} .kaadu-problem__tab[aria-selected="true"] {
+      background-color: var(--color-red);
+      color: var(--color-cream);
+    }
+
+    #shopify-section-{{ section.id }} .kaadu-problem__tab:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    #shopify-section-{{ section.id }} .kaadu-problem__tab:active {
+      transform: translateY(0);
+    }
+
+    #shopify-section-{{ section.id }} .kaadu-problem__tab:focus-visible {
+      outline: 2px solid var(--color-violet);
+      outline-offset: 2px;
+    }
+
+    #shopify-section-{{ section.id }} .kaadu-problem__panels {
+      margin-top: var(--space-8);
+    }
+
+    #shopify-section-{{ section.id }} .kaadu-problem__panel {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+
+    #shopify-section-{{ section.id }} .kaadu-problem__panel[hidden] {
+      display: none;
+    }
+
+    #shopify-section-{{ section.id }} .kaadu-problem__frame {
+      position: relative;
+      border: 2px solid var(--color-black);
+      background-color: var(--color-cream);
+      box-shadow: var(--space-2) var(--space-2) 0 0 var(--color-red);
+      aspect-ratio: 4 / 5;
+      overflow: hidden;
+    }
+
+    #shopify-section-{{ section.id }} .kaadu-problem__img,
+    #shopify-section-{{ section.id }} .kaadu-problem__img-placeholder {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background-color: var(--color-light-grey);
+    }
+
+    #shopify-section-{{ section.id }} .kaadu-problem__sticker {
+      position: absolute;
+      right: var(--space-4);
+      bottom: var(--space-4);
+      max-width: 42%;
+      background-color: var(--color-yellow);
+      color: var(--color-red);
+      border: 2px solid var(--color-black);
+      border-radius: 50%;
+      font-weight: 700;
+      text-align: center;
+      text-transform: uppercase;
+      padding: var(--space-3) var(--space-4);
+      transform: rotate(var(--kaadu-problem-sticker-rotate, -10deg));
+    }
+
+    #shopify-section-{{ section.id }} .kaadu-problem__panel-eyebrow {
+      margin: 0 0 var(--space-2);
+      color: var(--color-violet);
+    }
+
+    #shopify-section-{{ section.id }} .kaadu-problem__panel-heading {
+      margin: 0;
+      color: var(--color-red);
+    }
+
+    #shopify-section-{{ section.id }} .kaadu-problem__panel-body {
+      margin-top: var(--space-4);
+      color: var(--color-near-black);
+    }
+
+    #shopify-section-{{ section.id }} .kaadu-problem__highlight {
+      margin-top: var(--space-6);
+      background-color: var(--color-lime);
+      border-radius: var(--radius-card);
+      padding: var(--space-4) var(--space-6);
+    }
+
+    #shopify-section-{{ section.id }} .kaadu-problem__highlight-text {
+      color: var(--color-black);
+      font-weight: 700;
+    }
+
+    #shopify-section-{{ section.id }} .kaadu-problem__disclaimer {
+      margin-top: var(--space-3);
+      color: var(--color-near-black);
+    }
+
+    @media (min-width: 769px) {
+      #shopify-section-{{ section.id }} .kaadu-problem__container {
+        padding-inline: var(--space-6);
+      }
+
+      #shopify-section-{{ section.id }} .kaadu-problem__tabs {
+        gap: var(--space-4);
+        max-width: 700px;
+      }
+
+      #shopify-section-{{ section.id }} .kaadu-problem__panels {
+        margin-top: var(--space-12);
+      }
+
+      #shopify-section-{{ section.id }} .kaadu-problem__panel {
+        grid-template-columns: minmax(280px, 420px) 1fr;
+        gap: var(--space-12);
+        align-items: start;
+      }
+    }
+  {%- endstyle -%}
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.kaadu-problem').forEach(function (root) {
+      var tabs = Array.prototype.slice.call(root.querySelectorAll('[data-kaadu-problem-tab]'));
+      var panels = Array.prototype.slice.call(root.querySelectorAll('[data-kaadu-problem-panel]'));
+
+      if (!tabs.length || !panels.length) return;
+
+      function activate(index, moveFocus) {
+        tabs.forEach(function (tab, i) {
+          var isActive = i === index;
+          tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+          tab.tabIndex = isActive ? 0 : -1;
+          if (isActive && moveFocus) tab.focus();
+        });
+        panels.forEach(function (panel, i) {
+          var isActive = i === index;
+          panel.classList.toggle('is-active', isActive);
+          if (isActive) {
+            panel.removeAttribute('hidden');
+          } else {
+            panel.setAttribute('hidden', '');
+          }
+        });
+      }
+
+      tabs.forEach(function (tab, i) {
+        tab.addEventListener('click', function () {
+          activate(i, false);
+        });
+
+        tab.addEventListener('keydown', function (e) {
+          var newIndex = null;
+          if (e.key === 'ArrowRight') newIndex = (i + 1) % tabs.length;
+          if (e.key === 'ArrowLeft') newIndex = (i - 1 + tabs.length) % tabs.length;
+          if (e.key === 'Home') newIndex = 0;
+          if (e.key === 'End') newIndex = tabs.length - 1;
+
+          if (newIndex !== null) {
+            e.preventDefault();
+            activate(newIndex, true);
+          }
+        });
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Problem Section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow_tag",
+      "label": "Eyebrow tag",
+      "default": "SNACK LIKE YOU GIVE A DAMN",
+      "info": "Small red pill label above the heading."
+    },
+    {
+      "type": "text",
+      "id": "heading_line1",
+      "label": "Heading — line 1 (violet)",
+      "default": "Wer profitiert"
+    },
+    {
+      "type": "text",
+      "id": "heading_line2",
+      "label": "Heading — line 2 (red)",
+      "default": "von Kaadu?"
+    },
+    {
+      "type": "richtext",
+      "id": "intro_text",
+      "label": "Intro text",
+      "default": "<p>Von der Ananasfarm bis in die Packung: Kaadu funktioniert nur, weil alle fair beteiligt sind — in Vazhakulam, Kerala.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "select",
+      "id": "background_color",
+      "label": "Background color",
+      "options": [
+        { "value": "sky", "label": "Sky" },
+        { "value": "pink", "label": "Pink" },
+        { "value": "violet", "label": "Violet" },
+        { "value": "cream", "label": "Cream" },
+        { "value": "lime", "label": "Lime" },
+        { "value": "yellow", "label": "Yellow" },
+        { "value": "orange", "label": "Orange" },
+        { "value": "red", "label": "Red" }
+      ],
+      "default": "sky"
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme1",
+      "info": "Used for theme-editor preview only; visible background comes from the setting above."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stakeholder",
+      "name": "Stakeholder",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Stakeholder",
+          "info": "Used as both the tab button text and the panel heading."
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Panel eyebrow",
+          "info": "Small violet label above the panel heading, e.g. \"Im Betrieb\"."
+        },
+        {
+          "type": "richtext",
+          "id": "body_text",
+          "label": "Body text"
+        },
+        {
+          "type": "richtext",
+          "id": "highlight_text",
+          "label": "Highlight box text",
+          "info": "Bold statement on a lime background, e.g. key benefits."
+        },
+        {
+          "type": "text",
+          "id": "disclaimer_text",
+          "label": "Disclaimer / footnote"
+        },
+        {
+          "type": "header",
+          "content": "Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image (desktop)"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "Image (mobile)",
+          "info": "Optional. Shown on screens ≤ 768px. Falls back to the desktop image when not set."
+        },
+        {
+          "type": "text",
+          "id": "image_alt",
+          "label": "Image alt text",
+          "info": "Falls back to the label if left blank."
+        },
+        {
+          "type": "header",
+          "content": "Sticker (optional)"
+        },
+        {
+          "type": "text",
+          "id": "sticker_text",
+          "label": "Sticker text",
+          "info": "Short pun sticker shown bottom-right on the image, e.g. \"I find you so a-peeling\"."
+        },
+        {
+          "type": "range",
+          "id": "sticker_rotate",
+          "label": "Sticker rotation",
+          "min": -20,
+          "max": 20,
+          "step": 2,
+          "unit": "deg",
+          "default": -10
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Problem Section",
+      "blocks": [
+        {
+          "type": "stakeholder",
+          "settings": {
+            "label": "Arbeiter*innen",
+            "eyebrow": "Im Betrieb",
+            "body_text": "<p>In unserem Betrieb arbeiten ausschliesslich Frauen aus einkommensschwachen Familien der Region — mit einem Lohn von mindestens +50% über Marktlohn*, plus Pension, Versicherung und Gewinnbeteiligung.</p>",
+            "highlight_text": "<p>Lohn +50%*, Pension, Versicherung, Gewinnbeteiligung — langfristig Mitbesitz.</p>",
+            "disclaimer_text": "*Im Vergleich zu vergleichbarer Arbeit in der Region Vazhakulam, Kerala.",
+            "sticker_text": "I find you so a-peeling",
+            "sticker_rotate": -10
+          }
+        },
+        {
+          "type": "stakeholder",
+          "settings": {
+            "label": "Kleinbauer*innen",
+            "eyebrow": "Beim Anbau",
+            "body_text": "<p>Unsere Kleinbauer*innen in Vazhakulam erhalten 30–40% über Marktpreis für ihre Ananas — garantiert, unabhängig von Weltmarktschwankungen.</p>",
+            "highlight_text": "<p>Preis +30–40%*, garantierte Abnahme, langfristige Partnerschaft.</p>",
+            "disclaimer_text": "*Im Vergleich zu marktüblichen Ankaufspreisen in der Region Vazhakulam, Kerala."
+          }
+        },
+        {
+          "type": "stakeholder",
+          "settings": {
+            "label": "Erntehelfer*innen",
+            "eyebrow": "Bei der Ernte",
+            "body_text": "<p>Erntehelfer*innen erhalten fairen Tageslohn, sichere Arbeitsbedingungen und Zugang zu unserem Gemeinschaftsfonds.</p>",
+            "highlight_text": "<p>Fairer Tageslohn, Schutzausrüstung, Gemeinschaftsfonds.</p>",
+            "disclaimer_text": "*Im Vergleich zu vergleichbarer Erntearbeit in der Region Vazhakulam, Kerala."
+          }
+        },
+        {
+          "type": "stakeholder",
+          "settings": {
+            "label": "Natur × Community",
+            "eyebrow": "Für die Region",
+            "body_text": "<p>Ein Teil jedes Verkaufs fliesst zurück in die Gemeinde — in Bildung, Infrastruktur und den Schutz der lokalen Natur.</p>",
+            "highlight_text": "<p>Reinvestition in Bildung, Infrastruktur und Naturschutz vor Ort.</p>",
+            "disclaimer_text": "*Teil des Kaadu Gewinnbeteiligungsmodells in Vazhakulam, Kerala."
+          }
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer", "aside"]
+  }
+}
+{% endschema %}
