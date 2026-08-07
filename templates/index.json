@@ -642,7 +642,8 @@
     "custom_rich_text_with_image_yBcjeG": {
       "type": "custom-rich-text-with-image",
       "custom_css": [
-        "p {color: black;}"
+        "p {color: black;}",
+        ".kaadu-rtwi__outer{padding-bottom: 2px;}"
       ],
       "name": "Custom Rich Text Image",
       "settings": {
