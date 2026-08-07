@@ -642,10 +642,7 @@
     "custom_rich_text_with_image_yBcjeG": {
       "type": "custom-rich-text-with-image",
       "custom_css": [
-        ".kaadu-rtwi__image {position: relative; transform: translateX(-10px);}",
-        "p {color: black;}",
-        ".kaadu-rtwi__outer {padding-bottom: 16px;}",
-        "@media screen and (max-width: 767px) {}"
+        ".kaadu-rtwi__image {position: relative; transform: translateX(-10px);}"
       ],
       "name": "Custom Rich Text Image",
       "settings": {
@@ -683,7 +680,7 @@
         "button_image_mobile": "shopify://shop_images/right_arrow_in_spiky_cloud.svg",
         "button_text_mobile": "",
         "button_image_width_mobile": 64,
-        "padding_top": "small",
+        "padding_top": "none",
         "bg_class": "bg-lime",
         "color_scheme": "scheme5"
       }
