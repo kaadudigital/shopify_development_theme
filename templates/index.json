@@ -644,7 +644,7 @@
       "custom_css": [
         "p {color: black;}",
         ".kaadu-rtwi__outer {padding-bottom: 16px;}",
-        "@media screen and (max-width: 767px) {.kaadu-rtwi__outer {padding-bottom: 2px;}}"
+        "@media screen and (max-width: 767px) {.kaadu-rtwi__outer {padding-bottom: 2px; }}"
       ],
       "name": "Custom Rich Text Image",
       "settings": {
@@ -668,6 +668,10 @@
     },
     "email_input_dMpqpt": {
       "type": "email-input",
+      "custom_css": [
+        ".kaadu-rtwi__outer {padding-bottom: 16px;}",
+        "@media screen and (max-width: 767px) and (orientation: portrait) {.kaadu-rtwi__outer {padding-bottom: 2px;}}"
+      ],
       "name": "Email Signup",
       "settings": {
         "heading": "",
