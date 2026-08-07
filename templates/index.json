@@ -19,6 +19,78 @@
         "use_gradient_background": false
       }
     },
+    "kaadu_problem_section_3BNCTG": {
+      "type": "kaadu-problem-section",
+      "blocks": {
+        "stakeholder_xzg9DB": {
+          "type": "stakeholder",
+          "settings": {
+            "label": "Arbeiter*innen",
+            "eyebrow": "Im Betrieb",
+            "body_text": "<p>In unserem Betrieb arbeiten ausschliesslich Frauen aus einkommensschwachen Familien der Region — mit einem Lohn von mindestens +50% über Marktlohn*, plus Pension, Versicherung und Gewinnbeteiligung.</p>",
+            "highlight_text": "<p>Lohn +50%*, Pension, Versicherung, Gewinnbeteiligung — langfristig Mitbesitz.</p>",
+            "disclaimer_text": "*Im Vergleich zu vergleichbarer Arbeit in der Region Vazhakulam, Kerala.",
+            "image_alt": "",
+            "sticker_text": "I find you so a-peeling",
+            "sticker_rotate": -10
+          }
+        },
+        "stakeholder_qdKADr": {
+          "type": "stakeholder",
+          "settings": {
+            "label": "Kleinbauer*innen",
+            "eyebrow": "Beim Anbau",
+            "body_text": "<p>Unsere Kleinbauer*innen in Vazhakulam erhalten 30–40% über Marktpreis für ihre Ananas — garantiert, unabhängig von Weltmarktschwankungen.</p>",
+            "highlight_text": "<p>Preis +30–40%*, garantierte Abnahme, langfristige Partnerschaft.</p>",
+            "disclaimer_text": "*Im Vergleich zu marktüblichen Ankaufspreisen in der Region Vazhakulam, Kerala.",
+            "image_alt": "",
+            "sticker_text": "",
+            "sticker_rotate": -10
+          }
+        },
+        "stakeholder_4iVqpn": {
+          "type": "stakeholder",
+          "settings": {
+            "label": "Erntehelfer*innen",
+            "eyebrow": "Bei der Ernte",
+            "body_text": "<p>Erntehelfer*innen erhalten fairen Tageslohn, sichere Arbeitsbedingungen und Zugang zu unserem Gemeinschaftsfonds.</p>",
+            "highlight_text": "<p>Fairer Tageslohn, Schutzausrüstung, Gemeinschaftsfonds.</p>",
+            "disclaimer_text": "*Im Vergleich zu vergleichbarer Erntearbeit in der Region Vazhakulam, Kerala.",
+            "image_alt": "",
+            "sticker_text": "",
+            "sticker_rotate": -10
+          }
+        },
+        "stakeholder_ykEEYQ": {
+          "type": "stakeholder",
+          "settings": {
+            "label": "Natur × Community",
+            "eyebrow": "Für die Region",
+            "body_text": "<p>Ein Teil jedes Verkaufs fliesst zurück in die Gemeinde — in Bildung, Infrastruktur und den Schutz der lokalen Natur.</p>",
+            "highlight_text": "<p>Reinvestition in Bildung, Infrastruktur und Naturschutz vor Ort.</p>",
+            "disclaimer_text": "*Teil des Kaadu Gewinnbeteiligungsmodells in Vazhakulam, Kerala.",
+            "image_alt": "",
+            "sticker_text": "",
+            "sticker_rotate": -10
+          }
+        }
+      },
+      "block_order": [
+        "stakeholder_xzg9DB",
+        "stakeholder_qdKADr",
+        "stakeholder_4iVqpn",
+        "stakeholder_ykEEYQ"
+      ],
+      "name": "Problem Section",
+      "settings": {
+        "eyebrow_tag": "SNACK LIKE YOU GIVE A DAMN",
+        "heading_line1": "Wer profitiert",
+        "heading_line2": "von Kaadu?",
+        "intro_text": "<p>Von der Ananasfarm bis in die Packung: Kaadu funktioniert nur, weil alle fair beteiligt sind — in Vazhakulam, Kerala.</p>",
+        "background_color": "sky",
+        "color_scheme": ""
+      }
+    },
     "custom_video_showcase_yWKW93": {
       "type": "custom-video-showcase",
       "name": "Custom Video Showcase",
@@ -1100,6 +1172,7 @@
   },
   "order": [
     "main",
+    "kaadu_problem_section_3BNCTG",
     "custom_video_showcase_yWKW93",
     "kaadu_custom_distribution_mkKaw6",
     "pack_selector_cEiAYy",
