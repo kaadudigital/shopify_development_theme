@@ -642,6 +642,7 @@
     "custom_rich_text_with_image_yBcjeG": {
       "type": "custom-rich-text-with-image",
       "custom_css": [
+        ".kaadu-rtwi__image {position: relative; transform: translateX(-10px);}",
         "p {color: black;}",
         ".kaadu-rtwi__outer {padding-bottom: 16px;}",
         "@media screen and (max-width: 767px) {.kaadu-rtwi__outer {padding-bottom: 2px; }}"
