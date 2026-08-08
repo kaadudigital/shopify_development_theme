@@ -16,14 +16,9 @@
       <span class="kaadu-problem__eyebrow-tag caption">{{ section.settings.eyebrow_tag | escape }}</span>
     {%- endif -%}
 
-    {%- if section.settings.heading_line1 != blank or section.settings.heading_line2 != blank -%}
+    {%- if section.settings.heading != blank -%}
       <h2 class="kaadu-problem__heading h2">
-        {%- if section.settings.heading_line1 != blank -%}
-          <span class="kaadu-problem__heading-line kaadu-problem__heading-line--violet">{{ section.settings.heading_line1 | escape }}</span>
-        {%- endif -%}
-        {%- if section.settings.heading_line2 != blank -%}
-          <span class="kaadu-problem__heading-line kaadu-problem__heading-line--red">{{ section.settings.heading_line2 | escape }}</span>
-        {%- endif -%}
+        {{ section.settings.heading | escape | replace: '[br]', '<br>' | replace: '[nbsp]', '&nbsp;' }}
       </h2>
     {%- endif -%}
 
@@ -90,13 +85,22 @@
                   <div class="kaadu-problem__img-placeholder" aria-hidden="true"></div>
                 {%- endif -%}
 
-                {%- if block.settings.sticker_text != blank -%}
-                  <div
-                    class="kaadu-problem__sticker caption"
-                    style="--kaadu-problem-sticker-rotate: {{ block.settings.sticker_rotate }}deg;"
-                  >
-                    {{ block.settings.sticker_text | escape }}
-                  </div>
+                {%- if block.settings.sticker_image != blank -%}
+                  {%- assign sticker_alt_text = block.settings.sticker_alt | escape -%}
+                  {%- capture sticker_style -%}
+                    --kaadu-problem-sticker-width: {{ block.settings.sticker_width }}px; --kaadu-problem-sticker-rotate: {{ block.settings.sticker_rotate }}deg;
+                  {%- endcapture -%}
+                  {{
+                    block.settings.sticker_image
+                    | image_url: width: 400
+                    | image_tag:
+                      class: 'kaadu-problem__sticker',
+                      loading: 'lazy',
+                      alt: sticker_alt_text,
+                      width: block.settings.sticker_image.width,
+                      height: block.settings.sticker_image.height,
+                      style: sticker_style
+                  }}
                 {%- endif -%}
               </div>
             </div>
@@ -144,23 +148,10 @@
       text-transform: uppercase;
       letter-spacing: 0.02em;
       padding: var(--space-1) var(--space-3);
-      border-radius: var(--space-2);
     }
 
     #shopify-section-{{ section.id }} .kaadu-problem__heading {
       margin: var(--space-4) 0 0;
-    }
-
-    #shopify-section-{{ section.id }} .kaadu-problem__heading-line {
-      display: block;
-    }
-
-    #shopify-section-{{ section.id }} .kaadu-problem__heading-line--violet {
-      color: var(--color-violet);
-    }
-
-    #shopify-section-{{ section.id }} .kaadu-problem__heading-line--red {
-      color: var(--color-red);
     }
 
     #shopify-section-{{ section.id }} .kaadu-problem__intro {
@@ -241,7 +232,6 @@
 
     #shopify-section-{{ section.id }} .kaadu-problem__frame {
       position: relative;
-      border: 2px solid var(--color-black);
       background-color: var(--color-cream);
       box-shadow: var(--space-2) var(--space-2) 0 0 var(--color-red);
       aspect-ratio: 4 / 3;
@@ -261,15 +251,10 @@
       position: absolute;
       right: var(--space-4);
       bottom: var(--space-4);
+      width: var(--kaadu-problem-sticker-width, 140px);
       max-width: 42%;
-      background-color: var(--color-yellow);
-      color: var(--color-red);
-      border: 2px solid var(--color-black);
-      border-radius: 50%;
-      font-weight: 700;
-      text-align: center;
-      text-transform: uppercase;
-      padding: var(--space-3) var(--space-4);
+      height: auto;
+      object-fit: contain;
       transform: rotate(var(--kaadu-problem-sticker-rotate, -10deg));
     }
 
@@ -291,7 +276,6 @@
     #shopify-section-{{ section.id }} .kaadu-problem__highlight {
       margin-top: var(--space-6);
       background-color: var(--color-lime);
-      border-radius: var(--radius-card);
       padding: var(--space-4) var(--space-6);
     }
 
@@ -403,15 +387,10 @@
     },
     {
       "type": "text",
-      "id": "heading_line1",
-      "label": "Heading — line 1 (violet)",
-      "default": "Wer profitiert"
-    },
-    {
-      "type": "text",
-      "id": "heading_line2",
-      "label": "Heading — line 2 (red)",
-      "default": "von Kaadu?"
+      "id": "heading",
+      "label": "Heading",
+      "default": "Wer profitiert[br]von Kaadu?",
+      "info": "Use [br] for a line break and [nbsp] for a non-breaking space."
     },
     {
       "type": "richtext",
@@ -511,10 +490,26 @@
           "content": "Sticker (optional)"
         },
         {
+          "type": "image_picker",
+          "id": "sticker_image",
+          "label": "Sticker image",
+          "info": "PNG or SVG. Shown bottom-right on the image, e.g. a pun sticker."
+        },
+        {
           "type": "text",
-          "id": "sticker_text",
-          "label": "Sticker text",
-          "info": "Short pun sticker shown bottom-right on the image, e.g. \"I find you so a-peeling\"."
+          "id": "sticker_alt",
+          "label": "Sticker alt text",
+          "info": "Leave blank if the sticker is purely decorative."
+        },
+        {
+          "type": "range",
+          "id": "sticker_width",
+          "label": "Sticker width",
+          "min": 64,
+          "max": 256,
+          "step": 8,
+          "unit": "px",
+          "default": 140
         },
         {
           "type": "range",
@@ -541,7 +536,6 @@
             "body_text": "<p>In unserem Betrieb arbeiten ausschliesslich Frauen aus einkommensschwachen Familien der Region — mit einem Lohn von mindestens +50% über Marktlohn*, plus Pension, Versicherung und Gewinnbeteiligung.</p>",
             "highlight_text": "<p>Lohn +50%*, Pension, Versicherung, Gewinnbeteiligung — langfristig Mitbesitz.</p>",
             "disclaimer_text": "*Im Vergleich zu vergleichbarer Arbeit in der Region Vazhakulam, Kerala.",
-            "sticker_text": "I find you so a-peeling",
             "sticker_rotate": -10
           }
         },
