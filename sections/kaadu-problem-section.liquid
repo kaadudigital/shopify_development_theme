@@ -13,7 +13,7 @@
   <div class="kaadu-problem__container">
 
     {%- if section.settings.eyebrow_tag != blank -%}
-      <span class="kaadu-problem__eyebrow-tag caption">{{ section.settings.eyebrow_tag | escape }}</span>
+      <span class="kaadu-problem__eyebrow-tag caption bg-scheme-accent-1 text-scheme-accent-1-contrast">{{ section.settings.eyebrow_tag | escape }}</span>
     {%- endif -%}
 
     {%- if section.settings.heading != blank -%}
@@ -29,7 +29,12 @@
     {%- assign stakeholders = section.blocks | where: 'type', 'stakeholder' -%}
 
     {%- if stakeholders.size > 0 -%}
-      <div class="kaadu-problem__tabs" role="tablist" aria-label="{{ 'sections.kaadu_problem.tablist_label' | t: default: 'Zielgruppe auswählen' }}">
+      <div
+        class="kaadu-problem__tabs"
+        role="tablist"
+        aria-label="{{ 'sections.kaadu_problem.tablist_label' | t: default: 'Zielgruppe auswählen' }}"
+        data-color-scheme="{{ section.settings.tab_color_scheme }}"
+      >
         {%- for block in stakeholders -%}
           <button
             type="button"
@@ -110,14 +115,17 @@
                 <p class="kaadu-problem__panel-eyebrow btn-label">{{ block.settings.eyebrow | escape }}</p>
               {%- endif -%}
 
-              <h3 class="kaadu-problem__panel-heading h4-subsection-heading">{{ block.settings.label | escape }}</h3>
+              <h3 class="kaadu-problem__panel-heading h4-subsection-heading text-scheme-accent-1">{{ block.settings.label | escape }}</h3>
 
               {%- if block.settings.body_text != blank -%}
                 <div class="kaadu-problem__panel-body rte body">{{ block.settings.body_text }}</div>
               {%- endif -%}
 
               {%- if block.settings.highlight_text != blank -%}
-                <div class="kaadu-problem__highlight">
+                <div
+                  class="kaadu-problem__highlight bg-scheme-background text-scheme-text"
+                  data-color-scheme="{{ section.settings.highlight_color_scheme }}"
+                >
                   <div class="kaadu-problem__highlight-text rte body-large">{{ block.settings.highlight_text }}</div>
                 </div>
               {%- endif -%}
@@ -142,8 +150,6 @@
 
     #shopify-section-{{ section.id }} .kaadu-problem__eyebrow-tag {
       display: inline-block;
-      background-color: var(--color-red);
-      color: var(--color-cream);
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.02em;
@@ -186,9 +192,9 @@
       max-width: 100%;
       overflow-wrap: anywhere;
       white-space: nowrap;
-      background-color: var(--color-cream);
-      color: var(--color-red);
-      border: 2px solid var(--color-red);
+      background-color: rgb(var(--color-scheme-text));
+      color: rgb(var(--color-scheme-background));
+      border: 2px solid rgb(var(--color-scheme-background));
       border-radius: var(--radius-btn);
       box-shadow: var(--shadow-md);
       padding: var(--space-3) var(--space-4);
@@ -197,8 +203,8 @@
     }
 
     #shopify-section-{{ section.id }} .kaadu-problem__tab[aria-selected="true"] {
-      background-color: var(--color-red);
-      color: var(--color-cream);
+      background-color: rgb(var(--color-scheme-background));
+      color: rgb(var(--color-scheme-text));
     }
 
     #shopify-section-{{ section.id }} .kaadu-problem__tab:hover {
@@ -232,7 +238,7 @@
     #shopify-section-{{ section.id }} .kaadu-problem__frame {
       position: relative;
       background-color: var(--color-cream);
-      box-shadow: var(--space-2) var(--space-2) 0 0 var(--color-red);
+      box-shadow: var(--space-2) var(--space-2) 0 0 rgb(var(--color-scheme-accent-1));
       aspect-ratio: 4 / 3;
       overflow: hidden;
     }
@@ -264,7 +270,6 @@
 
     #shopify-section-{{ section.id }} .kaadu-problem__panel-heading {
       margin: 0;
-      color: var(--color-red);
     }
 
     #shopify-section-{{ section.id }} .kaadu-problem__panel-body {
@@ -273,12 +278,10 @@
 
     #shopify-section-{{ section.id }} .kaadu-problem__highlight {
       margin-top: var(--space-6);
-      background-color: var(--color-lime);
       padding: var(--space-4) var(--space-6);
     }
 
     #shopify-section-{{ section.id }} .kaadu-problem__highlight-text {
-      color: var(--color-black);
       font-weight: 700;
     }
 
@@ -324,51 +327,65 @@
 </section>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.kaadu-problem').forEach(function (root) {
+  (function () {
+    if (window.kaaduProblemTabsInit) return;
+    window.kaaduProblemTabsInit = true;
+
+    function activate(root, index, moveFocus) {
       var tabs = Array.prototype.slice.call(root.querySelectorAll('[data-kaadu-problem-tab]'));
       var panels = Array.prototype.slice.call(root.querySelectorAll('[data-kaadu-problem-panel]'));
 
-      if (!tabs.length || !panels.length) return;
-
-      function activate(index, moveFocus) {
-        tabs.forEach(function (tab, i) {
-          var isActive = i === index;
-          tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
-          tab.tabIndex = isActive ? 0 : -1;
-          if (isActive && moveFocus) tab.focus();
-        });
-        panels.forEach(function (panel, i) {
-          var isActive = i === index;
-          panel.classList.toggle('is-active', isActive);
-          if (isActive) {
-            panel.removeAttribute('hidden');
-          } else {
-            panel.setAttribute('hidden', '');
-          }
-        });
-      }
-
       tabs.forEach(function (tab, i) {
-        tab.addEventListener('click', function () {
-          activate(i, false);
-        });
-
-        tab.addEventListener('keydown', function (e) {
-          var newIndex = null;
-          if (e.key === 'ArrowRight') newIndex = (i + 1) % tabs.length;
-          if (e.key === 'ArrowLeft') newIndex = (i - 1 + tabs.length) % tabs.length;
-          if (e.key === 'Home') newIndex = 0;
-          if (e.key === 'End') newIndex = tabs.length - 1;
-
-          if (newIndex !== null) {
-            e.preventDefault();
-            activate(newIndex, true);
-          }
-        });
+        var isActive = i === index;
+        tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        tab.tabIndex = isActive ? 0 : -1;
+        if (isActive && moveFocus) tab.focus();
       });
+      panels.forEach(function (panel, i) {
+        var isActive = i === index;
+        panel.classList.toggle('is-active', isActive);
+        if (isActive) {
+          panel.removeAttribute('hidden');
+        } else {
+          panel.setAttribute('hidden', '');
+        }
+      });
+    }
+
+    // Event delegation on document: survives Shopify theme-editor re-renders,
+    // which replace a section's DOM via AJAX without re-running its inline script tag.
+    document.addEventListener('click', function (e) {
+      var tab = e.target.closest && e.target.closest('[data-kaadu-problem-tab]');
+      if (!tab) return;
+      var root = tab.closest('.kaadu-problem');
+      if (!root) return;
+      var tabs = Array.prototype.slice.call(root.querySelectorAll('[data-kaadu-problem-tab]'));
+      var index = tabs.indexOf(tab);
+      if (index === -1) return;
+      activate(root, index, false);
     });
-  });
+
+    document.addEventListener('keydown', function (e) {
+      var tab = e.target.closest && e.target.closest('[data-kaadu-problem-tab]');
+      if (!tab) return;
+      var root = tab.closest('.kaadu-problem');
+      if (!root) return;
+      var tabs = Array.prototype.slice.call(root.querySelectorAll('[data-kaadu-problem-tab]'));
+      var index = tabs.indexOf(tab);
+      if (index === -1) return;
+
+      var newIndex = null;
+      if (e.key === 'ArrowRight') newIndex = (index + 1) % tabs.length;
+      if (e.key === 'ArrowLeft') newIndex = (index - 1 + tabs.length) % tabs.length;
+      if (e.key === 'Home') newIndex = 0;
+      if (e.key === 'End') newIndex = tabs.length - 1;
+
+      if (newIndex !== null) {
+        e.preventDefault();
+        activate(root, newIndex, true);
+      }
+    });
+  })();
 </script>
 
 {% schema %}
@@ -380,7 +397,7 @@
       "id": "eyebrow_tag",
       "label": "Eyebrow tag",
       "default": "SNACK LIKE YOU GIVE A DAMN",
-      "info": "Small red pill label above the heading."
+      "info": "Small pill label above the heading. Color follows the section's color scheme accent."
     },
     {
       "type": "text",
@@ -404,6 +421,20 @@
       "id": "color_scheme",
       "label": "Color scheme",
       "default": "scheme1"
+    },
+    {
+      "type": "color_scheme",
+      "id": "tab_color_scheme",
+      "label": "Tab button color scheme",
+      "default": "scheme2",
+      "info": "The active tab uses this scheme's background/text pair; the inactive tabs use it inverted (outline style)."
+    },
+    {
+      "type": "color_scheme",
+      "id": "highlight_color_scheme",
+      "label": "Highlight box color scheme",
+      "default": "scheme5",
+      "info": "Background and text for the bold statement box in each panel."
     }
   ],
   "blocks": [
@@ -433,7 +464,7 @@
           "type": "richtext",
           "id": "highlight_text",
           "label": "Highlight box text",
-          "info": "Bold statement on a lime background, e.g. key benefits."
+          "info": "Bold statement, e.g. key benefits. Background/text color set by the Highlight box color scheme above."
         },
         {
           "type": "text",
