@@ -388,7 +388,8 @@
       "settings": {
         "text": "ITS NOT FAIR!",
         "repeat_text": true,
-        "shape_between_text": "custom_star",
+        "shape_between_text": "image",
+        "between_text_image": "shopify://shop_images/Kaadu_favicon_purple_RGB.png",
         "shape_size": 1.5,
         "animate_shape_between_text": true,
         "link": "",
