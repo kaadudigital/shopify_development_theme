@@ -92,7 +92,8 @@
         "heading": "Wer profitiert[br]von Kaadu?",
         "intro_text": "<p>Von der Ananasfarm bis in die Packung: Kaadu funktioniert nur, weil alle fair beteiligt sind — in Vazhakulam, Kerala.</p>",
         "color_scheme": "scheme2",
-        "highlight_color_scheme": "scheme6"
+        "tab_active_color": "#ACFF64",
+        "highlight_color_scheme": "scheme5"
       }
     },
     "custom_video_showcase_yWKW93": {
