@@ -18,6 +18,7 @@
   #shopify-section-{{ section.id }} .scrolling-text__shape-svg {
     height: var(--scrolling-text-shape-size);
     width: var(--scrolling-text-shape-size);
+    object-fit: contain;
   }
 {%- endstyle -%}
 
@@ -64,6 +65,10 @@
           "label": "custom star"
         },
         {
+          "value": "image",
+          "label": "Image"
+        },
+        {
           "value": "diamond",
           "label": "t:common.options.diamond.label"
         },
@@ -87,13 +92,19 @@
       "default": "10_point_star"
     },
     {
+      "type": "image_picker",
+      "id": "between_text_image",
+      "label": "Image",
+      "info": "Used when \"Image\" is selected above."
+    },
+    {
       "type": "range",
       "id": "shape_size",
       "min": 0.2,
       "max": 1.5,
       "step": 0.1,
       "unit": "em",
-      "label": "Shape size",
+      "label": "Shape / image size",
       "info": "Relative to the text height (1em = headline height).",
       "default": 0.6
     },
@@ -101,7 +112,8 @@
       "type": "checkbox",
       "id": "animate_shape_between_text",
       "default": true,
-      "label": "t:common.settings.animate_shape_between_text.label"
+      "label": "t:common.settings.animate_shape_between_text.label",
+      "info": "Does not apply to an image."
     },
     {
       "type": "header",

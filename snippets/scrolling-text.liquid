@@ -40,7 +40,11 @@
   <div class="flex shrink-0 grow-0 items-center {{ font }}">
     {%- if repeat_text -%}
       <span class="{{ text_size_class }} {% if font contains 'heading' and section.settings.apply_effects %}heading-effects{% endif %}">{{ text }}</span>
-      {%- if shape_between_text != 'none' -%}
+      {%- if shape_between_text == 'image' and section.settings.between_text_image -%}
+        <span class="flex-shrink-0 px-2 text-current">
+          {{- section.settings.between_text_image | image_url: width: 200 | image_tag: class: 'scrolling-text__shape-svg', widths: '100, 200, 300', alt: '', loading: 'lazy' -}}
+        </span>
+      {%- elsif shape_between_text != 'none' and shape_between_text != 'image' -%}
         <span class="flex-shrink-0 px-2 text-current">
           <svg class="scrolling-text__shape-svg h-4 w-4 {% if section.settings.animate_shape_between_text %}rotate-anim{% endif %}{% if shape_between_text == 'triangle' %} origin-[50%_66.66%]{% endif %}" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
             {%- case shape_between_text -%}
