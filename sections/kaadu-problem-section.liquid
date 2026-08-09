@@ -140,10 +140,6 @@
   </div>
 
   {%- style -%}
-    #shopify-section-{{ section.id }} {
-      --kaadu-problem-tab-active-bg: {{ section.settings.tab_active_color }};
-    }
-
     #shopify-section-{{ section.id }} .kaadu-problem__container {
       max-width: var(--container-max);
       margin-inline: auto;
@@ -206,9 +202,9 @@
     }
 
     #shopify-section-{{ section.id }} .kaadu-problem__tab[aria-selected="true"] {
-      background-color: var(--kaadu-problem-tab-active-bg);
-      color: rgb(var(--color-scheme-text-contrast));
-      border-color: var(--kaadu-problem-tab-active-bg);
+      background-color: rgb(var(--color-scheme-accent-1));
+      color: rgb(var(--color-scheme-accent-1-contrast));
+      border-color: rgb(var(--color-scheme-accent-1));
     }
 
     #shopify-section-{{ section.id }} .kaadu-problem__tab:hover {
@@ -424,14 +420,7 @@
       "id": "color_scheme",
       "label": "Color scheme",
       "default": "scheme1",
-      "info": "Also styles the heading, panel eyebrow/heading, inactive tabs, and image shadow via this scheme's text color."
-    },
-    {
-      "type": "color",
-      "id": "tab_active_color",
-      "label": "Active tab color",
-      "default": "#AE0000",
-      "info": "Background of whichever tab is currently selected. Inactive tabs use the color scheme above."
+      "info": "Also styles the heading, panel eyebrow/heading, image shadow (text color), and tabs — active via accent, inactive via text."
     },
     {
       "type": "color_scheme",
