@@ -32,7 +32,8 @@
             "disclaimer_text": "*Im Vergleich zu vergleichbarer Arbeit in der Region Vazhakulam, Kerala.",
             "image": "shopify://shop_images/52f2f8584ac253803e2a8b475558b239c4b73ea3.jpg",
             "image_alt": "",
-            "sticker_text": "",
+            "sticker_alt": "",
+            "sticker_width": 136,
             "sticker_rotate": -14
           }
         },
@@ -45,7 +46,8 @@
             "highlight_text": "<p>Preis +30–40%*, garantierte Abnahme, langfristige Partnerschaft.</p>",
             "disclaimer_text": "*Im Vergleich zu marktüblichen Ankaufspreisen in der Region Vazhakulam, Kerala.",
             "image_alt": "",
-            "sticker_text": "",
+            "sticker_alt": "",
+            "sticker_width": 136,
             "sticker_rotate": -10
           }
         },
@@ -58,7 +60,8 @@
             "highlight_text": "<p>Fairer Tageslohn, Schutzausrüstung, Gemeinschaftsfonds.</p>",
             "disclaimer_text": "*Im Vergleich zu vergleichbarer Erntearbeit in der Region Vazhakulam, Kerala.",
             "image_alt": "",
-            "sticker_text": "",
+            "sticker_alt": "",
+            "sticker_width": 136,
             "sticker_rotate": -10
           }
         },
@@ -71,7 +74,8 @@
             "highlight_text": "<p>Reinvestition in Bildung, Infrastruktur und Naturschutz vor Ort.</p>",
             "disclaimer_text": "*Teil des Kaadu Gewinnbeteiligungsmodells in Vazhakulam, Kerala.",
             "image_alt": "",
-            "sticker_text": "",
+            "sticker_alt": "",
+            "sticker_width": 136,
             "sticker_rotate": -10
           }
         }
@@ -85,11 +89,10 @@
       "name": "Problem Section",
       "settings": {
         "eyebrow_tag": "SNACK LIKE YOU GIVE A DAMN",
-        "heading_line1": "Wer profitiert",
-        "heading_line2": "von Kaadu?",
+        "heading": "Wer profitiert[br]von Kaadu?",
         "intro_text": "<p>Von der Ananasfarm bis in die Packung: Kaadu funktioniert nur, weil alle fair beteiligt sind — in Vazhakulam, Kerala.</p>",
-        "background_color": "sky",
-        "color_scheme": ""
+        "color_scheme": "scheme2",
+        "highlight_color_scheme": "scheme6"
       }
     },
     "custom_video_showcase_yWKW93": {
