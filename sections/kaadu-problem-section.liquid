@@ -7,7 +7,7 @@
 {%- endcomment -%}
 
 <section
-  class="kaadu-problem bg-{{ section.settings.background_color }}"
+  class="kaadu-problem bg-scheme-background text-scheme-text"
   data-color-scheme="{{ section.settings.color_scheme }}"
 >
   <div class="kaadu-problem__container">
@@ -157,7 +157,6 @@
     #shopify-section-{{ section.id }} .kaadu-problem__intro {
       margin-top: var(--space-4);
       max-width: 640px;
-      color: var(--color-near-black);
     }
 
     #shopify-section-{{ section.id }} .kaadu-problem__tabs {
@@ -270,7 +269,6 @@
 
     #shopify-section-{{ section.id }} .kaadu-problem__panel-body {
       margin-top: var(--space-4);
-      color: var(--color-near-black);
     }
 
     #shopify-section-{{ section.id }} .kaadu-problem__highlight {
@@ -286,7 +284,6 @@
 
     #shopify-section-{{ section.id }} .kaadu-problem__disclaimer {
       margin-top: var(--space-3);
-      color: var(--color-near-black);
     }
 
     @media (min-width: 769px) {
@@ -400,34 +397,13 @@
     },
     {
       "type": "header",
-      "content": "Background"
-    },
-    {
-      "type": "select",
-      "id": "background_color",
-      "label": "Background color",
-      "options": [
-        { "value": "sky", "label": "Sky" },
-        { "value": "pink", "label": "Pink" },
-        { "value": "violet", "label": "Violet" },
-        { "value": "cream", "label": "Cream" },
-        { "value": "lime", "label": "Lime" },
-        { "value": "yellow", "label": "Yellow" },
-        { "value": "orange", "label": "Orange" },
-        { "value": "red", "label": "Red" }
-      ],
-      "default": "sky"
-    },
-    {
-      "type": "header",
       "content": "Color"
     },
     {
       "type": "color_scheme",
       "id": "color_scheme",
       "label": "Color scheme",
-      "default": "scheme1",
-      "info": "Used for theme-editor preview only; visible background comes from the setting above."
+      "default": "scheme1"
     }
   ],
   "blocks": [
