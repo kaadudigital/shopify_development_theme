@@ -151,7 +151,7 @@
             onclick="packSelector.selectOption('{{ variant.id }}')"
           >
             <span class="pack-option__check" aria-hidden="true"></span>
-            <span class="pack-option__label">{{ variant.title }}</span>
+            <span class="pack-option__label btn-label">{{ variant.title }}</span>
           </button>
         {%- endfor -%}
       {%- else -%}
@@ -171,7 +171,7 @@
               onclick="packSelector.selectOption('{{ i }}')"
             >
               <span class="pack-option__check" aria-hidden="true"></span>
-              <span class="pack-option__label">{{ option_label }}</span>
+              <span class="pack-option__label btn-label">{{ option_label }}</span>
             </button>
           {%- endif -%}
         {%- endfor -%}
@@ -224,7 +224,7 @@
                 onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();packSelector.selectTier('{{ allocation.selling_plan.id }}');}"
               >
                 <span class="pack-tier__info">
-                  <span class="pack-tier__title">{{ allocation.selling_plan.name }}</span>
+                  <span class="pack-tier__title btn-label">{{ allocation.selling_plan.name }}</span>
                   {%- if allocation.selling_plan.description != blank -%}
                     <span class="pack-tier__subtitle caption">{{ allocation.selling_plan.description }}</span>
                   {%- endif -%}
@@ -285,7 +285,7 @@
                   onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();packSelector.selectTier('{{ i }}');}"
                 >
                   <span class="pack-tier__info">
-                    <span class="pack-tier__title">{{ tier_title }}</span>
+                    <span class="pack-tier__title btn-label">{{ tier_title }}</span>
                     {%- if tier_subtitle != blank -%}
                       <span class="pack-tier__subtitle caption">{{ tier_subtitle }}</span>
                     {%- endif -%}
@@ -711,11 +711,7 @@
     transform: rotate(45deg);
   }
   .pack-option__label {
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: 14px;
     color: var(--color-near-black);
-    text-transform: uppercase;
   }
 
   /* Frequency block */
@@ -837,11 +833,7 @@
     overflow-wrap: break-word;
   }
   .pack-tier__title {
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: 14px;
     color: var(--color-near-black);
-    text-transform: uppercase;
   }
   .pack-tier__subtitle {
     color: var(--color-near-black);
