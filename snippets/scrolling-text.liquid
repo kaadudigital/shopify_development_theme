@@ -34,6 +34,11 @@
   else
     assign text_size_class = 'text-sm'
   endif
+
+  assign image_shape_class = 'scrolling-text__shape-svg'
+  if section.settings.animate_image_between_text
+    assign image_shape_class = image_shape_class | append: ' rotate-anim'
+  endif
 %}
 
 {%- capture scrolling_text -%}
@@ -42,7 +47,7 @@
       <span class="{{ text_size_class }} {% if font contains 'heading' and section.settings.apply_effects %}heading-effects{% endif %}">{{ text }}</span>
       {%- if shape_between_text == 'image' and section.settings.between_text_image -%}
         <span class="flex-shrink-0 px-2 text-current">
-          {{- section.settings.between_text_image | image_url: width: 200 | image_tag: class: 'scrolling-text__shape-svg', widths: '100, 200, 300', alt: '', loading: 'lazy' -}}
+          {{- section.settings.between_text_image | image_url: width: 200 | image_tag: class: image_shape_class, widths: '100, 200, 300', alt: '', loading: 'lazy' -}}
         </span>
       {%- elsif shape_between_text != 'none' and shape_between_text != 'image' -%}
         <span class="flex-shrink-0 px-2 text-current">
@@ -129,7 +134,7 @@
 </div>
 
 <style>
-  {% if section.settings.animate_shape_between_text %}
+  {% if section.settings.animate_shape_between_text or section.settings.animate_image_between_text %}
   @media (prefers-reduced-motion: no-preference) {
     #scrolling-text-{{ section.id }} .rotate-anim {
       animation-iteration-count: infinite;
