@@ -6,6 +6,8 @@
   See Figma node 322:203.
 {%- endcomment -%}
 
+{%- assign tab_active_scheme = settings.color_schemes[section.settings.tab_active_color_scheme] -%}
+
 <section
   class="kaadu-problem bg-scheme-background text-scheme-text"
   data-color-scheme="{{ section.settings.color_scheme }}"
@@ -29,11 +31,17 @@
     {%- assign stakeholders = section.blocks | where: 'type', 'stakeholder' -%}
 
     {%- if stakeholders.size > 0 -%}
+      {%- capture tabs_style -%}
+        {%- if tab_active_scheme -%}
+          --kaadu-problem-tab-active-bg: {{ tab_active_scheme.settings.background.red }}, {{ tab_active_scheme.settings.background.green }}, {{ tab_active_scheme.settings.background.blue }};
+          --kaadu-problem-tab-active-text: {{ tab_active_scheme.settings.text.red }}, {{ tab_active_scheme.settings.text.green }}, {{ tab_active_scheme.settings.text.blue }};
+        {%- endif -%}
+      {%- endcapture -%}
       <div
         class="kaadu-problem__tabs"
         role="tablist"
         aria-label="{{ 'sections.kaadu_problem.tablist_label' | t: default: 'Zielgruppe auswählen' }}"
-        data-color-scheme="{{ section.settings.tab_color_scheme }}"
+        style="{{ tabs_style }}"
       >
         {%- for block in stakeholders -%}
           <button
@@ -112,7 +120,7 @@
 
             <div class="kaadu-problem__content">
               {%- if block.settings.eyebrow != blank -%}
-                <p class="kaadu-problem__panel-eyebrow btn-label">{{ block.settings.eyebrow | escape }}</p>
+                <p class="kaadu-problem__panel-eyebrow btn-label text-scheme-text">{{ block.settings.eyebrow | escape }}</p>
               {%- endif -%}
 
               <h3 class="kaadu-problem__panel-heading h4-subsection-heading text-scheme-accent-1">{{ block.settings.label | escape }}</h3>
@@ -192,9 +200,9 @@
       max-width: 100%;
       overflow-wrap: anywhere;
       white-space: nowrap;
-      background-color: rgb(var(--color-scheme-text));
-      color: rgb(var(--color-scheme-background));
-      border: 2px solid rgb(var(--color-scheme-background));
+      background-color: rgb(var(--color-scheme-accent-1-contrast));
+      color: rgb(var(--color-scheme-accent-1));
+      border: 2px solid rgb(var(--color-scheme-accent-1));
       border-radius: var(--radius-btn);
       box-shadow: var(--shadow-md);
       padding: var(--space-3) var(--space-4);
@@ -203,8 +211,9 @@
     }
 
     #shopify-section-{{ section.id }} .kaadu-problem__tab[aria-selected="true"] {
-      background-color: rgb(var(--color-scheme-background));
-      color: rgb(var(--color-scheme-text));
+      background-color: rgb(var(--kaadu-problem-tab-active-bg, var(--color-scheme-accent-1)));
+      color: rgb(var(--kaadu-problem-tab-active-text, var(--color-scheme-accent-1-contrast)));
+      border-color: rgb(var(--kaadu-problem-tab-active-bg, var(--color-scheme-accent-1)));
     }
 
     #shopify-section-{{ section.id }} .kaadu-problem__tab:hover {
@@ -265,7 +274,6 @@
 
     #shopify-section-{{ section.id }} .kaadu-problem__panel-eyebrow {
       margin: 0 0 var(--space-2);
-      color: var(--color-violet);
     }
 
     #shopify-section-{{ section.id }} .kaadu-problem__panel-heading {
@@ -420,14 +428,15 @@
       "type": "color_scheme",
       "id": "color_scheme",
       "label": "Color scheme",
-      "default": "scheme1"
+      "default": "scheme1",
+      "info": "Also styles the eyebrow tag, heading, tab outlines, and image shadow via this scheme's accent color."
     },
     {
       "type": "color_scheme",
-      "id": "tab_color_scheme",
-      "label": "Tab button color scheme",
+      "id": "tab_active_color_scheme",
+      "label": "Active tab color scheme",
       "default": "scheme2",
-      "info": "The active tab uses this scheme's background/text pair; the inactive tabs use it inverted (outline style)."
+      "info": "Background/text for whichever tab is currently selected. Inactive tabs use the color scheme above."
     },
     {
       "type": "color_scheme",
@@ -453,7 +462,7 @@
           "type": "text",
           "id": "eyebrow",
           "label": "Panel eyebrow",
-          "info": "Small violet label above the panel heading, e.g. \"Im Betrieb\"."
+          "info": "Small label above the panel heading, e.g. \"Im Betrieb\". Color follows the section's color scheme."
         },
         {
           "type": "richtext",
