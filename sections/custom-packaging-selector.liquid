@@ -12,6 +12,12 @@
       assign has_selling_plans = true
     endif
   endif
+
+  assign nav_shape_style = section.settings.nav_shape_style | default: 'default'
+  assign nav_shape_image = section.settings.nav_shape_image
+  if nav_shape_style == 'custom' and nav_shape_image == blank
+    assign nav_shape_style = 'default'
+  endif
 -%}
 
 <div
@@ -19,13 +25,20 @@
   class="pack-selector bg-scheme-background text-scheme-text"
   data-color-scheme="{{ section.settings.color_scheme }}"
 >
+  {%- if nav_shape_style == 'custom' -%}
+    {%- style -%}
+      #{{ section.id }} {
+        --nav-shape: url('{{ nav_shape_image | image_url: width: 200 }}');
+      }
+    {%- endstyle -%}
+  {%- endif -%}
   <div class="pack-selector__layout">
 
     {%- comment -%} Product media / gallery {%- endcomment -%}
     {%- assign product_image_media = product.media | where: 'media_type', 'image' -%}
     <div class="pack-media">
       {%- if product != blank and product_image_media.size > 0 -%}
-        <div class="pack-media__main">
+        <div class="pack-media__main" data-nav-shape="{{ nav_shape_style }}">
           {%- for media in product_image_media -%}
             <div class="pack-media__mainItem{% if forloop.first %} is-active{% endif %}" data-media-index="{{ media.id }}">
               <picture>
@@ -77,7 +90,7 @@
             {%- assign manual_media_count = manual_media_count | plus: 1 -%}
           {%- endif -%}
         {%- endfor -%}
-        <div class="pack-media__main">
+        <div class="pack-media__main" data-nav-shape="{{ nav_shape_style }}">
           {%- for i in media_indexes -%}
             {%- assign media_key = "gallery_image_" | append: i -%}
             {%- assign media_image = section.settings[media_key] -%}
@@ -586,6 +599,14 @@
   .pack-media__nav:hover {
     transform: translateY(-50%) scale(1.05);
   }
+  .pack-media__main[data-nav-shape="custom"] .pack-media__nav {
+    background: transparent;
+    background-image: var(--nav-shape);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
+    border: none;
+  }
   .pack-media__nav--prev {
     left: var(--space-3);
   }
@@ -1016,14 +1037,10 @@
     }
     .pack-qty[data-shape-mobile="custom"] .pack-qty__shape--mobile {
       display: block;
-      -webkit-mask-image: var(--qty-shape-mobile);
-      mask-image: var(--qty-shape-mobile);
-      -webkit-mask-repeat: no-repeat;
-      mask-repeat: no-repeat;
-      -webkit-mask-position: center;
-      mask-position: center;
-      -webkit-mask-size: 100% 100%;
-      mask-size: 100% 100%;
+      background-image: var(--qty-shape-mobile);
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 100% 100%;
     }
   }
   @media (min-width: 769px) {
@@ -1049,14 +1066,10 @@
     }
     .pack-qty[data-shape-desktop="custom"] .pack-qty__shape--desktop {
       display: block;
-      -webkit-mask-image: var(--qty-shape-desktop);
-      mask-image: var(--qty-shape-desktop);
-      -webkit-mask-repeat: no-repeat;
-      mask-repeat: no-repeat;
-      -webkit-mask-position: center;
-      mask-position: center;
-      -webkit-mask-size: 100% 100%;
-      mask-size: 100% 100%;
+      background-image: var(--qty-shape-desktop);
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 100% 100%;
     }
   }
   .pack-qty__label,
@@ -1320,6 +1333,19 @@
     { "type": "image_picker", "id": "gallery_image_5", "label": "Gallery Image 5" },
     { "type": "image_picker", "id": "gallery_image_6", "label": "Gallery Image 6" },
 
+    { "type": "header", "content": "Media Navigation Arrows" },
+    {
+      "type": "select",
+      "id": "nav_shape_style",
+      "label": "Navigation Button Shape",
+      "options": [
+        { "value": "default", "label": "Square (default)" },
+        { "value": "custom", "label": "Custom (uploaded image)" }
+      ],
+      "default": "default"
+    },
+    { "type": "image_picker", "id": "nav_shape_image", "label": "Navigation Button Custom Shape", "info": "Used when Shape is set to Custom. Upload any SVG/PNG — it renders with its own colors, stretched to fill the button. Falls back to Square if empty." },
+
     { "type": "header", "content": "Purchase Options" },
     { "type": "text", "id": "options_label", "label": "Options group label (accessibility)", "default": "Purchase options" },
     { "type": "text", "id": "option1_label", "label": "Option 1 Label", "default": "6ER PACK" },
@@ -1382,7 +1408,7 @@
       ],
       "default": "cloud"
     },
-    { "type": "image_picker", "id": "qty_shape_image_desktop", "label": "Quantity Stepper Custom Shape (desktop)", "info": "Used when Shape (desktop) is set to Custom. Upload a solid black-on-transparent SVG/PNG silhouette. Falls back to Dashed pill if empty." },
+    { "type": "image_picker", "id": "qty_shape_image_desktop", "label": "Quantity Stepper Custom Shape (desktop)", "info": "Used when Shape (desktop) is set to Custom. Upload any SVG/PNG — it renders with its own colors, stretched to fill the stepper. Falls back to Dashed pill if empty." },
     {
       "type": "select",
       "id": "qty_border_style_mobile",
@@ -1394,7 +1420,7 @@
       ],
       "default": "dashed"
     },
-    { "type": "image_picker", "id": "qty_shape_image_mobile", "label": "Quantity Stepper Custom Shape (mobile)", "info": "Used when Shape (mobile) is set to Custom. Upload a solid black-on-transparent SVG/PNG silhouette. Falls back to Dashed pill if empty." },
+    { "type": "image_picker", "id": "qty_shape_image_mobile", "label": "Quantity Stepper Custom Shape (mobile)", "info": "Used when Shape (mobile) is set to Custom. Upload any SVG/PNG — it renders with its own colors, stretched to fill the stepper. Falls back to Dashed pill if empty." },
 
     { "type": "header", "content": "Submit Button" },
     { "type": "text", "id": "button_label", "label": "Button Label", "default": "IN DEN WARENKORB" },
