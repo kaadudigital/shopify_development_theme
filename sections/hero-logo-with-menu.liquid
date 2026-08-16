@@ -23,6 +23,8 @@
       assign menu_count = menu_count | plus: 1
     endif
   endfor
+
+  assign account_url = section.settings.account_link | default: routes.account_url
 -%}
 
 {%- style -%}
@@ -125,7 +127,7 @@
     }
 
       /* ========================================
-         HAMBURGER MENU
+         HAMBURGER MENU (fallback when no menu button image is set)
          ======================================== */
       .hamburger-menu {
         display: none;
@@ -232,6 +234,7 @@
       .responsive-logo-container {
         grid-column: 2;
         justify-self: center;
+        transition: opacity 0.3s ease-out;
       }
 
       #{{ section.id }} .header-button-wrapper,
@@ -243,15 +246,33 @@
         transition: transform 0.2s ease;
       }
 
+      /* While the menu is open the shop button steps aside (the CLOSE pill and
+         cart stay), matching the reference open state. */
+      #{{ section.id }} .custom-shop-button {
+        transition: opacity 0.3s ease-out, transform 0.3s ease;
+      }
+
+      #{{ section.id }}.menu-open .custom-shop-button {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      /* Desktop only: the centred header logo fades out so the big overlay
+         logo (top-left, reference style) takes its place. */
+      @media (min-width: 769px) {
+        #{{ section.id }}.menu-open .responsive-logo-container {
+          opacity: 0;
+        }
+      }
+
       /* ========================================
          MENU OVERLAY
 
-         Layout contract: the overlay is a fixed, non-scrolling viewport-sized
-         box. `.menu-content` is stretched over it (inset: 0) and reserves the
-         header bar's height as *padding-top* — never as a margin — so that
-         `justify-content: center` still centres the links inside the space
-         that is actually visible below the header. --menu-header-offset is
-         written by the section script and kept in sync on resize.
+         Full-viewport panel that slides down from the top (reference-site
+         behaviour), with a solid scalloped edge at the bottom. The header bar
+         stays above it (CLOSE pill + cart remain usable); its height is
+         reserved as *padding-top* via --menu-header-offset, kept in sync by
+         the section script.
          ======================================== */
       #{{ section.id }} .menu-overlay {
         --menu-header-offset: 0px;
@@ -263,38 +284,19 @@
         height: 100vh;
         height: 100dvh;
         background-color: rgb(var(--color-scheme-background));
+        color: rgb(var(--color-scheme-text));
         z-index: 9999;
         visibility: hidden;
-        /* No scrolling inside the open menu — the list is sized to always fit. */
         overflow: hidden;
         overscroll-behavior: contain;
-        touch-action: none;
-        clip-path: circle(0% at var(--menu-x, 10%) var(--menu-y, 10%));
-        transition: clip-path 0.8s cubic-bezier(0.76, 0, 0.24, 1), visibility 0s 0.8s;
+        transform: translateY(-102%);
+        transition: transform 0.7s cubic-bezier(0.76, 0, 0.24, 1), visibility 0s 0.7s;
       }
 
       #{{ section.id }} .menu-overlay.active {
-        clip-path: circle(150% at var(--menu-x, 10%) var(--menu-y, 10%));
+        transform: translateY(0);
         visibility: visible;
-        transition: clip-path 0.8s cubic-bezier(0.76, 0, 0.24, 1), visibility 0s 0s;
-      }
-
-      /* Soft brand glow so the open state isn't a flat colour field */
-      #{{ section.id }} .menu-overlay::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        z-index: 0;
-        pointer-events: none;
-        opacity: 0;
-        background:
-          radial-gradient(55% 45% at 12% 18%, rgba(var(--color-scheme-text), 0.14), transparent 70%),
-          radial-gradient(50% 40% at 88% 82%, rgba(var(--color-scheme-text), 0.10), transparent 70%);
-        transition: opacity 0.6s ease 0.25s;
-      }
-
-      #{{ section.id }} .menu-overlay.active::before {
-        opacity: 1;
+        transition: transform 0.7s cubic-bezier(0.76, 0, 0.24, 1), visibility 0s 0s;
       }
 
       #{{ section.id }} .menu-content {
@@ -302,56 +304,202 @@
         inset: 0;
         z-index: 5;
         box-sizing: border-box;
-        padding-top: var(--menu-header-offset);
-        padding-bottom: var(--menu-cloud-height);
-        padding-inline: var(--space-6);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
+        padding-top: calc(var(--menu-header-offset) + var(--space-4));
+        padding-bottom: calc(var(--menu-cloud-height) + var(--space-6));
+        padding-inline: var(--space-4);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        touch-action: pan-y;
         color: rgb(var(--color-scheme-text));
       }
 
-      #{{ section.id }} .menu-content nav {
-        width: 100%;
+      @media (min-width: 769px) {
+        #{{ section.id }} .menu-content {
+          padding-inline: var(--space-6);
+        }
       }
 
-      #{{ section.id }} .menu-content nav ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        text-align: center;
+      #{{ section.id }} .menu-layout {
+        width: 100%;
+        max-width: var(--container-max);
+        margin-inline: auto;
+        min-height: 100%;
         display: flex;
         flex-direction: column;
+        gap: var(--space-8);
+      }
+
+      /* Mobile order: utility rows → links → email/social (reference mobile) */
+      #{{ section.id }} .menu-nav {
+        order: 1;
+      }
+
+      #{{ section.id }} .menu-side {
+        order: 2;
+      }
+
+      @media (min-width: 769px) {
+        #{{ section.id }} .menu-layout {
+          display: grid;
+          grid-template-columns: minmax(240px, 5fr) 7fr;
+          gap: var(--space-6);
+          align-items: stretch;
+        }
+
+        #{{ section.id }} .menu-side {
+          grid-column: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          gap: var(--space-8);
+        }
+
+        #{{ section.id }} .menu-nav {
+          grid-column: 2;
+        }
+      }
+
+      /* --- Left column: big logo + email + socials --- */
+      #{{ section.id }} .menu-logo {
+        display: none;
+      }
+
+      @media (min-width: 769px) {
+        #{{ section.id }} .menu-logo {
+          display: block;
+          width: clamp(220px, 26vw, 420px);
+        }
+
+        #{{ section.id }} .menu-logo img {
+          width: 100%;
+          height: auto;
+        }
+      }
+
+      #{{ section.id }} .menu-side-bottom {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-4);
+      }
+
+      #{{ section.id }} .menu-email {
+        color: rgb(var(--color-scheme-text));
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      #{{ section.id }} .menu-email:hover,
+      #{{ section.id }} .menu-email:focus-visible {
+        color: {{ section.settings.menu_accent_color | default: '#ACFF64' }};
+      }
+
+      #{{ section.id }} .menu-social a {
+        display: inline-flex;
         align-items: center;
-        gap: clamp(var(--space-1), 1.1vh, var(--space-3));
+        justify-content: center;
+        min-width: 48px;
+        min-height: 48px;
+        color: rgb(var(--color-scheme-text));
       }
 
-      #{{ section.id }} .menu-content nav ul li {
-        margin: 0;
-        max-width: 100%;
+      /* --- Utility rows (mobile only): Search / Account --- */
+      #{{ section.id }} .menu-utility {
+        list-style: none;
+        margin: 0 0 var(--space-6);
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-2);
       }
 
-      /* "Hide on desktop" per-item setting */
-      @media (min-width: 768px) {
-        #{{ section.id }} .menu-content nav ul li.hide-on-desktop {
+      #{{ section.id }} .menu-utility a {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-3);
+        min-height: 48px;
+        color: rgb(var(--color-scheme-text));
+        text-decoration: none;
+      }
+
+      #{{ section.id }} .menu-utility a:hover,
+      #{{ section.id }} .menu-utility a:focus-visible {
+        color: {{ section.settings.menu_accent_color | default: '#ACFF64' }};
+      }
+
+      #{{ section.id }} .menu-utility .theme-icon {
+        width: 24px;
+        height: 24px;
+        flex-shrink: 0;
+      }
+
+      /* Theme icons ship with a hardcoded #000 stroke — follow the scheme text
+         colour inside the overlay instead. */
+      #{{ section.id }} .menu-utility .theme-icon path {
+        stroke: currentColor;
+      }
+
+      @media (min-width: 769px) {
+        #{{ section.id }} .menu-utility {
           display: none;
         }
       }
 
-    /* Menu items - closing animation (top to bottom).
-       Fluid size is capped at the design system's h1 (64px) and only ever
-       scales *down*, so a long menu still fits without introducing scroll. */
-    #{{ section.id }} .menu-content nav ul li a {
+      /* --- "My account" link above the nav (desktop only, reference style) --- */
+      #{{ section.id }} .menu-account {
+        display: none;
+        color: rgb(var(--color-scheme-text));
+        text-decoration: none;
+        margin-bottom: var(--space-8);
+      }
+
+      #{{ section.id }} .menu-account:hover,
+      #{{ section.id }} .menu-account:focus-visible {
+        text-decoration: underline;
+        text-underline-offset: 4px;
+      }
+
+      @media (min-width: 769px) {
+        #{{ section.id }} .menu-account {
+          display: inline-block;
+        }
+      }
+
+      /* --- Main links: big, left-aligned, staggered reveal --- */
+      #{{ section.id }} .menu-content nav ul.menu-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: clamp(var(--space-1), 1vh, var(--space-3));
+      }
+
+      #{{ section.id }} .menu-content nav ul.menu-links li {
+        margin: 0;
+        max-width: 100%;
+        overflow: hidden;
+      }
+
+      /* "Hide on desktop" per-item setting */
+      @media (min-width: 768px) {
+        #{{ section.id }} .menu-content nav ul.menu-links li.hide-on-desktop {
+          display: none;
+        }
+      }
+
+    /* Menu items - closing animation (top to bottom). */
+    #{{ section.id }} .menu-content nav ul.menu-links li a {
       display: inline-block;
       position: relative;
       text-decoration: none;
       color: rgb(var(--color-scheme-text));
       font-family: var(--font-display);
-      font-size: clamp(1.75rem, min(9vw, 7.5vh), 4rem);
-      line-height: 1.1;
-      padding: 0 var(--space-2);
+      font-size: clamp(2.5rem, 9vw, 4rem);
+      line-height: 1.08;
+      padding: 0 var(--space-1);
       transform: translateY(100%) translateZ(0);
       opacity: 0;
       transition: transform 0.65s cubic-bezier(0.215, 0.61, 0.355, 1) 0ms,
@@ -359,31 +507,72 @@
                   color 0.25s ease-out;
     }
 
+    @media (min-width: 769px) {
+      #{{ section.id }} .menu-content nav ul.menu-links li a {
+        font-size: clamp(3rem, min(6.5vw, 11vh), 6rem);
+      }
+    }
 
     /* Opening animation (bottom to top) */
-    #{{ section.id }} .menu-overlay.active .menu-content nav ul li a {
+    #{{ section.id }} .menu-overlay.active .menu-content nav ul.menu-links li a {
       transform: translateY(0) translateZ(0);
       opacity: 1;
     }
 
-    /* Opening delays - bottom to top */
+    /* Opening delays - top to bottom */
     {% for i in (1..10) %}
-      #{{ section.id }} .menu-overlay.active .menu-content nav ul li:nth-child({{ i }}) a {
-        transition-delay: calc(({{ menu_count }} - {{ i }}) * 0.11s + 0.3s);
+      #{{ section.id }} .menu-overlay.active .menu-content nav ul.menu-links li:nth-child({{ i }}) a {
+        transition-delay: calc({{ i | minus: 1 }} * 0.09s + 0.35s);
       }
     {% endfor %}
 
-    /* Closing delays - top to bottom (reverse) */
+    /* Closing delays - bottom to top (reverse) */
     {% for i in (1..10) %}
-      #{{ section.id }} .menu-content nav ul li:nth-child({{ i }}) a {
-        transition-delay: calc({{ i | minus: 1 }} * 0.08s);
+      #{{ section.id }} .menu-content nav ul.menu-links li:nth-child({{ i }}) a {
+        transition-delay: calc(({{ menu_count }} - {{ i }}) * 0.06s);
       }
     {% endfor %}
 
       /* ========================================
-         CLOUD FOOTER
-         Absolutely positioned so it can never take part in the flow that
-         centres the links; slides up once the reveal circle has opened.
+         DECORATIVE STICKERS inside the overlay
+         ======================================== */
+      #{{ section.id }} .menu-sticker {
+        position: absolute;
+        z-index: 6;
+        width: clamp(56px, 7vw, 110px);
+        pointer-events: none;
+      }
+
+      #{{ section.id }} .menu-sticker img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+      }
+
+      #{{ section.id }} .menu-sticker--1 {
+        left: 10%;
+        top: 42%;
+        transform: rotate(-12deg);
+      }
+
+      #{{ section.id }} .menu-sticker--2 {
+        right: 7%;
+        bottom: calc(var(--menu-cloud-height) - 20px);
+        transform: rotate(9deg);
+      }
+
+      @media (max-width: 768px) {
+        #{{ section.id }} .menu-sticker--1 {
+          left: auto;
+          right: 4%;
+          top: 22%;
+        }
+      }
+
+      /* ========================================
+         SCALLOP FOOTER
+         Solid contrast-colour semicircle edge along the bottom (reference
+         style). Absolutely positioned; slides up once the panel is open.
          ======================================== */
       #{{ section.id }} .cloud-footer {
         position: absolute;
@@ -393,7 +582,7 @@
         z-index: 1;
         height: var(--menu-cloud-height);
         pointer-events: none;
-        color: rgba(var(--color-scheme-text), 0.12);
+        color: rgb(var(--color-scheme-text));
         transform: translateY(100%);
         transition: transform 0.7s cubic-bezier(0.215, 0.61, 0.355, 1) 0.15s;
       }
@@ -424,32 +613,35 @@
         display: none !important;
       }
   /* Dim all items when any item is hovered */
-  #{{ section.id }} .menu-overlay.active .menu-content nav ul:hover li a {
+  #{{ section.id }} .menu-overlay.active .menu-content nav ul.menu-links:hover li a {
     opacity: 0.35;
     transition-delay: 0s;
   }
 
   /* Keep hovered item at full opacity, with a bit of brand-appropriate tilt */
-  #{{ section.id }} .menu-overlay.active .menu-content nav ul li a:hover,
-  #{{ section.id }} .menu-overlay.active .menu-content nav ul li a:focus-visible {
+  #{{ section.id }} .menu-overlay.active .menu-content nav ul.menu-links li a:hover,
+  #{{ section.id }} .menu-overlay.active .menu-content nav ul.menu-links li a:focus-visible {
     opacity: 1 !important;
     color: {{ section.settings.menu_accent_color | default: '#ACFF64' }};
     transform: translateY(0) translateZ(0) rotate(-2deg) scale(1.04);
     transition: transform 0.3s ease-out, opacity 0.3s ease-out, color 0.2s ease-out;
   }
 
-  #{{ section.id }} .menu-content nav ul li a:focus-visible {
+  #{{ section.id }} .menu-content nav ul.menu-links li a:focus-visible,
+  #{{ section.id }} .menu-account:focus-visible,
+  #{{ section.id }} .menu-email:focus-visible,
+  #{{ section.id }} .menu-utility a:focus-visible {
     outline: 2px solid {{ section.settings.menu_accent_color | default: '#ACFF64' }};
     outline-offset: var(--space-2);
   }
 
   /* Current page marker */
-  #{{ section.id }} .menu-content nav ul li a[aria-current='page'] {
+  #{{ section.id }} .menu-content nav ul.menu-links li a[aria-current='page'] {
     color: {{ section.settings.menu_accent_color | default: '#ACFF64' }};
   }
 
   /* Underline sweep */
-  #{{ section.id }} .menu-overlay .menu-content nav ul li a::after {
+  #{{ section.id }} .menu-overlay .menu-content nav ul.menu-links li a::after {
     content: '';
     position: absolute;
     bottom: 0.08em;
@@ -461,21 +653,21 @@
     transition: width 0.45s cubic-bezier(0.215, 0.61, 0.355, 1) 0ms;
   }
 
-  #{{ section.id }} .menu-overlay.active .menu-content nav ul li a:hover::after,
-  #{{ section.id }} .menu-overlay.active .menu-content nav ul li a:focus-visible::after,
-  #{{ section.id }} .menu-overlay.active .menu-content nav ul li a[aria-current='page']::after {
+  #{{ section.id }} .menu-overlay.active .menu-content nav ul.menu-links li a:hover::after,
+  #{{ section.id }} .menu-overlay.active .menu-content nav ul.menu-links li a:focus-visible::after,
+  #{{ section.id }} .menu-overlay.active .menu-content nav ul.menu-links li a[aria-current='page']::after {
     width: 100%;
   }
 
   @media (prefers-reduced-motion: reduce) {
     #{{ section.id }} .menu-overlay,
     #{{ section.id }} .menu-overlay .cloud-footer,
-    #{{ section.id }} .menu-content nav ul li a {
+    #{{ section.id }} .menu-content nav ul.menu-links li a {
       transition-duration: 0.01ms !important;
       transition-delay: 0ms !important;
     }
 
-    #{{ section.id }} .menu-overlay.active .menu-content nav ul li a:hover {
+    #{{ section.id }} .menu-overlay.active .menu-content nav ul.menu-links li a:hover {
       transform: none;
     }
   }
@@ -491,7 +683,58 @@
           max-width: {{ section.settings.logo_width_mobile }}% !important;
         }
 
+        {%- if section.settings.menu_button_image != blank -%}
+        /* Reference-style mobile header: pill buttons instead of hamburger.
+           Sides size to content and the logo shrinks first, so the row can
+           never overflow at 320px. */
+        #{{ section.id }} .header-content-wrapper {
+          grid-template-columns: auto minmax(0, 1fr) auto;
+          gap: var(--space-2);
+        }
 
+        #{{ section.id }} .responsive-logo-container {
+          width: auto !important;
+          min-width: 0 !important;
+          max-width: {{ section.settings.logo_width_mobile }}% !important;
+        }
+
+        #{{ section.id }} .responsive-logo-container img {
+          max-width: 100%;
+        }
+
+        #{{ section.id }} .header-right {
+          gap: var(--space-2);
+        }
+
+        #{{ section.id }} .header-button-wrapper {
+          width: 76px;
+          height: 48px;
+        }
+
+        #{{ section.id }} .header-cart-icon {
+          width: var(--space-12);
+          height: var(--space-12);
+        }
+
+        .custom-menu-button-text,
+        .custom-shop-button-text {
+          font-size: 16px;
+          line-height: 24px;
+          padding: var(--space-2) var(--space-3);
+        }
+
+        .custom-cart-button {
+          padding: var(--space-3);
+        }
+
+        .menu-text-wrapper {
+          min-width: 56px;
+        }
+
+        .hamburger-menu {
+          display: none !important;
+        }
+        {%- else -%}
         #{{ section.id }} .header-right {
           gap: var(--space-2);
           display: none;
@@ -506,6 +749,7 @@
         .hamburger-menu {
           display: flex !important;
         }
+        {%- endif -%}
       }
 
       /* Tablet (768px - 1023px) */
@@ -597,16 +841,16 @@
           {%- comment -%} Left Section - Menu Button / Hamburger {%- endcomment -%}
           <div class="header-left">
             <div class="header-button-wrapper" id="menuButton-{{ section.id }}">
-              {%- comment -%} Hamburger Menu (Mobile/Tablet) {%- endcomment -%}
-              <button class="hamburger-menu" aria-label="Open menu">
+              {%- comment -%} Hamburger Menu (fallback) {%- endcomment -%}
+              <button class="hamburger-menu" aria-label="Open menu" aria-expanded="false" aria-controls="menuOverlay-{{ section.id }}">
                 <span class="line"></span>
                 <span class="line"></span>
                 <span class="line"></span>
               </button>
 
-              {%- comment -%} Custom Menu Button (Desktop) {%- endcomment -%}
+              {%- comment -%} Custom Menu Button {%- endcomment -%}
               {%- if section.settings.menu_button_image != blank -%}
-                <button class="custom-menu-button">
+                <button class="custom-menu-button" aria-expanded="false" aria-controls="menuOverlay-{{ section.id }}">
                   <span class="custom-menu-button-text">
                     <span class="menu-text-wrapper">
                       <span class="menu-text">MENU</span>
@@ -661,8 +905,8 @@
 
             {%- comment -%} Cart Icon {%- endcomment -%}
             {%- if section.settings.cart_icon_image != blank -%}
-              <button class="custom-cart-button">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="#c62828">
+              <button class="custom-cart-button" aria-label="Cart">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="#c62828" aria-hidden="true">
                   <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
                 </svg>
               </button>
@@ -671,7 +915,7 @@
                 class="header-cart-icon"
                 style="background-color: #c62828; display: flex; align-items: center; justify-content: center;"
               >
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="white" aria-hidden="true">
                   <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
                 </svg>
               </div>
@@ -681,38 +925,105 @@
       </div>
     </div>
 
-    {%- comment -%} Menu Overlay - Fullscreen {%- endcomment -%}
-    <div class="menu-overlay" id="menuOverlay-{{ section.id }}">
+    {%- comment -%} Menu Overlay - full-viewport panel, slides down from top {%- endcomment -%}
+    <div
+      class="menu-overlay bg-scheme-background text-scheme-text"
+      id="menuOverlay-{{ section.id }}"
+      data-color-scheme="{{ section.settings.overlay_color_scheme }}"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Menu"
+    >
       <div id="menuContent-{{ section.id }}" class="menu-content">
-        <nav>
-          <ul>
-            {%- comment -%} Loop through menu items from settings {%- endcomment -%}
-            {%- for i in (1..10) -%}
-              {%- assign label_key = 'menu_item_' | append: i | append: '_label' -%}
-              {%- assign link_key = 'menu_item_' | append: i | append: '_link' -%}
-              {%- assign hide_desktop_key = 'menu_item_' | append: i | append: '_hide_on_desktop' -%}
+        <div class="menu-layout">
+          {%- comment -%} Left column: big logo on desktop, email + socials {%- endcomment -%}
+          <div class="menu-side">
+            {%- if logo != blank -%}
+              <div class="menu-logo">
+                {{
+                  logo
+                  | image_url: width: 900
+                  | image_tag: width: logo.width, alt: logo.alt, loading: 'lazy'
+                }}
+              </div>
+            {%- endif -%}
 
-              {%- assign label = section.settings[label_key] -%}
-              {%- assign link = section.settings[link_key] -%}
-              {%- assign hide_on_desktop = section.settings[hide_desktop_key] -%}
+            <div class="menu-side-bottom">
+              {%- if section.settings.contact_email != blank -%}
+                <a class="menu-email btn-label" href="mailto:{{ section.settings.contact_email | escape }}">
+                  {{- section.settings.contact_email -}}
+                </a>
+              {%- endif -%}
+              {%- render 'social-icons', list_class: 'menu-social' -%}
+            </div>
+          </div>
 
-              {%- if label != blank -%}
-                <li class="menu-item-{{ i }}{% if hide_on_desktop %} hide-on-desktop{% endif %}">
-                  <a
-                    class="h1"
-                    href="{{ link }}"
-                    {% if link != blank and link == request.path %}aria-current="page"{% endif %}
-                  >
-                    {{- label -}}
+          {%- comment -%} Right column: account link + big nav links {%- endcomment -%}
+          <nav class="menu-nav" aria-label="Main menu">
+            {%- if section.settings.show_utility_links -%}
+              <ul class="menu-utility">
+                <li>
+                  <a class="btn-label" href="{{ routes.search_url }}">
+                    {%- render 'icon-search' -%}
+                    <span>{{ 'general.search.submit' | t }}</span>
                   </a>
                 </li>
-              {%- endif -%}
-            {%- endfor -%}
-          </ul>
-        </nav>
+                <li>
+                  <a class="btn-label" href="{{ account_url }}">
+                    {%- render 'icon-account' -%}
+                    <span>{{ section.settings.utility_account_label | default: 'Account' }}</span>
+                  </a>
+                </li>
+              </ul>
+            {%- endif -%}
+
+            {%- if section.settings.account_label != blank -%}
+              <a class="menu-account h3" href="{{ account_url }}">
+                {{- section.settings.account_label -}}
+              </a>
+            {%- endif -%}
+
+            <ul class="menu-links">
+              {%- comment -%} Loop through menu items from settings {%- endcomment -%}
+              {%- for i in (1..10) -%}
+                {%- assign label_key = 'menu_item_' | append: i | append: '_label' -%}
+                {%- assign link_key = 'menu_item_' | append: i | append: '_link' -%}
+                {%- assign hide_desktop_key = 'menu_item_' | append: i | append: '_hide_on_desktop' -%}
+
+                {%- assign label = section.settings[label_key] -%}
+                {%- assign link = section.settings[link_key] -%}
+                {%- assign hide_on_desktop = section.settings[hide_desktop_key] -%}
+
+                {%- if label != blank -%}
+                  <li class="menu-item-{{ i }}{% if hide_on_desktop %} hide-on-desktop{% endif %}">
+                    <a
+                      class="h1"
+                      href="{{ link }}"
+                      {% if link != blank and link == request.path %}aria-current="page"{% endif %}
+                    >
+                      {{- label -}}
+                    </a>
+                  </li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          </nav>
+        </div>
       </div>
 
-      {%- comment -%} Bottom Animated Cloud {%- endcomment -%}
+      {%- comment -%} Decorative stickers (reference-style floating shapes) {%- endcomment -%}
+      {%- if section.settings.overlay_sticker_1 != blank -%}
+        <div class="menu-sticker menu-sticker--1" aria-hidden="true">
+          {{ section.settings.overlay_sticker_1 | image_url: width: 300 | image_tag: alt: '', loading: 'lazy' }}
+        </div>
+      {%- endif -%}
+      {%- if section.settings.overlay_sticker_2 != blank -%}
+        <div class="menu-sticker menu-sticker--2" aria-hidden="true">
+          {{ section.settings.overlay_sticker_2 | image_url: width: 300 | image_tag: alt: '', loading: 'lazy' }}
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} Bottom Scallop Edge {%- endcomment -%}
       <div class="cloud-footer" aria-hidden="true">
         <svg
           width="100%"
@@ -755,17 +1066,17 @@
 <script>
   (function () {
     const sectionId = '{{ section.id }}';
+    const section = document.getElementById(sectionId);
     const menuButton = document.getElementById('menuButton-' + sectionId);
     const menuOverlay = document.getElementById('menuOverlay-' + sectionId);
     const hamburger = menuButton.querySelector('.hamburger-menu');
     const customMenuButton = menuButton.querySelector('.custom-menu-button');
-    const menubarsection = document.getElementById(sectionId);
 
-    // The header bar sits above the overlay, so the links must centre in the
+    // The header bar sits above the overlay, so the links must sit in the
     // space *below* it. Expose that height as padding (not margin) via a custom
     // property, and keep it current as the header reflows.
     function syncHeaderOffset() {
-      const bar = document.getElementById('menubar-' + sectionId) || menubarsection;
+      const bar = document.getElementById('menubar-' + sectionId) || section;
       menuOverlay.style.setProperty('--menu-header-offset', bar.offsetHeight + 'px');
     }
 
@@ -774,35 +1085,26 @@
     window.addEventListener('load', syncHeaderOffset);
 
     if (typeof ResizeObserver !== 'undefined') {
-      new ResizeObserver(syncHeaderOffset).observe(menubarsection);
+      new ResizeObserver(syncHeaderOffset).observe(section);
     }
-
-    // Block wheel/touch scroll chaining out of the open menu.
-    function blockScroll(e) {
-      if (menuOverlay.classList.contains('active')) {
-        e.preventDefault();
-      }
-    }
-
-    menuOverlay.addEventListener('wheel', blockScroll, { passive: false });
-    menuOverlay.addEventListener('touchmove', blockScroll, { passive: false });
 
     let originalOverflow;
+
+    function setExpanded(value) {
+      [hamburger, customMenuButton].forEach(function (btn) {
+        if (btn) btn.setAttribute('aria-expanded', value ? 'true' : 'false');
+      });
+    }
 
     function openMenu() {
       syncHeaderOffset();
 
-      const buttonRect = menuButton.getBoundingClientRect();
-      const centerX = ((buttonRect.left + buttonRect.right) / 2 / window.innerWidth) * 100;
-      const centerY = ((buttonRect.top + buttonRect.bottom) / 2 / window.innerHeight) * 100;
-
-      menuOverlay.style.setProperty('--menu-x', centerX + '%');
-      menuOverlay.style.setProperty('--menu-y', centerY + '%');
-
       originalOverflow = document.body.style.overflow;
       menuOverlay.classList.add('active');
+      section.classList.add('menu-open');
       document.body.style.overflow = 'hidden';
       document.documentElement.style.overflow = 'hidden';
+      setExpanded(true);
 
       // Add active class to hamburger or custom button
       if (hamburger && window.getComputedStyle(hamburger).display !== 'none') {
@@ -815,8 +1117,10 @@
 
     function closeMenu() {
       menuOverlay.classList.remove('active');
+      section.classList.remove('menu-open');
       document.body.style.overflow = originalOverflow || '';
       document.documentElement.style.overflow = '';
+      setExpanded(false);
 
       // Remove active class from hamburger and custom button
       if (hamburger) {
@@ -833,8 +1137,34 @@
       });
 
       document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && menuOverlay.classList.contains('active')) {
+        if (!menuOverlay.classList.contains('active')) return;
+
+        if (e.key === 'Escape') {
           closeMenu();
+          return;
+        }
+
+        // Keep Tab focus inside the open menu (overlay links + the visible
+        // toggle button and header cart).
+        if (e.key === 'Tab') {
+          const focusables = Array.prototype.slice
+            .call(section.querySelectorAll('.menu-overlay a[href], .menu-overlay button, .hamburger-menu, .custom-menu-button, .custom-cart-button'))
+            .filter(function (el) {
+              return el.offsetParent !== null;
+            });
+
+          if (focusables.length === 0) return;
+
+          const first = focusables[0];
+          const last = focusables[focusables.length - 1];
+
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
         }
       });
     }
@@ -909,17 +1239,18 @@
     {
       "type": "image_picker",
       "id": "menu_button_image",
-      "label": "Menu Button Image"
+      "label": "Menu Button Image",
+      "info": "When set, the pill button is also shown on mobile (instead of the hamburger)."
     },
     {
       "type": "header",
-      "content": "Hamburger Menu (Mobile)"
+      "content": "Hamburger Menu (fallback)"
     },
     {
       "type": "image_picker",
       "id": "hamburger_background_image",
       "label": "Hamburger Background Image",
-      "info": "Optional background image or shape shown behind the hamburger icon on mobile."
+      "info": "Optional background image or shape shown behind the hamburger icon on mobile (only used when no Menu Button Image is set)."
     },
     {
       "type": "color",
@@ -947,6 +1278,66 @@
     },
     {
       "type": "header",
+      "content": "Menu Overlay"
+    },
+    {
+      "type": "color_scheme",
+      "id": "overlay_color_scheme",
+      "label": "Overlay color scheme",
+      "info": "Background and text colours of the open menu. Pick a bold scheme (e.g. yellow) for the full-page look.",
+      "default": "scheme1"
+    },
+    {
+      "type": "color",
+      "id": "menu_accent_color",
+      "label": "Open menu accent color",
+      "info": "Used for the hover colour, underline sweep and current-page marker inside the open menu.",
+      "default": "#ACFF64"
+    },
+    {
+      "type": "text",
+      "id": "account_label",
+      "label": "Account link label (desktop)",
+      "info": "Small link shown above the menu links on desktop. Leave blank to hide.",
+      "default": "My Account"
+    },
+    {
+      "type": "url",
+      "id": "account_link",
+      "label": "Account link",
+      "info": "Defaults to the customer account page."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_utility_links",
+      "label": "Show Search and Account rows (mobile)",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "utility_account_label",
+      "label": "Mobile account row label",
+      "default": "Account & Subscriptions"
+    },
+    {
+      "type": "text",
+      "id": "contact_email",
+      "label": "Contact email",
+      "info": "Shown as a mailto link in the open menu. Leave blank to hide."
+    },
+    {
+      "type": "image_picker",
+      "id": "overlay_sticker_1",
+      "label": "Overlay sticker 1",
+      "info": "Decorative shape floating inside the open menu."
+    },
+    {
+      "type": "image_picker",
+      "id": "overlay_sticker_2",
+      "label": "Overlay sticker 2"
+    },
+    {
+      "type": "header",
       "content": "Menu Items"
     },
     {
@@ -955,13 +1346,6 @@
       "label": "Hide all menu buttons (desktop and mobile)",
       "info": "Hides the menu, shop, and cart buttons on both desktop and mobile. Use when you want a logo-only header.",
       "default": false
-    },
-    {
-      "type": "color",
-      "id": "menu_accent_color",
-      "label": "Open menu accent color",
-      "info": "Used for the hover colour, underline sweep and current-page marker inside the open menu.",
-      "default": "#ACFF64"
     },
     {
       "type": "text",
