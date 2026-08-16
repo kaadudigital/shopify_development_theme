@@ -1,0 +1,578 @@
+{%- comment -%}
+  Kaadu — Exit Intent Popup
+  Site-wide overlay (lives in sections/overlay-group.json). Opens a native
+  <dialog> newsletter-signup popup when the visitor shows exit intent
+  (desktop: cursor leaves toward the browser chrome; touch devices: a
+  configurable dwell-time fallback, since exit intent isn't detectable on
+  touch). Shown once per visit, suppressed for N days after being dismissed
+  or submitted (localStorage). Always visible in the theme editor so
+  merchants can style it without needing to trigger it.
+{%- endcomment -%}
+
+{%- if section.settings.enable -%}
+  {%- liquid
+    assign section_id = 'kaadu-exit-popup-' | append: section.id
+    assign form_id = 'kaadu-exit-popup-form-' | append: section.id
+    assign has_image = false
+    if section.settings.image != blank
+      assign has_image = true
+    endif
+    assign show_immediately = false
+    if form.errors or form.posted_successfully?
+      assign show_immediately = true
+    endif
+  -%}
+
+  <section
+    class="kaadu-exit-popup"
+    id="{{ section_id }}"
+    {% if show_immediately %}data-show-immediately="true"{% endif %}
+  >
+    <dialog
+      class="kaadu-exit-popup__dialog"
+      data-modal
+      aria-labelledby="{{ section_id }}-heading"
+    >
+      <div class="kaadu-exit-popup__backdrop" data-close-btn></div>
+      <div class="kaadu-exit-popup__inner">
+        <div class="kaadu-exit-popup__content {{ section.settings.background_color }}">
+          <button
+            type="button"
+            class="kaadu-exit-popup__close"
+            data-close-btn
+            aria-label="{{ 'general.accessibility.close_modal' | t: default: 'Schliessen' }}"
+          >
+            {%- render 'kaadu-icon-close' -%}
+          </button>
+
+          <div class="kaadu-exit-popup__grid">
+            {%- if has_image -%}
+              <div class="kaadu-exit-popup__media">
+                {{
+                  section.settings.image
+                  | image_url: width: 900
+                  | image_tag:
+                    class: 'kaadu-exit-popup__img',
+                    loading: 'lazy',
+                    alt: section.settings.image_alt,
+                    width: section.settings.image.width,
+                    height: section.settings.image.height,
+                    sizes: '(min-width: 769px) 420px, 100vw'
+                }}
+              </div>
+            {%- endif -%}
+
+            <div class="kaadu-exit-popup__text">
+              {%- if section.settings.eyebrow != blank -%}
+                <p class="kaadu-exit-popup__eyebrow caption">{{ section.settings.eyebrow | escape }}</p>
+              {%- endif -%}
+
+              {%- if section.settings.heading != blank -%}
+                <h2 id="{{ section_id }}-heading" class="kaadu-exit-popup__heading h3">
+                  {{ section.settings.heading }}
+                </h2>
+              {%- endif -%}
+
+              {%- if section.settings.body_text != blank -%}
+                <div class="kaadu-exit-popup__body rte body-large">{{ section.settings.body_text }}</div>
+              {%- endif -%}
+
+              <div class="kaadu-exit-popup__form-wrap">
+                {% form 'customer', id: form_id, class: 'kaadu-exit-popup__form' %}
+                  <input type="hidden" name="contact[tags]" value="newsletter,exit-intent-popup">
+
+                  {% if form.errors %}
+                    <p class="kaadu-exit-popup__message kaadu-exit-popup__message--error" id="{{ form_id }}-error">
+                      {{ form.errors.translated_fields.email | capitalize }}
+                      {{ form.errors.messages.email }}
+                    </p>
+                  {% endif %}
+
+                  {% if form.posted_successfully? %}
+                    <p class="kaadu-exit-popup__message kaadu-exit-popup__message--success" id="{{ form_id }}-success">
+                      {{ 'general.newsletter_form.confirmation' | t }}
+                    </p>
+                  {% else %}
+                    <label for="{{ form_id }}-email" class="sr-only">
+                      {{ 'general.newsletter_form.newsletter_email' | t }}
+                    </label>
+                    <input
+                      id="{{ form_id }}-email"
+                      type="email"
+                      name="contact[email]"
+                      class="kaadu-exit-popup__input"
+                      value="{{ form.email }}"
+                      autocorrect="off"
+                      autocapitalize="off"
+                      autocomplete="email"
+                      placeholder="{{ section.settings.email_placeholder | escape }}"
+                      required
+                      {% if form.errors %}
+                        autofocus
+                        aria-invalid="true"
+                        aria-describedby="{{ form_id }}-error"
+                      {% endif %}
+                    >
+                    <button type="submit" class="kaadu-exit-popup__submit btn-primary" name="commit">
+                      {{- section.settings.button_text | escape -}}
+                    </button>
+                  {% endif %}
+                {% endform %}
+
+                {%- if section.settings.dismiss_text != blank -%}
+                  <button type="button" class="kaadu-exit-popup__dismiss caption" data-close-btn>
+                    {{- section.settings.dismiss_text | escape -}}
+                  </button>
+                {%- endif -%}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </dialog>
+  </section>
+
+  {%- style -%}
+    #{{ section_id }} .kaadu-exit-popup__dialog {
+      block-size: 100%;
+      inline-size: 100%;
+      max-block-size: none;
+      max-inline-size: none;
+      color: inherit;
+      background: transparent;
+      border: none;
+      padding: 0;
+    }
+
+    #{{ section_id }} .kaadu-exit-popup__dialog::backdrop {
+      background: transparent;
+    }
+
+    #{{ section_id }} .kaadu-exit-popup__backdrop {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: var(--color-black);
+      opacity: 0;
+      transition: opacity 0.2s ease-out;
+    }
+
+    #{{ section_id }} .kaadu-exit-popup__inner {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      block-size: 100%;
+      inline-size: 100%;
+      padding: var(--space-4);
+      overflow-y: auto;
+    }
+
+    #{{ section_id }} .kaadu-exit-popup__content {
+      position: relative;
+      width: 100%;
+      max-width: 880px;
+      border: 2px solid var(--color-black);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+    }
+
+    #{{ section_id }} .kaadu-exit-popup__dialog.is-active .kaadu-exit-popup__backdrop {
+      opacity: 0.75;
+    }
+
+    #{{ section_id }} .kaadu-exit-popup__dialog.is-active .kaadu-exit-popup__content {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    #{{ section_id }} .kaadu-exit-popup__close {
+      position: absolute;
+      top: var(--space-3);
+      right: var(--space-3);
+      z-index: 3;
+      width: 48px;
+      height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-cream);
+      border: 2px solid var(--color-black);
+      border-radius: 50%;
+      color: var(--color-near-black);
+      cursor: pointer;
+      transition: transform 0.15s ease-out;
+    }
+
+    #{{ section_id }} .kaadu-exit-popup__close:hover {
+      transform: translateY(-2px);
+    }
+
+    #{{ section_id }} .kaadu-exit-popup__close:focus-visible {
+      outline: 2px solid var(--color-violet);
+      outline-offset: 2px;
+    }
+
+    #{{ section_id }} .kaadu-exit-popup__grid {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+
+    #{{ section_id }} .kaadu-exit-popup__media {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background-color: var(--color-light-grey);
+    }
+
+    #{{ section_id }} .kaadu-exit-popup__img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    #{{ section_id }} .kaadu-exit-popup__text {
+      padding: var(--space-8) var(--space-6);
+    }
+
+    #{{ section_id }} .kaadu-exit-popup__eyebrow {
+      margin: 0 0 var(--space-2);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    #{{ section_id }} .kaadu-exit-popup__heading {
+      margin: 0;
+    }
+
+    #{{ section_id }} .kaadu-exit-popup__body {
+      margin-top: var(--space-3);
+    }
+
+    #{{ section_id }} .kaadu-exit-popup__form-wrap {
+      margin-top: var(--space-6);
+    }
+
+    #{{ section_id }} .kaadu-exit-popup__form {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    #{{ section_id }} .kaadu-exit-popup__input {
+      appearance: none;
+      -webkit-appearance: none;
+      display: block;
+      width: 100%;
+      border: 2px solid var(--color-black);
+      border-radius: 0;
+      background-color: var(--color-cream);
+      color: var(--color-near-black);
+      box-shadow: none;
+      padding: var(--space-3) var(--space-4);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 24px;
+    }
+
+    #{{ section_id }} .kaadu-exit-popup__input::placeholder {
+      color: var(--color-mid-grey);
+    }
+
+    #{{ section_id }} .kaadu-exit-popup__submit {
+      width: 100%;
+    }
+
+    #{{ section_id }} .kaadu-exit-popup__message {
+      margin: 0;
+    }
+
+    #{{ section_id }} .kaadu-exit-popup__message--error {
+      color: var(--color-red);
+    }
+
+    #{{ section_id }} .kaadu-exit-popup__dismiss {
+      display: block;
+      margin: var(--space-4) auto 0;
+      background: none;
+      border: none;
+      padding: var(--space-2);
+      color: var(--color-near-black);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      cursor: pointer;
+    }
+
+    #{{ section_id }} .kaadu-exit-popup__dismiss:focus-visible {
+      outline: 2px solid var(--color-violet);
+      outline-offset: 2px;
+    }
+
+    @media (min-width: 769px) {
+      #{{ section_id }} .kaadu-exit-popup__grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      #{{ section_id }} .kaadu-exit-popup__media {
+        aspect-ratio: auto;
+        height: 100%;
+      }
+
+      #{{ section_id }} .kaadu-exit-popup__text {
+        padding: var(--space-12);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      #{{ section_id }} .kaadu-exit-popup__submit {
+        width: auto;
+        align-self: flex-start;
+      }
+    }
+  {%- endstyle -%}
+
+  <script>
+    (function () {
+      var section = document.getElementById('{{ section_id }}');
+      if (!section || section._kaaduExitPopupInit) return;
+      section._kaaduExitPopupInit = true;
+
+      var dialog = section.querySelector('[data-modal]');
+      if (!dialog) return;
+
+      var STORAGE_KEY = 'kaaduExitPopupDismissedAt-{{ section.id }}';
+      var suppressMs = {{ section.settings.suppress_days | times: 86400000 }};
+      var mobileDelayMs = {{ section.settings.mobile_trigger_delay | times: 1000 }};
+      var isDesignMode = {{ request.design_mode | json }};
+      var showImmediately = section.hasAttribute('data-show-immediately');
+      var hasTriggered = false;
+
+      function isSuppressed() {
+        try {
+          var raw = window.localStorage.getItem(STORAGE_KEY);
+          if (!raw) return false;
+          var last = parseInt(raw, 10);
+          if (isNaN(last)) return false;
+          return (Date.now() - last) < suppressMs;
+        } catch (e) {
+          return false;
+        }
+      }
+
+      function markSuppressed() {
+        try {
+          window.localStorage.setItem(STORAGE_KEY, String(Date.now()));
+        } catch (e) {}
+      }
+
+      function openDialog() {
+        if (hasTriggered || dialog.open) return;
+        hasTriggered = true;
+        dialog.showModal();
+        window.requestAnimationFrame(function () {
+          dialog.classList.add('is-active');
+        });
+      }
+
+      function closeDialog(suppress) {
+        if (suppress) markSuppressed();
+        dialog.classList.remove('is-active');
+        if (dialog.open) dialog.close();
+      }
+
+      section.querySelectorAll('[data-close-btn]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          closeDialog(true);
+        });
+      });
+
+      dialog.addEventListener('cancel', function () {
+        markSuppressed();
+      });
+
+      if (isDesignMode) {
+        openDialog();
+        return;
+      }
+
+      if (showImmediately) {
+        hasTriggered = true;
+        dialog.showModal();
+        window.requestAnimationFrame(function () {
+          dialog.classList.add('is-active');
+        });
+        markSuppressed();
+        return;
+      }
+
+      if (isSuppressed()) return;
+
+      var isCoarsePointer = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+
+      if (isCoarsePointer) {
+        var timer = window.setTimeout(openDialog, mobileDelayMs);
+        document.addEventListener('visibilitychange', function () {
+          if (document.hidden) window.clearTimeout(timer);
+        });
+      } else {
+        document.addEventListener('mouseout', function (e) {
+          if (hasTriggered) return;
+          if (!e.relatedTarget && e.clientY <= 0) {
+            openDialog();
+          }
+        });
+      }
+    })();
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Exit Intent Popup",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable",
+      "label": "Enable",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "BEVOR DU GEHST"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "WAIT. DON'T GO EMPTY-HANDED."
+    },
+    {
+      "type": "richtext",
+      "id": "body_text",
+      "label": "Body text",
+      "default": "<p>Sichere dir 20% auf deine erste Bestellung — 100% Frucht, 0% Ausbeutung.</p>"
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Email field placeholder",
+      "default": "Deine E-Mail-Adresse"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Submit button text",
+      "default": "20% SICHERN"
+    },
+    {
+      "type": "text",
+      "id": "dismiss_text",
+      "label": "Dismiss link text",
+      "default": "Nein danke, ich zahl den vollen Preis."
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "Optional. Shown alongside the offer. If left blank, only the text and form are shown."
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image alt text"
+    },
+    {
+      "type": "header",
+      "content": "Trigger settings"
+    },
+    {
+      "type": "range",
+      "id": "mobile_trigger_delay",
+      "min": 5,
+      "max": 60,
+      "step": 5,
+      "unit": "s",
+      "label": "Delay before showing on touch devices",
+      "default": 25,
+      "info": "Desktop uses cursor exit intent instead. Touch devices can't detect that, so the popup opens after this delay."
+    },
+    {
+      "type": "range",
+      "id": "suppress_days",
+      "min": 1,
+      "max": 90,
+      "step": 1,
+      "unit": "d",
+      "label": "Don't show again for (days)",
+      "default": 7,
+      "info": "Applies after the popup is dismissed or the form is submitted."
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "select",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "bg-yellow",
+      "options": [
+        {
+          "value": "bg-pink",
+          "label": "Light Pink"
+        },
+        {
+          "value": "bg-violet",
+          "label": "Radical Violet"
+        },
+        {
+          "value": "bg-cream",
+          "label": "Off-White Cream"
+        },
+        {
+          "value": "bg-sky",
+          "label": "Sky Blue"
+        },
+        {
+          "value": "bg-lime",
+          "label": "Lime Green"
+        },
+        {
+          "value": "bg-red",
+          "label": "Primary Red"
+        },
+        {
+          "value": "bg-yellow",
+          "label": "Electric Yellow"
+        },
+        {
+          "value": "bg-orange",
+          "label": "Zesty Orange"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Exit Intent Popup"
+    }
+  ]
+}
+{% endschema %}
