@@ -144,9 +144,9 @@
       "scheme1": {
         "settings": {
           "text": "#ae0000",
-          "body_text": "#ae0000",
-          "eyebrow_text": "#ae0000",
-          "caption_text": "#ae0000",
+          "body_text": "#000000",
+          "eyebrow_text": "#000000",
+          "caption_text": "#000000",
           "text_contrast": "#fffff5",
           "background": "#ffc5ff",
           "gradient": "",
