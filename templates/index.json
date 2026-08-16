@@ -140,7 +140,7 @@
         "crop": "vertical",
         "crop_desktop": "widescreen",
         "enable_overlay": true,
-        "overlay_color": "#2A1E1E",
+        "overlay_color": "#2a1e1e",
         "overlay_opacity": 75,
         "display_on_card": false,
         "style": "full",
@@ -319,6 +319,21 @@
         "intro_text": "",
         "color_scheme": "scheme-389c794f-4614-44af-93cb-cbbfec11d15a",
         "highlight_color_scheme": "scheme5"
+      }
+    },
+    "rich_text_w8w9Ah": {
+      "type": "rich-text",
+      "name": "t:sections.rich_text.name",
+      "settings": {
+        "title": "Ananas Crunchys",
+        "heading_size": "heading-standard",
+        "rich_text": "",
+        "display_on_card": false,
+        "content_width_desktop": "lg:w-2/3",
+        "button_link": "",
+        "button_label": "Shop Now",
+        "color_scheme": "scheme4",
+        "use_gradient_background": false
       }
     },
     "pack_selector_cEiAYy": {
@@ -731,6 +746,7 @@
     "custom_video_with_text_overlay_BWrhtb",
     "custom_image_section_anwQpJ",
     "kaadu_problem_section_3BNCTG",
+    "rich_text_w8w9Ah",
     "pack_selector_cEiAYy",
     "vertical_video_embeds_kJLBxQ",
     "image_with_highlights_mU9j66",
