@@ -19,6 +19,232 @@
         "use_gradient_background": false
       }
     },
+    "image_with_text_custom_nmQU4P": {
+      "type": "image-with-text-custom",
+      "blocks": {
+        "shape_divider_VK8CeQ": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "above",
+            "target_section_color_scheme": "scheme3",
+            "style": "circles-2.5-patterned_1200x54",
+            "enable_mobile_style": true,
+            "style_mobile": "circles-3-patterned_1200x67",
+            "flip_horizontal": false,
+            "enable_animation": true,
+            "animation_direction": ""
+          }
+        },
+        "shape_divider_iaU9Eb": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "above",
+            "target_section_color_scheme": "scheme3",
+            "style": "circles-2.5-patterned_1200x54",
+            "enable_mobile_style": true,
+            "style_mobile": "circles-3-patterned_1200x67",
+            "flip_horizontal": false,
+            "enable_animation": true,
+            "animation_direction": ""
+          }
+        }
+      },
+      "block_order": [
+        "shape_divider_VK8CeQ",
+        "shape_divider_iaU9Eb"
+      ],
+      "custom_css": [
+        "p,h3 {color: black;}",
+        "@media (min-width: 990px) {.custom-btn-wrapper, .body {margin-top: 28px; }}"
+      ],
+      "name": "image with text custom",
+      "settings": {
+        "display_on_card": false,
+        "image": "shopify://shop_images/Group_45.webp",
+        "image_caption": "",
+        "crop": "",
+        "image_shape": "default",
+        "blob_type": 1,
+        "rotate_image": 0,
+        "image_position": "left",
+        "image_size": "half",
+        "disable_media_style": false,
+        "title": "Snack like you give a damn.",
+        "h2_title": "100% Frucht. 0% Ausbeutung.",
+        "heading_size": "heading-feature",
+        "richtext": "<p>Gefriergetrocknete Früchte; fair produziert, in der Ursprungsgemeinde verarbeitet, radikal transparent.<br/><br/></p>",
+        "text_alignment": "text-left",
+        "mobile_text_alignment": "text-center",
+        "mobile_layout_order": false,
+        "button_link_type": "url",
+        "button_link": "shopify://pages/contact",
+        "focus_element_id": "",
+        "button_label": "SHOP OFFNEN",
+        "button_label_mobile": "",
+        "button2_link_type": "url",
+        "button2_link": "shopify://products/bananen-crunchys",
+        "focus_element2_id": "",
+        "button2_label": "JETZT PROBIEREN",
+        "button2_label_mobile": "PROBIERPAKET BESTELLEN",
+        "button2_image": "shopify://shop_images/Artboard151.svg",
+        "button2_image_mobile": "shopify://shop_images/Artboard12.svg",
+        "button_text_color_desktop": "#ffffff",
+        "button_text_color_mobile": "#f0f7f1",
+        "button2_width_desktop": 230,
+        "button2_width_mobile": 360,
+        "color_scheme": "",
+        "use_gradient_background": false
+      }
+    },
+    "scrolling_text_j9kYtA": {
+      "type": "scrolling-text",
+      "name": "t:sections.scrolling_text.name",
+      "settings": {
+        "text": "ITS NOT FAIR!",
+        "repeat_text": true,
+        "shape_between_text": "image",
+        "between_text_image": "shopify://shop_images/Kaadu_favicon_purple_RGB.png",
+        "shape_size": 2,
+        "animate_shape_between_text": true,
+        "animate_image_between_text": true,
+        "link": "",
+        "speed": 120,
+        "direction": "",
+        "color_scheme": "scheme5",
+        "use_gradient_background": false
+      }
+    },
+    "custom_video_with_text_overlay_BWrhtb": {
+      "type": "custom-video-with-text-overlay",
+      "blocks": {
+        "shape_divider_96CcGb": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "below",
+            "target_section_color_scheme": "scheme1",
+            "style": "circles-2.5-patterned_1200x54",
+            "enable_mobile_style": false,
+            "style_mobile": "waves-1-patterned_1200x20",
+            "flip_horizontal": false,
+            "enable_animation": false,
+            "animation_direction": ""
+          }
+        }
+      },
+      "block_order": [
+        "shape_divider_96CcGb"
+      ],
+      "name": "Custom Video Text Overlay",
+      "settings": {
+        "video": "shopify://files/videos/sample.mp4",
+        "crop": "vertical",
+        "crop_desktop": "widescreen",
+        "enable_overlay": true,
+        "overlay_color": "#2A1E1E",
+        "overlay_opacity": 75,
+        "display_on_card": false,
+        "style": "full",
+        "place_content": "place-content-center-center",
+        "text_align": "text-center",
+        "title": "AUSBEUTUNG IST TIEF VERANKERT",
+        "heading_tag": "h2",
+        "richtext": "<p>gghrd&lt;t</p>",
+        "cta_url": "",
+        "cta_text": "Shop Now",
+        "color_scheme": "",
+        "use_gradient_background": false
+      }
+    },
+    "custom_image_section_anwQpJ": {
+      "type": "custom-image-section",
+      "blocks": {
+        "shape_divider_HHiMPK": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "below",
+            "target_section_color_scheme": "scheme-389c794f-4614-44af-93cb-cbbfec11d15a",
+            "style": "circles-2.5-patterned_1200x54",
+            "enable_mobile_style": true,
+            "style_mobile": "circles-3-patterned_1200x67",
+            "flip_horizontal": false,
+            "enable_animation": true,
+            "animation_direction": ""
+          }
+        }
+      },
+      "block_order": [
+        "shape_divider_HHiMPK"
+      ],
+      "custom_css": [
+        ".hero-bg-image {z-index: 6;}",
+        "@media (max-width: 768px) {.hero-bg-image {transform: translate(-50%, -50%) rotate(-34.89deg); transform-origin: center center; }}"
+      ],
+      "name": "Custom Sticker Heading",
+      "settings": {
+        "section_height_desktop": 600,
+        "section_height_mobile": 600,
+        "background_image": "shopify://shop_images/handwithpineaple.webp",
+        "image_width_desktop": 885,
+        "image_width_mobile": 460,
+        "image_x_desktop": 25,
+        "image_y_desktop": 57,
+        "image_x_mobile": 50,
+        "image_y_mobile": 75,
+        "heading": "unsere[br] crunchys[br] verändern[br] alles",
+        "heading_tag": "h2",
+        "heading_style": "mega-heading",
+        "subheading": "",
+        "text_alignment_header": "text-center",
+        "header_display_on_card": false,
+        "subheading_display_on_card": false,
+        "header_x_desktop": 56,
+        "header_y_desktop": 57,
+        "header_x_mobile": 50,
+        "header_y_mobile": 38,
+        "subheading_x_desktop": 65,
+        "subheading_y_desktop": 55,
+        "subheading_x_mobile": 55,
+        "subheading_y_mobile": 50,
+        "heading_sticker_image": "shopify://shop_images/cutie_pineaple_rose_1.svg",
+        "heading_sticker_width_desktop": 120,
+        "heading_sticker_width_mobile": 80,
+        "heading_sticker_rotate": 25,
+        "heading_sticker_show_mobile": true,
+        "heading_sticker_x_desktop": 85,
+        "heading_sticker_y_desktop": -5,
+        "heading_sticker_x_mobile": 85,
+        "heading_sticker_y_mobile": -5,
+        "subheading_sticker_image": "shopify://shop_images/Radically_fair.png",
+        "subheading_sticker_width_desktop": 60,
+        "subheading_sticker_width_mobile": 80,
+        "subheading_sticker_rotate": -10,
+        "subheading_sticker_show_mobile": true,
+        "subheading_sticker_x_desktop": 40,
+        "subheading_sticker_y_desktop": 0,
+        "subheading_sticker_x_mobile": 100,
+        "subheading_sticker_y_mobile": 0,
+        "subheading_sticker_2_width_desktop": 120,
+        "subheading_sticker_2_width_mobile": 80,
+        "subheading_sticker_2_rotate": 10,
+        "subheading_sticker_2_show_mobile": true,
+        "subheading_sticker_2_x_desktop": 0,
+        "subheading_sticker_2_y_desktop": 100,
+        "subheading_sticker_2_x_mobile": 0,
+        "subheading_sticker_2_y_mobile": 100,
+        "body_text": "",
+        "body_display_on_card": false,
+        "text_alignment": "text-left",
+        "body_x_desktop": 65,
+        "body_y_desktop": 65,
+        "body_x_mobile": 55,
+        "body_y_mobile": 45,
+        "button_link": "",
+        "button_label": "Shop Now",
+        "button_style": "btn-secondary",
+        "color_scheme": "scheme6",
+        "use_gradient_background": false
+      }
+    },
     "kaadu_problem_section_3BNCTG": {
       "type": "kaadu-problem-section",
       "blocks": {
@@ -26,10 +252,10 @@
           "type": "stakeholder",
           "settings": {
             "label": "Arbeiter*innen",
-            "eyebrow": "Im Betrieb",
-            "body_text": "<p>In unserem Betrieb arbeiten ausschliesslich Frauen aus einkommensschwachen Familien der Region — mit einem Lohn von mindestens +50% über Marktlohn*, plus Pension, Versicherung und Gewinnbeteiligung.</p>",
+            "eyebrow": "",
+            "body_text": "<p>In unserem Betrieb arbeiten ausschliesslich Frauen aus einkommensschwachen Familien der Region.</p>",
             "highlight_text": "<p>Lohn +50%*, Pension, Versicherung, Gewinnbeteiligung — langfristig Mitbesitz.</p>",
-            "disclaimer_text": "*Im Vergleich zu vergleichbarer Arbeit in der Region Vazhakulam, Kerala.",
+            "disclaimer_text": "*Im Vergleich zu ähnlicher Arbeit in der Region Vazhakulam, Kerala.",
             "image": "shopify://shop_images/52f2f8584ac253803e2a8b475558b239c4b73ea3.jpg",
             "image_alt": "",
             "sticker_alt": "",
@@ -41,7 +267,7 @@
           "type": "stakeholder",
           "settings": {
             "label": "Kleinbauer*innen",
-            "eyebrow": "Beim Anbau",
+            "eyebrow": "",
             "body_text": "<p>Unsere Kleinbauer*innen in Vazhakulam erhalten 30–40% über Marktpreis für ihre Ananas — garantiert, unabhängig von Weltmarktschwankungen.</p>",
             "highlight_text": "<p>Preis +30–40%*, garantierte Abnahme, langfristige Partnerschaft.</p>",
             "disclaimer_text": "*Im Vergleich zu marktüblichen Ankaufspreisen in der Region Vazhakulam, Kerala.",
@@ -90,82 +316,9 @@
       "settings": {
         "eyebrow_tag": "SNACK LIKE YOU GIVE A DAMN",
         "heading": "Wer profitiert[br]von Kaadu?",
-        "intro_text": "<p>Von der Ananasfarm bis in die Packung: Kaadu funktioniert nur, weil alle fair beteiligt sind — in Vazhakulam, Kerala.</p>",
+        "intro_text": "",
         "color_scheme": "scheme-389c794f-4614-44af-93cb-cbbfec11d15a",
         "highlight_color_scheme": "scheme5"
-      }
-    },
-    "custom_video_showcase_yWKW93": {
-      "type": "custom-video-showcase",
-      "name": "Custom Video Showcase",
-      "settings": {
-        "heading": "unsere Geschichte",
-        "description": "<p>Gefriergetrocknete Früchte — fair produziert, in der Ursprungsgemeinde verarbeitet, radikal transparent.</p>",
-        "background_video": "shopify://files/videos/sample.mp4",
-        "modal_video_url": "https://www.youtube.com/watch?v=o4hGIwTBdZs",
-        "cursor_label": "Video abspielen",
-        "cursor_shape": "shopify://shop_images/Artboard12.svg",
-        "color_scheme": "scheme1"
-      }
-    },
-    "kaadu_custom_distribution_mkKaw6": {
-      "type": "kaadu-custom-distribution",
-      "blocks": {
-        "option_link_xBV6FU": {
-          "type": "option_link",
-          "settings": {
-            "heading": "Wieso machen wir das?",
-            "text": "Die kaputte Lieferkette, vier Mechanismen der Ausbeutung — und wie unsere Crunchys alles verändern.",
-            "link": "",
-            "background": "lime",
-            "show_border": false,
-            "rounded_corners": false
-          }
-        },
-        "option_link_rRhh3g": {
-          "type": "option_link",
-          "settings": {
-            "heading": "Transparenz",
-            "text": "Alle Zahlen: Löhne, Preise, Reports, Audits. Jeder kann von Transparenz reden — wir legen sie offen.",
-            "link": "",
-            "background": "sky",
-            "show_border": false,
-            "rounded_corners": false
-          }
-        },
-        "option_link_FVfFUh": {
-          "type": "option_link",
-          "settings": {
-            "heading": "Über uns",
-            "text": "Wie ein Familienbesuch in Vazhakulam 2022 zum Modell für eine neue Art von Handel wurde.",
-            "link": "",
-            "background": "yellow",
-            "show_border": false,
-            "rounded_corners": false
-          }
-        },
-        "option_link_PC6zmU": {
-          "type": "option_link",
-          "settings": {
-            "heading": "Ananas Crunchys",
-            "text": "Nachschub sichern — einzeln, im Bundle oder im Crunch-Abo mit 10% Rabatt.",
-            "link": "",
-            "background": "orange",
-            "show_border": false,
-            "rounded_corners": false
-          }
-        }
-      },
-      "block_order": [
-        "option_link_xBV6FU",
-        "option_link_rRhh3g",
-        "option_link_FVfFUh",
-        "option_link_PC6zmU"
-      ],
-      "name": "Distribution Section",
-      "settings": {
-        "title": "Tiefer eintauchen",
-        "color_scheme": ""
       }
     },
     "pack_selector_cEiAYy": {
@@ -231,24 +384,125 @@
         "color_scheme": "scheme4"
       }
     },
-    "custom_video_with_text_overlay_BWrhtb": {
-      "type": "custom-video-with-text-overlay",
-      "name": "Custom Video Text Overlay",
+    "vertical_video_embeds_kJLBxQ": {
+      "type": "vertical-video-embeds",
+      "blocks": {
+        "video_embed_4mERqh": {
+          "type": "video_embed",
+          "settings": {
+            "video_url": "",
+            "video_embed_code": ""
+          }
+        },
+        "video_embed_nKtBNw": {
+          "type": "video_embed",
+          "settings": {
+            "video_url": "",
+            "video_embed_code": ""
+          }
+        },
+        "video_embed_7QPM6i": {
+          "type": "video_embed",
+          "settings": {
+            "video_url": "",
+            "video_embed_code": ""
+          }
+        },
+        "video_embed_iLrwYH": {
+          "type": "video_embed",
+          "settings": {
+            "video_url": "",
+            "video_embed_code": ""
+          }
+        },
+        "video_embed_Tqj7Ed": {
+          "type": "video_embed",
+          "settings": {
+            "video_url": "",
+            "video_embed_code": ""
+          }
+        },
+        "video_embed_6GaFRt": {
+          "type": "video_embed",
+          "settings": {
+            "video_url": "",
+            "video_embed_code": ""
+          }
+        }
+      },
+      "block_order": [
+        "video_embed_4mERqh",
+        "video_embed_nKtBNw",
+        "video_embed_7QPM6i",
+        "video_embed_iLrwYH",
+        "video_embed_Tqj7Ed",
+        "video_embed_6GaFRt"
+      ],
+      "name": "t:sections.vertical_video_embeds.name",
       "settings": {
-        "crop": "vertical",
-        "crop_desktop": "widescreen",
-        "enable_overlay": true,
-        "overlay_color": "#f00707",
-        "overlay_opacity": 5,
-        "display_on_card": false,
-        "style": "full",
-        "place_content": "place-content-center-center",
-        "text_align": "text-center",
-        "title": "Video with text overlay",
-        "heading_tag": "h2",
-        "richtext": "",
-        "cta_url": "",
-        "cta_text": "Shop Now",
+        "title": "Vertikale Video-Einbettungen",
+        "subheading": "Use this text to share information.",
+        "slideshow_focus": "center",
+        "autoscroll_mode": "1",
+        "color_scheme": "",
+        "use_gradient_background": false
+      }
+    },
+    "image_with_highlights_mU9j66": {
+      "type": "image-with-highlights",
+      "blocks": {
+        "highlight_MUzXKM": {
+          "type": "highlight",
+          "settings": {
+            "title": "",
+            "text": "Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.",
+            "cta_link": "",
+            "cta_text": "",
+            "override_section_color_scheme": false,
+            "color_scheme": ""
+          }
+        },
+        "highlight_gjXrHU": {
+          "type": "highlight",
+          "settings": {
+            "title": "",
+            "text": "Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.",
+            "cta_link": "",
+            "cta_text": "",
+            "override_section_color_scheme": false,
+            "color_scheme": ""
+          }
+        },
+        "highlight_KRKBYm": {
+          "type": "highlight",
+          "settings": {
+            "title": "",
+            "text": "Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.",
+            "cta_link": "",
+            "cta_text": "",
+            "override_section_color_scheme": false,
+            "color_scheme": ""
+          }
+        }
+      },
+      "block_order": [
+        "highlight_MUzXKM",
+        "highlight_gjXrHU",
+        "highlight_KRKBYm"
+      ],
+      "name": "t:sections.image_with_highlights.name",
+      "settings": {
+        "title": "BESSER AUF JEDE ART UND WEISE",
+        "block_alignment_on_desktop": "justify-center",
+        "display_on_card": true,
+        "slideshow_on_mobile": true,
+        "slideshow_focus": "center",
+        "max_width": 500,
+        "crop": "",
+        "image_shape": "default",
+        "blob_type": 1,
+        "rotate_image": 0,
+        "disable_media_style": false,
         "color_scheme": "",
         "use_gradient_background": false
       }
@@ -259,6 +513,7 @@
         "info_tile_HBLN3L": {
           "type": "info_tile",
           "settings": {
+            "image": "shopify://shop_images/Group.png",
             "heading": "Tile Heading",
             "description": "Add details about this tile here.",
             "link": "",
@@ -306,296 +561,18 @@
         "subheading": "Share information using custom tiles",
         "display_on_card": true,
         "layout_mobile": "carousel",
-        "layout_desktop": "grid",
+        "layout_desktop": "carousel",
         "tiles_per_row_mobile": "2",
         "tiles_per_row_desktop": 3,
         "slideshow_focus": "center",
         "mobile_slide_width": "three_fifths",
         "desktop_slide_width": 35,
+        "autoscroll_direction": "1",
+        "autoscroll_mobile": false,
+        "autoscroll_desktop": false,
         "tiles_aspect_ratio": "",
         "image_shape": "",
         "color_scheme": "",
-        "use_gradient_background": false
-      }
-    },
-    "image_with_text_custom_nmQU4P": {
-      "type": "image-with-text-custom",
-      "blocks": {
-        "shape_divider_VK8CeQ": {
-          "type": "shape_divider",
-          "settings": {
-            "target_section": "above",
-            "target_section_color_scheme": "scheme3",
-            "style": "circles-2.5-patterned_1200x54",
-            "enable_mobile_style": true,
-            "style_mobile": "circles-3-patterned_1200x67",
-            "flip_horizontal": false,
-            "enable_animation": true,
-            "animation_direction": ""
-          }
-        }
-      },
-      "block_order": [
-        "shape_divider_VK8CeQ"
-      ],
-      "custom_css": [
-        "p,h3 {color: black;}",
-        "@media (min-width: 990px) {.custom-btn-wrapper, .body {margin-top: 28px; }}"
-      ],
-      "name": "image with text custom",
-      "settings": {
-        "display_on_card": false,
-        "image": "shopify://shop_images/product_in_star_background.png",
-        "image_caption": "The whole caption is manages by yonga chf of zoro and luffy and capation prickles had gonorhea made by circus balls of hero balalki vant krishna",
-        "crop": "",
-        "image_shape": "default",
-        "blob_type": 1,
-        "rotate_image": 0,
-        "image_position": "left",
-        "image_size": "half",
-        "disable_media_style": false,
-        "title": "Snack like you give a damn:",
-        "h2_title": "100% Frucht. 0% Ausbeutung.",
-        "heading_size": "heading-feature",
-        "richtext": "<p>Gefriergetrocknete Früchte; fair produziert, in der Ursprungsgemeinde verarbeitet, radikal transparent.<br/><br/></p>",
-        "text_alignment": "text-left",
-        "mobile_text_alignment": "text-center",
-        "mobile_layout_order": false,
-        "button_link_type": "url",
-        "button_link": "shopify://pages/contact",
-        "focus_element_id": "",
-        "button_label": "SHOP OFFNEN",
-        "button_label_mobile": "",
-        "button2_link_type": "url",
-        "button2_link": "shopify://products/bananen-crunchys",
-        "focus_element2_id": "",
-        "button2_label": "JETZT PROBIEREN",
-        "button2_label_mobile": "PROBIERPAKET BESTELLEN",
-        "button2_image": "shopify://shop_images/Artboard151.svg",
-        "button2_image_mobile": "shopify://shop_images/Artboard12.svg",
-        "button_text_color_desktop": "#ffffff",
-        "button_text_color_mobile": "#f0f7f1",
-        "button2_width_desktop": 230,
-        "button2_width_mobile": 360,
-        "color_scheme": "",
-        "use_gradient_background": false
-      }
-    },
-    "scrolling_text_j9kYtA": {
-      "type": "scrolling-text",
-      "name": "t:sections.scrolling_text.name",
-      "settings": {
-        "text": "ITS NOT FAIR!",
-        "repeat_text": true,
-        "shape_between_text": "image",
-        "between_text_image": "shopify://shop_images/Kaadu_favicon_purple_RGB.png",
-        "shape_size": 2,
-        "animate_shape_between_text": true,
-        "animate_image_between_text": true,
-        "link": "",
-        "speed": 120,
-        "direction": "",
-        "color_scheme": "scheme5",
-        "use_gradient_background": false
-      }
-    },
-    "custom_image_focus_carousel_XtKKQC": {
-      "type": "custom-image-focus-carousel",
-      "blocks": {
-        "shape_divider_JPU89L": {
-          "type": "shape_divider",
-          "settings": {
-            "target_section": "below",
-            "target_section_color_scheme": "scheme6",
-            "style": "circles-2.5-patterned_1200x54",
-            "enable_mobile_style": true,
-            "style_mobile": "circles-3-patterned_1200x67",
-            "flip_horizontal": false,
-            "enable_animation": true,
-            "animation_direction": ""
-          }
-        },
-        "image_4pVDca": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/52f2f8584ac253803e2a8b475558b239c4b73ea3.jpg",
-            "crop": "",
-            "image_shape": "website_shape_star",
-            "heading": "ARBEITER*INNEN",
-            "caption": "Frauen sind im Arbeitsmarkt in Vazhakulam stark benachteiligt - selbst wenn sie einen Job erhalten  sind die Löhne horrend.",
-            "button_text": "",
-            "url": ""
-          }
-        },
-        "image_7FYarq": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/e63b0123caaca3f787cbbc233d99805d54c05dfc.jpg",
-            "crop": "",
-            "image_shape": "website_shape_cloud",
-            "heading": "BAUERFAMILIEN",
-            "caption": "Mickrige Margen, gierige Zwischenhändler und einvolatiler Markt zerstörenExistenzen.",
-            "button_text": "",
-            "url": ""
-          }
-        },
-        "image_nKw4WK": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/0686fa36cf114a87ce3c9b417185ca52c25b8003.jpg",
-            "crop": "",
-            "image_shape": "website_shape_pancake",
-            "heading": "ERNTEHELFER*INNEN",
-            "caption": "Knapp CHF 10 für einen ganzen Tag Ananas ernten in der Sonne - keine Sozialleistungen oder Sicherheit",
-            "button_text": "",
-            "url": ""
-          }
-        }
-      },
-      "block_order": [
-        "shape_divider_JPU89L",
-        "image_4pVDca",
-        "image_7FYarq",
-        "image_nKw4WK"
-      ],
-      "name": "custom focus carousel",
-      "settings": {
-        "eyebrow": "Ausbeutung ist tief verankert",
-        "title": "DIE LIEFERKETTE LEIDET",
-        "title2": "",
-        "title3": "",
-        "subheading": "Unter den Tiefpreisen im Supermarkt leidet nicht nur die Natur.",
-        "desktop_extended_layout": true,
-        "enlarge_active_slide": true,
-        "disable_media_style": false,
-        "button_link_type": "url",
-        "button_link": "",
-        "focus_element_id": "",
-        "button_label": "Shop Now",
-        "button_padding_topbottom": 20,
-        "mobile_slide_width": "full_width",
-        "desktop_slide_width": 40,
-        "color_scheme": "scheme3",
-        "use_gradient_background": false
-      }
-    },
-    "custom_image_section_anwQpJ": {
-      "type": "custom-image-section",
-      "blocks": {
-        "shape_divider_HHiMPK": {
-          "type": "shape_divider",
-          "settings": {
-            "target_section": "below",
-            "target_section_color_scheme": "scheme-389c794f-4614-44af-93cb-cbbfec11d15a",
-            "style": "circles-2.5-patterned_1200x54",
-            "enable_mobile_style": true,
-            "style_mobile": "circles-3-patterned_1200x67",
-            "flip_horizontal": false,
-            "enable_animation": true,
-            "animation_direction": ""
-          }
-        }
-      },
-      "block_order": [
-        "shape_divider_HHiMPK"
-      ],
-      "custom_css": [
-        ".hero-bg-image {z-index: 6;}",
-        "@media (max-width: 768px) {.hero-bg-image {transform: translate(-50%, -50%) rotate(-34.89deg); transform-origin: center center; }}"
-      ],
-      "name": "Custom Sticker Heading",
-      "settings": {
-        "section_height_desktop": 600,
-        "section_height_mobile": 600,
-        "background_image": "shopify://shop_images/handwithpineaple.webp",
-        "image_width_desktop": 885,
-        "image_width_mobile": 460,
-        "image_x_desktop": 25,
-        "image_y_desktop": 57,
-        "image_x_mobile": 50,
-        "image_y_mobile": 75,
-        "heading": "unsere[br] crunchys[br] verändern[br] alles",
-        "heading_tag": "h2",
-        "heading_style": "mega-heading",
-        "subheading": "",
-        "text_alignment_header": "text-center",
-        "header_display_on_card": false,
-        "subheading_display_on_card": false,
-        "header_x_desktop": 56,
-        "header_y_desktop": 57,
-        "header_x_mobile": 50,
-        "header_y_mobile": 38,
-        "subheading_x_desktop": 65,
-        "subheading_y_desktop": 55,
-        "subheading_x_mobile": 55,
-        "subheading_y_mobile": 50,
-        "heading_sticker_image": "shopify://shop_images/cutie_pineaple_rose_1.svg",
-        "heading_sticker_width_desktop": 120,
-        "heading_sticker_width_mobile": 80,
-        "heading_sticker_rotate": 25,
-        "heading_sticker_show_mobile": true,
-        "heading_sticker_x_desktop": 85,
-        "heading_sticker_y_desktop": -5,
-        "heading_sticker_x_mobile": 85,
-        "heading_sticker_y_mobile": -5,
-        "subheading_sticker_width_desktop": 120,
-        "subheading_sticker_width_mobile": 80,
-        "subheading_sticker_rotate": -10,
-        "subheading_sticker_show_mobile": true,
-        "subheading_sticker_x_desktop": 100,
-        "subheading_sticker_y_desktop": 0,
-        "subheading_sticker_x_mobile": 100,
-        "subheading_sticker_y_mobile": 0,
-        "subheading_sticker_2_width_desktop": 120,
-        "subheading_sticker_2_width_mobile": 80,
-        "subheading_sticker_2_rotate": 10,
-        "subheading_sticker_2_show_mobile": true,
-        "subheading_sticker_2_x_desktop": 0,
-        "subheading_sticker_2_y_desktop": 100,
-        "subheading_sticker_2_x_mobile": 0,
-        "subheading_sticker_2_y_mobile": 100,
-        "body_text": "",
-        "body_display_on_card": false,
-        "text_alignment": "text-left",
-        "body_x_desktop": 65,
-        "body_y_desktop": 65,
-        "body_x_mobile": 55,
-        "body_y_mobile": 45,
-        "button_link": "",
-        "button_label": "Shop Now",
-        "button_style": "btn-secondary",
-        "color_scheme": "scheme6",
-        "use_gradient_background": false
-      }
-    },
-    "custom_image_heading_text_4H93px": {
-      "type": "custom-image-heading-text",
-      "custom_css": [],
-      "name": "custom image heading text",
-      "settings": {
-        "display_on_card": false,
-        "image": "shopify://shop_images/fairness_graph.webp",
-        "image_caption": "The whole caption is manages by yonga chf of zoro and luffy and capation prickles had gonorhea made by circus balls of hero balalki vant krishna",
-        "crop": "",
-        "image_shape": "default",
-        "blob_type": 1,
-        "rotate_image": 0,
-        "image_position": "right",
-        "image_size": "half",
-        "disable_media_style": false,
-        "eyebrow": "MARKTPREISE SCHWANKEN,UNSERE NICHT",
-        "title": "Fairness für klein bauern",
-        "heading_level": "h2",
-        "heading_alignment": "text-center",
-        "heading_alignment_mobile": "text-center",
-        "subheading": "",
-        "conclusion_heading": "",
-        "richtext": "<p>Kaadu zahlt Kleinbauern stabile, transparentePreise – deutlich über dem Markt.<br/><br/>So schaffen wir Planungssicherheit undschützen sie vor Preisschwankungen.Umweltauflagen und faire Löhne fürErntehelfer sichern ganzheitliche Wirkung.</p>",
-        "text_alignment": "text-left",
-        "text_alignment_mobile": "text-center",
-        "button_link": "shopify://pages/contact",
-        "button_label": "SHOP ÖFFNEN",
-        "color_scheme": "scheme-389c794f-4614-44af-93cb-cbbfec11d15a",
         "use_gradient_background": false
       }
     },
@@ -697,28 +674,6 @@
         "use_gradient_background": false
       }
     },
-    "custom_rich_text_with_image_aY8WDA": {
-      "type": "custom-rich-text-with-image",
-      "name": "Custom Rich Text Image",
-      "settings": {
-        "eyebrow": "",
-        "title": "Starke Job",
-        "title2": "Für Lokale Frauen",
-        "title3": "",
-        "subheading": "",
-        "rich_text": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>",
-        "image": "shopify://shop_images/strong-job-women-graph.webp",
-        "image_caption": "The whole caption is manages by yonga chf of zoro and luffy and capation prickles had gonorhea made by circus balls of hero balalki vant krishna",
-        "image_width": "md",
-        "display_on_card": false,
-        "content_width_desktop": "lg:w-2/3",
-        "button_link": "",
-        "button_label": "Shop Now",
-        "button_style": "btn-secondary",
-        "color_scheme": "scheme3",
-        "use_gradient_background": false
-      }
-    },
     "custom_rich_text_with_image_yBcjeG": {
       "type": "custom-rich-text-with-image",
       "custom_css": [
@@ -767,439 +722,21 @@
         "bg_class": "bg-lime",
         "color_scheme": "scheme5"
       }
-    },
-    "custom_image_focus_carousel_AGiAMj": {
-      "type": "custom-image-focus-carousel",
-      "blocks": {
-        "image_7Bzj3C": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/Adobe_Express_-_file.png",
-            "crop": "",
-            "image_shape": "default",
-            "heading": "Heading",
-            "caption": "Use this text to share information about your brand with your customers.",
-            "button_text": "",
-            "url": ""
-          }
-        },
-        "image_BjDXUn": {
-          "type": "image",
-          "settings": {
-            "crop": "",
-            "image_shape": "default",
-            "heading": "Heading",
-            "caption": "Use this text to share information about your brand with your customers.",
-            "button_text": "",
-            "url": ""
-          }
-        },
-        "image_JxJHVt": {
-          "type": "image",
-          "settings": {
-            "crop": "",
-            "image_shape": "default",
-            "heading": "Heading",
-            "caption": "Use this text to share information about your brand with your customers.",
-            "button_text": "",
-            "url": ""
-          }
-        },
-        "image_EKp6bC": {
-          "type": "image",
-          "settings": {
-            "crop": "",
-            "image_shape": "default",
-            "heading": "Heading",
-            "caption": "Use this text to share information about your brand with your customers.",
-            "button_text": "",
-            "url": ""
-          }
-        },
-        "image_FNcbwb": {
-          "type": "image",
-          "settings": {
-            "crop": "",
-            "image_shape": "default",
-            "heading": "Heading",
-            "caption": "Use this text to share information about your brand with your customers.",
-            "button_text": "",
-            "url": ""
-          }
-        }
-      },
-      "block_order": [
-        "image_7Bzj3C",
-        "image_BjDXUn",
-        "image_JxJHVt",
-        "image_EKp6bC",
-        "image_FNcbwb"
-      ],
-      "custom_css": [
-        ".h2 {color: black;}"
-      ],
-      "name": "custom focus carousel",
-      "settings": {
-        "eyebrow": "",
-        "title": "Image focus carousel",
-        "title2": "second line title",
-        "title3": "",
-        "subheading": "Use this text to share information about your collection.",
-        "desktop_extended_layout": false,
-        "enlarge_active_slide": true,
-        "disable_media_style": false,
-        "button_link_type": "url",
-        "button_image": "shopify://shop_images/Vector.png",
-        "button_link": "shopify://pages/contact",
-        "focus_element_id": "",
-        "button_label": "JETZT KAUFEN",
-        "button_padding_topbottom": 32,
-        "mobile_slide_width": "three_fifths",
-        "desktop_slide_width": 50,
-        "color_scheme": "scheme6",
-        "use_gradient_background": false
-      }
-    },
-    "custom_video_NyCJ7Q": {
-      "type": "custom-video",
-      "name": "custom video with title",
-      "settings": {
-        "title": "wieso machen wir das?",
-        "style": "inset",
-        "aspect_ratio": "4:3",
-        "video_frame_shape": "website_shape_star",
-        "mode": "preview",
-        "playback": "inline",
-        "play_button_background_color": "#ffffff",
-        "play_button_icon_color": "#000000",
-        "color_scheme": "",
-        "use_gradient_background": false
-      }
-    },
-    "custom_text_around_image_VxwP3K": {
-      "type": "custom-text-around-image",
-      "blocks": {
-        "sticker_LkXBmz": {
-          "type": "sticker",
-          "settings": {
-            "width": 150,
-            "half_width_on_mobile": true,
-            "text": "Sticker",
-            "shape": "star_1",
-            "sticker_font_size": "1.563rem",
-            "horizontal_position": 50,
-            "vertical_position": 60,
-            "rotate": 0,
-            "show_sticker_on_mobile": true,
-            "show_sticker_on_desktop": true,
-            "rotation_animation": "none",
-            "enable_parallax": false,
-            "parallax_speed": 3,
-            "color_scheme": "scheme1",
-            "color": "bg-scheme-accent-1 text-scheme-accent-1-contrast"
-          }
-        },
-        "richtext_g9kaXP": {
-          "type": "richtext",
-          "settings": {
-            "heading": "VOLLES AROMA – WEIL REIF GEERNTET",
-            "body_text": "<p>Use this text to describe a feature or benefit.</p>",
-            "text_alignment": "center"
-          }
-        },
-        "richtext_WcXd7w": {
-          "type": "richtext",
-          "settings": {
-            "heading": "KNUSPRIG, LUFTIG, LEICHT",
-            "body_text": "<p>Use this text to describe a feature or benefit.</p>",
-            "text_alignment": "right"
-          }
-        },
-        "richtext_XaMzGn": {
-          "type": "richtext",
-          "settings": {
-            "heading": "100 % FRUCHT – OHNE ZUSÄTZE",
-            "body_text": "<p>Use this text to describe a feature or benefit.</p>",
-            "text_alignment": "left"
-          }
-        },
-        "richtext_w3ajYx": {
-          "type": "richtext",
-          "settings": {
-            "heading": "SCHONENDE TROCKNUNG = MEHR NÄHRSTOFFE",
-            "body_text": "<p>Use this text to describe a feature or benefit.</p>",
-            "text_alignment": "right"
-          }
-        },
-        "richtext_z6Rwha": {
-          "type": "richtext",
-          "settings": {
-            "heading": "SCHONENDE TROCKNUNG",
-            "body_text": "<p>Use this text to describe a feature or benefit.</p>",
-            "text_alignment": "left"
-          }
-        },
-        "richtext_kwdVQ4": {
-          "type": "richtext",
-          "settings": {
-            "heading": "UNPROFITABLE FRÜCHTE GERETTET",
-            "body_text": "<p>Use this text to describe a feature or benefit.</p>",
-            "text_alignment": "right"
-          }
-        }
-      },
-      "block_order": [
-        "sticker_LkXBmz",
-        "richtext_g9kaXP",
-        "richtext_WcXd7w",
-        "richtext_XaMzGn",
-        "richtext_w3ajYx",
-        "richtext_z6Rwha",
-        "richtext_kwdVQ4"
-      ],
-      "name": "Image + 6 Richtext Blocks",
-      "settings": {
-        "title": "GEFRIERGETROCKNETER",
-        "heading_alignment": "center",
-        "body_text": "",
-        "main_image": "shopify://shop_images/ring_pineappl.webp",
-        "button_label": "Jetzt Probieren",
-        "button_link": "shopify://pages/contact",
-        "bg_class": "bg-pink",
-        "padding_top": 60,
-        "padding_bottom": 60,
-        "color_scheme": ""
-      }
-    },
-    "image_with_highlights_mU9j66": {
-      "type": "image-with-highlights",
-      "blocks": {
-        "highlight_MUzXKM": {
-          "type": "highlight",
-          "settings": {
-            "title": "",
-            "text": "Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.",
-            "cta_link": "",
-            "cta_text": "",
-            "override_section_color_scheme": false,
-            "color_scheme": ""
-          }
-        },
-        "highlight_gjXrHU": {
-          "type": "highlight",
-          "settings": {
-            "title": "",
-            "text": "Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.",
-            "cta_link": "",
-            "cta_text": "",
-            "override_section_color_scheme": false,
-            "color_scheme": ""
-          }
-        },
-        "highlight_KRKBYm": {
-          "type": "highlight",
-          "settings": {
-            "title": "",
-            "text": "Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.",
-            "cta_link": "",
-            "cta_text": "",
-            "override_section_color_scheme": false,
-            "color_scheme": ""
-          }
-        },
-        "highlight_CEK8z6": {
-          "type": "highlight",
-          "settings": {
-            "title": "",
-            "text": "Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.",
-            "cta_link": "",
-            "cta_text": "",
-            "override_section_color_scheme": false,
-            "color_scheme": ""
-          }
-        },
-        "highlight_PBQ4Vp": {
-          "type": "highlight",
-          "settings": {
-            "title": "",
-            "text": "Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.",
-            "cta_link": "",
-            "cta_text": "",
-            "override_section_color_scheme": false,
-            "color_scheme": ""
-          }
-        },
-        "highlight_wirECk": {
-          "type": "highlight",
-          "settings": {
-            "title": "",
-            "text": "Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.",
-            "cta_link": "",
-            "cta_text": "",
-            "override_section_color_scheme": false,
-            "color_scheme": ""
-          }
-        }
-      },
-      "block_order": [
-        "highlight_MUzXKM",
-        "highlight_gjXrHU",
-        "highlight_KRKBYm",
-        "highlight_CEK8z6",
-        "highlight_PBQ4Vp",
-        "highlight_wirECk"
-      ],
-      "name": "t:sections.image_with_highlights.name",
-      "settings": {
-        "title": "",
-        "block_alignment_on_desktop": "justify-center",
-        "display_on_card": true,
-        "slideshow_on_mobile": true,
-        "slideshow_focus": "center",
-        "max_width": 500,
-        "crop": "",
-        "image_shape": "default",
-        "blob_type": 1,
-        "rotate_image": 0,
-        "disable_media_style": false,
-        "color_scheme": "",
-        "use_gradient_background": false
-      }
-    },
-    "featured_product_zzj8MW": {
-      "type": "featured-product",
-      "blocks": {
-        "title_4c7jXj": {
-          "type": "title",
-          "settings": {
-            "display_on_card": false,
-            "text_align": "text-left"
-          }
-        },
-        "price_b9aQUy": {
-          "type": "price",
-          "settings": {
-            "display_on_card": false,
-            "show_on_sale_sticker": false,
-            "text_align": "text-left"
-          }
-        },
-        "icon_row_VzLTAM": {
-          "type": "icon_row",
-          "settings": {
-            "display_on_card": false,
-            "uppercase_text": false,
-            "icon_alignment": "justify-start",
-            "icon_thickness": 1.5,
-            "background_color": "bg-transparent text-scheme-text",
-            "show_border": true,
-            "icon_size": "h-10 w-10",
-            "icon_1": "globe",
-            "text_1": "Row item",
-            "icon_2": "truck",
-            "text_2": "Row item",
-            "icon_3": "washing",
-            "text_3": "Row item",
-            "icon_4": "heart",
-            "text_4": "Row item",
-            "icon_5": "ruler",
-            "text_5": "Row item"
-          }
-        },
-        "variant_picker_iwDeHh": {
-          "type": "variant_picker",
-          "settings": {
-            "display_on_card": false,
-            "option_style": "drop_down",
-            "full_width_buttons": false,
-            "hide_option_labels": true,
-            "enable_color_swatches": false
-          }
-        },
-        "buy_buttons_kP9qBY": {
-          "type": "buy_buttons",
-          "settings": {
-            "display_on_card": false,
-            "show_price": false,
-            "enable_payment_button": true,
-            "show_pickup_availability": true,
-            "show_gift_card_recipient": false
-          }
-        }
-      },
-      "block_order": [
-        "title_4c7jXj",
-        "price_b9aQUy",
-        "icon_row_VzLTAM",
-        "variant_picker_iwDeHh",
-        "buy_buttons_kP9qBY"
-      ],
-      "name": "t:sections.featured_product.name",
-      "settings": {
-        "title": "",
-        "product": "bananen-crunchys",
-        "crop": "",
-        "image_shape": "default",
-        "media_mobile_width": "w-full",
-        "desktop_media_width": "lg:col-span-6_lg:col-span-6",
-        "enable_video_looping": true,
-        "thumbnails_position": "left",
-        "thumbnail_crop": "aspect-w-1 aspect-h-1",
-        "thumbnail_shape": "default",
-        "hide_media_shadow": false,
-        "thumbnail_size": "standard",
-        "show_thumbnails_on_mobile": false,
-        "color_scheme": "",
-        "use_gradient_background": false
-      }
-    },
-    "featured_collection_d8jhDg": {
-      "type": "featured-collection",
-      "name": "t:sections.featured_collection.name",
-      "settings": {
-        "title": "Featured collection",
-        "subheading": "Use this text to share information about your collection.",
-        "collection": "",
-        "no_products": 4,
-        "show_view_all": false,
-        "enable_quick_buy": false,
-        "display_on_card": false,
-        "layout": "grid",
-        "products_per_row_mobile": "1",
-        "products_per_row_desktop": 4,
-        "slideshow_focus": "center",
-        "mobile_slide_width": "three_fifths",
-        "desktop_slide_width": 40,
-        "autoscroll_mode": "1",
-        "product_tiles_aspect_ratio": "",
-        "image_shape": "",
-        "color_scheme": "",
-        "use_gradient_background": false
-      }
     }
   },
   "order": [
     "main",
-    "kaadu_problem_section_3BNCTG",
-    "custom_video_showcase_yWKW93",
-    "kaadu_custom_distribution_mkKaw6",
-    "pack_selector_cEiAYy",
-    "custom_video_with_text_overlay_BWrhtb",
-    "custom_feature_infotile_knJnMQ",
     "image_with_text_custom_nmQU4P",
     "scrolling_text_j9kYtA",
-    "custom_image_focus_carousel_XtKKQC",
+    "custom_video_with_text_overlay_BWrhtb",
     "custom_image_section_anwQpJ",
-    "custom_image_heading_text_4H93px",
-    "custom_image_section_Mafcmn",
-    "custom_rich_text_with_image_aY8WDA",
-    "custom_rich_text_with_image_yBcjeG",
-    "email_input_dMpqpt",
-    "custom_image_focus_carousel_AGiAMj",
-    "custom_video_NyCJ7Q",
-    "custom_text_around_image_VxwP3K",
+    "kaadu_problem_section_3BNCTG",
+    "pack_selector_cEiAYy",
+    "vertical_video_embeds_kJLBxQ",
     "image_with_highlights_mU9j66",
-    "featured_product_zzj8MW",
-    "featured_collection_d8jhDg"
+    "custom_feature_infotile_knJnMQ",
+    "custom_image_section_Mafcmn",
+    "custom_rich_text_with_image_yBcjeG",
+    "email_input_dMpqpt"
   ]
 }
