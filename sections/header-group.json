@@ -50,7 +50,7 @@
         "logo": "shopify://shop_images/Kaadu_wordmark_red_RGB.svg",
         "logo_max_width": 160,
         "main_linklist": "main-menu",
-        "nested_nav_style": "mega_menu",
+        "nested_nav_style": "dropdown",
         "showcase_top_level_collections": false,
         "show_all_navigation_links": false,
         "showcase_second_level_links": false,
