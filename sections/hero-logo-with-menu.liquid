@@ -142,11 +142,14 @@
       }
 
       {%- if section.settings.hamburger_background_image != blank -%}
-      .hamburger-menu {
-        box-sizing: border-box;
-        width: 56px;
-        height: 56px;
-        padding: var(--space-3);
+      .hamburger-menu::before {
+        content: '';
+        position: absolute;
+        top: -16px;
+        bottom: -16px;
+        left: -13px;
+        right: -13px;
+        z-index: -1;
         background-image: url('{{ section.settings.hamburger_background_image | img_url: 'master' }}');
         background-size: contain;
         background-position: center;
@@ -372,6 +375,8 @@
       /* Mobile (max-width: 767px) */
       @media (max-width: 767px) {
         #{{ section.id }} .responsive-logo-container {
+          width: {{ section.settings.logo_width_mobile }}% !important;
+          min-width: {{ section.settings.logo_width_mobile }}% !important;
           max-width: {{ section.settings.logo_width_mobile }}% !important;
         }
 

@@ -61,18 +61,6 @@
     assign splide_destroy_desktop = false
   endif
 
-  # The theme's makeSlideshow() JS only mounts the Splide AutoScroll
-  # extension when the TOP-LEVEL autoScroll.autoStart is true — it never
-  # inspects the nested breakpoints.990.autoScroll override. So the
-  # extension must be told to mount whenever EITHER breakpoint wants
-  # auto-scroll; per-breakpoint on/off is then driven by "speed" (0 = no
-  # motion), which the extension re-reads live as Splide swaps in the
-  # breakpoint override on resize.
-  assign autoscroll_enabled = false
-  if section.settings.autoscroll_mobile or section.settings.autoscroll_desktop
-    assign autoscroll_enabled = true
-  endif
-
   assign eager_loading_limit = mobile_grid_cols | plus: 0 | default: 1
 
   if layout_desktop == 'grid'
@@ -337,8 +325,8 @@
             "focus": {{ section.settings.slideshow_focus | json }},
             "type": "loop",
             "autoScroll": {
-              "autoStart": {{ autoscroll_enabled | json }},
-              "speed": {% if section.settings.autoscroll_mobile %}{{ section.settings.autoscroll_direction | plus: 0 | json }}{% else %}0{% endif %}
+              "autoStart": {{ section.settings.autoscroll_enabled | json }},
+              "speed": {% if section.settings.autoscroll_enabled %}{{ section.settings.autoscroll_direction | plus: 0 | json }}{% else %}0{% endif %}
             },
             "padding": {
               "left": "1.25rem",
@@ -351,10 +339,6 @@
                 "padding": {
                   "left": "2.5rem",
                   "right": "2.5rem"
-                },
-                "autoScroll": {
-                  "autoStart": {{ autoscroll_enabled | json }},
-                  "speed": {% if section.settings.autoscroll_desktop %}{{ section.settings.autoscroll_direction | plus: 0 | json }}{% else %}0{% endif %}
                 }
               }
             }
@@ -611,17 +595,10 @@
     },
     {
       "type": "checkbox",
-      "id": "autoscroll_mobile",
-      "label": "Auto-scroll (mobile)",
+      "id": "autoscroll_enabled",
+      "label": "Auto-scroll",
       "default": false,
-      "info": "Automatically scrolls the carousel on mobile. Visitors can still swipe to scroll manually."
-    },
-    {
-      "type": "checkbox",
-      "id": "autoscroll_desktop",
-      "label": "Auto-scroll (desktop)",
-      "default": false,
-      "info": "Automatically scrolls the carousel on desktop."
+      "info": "Automatically scrolls the carousel on whichever breakpoints use the Carousel layout. Visitors can still swipe/drag to scroll manually."
     },
     {
       "type": "header",
