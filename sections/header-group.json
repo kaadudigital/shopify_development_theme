@@ -73,7 +73,8 @@
         "mobile_main_linklist": "",
         "sidebar_menu_font_size": "heading-standard",
         "sidebar_show_footer_menu": false,
-        "sidebar_show_social_icons": false
+        "sidebar_show_social_icons": false,
+        "menu_icon_stripe_color": "#000000"
       }
     },
     "free_shipping_bar_jXrXVB": {
@@ -106,9 +107,11 @@
         "logo_width_desktop_large": 360,
         "logo_width_desktop_xlarge": 320,
         "menu_button_image": "shopify://shop_images/Vector.png",
+        "hamburger_stripe_color": "#FFFFFF",
         "shop_button_image": "shopify://shop_images/06d3f155e99649c6ad8f552f17b4bec9ac475189.png",
         "cart_icon_image": "shopify://shop_images/Vector_f1de3305-1aa4-4f1c-9b06-f17b521b7581.png",
         "hide_menu_buttons": false,
+        "menu_accent_color": "#acff64",
         "menu_item_1_label": "Home",
         "menu_item_1_link": "",
         "menu_item_1_hide_on_desktop": false,
