@@ -50,16 +50,28 @@
         "use_gradient_background": false
       }
     },
-    "kaadu-exit-intent-popup": {
-      "type": "kaadu-exit-intent-popup",
+    "kaadu_exit_intend_popup_7XqnRp": {
+      "type": "kaadu-exit-intend-popup",
+      "name": "Exit Intent Popup",
       "settings": {
-        "enable": true
+        "enable": true,
+        "eyebrow": "BEVOR DU GEHST",
+        "heading": "WAIT. DON'T GO EMPTY-HANDED.",
+        "body_text": "<p>Sichere dir 20% auf deine erste Bestellung — 100% Frucht, 0% Ausbeutung.</p>",
+        "email_placeholder": "Deine E-Mail-Adresse",
+        "button_text": "20% SICHERN",
+        "dismiss_text": "Nein danke, ich zahl den vollen Preis.",
+        "image": "shopify://shop_images/Gemini_Generated_Image_s3trfs3trfs3trfs_3.jpg",
+        "image_alt": "",
+        "mobile_trigger_delay": 25,
+        "suppress_days": 7,
+        "background_color": "bg-yellow"
       }
     }
   },
   "order": [
     "call-to-action",
     "age-check",
-    "kaadu-exit-intent-popup"
+    "kaadu_exit_intend_popup_7XqnRp"
   ]
 }
