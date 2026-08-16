@@ -3340,6 +3340,14 @@
         "sidebar_show_social_icons": {
           "label": "Show social icons"
         },
+        "header_mobile_menu_icon": "Mobile menu icon",
+        "menu_icon_background_image": {
+          "label": "Background image",
+          "info": "Optional image or SVG shown behind the mobile menu icon bars."
+        },
+        "menu_icon_stripe_color": {
+          "label": "Icon stripe color"
+        },
         "nested_nav_style": {
           "label": "Nested navigation style on desktop",
           "options": {

@@ -325,8 +325,8 @@
             "focus": {{ section.settings.slideshow_focus | json }},
             "type": "loop",
             "autoScroll": {
-              "autoStart": {% if section.settings.autoscroll_mode == '0' or section.settings.autoscroll_mode == blank %}false{% else %}true{% endif %},
-              "speed": {% if section.settings.autoscroll_mode == blank %}0{% else %}{{ section.settings.autoscroll_mode | plus: 0 | json }}{% endif %}
+              "autoStart": {{ section.settings.autoscroll_mobile | json }},
+              "speed": {% if section.settings.autoscroll_mobile %}{{ section.settings.autoscroll_direction | plus: 0 | json }}{% else %}0{% endif %}
             },
             "padding": {
               "left": "1.25rem",
@@ -339,6 +339,10 @@
                 "padding": {
                   "left": "2.5rem",
                   "right": "2.5rem"
+                },
+                "autoScroll": {
+                  "autoStart": {{ section.settings.autoscroll_desktop | json }},
+                  "speed": {% if section.settings.autoscroll_desktop %}{{ section.settings.autoscroll_direction | plus: 0 | json }}{% else %}0{% endif %}
                 }
               }
             }
@@ -579,8 +583,8 @@
     },
     {
       "type": "select",
-      "id": "autoscroll_mode",
-      "label": "Auto-scroll",
+      "id": "autoscroll_direction",
+      "label": "Auto-scroll direction",
       "options": [
         {
           "value": "1",
@@ -589,13 +593,23 @@
         {
           "value": "-1",
           "label": "Left to right"
-        },
-        {
-          "value": "0",
-          "label": "Disabled"
         }
       ],
-      "default": "0"
+      "default": "1"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoscroll_mobile",
+      "label": "Auto-scroll (mobile)",
+      "default": false,
+      "info": "Automatically scrolls the carousel on mobile. Visitors can still swipe to scroll manually."
+    },
+    {
+      "type": "checkbox",
+      "id": "autoscroll_desktop",
+      "label": "Auto-scroll (desktop)",
+      "default": false,
+      "info": "Automatically scrolls the carousel on desktop."
     },
     {
       "type": "header",

@@ -49,10 +49,17 @@
         "color_scheme": "scheme1",
         "use_gradient_background": false
       }
+    },
+    "kaadu-exit-intent-popup": {
+      "type": "kaadu-exit-intent-popup",
+      "settings": {
+        "enable": true
+      }
     }
   },
   "order": [
     "call-to-action",
-    "age-check"
+    "age-check",
+    "kaadu-exit-intent-popup"
   ]
 }
