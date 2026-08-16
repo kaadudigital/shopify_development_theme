@@ -3635,6 +3635,21 @@ input[type='text'],
   color: rgba(var(--color-scheme-text), var(--tw-text-opacity));
 }
 
+.text-scheme-body-text {
+  --tw-text-opacity: 1;
+  color: rgba(var(--color-scheme-body-text), var(--tw-text-opacity));
+}
+
+.text-scheme-eyebrow-text {
+  --tw-text-opacity: 1;
+  color: rgba(var(--color-scheme-eyebrow-text), var(--tw-text-opacity));
+}
+
+.text-scheme-caption-text {
+  --tw-text-opacity: 1;
+  color: rgba(var(--color-scheme-caption-text), var(--tw-text-opacity));
+}
+
 .text-scheme-text-contrast {
   --tw-text-opacity: 1;
   color: rgba(var(--color-scheme-text-contrast), var(--tw-text-opacity));
@@ -6836,6 +6851,29 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
 }
 
 /* ── TYPE SCALE — class-only (opt-in) to avoid clashing with Shapes' h1–h6 reset */
+
+/* Text-role colors. :where() keeps these at 0 specificity so any
+   existing color utility/override on the same element (e.g. text-white)
+   still wins regardless of source order — these only replace the
+   ambient color inherited from an ancestor's .text-scheme-text. */
+:where(.body, .body-large) {
+  color: rgb(var(--color-scheme-body-text));
+}
+
+:where(.caption) {
+  color: rgb(var(--color-scheme-caption-text));
+}
+
+:where(
+  .info-tiles__eyebrow,
+  .image-with-text__eyebrow,
+  .kaadu-exit-popup__eyebrow,
+  .kaadu-rtwi__eyebrow,
+  .kaadu-iht__eyebrow,
+  .kaadu-problem__panel-eyebrow
+) {
+  color: rgb(var(--color-scheme-eyebrow-text));
+}
 
 .h1 {
   font-family: var(--font-display) !important;

@@ -144,6 +144,9 @@
       "scheme1": {
         "settings": {
           "text": "#ae0000",
+          "body_text": "#ae0000",
+          "eyebrow_text": "#ae0000",
+          "caption_text": "#ae0000",
           "text_contrast": "#fffff5",
           "background": "#ffc5ff",
           "gradient": "",
@@ -158,6 +161,9 @@
       "scheme2": {
         "settings": {
           "text": "#fffff5",
+          "body_text": "#fffff5",
+          "eyebrow_text": "#fffff5",
+          "caption_text": "#fffff5",
           "text_contrast": "#ffc5ff",
           "background": "#ae0000",
           "gradient": "",
@@ -172,6 +178,9 @@
       "scheme3": {
         "settings": {
           "text": "#fffff5",
+          "body_text": "#fffff5",
+          "eyebrow_text": "#fffff5",
+          "caption_text": "#fffff5",
           "text_contrast": "#fffef4",
           "background": "#542a76",
           "gradient": "",
@@ -186,6 +195,9 @@
       "scheme4": {
         "settings": {
           "text": "#fffff5",
+          "body_text": "#fffff5",
+          "eyebrow_text": "#fffff5",
+          "caption_text": "#fffff5",
           "text_contrast": "#ff781e",
           "background": "#ff781e",
           "gradient": "",
@@ -200,6 +212,9 @@
       "scheme5": {
         "settings": {
           "text": "#ae0000",
+          "body_text": "#ae0000",
+          "eyebrow_text": "#ae0000",
+          "caption_text": "#ae0000",
           "text_contrast": "#000000",
           "background": "#acff64",
           "gradient": "",
@@ -214,6 +229,9 @@
       "scheme6": {
         "settings": {
           "text": "#ae0000",
+          "body_text": "#ae0000",
+          "eyebrow_text": "#ae0000",
+          "caption_text": "#ae0000",
           "text_contrast": "#ffffff",
           "background": "#ffffff",
           "gradient": "",
@@ -228,6 +246,9 @@
       "scheme-f3c790b8-ce18-4811-87cf-e53b730fe742": {
         "settings": {
           "text": "#000000",
+          "body_text": "#000000",
+          "eyebrow_text": "#000000",
+          "caption_text": "#000000",
           "text_contrast": "#fffff5",
           "background": "#ffc5ff",
           "gradient": "",
@@ -242,6 +263,9 @@
       "scheme-389c794f-4614-44af-93cb-cbbfec11d15a": {
         "settings": {
           "text": "#542a76",
+          "body_text": "#542a76",
+          "eyebrow_text": "#542a76",
+          "caption_text": "#542a76",
           "text_contrast": "#fffff5",
           "background": "#b7d9ff",
           "gradient": "",
@@ -368,6 +392,9 @@
         "scheme1": {
           "settings": {
             "text": "#000000",
+            "body_text": "#000000",
+            "eyebrow_text": "#000000",
+            "caption_text": "#000000",
             "text_contrast": "#ffffff",
             "background": "#ffffff",
             "gradient": "",
@@ -382,6 +409,9 @@
         "scheme2": {
           "settings": {
             "text": "#000000",
+            "body_text": "#000000",
+            "eyebrow_text": "#000000",
+            "caption_text": "#000000",
             "text_contrast": "#ffffff",
             "background": "#ff2524",
             "gradient": "",
@@ -396,6 +426,9 @@
         "scheme3": {
           "settings": {
             "text": "#000000",
+            "body_text": "#000000",
+            "eyebrow_text": "#000000",
+            "caption_text": "#000000",
             "text_contrast": "#ffffff",
             "background": "#ffcc37",
             "gradient": "",
@@ -410,6 +443,9 @@
         "scheme4": {
           "settings": {
             "text": "#000000",
+            "body_text": "#000000",
+            "eyebrow_text": "#000000",
+            "caption_text": "#000000",
             "text_contrast": "#ffffff",
             "background": "#5aff24",
             "gradient": "",
@@ -424,6 +460,9 @@
         "scheme5": {
           "settings": {
             "text": "#ffffff",
+            "body_text": "#ffffff",
+            "eyebrow_text": "#ffffff",
+            "caption_text": "#ffffff",
             "text_contrast": "#000000",
             "background": "#000000",
             "gradient": "",
@@ -438,6 +477,9 @@
         "scheme6": {
           "settings": {
             "text": "#000000",
+            "body_text": "#000000",
+            "eyebrow_text": "#000000",
+            "caption_text": "#000000",
             "text_contrast": "#ffffff",
             "background": "#ffffff",
             "gradient": "",
@@ -560,6 +602,9 @@
         "scheme1": {
           "settings": {
             "text": "#000000",
+            "body_text": "#000000",
+            "eyebrow_text": "#000000",
+            "caption_text": "#000000",
             "text_contrast": "#ffffff",
             "background": "#ffffff",
             "gradient": "",
@@ -574,6 +619,9 @@
         "scheme2": {
           "settings": {
             "text": "#000000",
+            "body_text": "#000000",
+            "eyebrow_text": "#000000",
+            "caption_text": "#000000",
             "text_contrast": "#ffffff",
             "background": "#eaeaea",
             "gradient": "",
@@ -588,6 +636,9 @@
         "scheme3": {
           "settings": {
             "text": "#000000",
+            "body_text": "#000000",
+            "eyebrow_text": "#000000",
+            "caption_text": "#000000",
             "text_contrast": "#ffffff",
             "background": "#c789ff",
             "gradient": "",
@@ -602,6 +653,9 @@
         "scheme4": {
           "settings": {
             "text": "#000000",
+            "body_text": "#000000",
+            "eyebrow_text": "#000000",
+            "caption_text": "#000000",
             "text_contrast": "#ffffff",
             "background": "#ff69ae",
             "gradient": "",
@@ -616,6 +670,9 @@
         "scheme5": {
           "settings": {
             "text": "#ffffff",
+            "body_text": "#ffffff",
+            "eyebrow_text": "#ffffff",
+            "caption_text": "#ffffff",
             "text_contrast": "#000000",
             "background": "#000000",
             "gradient": "",
@@ -630,6 +687,9 @@
         "scheme6": {
           "settings": {
             "text": "#000000",
+            "body_text": "#000000",
+            "eyebrow_text": "#000000",
+            "caption_text": "#000000",
             "text_contrast": "#ffffff",
             "background": "#ffffff",
             "gradient": "",
@@ -749,6 +809,9 @@
         "scheme1": {
           "settings": {
             "text": "#233102",
+            "body_text": "#233102",
+            "eyebrow_text": "#233102",
+            "caption_text": "#233102",
             "text_contrast": "#eeff96",
             "background": "#eeff96",
             "gradient": "",
@@ -763,6 +826,9 @@
         "scheme2": {
           "settings": {
             "text": "#440151",
+            "body_text": "#440151",
+            "eyebrow_text": "#440151",
+            "caption_text": "#440151",
             "text_contrast": "#ecb3ff",
             "background": "#ecb3ff",
             "gradient": "",
@@ -777,6 +843,9 @@
         "scheme3": {
           "settings": {
             "text": "#063b46",
+            "body_text": "#063b46",
+            "eyebrow_text": "#063b46",
+            "caption_text": "#063b46",
             "text_contrast": "#6bfdfd",
             "background": "#6bfdfd",
             "gradient": "",
@@ -791,6 +860,9 @@
         "scheme4": {
           "settings": {
             "text": "#00341d",
+            "body_text": "#00341d",
+            "eyebrow_text": "#00341d",
+            "caption_text": "#00341d",
             "text_contrast": "#7effc1",
             "background": "#7effc1",
             "gradient": "",
@@ -805,6 +877,9 @@
         "scheme5": {
           "settings": {
             "text": "#ffffff",
+            "body_text": "#ffffff",
+            "eyebrow_text": "#ffffff",
+            "caption_text": "#ffffff",
             "text_contrast": "#000000",
             "background": "#000000",
             "gradient": "",
@@ -819,6 +894,9 @@
         "scheme6": {
           "settings": {
             "text": "#000000",
+            "body_text": "#000000",
+            "eyebrow_text": "#000000",
+            "caption_text": "#000000",
             "text_contrast": "#ffffff",
             "background": "#ffffff",
             "gradient": "",
@@ -938,6 +1016,9 @@
         "scheme1": {
           "settings": {
             "text": "#50463e",
+            "body_text": "#50463e",
+            "eyebrow_text": "#50463e",
+            "caption_text": "#50463e",
             "text_contrast": "#ffffff",
             "background": "#ffffff",
             "gradient": "",
@@ -952,6 +1033,9 @@
         "scheme2": {
           "settings": {
             "text": "#50463e",
+            "body_text": "#50463e",
+            "eyebrow_text": "#50463e",
+            "caption_text": "#50463e",
             "text_contrast": "#fffefc",
             "background": "#eeece7",
             "gradient": "",
@@ -966,6 +1050,9 @@
         "scheme3": {
           "settings": {
             "text": "#f4eff2",
+            "body_text": "#f4eff2",
+            "eyebrow_text": "#f4eff2",
+            "caption_text": "#f4eff2",
             "text_contrast": "#5b414a",
             "background": "#5b414a",
             "gradient": "",
@@ -980,6 +1067,9 @@
         "scheme4": {
           "settings": {
             "text": "#584450",
+            "body_text": "#584450",
+            "eyebrow_text": "#584450",
+            "caption_text": "#584450",
             "text_contrast": "#d9c8d2",
             "background": "#d9c8d2",
             "gradient": "",
@@ -994,6 +1084,9 @@
         "scheme5": {
           "settings": {
             "text": "#ffffff",
+            "body_text": "#ffffff",
+            "eyebrow_text": "#ffffff",
+            "caption_text": "#ffffff",
             "text_contrast": "#000000",
             "background": "#000000",
             "gradient": "",
@@ -1008,6 +1101,9 @@
         "scheme6": {
           "settings": {
             "text": "#000000",
+            "body_text": "#000000",
+            "eyebrow_text": "#000000",
+            "caption_text": "#000000",
             "text_contrast": "#ffffff",
             "background": "#ffffff",
             "gradient": "",
@@ -1127,6 +1223,9 @@
         "scheme1": {
           "settings": {
             "text": "#4d9e76",
+            "body_text": "#4d9e76",
+            "eyebrow_text": "#4d9e76",
+            "caption_text": "#4d9e76",
             "text_contrast": "#ffffff",
             "background": "#ffffff",
             "gradient": "",
@@ -1141,6 +1240,9 @@
         "scheme2": {
           "settings": {
             "text": "#fffef4",
+            "body_text": "#fffef4",
+            "eyebrow_text": "#fffef4",
+            "caption_text": "#fffef4",
             "text_contrast": "#8b635c",
             "background": "#8b635c",
             "gradient": "",
@@ -1155,6 +1257,9 @@
         "scheme3": {
           "settings": {
             "text": "#fffef4",
+            "body_text": "#fffef4",
+            "eyebrow_text": "#fffef4",
+            "caption_text": "#fffef4",
             "text_contrast": "#4d9e76",
             "background": "#4d9e76",
             "gradient": "",
@@ -1169,6 +1274,9 @@
         "scheme4": {
           "settings": {
             "text": "#4d9e76",
+            "body_text": "#4d9e76",
+            "eyebrow_text": "#4d9e76",
+            "caption_text": "#4d9e76",
             "text_contrast": "#ffffff",
             "background": "#f0f9f4",
             "gradient": "",
@@ -1183,6 +1291,9 @@
         "scheme5": {
           "settings": {
             "text": "#ffffff",
+            "body_text": "#ffffff",
+            "eyebrow_text": "#ffffff",
+            "caption_text": "#ffffff",
             "text_contrast": "#000000",
             "background": "#000000",
             "gradient": "",
@@ -1197,6 +1308,9 @@
         "scheme6": {
           "settings": {
             "text": "#000000",
+            "body_text": "#000000",
+            "eyebrow_text": "#000000",
+            "caption_text": "#000000",
             "text_contrast": "#ffffff",
             "background": "#ffffff",
             "gradient": "",

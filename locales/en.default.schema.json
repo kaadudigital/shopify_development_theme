@@ -2045,7 +2045,17 @@
       "name": "Colors",
       "settings": {
         "text": {
-          "label": "Text"
+          "label": "Text",
+          "info": "Headings and any other text elements not covered by Body, Eyebrow, or Caption text below"
+        },
+        "body_text": {
+          "label": "Body text"
+        },
+        "eyebrow_text": {
+          "label": "Eyebrow text"
+        },
+        "caption_text": {
+          "label": "Caption text"
         },
         "text_contrast": {
           "label": "Text contrast"

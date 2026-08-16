@@ -218,11 +218,6 @@
                 else
                   assign loading = 'lazy'
                 endif
-                if forloop.index <= eager_loading_limit
-                  assign loading = 'eager'
-                else
-                  assign loading = 'lazy'
-                endif
 
                 if forloop.first
                   assign preload = true
@@ -390,15 +385,12 @@
        desktop overrides at 769px. All values from the --space-* scale. */
     .info-tiles__eyebrow {
       margin: 0 0 var(--space-4); /* overline → headline: 16px */
-      color: black;
     }
     .info-tiles__heading {
       margin: 0;
     }
     .info-tiles__subheading {
       margin-top: var(--space-4); /* headline → subheading: 16px */
-      color: black;
-
     }
     .info-tiles__content {
       margin-top: var(--space-6); /* header → tiles: 24px mobile */
@@ -578,6 +570,13 @@
       "default": 40
     },
     {
+      "type": "checkbox",
+      "id": "autoscroll_enabled",
+      "label": "Auto-scroll",
+      "default": false,
+      "info": "Automatically scrolls the carousel on whichever breakpoints use the Carousel layout. Visitors can still swipe/drag to scroll manually."
+    },
+    {
       "type": "select",
       "id": "autoscroll_direction",
       "label": "Auto-scroll direction",
@@ -592,13 +591,6 @@
         }
       ],
       "default": "1"
-    },
-    {
-      "type": "checkbox",
-      "id": "autoscroll_enabled",
-      "label": "Auto-scroll",
-      "default": false,
-      "info": "Automatically scrolls the carousel on whichever breakpoints use the Carousel layout. Visitors can still swipe/drag to scroll manually."
     },
     {
       "type": "header",

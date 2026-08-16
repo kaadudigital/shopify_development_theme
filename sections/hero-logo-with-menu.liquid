@@ -167,6 +167,12 @@
         left: 0;
       }
 
+      {%- if section.settings.hamburger_stripe_color != blank -%}
+      .hamburger-menu .line {
+        background-color: {{ section.settings.hamburger_stripe_color }};
+      }
+      {%- endif -%}
+
       .hamburger-menu .line:nth-child(1) {
         top: 0;
       }
@@ -239,17 +245,30 @@
 
       /* ========================================
          MENU OVERLAY
+
+         Layout contract: the overlay is a fixed, non-scrolling viewport-sized
+         box. `.menu-content` is stretched over it (inset: 0) and reserves the
+         header bar's height as *padding-top* — never as a margin — so that
+         `justify-content: center` still centres the links inside the space
+         that is actually visible below the header. --menu-header-offset is
+         written by the section script and kept in sync on resize.
          ======================================== */
       #{{ section.id }} .menu-overlay {
+        --menu-header-offset: 0px;
+        --menu-cloud-height: 80px;
         position: fixed;
         top: 0;
         left: 0;
         width: 100vw;
         height: 100vh;
+        height: 100dvh;
         background-color: rgb(var(--color-scheme-background));
         z-index: 9999;
         visibility: hidden;
+        /* No scrolling inside the open menu — the list is sized to always fit. */
         overflow: hidden;
+        overscroll-behavior: contain;
+        touch-action: none;
         clip-path: circle(0% at var(--menu-x, 10%) var(--menu-y, 10%));
         transition: clip-path 0.8s cubic-bezier(0.76, 0, 0.24, 1), visibility 0s 0.8s;
       }
@@ -260,16 +279,42 @@
         transition: clip-path 0.8s cubic-bezier(0.76, 0, 0.24, 1), visibility 0s 0s;
       }
 
+      /* Soft brand glow so the open state isn't a flat colour field */
+      #{{ section.id }} .menu-overlay::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        opacity: 0;
+        background:
+          radial-gradient(55% 45% at 12% 18%, rgba(var(--color-scheme-text), 0.14), transparent 70%),
+          radial-gradient(50% 40% at 88% 82%, rgba(var(--color-scheme-text), 0.10), transparent 70%);
+        transition: opacity 0.6s ease 0.25s;
+      }
+
+      #{{ section.id }} .menu-overlay.active::before {
+        opacity: 1;
+      }
+
       #{{ section.id }} .menu-content {
-        position: relative;
+        position: absolute;
+        inset: 0;
         z-index: 5;
-        height: 100%;
+        box-sizing: border-box;
+        padding-top: var(--menu-header-offset);
+        padding-bottom: var(--menu-cloud-height);
+        padding-inline: var(--space-6);
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: var(--space-8);
+        overflow: hidden;
         color: rgb(var(--color-scheme-text));
+      }
+
+      #{{ section.id }} .menu-content nav {
+        width: 100%;
       }
 
       #{{ section.id }} .menu-content nav ul {
@@ -277,21 +322,41 @@
         padding: 0;
         margin: 0;
         text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: clamp(var(--space-1), 1.1vh, var(--space-3));
       }
 
       #{{ section.id }} .menu-content nav ul li {
-        margin: var(--space-6) 0;
+        margin: 0;
+        max-width: 100%;
       }
-    /* Menu items - closing animation (top to bottom) */
+
+      /* "Hide on desktop" per-item setting */
+      @media (min-width: 768px) {
+        #{{ section.id }} .menu-content nav ul li.hide-on-desktop {
+          display: none;
+        }
+      }
+
+    /* Menu items - closing animation (top to bottom).
+       Fluid size is capped at the design system's h1 (64px) and only ever
+       scales *down*, so a long menu still fits without introducing scroll. */
     #{{ section.id }} .menu-content nav ul li a {
-      display: block;
+      display: inline-block;
+      position: relative;
       text-decoration: none;
       color: rgb(var(--color-scheme-text));
+      font-family: var(--font-display);
+      font-size: clamp(1.75rem, min(9vw, 7.5vh), 4rem);
+      line-height: 1.1;
+      padding: 0 var(--space-2);
       transform: translateY(100%) translateZ(0);
       opacity: 0;
       transition: transform 0.65s cubic-bezier(0.215, 0.61, 0.355, 1) 0ms,
-                  opacity 0.65s cubic-bezier(0.215, 0.61, 0.355, 1) 0ms;
-      font-family: var(--font-display);
+                  opacity 0.65s cubic-bezier(0.215, 0.61, 0.355, 1) 0ms,
+                  color 0.25s ease-out;
     }
 
 
@@ -315,10 +380,32 @@
       }
     {% endfor %}
 
-      #{{ section.id }} .menu-content a:hover {
-        opacity: 0.7;
-        transform: translateY(0) translateZ(0) scale(1.05);
-        transition: transform 0.3s ease, opacity 0.3s ease;
+      /* ========================================
+         CLOUD FOOTER
+         Absolutely positioned so it can never take part in the flow that
+         centres the links; slides up once the reveal circle has opened.
+         ======================================== */
+      #{{ section.id }} .cloud-footer {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+        height: var(--menu-cloud-height);
+        pointer-events: none;
+        color: rgba(var(--color-scheme-text), 0.12);
+        transform: translateY(100%);
+        transition: transform 0.7s cubic-bezier(0.215, 0.61, 0.355, 1) 0.15s;
+      }
+
+      #{{ section.id }} .menu-overlay.active .cloud-footer {
+        transform: translateY(0);
+      }
+
+      #{{ section.id }} .cloud-footer svg {
+        display: block;
+        width: 100%;
+        height: 100%;
       }
 
       #{{ section.id }} .section-content-custom-padding {
@@ -338,35 +425,59 @@
       }
   /* Dim all items when any item is hovered */
   #{{ section.id }} .menu-overlay.active .menu-content nav ul:hover li a {
-    opacity: 0.3;
+    opacity: 0.35;
     transition-delay: 0s;
   }
 
-  /* Keep hovered item at full opacity */
-  #{{ section.id }} .menu-overlay.active .menu-content nav ul li a:hover {
+  /* Keep hovered item at full opacity, with a bit of brand-appropriate tilt */
+  #{{ section.id }} .menu-overlay.active .menu-content nav ul li a:hover,
+  #{{ section.id }} .menu-overlay.active .menu-content nav ul li a:focus-visible {
     opacity: 1 !important;
-    transform: translateY(0) translateZ(0) scale(1);
+    color: {{ section.settings.menu_accent_color | default: '#ACFF64' }};
+    transform: translateY(0) translateZ(0) rotate(-2deg) scale(1.04);
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out, color 0.2s ease-out;
   }
 
-  /* Underline animation */
-  #{{ section.id }} .menu-overlay.active .menu-content nav ul li a {
-    position: relative;
-    display: inline-block;
+  #{{ section.id }} .menu-content nav ul li a:focus-visible {
+    outline: 2px solid {{ section.settings.menu_accent_color | default: '#ACFF64' }};
+    outline-offset: var(--space-2);
   }
 
-  #{{ section.id }} .menu-overlay.active .menu-content nav ul li a::after {
+  /* Current page marker */
+  #{{ section.id }} .menu-content nav ul li a[aria-current='page'] {
+    color: {{ section.settings.menu_accent_color | default: '#ACFF64' }};
+  }
+
+  /* Underline sweep */
+  #{{ section.id }} .menu-overlay .menu-content nav ul li a::after {
     content: '';
     position: absolute;
-    bottom: 6px;
+    bottom: 0.08em;
     left: 0;
     width: 0;
-    height: 3px;
-    background-color: currentColor;
-    transition: width 0.6s cubic-bezier(0.215, 0.61, 0.355, 1) 0ms;
+    height: 4px;
+    border-radius: 2px;
+    background-color: {{ section.settings.menu_accent_color | default: '#ACFF64' }};
+    transition: width 0.45s cubic-bezier(0.215, 0.61, 0.355, 1) 0ms;
   }
 
-  #{{ section.id }} .menu-overlay.active .menu-content nav ul li a:hover::after {
+  #{{ section.id }} .menu-overlay.active .menu-content nav ul li a:hover::after,
+  #{{ section.id }} .menu-overlay.active .menu-content nav ul li a:focus-visible::after,
+  #{{ section.id }} .menu-overlay.active .menu-content nav ul li a[aria-current='page']::after {
     width: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #{{ section.id }} .menu-overlay,
+    #{{ section.id }} .menu-overlay .cloud-footer,
+    #{{ section.id }} .menu-content nav ul li a {
+      transition-duration: 0.01ms !important;
+      transition-delay: 0ms !important;
+    }
+
+    #{{ section.id }} .menu-overlay.active .menu-content nav ul li a:hover {
+      transform: none;
+    }
   }
       /* ========================================
          RESPONSIVE STYLES
@@ -386,10 +497,6 @@
           display: none;
         }
 
-        #{{ section.id }} .menu-content nav ul li {
-          margin: var(--space-4) 0;
-        }
-
         /* Show hamburger, hide custom menu button */
         .custom-menu-button,
         .custom-menu-button-text {
@@ -407,9 +514,20 @@
           max-width: {{ section.settings.logo_width_tablet }}% !important;
         }
 
+        #{{ section.id }} .menu-overlay {
+          --menu-cloud-height: 110px;
+        }
+
         #{{ section.id }} .header-cart-icon {
           width: var(--space-12);
           height: var(--space-12);
+        }
+      }
+
+      /* Desktop (1024px+) */
+      @media (min-width: 1024px) {
+        #{{ section.id }} .menu-overlay {
+          --menu-cloud-height: 140px;
         }
       }
 
@@ -580,7 +698,13 @@
 
               {%- if label != blank -%}
                 <li class="menu-item-{{ i }}{% if hide_on_desktop %} hide-on-desktop{% endif %}">
-                  <a class="h1" href="{{ link }}">{{ label }}</a>
+                  <a
+                    class="h1"
+                    href="{{ link }}"
+                    {% if link != blank and link == request.path %}aria-current="page"{% endif %}
+                  >
+                    {{- label -}}
+                  </a>
                 </li>
               {%- endif -%}
             {%- endfor -%}
@@ -589,15 +713,16 @@
       </div>
 
       {%- comment -%} Bottom Animated Cloud {%- endcomment -%}
-      <div class="cloud-footer">
+      <div class="cloud-footer" aria-hidden="true">
         <svg
           width="100%"
           height="240"
           viewBox="0 0 2400 240"
           preserveAspectRatio="none"
           xmlns="http://www.w3.org/2000/svg"
+          focusable="false"
         >
-          <path d="M 0,240 L 0,120 A 60,60 0 0,1 120,120 A 60,60 0 0,1 240,120 A 60,60 0 0,1 360,120 A 60,60 0 0,1 480,120 A 60,60 0 0,1 600,120 A 60,60 0 0,1 720,120 A 60,60 0 0,1 840,120 A 60,60 0 0,1 960,120 A 60,60 0 0,1 1080,120 A 60,60 0 0,1 1200,120 A 60,60 0 0,1 1320,120 A 60,60 0 0,1 1440,120 A 60,60 0 0,1 1560,120 A 60,60 0 0,1 1680,120 A 60,60 0 0,1 1800,120 A 60,60 0 0,1 1920,120 A 60,60 0 0,1 2040,120 A 60,60 0 0,1 2160,120 A 60,60 0 0,1 2280,120 A 60,60 0 0,1 2400,120 L 2400,240 Z" fill="#542A76"/>
+          <path d="M 0,240 L 0,120 A 60,60 0 0,1 120,120 A 60,60 0 0,1 240,120 A 60,60 0 0,1 360,120 A 60,60 0 0,1 480,120 A 60,60 0 0,1 600,120 A 60,60 0 0,1 720,120 A 60,60 0 0,1 840,120 A 60,60 0 0,1 960,120 A 60,60 0 0,1 1080,120 A 60,60 0 0,1 1200,120 A 60,60 0 0,1 1320,120 A 60,60 0 0,1 1440,120 A 60,60 0 0,1 1560,120 A 60,60 0 0,1 1680,120 A 60,60 0 0,1 1800,120 A 60,60 0 0,1 1920,120 A 60,60 0 0,1 2040,120 A 60,60 0 0,1 2160,120 A 60,60 0 0,1 2280,120 A 60,60 0 0,1 2400,120 L 2400,240 Z" fill="currentColor"/>
         </svg>
       </div>
     </div>
@@ -635,12 +760,38 @@
     const hamburger = menuButton.querySelector('.hamburger-menu');
     const customMenuButton = menuButton.querySelector('.custom-menu-button');
     const menubarsection = document.getElementById(sectionId);
-    const menuContent = document.getElementById('menuContent-' + sectionId);
 
-    menuContent.style.marginTop = menubarsection.offsetHeight + 'px';
+    // The header bar sits above the overlay, so the links must centre in the
+    // space *below* it. Expose that height as padding (not margin) via a custom
+    // property, and keep it current as the header reflows.
+    function syncHeaderOffset() {
+      const bar = document.getElementById('menubar-' + sectionId) || menubarsection;
+      menuOverlay.style.setProperty('--menu-header-offset', bar.offsetHeight + 'px');
+    }
+
+    syncHeaderOffset();
+    window.addEventListener('resize', syncHeaderOffset);
+    window.addEventListener('load', syncHeaderOffset);
+
+    if (typeof ResizeObserver !== 'undefined') {
+      new ResizeObserver(syncHeaderOffset).observe(menubarsection);
+    }
+
+    // Block wheel/touch scroll chaining out of the open menu.
+    function blockScroll(e) {
+      if (menuOverlay.classList.contains('active')) {
+        e.preventDefault();
+      }
+    }
+
+    menuOverlay.addEventListener('wheel', blockScroll, { passive: false });
+    menuOverlay.addEventListener('touchmove', blockScroll, { passive: false });
+
     let originalOverflow;
 
     function openMenu() {
+      syncHeaderOffset();
+
       const buttonRect = menuButton.getBoundingClientRect();
       const centerX = ((buttonRect.left + buttonRect.right) / 2 / window.innerWidth) * 100;
       const centerY = ((buttonRect.top + buttonRect.bottom) / 2 / window.innerHeight) * 100;
@@ -651,6 +802,7 @@
       originalOverflow = document.body.style.overflow;
       menuOverlay.classList.add('active');
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
 
       // Add active class to hamburger or custom button
       if (hamburger && window.getComputedStyle(hamburger).display !== 'none') {
@@ -664,6 +816,7 @@
     function closeMenu() {
       menuOverlay.classList.remove('active');
       document.body.style.overflow = originalOverflow || '';
+      document.documentElement.style.overflow = '';
 
       // Remove active class from hamburger and custom button
       if (hamburger) {
@@ -769,6 +922,12 @@
       "info": "Optional background image or shape shown behind the hamburger icon on mobile."
     },
     {
+      "type": "color",
+      "id": "hamburger_stripe_color",
+      "label": "Hamburger Stripe Color",
+      "info": "Leave blank to use the color scheme's text color."
+    },
+    {
       "type": "header",
       "content": "Shop Button"
     },
@@ -796,6 +955,13 @@
       "label": "Hide all menu buttons (desktop and mobile)",
       "info": "Hides the menu, shop, and cart buttons on both desktop and mobile. Use when you want a logo-only header.",
       "default": false
+    },
+    {
+      "type": "color",
+      "id": "menu_accent_color",
+      "label": "Open menu accent color",
+      "info": "Used for the hover colour, underline sweep and current-page marker inside the open menu.",
+      "default": "#ACFF64"
     },
     {
       "type": "text",

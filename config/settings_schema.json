@@ -18,6 +18,25 @@
             "type": "color",
             "id": "text",
             "label": "t:settings_schema.colors.settings.text.label",
+            "default": "#162317",
+            "info": "t:settings_schema.colors.settings.text.info"
+          },
+          {
+            "type": "color",
+            "id": "body_text",
+            "label": "t:settings_schema.colors.settings.body_text.label",
+            "default": "#162317"
+          },
+          {
+            "type": "color",
+            "id": "eyebrow_text",
+            "label": "t:settings_schema.colors.settings.eyebrow_text.label",
+            "default": "#162317"
+          },
+          {
+            "type": "color",
+            "id": "caption_text",
+            "label": "t:settings_schema.colors.settings.caption_text.label",
             "default": "#162317"
           },
           {

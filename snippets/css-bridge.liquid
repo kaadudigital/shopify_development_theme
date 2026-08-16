@@ -115,6 +115,9 @@
     {% endif %}
     [data-color-scheme="{{ scheme.id }}"] {
       --color-scheme-text: {{ scheme.settings.text.red }}, {{ scheme.settings.text.green }}, {{ scheme.settings.text.blue }};
+      --color-scheme-body-text: {{ scheme.settings.body_text.red }}, {{ scheme.settings.body_text.green }}, {{ scheme.settings.body_text.blue }};
+      --color-scheme-eyebrow-text: {{ scheme.settings.eyebrow_text.red }}, {{ scheme.settings.eyebrow_text.green }}, {{ scheme.settings.eyebrow_text.blue }};
+      --color-scheme-caption-text: {{ scheme.settings.caption_text.red }}, {{ scheme.settings.caption_text.green }}, {{ scheme.settings.caption_text.blue }};
       --color-scheme-text-contrast: {{ scheme.settings.text_contrast.red }}, {{ scheme.settings.text_contrast.green }}, {{ scheme.settings.text_contrast.blue }};
       --color-scheme-background: {{ scheme.settings.background.red }}, {{ scheme.settings.background.green }}, {{ scheme.settings.background.blue }};
       --color-scheme-accent-1: {{ scheme.settings.accent_1.red }}, {{ scheme.settings.accent_1.green }}, {{ scheme.settings.accent_1.blue }};
@@ -132,6 +135,9 @@
     /* unique values for each scheme */
     :root {
       --color-scheme-{{ scheme.id }}-text: {{ scheme.settings.text.red }} {{ scheme.settings.text.green }} {{ scheme.settings.text.blue }};
+      --color-scheme-{{ scheme.id }}-body-text: {{ scheme.settings.body_text.red }}, {{ scheme.settings.body_text.green }}, {{ scheme.settings.body_text.blue }};
+      --color-scheme-{{ scheme.id }}-eyebrow-text: {{ scheme.settings.eyebrow_text.red }}, {{ scheme.settings.eyebrow_text.green }}, {{ scheme.settings.eyebrow_text.blue }};
+      --color-scheme-{{ scheme.id }}-caption-text: {{ scheme.settings.caption_text.red }}, {{ scheme.settings.caption_text.green }}, {{ scheme.settings.caption_text.blue }};
       --color-scheme-{{ scheme.id }}-text-contrast: {{ scheme.settings.text_contrast.red }}, {{ scheme.settings.text_contrast.green }}, {{ scheme.settings.text_contrast.blue }};
       --color-scheme-{{ scheme.id }}-background: {{ scheme.settings.background.red }}, {{ scheme.settings.background.green }}, {{ scheme.settings.background.blue }};
       --color-scheme-{{ scheme.id }}-accent-1: {{ scheme.settings.accent_1.red }}, {{ scheme.settings.accent_1.green }}, {{ scheme.settings.accent_1.blue }};
