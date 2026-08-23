@@ -1,3 +1,17 @@
+{%- liquid
+  # Carousel arrow silhouette. 'shape-defs' bails out on blank/'default', so a
+  # blank setting simply leaves the arrows in the theme's default pill shape.
+  assign arrow_shape = section.settings.arrow_shape
+  if arrow_shape == 'default'
+    assign arrow_shape = ''
+  endif
+  assign arrow_shape_id = section.id | append: '-arrow'
+-%}
+
+{%- if arrow_shape != blank -%}
+  {%- render 'shape-defs', shape: arrow_shape, shape_id: arrow_shape_id -%}
+{%- endif -%}
+
 {%- style -%}
   /* Vertical rhythm per Kaadu Typography & Spacing Docs — mobile first,
      desktop overrides at 769px. All values from the --space-* scale. */
@@ -30,20 +44,24 @@
     margin-top: var(--space-8); /* body → CTA group: 32px */
   }
 
-  /* Card text repeats the eyebrow treatment (.h3 + eyebrow colour) so the
-     highlight copy reads as a label rather than a paragraph. */
-  #shopify-section-{{ section.id }} .kaadu-iwh__card-text {
-    color: rgb(var(--color-scheme-eyebrow-text));
-  }
-
-  /* Highlight cards are borderless with square corners in this section.
-     Overriding the theme-wide card tokens (snippets/css-bridge.liquid) on
-     the section root leaves .card / .card__surface untouched globally while
-     zeroing both the surface border and the offset shadow's border. */
+  /* Highlight cards are borderless with square corners in this section,
+     regardless of the theme-wide card settings. The tokens are zeroed for
+     anything nested that reads them, and the border/radius are then also
+     cleared directly on the card elements so a merchant raising the global
+     card border width can never reintroduce an edge here. The ID in the
+     selector outranks the theme's own .card rules without needing
+     !important. ::before is the shadow's border ring, ::after its fill. */
   #shopify-section-{{ section.id }} {
     --card-border-radius: 0px;
     --card-border-width: 0;
     --card-shadow-border-width: 0;
+  }
+  #shopify-section-{{ section.id }} .kaadu-iwh__card,
+  #shopify-section-{{ section.id }} .kaadu-iwh__card-body,
+  #shopify-section-{{ section.id }} .kaadu-iwh__card::before,
+  #shopify-section-{{ section.id }} .kaadu-iwh__card::after {
+    border: 0;
+    border-radius: 0;
   }
 
   {%- if section.settings.mobile_arrow_background != blank
@@ -59,6 +77,32 @@
       {%- if section.settings.mobile_arrow_icon_color != blank %}
         color: {{ section.settings.mobile_arrow_icon_color }};
       {%- endif %}
+    }
+  {%- endif -%}
+
+  {%- if arrow_shape != blank -%}
+    /* The arrow's background takes its silhouette from the theme's shared
+       clip-path library (snippets/shape-defs.liquid), rendered once above as
+       #clip-{{ arrow_shape_id }}. The surface is squared off to 48px first —
+       the shapes are authored on a 1:1 viewBox, so a rectangular button would
+       stretch them, and 48px also satisfies the minimum tap target. The
+       theme's inset border and offset shadow rectangle are dropped because
+       neither follows the clip path: the border would be sliced off mid-edge
+       and the shadow would sit behind the shape as a visible rectangle. */
+    #shopify-section-{{ section.id }} .kaadu-iwh__arrows .push-btn__surface {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: var(--space-12);
+      height: var(--space-12);
+      padding: 0;
+      border-radius: 0;
+      box-shadow: none;
+      -webkit-clip-path: url(#clip-{{ arrow_shape_id }});
+      clip-path: url(#clip-{{ arrow_shape_id }});
+    }
+    #shopify-section-{{ section.id }} .kaadu-iwh__arrows .push-btn::after {
+      display: none;
     }
   {%- endif -%}
 
@@ -147,7 +191,7 @@
             {{- block.settings.title -}}
           </{{ block_heading_level }}>
         {% endif %}
-        <div class="kaadu-iwh__card-text inline-rte h3 break-words">
+        <div class="kaadu-iwh__card-text inline-rte body break-words">
           {{ block.settings.text }}
         </div>
         {% if block.settings.cta_link and block.settings.cta_text != blank %}
@@ -168,7 +212,7 @@
 
   {%- capture mobile_block -%}
     <li
-      class="{% if slideshow_on_mobile %}splide__slide w-4/5 lg:w-full{% endif %} relative lg:col-span-3 {% if section.settings.display_on_card %}text-scheme-text card{% endif %}"
+      class="{% if slideshow_on_mobile %}splide__slide w-4/5 lg:w-full{% endif %} relative lg:col-span-3 {% if section.settings.display_on_card %}text-scheme-text card kaadu-iwh__card{% endif %}"
       {% if block.settings.override_section_color_scheme %}
         data-color-scheme="{{ block.settings.color_scheme }}"
       {% endif %}
@@ -180,7 +224,7 @@
 
   {%- capture desktop_block -%}
     <div
-      class="{% if section.settings.display_on_card %}text-scheme-text card{% endif %} "
+      class="{% if section.settings.display_on_card %}text-scheme-text card kaadu-iwh__card{% endif %} "
       {% if block.settings.override_section_color_scheme %}
         data-color-scheme="{{ block.settings.color_scheme }}"
       {% endif %}
@@ -426,6 +470,364 @@
       "label": "Arrow icon color",
       "default": "#000000",
       "info": "Keep at least 3:1 contrast against the arrow background."
+    },
+    {
+      "type": "select",
+      "id": "arrow_shape",
+      "label": "Arrow background shape",
+      "info": "Applies to the mobile carousel arrows.",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:common.options.default.label"
+        },
+        {
+          "value": "diamond",
+          "label": "t:common.options.diamond.label",
+          "group": "t:common.groups.basic"
+        },
+        {
+          "value": "triangle_1",
+          "label": "t:common.options.triangle_1.label",
+          "group": "t:common.groups.basic"
+        },
+        {
+          "value": "triangle_2",
+          "label": "t:common.options.triangle_2.label",
+          "group": "t:common.groups.basic"
+        },
+        {
+          "value": "pentagon",
+          "label": "t:common.options.pentagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "hexagon",
+          "label": "t:common.options.hexagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "heptagon",
+          "label": "t:common.options.heptagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "octagon",
+          "label": "t:common.options.octagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "nonagon",
+          "label": "t:common.options.nonagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "decagon",
+          "label": "t:common.options.decagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "rounded_pentagon",
+          "label": "t:common.options.rounded_pentagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "rounded_hexagon",
+          "label": "t:common.options.rounded_hexagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "rounded_heptagon",
+          "label": "t:common.options.rounded_heptagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "rounded_octagon",
+          "label": "t:common.options.rounded_octagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "rounded_nonagon",
+          "label": "t:common.options.rounded_nonagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "rounded_decagon",
+          "label": "t:common.options.rounded_decagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "star_1",
+          "label": "t:common.options.star_1.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "star_2",
+          "label": "t:common.options.star_2.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "star_3",
+          "label": "t:common.options.star_3.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "star_4",
+          "label": "t:common.options.star_4.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "star_5",
+          "label": "t:common.options.star_5.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "star_6",
+          "label": "t:common.options.star_6.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "abstract_star_1",
+          "label": "t:common.options.abstract_star_1.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "abstract_star_2",
+          "label": "t:common.options.abstract_star_2.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "abstract_star_3",
+          "label": "t:common.options.abstract_star_3.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "scalloped_circle_1",
+          "label": "t:common.options.scalloped_circle_1.label",
+          "group": "t:common.groups.scalloped_circles"
+        },
+        {
+          "value": "scalloped_circle_2",
+          "label": "t:common.options.scalloped_circle_2.label",
+          "group": "t:common.groups.scalloped_circles"
+        },
+        {
+          "value": "scalloped_circle_3",
+          "label": "t:common.options.scalloped_circle_3.label",
+          "group": "t:common.groups.scalloped_circles"
+        },
+        {
+          "value": "scalloped_circle_4",
+          "label": "t:common.options.scalloped_circle_4.label",
+          "group": "t:common.groups.scalloped_circles"
+        },
+        {
+          "value": "scalloped_circle_5",
+          "label": "t:common.options.scalloped_circle_5.label",
+          "group": "t:common.groups.scalloped_circles"
+        },
+        {
+          "value": "scalloped_circle_6",
+          "label": "t:common.options.scalloped_circle_6.label",
+          "group": "t:common.groups.scalloped_circles"
+        },
+        {
+          "value": "parallelogram",
+          "label": "t:common.options.parallelogram.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "squircle",
+          "label": "t:common.options.squircle.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "scalloped_square_1",
+          "label": "t:common.options.scalloped_square_1.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "scalloped_square_2",
+          "label": "t:common.options.scalloped_square_2.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "leaf",
+          "label": "t:common.options.leaf.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "clipped_square",
+          "label": "t:common.options.clipped.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "convex_square",
+          "label": "t:common.options.convex.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "twisted_square",
+          "label": "t:common.options.twisted.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "trapeze",
+          "label": "t:common.options.trapeze.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "pinched",
+          "label": "t:common.options.pinched.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "pixelated",
+          "label": "t:common.options.pixelated.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "overlapped",
+          "label": "t:common.options.overlapped.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "zig_zag",
+          "label": "t:common.options.zig_zag.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "zig_zag_tear",
+          "label": "t:common.options.zig_zag_tear.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "wave_tear",
+          "label": "t:common.options.wave_tear.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "flower",
+          "label": "t:common.options.flower.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "flower_bloom",
+          "label": "t:common.options.flower_bloom.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "concave",
+          "label": "t:common.options.concave.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "flag",
+          "label": "t:common.options.flag.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "abstract_oval",
+          "label": "t:common.options.abstract_oval.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "cross",
+          "label": "t:common.options.cross.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "quatrefoil",
+          "label": "t:common.options.quatrefoil.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "quadrant",
+          "label": "t:common.options.quadrant.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "wind",
+          "label": "t:common.options.wind.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "windmill",
+          "label": "t:common.options.windmill.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "heart",
+          "label": "t:common.options.heart.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "mirrored_pyramids",
+          "label": "t:common.options.mirrored_pyramids.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "plus",
+          "label": "t:common.options.plus.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "double_pill_1",
+          "label": "t:common.options.double_pill_1.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "double_pill_2",
+          "label": "t:common.options.double_pill_2.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "triple_pill_1",
+          "label": "t:common.options.triple_pill_1.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "triple_pill_2",
+          "label": "t:common.options.triple_pill_2.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "crown",
+          "label": "t:common.options.crown.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "stair",
+          "label": "t:common.options.stair.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "pancake_stack",
+          "label": "t:common.options.pancake_stack.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "asterisk",
+          "label": "t:common.options.asterisk.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "overlapping_squares",
+          "label": "t:common.options.overlapping_squares.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "brush_stroke",
+          "label": "t:common.options.brush_stroke.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "blob",
+          "label": "t:common.options.blob.label",
+          "group": "t:common.groups.variable"
+        }
+      ],
+      "default": "default"
     },
     {
       "type": "header",
