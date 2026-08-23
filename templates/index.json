@@ -147,11 +147,11 @@
         "place_content": "place-content-center-center",
         "text_align": "text-center",
         "title": "AUSBEUTUNG IST TIEF VERANKERT",
-        "heading_tag": "h2",
+        "heading_tag": "h1",
         "richtext": "<p>gghrd&lt;t</p>",
         "cta_url": "shopify://blogs/news",
         "cta_text": "Shop Now",
-        "color_scheme": "",
+        "color_scheme": "scheme3",
         "use_gradient_background": false
       }
     },
