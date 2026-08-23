@@ -316,13 +316,19 @@
           align-items: stretch;
         }
 
+        /* Explicit row 1 for both: the mobile `order` values would otherwise
+           push the left column into an auto-placed second row. */
         #{{ section.id }} .menu-side {
           grid-column: 1;
+          grid-row: 1;
+          order: 0;
           justify-content: space-between;
         }
 
         #{{ section.id }} .menu-nav {
           grid-column: 2;
+          grid-row: 1;
+          order: 0;
         }
       }
 
@@ -629,10 +635,12 @@
         transform: translateY(0);
       }
 
+      /* Each SVG copy spans 50% of the scroller, so scroller width controls
+         bump width: 140% ⇒ each copy is 0.7× the viewport ⇒ bumps 30% narrower. */
       #{{ section.id }} .cloud-scroller {
         position: absolute;
         inset: 0;
-        width: 200%;
+        width: 140%;
         display: flex;
         animation: kd-scroll 20s linear infinite;
       }
@@ -644,10 +652,6 @@
         flex-shrink: 0;
       }
 
-      #{{ section.id }} .scallop-m {
-        display: none;
-      }
-
       @keyframes kd-scroll {
         from {
           transform: translateX(-50%);
@@ -657,16 +661,11 @@
         }
       }
 
+      /* Mobile: same 7-bump SVG, but each copy spans 2× the viewport width,
+         so the bumps stay wide instead of squeezing into pointy arcs. */
       @media (max-width: 767px) {
-        #{{ section.id }} .scallop-d {
-          display: none;
-        }
-
-        #{{ section.id }} .scallop-m {
-          display: block;
-        }
-
         #{{ section.id }} .cloud-scroller {
+          width: 400%;
           animation-duration: 12s;
         }
       }
@@ -1048,17 +1047,11 @@
       {%- comment -%} Bottom Scallop Edge — two tiling copies scroll left → right {%- endcomment -%}
       <div class="cloud-footer" aria-hidden="true">
         <div class="cloud-scroller">
-          <svg class="scallop-d" viewBox="0 0 2800 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+          <svg viewBox="0 0 2800 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
             <path d="M 0,300 L 0,150 A 200,150 0 0 1 400,150 A 200,150 0 0 1 800,150 A 200,150 0 0 1 1200,150 A 200,150 0 0 1 1600,150 A 200,150 0 0 1 2000,150 A 200,150 0 0 1 2400,150 A 200,150 0 0 1 2800,150 L 2800,300 Z" fill="currentColor"/>
           </svg>
-          <svg class="scallop-d" viewBox="0 0 2800 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+          <svg viewBox="0 0 2800 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
             <path d="M 0,300 L 0,150 A 200,150 0 0 1 400,150 A 200,150 0 0 1 800,150 A 200,150 0 0 1 1200,150 A 200,150 0 0 1 1600,150 A 200,150 0 0 1 2000,150 A 200,150 0 0 1 2400,150 A 200,150 0 0 1 2800,150 L 2800,300 Z" fill="currentColor"/>
-          </svg>
-          <svg class="scallop-m" viewBox="0 0 1600 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
-            <path d="M 0,300 L 0,150 A 200,150 0 0 1 400,150 A 200,150 0 0 1 800,150 A 200,150 0 0 1 1200,150 A 200,150 0 0 1 1600,150 L 1600,300 Z" fill="currentColor"/>
-          </svg>
-          <svg class="scallop-m" viewBox="0 0 1600 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
-            <path d="M 0,300 L 0,150 A 200,150 0 0 1 400,150 A 200,150 0 0 1 800,150 A 200,150 0 0 1 1200,150 A 200,150 0 0 1 1600,150 L 1600,300 Z" fill="currentColor"/>
           </svg>
         </div>
       </div>
