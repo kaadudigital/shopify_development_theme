@@ -139,7 +139,7 @@
           "focus": "center",
           "type": "loop",
           "autoScroll": {
-            "autoStart": false,
+            "autoStart": {% if section.settings.autoscroll_mode == '0' %}false{% else %}true{% endif %},
             "speed": {{ section.settings.autoscroll_mode | plus: 0 | json }}
           }
         }
@@ -178,6 +178,26 @@
       "type": "checkbox",
       "id": "display_on_card",
       "label": "t:common.settings.display_on_card.label"
+    },
+    {
+      "type": "select",
+      "id": "autoscroll_mode",
+      "label": "t:common.settings.autoscroll_mode.label",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:common.options.right_to_left.label"
+        },
+        {
+          "value": "-1",
+          "label": "t:common.options.left_to_right.label"
+        },
+        {
+          "value": "0",
+          "label": "t:common.options.disabled.label"
+        }
+      ],
+      "default": "1"
     },
     {
       "id": "title",

@@ -183,9 +183,9 @@
               "autoWidth": true,
               "gap": "2.5rem",
               "focus": {{ section.settings.slideshow_focus | json }},
-              "type": "{% if section.settings.slideshow_focus == 'left' %}slide{% else %}loop{% endif %}",
+              "type": "{% if section.settings.autoscroll_mode != '0' %}loop{% elsif section.settings.slideshow_focus == 'left' %}slide{% else %}loop{% endif %}",
               "autoScroll": {
-                "autoStart": false,
+                "autoStart": {% if section.settings.autoscroll_mode == '0' %}false{% else %}true{% endif %},
                 "speed": {{ section.settings.autoscroll_mode | plus: 0 | json }}
               },
               "padding": {
@@ -283,6 +283,26 @@
         }
       ],
       "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "autoscroll_mode",
+      "label": "t:common.settings.autoscroll_mode.label",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:common.options.right_to_left.label"
+        },
+        {
+          "value": "-1",
+          "label": "t:common.options.left_to_right.label"
+        },
+        {
+          "value": "0",
+          "label": "t:common.options.disabled.label"
+        }
+      ],
+      "default": "1"
     },
     {
       "type": "header",
