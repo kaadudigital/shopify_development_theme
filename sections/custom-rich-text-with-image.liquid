@@ -23,6 +23,14 @@
   #shopify-section-{{ section.id }} .kaadu-rtwi__image {
     margin-top: var(--space-8);
   }
+  /* Image width is capped in px per breakpoint. `width: 100%` keeps it fluid
+     below the cap so a narrow phone never overflows, and the desktop value
+     takes over at the 769px design-system breakpoint — the same one the
+     mobile <source> below switches on. */
+  #shopify-section-{{ section.id }} .kaadu-rtwi__image-inner {
+    width: 100%;
+    max-width: {{ section.settings.image_width_mobile }}px;
+  }
   #shopify-section-{{ section.id }} .kaadu-rtwi__image-caption {
     margin-top: var(--space-2);
     text-align: center;
@@ -40,6 +48,9 @@
     }
     #shopify-section-{{ section.id }} .kaadu-rtwi__card-surface {
       padding: var(--space-8);
+    }
+    #shopify-section-{{ section.id }} .kaadu-rtwi__image-inner {
+      max-width: {{ section.settings.image_width_desktop }}px;
     }
   }
 {%- endstyle -%}
@@ -72,7 +83,7 @@
 
         {%- if section.settings.image != blank -%}
           <div class="kaadu-rtwi__image flex justify-center">
-            <div class="{% if section.settings.image_width != 'full' %}max-w-{{ section.settings.image_width }}{% endif %}">
+            <div class="kaadu-rtwi__image-inner">
               <picture>
                 {%- if section.settings.image_mobile != blank -%}
                   <source
@@ -86,7 +97,7 @@
                   | image_tag:
                     class: 'h-auto',
                     loading: 'lazy',
-                    sizes: '(min-width: 990px) 800px, 90vw'
+                    sizes: '(min-width: 769px) {{ section.settings.image_width_desktop }}px, {{ section.settings.image_width_mobile }}px'
                 }}
               </picture>
               {%- if section.settings.image_caption != blank -%}
@@ -195,37 +206,25 @@
       "info": "Optional. Displayed below the image in Small / Caption style."
     },
     {
-      "type": "select",
-      "id": "image_width",
-      "label": "Image Width",
-      "options": [
-        {
-          "value": "xs",
-          "label": "Extra Small (200px)"
-        },
-        {
-          "value": "sm",
-          "label": "Small (300px)"
-        },
-        {
-          "value": "md",
-          "label": "Medium (500px)"
-        },
-        {
-          "value": "lg",
-          "label": "Large (700px)"
-        },
-        {
-          "value": "xl",
-          "label": "Extra Large (900px)"
-        },
-        {
-          "value": "full",
-          "label": "Full Width"
-        }
-      ],
-      "default": "md",
-      "info": "Maximum width of the image"
+      "type": "range",
+      "id": "image_width_desktop",
+      "label": "Image width (Desktop)",
+      "min": 100,
+      "max": 1100,
+      "step": 10,
+      "unit": "px",
+      "default": 320,
+      "info": "Maximum width of the image from 769px up. The image stays fluid below this width, so it never overflows a narrow screen."
+    },
+    {
+      "type": "range",
+      "id": "image_width_mobile",
+      "label": "Image width (Mobile)",
+      "min": 100,
+      "max": 1100,
+      "step": 10,
+      "unit": "px",
+      "default": 320
     },
     {
       "type": "checkbox",
