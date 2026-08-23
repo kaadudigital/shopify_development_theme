@@ -690,7 +690,9 @@
         position: absolute;
         left: 0;
         right: 0;
-        bottom: 0;
+        /* Negative offset drops the strip below the viewport edge (clipped by
+           the overlay) without flattening the bump proportions. */
+        bottom: var(--menu-cloud-offset, 0px);
         z-index: 1;
         height: var(--menu-cloud-height);
         overflow: hidden;
@@ -890,7 +892,8 @@
       /* Desktop (1024px+) */
       @media (min-width: 1024px) {
         #{{ section.id }} .menu-overlay {
-          --menu-cloud-height: 130px;
+          --menu-cloud-height: 170px;
+          --menu-cloud-offset: -40px;
         }
       }
 
