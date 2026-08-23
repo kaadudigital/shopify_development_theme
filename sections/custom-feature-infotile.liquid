@@ -238,6 +238,7 @@
 
               {%- render 'info-tile',
                 block: block,
+                fit: section.settings.image_fit,
                 crop: section.settings.tiles_aspect_ratio,
                 shape: image_shape,
                 shape_override: block.settings.image_shape_override,
@@ -296,6 +297,7 @@
                 -%}
                 {%- render 'info-tile',
                   block: blank,
+                  fit: section.settings.image_fit,
                   crop: section.settings.tiles_aspect_ratio,
                   shape: image_shape,
                   shape_id: shape_id,
@@ -605,6 +607,23 @@
     {
       "type": "header",
       "content": "Tile Image Settings"
+    },
+    {
+      "type": "select",
+      "id": "image_fit",
+      "label": "Image fit",
+      "info": "Applies when an aspect ratio or an image shape is chosen. Contain shows the whole image; Fill crops it to the edges.",
+      "options": [
+        {
+          "value": "contain",
+          "label": "Contain — show the whole image"
+        },
+        {
+          "value": "cover",
+          "label": "Fill — crop to the edges"
+        }
+      ],
+      "default": "contain"
     },
     {
       "type": "select",
