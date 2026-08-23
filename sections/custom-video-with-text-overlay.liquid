@@ -115,7 +115,12 @@
        label and type all flip together there. */
     #shopify-section-{{ section.id }} .kaadu-vto__btn {
       position: relative;
-      display: flex;
+      /* inline-flex, not flex: the button has a fixed pixel width, and the
+         section's Text alignment setting positions it via `text-align` on an
+         ancestor. A block-level flex box ignores text-align and would pin
+         itself to the left edge; inline-level means it follows left / centre /
+         right like the .btn-primary fallback does. */
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       border: none;
