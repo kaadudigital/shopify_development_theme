@@ -464,7 +464,7 @@
       }
     },
     "image_with_highlights_mU9j66": {
-      "type": "image-with-highlights",
+      "type": "custom-image-with-highlights",
       "blocks": {
         "highlight_MUzXKM": {
           "type": "highlight",
