@@ -200,11 +200,11 @@
         max-width: 100%;
       }
 
-      /* MENU pill slightly overlaps the logo */
+      /* MENU pill overlaps the logo */
       #{{ section.id }} .header-left {
         position: relative;
         z-index: 2;
-        margin-left: -8px;
+        margin-left: -38px;
         flex-shrink: 0;
       }
 
@@ -600,7 +600,7 @@
         color: var(--color-sky);
         pointer-events: none;
         transform: translate3d(var(--kd-par-x, 0px), var(--kd-par-y, 0px), 0);
-        transition: transform 0.2s ease-out;
+        transition: transform 0.35s ease-out;
       }
 
       #{{ section.id }} .menu-cloud-pop {
@@ -1158,16 +1158,16 @@
           <circle cx="60" cy="60" r="26"/>
         </svg>
       {%- endcapture -%}
-      <div class="menu-cloud menu-cloud--1" data-depth="28" aria-hidden="true">
+      <div class="menu-cloud menu-cloud--1" data-depth="70" aria-hidden="true">
         <div class="menu-cloud-pop">{{ flower_svg }}</div>
       </div>
-      <div class="menu-cloud menu-cloud--2" data-depth="40" aria-hidden="true">
+      <div class="menu-cloud menu-cloud--2" data-depth="100" aria-hidden="true">
         <div class="menu-cloud-pop">{{ flower_svg }}</div>
       </div>
-      <div class="menu-cloud menu-cloud--3" data-depth="20" aria-hidden="true">
+      <div class="menu-cloud menu-cloud--3" data-depth="50" aria-hidden="true">
         <div class="menu-cloud-pop">{{ flower_svg }}</div>
       </div>
-      <div class="menu-cloud menu-cloud--4" data-depth="32" aria-hidden="true">
+      <div class="menu-cloud menu-cloud--4" data-depth="85" aria-hidden="true">
         <div class="menu-cloud-pop">{{ flower_svg }}</div>
       </div>
 
