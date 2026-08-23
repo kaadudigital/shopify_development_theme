@@ -1,0 +1,81 @@
+{%- comment -%}
+  Carousel arrow appearance: background colour, icon colour and background
+  shape for a section's Splide arrows.
+
+  Renders the clip-path definition plus CSS scoped to this section. It targets
+  the shared `.splide__arrows` container, so it works whether the arrows are
+  rendered directly by the section or inside a carousel snippet such as
+  snippets/featured-collection.liquid.
+
+  Parameters (pass the section's own setting ids, which differ in a couple of
+  older sections):
+    section_id - required; {% render %} has an isolated scope, so the id is
+                 passed in rather than relying on `section` being visible here
+    shape      - a shape-defs value; 'default' or blank leaves the theme's pill
+    bg         - arrow background colour
+    icon       - arrow icon colour
+
+  Usage:
+    {%- render 'kaadu-carousel-arrows',
+      section_id: section.id,
+      shape: section.settings.arrow_shape,
+      bg: section.settings.arrow_background,
+      icon: section.settings.arrow_icon_color
+    -%}
+{%- endcomment -%}
+
+{%- liquid
+  assign sid = section_id | default: section.id
+
+  assign arrow_shape = shape
+  if arrow_shape == 'default'
+    assign arrow_shape = ''
+  endif
+  assign arrow_shape_id = sid | append: '-arrow'
+-%}
+
+{%- if arrow_shape != blank -%}
+  {%- render 'shape-defs', shape: arrow_shape, shape_id: arrow_shape_id -%}
+{%- endif -%}
+
+{%- style -%}
+  {%- if bg != blank or icon != blank -%}
+    /* The ID selector outranks the theme's own
+       `.push-btn:hover .push-btn__surface` rule, so the chosen colours also
+       hold on hover; the push/translate hover animation is unaffected. */
+    #shopify-section-{{ sid }} .splide__arrows .push-btn__surface {
+      {%- if bg != blank %}
+        background: {{ bg }};
+      {%- endif %}
+      {%- if icon != blank %}
+        color: {{ icon }};
+      {%- endif %}
+    }
+  {%- endif -%}
+
+  {%- if arrow_shape != blank -%}
+    /* Silhouette comes from the shared clip-path library
+       (snippets/shape-defs.liquid), rendered once above as
+       #clip-{{ arrow_shape_id }}. The surface is squared off to 48px first:
+       the shapes are authored on a 1:1 viewBox, so a rectangular button would
+       stretch them, and 48px also satisfies the minimum tap target. The
+       theme's inset border and offset shadow rectangle are dropped because
+       neither follows the clip path — the border would be sliced off mid-edge
+       and the shadow would sit behind the shape as a visible rectangle. */
+    #shopify-section-{{ sid }} .splide__arrows .push-btn__surface {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: var(--space-12);
+      height: var(--space-12);
+      padding: 0;
+      border-radius: 0;
+      box-shadow: none;
+      -webkit-clip-path: url(#clip-{{ arrow_shape_id }});
+      clip-path: url(#clip-{{ arrow_shape_id }});
+    }
+    #shopify-section-{{ sid }} .splide__arrows .push-btn::after {
+      display: none;
+    }
+  {%- endif -%}
+{%- endstyle -%}

@@ -1,6 +1,13 @@
 {%- liquid
-  assign crop = crop | default: settings.product_tiles_aspect_ratio
-  assign shape = shape | default: settings.product_tile_media_shape
+  # Info tiles no longer inherit the theme-wide product-tile crop and media
+  # shape. Those globals (a 1:1 box and a wave_tear silhouette) forced every
+  # tile image to be cropped to fill, which is not what an info tile wants —
+  # its image is usually a logo or icon that must be shown whole. Blank now
+  # means "natural, unshaped"; a merchant can still pick a ratio or shape
+  # explicitly per section or per tile. This snippet is only rendered by
+  # sections/custom-feature-infotile.liquid, so nothing else is affected.
+  assign crop = crop | default: 'natural'
+  assign shape = shape | default: 'default'
   
   if block and block != blank and shape_override != blank
     assign shape = shape_override
@@ -60,15 +67,29 @@
           
           <div class="relative {% unless display_on_card %}{% if settings.media_shadow_direction contains 'top' %}pt-media-shadow{% else %}pb-media-shadow{% endif %}{% endunless %}">
             {%- if shape == 'default' -%}
-              <div class="media-wrapper {{ crop }}">
+              {%- if crop == 'natural' -%}
+                {%- comment -%}
+                  No aspect box and no object-cover: the image keeps its own
+                  proportions and is never cropped.
+                {%- endcomment -%}
                 {{- block.settings.image | image_url: width: 1200 | image_tag:
                   loading: loading,
                   sizes: sizes,
                   widths: '300, 400, 500, 600, 800, 1000, 1200',
-                  class: 'object-cover w-full h-full',
+                  class: 'w-full h-auto',
                   preload: preload
                 -}}
-              </div>
+              {%- else -%}
+                <div class="media-wrapper {{ crop }}">
+                  {{- block.settings.image | image_url: width: 1200 | image_tag:
+                    loading: loading,
+                    sizes: sizes,
+                    widths: '300, 400, 500, 600, 800, 1000, 1200',
+                    class: 'object-cover w-full h-full',
+                    preload: preload
+                  -}}
+                </div>
+              {%- endif -%}
             {%- else -%}
               <div class="media-wrapper {% if crop == 'natural' %}relative{% else %}{{ crop }}{% endif %}">
                 {%- liquid
