@@ -117,6 +117,29 @@
     "custom_video_with_text_overlay_BWrhtb": {
       "type": "custom-video-with-text-overlay",
       "blocks": {
+        "sticker_LNbtUW": {
+          "type": "sticker",
+          "settings": {
+            "width": 150,
+            "half_width_on_mobile": false,
+            "text": "Sticker",
+            "shape": "star_1",
+            "sticker_font_size": "1.563rem",
+            "image": "shopify://shop_images/Kaadu_faviconv2_limegreen_RGB.png",
+            "horizontal_position": 80,
+            "vertical_position": 80,
+            "horizontal_position_sm": 80,
+            "vertical_position_sm": 80,
+            "rotate": 0,
+            "show_sticker_on_mobile": true,
+            "show_sticker_on_desktop": true,
+            "rotation_animation": "none",
+            "enable_parallax": false,
+            "parallax_speed": 3,
+            "color_scheme": "scheme1",
+            "color": "bg-scheme-accent-1 text-scheme-accent-1-contrast"
+          }
+        },
         "shape_divider_96CcGb": {
           "type": "shape_divider",
           "settings": {
@@ -132,6 +155,7 @@
         }
       },
       "block_order": [
+        "sticker_LNbtUW",
         "shape_divider_96CcGb"
       ],
       "name": "Custom Video Text Overlay",
@@ -146,12 +170,20 @@
         "style": "full",
         "place_content": "place-content-center-center",
         "text_align": "text-center",
+        "eyebrow": "yes eyebrow",
         "title": "AUSBEUTUNG IST TIEF VERANKERT",
         "heading_tag": "h1",
         "richtext": "<p>gghrd&lt;t</p>",
         "cta_url": "shopify://blogs/news",
         "cta_text": "Shop Now",
-        "color_scheme": "scheme3",
+        "cta_text_mobile": "",
+        "button2_image": "shopify://shop_images/Artboard151.svg",
+        "button2_image_mobile": "shopify://shop_images/Artboard12.svg",
+        "button2_width_desktop": 200,
+        "button2_width_mobile": 150,
+        "button_text_color_desktop": "#ae0000",
+        "button_text_color_mobile": "#ae0000",
+        "color_scheme": "scheme1",
         "use_gradient_background": false
       }
     },
