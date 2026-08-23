@@ -772,12 +772,12 @@
     transition-delay: 0s;
   }
 
-  /* Keep hovered item at full opacity, with a bit of brand-appropriate tilt.
-     No colour change — links stay in the scheme text colour. */
+  /* Keep hovered item at full opacity with a subtle scale — no tilt, no
+     colour change. */
   #{{ section.id }} .menu-overlay.active .menu-content nav ul.menu-links li a:hover,
   #{{ section.id }} .menu-overlay.active .menu-content nav ul.menu-links li a:focus-visible {
     opacity: 1 !important;
-    transform: translateY(0) translateZ(0) rotate(-2deg) scale(1.04);
+    transform: translateY(0) translateZ(0) scale(1.04);
     transition: transform 0.3s ease-out, opacity 0.3s ease-out;
   }
 
