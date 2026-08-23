@@ -356,36 +356,29 @@
         }
       }
 
+      /* Tagline artwork — desktop only */
       #{{ section.id }} .menu-tagline {
-        display: flex;
-        align-items: center;
-        gap: var(--space-6);
-      }
-
-      #{{ section.id }} .menu-tagline p {
-        margin: 0;
-        font-family: var(--font-display);
-        font-size: 24px;
-        line-height: 1.12;
-        text-transform: uppercase;
-        color: var(--color-red);
-        max-width: 420px;
-      }
-
-      #{{ section.id }} .menu-tagline img {
-        width: 88px;
-        height: auto;
-        object-fit: contain;
-        transform: rotate(8deg);
+        display: none;
       }
 
       @media (min-width: 769px) {
-        #{{ section.id }} .menu-tagline p {
-          font-size: 34px;
+        #{{ section.id }} .menu-tagline {
+          display: flex;
+          align-items: center;
+          gap: var(--space-6);
         }
 
-        #{{ section.id }} .menu-tagline img {
+        #{{ section.id }} .menu-tagline-image {
+          width: clamp(240px, 26vw, 420px);
+          max-width: 100%;
+          height: auto;
+        }
+
+        #{{ section.id }} .menu-tagline-sticker {
           width: 120px;
+          height: auto;
+          object-fit: contain;
+          transform: rotate(8deg);
         }
       }
 
@@ -415,7 +408,8 @@
         gap: var(--space-2);
       }
 
-      #{{ section.id }} .menu-social a {
+      #{{ section.id }} .menu-social a,
+      #{{ section.id }} .menu-social .menu-social-drop {
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -711,13 +705,13 @@
       }
 
       /* Three tiling copies, each 1/3 of the scroller. Copy width = scroller
-         width ÷ 3, so 210% ⇒ each copy is 0.7× the viewport (bumps 30%
-         narrower than full-width) while the extra copy keeps the right edge
-         covered at every animation phase. The loop shifts exactly one copy. */
+         width ÷ 3, so 252% ⇒ each copy is 0.84× the viewport, while the extra
+         copy keeps the right edge covered at every animation phase. The loop
+         shifts exactly one copy. */
       #{{ section.id }} .cloud-scroller {
         position: absolute;
         inset: 0;
-        width: 210%;
+        width: 252%;
         display: flex;
         animation: kd-scroll 20s linear infinite;
       }
@@ -1018,13 +1012,17 @@
               </div>
             {%- endif -%}
 
-            {%- if section.settings.overlay_tagline != blank or section.settings.overlay_sticker_1 != blank -%}
+            {%- if section.settings.overlay_tagline_image != blank or section.settings.overlay_sticker_1 != blank -%}
               <div class="menu-tagline">
-                {%- if section.settings.overlay_tagline != blank -%}
-                  <p>{{ section.settings.overlay_tagline }}</p>
+                {%- if section.settings.overlay_tagline_image != blank -%}
+                  {{
+                    section.settings.overlay_tagline_image
+                    | image_url: width: 900
+                    | image_tag: class: 'menu-tagline-image', alt: section.settings.overlay_tagline_image.alt, loading: 'lazy'
+                  }}
                 {%- endif -%}
                 {%- if section.settings.overlay_sticker_1 != blank -%}
-                  {{ section.settings.overlay_sticker_1 | image_url: width: 300 | image_tag: alt: '', loading: 'lazy' }}
+                  {{ section.settings.overlay_sticker_1 | image_url: width: 300 | image_tag: class: 'menu-tagline-sticker', alt: '', loading: 'lazy' }}
                 {%- endif -%}
               </div>
             {%- endif -%}
@@ -1041,34 +1039,50 @@
                 assign social_facebook = section.settings.social_facebook_link | default: settings.social_facebook_link
                 assign social_instagram = section.settings.social_instagram_link | default: settings.social_instagram_link
               -%}
-              {%- if social_tiktok != blank or social_facebook != blank or social_instagram != blank -%}
-                <ul class="menu-social">
+              {%- comment -%}
+                Networks without a configured URL render as decorative icons
+                (no link) so the row is always present; paste the profile URLs
+                in the section settings (or Theme settings → Social) to make
+                them clickable.
+              {%- endcomment -%}
+              <ul class="menu-social">
+                <li>
                   {%- if social_tiktok != blank -%}
-                    <li>
-                      <a href="{{ social_tiktok }}" target="_blank" rel="noopener">
-                        <span class="menu-social-icon" aria-hidden="true">{% render 'icon-tiktok' %}</span>
-                        <span class="visually-hidden">TikTok</span>
-                      </a>
-                    </li>
+                    <a href="{{ social_tiktok }}" target="_blank" rel="noopener">
+                      <span class="menu-social-icon" aria-hidden="true">{% render 'icon-tiktok' %}</span>
+                      <span class="visually-hidden">TikTok</span>
+                    </a>
+                  {%- else -%}
+                    <span class="menu-social-drop" aria-hidden="true">
+                      <span class="menu-social-icon">{% render 'icon-tiktok' %}</span>
+                    </span>
                   {%- endif -%}
+                </li>
+                <li>
                   {%- if social_facebook != blank -%}
-                    <li>
-                      <a href="{{ social_facebook }}" target="_blank" rel="noopener">
-                        <span class="menu-social-icon" aria-hidden="true">{% render 'icon-facebook' %}</span>
-                        <span class="visually-hidden">Facebook</span>
-                      </a>
-                    </li>
+                    <a href="{{ social_facebook }}" target="_blank" rel="noopener">
+                      <span class="menu-social-icon" aria-hidden="true">{% render 'icon-facebook' %}</span>
+                      <span class="visually-hidden">Facebook</span>
+                    </a>
+                  {%- else -%}
+                    <span class="menu-social-drop" aria-hidden="true">
+                      <span class="menu-social-icon">{% render 'icon-facebook' %}</span>
+                    </span>
                   {%- endif -%}
+                </li>
+                <li>
                   {%- if social_instagram != blank -%}
-                    <li>
-                      <a href="{{ social_instagram }}" target="_blank" rel="noopener">
-                        <span class="menu-social-icon" aria-hidden="true">{% render 'icon-instagram' %}</span>
-                        <span class="visually-hidden">Instagram</span>
-                      </a>
-                    </li>
+                    <a href="{{ social_instagram }}" target="_blank" rel="noopener">
+                      <span class="menu-social-icon" aria-hidden="true">{% render 'icon-instagram' %}</span>
+                      <span class="visually-hidden">Instagram</span>
+                    </a>
+                  {%- else -%}
+                    <span class="menu-social-drop" aria-hidden="true">
+                      <span class="menu-social-icon">{% render 'icon-instagram' %}</span>
+                    </span>
                   {%- endif -%}
-                </ul>
-              {%- endif -%}
+                </li>
+              </ul>
             </div>
           </div>
 
@@ -1431,11 +1445,10 @@
       "info": "Falls back to Theme settings → Social if blank."
     },
     {
-      "type": "text",
-      "id": "overlay_tagline",
-      "label": "Overlay tagline",
-      "info": "Shown under the wordmark in the open menu (desktop left column). Enter in normal case — uppercasing is CSS-only.",
-      "default": "Snack Like You Give a Damn."
+      "type": "image_picker",
+      "id": "overlay_tagline_image",
+      "label": "Tagline image",
+      "info": "Shown under the wordmark in the open menu. Desktop only — hidden on mobile."
     },
     {
       "type": "image_picker",
