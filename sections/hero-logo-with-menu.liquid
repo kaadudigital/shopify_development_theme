@@ -25,60 +25,109 @@
   endfor
 
   assign account_url = section.settings.account_link | default: routes.account_url
+  assign shop_url = section.settings.shop_link | default: routes.all_products_collection_url
+  assign accent_color = section.settings.menu_accent_color | default: '#ACFF64'
 -%}
 
 {%- style -%}
       /* ========================================
-         BUTTON STYLES
+         PILL BUTTONS (CSS-only — no image assets)
          ======================================== */
-      .custom-menu-button,
-      .custom-shop-button,
-      .custom-cart-button {
-        background-size: contain;
-        background-position: center;
-        background-repeat: no-repeat;
-        border: none;
-        cursor: pointer;
-        transition: transform 0.3s ease;
-        position: relative;
+      #{{ section.id }} .custom-menu-button,
+      #{{ section.id }} .custom-shop-button,
+      #{{ section.id }} .custom-cart-button {
         display: flex;
         align-items: center;
         justify-content: center;
+        flex-shrink: 0;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+        border-radius: 50%;
+        box-shadow: var(--shadow-sm);
+        transition: transform 0.3s ease;
       }
 
-      .custom-menu-button {
-        background-image: url('{{ section.settings.menu_button_image | img_url: 'master' }}');
-        transform: rotate(-3.94deg);
+      #{{ section.id }} .custom-menu-button:focus-visible,
+      #{{ section.id }} .custom-shop-button:focus-visible,
+      #{{ section.id }} .custom-cart-button:focus-visible {
+        outline: 3px solid var(--color-black);
+        outline-offset: 2px;
       }
 
-      .custom-menu-button:hover {
-        transform: rotate(1.2deg);
+      /* MENU / CLOSE — lime oval */
+      #{{ section.id }} .custom-menu-button {
+        width: 96px;
+        height: 52px;
+        background-color: {{ accent_color }};
+        transform: rotate(-8deg);
       }
 
-      .custom-shop-button {
-        background-image: url('{{ section.settings.shop_button_image | img_url: 'master' }}');
-        transform: rotate(6.14deg);
+      #{{ section.id }} .custom-menu-button:hover {
+        transform: rotate(-2deg) scale(1.04);
       }
 
-      .custom-shop-button:hover,
-      .custom-cart-button:hover {
-        transform: rotate(1deg);
+      /* SHOP NOW — cream oval, red text */
+      #{{ section.id }} .custom-shop-button {
+        min-width: 120px;
+        height: 64px;
+        padding: 0 var(--space-3);
+        background-color: var(--color-cream);
+        color: var(--color-red);
+        transform: rotate(-4deg);
+        font-family: var(--font-display);
+        font-size: 20px;
+        line-height: 1.1;
+        text-transform: uppercase;
+        text-align: center;
       }
 
-      .custom-cart-button {
-        background-image: url('{{ section.settings.cart_icon_image | img_url: 'master' }}');
-        transform: rotate(-9.53deg);
-        padding: var(--space-6);
+      #{{ section.id }} .custom-shop-button:hover {
+        transform: rotate(0deg) scale(1.04);
       }
 
-      .custom-menu-button-text,
-      .custom-shop-button-text {
+      /* CART — red oval, cream text */
+      #{{ section.id }} .custom-cart-button {
+        width: 110px;
+        height: 60px;
+        background-color: var(--color-red);
+        color: var(--color-cream);
+        transform: rotate(4deg);
+        font-family: var(--font-display);
+        font-size: 24px;
+        line-height: 1.1;
+        text-transform: uppercase;
+      }
+
+      #{{ section.id }} .custom-cart-button:hover {
+        transform: rotate(1deg) scale(1.04);
+      }
+
+      #{{ section.id }} .custom-menu-button-text {
         color: var(--color-red);
         font-family: var(--font-display);
         font-size: 24px;
         line-height: 32px;
         font-weight: 400;
-        padding: var(--space-4) var(--space-6);
+        padding: 0;
+      }
+
+      /* Icon-only variants (shown on mobile) */
+      #{{ section.id }} .pill-icon {
+        display: none;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #{{ section.id }} .pill-icon .theme-icon {
+        width: 22px;
+        height: 22px;
+      }
+
+      /* Theme icons ship with a hardcoded #000 stroke — follow the pill's
+         text colour instead. */
+      #{{ section.id }} .pill-icon .theme-icon path {
+        stroke: currentColor;
       }
 
       /* Menu button text container for animation */
@@ -87,7 +136,8 @@
       overflow: hidden;
       height: 1.2em;
       display: block;
-      min-width: 80px;
+      min-width: 64px;
+      text-align: center;
     }
 
     .menu-text-wrapper .menu-text,
@@ -127,138 +177,55 @@
     }
 
       /* ========================================
-         HAMBURGER MENU (fallback when no menu button image is set)
-         ======================================== */
-      .hamburger-menu {
-        display: none;
-        flex-direction: column;
-        justify-content: space-around;
-        width: 30px;
-        height: 24px;
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        padding: 0;
-        z-index: 10;
-        position: relative;
-      }
-
-      {%- if section.settings.hamburger_background_image != blank -%}
-      .hamburger-menu::before {
-        content: '';
-        position: absolute;
-        top: -16px;
-        bottom: -16px;
-        left: -13px;
-        right: -13px;
-        z-index: -1;
-        background-image: url('{{ section.settings.hamburger_background_image | img_url: 'master' }}');
-        background-size: contain;
-        background-position: center;
-        background-repeat: no-repeat;
-      }
-      {%- endif -%}
-
-      .hamburger-menu .line {
-        width: 100%;
-        height: 3px;
-        background-color: rgb(var(--color-scheme-text));
-        transition: all 0.3s ease;
-        border-radius: 2px;
-        position: absolute;
-        left: 0;
-      }
-
-      {%- if section.settings.hamburger_stripe_color != blank -%}
-      .hamburger-menu .line {
-        background-color: {{ section.settings.hamburger_stripe_color }};
-      }
-      {%- endif -%}
-
-      .hamburger-menu .line:nth-child(1) {
-        top: 0;
-      }
-
-      .hamburger-menu .line:nth-child(2) {
-        top: 50%;
-        transform: translateY(-50%);
-      }
-
-      .hamburger-menu .line:nth-child(3) {
-        bottom: 0;
-      }
-
-      /* Hamburger to X animation */
-      .hamburger-menu.active .line:nth-child(1) {
-        top: 50%;
-        transform: translateY(-50%) rotate(45deg);
-      }
-
-      .hamburger-menu.active .line:nth-child(2) {
-        opacity: 0;
-      }
-
-      .hamburger-menu.active .line:nth-child(3) {
-        bottom: 50%;
-        transform: translateY(50%) rotate(-45deg);
-      }
-
-      /* ========================================
-         HEADER LAYOUT
+         HEADER LAYOUT — logo left, pills cluster
          ======================================== */
       .adjust-menu-on-overlay {
         position: relative;
         z-index: 100000;
       }
 
-      .header-content-wrapper {
-        display: grid;
-        grid-template-columns: 1fr auto 1fr;
-        align-items: center;
-        gap: var(--space-4);
-      }
-
-      #{{ section.id }} .header-left {
-        grid-column: 1;
-        justify-self: start;
-      }
-
-      #{{ section.id }} .header-right {
-        grid-column: 3;
-        justify-self: end;
+      #{{ section.id }} .header-content-wrapper {
         display: flex;
-        align-items: center;
-        gap: var(--space-4);
+        align-items: flex-start;
+        gap: var(--space-3);
       }
 
-      .responsive-logo-container {
-        grid-column: 2;
-        justify-self: center;
+      #{{ section.id }} .responsive-logo-container {
+        min-width: 0;
+        flex-shrink: 1;
         transition: opacity 0.3s ease-out;
       }
 
-      #{{ section.id }} .header-button-wrapper,
-      #{{ section.id }} .header-cart-icon {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: transform 0.2s ease;
+      #{{ section.id }} .responsive-logo-container img {
+        max-width: 100%;
+      }
+
+      /* MENU pill slightly overlaps the logo */
+      #{{ section.id }} .header-left {
+        position: relative;
+        z-index: 2;
+        margin-left: -8px;
+        flex-shrink: 0;
+      }
+
+      #{{ section.id }} .header-spacer {
+        flex: 1 1 0;
+        min-width: var(--space-2);
       }
 
       /* While the menu is open the shop button steps aside (the CLOSE pill and
-         cart stay), matching the reference open state. */
+         cart stay), and on desktop the header logo yields to the giant overlay
+         wordmark. visibility:hidden also removes the shop pill from tab order. */
       #{{ section.id }} .custom-shop-button {
-        transition: opacity 0.3s ease-out, transform 0.3s ease;
+        transition: opacity 0.3s ease-out, visibility 0s 0.3s, transform 0.3s ease;
       }
 
       #{{ section.id }}.menu-open .custom-shop-button {
         opacity: 0;
+        visibility: hidden;
         pointer-events: none;
       }
 
-      /* Desktop only: the centred header logo fades out so the big overlay
-         logo (top-left, reference style) takes its place. */
       @media (min-width: 769px) {
         #{{ section.id }}.menu-open .responsive-logo-container {
           opacity: 0;
@@ -268,15 +235,14 @@
       /* ========================================
          MENU OVERLAY
 
-         Full-viewport panel that slides down from the top (reference-site
-         behaviour), with a solid scalloped edge at the bottom. The header bar
-         stays above it (CLOSE pill + cart remain usable); its height is
-         reserved as *padding-top* via --menu-header-offset, kept in sync by
-         the section script.
+         Full-viewport panel that slides down from the top, with an animated
+         scalloped edge along the bottom. The header bar stays above it (CLOSE
+         pill + cart remain usable); its height is reserved as *padding-top*
+         via --menu-header-offset, kept in sync by the section script.
          ======================================== */
       #{{ section.id }} .menu-overlay {
         --menu-header-offset: 0px;
-        --menu-cloud-height: 80px;
+        --menu-cloud-height: 96px;
         position: fixed;
         top: 0;
         left: 0;
@@ -329,13 +295,17 @@
         gap: var(--space-8);
       }
 
-      /* Mobile order: utility rows → links → email/social (reference mobile) */
+      /* Mobile order: utility rows → links → tagline/email/social */
       #{{ section.id }} .menu-nav {
         order: 1;
       }
 
       #{{ section.id }} .menu-side {
         order: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-8);
       }
 
       @media (min-width: 769px) {
@@ -348,10 +318,7 @@
 
         #{{ section.id }} .menu-side {
           grid-column: 1;
-          display: flex;
-          flex-direction: column;
           justify-content: space-between;
-          gap: var(--space-8);
         }
 
         #{{ section.id }} .menu-nav {
@@ -359,7 +326,7 @@
         }
       }
 
-      /* --- Left column: big logo + email + socials --- */
+      /* --- Left column: giant wordmark → tagline + sticker → email/socials --- */
       #{{ section.id }} .menu-logo {
         display: none;
       }
@@ -367,12 +334,48 @@
       @media (min-width: 769px) {
         #{{ section.id }} .menu-logo {
           display: block;
-          width: clamp(220px, 26vw, 420px);
+          width: clamp(420px, 46vw, 640px);
+          max-width: 100%;
+          margin-left: -40px;
+          transform: rotate(-3deg);
         }
 
         #{{ section.id }} .menu-logo img {
           width: 100%;
           height: auto;
+        }
+      }
+
+      #{{ section.id }} .menu-tagline {
+        display: flex;
+        align-items: center;
+        gap: var(--space-6);
+      }
+
+      #{{ section.id }} .menu-tagline p {
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: 24px;
+        line-height: 1.12;
+        text-transform: uppercase;
+        color: var(--color-red);
+        max-width: 420px;
+      }
+
+      #{{ section.id }} .menu-tagline img {
+        width: 88px;
+        height: auto;
+        object-fit: contain;
+        transform: rotate(8deg);
+      }
+
+      @media (min-width: 769px) {
+        #{{ section.id }} .menu-tagline p {
+          font-size: 34px;
+        }
+
+        #{{ section.id }} .menu-tagline img {
+          width: 120px;
         }
       }
 
@@ -391,7 +394,7 @@
 
       #{{ section.id }} .menu-email:hover,
       #{{ section.id }} .menu-email:focus-visible {
-        color: {{ section.settings.menu_accent_color | default: '#ACFF64' }};
+        color: {{ accent_color }};
       }
 
       #{{ section.id }} .menu-social a {
@@ -424,7 +427,7 @@
 
       #{{ section.id }} .menu-utility a:hover,
       #{{ section.id }} .menu-utility a:focus-visible {
-        color: {{ section.settings.menu_accent_color | default: '#ACFF64' }};
+        color: {{ accent_color }};
       }
 
       #{{ section.id }} .menu-utility .theme-icon {
@@ -433,8 +436,6 @@
         flex-shrink: 0;
       }
 
-      /* Theme icons ship with a hardcoded #000 stroke — follow the scheme text
-         colour inside the overlay instead. */
       #{{ section.id }} .menu-utility .theme-icon path {
         stroke: currentColor;
       }
@@ -445,7 +446,7 @@
         }
       }
 
-      /* --- "My account" link above the nav (desktop only, reference style) --- */
+      /* --- "My account" link above the nav (desktop only) --- */
       #{{ section.id }} .menu-account {
         display: none;
         color: rgb(var(--color-scheme-text));
@@ -534,13 +535,20 @@
     {% endfor %}
 
       /* ========================================
-         DECORATIVE STICKERS inside the overlay
+         DECORATIVE ELEMENTS inside the overlay
+         Sticker and sky clouds pop in (scale 0 → 1) once the panel is open.
          ======================================== */
       #{{ section.id }} .menu-sticker {
         position: absolute;
         z-index: 6;
         width: clamp(56px, 7vw, 110px);
         pointer-events: none;
+        transform: scale(0) rotate(9deg);
+        transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.6s;
+      }
+
+      #{{ section.id }} .menu-overlay.active .menu-sticker {
+        transform: scale(1) rotate(9deg);
       }
 
       #{{ section.id }} .menu-sticker img {
@@ -549,30 +557,59 @@
         object-fit: contain;
       }
 
-      #{{ section.id }} .menu-sticker--1 {
-        left: 10%;
-        top: 42%;
-        transform: rotate(-12deg);
-      }
-
       #{{ section.id }} .menu-sticker--2 {
         right: 7%;
         bottom: calc(var(--menu-cloud-height) - 20px);
-        transform: rotate(9deg);
       }
 
-      @media (max-width: 768px) {
-        #{{ section.id }} .menu-sticker--1 {
-          left: auto;
-          right: 4%;
-          top: 22%;
+      #{{ section.id }} .menu-cloud {
+        position: absolute;
+        z-index: 1;
+        width: clamp(80px, 9vw, 140px);
+        color: var(--color-sky);
+        pointer-events: none;
+        transform: scale(0);
+        transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.6s;
+      }
+
+      #{{ section.id }} .menu-overlay.active .menu-cloud {
+        transform: scale(1);
+      }
+
+      #{{ section.id }} .menu-cloud svg {
+        display: block;
+        width: 100%;
+        height: auto;
+        fill: currentColor;
+      }
+
+      #{{ section.id }} .menu-cloud--1 {
+        left: 46%;
+        top: 60px;
+      }
+
+      #{{ section.id }} .menu-cloud--2 {
+        right: -30px;
+        bottom: 260px;
+      }
+
+      @media (max-width: 767px) {
+        #{{ section.id }} .menu-cloud--1 {
+          display: none;
+        }
+
+        #{{ section.id }} .menu-cloud--2 {
+          right: -26px;
+          top: 26%;
+          bottom: auto;
         }
       }
 
       /* ========================================
          SCALLOP FOOTER
-         Solid contrast-colour semicircle edge along the bottom (reference
-         style). Absolutely positioned; slides up once the panel is open.
+         Big solid semicircle bumps along the bottom, scrolling slowly left →
+         right. Two copies of the tiling SVG sit in a 200%-wide scroller; the
+         translateY open-transition stays on .cloud-footer itself.
          ======================================== */
       #{{ section.id }} .cloud-footer {
         position: absolute;
@@ -581,6 +618,7 @@
         bottom: 0;
         z-index: 1;
         height: var(--menu-cloud-height);
+        overflow: hidden;
         pointer-events: none;
         color: rgb(var(--color-scheme-text));
         transform: translateY(100%);
@@ -591,10 +629,46 @@
         transform: translateY(0);
       }
 
-      #{{ section.id }} .cloud-footer svg {
+      #{{ section.id }} .cloud-scroller {
+        position: absolute;
+        inset: 0;
+        width: 200%;
+        display: flex;
+        animation: kd-scroll 20s linear infinite;
+      }
+
+      #{{ section.id }} .cloud-scroller svg {
         display: block;
-        width: 100%;
+        width: 50%;
         height: 100%;
+        flex-shrink: 0;
+      }
+
+      #{{ section.id }} .scallop-m {
+        display: none;
+      }
+
+      @keyframes kd-scroll {
+        from {
+          transform: translateX(-50%);
+        }
+        to {
+          transform: translateX(0);
+        }
+      }
+
+      @media (max-width: 767px) {
+        #{{ section.id }} .scallop-d {
+          display: none;
+        }
+
+        #{{ section.id }} .scallop-m {
+          display: block;
+        }
+
+        #{{ section.id }} .cloud-scroller {
+          animation-duration: 12s;
+        }
       }
 
       #{{ section.id }} .section-content-custom-padding {
@@ -607,9 +681,10 @@
         }
       }
 
-      /* Hide menu buttons toggle — grid keeps logo centered automatically */
+      /* Hide menu buttons toggle — logo-only header */
       #{{ section.id }}.hide-menu-buttons .header-left,
-      #{{ section.id }}.hide-menu-buttons .header-right {
+      #{{ section.id }}.hide-menu-buttons .custom-shop-button,
+      #{{ section.id }}.hide-menu-buttons .custom-cart-button {
         display: none !important;
       }
   /* Dim all items when any item is hovered */
@@ -622,7 +697,7 @@
   #{{ section.id }} .menu-overlay.active .menu-content nav ul.menu-links li a:hover,
   #{{ section.id }} .menu-overlay.active .menu-content nav ul.menu-links li a:focus-visible {
     opacity: 1 !important;
-    color: {{ section.settings.menu_accent_color | default: '#ACFF64' }};
+    color: {{ accent_color }};
     transform: translateY(0) translateZ(0) rotate(-2deg) scale(1.04);
     transition: transform 0.3s ease-out, opacity 0.3s ease-out, color 0.2s ease-out;
   }
@@ -631,13 +706,13 @@
   #{{ section.id }} .menu-account:focus-visible,
   #{{ section.id }} .menu-email:focus-visible,
   #{{ section.id }} .menu-utility a:focus-visible {
-    outline: 2px solid {{ section.settings.menu_accent_color | default: '#ACFF64' }};
+    outline: 2px solid {{ accent_color }};
     outline-offset: var(--space-2);
   }
 
   /* Current page marker */
   #{{ section.id }} .menu-content nav ul.menu-links li a[aria-current='page'] {
-    color: {{ section.settings.menu_accent_color | default: '#ACFF64' }};
+    color: {{ accent_color }};
   }
 
   /* Underline sweep */
@@ -649,7 +724,7 @@
     width: 0;
     height: 4px;
     border-radius: 2px;
-    background-color: {{ section.settings.menu_accent_color | default: '#ACFF64' }};
+    background-color: {{ accent_color }};
     transition: width 0.45s cubic-bezier(0.215, 0.61, 0.355, 1) 0ms;
   }
 
@@ -662,9 +737,15 @@
   @media (prefers-reduced-motion: reduce) {
     #{{ section.id }} .menu-overlay,
     #{{ section.id }} .menu-overlay .cloud-footer,
-    #{{ section.id }} .menu-content nav ul.menu-links li a {
+    #{{ section.id }} .menu-content nav ul.menu-links li a,
+    #{{ section.id }} .menu-sticker,
+    #{{ section.id }} .menu-cloud {
       transition-duration: 0.01ms !important;
       transition-delay: 0ms !important;
+    }
+
+    #{{ section.id }} .cloud-scroller {
+      animation: none;
     }
 
     #{{ section.id }} .menu-overlay.active .menu-content nav ul.menu-links li a:hover {
@@ -677,18 +758,7 @@
 
       /* Mobile (max-width: 767px) */
       @media (max-width: 767px) {
-        #{{ section.id }} .responsive-logo-container {
-          width: {{ section.settings.logo_width_mobile }}% !important;
-          min-width: {{ section.settings.logo_width_mobile }}% !important;
-          max-width: {{ section.settings.logo_width_mobile }}% !important;
-        }
-
-        {%- if section.settings.menu_button_image != blank -%}
-        /* Reference-style mobile header: pill buttons instead of hamburger.
-           Sides size to content and the logo shrinks first, so the row can
-           never overflow at 320px. */
         #{{ section.id }} .header-content-wrapper {
-          grid-template-columns: auto minmax(0, 1fr) auto;
           gap: var(--space-2);
         }
 
@@ -698,58 +768,37 @@
           max-width: {{ section.settings.logo_width_mobile }}% !important;
         }
 
-        #{{ section.id }} .responsive-logo-container img {
-          max-width: 100%;
-        }
-
-        #{{ section.id }} .header-right {
-          gap: var(--space-2);
-        }
-
-        #{{ section.id }} .header-button-wrapper {
-          width: 76px;
+        #{{ section.id }} .custom-menu-button {
+          width: 82px;
           height: 48px;
         }
 
-        #{{ section.id }} .header-cart-icon {
-          width: var(--space-12);
-          height: var(--space-12);
-        }
-
-        .custom-menu-button-text,
-        .custom-shop-button-text {
-          font-size: 16px;
+        #{{ section.id }} .custom-menu-button-text {
+          font-size: 18px;
           line-height: 24px;
-          padding: var(--space-2) var(--space-3);
-        }
-
-        .custom-cart-button {
-          padding: var(--space-3);
         }
 
         .menu-text-wrapper {
-          min-width: 56px;
+          min-width: 52px;
         }
 
-        .hamburger-menu {
-          display: none !important;
+        /* Shop + cart collapse to icon-only pills */
+        #{{ section.id }} .custom-shop-button,
+        #{{ section.id }} .custom-cart-button {
+          width: 52px;
+          min-width: 52px;
+          height: 48px;
+          padding: 0;
         }
-        {%- else -%}
-        #{{ section.id }} .header-right {
-          gap: var(--space-2);
+
+        #{{ section.id }} .shop-label,
+        #{{ section.id }} .cart-label {
           display: none;
         }
 
-        /* Show hamburger, hide custom menu button */
-        .custom-menu-button,
-        .custom-menu-button-text {
-          display: none !important;
+        #{{ section.id }} .pill-icon {
+          display: flex;
         }
-
-        .hamburger-menu {
-          display: flex !important;
-        }
-        {%- endif -%}
       }
 
       /* Tablet (768px - 1023px) */
@@ -759,19 +808,14 @@
         }
 
         #{{ section.id }} .menu-overlay {
-          --menu-cloud-height: 110px;
-        }
-
-        #{{ section.id }} .header-cart-icon {
-          width: var(--space-12);
-          height: var(--space-12);
+          --menu-cloud-height: 130px;
         }
       }
 
       /* Desktop (1024px+) */
       @media (min-width: 1024px) {
         #{{ section.id }} .menu-overlay {
-          --menu-cloud-height: 140px;
+          --menu-cloud-height: 170px;
         }
       }
 
@@ -779,16 +823,6 @@
       @media (min-width: 1024px) and (max-width: 1439px) {
         #{{ section.id }} .responsive-logo-container {
           max-width: {{ section.settings.logo_width_desktop }}px !important;
-        }
-
-        #{{ section.id }} .header-button-wrapper {
-          width: 100px;
-          height: 70px;
-        }
-
-        #{{ section.id }} .header-cart-icon {
-          width: var(--space-16);
-          height: var(--space-16);
         }
       }
 
@@ -838,38 +872,7 @@
     >
       <div class="section-content px-section {% unless section.settings.disable_vertical_spacing %}section-content-custom-padding{% endunless %} {% if enable_overlay %}absolute top-0 left-0 right-0 pointer-events-none z-20{% endif %}">
         <div class="mx-auto max-w-site header-content-wrapper">
-          {%- comment -%} Left Section - Menu Button / Hamburger {%- endcomment -%}
-          <div class="header-left">
-            <div class="header-button-wrapper" id="menuButton-{{ section.id }}">
-              {%- comment -%} Hamburger Menu (fallback) {%- endcomment -%}
-              <button class="hamburger-menu" aria-label="Open menu" aria-expanded="false" aria-controls="menuOverlay-{{ section.id }}">
-                <span class="line"></span>
-                <span class="line"></span>
-                <span class="line"></span>
-              </button>
-
-              {%- comment -%} Custom Menu Button {%- endcomment -%}
-              {%- if section.settings.menu_button_image != blank -%}
-                <button class="custom-menu-button" aria-expanded="false" aria-controls="menuOverlay-{{ section.id }}">
-                  <span class="custom-menu-button-text">
-                    <span class="menu-text-wrapper">
-                      <span class="menu-text">MENU</span>
-                      <span class="close-text">CLOSE</span>
-                    </span>
-                  </span>
-                </button>
-              {%- else -%}
-                <div
-                  class="custom-menu-button-text"
-                  style="background-color: #8bc34a; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #c62828; width: 100%; height: 100%;"
-                >
-                  MENU
-                </div>
-              {%- endif -%}
-            </div>
-          </div>
-
-          {%- comment -%} Center Section - Logo {%- endcomment -%}
+          {%- comment -%} Logo — left {%- endcomment -%}
           {%- if logo != blank -%}
             <div class="responsive-logo-container">
               {{
@@ -885,42 +888,35 @@
             </div>
           {%- endif -%}
 
-          {%- comment -%} Right Section - Shop Button and Cart {%- endcomment -%}
-          <div class="header-right">
-            {%- comment -%} Shop Button {%- endcomment -%}
-            {%- if section.settings.shop_button_image != blank -%}
-              <div class="header-button-wrapper">
-                <button class="custom-shop-button">
-                  <span class="custom-shop-button-text">SHOP</span>
-                </button>
-              </div>
-            {%- else -%}
-              <div
-                class="header-button-wrapper"
-                style="background-color: #90caf9; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #c62828;"
-              >
-                SHOP
-              </div>
-            {%- endif -%}
-
-            {%- comment -%} Cart Icon {%- endcomment -%}
-            {%- if section.settings.cart_icon_image != blank -%}
-              <button class="custom-cart-button" aria-label="Cart">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="#c62828" aria-hidden="true">
-                  <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
-                </svg>
-              </button>
-            {%- else -%}
-              <div
-                class="header-cart-icon"
-                style="background-color: #c62828; display: flex; align-items: center; justify-content: center;"
-              >
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="white" aria-hidden="true">
-                  <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
-                </svg>
-              </div>
-            {%- endif -%}
+          {%- comment -%} MENU / CLOSE pill — overlaps the logo {%- endcomment -%}
+          <div class="header-left" id="menuButton-{{ section.id }}">
+            <button
+              class="custom-menu-button"
+              aria-expanded="false"
+              aria-controls="menuOverlay-{{ section.id }}"
+            >
+              <span class="custom-menu-button-text">
+                <span class="menu-text-wrapper">
+                  <span class="menu-text">MENU</span>
+                  <span class="close-text">CLOSE</span>
+                </span>
+              </span>
+            </button>
           </div>
+
+          <div class="header-spacer" aria-hidden="true"></div>
+
+          {%- comment -%} SHOP NOW pill (icon-only on mobile) {%- endcomment -%}
+          <a class="custom-shop-button" href="{{ shop_url }}" aria-label="{{ section.settings.shop_label | default: 'Shop Now' | escape }}">
+            <span class="shop-label">{{ section.settings.shop_label | default: 'Shop Now' }}</span>
+            <span class="pill-icon" aria-hidden="true">{% render 'icon-bag' %}</span>
+          </a>
+
+          {%- comment -%} CART pill (icon-only on mobile) {%- endcomment -%}
+          <a class="custom-cart-button" href="{{ routes.cart_url }}" aria-label="Cart">
+            <span class="cart-label">Cart</span>
+            <span class="pill-icon" aria-hidden="true">{% render 'icon-cart' %}</span>
+          </a>
         </div>
       </div>
     </div>
@@ -936,15 +932,26 @@
     >
       <div id="menuContent-{{ section.id }}" class="menu-content">
         <div class="menu-layout">
-          {%- comment -%} Left column: big logo on desktop, email + socials {%- endcomment -%}
+          {%- comment -%} Left column: giant wordmark, tagline + sticker, email + socials {%- endcomment -%}
           <div class="menu-side">
             {%- if logo != blank -%}
               <div class="menu-logo">
                 {{
                   logo
-                  | image_url: width: 900
+                  | image_url: width: 1300
                   | image_tag: width: logo.width, alt: logo.alt, loading: 'lazy'
                 }}
+              </div>
+            {%- endif -%}
+
+            {%- if section.settings.overlay_tagline != blank or section.settings.overlay_sticker_1 != blank -%}
+              <div class="menu-tagline">
+                {%- if section.settings.overlay_tagline != blank -%}
+                  <p>{{ section.settings.overlay_tagline }}</p>
+                {%- endif -%}
+                {%- if section.settings.overlay_sticker_1 != blank -%}
+                  {{ section.settings.overlay_sticker_1 | image_url: width: 300 | image_tag: alt: '', loading: 'lazy' }}
+                {%- endif -%}
               </div>
             {%- endif -%}
 
@@ -1011,30 +1018,49 @@
         </div>
       </div>
 
-      {%- comment -%} Decorative stickers (reference-style floating shapes) {%- endcomment -%}
-      {%- if section.settings.overlay_sticker_1 != blank -%}
-        <div class="menu-sticker menu-sticker--1" aria-hidden="true">
-          {{ section.settings.overlay_sticker_1 | image_url: width: 300 | image_tag: alt: '', loading: 'lazy' }}
-        </div>
-      {%- endif -%}
+      {%- comment -%} Sky flower-cloud accents {%- endcomment -%}
+      <div class="menu-cloud menu-cloud--1" aria-hidden="true">
+        <svg viewBox="0 0 120 104" xmlns="http://www.w3.org/2000/svg" focusable="false">
+          <circle cx="60" cy="30" r="26"/>
+          <circle cx="32" cy="44" r="24"/>
+          <circle cx="88" cy="44" r="24"/>
+          <circle cx="42" cy="72" r="24"/>
+          <circle cx="78" cy="72" r="24"/>
+        </svg>
+      </div>
+      <div class="menu-cloud menu-cloud--2" aria-hidden="true">
+        <svg viewBox="0 0 120 104" xmlns="http://www.w3.org/2000/svg" focusable="false">
+          <circle cx="60" cy="30" r="26"/>
+          <circle cx="32" cy="44" r="24"/>
+          <circle cx="88" cy="44" r="24"/>
+          <circle cx="42" cy="72" r="24"/>
+          <circle cx="78" cy="72" r="24"/>
+        </svg>
+      </div>
+
+      {%- comment -%} Floating sticker {%- endcomment -%}
       {%- if section.settings.overlay_sticker_2 != blank -%}
         <div class="menu-sticker menu-sticker--2" aria-hidden="true">
           {{ section.settings.overlay_sticker_2 | image_url: width: 300 | image_tag: alt: '', loading: 'lazy' }}
         </div>
       {%- endif -%}
 
-      {%- comment -%} Bottom Scallop Edge {%- endcomment -%}
+      {%- comment -%} Bottom Scallop Edge — two tiling copies scroll left → right {%- endcomment -%}
       <div class="cloud-footer" aria-hidden="true">
-        <svg
-          width="100%"
-          height="240"
-          viewBox="0 0 2400 240"
-          preserveAspectRatio="none"
-          xmlns="http://www.w3.org/2000/svg"
-          focusable="false"
-        >
-          <path d="M 0,240 L 0,120 A 60,60 0 0,1 120,120 A 60,60 0 0,1 240,120 A 60,60 0 0,1 360,120 A 60,60 0 0,1 480,120 A 60,60 0 0,1 600,120 A 60,60 0 0,1 720,120 A 60,60 0 0,1 840,120 A 60,60 0 0,1 960,120 A 60,60 0 0,1 1080,120 A 60,60 0 0,1 1200,120 A 60,60 0 0,1 1320,120 A 60,60 0 0,1 1440,120 A 60,60 0 0,1 1560,120 A 60,60 0 0,1 1680,120 A 60,60 0 0,1 1800,120 A 60,60 0 0,1 1920,120 A 60,60 0 0,1 2040,120 A 60,60 0 0,1 2160,120 A 60,60 0 0,1 2280,120 A 60,60 0 0,1 2400,120 L 2400,240 Z" fill="currentColor"/>
-        </svg>
+        <div class="cloud-scroller">
+          <svg class="scallop-d" viewBox="0 0 2800 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+            <path d="M 0,300 L 0,150 A 200,150 0 0 1 400,150 A 200,150 0 0 1 800,150 A 200,150 0 0 1 1200,150 A 200,150 0 0 1 1600,150 A 200,150 0 0 1 2000,150 A 200,150 0 0 1 2400,150 A 200,150 0 0 1 2800,150 L 2800,300 Z" fill="currentColor"/>
+          </svg>
+          <svg class="scallop-d" viewBox="0 0 2800 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+            <path d="M 0,300 L 0,150 A 200,150 0 0 1 400,150 A 200,150 0 0 1 800,150 A 200,150 0 0 1 1200,150 A 200,150 0 0 1 1600,150 A 200,150 0 0 1 2000,150 A 200,150 0 0 1 2400,150 A 200,150 0 0 1 2800,150 L 2800,300 Z" fill="currentColor"/>
+          </svg>
+          <svg class="scallop-m" viewBox="0 0 1600 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+            <path d="M 0,300 L 0,150 A 200,150 0 0 1 400,150 A 200,150 0 0 1 800,150 A 200,150 0 0 1 1200,150 A 200,150 0 0 1 1600,150 L 1600,300 Z" fill="currentColor"/>
+          </svg>
+          <svg class="scallop-m" viewBox="0 0 1600 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+            <path d="M 0,300 L 0,150 A 200,150 0 0 1 400,150 A 200,150 0 0 1 800,150 A 200,150 0 0 1 1200,150 A 200,150 0 0 1 1600,150 L 1600,300 Z" fill="currentColor"/>
+          </svg>
+        </div>
       </div>
     </div>
   </section>
@@ -1069,7 +1095,6 @@
     const section = document.getElementById(sectionId);
     const menuButton = document.getElementById('menuButton-' + sectionId);
     const menuOverlay = document.getElementById('menuOverlay-' + sectionId);
-    const hamburger = menuButton.querySelector('.hamburger-menu');
     const customMenuButton = menuButton.querySelector('.custom-menu-button');
 
     // The header bar sits above the overlay, so the links must sit in the
@@ -1090,12 +1115,6 @@
 
     let originalOverflow;
 
-    function setExpanded(value) {
-      [hamburger, customMenuButton].forEach(function (btn) {
-        if (btn) btn.setAttribute('aria-expanded', value ? 'true' : 'false');
-      });
-    }
-
     function openMenu() {
       syncHeaderOffset();
 
@@ -1104,15 +1123,8 @@
       section.classList.add('menu-open');
       document.body.style.overflow = 'hidden';
       document.documentElement.style.overflow = 'hidden';
-      setExpanded(true);
-
-      // Add active class to hamburger or custom button
-      if (hamburger && window.getComputedStyle(hamburger).display !== 'none') {
-        hamburger.classList.add('active');
-      }
-      if (customMenuButton && window.getComputedStyle(customMenuButton).display !== 'none') {
-        customMenuButton.classList.add('active');
-      }
+      customMenuButton.setAttribute('aria-expanded', 'true');
+      customMenuButton.classList.add('active');
     }
 
     function closeMenu() {
@@ -1120,15 +1132,8 @@
       section.classList.remove('menu-open');
       document.body.style.overflow = originalOverflow || '';
       document.documentElement.style.overflow = '';
-      setExpanded(false);
-
-      // Remove active class from hamburger and custom button
-      if (hamburger) {
-        hamburger.classList.remove('active');
-      }
-      if (customMenuButton) {
-        customMenuButton.classList.remove('active');
-      }
+      customMenuButton.setAttribute('aria-expanded', 'false');
+      customMenuButton.classList.remove('active');
     }
 
     if (menuButton && menuOverlay) {
@@ -1148,7 +1153,7 @@
         // toggle button and header cart).
         if (e.key === 'Tab') {
           const focusables = Array.prototype.slice
-            .call(section.querySelectorAll('.menu-overlay a[href], .menu-overlay button, .hamburger-menu, .custom-menu-button, .custom-cart-button'))
+            .call(section.querySelectorAll('.menu-overlay a[href], .menu-overlay button, .custom-menu-button, .custom-cart-button'))
             .filter(function (el) {
               return el.offsetParent !== null;
             });
@@ -1234,47 +1239,26 @@
     },
     {
       "type": "header",
-      "content": "Menu Button"
+      "content": "Header Buttons"
     },
     {
-      "type": "image_picker",
-      "id": "menu_button_image",
-      "label": "Menu Button Image",
-      "info": "When set, the pill button is also shown on mobile (instead of the hamburger)."
+      "type": "checkbox",
+      "id": "hide_menu_buttons",
+      "label": "Hide all menu buttons (desktop and mobile)",
+      "info": "Hides the menu, shop, and cart buttons on both desktop and mobile. Use when you want a logo-only header.",
+      "default": false
     },
     {
-      "type": "header",
-      "content": "Hamburger Menu (fallback)"
+      "type": "text",
+      "id": "shop_label",
+      "label": "Shop button label",
+      "default": "Shop Now"
     },
     {
-      "type": "image_picker",
-      "id": "hamburger_background_image",
-      "label": "Hamburger Background Image",
-      "info": "Optional background image or shape shown behind the hamburger icon on mobile (only used when no Menu Button Image is set)."
-    },
-    {
-      "type": "color",
-      "id": "hamburger_stripe_color",
-      "label": "Hamburger Stripe Color",
-      "info": "Leave blank to use the color scheme's text color."
-    },
-    {
-      "type": "header",
-      "content": "Shop Button"
-    },
-    {
-      "type": "image_picker",
-      "id": "shop_button_image",
-      "label": "Shop Button Image"
-    },
-    {
-      "type": "header",
-      "content": "Cart Icon"
-    },
-    {
-      "type": "image_picker",
-      "id": "cart_icon_image",
-      "label": "Cart Icon Image"
+      "type": "url",
+      "id": "shop_link",
+      "label": "Shop button link",
+      "info": "Defaults to the all-products collection."
     },
     {
       "type": "header",
@@ -1284,15 +1268,34 @@
       "type": "color_scheme",
       "id": "overlay_color_scheme",
       "label": "Overlay color scheme",
-      "info": "Background and text colours of the open menu. Pick a bold scheme (e.g. yellow) for the full-page look.",
+      "info": "Background and text colours of the open menu.",
       "default": "scheme1"
     },
     {
       "type": "color",
       "id": "menu_accent_color",
-      "label": "Open menu accent color",
-      "info": "Used for the hover colour, underline sweep and current-page marker inside the open menu.",
+      "label": "Accent color",
+      "info": "Fill of the MENU/CLOSE pill, plus the hover colour, underline sweep and current-page marker inside the open menu.",
       "default": "#ACFF64"
+    },
+    {
+      "type": "text",
+      "id": "overlay_tagline",
+      "label": "Overlay tagline",
+      "info": "Shown under the wordmark in the open menu (desktop left column). Enter in normal case — uppercasing is CSS-only.",
+      "default": "Snack Like You Give a Damn."
+    },
+    {
+      "type": "image_picker",
+      "id": "overlay_sticker_1",
+      "label": "Tagline sticker",
+      "info": "Shown beside the tagline (e.g. the Radically Fair sticker)."
+    },
+    {
+      "type": "image_picker",
+      "id": "overlay_sticker_2",
+      "label": "Floating sticker",
+      "info": "Decorative sticker floating near the bottom-right of the open menu."
     },
     {
       "type": "text",
@@ -1326,26 +1329,8 @@
       "info": "Shown as a mailto link in the open menu. Leave blank to hide."
     },
     {
-      "type": "image_picker",
-      "id": "overlay_sticker_1",
-      "label": "Overlay sticker 1",
-      "info": "Decorative shape floating inside the open menu."
-    },
-    {
-      "type": "image_picker",
-      "id": "overlay_sticker_2",
-      "label": "Overlay sticker 2"
-    },
-    {
       "type": "header",
       "content": "Menu Items"
-    },
-    {
-      "type": "checkbox",
-      "id": "hide_menu_buttons",
-      "label": "Hide all menu buttons (desktop and mobile)",
-      "info": "Hides the menu, shop, and cart buttons on both desktop and mobile. Use when you want a logo-only header.",
-      "default": false
     },
     {
       "type": "text",
