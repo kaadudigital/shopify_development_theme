@@ -13,7 +13,6 @@
   "sections": {
     "announcement-bar": {
       "type": "announcement-bar",
-      "disabled": false,
       "settings": {
         "home_page_only": false,
         "display": "static",
@@ -109,7 +108,7 @@
         "hide_menu_buttons": false,
         "shop_label": "Shop Now",
         "shop_link": "",
-        "overlay_color_scheme": "scheme1",
+        "overlay_color_scheme": "scheme6",
         "menu_accent_color": "#acff64",
         "overlay_tagline": "Snack Like You Give a Damn.",
         "account_label": "My Account",
