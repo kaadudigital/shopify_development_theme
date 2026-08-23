@@ -70,7 +70,12 @@
 -%}
 
 {%- style -%}
-  #{{ section.id }} .kaadu-video-overlay {
+  /* Scoped to #shopify-section-{{ section.id }}, the wrapper Shopify renders
+     around the section. This block previously used a bare `#{{ section.id }}`,
+     which matches no element — no tag here carries that id — so the overlay
+     colour and opacity never applied and "Enable video overlay" had no
+     visible effect at all. */
+  #shopify-section-{{ section.id }} .kaadu-video-overlay {
     position: absolute;
     inset: 0;
     z-index: 15;
@@ -78,6 +83,46 @@
     background-color: {{ section.settings.overlay_color }};
     opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
   }
+
+  /* Vertical rhythm per Kaadu Typography & Spacing Docs: overline → headline
+     is 16px. The eyebrow takes its colour from the section's colour scheme so
+     it follows the scheme selector like the rest of the section. */
+  #shopify-section-{{ section.id }} .kaadu-vto__eyebrow {
+    margin: 0 0 var(--space-4);
+    color: rgb(var(--color-scheme-eyebrow-text));
+  }
+
+  {%- if section.settings.button_image != blank -%}
+    /* Custom blob button: the label sits on a merchant-supplied button image
+       instead of the pill surface, matching the pattern already used in
+       sections/custom-image-focus-carousel.liquid. Falls back to .btn-primary
+       in the markup when no image is chosen, so the CTA is never invisible. */
+    #shopify-section-{{ section.id }} .kaadu-vto__btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      cursor: pointer;
+      background-color: transparent;
+      background-image: url('{{ section.settings.button_image | image_url: width: 600 }}');
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+      transition: transform 0.2s ease-out;
+    }
+    #shopify-section-{{ section.id }} .kaadu-vto__btn:hover {
+      transform: translateY(-2px);
+    }
+    #shopify-section-{{ section.id }} .kaadu-vto__btn-text {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: 24px;
+      line-height: 1;
+      text-transform: uppercase;
+      color: {{ section.settings.button_text_color }};
+      padding: {{ section.settings.button_padding_topbottom }}px var(--space-6);
+    }
+  {%- endif -%}
 {%- endstyle -%}
 
 <section
@@ -101,6 +146,11 @@
         class="px-section py-section-vertical-spacing {{ content_class }} z-20 text-scheme-text {{ section.settings.place_content }} {{ section.settings.text_align }} {% if section.settings.style == 'inset' %}max-w-site mx-auto{% endif %}"
       >
         {%- capture content -%}
+          {% if section.settings.eyebrow != blank %}
+            <p class="kaadu-vto__eyebrow h3 break-words">
+              {{ section.settings.eyebrow | escape }}
+            </p>
+          {% endif %}
           {% if section.settings.title != blank %}
             <{{ section.settings.heading_tag }} class="{{ section.settings.heading_tag }}">
               {{ section.settings.title }}
@@ -113,9 +163,15 @@
           {% endif %}
           {% if section.settings.cta_url != blank and section.settings.cta_text != blank %}
             <div class="relative z-10 mt-6">
-              <a class="btn-primary inline-block" href="{{ section.settings.cta_url }}">
-                {{ section.settings.cta_text }}
-              </a>
+              {%- if section.settings.button_image != blank -%}
+                <a class="kaadu-vto__btn" href="{{ section.settings.cta_url }}">
+                  <span class="kaadu-vto__btn-text">{{ section.settings.cta_text }}</span>
+                </a>
+              {%- else -%}
+                <a class="btn-primary inline-block" href="{{ section.settings.cta_url }}">
+                  {{ section.settings.cta_text }}
+                </a>
+              {%- endif -%}
             </div>
           {% endif %}
         {%- endcapture -%}
@@ -316,6 +372,12 @@
       "content": "t:common.settings.header_content"
     },
     {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "info": "Short overline above the title (H3 — Subheading style). Uses the colour scheme's eyebrow colour."
+    },
+    {
       "type": "inline_richtext",
       "id": "title",
       "label": "Title",
@@ -348,6 +410,35 @@
       "id": "cta_text",
       "label": "t:common.settings.cta_text.label",
       "default": "Shop Now"
+    },
+    {
+      "type": "header",
+      "content": "Custom button"
+    },
+    {
+      "type": "paragraph",
+      "content": "Pick a button image to replace the default pill button. Without an image the CTA falls back to the standard pill."
+    },
+    {
+      "type": "image_picker",
+      "id": "button_image",
+      "label": "Button image"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button label colour",
+      "default": "#AE0000"
+    },
+    {
+      "type": "range",
+      "id": "button_padding_topbottom",
+      "label": "Button top/bottom padding",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 20
     },
     {
       "type": "header",
@@ -398,6 +489,31 @@
           "id": "shape",
           "label": "t:common.blocks.sticker.settings.shape.label",
           "options": [
+            {
+              "value": "website_shape_star",
+              "label": "custom star",
+              "group": "custom shapes"
+            },
+            {
+              "value": "website_shape_bun",
+              "label": "custom bun",
+              "group": "custom shapes"
+            },
+            {
+              "value": "website_shape_frame",
+              "label": "custom frame",
+              "group": "custom shapes"
+            },
+            {
+              "value": "website_shape_pancake",
+              "label": "custom pancake",
+              "group": "custom shapes"
+            },
+            {
+              "value": "website_shape_cloud",
+              "label": "custom cloud",
+              "group": "custom shapes"
+            },
             {
               "value": "fit_to_text",
               "label": "t:common.blocks.sticker.settings.shape.options.fit_to_text.label"
@@ -729,6 +845,26 @@
           "step": 1,
           "unit": "%",
           "label": "t:common.blocks.sticker.settings.vertical_position.label",
+          "default": 80
+        },
+        {
+          "type": "range",
+          "id": "horizontal_position_sm",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "horizontal position mobile",
+          "default": 80
+        },
+        {
+          "type": "range",
+          "id": "vertical_position_sm",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "vertical position mobile",
           "default": 80
         },
         {
