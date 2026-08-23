@@ -279,9 +279,12 @@
         color: rgb(var(--color-scheme-text));
       }
 
+      /* Desktop content is height-scaled to always fit, so lock scrolling;
+         mobile keeps overflow-y auto as a safety net for short viewports. */
       @media (min-width: 769px) {
         #{{ section.id }} .menu-content {
           padding-inline: var(--space-6);
+          overflow-y: hidden;
         }
       }
 
