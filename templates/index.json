@@ -624,7 +624,10 @@
         "tiles_aspect_ratio": "",
         "image_shape": "",
         "color_scheme": "",
-        "use_gradient_background": false
+        "use_gradient_background": false,
+        "arrow_background": "#fffff5",
+        "arrow_icon_color": "#000000",
+        "arrow_shape": "website_shape_star"
       }
     },
     "custom_image_section_Mafcmn": {
