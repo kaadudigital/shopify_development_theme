@@ -69,6 +69,18 @@
   endcase
 -%}
 
+{%- liquid
+  # Shape-button sources, mirroring snippets/image-with-text-custom.liquid:
+  # the mobile image falls back to the desktop one so the aspect ratio is
+  # always taken from an image that actually renders.
+  assign mobile_button_source = section.settings.button2_image_mobile | default: section.settings.button2_image
+
+  assign cta_text_mobile_display = section.settings.cta_text_mobile
+  if cta_text_mobile_display == blank
+    assign cta_text_mobile_display = section.settings.cta_text
+  endif
+-%}
+
 {%- style -%}
   /* Scoped to #shopify-section-{{ section.id }}, the wrapper Shopify renders
      around the section. This block previously used a bare `#{{ section.id }}`,
@@ -92,35 +104,79 @@
     color: rgb(var(--color-scheme-eyebrow-text));
   }
 
-  {%- if section.settings.button_image != blank -%}
-    /* Custom blob button: the label sits on a merchant-supplied button image
-       instead of the pill surface, matching the pattern already used in
-       sections/custom-image-focus-carousel.liquid. Falls back to .btn-primary
-       in the markup when no image is chosen, so the CTA is never invisible. */
+  {%- if section.settings.button2_image != blank -%}
+    /* Custom blob/shape button — same treatment as the one in
+       snippets/image-with-text-custom.liquid: the label sits on a merchant
+       supplied button image rather than a pill surface, with its own image,
+       width, label and colour per breakpoint. Height comes from the source
+       image's real aspect ratio so the artwork is never stretched. The
+       markup falls back to .btn-primary when no image is set, so the CTA is
+       never invisible. 490px is the reference's breakpoint — image, width,
+       label and type all flip together there. */
     #shopify-section-{{ section.id }} .kaadu-vto__btn {
-      display: inline-flex;
+      position: relative;
+      display: flex;
       align-items: center;
       justify-content: center;
       border: none;
       cursor: pointer;
       background-color: transparent;
-      background-image: url('{{ section.settings.button_image | image_url: width: 600 }}');
+      background-image: url('{{ section.settings.button2_image | image_url: width: 800 }}');
       background-size: contain;
       background-position: center;
       background-repeat: no-repeat;
       transition: transform 0.2s ease-out;
+      width: {{ section.settings.button2_width_desktop }}px;
+      max-width: 100%;
+      aspect-ratio: {{ section.settings.button2_image.aspect_ratio }};
     }
     #shopify-section-{{ section.id }} .kaadu-vto__btn:hover {
       transform: translateY(-2px);
     }
     #shopify-section-{{ section.id }} .kaadu-vto__btn-text {
+      color: {{ section.settings.button_text_color_desktop }};
       font-family: var(--font-display);
       font-weight: 400;
-      font-size: 24px;
-      line-height: 1;
+      font-size: 20px;
+      line-height: 24px;
       text-transform: uppercase;
-      color: {{ section.settings.button_text_color }};
-      padding: {{ section.settings.button_padding_topbottom }}px var(--space-6);
+      letter-spacing: 0.02em;
+      padding: 0 var(--space-6);
+    }
+
+    @media (max-width: 490px) {
+      #shopify-section-{{ section.id }} .kaadu-vto__btn {
+        width: {{ section.settings.button2_width_mobile }}px;
+        aspect-ratio: {{ mobile_button_source.aspect_ratio }};
+        {%- if section.settings.button2_image_mobile != blank %}
+          background-image: url('{{ section.settings.button2_image_mobile | image_url: width: 600 }}');
+        {%- endif %}
+      }
+      #shopify-section-{{ section.id }} .kaadu-vto__btn-text {
+        color: {{ section.settings.button_text_color_mobile }};
+        font-family: var(--font-body);
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 24px;
+        letter-spacing: 0;
+        text-align: center;
+      }
+    }
+
+    /* Label swap shares the 490px breakpoint with the button rules above. */
+    #shopify-section-{{ section.id }} .kaadu-vto__label--mobile {
+      display: none;
+    }
+    #shopify-section-{{ section.id }} .kaadu-vto__label--desktop {
+      display: inline;
+    }
+    @media (max-width: 490px) {
+      #shopify-section-{{ section.id }} .kaadu-vto__label--mobile {
+        display: inline;
+      }
+      #shopify-section-{{ section.id }} .kaadu-vto__label--desktop {
+        display: none;
+      }
     }
   {%- endif -%}
 {%- endstyle -%}
@@ -163,9 +219,16 @@
           {% endif %}
           {% if section.settings.cta_url != blank and section.settings.cta_text != blank %}
             <div class="relative z-10 mt-6">
-              {%- if section.settings.button_image != blank -%}
+              {%- if section.settings.button2_image != blank -%}
+                {%- comment -%}
+                  A single <a> carries the button styling. The reference nests a
+                  <button> inside the <a>, which is invalid HTML (interactive
+                  content inside a link) — this renders identically without it.
+                {%- endcomment -%}
                 <a class="kaadu-vto__btn" href="{{ section.settings.cta_url }}">
-                  <span class="kaadu-vto__btn-text">{{ section.settings.cta_text }}</span>
+                  <span class="kaadu-vto__btn-text">
+                    <span class="kaadu-vto__label--mobile">{{ cta_text_mobile_display }}</span><span class="kaadu-vto__label--desktop">{{ section.settings.cta_text }}</span>
+                  </span>
                 </a>
               {%- else -%}
                 <a class="btn-primary inline-block" href="{{ section.settings.cta_url }}">
@@ -412,33 +475,61 @@
       "default": "Shop Now"
     },
     {
+      "type": "text",
+      "id": "cta_text_mobile",
+      "label": "Button label (Mobile)",
+      "info": "Leave empty to reuse the desktop label."
+    },
+    {
       "type": "header",
-      "content": "Custom button"
+      "content": "Custom image button"
     },
     {
       "type": "paragraph",
-      "content": "Pick a button image to replace the default pill button. Without an image the CTA falls back to the standard pill."
+      "content": "Pick a button image to replace the default pill button. The button's height follows the image's own aspect ratio. Without an image the CTA falls back to the standard pill."
     },
     {
       "type": "image_picker",
-      "id": "button_image",
-      "label": "Button image"
+      "id": "button2_image",
+      "label": "Button image (Desktop)"
     },
     {
-      "type": "color",
-      "id": "button_text_color",
-      "label": "Button label colour",
-      "default": "#AE0000"
+      "type": "image_picker",
+      "id": "button2_image_mobile",
+      "label": "Button image (Mobile)",
+      "info": "Leave empty to reuse the desktop image."
     },
     {
       "type": "range",
-      "id": "button_padding_topbottom",
-      "label": "Button top/bottom padding",
-      "min": 0,
-      "max": 80,
-      "step": 2,
+      "id": "button2_width_desktop",
+      "label": "Button width (Desktop)",
+      "min": 80,
+      "max": 800,
+      "step": 10,
       "unit": "px",
-      "default": 20
+      "default": 200
+    },
+    {
+      "type": "range",
+      "id": "button2_width_mobile",
+      "label": "Button width (Mobile)",
+      "min": 80,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "default": 150
+    },
+    {
+      "type": "color",
+      "id": "button_text_color_desktop",
+      "label": "Button label colour (Desktop)",
+      "default": "#AE0000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color_mobile",
+      "label": "Button label colour (Mobile)",
+      "default": "#AE0000"
     },
     {
       "type": "header",
