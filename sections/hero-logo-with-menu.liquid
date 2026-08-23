@@ -338,11 +338,15 @@
       }
 
       @media (min-width: 769px) {
+        /* Pull the wordmark up into the header zone so the CLOSE pill sits on
+           its upper edge instead of floating alone (--menu-header-offset is
+           the header bar height, synced by the section script). */
         #{{ section.id }} .menu-logo {
           display: block;
           width: clamp(420px, 46vw, 640px);
           max-width: 100%;
           margin-left: -40px;
+          margin-top: calc(-1 * var(--menu-header-offset) + var(--space-6));
           transform: rotate(-3deg);
         }
 
@@ -400,7 +404,15 @@
 
       #{{ section.id }} .menu-email:hover,
       #{{ section.id }} .menu-email:focus-visible {
-        color: {{ accent_color }};
+        opacity: 0.7;
+      }
+
+      #{{ section.id }} .menu-social {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        gap: var(--space-2);
       }
 
       #{{ section.id }} .menu-social a {
@@ -410,6 +422,23 @@
         min-width: 48px;
         min-height: 48px;
         color: rgb(var(--color-scheme-text));
+      }
+
+      #{{ section.id }} .menu-social a:hover,
+      #{{ section.id }} .menu-social a:focus-visible {
+        opacity: 0.7;
+      }
+
+      #{{ section.id }} .menu-social-icon {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+      }
+
+      #{{ section.id }} .menu-social-icon svg {
+        width: 100%;
+        height: 100%;
+        fill: currentColor;
       }
 
       /* --- Utility rows (mobile only): Search / Account --- */
@@ -433,7 +462,7 @@
 
       #{{ section.id }} .menu-utility a:hover,
       #{{ section.id }} .menu-utility a:focus-visible {
-        color: {{ accent_color }};
+        opacity: 0.7;
       }
 
       #{{ section.id }} .menu-utility .theme-icon {
@@ -568,17 +597,24 @@
         bottom: calc(var(--menu-cloud-height) - 20px);
       }
 
+      /* Flowers: outer div follows the cursor (parallax via --kd-par-*, set by
+         the section script), inner div pops in, the SVG spins continuously. */
       #{{ section.id }} .menu-cloud {
         position: absolute;
         z-index: 1;
         width: clamp(80px, 9vw, 140px);
         color: var(--color-sky);
         pointer-events: none;
+        transform: translate3d(var(--kd-par-x, 0px), var(--kd-par-y, 0px), 0);
+        transition: transform 0.2s ease-out;
+      }
+
+      #{{ section.id }} .menu-cloud-pop {
         transform: scale(0);
         transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.6s;
       }
 
-      #{{ section.id }} .menu-overlay.active .menu-cloud {
+      #{{ section.id }} .menu-overlay.active .menu-cloud-pop {
         transform: scale(1);
       }
 
@@ -587,6 +623,13 @@
         width: 100%;
         height: auto;
         fill: currentColor;
+        animation: kd-spin 26s linear infinite;
+      }
+
+      @keyframes kd-spin {
+        to {
+          transform: rotate(360deg);
+        }
       }
 
       #{{ section.id }} .menu-cloud--1 {
@@ -599,8 +642,35 @@
         bottom: 260px;
       }
 
+      #{{ section.id }} .menu-cloud--2 svg {
+        animation-duration: 34s;
+        animation-direction: reverse;
+      }
+
+      #{{ section.id }} .menu-cloud--3 {
+        left: 4%;
+        bottom: 220px;
+        width: clamp(64px, 6vw, 96px);
+      }
+
+      #{{ section.id }} .menu-cloud--3 svg {
+        animation-duration: 40s;
+      }
+
+      #{{ section.id }} .menu-cloud--4 {
+        right: 16%;
+        top: 18%;
+        width: clamp(56px, 5vw, 84px);
+      }
+
+      #{{ section.id }} .menu-cloud--4 svg {
+        animation-duration: 30s;
+        animation-direction: reverse;
+      }
+
       @media (max-width: 767px) {
-        #{{ section.id }} .menu-cloud--1 {
+        #{{ section.id }} .menu-cloud--1,
+        #{{ section.id }} .menu-cloud--4 {
           display: none;
         }
 
@@ -608,6 +678,11 @@
           right: -26px;
           top: 26%;
           bottom: auto;
+        }
+
+        #{{ section.id }} .menu-cloud--3 {
+          left: -20px;
+          bottom: 34%;
         }
       }
 
@@ -635,37 +710,39 @@
         transform: translateY(0);
       }
 
-      /* Each SVG copy spans 50% of the scroller, so scroller width controls
-         bump width: 140% ⇒ each copy is 0.7× the viewport ⇒ bumps 30% narrower. */
+      /* Three tiling copies, each 1/3 of the scroller. Copy width = scroller
+         width ÷ 3, so 210% ⇒ each copy is 0.7× the viewport (bumps 30%
+         narrower than full-width) while the extra copy keeps the right edge
+         covered at every animation phase. The loop shifts exactly one copy. */
       #{{ section.id }} .cloud-scroller {
         position: absolute;
         inset: 0;
-        width: 140%;
+        width: 210%;
         display: flex;
         animation: kd-scroll 20s linear infinite;
       }
 
       #{{ section.id }} .cloud-scroller svg {
         display: block;
-        width: 50%;
+        width: calc(100% / 3);
         height: 100%;
         flex-shrink: 0;
       }
 
       @keyframes kd-scroll {
         from {
-          transform: translateX(-50%);
+          transform: translateX(calc(-100% / 3));
         }
         to {
           transform: translateX(0);
         }
       }
 
-      /* Mobile: same 7-bump SVG, but each copy spans 2× the viewport width,
-         so the bumps stay wide instead of squeezing into pointy arcs. */
+      /* Mobile: each copy spans 2× the viewport width, so the bumps stay wide
+         instead of squeezing into pointy arcs. */
       @media (max-width: 767px) {
         #{{ section.id }} .cloud-scroller {
-          width: 400%;
+          width: 600%;
           animation-duration: 12s;
         }
       }
@@ -692,29 +769,25 @@
     transition-delay: 0s;
   }
 
-  /* Keep hovered item at full opacity, with a bit of brand-appropriate tilt */
+  /* Keep hovered item at full opacity, with a bit of brand-appropriate tilt.
+     No colour change — links stay in the scheme text colour. */
   #{{ section.id }} .menu-overlay.active .menu-content nav ul.menu-links li a:hover,
   #{{ section.id }} .menu-overlay.active .menu-content nav ul.menu-links li a:focus-visible {
     opacity: 1 !important;
-    color: {{ accent_color }};
     transform: translateY(0) translateZ(0) rotate(-2deg) scale(1.04);
-    transition: transform 0.3s ease-out, opacity 0.3s ease-out, color 0.2s ease-out;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
   }
 
   #{{ section.id }} .menu-content nav ul.menu-links li a:focus-visible,
   #{{ section.id }} .menu-account:focus-visible,
   #{{ section.id }} .menu-email:focus-visible,
-  #{{ section.id }} .menu-utility a:focus-visible {
-    outline: 2px solid {{ accent_color }};
+  #{{ section.id }} .menu-utility a:focus-visible,
+  #{{ section.id }} .menu-social a:focus-visible {
+    outline: 2px solid currentColor;
     outline-offset: var(--space-2);
   }
 
-  /* Current page marker */
-  #{{ section.id }} .menu-content nav ul.menu-links li a[aria-current='page'] {
-    color: {{ accent_color }};
-  }
-
-  /* Underline sweep */
+  /* Underline sweep (also marks the current page) */
   #{{ section.id }} .menu-overlay .menu-content nav ul.menu-links li a::after {
     content: '';
     position: absolute;
@@ -723,7 +796,7 @@
     width: 0;
     height: 4px;
     border-radius: 2px;
-    background-color: {{ accent_color }};
+    background-color: currentColor;
     transition: width 0.45s cubic-bezier(0.215, 0.61, 0.355, 1) 0ms;
   }
 
@@ -738,12 +811,14 @@
     #{{ section.id }} .menu-overlay .cloud-footer,
     #{{ section.id }} .menu-content nav ul.menu-links li a,
     #{{ section.id }} .menu-sticker,
-    #{{ section.id }} .menu-cloud {
+    #{{ section.id }} .menu-cloud,
+    #{{ section.id }} .menu-cloud-pop {
       transition-duration: 0.01ms !important;
       transition-delay: 0ms !important;
     }
 
-    #{{ section.id }} .cloud-scroller {
+    #{{ section.id }} .cloud-scroller,
+    #{{ section.id }} .menu-cloud svg {
       animation: none;
     }
 
@@ -960,7 +1035,40 @@
                   {{- section.settings.contact_email -}}
                 </a>
               {%- endif -%}
-              {%- render 'social-icons', list_class: 'menu-social' -%}
+
+              {%- liquid
+                assign social_tiktok = section.settings.social_tiktok_link | default: settings.social_tiktok_link
+                assign social_facebook = section.settings.social_facebook_link | default: settings.social_facebook_link
+                assign social_instagram = section.settings.social_instagram_link | default: settings.social_instagram_link
+              -%}
+              {%- if social_tiktok != blank or social_facebook != blank or social_instagram != blank -%}
+                <ul class="menu-social">
+                  {%- if social_tiktok != blank -%}
+                    <li>
+                      <a href="{{ social_tiktok }}" target="_blank" rel="noopener">
+                        <span class="menu-social-icon" aria-hidden="true">{% render 'icon-tiktok' %}</span>
+                        <span class="visually-hidden">TikTok</span>
+                      </a>
+                    </li>
+                  {%- endif -%}
+                  {%- if social_facebook != blank -%}
+                    <li>
+                      <a href="{{ social_facebook }}" target="_blank" rel="noopener">
+                        <span class="menu-social-icon" aria-hidden="true">{% render 'icon-facebook' %}</span>
+                        <span class="visually-hidden">Facebook</span>
+                      </a>
+                    </li>
+                  {%- endif -%}
+                  {%- if social_instagram != blank -%}
+                    <li>
+                      <a href="{{ social_instagram }}" target="_blank" rel="noopener">
+                        <span class="menu-social-icon" aria-hidden="true">{% render 'icon-instagram' %}</span>
+                        <span class="visually-hidden">Instagram</span>
+                      </a>
+                    </li>
+                  {%- endif -%}
+                </ul>
+              {%- endif -%}
             </div>
           </div>
 
@@ -1017,24 +1125,29 @@
         </div>
       </div>
 
-      {%- comment -%} Sky flower-cloud accents {%- endcomment -%}
-      <div class="menu-cloud menu-cloud--1" aria-hidden="true">
-        <svg viewBox="0 0 120 104" xmlns="http://www.w3.org/2000/svg" focusable="false">
-          <circle cx="60" cy="30" r="26"/>
-          <circle cx="32" cy="44" r="24"/>
-          <circle cx="88" cy="44" r="24"/>
-          <circle cx="42" cy="72" r="24"/>
-          <circle cx="78" cy="72" r="24"/>
+      {%- comment -%} Sky flower accents — 6 petals + centre, spinning, cursor-follow {%- endcomment -%}
+      {%- capture flower_svg -%}
+        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" focusable="false">
+          <circle cx="90" cy="60" r="21"/>
+          <circle cx="75" cy="86" r="21"/>
+          <circle cx="45" cy="86" r="21"/>
+          <circle cx="30" cy="60" r="21"/>
+          <circle cx="45" cy="34" r="21"/>
+          <circle cx="75" cy="34" r="21"/>
+          <circle cx="60" cy="60" r="26"/>
         </svg>
+      {%- endcapture -%}
+      <div class="menu-cloud menu-cloud--1" data-depth="28" aria-hidden="true">
+        <div class="menu-cloud-pop">{{ flower_svg }}</div>
       </div>
-      <div class="menu-cloud menu-cloud--2" aria-hidden="true">
-        <svg viewBox="0 0 120 104" xmlns="http://www.w3.org/2000/svg" focusable="false">
-          <circle cx="60" cy="30" r="26"/>
-          <circle cx="32" cy="44" r="24"/>
-          <circle cx="88" cy="44" r="24"/>
-          <circle cx="42" cy="72" r="24"/>
-          <circle cx="78" cy="72" r="24"/>
-        </svg>
+      <div class="menu-cloud menu-cloud--2" data-depth="40" aria-hidden="true">
+        <div class="menu-cloud-pop">{{ flower_svg }}</div>
+      </div>
+      <div class="menu-cloud menu-cloud--3" data-depth="20" aria-hidden="true">
+        <div class="menu-cloud-pop">{{ flower_svg }}</div>
+      </div>
+      <div class="menu-cloud menu-cloud--4" data-depth="32" aria-hidden="true">
+        <div class="menu-cloud-pop">{{ flower_svg }}</div>
       </div>
 
       {%- comment -%} Floating sticker {%- endcomment -%}
@@ -1047,6 +1160,9 @@
       {%- comment -%} Bottom Scallop Edge — two tiling copies scroll left → right {%- endcomment -%}
       <div class="cloud-footer" aria-hidden="true">
         <div class="cloud-scroller">
+          <svg viewBox="0 0 2800 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+            <path d="M 0,300 L 0,150 A 200,150 0 0 1 400,150 A 200,150 0 0 1 800,150 A 200,150 0 0 1 1200,150 A 200,150 0 0 1 1600,150 A 200,150 0 0 1 2000,150 A 200,150 0 0 1 2400,150 A 200,150 0 0 1 2800,150 L 2800,300 Z" fill="currentColor"/>
+          </svg>
           <svg viewBox="0 0 2800 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
             <path d="M 0,300 L 0,150 A 200,150 0 0 1 400,150 A 200,150 0 0 1 800,150 A 200,150 0 0 1 1200,150 A 200,150 0 0 1 1600,150 A 200,150 0 0 1 2000,150 A 200,150 0 0 1 2400,150 A 200,150 0 0 1 2800,150 L 2800,300 Z" fill="currentColor"/>
           </svg>
@@ -1128,6 +1244,31 @@
       customMenuButton.setAttribute('aria-expanded', 'false');
       customMenuButton.classList.remove('active');
     }
+
+    // Flowers drift toward the cursor while the menu is open. Each flower's
+    // data-depth sets how far it travels; skipped under reduced motion.
+    const clouds = menuOverlay.querySelectorAll('.menu-cloud');
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let parallaxRaf = null;
+    let cursorX = 0;
+    let cursorY = 0;
+
+    document.addEventListener('mousemove', function (e) {
+      if (motionQuery.matches || !menuOverlay.classList.contains('active')) return;
+
+      cursorX = e.clientX / window.innerWidth - 0.5;
+      cursorY = e.clientY / window.innerHeight - 0.5;
+
+      if (parallaxRaf) return;
+      parallaxRaf = requestAnimationFrame(function () {
+        parallaxRaf = null;
+        clouds.forEach(function (cloud) {
+          const depth = parseFloat(cloud.getAttribute('data-depth')) || 24;
+          cloud.style.setProperty('--kd-par-x', cursorX * depth + 'px');
+          cloud.style.setProperty('--kd-par-y', cursorY * depth + 'px');
+        });
+      });
+    });
 
     if (menuButton && menuOverlay) {
       menuButton.addEventListener('click', function () {
@@ -1268,8 +1409,26 @@
       "type": "color",
       "id": "menu_accent_color",
       "label": "Accent color",
-      "info": "Fill of the MENU/CLOSE pill, plus the hover colour, underline sweep and current-page marker inside the open menu.",
+      "info": "Fill of the MENU/CLOSE pill.",
       "default": "#ACFF64"
+    },
+    {
+      "type": "url",
+      "id": "social_tiktok_link",
+      "label": "TikTok link",
+      "info": "Falls back to Theme settings → Social if blank."
+    },
+    {
+      "type": "url",
+      "id": "social_facebook_link",
+      "label": "Facebook link",
+      "info": "Falls back to Theme settings → Social if blank."
+    },
+    {
+      "type": "url",
+      "id": "social_instagram_link",
+      "label": "Instagram link",
+      "info": "Falls back to Theme settings → Social if blank."
     },
     {
       "type": "text",
