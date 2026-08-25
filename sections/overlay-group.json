@@ -65,7 +65,7 @@
         "image_alt": "",
         "mobile_trigger_delay": 25,
         "suppress_days": 7,
-        "background_color": "bg-yellow"
+        "background_color": "bg-violet"
       }
     }
   },
