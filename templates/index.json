@@ -121,7 +121,7 @@
           "type": "sticker",
           "settings": {
             "width": 150,
-            "half_width_on_mobile": false,
+            "half_width_on_mobile": true,
             "text": "Sticker",
             "shape": "star_1",
             "sticker_font_size": "1.563rem",
@@ -182,7 +182,7 @@
         "button2_width_desktop": 200,
         "button2_width_mobile": 150,
         "button_text_color_desktop": "#ae0000",
-        "button_text_color_mobile": "#ae0000",
+        "button_text_color_mobile": "#FFFFFF",
         "color_scheme": "scheme1",
         "use_gradient_background": false
       }
@@ -765,7 +765,6 @@
         "rich_text": "<p>Perfektion ist nicht unser Ziel – Veränderung schon.Begleite uns auf dem Weg zu radikaler Fairness.</p>",
         "image": "shopify://shop_images/Extra_Mascots-06.svg",
         "image_caption": "",
-        "image_width": "xs",
         "display_on_card": false,
         "content_width_desktop": "lg:w-2/3",
         "button_link": "",
