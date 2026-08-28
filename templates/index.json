@@ -182,7 +182,7 @@
         "button2_width_desktop": 200,
         "button2_width_mobile": 150,
         "button_text_color_desktop": "#ae0000",
-        "button_text_color_mobile": "#FFFFFF",
+        "button_text_color_mobile": "#ffffff",
         "color_scheme": "scheme1",
         "use_gradient_background": false
       }
@@ -765,6 +765,8 @@
         "rich_text": "<p>Perfektion ist nicht unser Ziel – Veränderung schon.Begleite uns auf dem Weg zu radikaler Fairness.</p>",
         "image": "shopify://shop_images/Extra_Mascots-06.svg",
         "image_caption": "",
+        "image_width_desktop": 320,
+        "image_width_mobile": 200,
         "display_on_card": false,
         "content_width_desktop": "lg:w-2/3",
         "button_link": "",
