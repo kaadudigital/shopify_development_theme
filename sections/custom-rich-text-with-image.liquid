@@ -55,6 +55,12 @@
   }
 {%- endstyle -%}
 
+{%- liquid
+  assign image_width_desktop = section.settings.image_width_desktop
+  assign image_width_mobile = section.settings.image_width_mobile
+  assign sizes = '(min-width: 769px) min(100vw, ' | append: image_width_desktop | append: 'px), min(100vw, ' | append: image_width_mobile | append: 'px)'
+-%}
+
 <section
   class="relative overflow-hidden bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %}"
   data-color-scheme="{{ section.settings.color_scheme }}"
@@ -86,9 +92,14 @@
             <div class="kaadu-rtwi__image-inner">
               <picture>
                 {%- if section.settings.image_mobile != blank -%}
+                  {%- comment -%}
+                    Request the mobile art at 2x its cap rather than a fixed 800px, so a
+                    small setting doesn't pull down a full-size file.
+                  {%- endcomment -%}
+                  {%- assign mobile_src_width = image_width_mobile | times: 2 -%}
                   <source
                     media="(max-width: 768px)"
-                    srcset="{{ section.settings.image_mobile | image_url: width: 800 }}"
+                    srcset="{{ section.settings.image_mobile | image_url: width: mobile_src_width }}"
                   >
                 {%- endif -%}
                 {{
@@ -97,7 +108,8 @@
                   | image_tag:
                     class: 'h-auto',
                     loading: 'lazy',
-                    sizes: '(min-width: 769px) {{ section.settings.image_width_desktop }}px, {{ section.settings.image_width_mobile }}px'
+                    widths: '80, 160, 240, 320, 480, 640, 800, 1000, 1200, 1500',
+                    sizes: sizes
                 }}
               </picture>
               {%- if section.settings.image_caption != blank -%}
@@ -209,8 +221,8 @@
       "type": "range",
       "id": "image_width_desktop",
       "label": "Image width (Desktop)",
-      "min": 100,
-      "max": 1100,
+      "min": 40,
+      "max": 1040,
       "step": 10,
       "unit": "px",
       "default": 320,
@@ -220,11 +232,12 @@
       "type": "range",
       "id": "image_width_mobile",
       "label": "Image width (Mobile)",
-      "min": 100,
-      "max": 1100,
+      "min": 40,
+      "max": 800,
       "step": 10,
       "unit": "px",
-      "default": 320
+      "default": 320,
+      "info": "Maximum width of the image up to 768px. The image stays fluid below this width, so it never overflows a narrow screen."
     },
     {
       "type": "checkbox",
