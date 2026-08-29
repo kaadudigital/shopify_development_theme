@@ -13,11 +13,21 @@
     endif
   endif
 
+  # 'default' (plain square) and 'custom' (merchant-uploaded image) are this
+  # section's own keywords. Anything else is a shape-defs silhouette, applied to
+  # the arrow as a clip path.
   assign nav_shape_style = section.settings.nav_shape_style | default: 'default'
   assign nav_shape_image = section.settings.nav_shape_image
+  assign nav_shape_keywords = 'default,custom' | split: ','
+  assign nav_shape_clip = ''
+  unless nav_shape_keywords contains nav_shape_style
+    assign nav_shape_clip = nav_shape_style
+    assign nav_shape_style = 'shaped'
+  endunless
   if nav_shape_style == 'custom' and nav_shape_image == blank
     assign nav_shape_style = 'default'
   endif
+  assign nav_shape_id = section.id | append: '-navshape'
 
   # Clip-path shapes for the product media and the radio ticks. `shape-defs`
   # ignores anything containing 'default', so that doubles as the "no shape" state.
@@ -68,6 +78,14 @@
     {%- style -%}
       #{{ section.id }} {
         --nav-shape: url('{{ nav_shape_image | image_url: width: 200 }}');
+      }
+    {%- endstyle -%}
+  {%- endif -%}
+  {%- if nav_shape_clip != blank -%}
+    {%- render 'shape-defs', shape: nav_shape_clip, shape_id: nav_shape_id, index: section.index -%}
+    {%- style -%}
+      #{{ section.id }} {
+        --nav-clip: url(#clip-{{ nav_shape_id }});
       }
     {%- endstyle -%}
   {%- endif -%}
@@ -426,6 +444,29 @@
         assign qty_custom_image_desktop = section.settings.qty_shape_image_desktop
         assign qty_custom_image_mobile = section.settings.qty_shape_image_mobile
 
+        # 'dashed', 'cloud' and 'custom' are the stepper's own frame styles;
+        # anything else is a shape-defs silhouette. The stepper is a wide bar,
+        # so a shape is drawn as an outline frame behind the controls rather
+        # than clipped — clipping a 1:1 silhouette to a bar would cut the
+        # buttons off at the points, the same reason the uploaded-image option
+        # already paints a stretched background instead.
+        assign qty_shape_keywords = 'dashed,cloud,custom' | split: ','
+
+        assign qty_shape_clip_desktop = ''
+        unless qty_shape_keywords contains qty_shape_desktop
+          assign qty_shape_clip_desktop = qty_shape_desktop
+          assign qty_shape_desktop = 'shaped'
+        endunless
+
+        assign qty_shape_clip_mobile = ''
+        unless qty_shape_keywords contains qty_shape_mobile
+          assign qty_shape_clip_mobile = qty_shape_mobile
+          assign qty_shape_mobile = 'shaped'
+        endunless
+
+        assign qty_shape_id_desktop = section.id | append: '-qtyshaped'
+        assign qty_shape_id_mobile = section.id | append: '-qtyshapem'
+
         if qty_shape_desktop == 'custom' and qty_custom_image_desktop == blank
           assign qty_shape_desktop = 'dashed'
         endif
@@ -433,6 +474,12 @@
           assign qty_shape_mobile = 'dashed'
         endif
       -%}
+      {%- if qty_shape_clip_desktop != blank -%}
+        {%- render 'shape-defs', shape: qty_shape_clip_desktop, shape_id: qty_shape_id_desktop, index: section.index -%}
+      {%- endif -%}
+      {%- if qty_shape_clip_mobile != blank -%}
+        {%- render 'shape-defs', shape: qty_shape_clip_mobile, shape_id: qty_shape_id_mobile, index: section.index -%}
+      {%- endif -%}
       {%- if qty_shape_desktop == 'custom' or qty_shape_mobile == 'custom' -%}
         {%- style -%}
           #{{ section.id }} {
@@ -447,7 +494,7 @@
       {%- endif -%}
       <div class="pack-qty" data-shape-desktop="{{ qty_shape_desktop }}" data-shape-mobile="{{ qty_shape_mobile }}">
         {%- if qty_shape_desktop == 'cloud' or qty_shape_mobile == 'cloud' -%}
-          <svg class="pack-qty__frame" viewBox="0 0 150 78" preserveAspectRatio="xMidYMid meet" fill="none" aria-hidden="true">
+          <svg class="pack-qty__frame pack-qty__frame--cloud" viewBox="0 0 150 78" preserveAspectRatio="xMidYMid meet" fill="none" aria-hidden="true">
             <mask id="pack-qty-cloud-mask-{{ section.id }}" fill="#fff">
               <path d="M44.521 5.209a8.256 8.256 0 0 1 2.935-3.69 8.43 8.43 0 0 1 9.103-.352 8.28 8.28 0 0 1 3.218 3.452 8.28 8.28 0 0 1 3.218-3.45 8.43 8.43 0 0 1 9.102.351 8.257 8.257 0 0 1 2.933 3.69 8.256 8.256 0 0 1 2.935-3.69 8.43 8.43 0 0 1 9.103-.352 8.28 8.28 0 0 1 3.218 3.452 8.265 8.265 0 0 1 2.932-3.277A8.427 8.427 0 0 1 101.752 1a8.295 8.295 0 0 1 3.192 3.031A8.302 8.302 0 0 1 108.14.998a8.43 8.43 0 0 1 8.537.344 8.275 8.275 0 0 1 2.934 3.277A8.299 8.299 0 0 1 123.524.8a8.447 8.447 0 0 1 5.472-.584 8.359 8.359 0 0 1 4.65 2.904 8.17 8.17 0 0 1 1.809 5.132c0 .07-.007.144-.007.215a8.39 8.39 0 0 1 3.157-1.542 8.456 8.456 0 0 1 3.52-.12 8.407 8.407 0 0 1 3.257 1.322 8.284 8.284 0 0 1 2.415 2.531 8.138 8.138 0 0 1 .812 6.75 8.216 8.216 0 0 1-1.748 3.02 8.344 8.344 0 0 1-2.853 2.04 8.319 8.319 0 0 1 3.728 3.184 8.158 8.158 0 0 1-.397 9.29 8.336 8.336 0 0 1-3.986 2.864 8.337 8.337 0 0 1 3.986 2.864 8.158 8.158 0 0 1 .397 9.29 8.318 8.318 0 0 1-3.728 3.185 8.35 8.35 0 0 1 2.876 2.06 8.214 8.214 0 0 1 1.748 3.054 8.142 8.142 0 0 1-.893 6.798 8.294 8.294 0 0 1-2.479 2.513 8.453 8.453 0 0 1-6.86 1.06 8.388 8.388 0 0 1-3.139-1.644 8.175 8.175 0 0 1-1.613 6.904 8.357 8.357 0 0 1-4.651 2.906 8.443 8.443 0 0 1-5.473-.585 8.295 8.295 0 0 1-3.913-3.823 8.265 8.265 0 0 1-2.932 3.282 8.427 8.427 0 0 1-8.541.343 8.291 8.291 0 0 1-3.193-3.036 8.28 8.28 0 0 1-3.191 3.036 8.42 8.42 0 0 1-8.537-.343 8.259 8.259 0 0 1-2.93-3.282 8.27 8.27 0 0 1-3.215 3.46 8.421 8.421 0 0 1-9.11-.352 8.247 8.247 0 0 1-2.93-3.699 8.248 8.248 0 0 1-2.931 3.698 8.421 8.421 0 0 1-9.11.353 8.272 8.272 0 0 1-3.214-3.46 8.27 8.27 0 0 1-3.215 3.46 8.421 8.421 0 0 1-9.11-.352 8.247 8.247 0 0 1-2.93-3.699 8.248 8.248 0 0 1-2.931 3.699 8.422 8.422 0 0 1-9.11.353 8.272 8.272 0 0 1-3.215-3.461 8.299 8.299 0 0 1-3.915 3.823 8.449 8.449 0 0 1-5.475.587 8.364 8.364 0 0 1-4.654-2.906 8.177 8.177 0 0 1-1.809-5.135c.003-.552.06-1.102.17-1.643a8.391 8.391 0 0 1-3.154 1.56 8.456 8.456 0 0 1-3.524.136 8.41 8.41 0 0 1-3.266-1.313 8.29 8.29 0 0 1-2.426-2.527 8.142 8.142 0 0 1-.826-6.757 8.217 8.217 0 0 1 1.747-3.025 8.347 8.347 0 0 1 2.856-2.043 8.316 8.316 0 0 1-3.726-3.184 8.159 8.159 0 0 1 .395-9.29 8.34 8.34 0 0 1 3.985-2.865 8.34 8.34 0 0 1-3.985-2.864 8.158 8.158 0 0 1-.396-9.29 8.315 8.315 0 0 1 3.727-3.185 8.346 8.346 0 0 1-2.833-2.026 8.218 8.218 0 0 1-1.744-2.994 8.144 8.144 0 0 1 .76-6.713 8.285 8.285 0 0 1 2.37-2.54 8.407 8.407 0 0 1 3.216-1.358 8.456 8.456 0 0 1 3.498.061 8.398 8.398 0 0 1 3.166 1.47c0-.04-.007-.08-.007-.12a8.18 8.18 0 0 1 1.813-5.13A8.367 8.367 0 0 1 19.88.213a8.452 8.452 0 0 1 5.471.584 8.302 8.302 0 0 1 3.916 3.818 8.28 8.28 0 0 1 3.218-3.452 8.43 8.43 0 0 1 9.103.351 8.256 8.256 0 0 1 2.935 3.69l-.003.005Z"/>
             </mask>
@@ -459,6 +506,21 @@
         {%- endif -%}
         {%- if qty_shape_mobile == 'custom' -%}
           <span class="pack-qty__shape pack-qty__shape--mobile" aria-hidden="true"></span>
+        {%- endif -%}
+        {%- comment -%}
+          shape-defs also publishes each silhouette as `#outline-<id>`, a stroked
+          path carrying vector-effect="non-scaling-stroke", so stretching the
+          1:1 viewBox across the bar keeps the outline an even 2px.
+        {%- endcomment -%}
+        {%- if qty_shape_clip_desktop != blank -%}
+          <svg class="pack-qty__frame pack-qty__frame--shaped-desktop" viewBox="0 0 200 200" preserveAspectRatio="none" fill="none" aria-hidden="true">
+            <use href="#outline-{{ qty_shape_id_desktop }}" fill="none" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        {%- endif -%}
+        {%- if qty_shape_clip_mobile != blank -%}
+          <svg class="pack-qty__frame pack-qty__frame--shaped-mobile" viewBox="0 0 200 200" preserveAspectRatio="none" fill="none" aria-hidden="true">
+            <use href="#outline-{{ qty_shape_id_mobile }}" fill="none" stroke="currentColor" stroke-width="2"/>
+          </svg>
         {%- endif -%}
         <span class="pack-qty__label caption">{{ section.settings.qty_label }}</span>
         <button type="button" class="pack-qty__btn" aria-label="{{ 'products.product.quantity.decrease_html' | t: product: '' | default: 'Decrease quantity' | escape }}" onclick="packSelector.changeQty(-1)">&minus;</button>
@@ -654,6 +716,20 @@
     background-position: center;
     background-size: 100% 100%;
     border: none;
+  }
+  /* Squared to 48px because the shapes are authored on a 1:1 viewBox — a 40px
+     rectangle would stretch them — and 48px meets the minimum tap target. The
+     border goes because a clip path slices it off mid-edge. */
+  .pack-media__main[data-nav-shape="shaped"] .pack-media__nav {
+    width: var(--space-12);
+    height: var(--space-12);
+    border: none;
+    -webkit-clip-path: var(--nav-clip);
+    clip-path: var(--nav-clip);
+  }
+  .pack-media__main[data-nav-shape="shaped"] .pack-media__nav:focus-visible {
+    outline: 2px solid var(--color-red);
+    outline-offset: 2px;
   }
   .pack-media__nav--prev {
     left: var(--space-3);
@@ -1158,7 +1234,7 @@
       justify-content: center;
       padding: var(--space-3) var(--space-6);
     }
-    .pack-qty[data-shape-mobile="cloud"] .pack-qty__frame {
+    .pack-qty[data-shape-mobile="cloud"] .pack-qty__frame--cloud {
       display: block;
     }
     .pack-qty[data-shape-mobile="custom"] {
@@ -1174,6 +1250,15 @@
       background-position: center;
       background-size: 100% 100%;
     }
+    .pack-qty[data-shape-mobile="shaped"] {
+      border: none;
+      aspect-ratio: 150 / 78;
+      justify-content: center;
+      padding: var(--space-3) var(--space-6);
+    }
+    .pack-qty[data-shape-mobile="shaped"] .pack-qty__frame--shaped-mobile {
+      display: block;
+    }
   }
   @media (min-width: 769px) {
     .pack-qty[data-shape-desktop="dashed"] {
@@ -1187,7 +1272,7 @@
       justify-content: center;
       padding: var(--space-3) var(--space-6);
     }
-    .pack-qty[data-shape-desktop="cloud"] .pack-qty__frame {
+    .pack-qty[data-shape-desktop="cloud"] .pack-qty__frame--cloud {
       display: block;
     }
     .pack-qty[data-shape-desktop="custom"] {
@@ -1202,6 +1287,15 @@
       background-repeat: no-repeat;
       background-position: center;
       background-size: 100% 100%;
+    }
+    .pack-qty[data-shape-desktop="shaped"] {
+      border: none;
+      aspect-ratio: 150 / 78;
+      justify-content: center;
+      padding: var(--space-3) var(--space-6);
+    }
+    .pack-qty[data-shape-desktop="shaped"] .pack-qty__frame--shaped-desktop {
+      display: block;
     }
   }
   .pack-qty__label,
@@ -1906,15 +2000,388 @@
       "label": "Navigation Button Shape",
       "options": [
         {
+          "value": "website_shape_star",
+          "label": "custom star",
+          "group": "custom shapes"
+        },
+        {
+          "value": "website_shape_bun",
+          "label": "custom bun",
+          "group": "custom shapes"
+        },
+        {
+          "value": "website_shape_frame",
+          "label": "custom frame",
+          "group": "custom shapes"
+        },
+        {
+          "value": "website_shape_pancake",
+          "label": "custom pancake",
+          "group": "custom shapes"
+        },
+        {
+          "value": "website_shape_cloud",
+          "label": "custom cloud",
+          "group": "custom shapes"
+        },
+        {
           "value": "default",
-          "label": "Square (default)"
+          "label": "Square (default)",
+          "group": "basic"
         },
         {
           "value": "custom",
-          "label": "Custom (uploaded image)"
+          "label": "Custom (uploaded image)",
+          "group": "basic"
+        },
+        {
+          "value": "diamond",
+          "label": "t:common.options.diamond.label",
+          "group": "t:common.groups.basic"
+        },
+        {
+          "value": "triangle_1",
+          "label": "t:common.options.triangle_1.label",
+          "group": "t:common.groups.basic"
+        },
+        {
+          "value": "triangle_2",
+          "label": "t:common.options.triangle_2.label",
+          "group": "t:common.groups.basic"
+        },
+        {
+          "value": "pentagon",
+          "label": "t:common.options.pentagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "hexagon",
+          "label": "t:common.options.hexagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "heptagon",
+          "label": "t:common.options.heptagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "octagon",
+          "label": "t:common.options.octagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "nonagon",
+          "label": "t:common.options.nonagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "decagon",
+          "label": "t:common.options.decagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "rounded_pentagon",
+          "label": "t:common.options.rounded_pentagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "rounded_hexagon",
+          "label": "t:common.options.rounded_hexagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "rounded_heptagon",
+          "label": "t:common.options.rounded_heptagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "rounded_octagon",
+          "label": "t:common.options.rounded_octagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "rounded_nonagon",
+          "label": "t:common.options.rounded_nonagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "rounded_decagon",
+          "label": "t:common.options.rounded_decagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "star_1",
+          "label": "t:common.options.star_1.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "star_2",
+          "label": "t:common.options.star_2.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "star_3",
+          "label": "t:common.options.star_3.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "star_4",
+          "label": "t:common.options.star_4.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "star_5",
+          "label": "t:common.options.star_5.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "star_6",
+          "label": "t:common.options.star_6.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "abstract_star_1",
+          "label": "t:common.options.abstract_star_1.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "abstract_star_2",
+          "label": "t:common.options.abstract_star_2.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "abstract_star_3",
+          "label": "t:common.options.abstract_star_3.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "scalloped_circle_1",
+          "label": "t:common.options.scalloped_circle_1.label",
+          "group": "t:common.groups.scalloped_circles"
+        },
+        {
+          "value": "scalloped_circle_2",
+          "label": "t:common.options.scalloped_circle_2.label",
+          "group": "t:common.groups.scalloped_circles"
+        },
+        {
+          "value": "scalloped_circle_3",
+          "label": "t:common.options.scalloped_circle_3.label",
+          "group": "t:common.groups.scalloped_circles"
+        },
+        {
+          "value": "scalloped_circle_4",
+          "label": "t:common.options.scalloped_circle_4.label",
+          "group": "t:common.groups.scalloped_circles"
+        },
+        {
+          "value": "scalloped_circle_5",
+          "label": "t:common.options.scalloped_circle_5.label",
+          "group": "t:common.groups.scalloped_circles"
+        },
+        {
+          "value": "scalloped_circle_6",
+          "label": "t:common.options.scalloped_circle_6.label",
+          "group": "t:common.groups.scalloped_circles"
+        },
+        {
+          "value": "parallelogram",
+          "label": "t:common.options.parallelogram.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "squircle",
+          "label": "t:common.options.squircle.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "scalloped_square_1",
+          "label": "t:common.options.scalloped_square_1.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "scalloped_square_2",
+          "label": "t:common.options.scalloped_square_2.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "leaf",
+          "label": "t:common.options.leaf.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "clipped_square",
+          "label": "t:common.options.clipped.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "convex_square",
+          "label": "t:common.options.convex.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "twisted_square",
+          "label": "t:common.options.twisted.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "trapeze",
+          "label": "t:common.options.trapeze.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "pinched",
+          "label": "t:common.options.pinched.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "pixelated",
+          "label": "t:common.options.pixelated.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "overlapped",
+          "label": "t:common.options.overlapped.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "zig_zag",
+          "label": "t:common.options.zig_zag.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "zig_zag_tear",
+          "label": "t:common.options.zig_zag_tear.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "wave_tear",
+          "label": "t:common.options.wave_tear.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "flower",
+          "label": "t:common.options.flower.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "flower_bloom",
+          "label": "t:common.options.flower_bloom.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "concave",
+          "label": "t:common.options.concave.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "flag",
+          "label": "t:common.options.flag.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "abstract_oval",
+          "label": "t:common.options.abstract_oval.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "cross",
+          "label": "t:common.options.cross.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "quatrefoil",
+          "label": "t:common.options.quatrefoil.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "quadrant",
+          "label": "t:common.options.quadrant.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "wind",
+          "label": "t:common.options.wind.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "windmill",
+          "label": "t:common.options.windmill.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "heart",
+          "label": "t:common.options.heart.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "mirrored_pyramids",
+          "label": "t:common.options.mirrored_pyramids.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "plus",
+          "label": "t:common.options.plus.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "double_pill_1",
+          "label": "t:common.options.double_pill_1.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "double_pill_2",
+          "label": "t:common.options.double_pill_2.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "triple_pill_1",
+          "label": "t:common.options.triple_pill_1.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "triple_pill_2",
+          "label": "t:common.options.triple_pill_2.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "crown",
+          "label": "t:common.options.crown.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "stair",
+          "label": "t:common.options.stair.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "pancake_stack",
+          "label": "t:common.options.pancake_stack.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "asterisk",
+          "label": "t:common.options.asterisk.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "overlapping_squares",
+          "label": "t:common.options.overlapping_squares.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "brush_stroke",
+          "label": "t:common.options.brush_stroke.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "blob",
+          "label": "t:common.options.blob.label",
+          "group": "t:common.groups.variable"
         }
       ],
-      "default": "default"
+      "default": "default",
+      "info": "Custom shapes and the shape library clip the arrow; 'Custom (uploaded image)' paints the picked image behind it."
     },
     {
       "type": "image_picker",
@@ -2640,19 +3107,393 @@
       "label": "Quantity Stepper Shape (desktop)",
       "options": [
         {
+          "value": "website_shape_star",
+          "label": "custom star",
+          "group": "custom shapes"
+        },
+        {
+          "value": "website_shape_bun",
+          "label": "custom bun",
+          "group": "custom shapes"
+        },
+        {
+          "value": "website_shape_frame",
+          "label": "custom frame",
+          "group": "custom shapes"
+        },
+        {
+          "value": "website_shape_pancake",
+          "label": "custom pancake",
+          "group": "custom shapes"
+        },
+        {
+          "value": "website_shape_cloud",
+          "label": "custom cloud",
+          "group": "custom shapes"
+        },
+        {
           "value": "dashed",
-          "label": "Dashed pill"
+          "label": "Dashed pill",
+          "group": "basic"
         },
         {
           "value": "cloud",
-          "label": "Cloud (scalloped)"
+          "label": "Cloud (scalloped)",
+          "group": "basic"
         },
         {
           "value": "custom",
-          "label": "Custom (uploaded image)"
+          "label": "Custom (uploaded image)",
+          "group": "basic"
+        },
+        {
+          "value": "diamond",
+          "label": "t:common.options.diamond.label",
+          "group": "t:common.groups.basic"
+        },
+        {
+          "value": "triangle_1",
+          "label": "t:common.options.triangle_1.label",
+          "group": "t:common.groups.basic"
+        },
+        {
+          "value": "triangle_2",
+          "label": "t:common.options.triangle_2.label",
+          "group": "t:common.groups.basic"
+        },
+        {
+          "value": "pentagon",
+          "label": "t:common.options.pentagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "hexagon",
+          "label": "t:common.options.hexagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "heptagon",
+          "label": "t:common.options.heptagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "octagon",
+          "label": "t:common.options.octagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "nonagon",
+          "label": "t:common.options.nonagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "decagon",
+          "label": "t:common.options.decagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "rounded_pentagon",
+          "label": "t:common.options.rounded_pentagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "rounded_hexagon",
+          "label": "t:common.options.rounded_hexagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "rounded_heptagon",
+          "label": "t:common.options.rounded_heptagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "rounded_octagon",
+          "label": "t:common.options.rounded_octagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "rounded_nonagon",
+          "label": "t:common.options.rounded_nonagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "rounded_decagon",
+          "label": "t:common.options.rounded_decagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "star_1",
+          "label": "t:common.options.star_1.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "star_2",
+          "label": "t:common.options.star_2.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "star_3",
+          "label": "t:common.options.star_3.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "star_4",
+          "label": "t:common.options.star_4.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "star_5",
+          "label": "t:common.options.star_5.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "star_6",
+          "label": "t:common.options.star_6.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "abstract_star_1",
+          "label": "t:common.options.abstract_star_1.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "abstract_star_2",
+          "label": "t:common.options.abstract_star_2.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "abstract_star_3",
+          "label": "t:common.options.abstract_star_3.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "scalloped_circle_1",
+          "label": "t:common.options.scalloped_circle_1.label",
+          "group": "t:common.groups.scalloped_circles"
+        },
+        {
+          "value": "scalloped_circle_2",
+          "label": "t:common.options.scalloped_circle_2.label",
+          "group": "t:common.groups.scalloped_circles"
+        },
+        {
+          "value": "scalloped_circle_3",
+          "label": "t:common.options.scalloped_circle_3.label",
+          "group": "t:common.groups.scalloped_circles"
+        },
+        {
+          "value": "scalloped_circle_4",
+          "label": "t:common.options.scalloped_circle_4.label",
+          "group": "t:common.groups.scalloped_circles"
+        },
+        {
+          "value": "scalloped_circle_5",
+          "label": "t:common.options.scalloped_circle_5.label",
+          "group": "t:common.groups.scalloped_circles"
+        },
+        {
+          "value": "scalloped_circle_6",
+          "label": "t:common.options.scalloped_circle_6.label",
+          "group": "t:common.groups.scalloped_circles"
+        },
+        {
+          "value": "parallelogram",
+          "label": "t:common.options.parallelogram.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "squircle",
+          "label": "t:common.options.squircle.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "scalloped_square_1",
+          "label": "t:common.options.scalloped_square_1.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "scalloped_square_2",
+          "label": "t:common.options.scalloped_square_2.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "leaf",
+          "label": "t:common.options.leaf.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "clipped_square",
+          "label": "t:common.options.clipped.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "convex_square",
+          "label": "t:common.options.convex.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "twisted_square",
+          "label": "t:common.options.twisted.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "trapeze",
+          "label": "t:common.options.trapeze.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "pinched",
+          "label": "t:common.options.pinched.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "pixelated",
+          "label": "t:common.options.pixelated.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "overlapped",
+          "label": "t:common.options.overlapped.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "zig_zag",
+          "label": "t:common.options.zig_zag.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "zig_zag_tear",
+          "label": "t:common.options.zig_zag_tear.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "wave_tear",
+          "label": "t:common.options.wave_tear.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "flower",
+          "label": "t:common.options.flower.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "flower_bloom",
+          "label": "t:common.options.flower_bloom.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "concave",
+          "label": "t:common.options.concave.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "flag",
+          "label": "t:common.options.flag.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "abstract_oval",
+          "label": "t:common.options.abstract_oval.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "cross",
+          "label": "t:common.options.cross.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "quatrefoil",
+          "label": "t:common.options.quatrefoil.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "quadrant",
+          "label": "t:common.options.quadrant.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "wind",
+          "label": "t:common.options.wind.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "windmill",
+          "label": "t:common.options.windmill.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "heart",
+          "label": "t:common.options.heart.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "mirrored_pyramids",
+          "label": "t:common.options.mirrored_pyramids.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "plus",
+          "label": "t:common.options.plus.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "double_pill_1",
+          "label": "t:common.options.double_pill_1.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "double_pill_2",
+          "label": "t:common.options.double_pill_2.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "triple_pill_1",
+          "label": "t:common.options.triple_pill_1.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "triple_pill_2",
+          "label": "t:common.options.triple_pill_2.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "crown",
+          "label": "t:common.options.crown.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "stair",
+          "label": "t:common.options.stair.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "pancake_stack",
+          "label": "t:common.options.pancake_stack.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "asterisk",
+          "label": "t:common.options.asterisk.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "overlapping_squares",
+          "label": "t:common.options.overlapping_squares.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "brush_stroke",
+          "label": "t:common.options.brush_stroke.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "blob",
+          "label": "t:common.options.blob.label",
+          "group": "t:common.groups.variable"
         }
       ],
-      "default": "cloud"
+      "default": "cloud",
+      "info": "Shapes are drawn as an outline frame around the stepper."
     },
     {
       "type": "image_picker",
@@ -2666,19 +3507,393 @@
       "label": "Quantity Stepper Shape (mobile)",
       "options": [
         {
+          "value": "website_shape_star",
+          "label": "custom star",
+          "group": "custom shapes"
+        },
+        {
+          "value": "website_shape_bun",
+          "label": "custom bun",
+          "group": "custom shapes"
+        },
+        {
+          "value": "website_shape_frame",
+          "label": "custom frame",
+          "group": "custom shapes"
+        },
+        {
+          "value": "website_shape_pancake",
+          "label": "custom pancake",
+          "group": "custom shapes"
+        },
+        {
+          "value": "website_shape_cloud",
+          "label": "custom cloud",
+          "group": "custom shapes"
+        },
+        {
           "value": "dashed",
-          "label": "Dashed pill"
+          "label": "Dashed pill",
+          "group": "basic"
         },
         {
           "value": "cloud",
-          "label": "Cloud (scalloped)"
+          "label": "Cloud (scalloped)",
+          "group": "basic"
         },
         {
           "value": "custom",
-          "label": "Custom (uploaded image)"
+          "label": "Custom (uploaded image)",
+          "group": "basic"
+        },
+        {
+          "value": "diamond",
+          "label": "t:common.options.diamond.label",
+          "group": "t:common.groups.basic"
+        },
+        {
+          "value": "triangle_1",
+          "label": "t:common.options.triangle_1.label",
+          "group": "t:common.groups.basic"
+        },
+        {
+          "value": "triangle_2",
+          "label": "t:common.options.triangle_2.label",
+          "group": "t:common.groups.basic"
+        },
+        {
+          "value": "pentagon",
+          "label": "t:common.options.pentagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "hexagon",
+          "label": "t:common.options.hexagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "heptagon",
+          "label": "t:common.options.heptagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "octagon",
+          "label": "t:common.options.octagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "nonagon",
+          "label": "t:common.options.nonagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "decagon",
+          "label": "t:common.options.decagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "rounded_pentagon",
+          "label": "t:common.options.rounded_pentagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "rounded_hexagon",
+          "label": "t:common.options.rounded_hexagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "rounded_heptagon",
+          "label": "t:common.options.rounded_heptagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "rounded_octagon",
+          "label": "t:common.options.rounded_octagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "rounded_nonagon",
+          "label": "t:common.options.rounded_nonagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "rounded_decagon",
+          "label": "t:common.options.rounded_decagon.label",
+          "group": "t:common.groups.polygons"
+        },
+        {
+          "value": "star_1",
+          "label": "t:common.options.star_1.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "star_2",
+          "label": "t:common.options.star_2.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "star_3",
+          "label": "t:common.options.star_3.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "star_4",
+          "label": "t:common.options.star_4.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "star_5",
+          "label": "t:common.options.star_5.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "star_6",
+          "label": "t:common.options.star_6.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "abstract_star_1",
+          "label": "t:common.options.abstract_star_1.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "abstract_star_2",
+          "label": "t:common.options.abstract_star_2.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "abstract_star_3",
+          "label": "t:common.options.abstract_star_3.label",
+          "group": "t:common.groups.stars"
+        },
+        {
+          "value": "scalloped_circle_1",
+          "label": "t:common.options.scalloped_circle_1.label",
+          "group": "t:common.groups.scalloped_circles"
+        },
+        {
+          "value": "scalloped_circle_2",
+          "label": "t:common.options.scalloped_circle_2.label",
+          "group": "t:common.groups.scalloped_circles"
+        },
+        {
+          "value": "scalloped_circle_3",
+          "label": "t:common.options.scalloped_circle_3.label",
+          "group": "t:common.groups.scalloped_circles"
+        },
+        {
+          "value": "scalloped_circle_4",
+          "label": "t:common.options.scalloped_circle_4.label",
+          "group": "t:common.groups.scalloped_circles"
+        },
+        {
+          "value": "scalloped_circle_5",
+          "label": "t:common.options.scalloped_circle_5.label",
+          "group": "t:common.groups.scalloped_circles"
+        },
+        {
+          "value": "scalloped_circle_6",
+          "label": "t:common.options.scalloped_circle_6.label",
+          "group": "t:common.groups.scalloped_circles"
+        },
+        {
+          "value": "parallelogram",
+          "label": "t:common.options.parallelogram.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "squircle",
+          "label": "t:common.options.squircle.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "scalloped_square_1",
+          "label": "t:common.options.scalloped_square_1.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "scalloped_square_2",
+          "label": "t:common.options.scalloped_square_2.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "leaf",
+          "label": "t:common.options.leaf.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "clipped_square",
+          "label": "t:common.options.clipped.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "convex_square",
+          "label": "t:common.options.convex.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "twisted_square",
+          "label": "t:common.options.twisted.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "trapeze",
+          "label": "t:common.options.trapeze.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "pinched",
+          "label": "t:common.options.pinched.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "pixelated",
+          "label": "t:common.options.pixelated.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "overlapped",
+          "label": "t:common.options.overlapped.label",
+          "group": "t:common.groups.square"
+        },
+        {
+          "value": "zig_zag",
+          "label": "t:common.options.zig_zag.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "zig_zag_tear",
+          "label": "t:common.options.zig_zag_tear.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "wave_tear",
+          "label": "t:common.options.wave_tear.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "flower",
+          "label": "t:common.options.flower.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "flower_bloom",
+          "label": "t:common.options.flower_bloom.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "concave",
+          "label": "t:common.options.concave.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "flag",
+          "label": "t:common.options.flag.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "abstract_oval",
+          "label": "t:common.options.abstract_oval.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "cross",
+          "label": "t:common.options.cross.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "quatrefoil",
+          "label": "t:common.options.quatrefoil.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "quadrant",
+          "label": "t:common.options.quadrant.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "wind",
+          "label": "t:common.options.wind.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "windmill",
+          "label": "t:common.options.windmill.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "heart",
+          "label": "t:common.options.heart.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "mirrored_pyramids",
+          "label": "t:common.options.mirrored_pyramids.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "plus",
+          "label": "t:common.options.plus.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "double_pill_1",
+          "label": "t:common.options.double_pill_1.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "double_pill_2",
+          "label": "t:common.options.double_pill_2.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "triple_pill_1",
+          "label": "t:common.options.triple_pill_1.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "triple_pill_2",
+          "label": "t:common.options.triple_pill_2.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "crown",
+          "label": "t:common.options.crown.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "stair",
+          "label": "t:common.options.stair.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "pancake_stack",
+          "label": "t:common.options.pancake_stack.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "asterisk",
+          "label": "t:common.options.asterisk.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "overlapping_squares",
+          "label": "t:common.options.overlapping_squares.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "brush_stroke",
+          "label": "t:common.options.brush_stroke.label",
+          "group": "t:common.groups.miscellaneous"
+        },
+        {
+          "value": "blob",
+          "label": "t:common.options.blob.label",
+          "group": "t:common.groups.variable"
         }
       ],
-      "default": "dashed"
+      "default": "dashed",
+      "info": "Shapes are drawn as an outline frame around the stepper."
     },
     {
       "type": "image_picker",
