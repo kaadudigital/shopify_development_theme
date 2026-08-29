@@ -251,7 +251,7 @@
     {%- comment -%} Frequency / subscription {%- endcomment -%}
     <p class="pack-selector__heading h3">{{ section.settings.frequency_label }}</p>
 
-    <div class="pack-frequency">
+    <div class="pack-frequency" data-collapse-onetime="{% if section.settings.collapse_subscribe_on_onetime %}true{% else %}false{% endif %}">
       <button
         type="button"
         class="pack-subscribe"
@@ -1091,6 +1091,14 @@
     object-fit: contain;
   }
 
+  /* Contract the subscribe block to its header while the one-time option is
+     chosen. display:none also drops the tier radios out of the tab order, which
+     is right — no tier is selectable in that state. */
+  .pack-frequency[data-collapse-onetime="true"][data-frequency-state="onetime"] .pack-subscribe__tiers,
+  .pack-frequency[data-collapse-onetime="true"][data-frequency-state="onetime"] .pack-subscribe__benefits {
+    display: none;
+  }
+
   .pack-onetime {
     display: flex;
     flex-direction: column;
@@ -1455,6 +1463,13 @@
       var onetime = document.querySelector('.pack-onetime');
       if (subscribe) subscribe.setAttribute('aria-checked', frequency === 'subscribe' ? 'true' : 'false');
       if (onetime) onetime.setAttribute('aria-checked', frequency === 'onetime' ? 'true' : 'false');
+
+      // Drives the collapsed state in CSS. It lives on the container rather than
+      // keying off .pack-subscribe[aria-checked="false"] because the markup ships
+      // unchecked — that would render the tiers collapsed and pop them open once
+      // this runs on DOMContentLoaded.
+      var frequencyGroup = document.querySelector('.pack-frequency');
+      if (frequencyGroup) frequencyGroup.setAttribute('data-frequency-state', frequency);
 
       state.frequency = frequency;
 
@@ -3084,6 +3099,13 @@
       "id": "onetime_caption",
       "label": "One Time Purchase Caption",
       "default": "Kein gratis Versand"
+    },
+    {
+      "type": "checkbox",
+      "id": "collapse_subscribe_on_onetime",
+      "label": "Collapse subscribe block when one-time is selected",
+      "info": "Contracts the subscribe option to its title and price while the one-time option is chosen.",
+      "default": true
     },
     {
       "type": "header",
