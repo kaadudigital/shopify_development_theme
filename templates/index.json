@@ -526,11 +526,22 @@
     "image_with_highlights_mU9j66": {
       "type": "custom-image-with-highlights",
       "blocks": {
+        "highlight_MwnfGP": {
+          "type": "highlight",
+          "settings": {
+            "title": "",
+            "text": "97% NÄHRSTOFFE",
+            "cta_link": "",
+            "cta_text": "",
+            "override_section_color_scheme": false,
+            "color_scheme": "scheme1"
+          }
+        },
         "highlight_MUzXKM": {
           "type": "highlight",
           "settings": {
             "title": "",
-            "text": "Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.",
+            "text": "100% FRUCHT",
             "cta_link": "",
             "cta_text": "",
             "override_section_color_scheme": false,
@@ -541,7 +552,7 @@
           "type": "highlight",
           "settings": {
             "title": "",
-            "text": "Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.",
+            "text": "REIF GEERNTET",
             "cta_link": "",
             "cta_text": "",
             "override_section_color_scheme": false,
@@ -552,7 +563,7 @@
           "type": "highlight",
           "settings": {
             "title": "",
-            "text": "Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.",
+            "text": "0 ZUSÄTZE",
             "cta_link": "",
             "cta_text": "",
             "override_section_color_scheme": false,
@@ -561,6 +572,7 @@
         }
       },
       "block_order": [
+        "highlight_MwnfGP",
         "highlight_MUzXKM",
         "highlight_gjXrHU",
         "highlight_KRKBYm"
