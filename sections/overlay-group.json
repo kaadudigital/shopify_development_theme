@@ -57,7 +57,7 @@
         "enable": true,
         "eyebrow": "BEVOR DU GEHST",
         "heading": "WAIT. DON'T GO EMPTY-HANDED.",
-        "body_text": "<p>Sichere dir 20% auf deine erste Bestellung — 100% Frucht, 0% Ausbeutung.</p>",
+        "body_text": "<p>Sichere dir 20% auf deine erste Bestellung</p>",
         "email_placeholder": "Deine E-Mail-Adresse",
         "button_text": "20% SICHERN",
         "dismiss_text": "Nein danke, ich zahl den vollen Preis.",

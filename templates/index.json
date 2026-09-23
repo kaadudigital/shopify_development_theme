@@ -100,7 +100,7 @@
       "type": "scrolling-text",
       "name": "t:sections.scrolling_text.name",
       "settings": {
-        "text": "ITS NOT FAIR!",
+        "text": "RADIKALE FAIRNESS OHNE KOMPROMISS",
         "repeat_text": true,
         "shape_between_text": "image",
         "between_text_image": "shopify://shop_images/Kaadu_favicon_purple_RGB.png",
@@ -164,18 +164,18 @@
         "crop": "vertical",
         "crop_desktop": "widescreen",
         "enable_overlay": true,
-        "overlay_color": "#858585",
-        "overlay_opacity": 35,
+        "overlay_color": "#FFFFFF",
+        "overlay_opacity": 70,
         "display_on_card": false,
         "style": "full",
         "place_content": "place-content-center-center",
         "text_align": "text-center",
-        "eyebrow": "yes eyebrow",
+        "eyebrow": "ITS NOT FAIR!",
         "title": "AUSBEUTUNG IST TIEF VERANKERT",
         "heading_tag": "h1",
-        "richtext": "<p>some body you say</p>",
+        "richtext": "<p>Grün gepflückt, über fünf Zwischenhändler, die Verarbeitung tausende Kilometer weit weg. Der Bauer sieht davon fast nichts.</p>",
         "cta_url": "shopify://blogs/news",
-        "cta_text": "Shop Now",
+        "cta_text": "VIDEO ANSEHEN",
         "cta_text_mobile": "",
         "button2_image": "shopify://shop_images/Artboard151.svg",
         "button2_image_mobile": "shopify://shop_images/Artboard12.svg",
@@ -270,7 +270,7 @@
         "body_y_desktop": 65,
         "body_x_mobile": 55,
         "body_y_mobile": 45,
-        "button_link": "",
+        "button_link": "shopify://products/bananen-crunchys",
         "button_label": "Shop Now",
         "button_style": "btn-secondary",
         "color_scheme": "scheme6",
@@ -456,59 +456,35 @@
         "nutrition_content": "",
         "shipping_label": "Versand",
         "shipping_content": "",
-        "color_scheme": "scheme4"
+        "color_scheme": "scheme1"
       }
     },
     "vertical_video_embeds_kJLBxQ": {
       "type": "vertical-video-embeds",
       "blocks": {
-        "video_embed_4mERqh": {
-          "type": "video_embed",
-          "settings": {
-            "video_url": "",
-            "video_embed_code": ""
-          }
-        },
-        "video_embed_nKtBNw": {
-          "type": "video_embed",
-          "settings": {
-            "video_url": "",
-            "video_embed_code": ""
-          }
-        },
-        "video_embed_7QPM6i": {
-          "type": "video_embed",
-          "settings": {
-            "video_url": "",
-            "video_embed_code": ""
-          }
-        },
         "video_embed_iLrwYH": {
           "type": "video_embed",
           "settings": {
-            "video_url": "",
+            "video_url": "https://www.tiktok.com/@alex.svg/video/7624184846646021398?is_from_webapp=1&sender_device=pc",
             "video_embed_code": ""
           }
         },
         "video_embed_Tqj7Ed": {
           "type": "video_embed",
           "settings": {
-            "video_url": "",
+            "video_url": "https://www.tiktok.com/@alex.svg/video/7660550945939410198?is_from_webapp=1&sender_device=pc",
             "video_embed_code": ""
           }
         },
         "video_embed_6GaFRt": {
           "type": "video_embed",
           "settings": {
-            "video_url": "",
+            "video_url": "https://www.tiktok.com/@alex.svg/video/7677984987571948802?is_from_webapp=1&sender_device=pc",
             "video_embed_code": ""
           }
         }
       },
       "block_order": [
-        "video_embed_4mERqh",
-        "video_embed_nKtBNw",
-        "video_embed_7QPM6i",
         "video_embed_iLrwYH",
         "video_embed_Tqj7Ed",
         "video_embed_6GaFRt"
