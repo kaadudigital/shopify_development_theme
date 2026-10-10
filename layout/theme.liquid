@@ -219,6 +219,7 @@
   </head>
 
   <body data-color-scheme="scheme3" style="background-color: rgb(84, 42, 118);">
+    {%- render 'kd-cloud-defs' -%}
     {%- if settings.show_on_sale_badge -%}
       {%- render 'static-sticker-defs',
         shape: settings.on_sale_badge_shape,

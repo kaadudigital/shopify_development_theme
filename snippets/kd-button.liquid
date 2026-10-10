@@ -1,0 +1,42 @@
+{%- comment -%}
+  Kaadu Design System — cloud button (.kd-btn). Never a pill; label is Fagies, uppercase via CSS.
+
+  Params:
+  - label     {String}  required — type it in normal case
+  - url       {String}  optional — renders <a href>; without it a <button>
+  - variant   {String}  optional — 'primary' (purple/lime), 'red' (red/paper), 'lime' (lime/red),
+                         'paper' (paper/red), 'outline' (card secondary, Banter 12px).
+                         Blank = follows the section colour scheme (accent 1 / accent 1 contrast).
+  - size      {String}  optional — 'lg' 64px, 'md' 56px, 'sm' 52px; blank = 60px
+  - type      {String}  optional — button type when no url (default 'button')
+  - full      {Boolean} optional — stretch to the container width
+  - class     {String}  optional — extra classes
+  - attrs     {String}  optional — extra raw attributes (e.g. 'aria-pressed="false" name="add"')
+
+  Usage:
+    {%- render 'kd-button', label: section.settings.button_label, url: section.settings.button_link, variant: 'red' -%}
+{%- endcomment -%}
+{%- liquid
+  assign btn_classes = 'kd-btn'
+  if variant != blank
+    assign btn_classes = btn_classes | append: ' kd-btn--' | append: variant
+  endif
+  if size != blank
+    assign btn_classes = btn_classes | append: ' kd-btn--' | append: size
+  endif
+  if full
+    assign btn_classes = btn_classes | append: ' kd-btn--full'
+  endif
+  if class != blank
+    assign btn_classes = btn_classes | append: ' ' | append: class
+  endif
+-%}
+{%- capture btn_inner -%}
+  <svg class="kd-btn__cloud" aria-hidden="true" focusable="false"><use href="#kd-cloud"></use></svg>
+  <span class="kd-btn__label">{{ label }}</span>
+{%- endcapture -%}
+{%- if url != blank -%}
+  <a href="{{ url }}" class="{{ btn_classes }}" {{ attrs }}>{{ btn_inner }}</a>
+{%- else -%}
+  <button type="{{ type | default: 'button' }}" class="{{ btn_classes }}" {{ attrs }}>{{ btn_inner }}</button>
+{%- endif -%}

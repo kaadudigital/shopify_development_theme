@@ -2,7 +2,7 @@
   #shopify-section-{{ section.id }} .kaadu-rtwi__outer {
     max-width: var(--container-max);
     margin-inline: auto;
-    padding-block: var(--space-8);
+    padding-block: var(--legacy-space-8);
     padding-inline: var(--space-4);
   }
   #shopify-section-{{ section.id }} .kaadu-rtwi__card-surface {
@@ -21,7 +21,7 @@
     margin-top: var(--space-6);
   }
   #shopify-section-{{ section.id }} .kaadu-rtwi__image {
-    margin-top: var(--space-8);
+    margin-top: var(--legacy-space-8);
   }
   /* Image width is capped in px per breakpoint. `width: 100%` keeps it fluid
      below the cap so a narrow phone never overflows, and the desktop value
@@ -39,7 +39,7 @@
     margin-top: var(--space-6);
   }
   #shopify-section-{{ section.id }} .kaadu-rtwi__cta {
-    margin-top: var(--space-8);
+    margin-top: var(--legacy-space-8);
   }
   @media (min-width: 769px) {
     #shopify-section-{{ section.id }} .kaadu-rtwi__outer {
@@ -47,7 +47,7 @@
       padding-inline: var(--space-6);
     }
     #shopify-section-{{ section.id }} .kaadu-rtwi__card-surface {
-      padding: var(--space-8);
+      padding: var(--legacy-space-8);
     }
     #shopify-section-{{ section.id }} .kaadu-rtwi__image-inner {
       max-width: {{ section.settings.image_width_desktop }}px;

@@ -6742,14 +6742,17 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
 
 /* ────────────────────────────────────────────────────────────────
    KAADU DESIGN SYSTEM
-   Source of truth: kaadu-design-system/project/colors_and_type.css
-   Do not duplicate tokens elsewhere — reference via var(--*).
+   Source of truth: Kaadu Design System (claude.ai/artifact/CnMT95HubMKA5CeChwNxBm),
+   README + tokens.json + components/bundle.css. Mirrored here; reference via var(--*).
+   DS type classes carry a `kd-` prefix in the theme (e.g. .kd-display-h2) so they
+   never collide with Shapes classes like .price or .label.
    ──────────────────────────────────────────────────────────────── */
 
 /* ── BRAND FONTS ──────────────────────────────────────────────── */
 @font-face {
   font-family: 'Fagies';
-  src: url('Fagies.ttf') format('truetype');
+  src: url('Fagies-Regular.woff2') format('woff2'),
+       url('Fagies.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -6763,12 +6766,15 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
   font-display: swap;
 }
 
+/* The DS calls this file "Variable (600 900)", but it is the static Semibold
+   (byte-identical). Every bold/black weight in the DS renders with it until
+   real Banter Bold/Black files are added. */
 @font-face {
   font-family: 'Banter Grotesk';
   src: url('BanterGrotesk-Semibold.woff2') format('woff2'),
        url('BanterGrotesk-Semibold.woff') format('woff'),
        url('BanterGrotesk-Semibold.otf') format('opentype');
-  font-weight: 600;
+  font-weight: 600 900;
   font-style: normal;
   font-display: swap;
 }
@@ -6781,89 +6787,298 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
   font-display: swap;
 }
 
-/* ── DESIGN TOKENS ────────────────────────────────────────────── */
+/* ── DESIGN TOKENS (DS tokens.json) ───────────────────────────── */
 :root {
-  /* Primary palette */
-  --color-red:        #AE0000;
-  --color-violet:     #542A76;
-  --color-pink:       #FFC5FF;
-  --color-orange:     #FF781E;
-  --color-cream:      #FFFFF5;
+  /* Colour — grounds and inks */
+  --pink:        #ffc6ff;
+  --purple:      #542a76;
+  --red:         #ac0300;
+  --lime:        #aeff64;
+  --paper:       #fffff5;
+  --sky:         #b7d9ff;
+  --ink:         #000000;
+  --black:       #000000;
+  --lilac:       #e9a2e6;
+  --orange:      #ff781e;
+  --paper-glass: rgba(255, 255, 245, 0.4);
 
-  /* Secondary palette */
-  --color-lime:       #ACFF64;
-  --color-yellow:     #EDF731;
-  --color-sky:        #B7D9FF;
+  /* Colour — named by the DS README/bundle.css but missing from its tokens.json.
+     Proposed values taken from the page mockups; confirm with design. */
+  --ink-muted:     #6b6b6b;
+  --paper-warm:    #fff9ee;
+  --grey:          #9a9a94;
+  --charcoal:      #3a3a3a;
+  --sage:          #6e7a6c;
+  --logo-red:      #ae0000;
+  --tint-cocoa:    #6b4a2a;
+  --tint-plum:     #3c2554;
+  --tint-ochre:    #7a5a1e;
+  --tint-umber:    #3f2b10;
+  --tint-forest:   #1f3a2e;
+  --overlay-card:  rgba(20, 5, 25, 0.92);
+  --overlay-scrim: rgba(26, 26, 26, 0.45);
 
-  /* Neutrals */
-  --color-black:      #000000;
-  --color-near-black: #221F1F;
-  --color-dark-brown: #422A24;
-  --color-mid-grey:   #8C8C8C;
-  --color-light-grey: #E6E6E6;
+  /* Shadow */
+  --shadow-card:        0 4px 14px rgba(0, 0, 0, 0.12);
+  --shadow-drawer:      -8px 0 30px rgba(0, 0, 0, 0.2);
+  --shadow-tile-active: 0 14px 30px rgba(0, 0, 0, 0.28), inset 0 0 0 2px #3a3a3a;
+  --shadow-product:     0 12px 24px rgba(0, 0, 0, 0.14);
 
-  /* Semantic */
-  --color-bg-hero:        var(--color-pink);
-  --color-bg-section-alt: var(--color-violet);
-  --color-bg-light:       var(--color-cream);
-  --color-bg-ticker:      var(--color-lime);
-  --color-bg-sky:         var(--color-sky);
-
-  --color-text-primary: var(--color-black);
-  --color-text-on-dark: var(--color-cream);
-  --color-text-brand:   var(--color-red);
-  --color-text-violet:  var(--color-violet);
-
-  /* Spacing — 4px base */
-  --space-0:  0px;
+  /* Spacing */
   --space-1:  4px;
   --space-2:  8px;
   --space-3:  12px;
   --space-4:  16px;
+  --space-5:  20px;
   --space-6:  24px;
-  --space-8:  32px;
-  --space-12: 48px;
-  --space-16: 64px;
-  --space-24: 96px;
-  --space-32: 128px;
+  --space-7:  28px;
+  --space-8:  40px;
+  --space-9:  48px;
+  --space-10: 56px;
+  --space-11: 64px;
+  --space-12: 80px;
+  --space-13: 96px;
 
-  /* Layout */
+  /* Layout (DS "Large screens") */
+  --page-max:    1440px;
+  --content-max: 1800px;
+  --measure:     560px;
+  --card-w:      400px;
+  --gutter-sm:   20px;
+  --gutter-md:   32px;
+  --gutter-lg:   64px;
+  --gutter:      var(--gutter-sm);
+  --kd-px:       calc(100vw / 1440); /* 1px of the 1440 artboard — decorations only, never type */
+
+  /* Radius */
+  --radius-0:     0px;
+  --radius-tile:  36px;
+  --radius-pill:  999px;
+  --radius-split: 2px;
+
+  /* Type families */
+  --font-display: 'Fagies', Impact, 'Arial Narrow Bold', sans-serif;
+  --font-sans:    'Banter Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+  /* ── Legacy aliases — pre-redesign names, now pointing at DS values.
+     Remove each once no section references it. */
+  --color-red:        var(--red);
+  --color-violet:     var(--purple);
+  --color-pink:       var(--pink);
+  --color-orange:     var(--orange);
+  --color-cream:      var(--paper);
+  --color-lime:       var(--lime);
+  --color-sky:        var(--sky);
+  --color-black:      var(--ink);
+  --color-yellow:     #edf731; /* not in the DS */
+  --color-near-black: #221f1f; /* not in the DS — use --ink */
+  --color-dark-brown: #422a24; /* not in the DS */
+  --color-mid-grey:   #8c8c8c; /* not in the DS — use --ink-muted */
+  --color-light-grey: #e6e6e6; /* not in the DS */
+
+  --color-bg-hero:        var(--pink);
+  --color-bg-section-alt: var(--purple);
+  --color-bg-light:       var(--paper);
+  --color-bg-ticker:      var(--lime);
+  --color-bg-sky:         var(--sky);
+  --color-text-primary:   var(--ink);
+  --color-text-on-dark:   var(--paper);
+  --color-text-brand:     var(--red);
+  --color-text-violet:    var(--purple);
+
+  --space-0:          0px;
+  --legacy-space-8:   32px; /* old --space-8; the DS --space-8 is 40px */
+  --legacy-space-12:  48px; /* old --space-12; the DS --space-12 is 80px */
+  --space-16:         64px;
+  --space-24:         96px;
+  --space-32:         128px;
+
   --container-max:            1200px;
   --grid-gutter-desktop:      24px;
   --grid-gutter-mobile:       16px;
   --section-padding-v:        64px;
   --section-padding-v-mobile: 32px;
 
-  /* Radii */
   --radius-btn:     30px;
   --radius-card:    12px;
   --radius-sticker: 16px;
 
-  /* Shadows */
-  --shadow-sm:   0px 2px 7.6px 0px rgba(0,0,0,0.25);
-  --shadow-md:   0px 4px 4px 0px rgba(0,0,0,0.25);
-  --shadow-glow: 0px 0px 35px 0px rgba(0,0,0,0.10);
+  --shadow-sm:   0px 2px 7.6px 0px rgba(0, 0, 0, 0.25);
+  --shadow-md:   var(--shadow-card);
+  --shadow-glow: 0px 0px 35px 0px rgba(0, 0, 0, 0.10);
 
-  /* Typography families */
-  --font-display: 'Fagies', 'ThickHead', Helvetica, Arial, sans-serif;
-  --font-heading: 'Banter Grotesk', 'DM Sans', Helvetica, Arial, sans-serif;
-  --font-body:    'Banter Grotesk', 'DM Sans', Helvetica, Arial, sans-serif;
+  --font-heading: var(--font-sans);
+  --font-body:    var(--font-sans);
 }
 
-/* ── TYPE SCALE — class-only (opt-in) to avoid clashing with Shapes' h1–h6 reset */
+@media (min-width: 768px)  { :root { --gutter: var(--gutter-md); } }
+@media (min-width: 1200px) { :root { --gutter: var(--gutter-lg); } }
 
-/* Text-role colors. :where() keeps these at 0 specificity so any
-   existing color utility/override on the same element (e.g. text-white)
-   still wins regardless of source order — these only replace the
-   ambient color inherited from an ancestor's .text-scheme-text. */
+/* ── BASE ─────────────────────────────────────────────────────── */
+/* Focus: 4px solid red, 3px offset, on every button, link and input */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 4px solid var(--red);
+  outline-offset: 3px;
+}
+
+/* ── TYPE SCALE ───────────────────────────────────────────────── */
+/* Display (Fagies) — always uppercase, never bold or synthesised.
+   Sizes step at 768 / 1200 / 1441 (DS "Large screens"); mobile-first. */
+.kd-display-crunchys, .kd-display-hero, .kd-display-h2, .kd-display-h2-tight,
+.kd-display-quote, .kd-display-ticker, .kd-display-drawer,
+.kd-display-button-lg, .kd-display-button, .kd-display-button-sm, .kd-display-button-xs {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-synthesis: none;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+.kd-display-crunchys { font-size: 48px; line-height: 0.92; }
+.kd-display-hero     { font-size: 46px; line-height: 0.98; }
+.kd-display-h2       { font-size: 34px; line-height: 0.95; }
+.kd-display-h2-tight { font-size: 28px; line-height: 0.95; }
+.kd-display-quote    { font-size: 28px; line-height: 1.05; }
+.kd-display-ticker   { font-size: 34px; line-height: 1; letter-spacing: 0.02em; }
+.kd-display-drawer   { font-size: 26px; line-height: 1; }
+.kd-display-button-lg { font-size: 22px; line-height: 1; }
+.kd-display-button    { font-size: 20px; line-height: 1; letter-spacing: 0.03em; }
+.kd-display-button-sm { font-size: 18px; line-height: 1; }
+.kd-display-button-xs { font-size: 16px; line-height: 1; }
+@media (min-width: 768px) {
+  .kd-display-crunchys { font-size: 64px; }
+  .kd-display-hero     { font-size: 60px; }
+  .kd-display-h2       { font-size: 48px; }
+  .kd-display-h2-tight { font-size: 40px; }
+  .kd-display-quote    { font-size: 32px; }
+}
+@media (min-width: 1200px) {
+  .kd-display-crunchys { font-size: 84px; }
+  .kd-display-hero     { font-size: 76px; }
+  .kd-display-h2       { font-size: 64px; }
+  .kd-display-h2-tight { font-size: 56px; }
+  .kd-display-quote    { font-size: 40px; }
+}
+@media (min-width: 1441px) {
+  .kd-display-crunchys { font-size: 100px; }
+  .kd-display-hero     { font-size: 92px; }
+  .kd-display-h2       { font-size: 76px; }
+  .kd-display-h2-tight { font-size: 64px; }
+  .kd-display-quote    { font-size: 48px; }
+}
+
+/* Text (Banter Grotesk). Regular weight is never uppercased; bold (600+) always is. */
+.kd-lead    { font-family: var(--font-sans); font-weight: 400; font-size: 18px; line-height: 25px; max-width: var(--measure); }
+.kd-body-lg { font-family: var(--font-sans); font-weight: 400; font-size: 17px; line-height: 24px; max-width: var(--measure); }
+.kd-body    { font-family: var(--font-sans); font-weight: 400; font-size: 16px; line-height: 1.45; }
+.kd-body-sm { font-family: var(--font-sans); font-weight: 400; font-size: 13px; line-height: 1.4; }
+@media (min-width: 768px) {
+  .kd-lead    { font-size: 24px; line-height: 32px; }
+  .kd-body-lg { font-size: 20px; line-height: 28px; }
+}
+
+.kd-strong-lg, .kd-strong, .kd-strong-md, .kd-strong-sm,
+.kd-label, .kd-label-lg, .kd-label-sm, .kd-announcement, .kd-price {
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+}
+.kd-strong-lg     { font-weight: 700; font-size: 24px; line-height: 1.1; }
+.kd-strong        { font-weight: 700; font-size: 20px; line-height: 1.2; }
+.kd-strong-md     { font-weight: 700; font-size: 18px; line-height: 24px; }
+.kd-strong-sm     { font-weight: 700; font-size: 16px; line-height: 1.1; }
+.kd-label         { font-weight: 900; font-size: 13px; line-height: 1.2; letter-spacing: 0.06em; }
+.kd-label-lg      { font-weight: 900; font-size: 16px; line-height: 1.2; letter-spacing: 0.04em; }
+.kd-label-sm      { font-weight: 700; font-size: 12px; line-height: 1.2; letter-spacing: 0.06em; }
+.kd-announcement  { font-weight: 700; font-size: 14px; line-height: 1;   letter-spacing: 0.04em; }
+.kd-price         { font-weight: 900; font-size: 22px; line-height: 1.1; }
+
+/* Legacy type classes — kept so un-migrated sections keep working.
+   .h1 / .h2 / .mega-heading now follow the DS display steps. */
+.h1, .h2, .mega-heading {
+  font-family: var(--font-display) !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+  text-transform: uppercase;
+  letter-spacing: 0 !important;
+}
+.h1           { font-size: 46px !important; line-height: 0.98 !important; }
+.h2           { font-size: 34px !important; line-height: 0.95 !important; }
+.mega-heading { font-size: 48px !important; line-height: 0.92 !important; text-align: center; vertical-align: middle; }
+@media (min-width: 768px) {
+  .h1           { font-size: 60px !important; }
+  .h2           { font-size: 48px !important; }
+  .mega-heading { font-size: 64px !important; }
+}
+@media (min-width: 1200px) {
+  .h1           { font-size: 76px !important; }
+  .h2           { font-size: 64px !important; }
+  .mega-heading { font-size: 84px !important; }
+}
+@media (min-width: 1441px) {
+  .h1           { font-size: 92px !important; }
+  .h2           { font-size: 76px !important; }
+  .mega-heading { font-size: 100px !important; }
+}
+
+/* Non-display legacy classes keep their pre-redesign sizes until their
+   sections migrate to the kd- classes. */
+.h3 {
+  font-family: var(--font-sans) !important;
+  font-weight: 600 !important;
+  font-size: 24px !important;
+  line-height: 32px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.h4-subsection-heading {
+  font-family: var(--font-sans) !important;
+  font-weight: 600 !important;
+  font-size: 32px !important;
+  line-height: 40px !important;
+  text-transform: uppercase;
+}
+.body-large {
+  font-family: var(--font-sans) !important;
+  font-weight: 400 !important;
+  font-size: 18px !important;
+  line-height: 28px !important;
+}
+.body {
+  font-family: var(--font-sans) !important;
+  font-weight: 400 !important;
+  font-size: 24px !important;
+  line-height: 32px !important;
+}
+.caption {
+  font-family: var(--font-sans) !important;
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  line-height: 20px !important;
+}
+.btn-label {
+  font-family: var(--font-sans) !important;
+  font-weight: 600 !important;
+  font-size: 18px !important;
+  line-height: 24px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+@media (max-width: 767.98px) {
+  .h3 { font-size: 16px !important; line-height: 24px !important; }
+  .body-large, .body { font-size: 16px !important; line-height: 24px !important; }
+  .btn-label { font-size: 16px !important; }
+}
+@media (max-width: 479.98px) {
+  .h4-subsection-heading { font-size: 24px !important; line-height: 28px !important; }
+}
+
+/* Text-role colours. :where() keeps these at 0 specificity so any explicit
+   colour utility on the same element still wins. */
 :where(.body, .body-large) {
   color: rgb(var(--color-scheme-body-text));
 }
-
 :where(.caption) {
   color: rgb(var(--color-scheme-caption-text));
 }
-
 :where(
   .info-tiles__eyebrow,
   .image-with-text__eyebrow,
@@ -6875,239 +7090,213 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
   color: rgb(var(--color-scheme-eyebrow-text));
 }
 
-.h1 {
-  font-family: var(--font-display) !important;
-  font-weight: 400 !important;
-  font-size: 64px !important;
-  line-height: 72px !important;
-  text-transform: uppercase;
-  letter-spacing: -0.01em;
-}
-
-.mega-heading {
-  font-family: var(--font-display) !important;
-  font-weight: 400 !important;
-  font-style: normal !important;
-  font-size: 96px !important;
-  line-height: 100px !important;
-  letter-spacing: 0 !important;
-  text-align: center;
-  text-transform: uppercase;
-  vertical-align: middle;
-}
-
-.h2 {
-  font-family: var(--font-display) !important;
-  font-weight: 400 !important;
-  font-size: 48px !important;
-  line-height: 56px !important;
-  text-transform: uppercase;
-}
-
-@media (max-width: 768px) {
-  .h2 {
-    font-size: 40px !important;
-    line-height: 44px !important;
-  }
-}
-
-.h3 {
-  font-family: var(--font-heading) !important;
-  font-weight: 600 !important;
-  font-size: 24px !important;
-  line-height: 32px !important;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-}
-
-.h4-subsection-heading {
-  font-family: var(--font-heading) !important;
-  font-weight: 600 !important;
-  font-size: 32px !important;
-  line-height: 40px !important;
-  text-transform: uppercase;
-}
-
-@media (max-width: 480px) {
-  .h4-subsection-heading {
-    font-size: 24px !important;
-    line-height: 28px !important;
-  }
-}
-
-.body-large {
-  font-family: var(--font-body) !important;
-  font-weight: 400 !important;
-  font-size: 18px !important;
-  line-height: 28px !important;
-}
-
-.body {
-  font-family: var(--font-body) !important;
-  font-weight: 400 !important;
-  font-size: 24px !important;
-  line-height: 32px !important;
-}
-
-.caption {
-  font-family: var(--font-body) !important;
-  font-weight: 400 !important;
-  font-size: 14px !important;
-  line-height: 20px !important;
-}
-
-.btn-label {
-  font-family: var(--font-heading) !important;
-  font-weight: 600 !important;
-  font-size: 18px !important;
-  line-height: 24px !important;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-
-@media (max-width: 768px) {
-  .h1 {
-    font-size: 48px !important;
-    line-height: 56px !important;
-  }
-  .mega-heading {
-    font-size: 48px !important;
-    line-height: 56px !important;
-    text-transform: uppercase;
-  }
-  .h3 {
-    font-size: 16px !important;
-    line-height: 24px !important;
-  }
-  .body-large,
-  .body {
-    font-size: 16px !important;
-    line-height: 24px !important;
-  }
-  .btn-label {
-    font-size: 16px !important;
-  }
+@media (max-width: 767.98px) {
   :root {
     --section-padding-v: var(--section-padding-v-mobile);
   }
 }
 
-/* ── UTILITY CLASSES ──────────────────────────────────────────── */
+/* ── TEXT LINKS — every linked text starts with ✶, underline on hover only ── */
+.kd-link {
+  font-weight: 700;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: inherit;
+}
+.kd-link::before { content: "\2736\00a0"; }
+.kd-link:hover   { text-decoration: underline; text-underline-offset: 3px; }
+
+/* ── SECTION HEADING — kicker + Fagies h2 ─────────────────────── */
+.kd-heading { display: flex; flex-direction: column; gap: 10px; }
+.kd-heading__kicker { margin: 0; color: var(--red); }
+.kd-heading__title  { margin: 0; color: var(--red); }
+.kd-heading--center { align-items: center; text-align: center; gap: 6px; }
+.kd-heading--center .kd-heading__kicker { color: inherit; }
+
+/* ── LAYOUT ───────────────────────────────────────────────────── */
+/* Full-bleed colour band with the stepped gutter (20 / 32 / 64) */
+.kd-section {
+  box-sizing: border-box;
+  padding-inline: var(--gutter);
+}
+/* Text-beside-media rows stop at 1800px on very large screens; the band stays full width */
+.kd-wide {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+}
+
+/* Grounds — each sets the ground and its DS ink */
+.kd-ground-pink   { background-color: var(--pink);   color: var(--purple); }
+.kd-ground-paper  { background-color: var(--paper);  color: var(--ink); }
+.kd-ground-sky    { background-color: var(--sky);    color: var(--ink); }
+.kd-ground-lime   { background-color: var(--lime);   color: var(--purple); }
+.kd-ground-purple { background-color: var(--purple); color: var(--paper); }
+
+/* Legacy utilities */
 .text-upper  { text-transform: uppercase; }
-.text-red    { color: var(--color-red); }
-.text-violet { color: var(--color-violet); }
-.text-cream  { color: var(--color-cream); }
-.text-black  { color: var(--color-black); }
+.text-red    { color: var(--red); }
+.text-violet { color: var(--purple); }
+.text-cream  { color: var(--paper); }
+.text-black  { color: var(--ink); }
 
-.bg-pink   { background-color: var(--color-pink); }
-.bg-violet { background-color: var(--color-violet); color: var(--color-cream); }
-.bg-cream  { background-color: var(--color-cream); color: var(--color-near-black); }
-.bg-lime   { background-color: var(--color-lime); color: var(--color-black); }
-.bg-sky    { background-color: var(--color-sky); color: var(--color-black); }
-.bg-red    { background-color: var(--color-red); color: var(--color-cream); }
-.bg-yellow { background-color: var(--color-yellow); color: var(--color-black); }
-.bg-orange { background-color: var(--color-orange); color: var(--color-black); }
+.bg-pink   { background-color: var(--pink); }
+.bg-violet { background-color: var(--purple); color: var(--paper); }
+.bg-cream  { background-color: var(--paper);  color: var(--ink); }
+.bg-lime   { background-color: var(--lime);   color: var(--purple); }
+.bg-sky    { background-color: var(--sky);    color: var(--ink); }
+.bg-red    { background-color: var(--red);    color: var(--paper); }
+.bg-yellow { background-color: var(--color-yellow); color: var(--ink); } /* not a DS ground */
+.bg-orange { background-color: var(--orange); color: var(--ink); }       /* not a DS ground */
 
-/* ── BUTTONS ──────────────────────────────────────────────────── */
-
-.btn-primary {
+/* ── CLOUD BUTTON (.kd-btn) ───────────────────────────────────────
+   Markup: snippets/kd-button.liquid. The cloud is <use href="#kd-cloud">
+   (snippets/kd-cloud-defs.liquid, rendered once in layout/theme.liquid).
+   Without a variant the cloud follows the section's colour scheme:
+   accent 1 = cloud, accent 1 contrast = label. */
+.kd-btn {
+  --kd-cloud: rgb(var(--color-scheme-accent-1, 84, 42, 118));
+  position: relative;
+  z-index: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 16px 24px;
-  background-color: var(--color-cream);
-  border: 2px solid var(--color-black);
-  border-radius: var(--radius-btn);
-  box-shadow: var(--shadow-md);
+  gap: 6px;
+  box-sizing: border-box;
+  height: 60px;
+  padding: 0 var(--space-8);
+  border: 0;
+  background: transparent;
+  color: rgb(var(--color-scheme-accent-1-contrast, 174, 255, 100));
   font-family: var(--font-display);
   font-weight: 400;
   font-size: 20px;
-  line-height: 24px;
+  line-height: 1;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
-  color: var(--color-red);
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
   text-decoration: none;
-  min-height: 48px;
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0px 6px 6px 0px rgba(0,0,0,0.25);
+.kd-btn__cloud {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: var(--kd-cloud);
+  filter: drop-shadow(var(--shadow-card));
+  pointer-events: none;
 }
-.btn-primary:active {
-  transform: translateY(0);
-  box-shadow: var(--shadow-sm);
+.kd-btn__label {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
+.kd-btn:hover .kd-btn__cloud { filter: drop-shadow(var(--shadow-card)) brightness(1.04); }
+.kd-btn:active { transform: translateY(1px); }
+.kd-btn[disabled], .kd-btn[aria-disabled="true"] { opacity: 0.5; cursor: not-allowed; }
+.kd-btn--full { display: flex; width: 100%; }
 
-.btn-secondary {
+.kd-btn--primary { --kd-cloud: var(--purple); color: var(--lime); }
+.kd-btn--red     { --kd-cloud: var(--red);    color: var(--paper); }
+.kd-btn--lime    { --kd-cloud: var(--lime);   color: var(--red); }
+.kd-btn--paper   { --kd-cloud: var(--paper);  color: var(--red); }
+
+.kd-btn--lg { height: 64px; font-size: 22px; letter-spacing: 0; padding: 0 42px; }
+.kd-btn--md { height: 56px; font-size: 18px; letter-spacing: 0; padding: 0 38px; }
+.kd-btn--sm { height: 52px; font-size: 16px; letter-spacing: 0; padding: 0 32px; }
+
+/* Outline cloud — the small secondary action on photo cards ("Details ↻") */
+.kd-btn--outline {
+  --kd-cloud: transparent;
+  height: 40px;
+  padding: 0 26px;
+  color: var(--paper);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.kd-btn--outline .kd-btn__cloud {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  filter: none;
+}
+.kd-btn--outline:hover .kd-btn__cloud { filter: none; }
+.kd-btn--outline[aria-pressed="true"] { --kd-cloud: var(--paper); color: var(--red); }
+.kd-btn--outline[aria-pressed="true"] .kd-btn__cloud { fill: var(--kd-cloud); stroke: none; }
+
+/* Round icon button (drawer close) */
+.kd-btn-round {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 14px 24px;
-  background-color: var(--color-cream);
-  border: 2px solid var(--color-black);
-  border-radius: var(--radius-btn);
-  box-shadow: var(--shadow-md);
-  font-family: var(--font-heading);
-  font-weight: 600;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--lime);
+  color: var(--red);
+  font-family: var(--font-display);
   font-size: 18px;
-  line-height: 24px;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  color: var(--color-black);
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* ── LEGACY BUTTONS — clouds via CSS mask, for markup that can't render
+   kd-button yet. No drop shadow (a filter would also shadow the label).
+   Migrate to snippets/kd-button.liquid when restyling the section. */
+.btn-primary,
+.btn-secondary {
+  --kd-cloud: var(--purple);
+  position: relative;
+  z-index: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  padding: 0 38px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--lime);
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1;
+  text-transform: uppercase;
   text-decoration: none;
-  min-height: 48px;
+  cursor: pointer;
 }
-.btn-secondary:hover {
-  background-color: var(--color-light-grey);
-  transform: translateY(-1px);
+.btn-primary::before,
+.btn-secondary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--kd-cloud);
+  -webkit-mask: url('kd-cloud.svg') center / 100% 100% no-repeat;
+          mask: url('kd-cloud.svg') center / 100% 100% no-repeat;
 }
-.btn-secondary:active {
-  transform: translateY(0);
-}
+.btn-secondary         { --kd-cloud: var(--red);   color: var(--paper); }
+.btn-secondary-inverse { --kd-cloud: var(--paper); color: var(--red); }
+.btn-primary:active,
+.btn-secondary:active { transform: translateY(1px); }
 
-.btn-secondary-inverse {
-  background-color: transparent;
-  border-color: var(--color-cream);
-  color: var(--color-cream);
-}
-.btn-secondary-inverse:hover {
-  background-color: rgba(255, 255, 245, 0.15);
-}
-
-@media (max-width: 768px) {
-  .btn-primary,
-  .btn-secondary {
-    padding: 12px 20px;
-    font-size: 16px;
-    box-shadow: var(--shadow-md);
-  }
-}
-
-/* Lock Kaadu design-system drop shadow when these classes are combined with
-   legacy theme classes (e.g. .push-btn__surface, which sets its own inset
-   box-shadow earlier in the cascade). Higher specificity (0,0,2,0) keeps the
-   drop shadow visible at every breakpoint, including mobile. */
-.push-btn__surface.btn-primary,
-.push-btn__surface.btn-secondary {
-  box-shadow: var(--shadow-md);
-}
-.push-btn__surface.btn-primary:hover {
-  box-shadow: 0px 6px 6px 0px rgba(0,0,0,0.25);
-}
-.push-btn__surface.btn-primary:active {
-  box-shadow: var(--shadow-sm);
-}
-
-/* ── CARDS ────────────────────────────────────────────────────── */
+/* ── CARDS — square, shadow only, no border ───────────────────── */
 .card {
-  background-color: var(--color-cream);
-  border: 2px solid var(--color-black);
-  border-radius: var(--radius-card);
+  background-color: var(--paper);
+  border: 0;
+  border-radius: var(--radius-0);
   padding: var(--space-8);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-card);
 }
 
 /* ── HELPERS ──────────────────────────────────────────────────── */
@@ -7174,8 +7363,8 @@ body {
   .focus-carousel__extended-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-8);
-    padding-inline: var(--space-8);
+    gap: var(--legacy-space-8);
+    padding-inline: var(--legacy-space-8);
   }
   .focus-carousel__extended-item {
     text-align: center;

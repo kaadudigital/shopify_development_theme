@@ -646,7 +646,7 @@
   @media (min-width: 769px) {
     .pack-selector__layout {
       grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-      gap: var(--space-8);
+      gap: var(--legacy-space-8);
       align-items: start;
     }
   }
@@ -721,8 +721,8 @@
      rectangle would stretch them — and 48px meets the minimum tap target. The
      border goes because a clip path slices it off mid-edge. */
   .pack-media__main[data-nav-shape="shaped"] .pack-media__nav {
-    width: var(--space-12);
-    height: var(--space-12);
+    width: var(--legacy-space-12);
+    height: var(--legacy-space-12);
     border: none;
     -webkit-clip-path: var(--nav-clip);
     clip-path: var(--nav-clip);
@@ -796,7 +796,7 @@
 
   /* Accordion */
   .pack-accordion {
-    margin-top: var(--space-8);
+    margin-top: var(--legacy-space-8);
     border-top: 2px solid var(--color-black);
   }
   .pack-accordion__item {

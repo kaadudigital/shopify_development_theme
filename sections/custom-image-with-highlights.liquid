@@ -26,7 +26,7 @@
     margin-top: var(--space-6); /* header → content: 24px mobile */
   }
   #shopify-section-{{ section.id }} .kaadu-iwh__carousel {
-    margin-top: var(--space-8); /* image → highlights: 32px */
+    margin-top: var(--legacy-space-8); /* image → highlights: 32px */
   }
   #shopify-section-{{ section.id }} .kaadu-iwh__arrows {
     margin-top: var(--space-6); /* carousel → arrows: 24px */
@@ -41,7 +41,7 @@
     margin-top: var(--space-4); /* heading → body: 16px */
   }
   #shopify-section-{{ section.id }} .kaadu-iwh__card-cta {
-    margin-top: var(--space-8); /* body → CTA group: 32px */
+    margin-top: var(--legacy-space-8); /* body → CTA group: 32px */
   }
 
   /* Highlight cards are borderless with square corners in this section,
@@ -93,8 +93,8 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: var(--space-12);
-      height: var(--space-12);
+      width: var(--legacy-space-12);
+      height: var(--legacy-space-12);
       padding: 0;
       border-radius: 0;
       box-shadow: none;
@@ -108,10 +108,10 @@
 
   @media (min-width: 769px) {
     #shopify-section-{{ section.id }} .kaadu-iwh__content {
-      margin-top: var(--space-12); /* header → content: 48px desktop */
+      margin-top: var(--legacy-space-12); /* header → content: 48px desktop */
     }
     #shopify-section-{{ section.id }} .kaadu-iwh__card-body {
-      padding: var(--space-8); /* card inner padding: 32px desktop */
+      padding: var(--legacy-space-8); /* card inner padding: 32px desktop */
     }
   }
 {%- endstyle -%}

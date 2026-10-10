@@ -4,8 +4,8 @@
   #shopify-section-{{ section.id }} .email-signup-section {
     position: relative;
     overflow: hidden;
-    padding-block-start: {%- if section.settings.padding_top == 'none' -%}var(--space-2){%- elsif section.settings.padding_top == 'small' -%}var(--space-4){%- else -%}var(--space-8){%- endif -%};
-    padding-block-end: var(--space-8);
+    padding-block-start: {%- if section.settings.padding_top == 'none' -%}var(--space-2){%- elsif section.settings.padding_top == 'small' -%}var(--space-4){%- else -%}var(--legacy-space-8){%- endif -%};
+    padding-block-end: var(--legacy-space-8);
     padding-inline: var(--space-4);
   }
   #shopify-section-{{ section.id }} .email-signup-container {
@@ -152,16 +152,16 @@
 
   @media (min-width: 769px) {
     #shopify-section-{{ section.id }} .email-signup-section {
-      padding-block-start: {%- if section.settings.padding_top == 'none' -%}var(--space-2){%- elsif section.settings.padding_top == 'small' -%}var(--space-8){%- else -%}var(--section-padding-v){%- endif -%};
+      padding-block-start: {%- if section.settings.padding_top == 'none' -%}var(--space-2){%- elsif section.settings.padding_top == 'small' -%}var(--legacy-space-8){%- else -%}var(--section-padding-v){%- endif -%};
       padding-block-end: var(--section-padding-v);
       padding-inline: var(--space-6);
     }
     #shopify-section-{{ section.id }} .email-signup-heading {
-      margin-bottom: var(--space-8);
+      margin-bottom: var(--legacy-space-8);
     }
     #shopify-section-{{ section.id }} .email-signup-input {
       height: 64px;
-      padding: var(--space-4) var(--space-8);
+      padding: var(--space-4) var(--legacy-space-8);
     }
     #shopify-section-{{ section.id }} .email-signup-wrapper {
       gap: var(--space-6);

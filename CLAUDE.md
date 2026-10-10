@@ -178,28 +178,40 @@ All spacing in multiples of **4px**. Reference tokens — do not hardcode px val
 
 Mobile vertical spacing ≈ 50% of desktop.
 
-### Layout
+### Layout & Large Screens
 
-- **Container:** `max-width: var(--container-max)` (1200px); `margin-inline: auto`.
-- **Desktop grid:** 12 columns, 24px gutter.
-- **Mobile grid:** 6 columns, 16px gutter.
-- **Breakpoint:** `768px`. Mobile-first — write the mobile layout as default, override with `@media (min-width: 769px)`.
-- Use CSS Grid and Flexbox. **Never use absolute/percentage positioning for content** — it breaks at unexpected viewport widths.
+> **Redesign source of truth:** the Kaadu Design System (https://claude.ai/artifact/CnMT95HubMKA5CeChwNxBm) wins over the page mockups (https://claude.ai/artifact/DeWG7XTMTAJmdxb9iXNZ82), which are a rough draft — take page structure and content from the mockups, every size, colour, font and component rule from the design system.
+>
+> **Redesign (branch `redesign`):** layout follows the new Kaadu Design System, section "Large screens" (https://claude.ai/artifact/CnMT95HubMKA5CeChwNxBm), modelled on cobfoods.com. These rules replace the old 1200px container and 12-column grid.
+
+- **Fluid and full width — no fixed page container.** Colour bands always run edge to edge. Only the gutter, the headline steps and a few caps change with the window.
+- **Breakpoints (mobile-first, `min-width`):** `768px` (tablet; below is mobile), `992px`, `1200px` (desktop spec applies), `1441px` (above the 1440 artboard), `1800px` (very large screens). Write mobile as the default and step up with `@media (min-width: …)`.
+- **Gutter (section `padding-inline`):** 20px below 768 → 32px from 768 → 64px from 1200. It never grows past 64px.
+- **Headlines step at breakpoints, never fluid** (no `clamp()` / `vw` on type):
+
+| Style | < 768 | ≥ 768 | ≥ 1200 (spec) | ≥ 1441 |
+|---|---|---|---|---|
+| Hero (`display-hero`) | 46 | 60 | 76 | 92 |
+| Crunchys claim | 48 | 64 | 84 | 100 |
+| Section H2 (`display-h2`) | 34 | 48 | 64 | 76 |
+| H2 tight (product, comparison) | 28 | 40 | 56 | 64 |
+| Pull quote | 28 | 32 | 40 | 48 |
+
+  Body, label and button sizes stay at spec above 768px.
+- **Images, background shapes and stickers scale with the window from 1200px up:** size them as a share of the 1440 artboard with a px cap, e.g. `width: min(calc(110 * var(--kd-px)), 140px)` where `--kd-px: calc(100vw / 1440)`. Below 1200px use fixed px. Never scale text this way. (This is the only allowed viewport-relative sizing — content layout itself stays Grid/Flexbox.)
+- **Text-beside-media rows** (hero, product, image-with-text) cap at 1800px, centred inside their full-bleed band (`.kd-wide`). Carousels, tickers and colour bands are never capped.
+- **Two-column layouts** stack below 768 and go side by side from 768. Product page: gallery and details 50/50, gap 20px → 48px from 1200.
+- Use CSS Grid and Flexbox. **Never use absolute/percentage positioning for content** — it breaks at unexpected viewport widths. Decorative shapes/stickers are the exception (see above).
 - Shopify does not support separate mobile/desktop section files. Every section must be responsive in a single file using media queries. Never swap layouts via JS.
 
 ```css
-.my-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-4);
-}
+.my-section { padding-inline: 20px; }
+@media (min-width: 768px)  { .my-section { padding-inline: 32px; } }
+@media (min-width: 1200px) { .my-section { padding-inline: 64px; } }
 
-@media (min-width: 769px) {
-  .my-grid {
-    grid-template-columns: repeat(12, 1fr);
-    gap: var(--space-6);
-  }
-}
+.my-row { display: grid; grid-template-columns: 1fr; gap: var(--space-5); }
+@media (min-width: 768px)  { .my-row { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1800px) { .my-row { max-width: 1800px; margin-inline: auto; } }
 ```
 
 ### Radii & Shadows
@@ -271,6 +283,8 @@ In [kaadu-design-system/project/assets/stickers/](kaadu-design-system/project/as
 | `mango-sticker.png` | Mango fruit mascot |
 
 Stickers are the brand's expressive accent — apply slight rotation transforms (`-8°` to `-15°`) for energy. Minimum size: 48px. Always `object-fit: contain`. Never distort the aspect ratio. Never outline, recolour, or stretch the mascot.
+
+> **Redesign decision (2026-10-10):** the theme's existing sticker and background-shape systems are **kept** through the redesign — `snippets/block-sticker.liquid`, `snippets/block-background-shape.liquid`, `snippets/block-background-pattern.liquid`, `snippets/collection-shape-defs.liquid` and the `website_shape_*` shape options in section schemas. Restyle around them; do not remove or replace them with the new design system's `kd-tag--sticker`. On large screens they scale per "Layout & Large Screens".
 
 ### Iconography
 
@@ -454,5 +468,5 @@ When editing a section that still feels off after migration, verify the layout a
 2. **Read the design system** — for new components, open the matching specimen in [kaadu-design-system/project/preview/](kaadu-design-system/project/preview/) and the prototype in [kaadu-design-system/project/ui_kits/website/](kaadu-design-system/project/ui_kits/website/) before coding.
 3. **Reuse before creating** — find the closest Shapes section and customise it. Only create a new file when nothing close exists.
 4. **Tokens & canonical classes only** — if you find yourself writing `style="font-size: 24px"` or `#ae0000`, stop and use the right class or `var(--*)` instead.
-5. **Test responsively** — check at 375px, 768px, and 1280px before marking done.
+5. **Test responsively** — check at 390, 768, 1200, 1440, 1920 and 2560px before marking done.
 6. **Verify against standards** — colour contrast, font sizes, spacing, heading hierarchy, and `.bg-*` text pairing must all pass.
