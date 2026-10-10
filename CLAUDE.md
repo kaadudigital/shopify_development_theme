@@ -2,28 +2,28 @@
 
 ## Project Overview
 
-E-commerce site for **Kaadu**, a Swiss fair-trade freeze-dried fruit brand. Primary market language is **German**; secondary is **English** (used for slogans and CTAs alongside German body copy). Built on the **Shapes theme by Archetype Themes**, extended with custom sections.
+E-commerce site for **Kaadu**, a Swiss fair-trade freeze-dried fruit brand. Primary market language is **German**; secondary is **English** (used for slogans and CTAs alongside German body copy). Built on the **Shapes theme (v3.0.4) by Switch Themes**, extended with custom sections. A redesign to the new Kaadu Design System is in progress on branch `redesign` (tag `pre-redesign` marks the state before it).
 
-- **Figma file:** `iVsw9LOw9Tqvq6hkvZMnpf` — start node `322:203`
-- **Figma URL:** `https://www.figma.com/design/iVsw9LOw9Tqvq6hkvZMnpf/Wireframe?node-id=322-203`
+- **Design system:** https://claude.ai/artifact/CnMT95HubMKA5CeChwNxBm (source of truth)
+- **Page mockups (rough draft):** https://claude.ai/artifact/DeWG7XTMTAJmdxb9iXNZ82
+- **Old Figma wireframe (pre-redesign):** `iVsw9LOw9Tqvq6hkvZMnpf`, node `322:203`
 - **Stack:** Shopify Liquid + CSS + vanilla JS. No React, no build step, no npm.
-- **Base theme:** Shapes by Archetype Themes.
+- **Base theme:** Shapes by Switch Themes.
 
 ---
 
 ## Source of Truth
 
-The design system lives in [kaadu-design-system/](kaadu-design-system/). Treat it as the authoritative spec.
+**The Kaadu Design System is the authoritative spec:** https://claude.ai/artifact/CnMT95HubMKA5CeChwNxBm. Read its `project/README.md` (brand book + "Large screens"), `project/tokens.json` and `project/components/bundle.css` + `components/<Name>/README.md` before styling anything. Read it with the Artifact tool, not WebFetch.
 
-| File | Authority |
+| Source | Authority |
 |---|---|
-| [kaadu-design-system/project/colors_and_type.css](kaadu-design-system/project/colors_and_type.css) | All tokens, type scale, button + card components |
-| [kaadu-design-system/project/README.md](kaadu-design-system/project/README.md) | Tone, copy patterns, imagery direction, casing rules |
-| [kaadu-design-system/project/preview/](kaadu-design-system/project/preview/) | Static specimens for colours, type, spacing, buttons, cards |
-| [kaadu-design-system/project/ui_kits/website/](kaadu-design-system/project/ui_kits/website/) | High-fidelity JSX prototypes — match these visually, not structurally |
-| [kaadu-design-system/project/assets/](kaadu-design-system/project/assets/) | Logos (SVG), stickers (PNG), photos, blob button PNGs |
+| Kaadu Design System (link above) | Every token, size, colour, font, spacing, radius, shadow and component rule. Wins over everything below. |
+| Page mockups — https://claude.ai/artifact/DeWG7XTMTAJmdxb9iXNZ82 | A **rough draft**: which sections a page has, their order and content. Never take sizes or colours from it. |
+| [assets/base.bundle.css](assets/base.bundle.css) — "KAADU DESIGN SYSTEM" + "KAADU COMPONENTS" blocks | The theme's implementation of the DS. Mirror DS changes here. |
+| [kaadu-design-system/](kaadu-design-system/), brand PDF, `Kaadu Web Style Guide.docx` | **Superseded** pre-redesign references. Use only for logo/sticker asset files. |
 
-The brand PDF and `Kaadu Web Style Guide.docx` are historical references — when they conflict with the design system files above, the design system wins.
+Where the DS is silent or contradicts itself, ask; if you must proceed, propose a value, mark it "proposed" in a comment, and say so.
 
 ---
 
@@ -81,9 +81,11 @@ Use these verbatim in UI copy, headlines, and CTAs. Do not invent alternatives w
 ### Casing & Copy Rules
 - **Display headlines (H1):** ALL CAPS via `text-transform: uppercase`. Enter in normal case in CMS for SEO.
 - **Section headlines (H2):** ALL CAPS via CSS.
-- **CTAs / buttons:** ALL CAPS via CSS.
+- **CTAs / buttons:** ALL CAPS via CSS. Bold Banter (labels, kickers, prices, card titles) is ALL CAPS too; regular-weight body copy never is.
 - **Body copy:** sentence case. Normal writing.
-- **No emoji** in body copy or headings — brand stickers and mascots serve that role.
+- **No emoji** in UI copy — brand stickers and mascots serve that role. The only symbols are ✶ ✓ ✕ ← → ★ − +.
+- **Swiss High German:** ss, never ß ("Grösse"); address the reader as **du**; gender with the asterisk (Arbeiter*innen).
+- **Formats:** "CHF 4.45" (space, two decimals); "20 %" (space); «guillemets» for quotes; · as metadata separator. Unknown facts go in square brackets ("[Zahl]"), never invented.
 - Use specific numbers in impact copy (*"30–40% über Marktpreis"*, *"100% höhere Löhne"*).
 - German and English are mixed deliberately — English slogans for maximum punch.
 
@@ -91,92 +93,70 @@ Use these verbatim in UI copy, headlines, and CTAs. Do not invent alternatives w
 
 ## Visual Foundations
 
-All foundations are defined as CSS custom properties on `:root` in [assets/base.bundle.css](assets/base.bundle.css), mirroring [kaadu-design-system/project/colors_and_type.css](kaadu-design-system/project/colors_and_type.css). **Never hardcode hex, font, or spacing values in Liquid or section CSS — always reference via `var(--*)`.**
+All foundations are CSS custom properties on `:root` in the "KAADU DESIGN SYSTEM" block of [assets/base.bundle.css](assets/base.bundle.css), mirroring the DS `tokens.json`. **Never hardcode hex, font, or spacing values in Liquid or section CSS — always reference via `var(--*)`.** Token names are the DS's own (`--pink`, `--space-8`, …), unprefixed.
 
-### Colour Tokens
+### Colour
 
 | Token | Hex | Role |
 |---|---|---|
-| `--color-red` | `#AE0000` | Primary brand red — hero text, CTAs, protest ticker |
-| `--color-violet` | `#542A76` | Radical Violet — dark section backgrounds, headings |
-| `--color-pink` | `#FFC5FF` | Light Pink — hero section background, soft accents |
-| `--color-orange` | `#FF781E` | Zetsy Orange — accent, product labels |
-| `--color-cream` | `#FFFFF5` | Off-White Cream — light section bg, text on dark sections |
-| `--color-lime` | `#ACFF64` | Lime Green — ticker bar bg, data highlights, tags |
-| `--color-yellow` | `#EDF731` | Electric Yellow — accent, highlights |
-| `--color-sky` | `#B7D9FF` | Sky Blue — fairness / farmer section backgrounds |
-| `--color-black` | `#000000` | Hard black — borders, body text |
-| `--color-near-black` | `#221F1F` | Primary body text on light backgrounds |
-| `--color-dark-brown` | `#422A24` | Deep accent tone |
-| `--color-mid-grey` | `#8C8C8C` | Disabled states, muted text |
-| `--color-light-grey` | `#E6E6E6` | Dividers, hover surfaces |
+| `--pink` | `#FFC6FF` | Default page ground: body, hero, comparison, quote. Ink: `--purple` (body), `--red` (headlines) |
+| `--purple` | `#542A76` | Brand ink on pink/lime; ground for header, footer, drawer head; primary cloud fill. Ink on it: `--paper` or `--lime` |
+| `--red` | `#AC0300` | Fagies headlines, kickers, errors, focus ring, announcement ground, secondary cloud. **Never body text** |
+| `--lime` | `#AEFF64` | Accent: ticker, notices, stickers, join section. Ink on it: `--red` (headlines) / `--purple` (body) |
+| `--paper` | `#FFFFF5` | Warm white: product/crunchys grounds, cards, inputs, drawer body; text on purple/red |
+| `--sky` | `#B7D9FF` | People section ground. Ink: `--red` headlines, `--ink` body |
+| `--ink` / `--black` | `#000000` | Body text on paper, sky, lime notices |
+| `--lilac`, `--orange` | `#E9A2E6`, `#FF781E` | Product option tiles only. Orange is never text and never a section ground |
+| `--logo-red` | `#AE0000` | The logo's own red — not a UI colour |
 
-### Section Background Utilities
+**Proposed** (named by the DS but missing from its tokens.json; values from the mockups): `--ink-muted #6B6B6B` (12px+ only), `--paper-warm #FFF9EE`, `--grey #9A9A94`, `--charcoal #3A3A3A`, `--sage #6E7A6C` (video overlay only), `--tint-cocoa/plum/ochre/umber/forest` (people-card photo tints), `--overlay-card`, `--overlay-scrim`.
 
-Sections alternate between **Pink, Violet, Cream, Sky** (with Lime, Red, Yellow, Orange used for accent strips/tickers). Apply via utility classes on the section root:
+**Grounds alternate by section:** pink → paper → sky → lime → purple. A page runs through at least four; **never two pink sections in a row**. Red is not a section ground (announcement bar and the CTA card only). Use `.kd-ground-{pink|paper|sky|lime|purple}` or the matching colour scheme. Never pair two light grounds (lime on paper, pink on paper), two dark inks (red on purple), or body text in red, lime or orange.
 
-```css
-.bg-pink   /* #FFC5FF + black text     */
-.bg-violet /* #542A76 + cream text     */
-.bg-cream  /* #FFFFF5 + near-black text */
-.bg-sky    /* #B7D9FF + black text     */
-.bg-lime   /* #ACFF64 + black text     */
-.bg-red    /* #AE0000 + cream text     */
-.bg-yellow /* #EDF731 + black text     */
-.bg-orange /* #FF781E + black text     */
-```
+**Colour schemes** (Theme settings) are mapped to the DS grounds, so sections keep using `color_scheme` settings: `scheme1` Pink · `scheme2` Red (announcement/CTA only) · `scheme3` Purple · `scheme4`/`scheme6` Paper · `scheme5` Lime · `scheme-f3c7…` Pink hero (black kicker/lead) · `scheme-389c…` Sky. Scheme `accent_1` / `accent_1_contrast` drive the default cloud-button colours.
 
-Each utility sets both `background-color` and a contrast-safe `color`. Don't pair pastel/neon backgrounds with cream text — it fails contrast.
+Legacy `--color-*` tokens and `.bg-*` / `.text-*` utilities still exist as aliases pointing at DS values. Don't use them in new code; remove them as sections migrate.
 
 ### Typography
 
-| Role | Font | Weight | Transform |
-|---|---|---|---|
-| Display / H1 + H2 | Fagies (`--font-display`) | Regular (400) | uppercase |
-| Sub-headings (H3 / H4) | Banter Grotesk (`--font-heading`) | Semibold (700) | uppercase |
-| Body | Banter Grotesk (`--font-body`) | Regular (400) | none |
-| Buttons / CTAs | Banter Grotesk (`--font-heading`) | Semibold (700) | uppercase |
+Two faces, self-hosted in `assets/`: **Fagies** (`--font-display`, one weight, ALWAYS uppercase, never bold or synthesised) and **Banter Grotesk** (`--font-sans`; 400 for running text, bold for labels). Bold Banter (600+) is ALWAYS uppercase; regular-weight Banter never is. Fagies lives only in headlines, cloud buttons, the ticker and panel titles — **never on pills, tags, badges or stickers** (those are Banter bold).
 
-Fonts live in [assets/](assets/) (`Fagies.ttf`, `BanterGrotesk-Regular.woff2`, `THICKHEA.TTF` as a Fagies fallback) and are loaded via `@font-face` in [base.bundle.css](assets/base.bundle.css). System fallback: `Helvetica, Arial, sans-serif`.
+> Banter Bold (700) / Black (900) files don't exist in the brand assets — the "600 900" face is the Semibold file, so every bold weight renders as Semibold until real files are added.
 
-### Canonical Type Classes
+### Type classes
 
-Apply typography through these classes only. **Do not invent one-off font sizes.** If a new size is genuinely needed, add it in [base.bundle.css](assets/base.bundle.css) and name it semantically. The implemented definitions in [base.bundle.css](assets/base.bundle.css) are the source of truth — this table mirrors them.
+DS styles are implemented as `kd-`-prefixed classes (the prefix avoids collisions with Shapes classes like `.price`). **Use only these; never invent font sizes.** Display sizes step at 768 / 1200 / 1441 (see "Layout & Large Screens").
 
-| Class | Desktop (size/lh) | Mobile (size/lh) | Mobile breakpoint | Font | Use |
-|---|---|---|---|---|---|
-| `.h1` | 64 / 72 | 48 / 56 | ≤ 768px | Fagies Regular | Hero / page H1 |
-| `.h2` | 48 / 56 | 40 / 44 | ≤ 768px | Fagies Regular | Section H2 |
-| `.h3` | 24 / 32 | 16 / 24 | ≤ 768px | Banter Grotesk Semibold | Tertiary heading |
-| `.h4-subsection-heading` | 32 / 40 | 24 / 28 | ≤ 480px | Banter Grotesk Semibold | Sub-section heading (e.g. carousel slide titles) |
-| `.body-large` | 18 / 28 | 16 / 24 | ≤ 768px | Banter Grotesk Regular | Lead copy, product descriptions |
-| `.body` | 24 / 32 | 16 / 24 | ≤ 768px | Banter Grotesk Regular | Standard body text |
-| `.caption` | 14 / 20 | 14 / 20 | — | Banter Grotesk Regular | Captions, disclaimers, labels |
-| `.btn-label` | 18 / 24 | 16 / 24 | ≤ 768px | Banter Grotesk Semibold | Inline button/label typography |
+| Class | Spec (≥1200) | Use |
+|---|---|---|
+| `.kd-display-hero` | Fagies 76 / 0.98 | Hero h1, once per page |
+| `.kd-display-crunchys` | Fagies 84 / 0.92 | The one oversized claim per page |
+| `.kd-display-h2` | Fagies 64 / 0.95 | Section h2 |
+| `.kd-display-h2-tight` | Fagies 56 / 0.95 | Product title, comparison headline |
+| `.kd-display-quote` | Fagies 40 / 1.05 | The one pull quote |
+| `.kd-display-ticker` / `-drawer` | Fagies 34 / 26 | Ticker band / panel titles |
+| `.kd-lead` / `.kd-body-lg` | Banter 24/32 · 20/28, max 560px | Hero lead / section intro (mobile 18/25 · 17/24 — proposed) |
+| `.kd-body` / `.kd-body-sm` | Banter 16/1.45 · 13/1.4 | Running text / notices, cart |
+| `.kd-strong-lg/-/md/sm` | Banter 700, 24 · 20 · 18 · 16 | Card titles, claims, checklist rows, notice titles |
+| `.kd-label` / `-lg` / `-sm` | Banter 900, 13 · 16 · 12, tracked | Kickers above every h2 (in red), group labels, pills |
+| `.kd-price` / `.kd-announcement` | Banter 900 22 · 700 14 | Prices / announcement bar |
 
-`.h1`, `.h2`, `.h3`, `.h4-subsection-heading`, and `.btn-label` carry `text-transform: uppercase` automatically. These are class selectors only — they do not auto-apply to raw `<h1>`/`<h2>` elements, so always opt in explicitly: `<div class="h1">…</div>` or `<h1 class="h1">…</h1>`.
+Legacy `.h1`, `.h2`, `.mega-heading` now follow the DS display steps. `.h3`, `.h4-subsection-heading`, `.body`, `.body-large`, `.caption`, `.btn-label` keep their old sizes until their sections migrate — don't use them in new code.
 
-Minimum rendered text size: **14px**.
-
-### Spacing Tokens
-
-All spacing in multiples of **4px**. Reference tokens — do not hardcode px values inline.
+### Spacing
 
 ```css
---space-0:  0px;   --space-1:  4px;   --space-2:  8px;
---space-3:  12px;  --space-4:  16px;  --space-6:  24px;
---space-8:  32px;  --space-12: 48px;  --space-16: 64px;
---space-24: 96px;  --space-32: 128px;
+--space-1: 4px;   --space-2: 8px;   --space-3: 12px;  --space-4: 16px;
+--space-5: 20px;  --space-6: 24px;  --space-7: 28px;  --space-8: 40px;
+--space-9: 48px;  --space-10: 56px; --space-11: 64px; --space-12: 80px;
+--space-13: 96px;
+--measure: 560px; --card-w: 400px; --page-max: 1440px; --content-max: 1800px;
+--gutter-sm: 20px; --gutter-md: 32px; --gutter-lg: 64px; --gutter (stepped);
 ```
 
-| Context | Desktop | Mobile |
-|---|---|---|
-| Tight gaps inside components | 4–12px | 4–12px |
-| Card / button inner padding | 16–32px | 16–32px |
-| Between sections | 48–128px | 24–64px |
-| Section top/bottom padding | `var(--section-padding-v)` = 64px | 32px |
+Inside components 4–28px (`space-1`…`space-7`); between blocks 40–64px. Sections: 72–96px vertical padding (`space-12`, `space-13`); paper sections run tighter at 40px (`space-8`).
 
-Mobile vertical spacing ≈ 50% of desktop.
+> `--space-8` and `--space-12` changed value in the redesign (32→40, 48→80). Pre-redesign uses were renamed to `--legacy-space-8` / `--legacy-space-12`; replace them as sections migrate.
 
 ### Layout & Large Screens
 
@@ -214,47 +194,45 @@ Mobile vertical spacing ≈ 50% of desktop.
 @media (min-width: 1800px) { .my-row { max-width: 1800px; margin-inline: auto; } }
 ```
 
-### Radii & Shadows
+### Shape, radii & shadows
 
-```css
---radius-btn:     30px;   /* pill buttons */
---radius-card:    12px;   /* cards */
---radius-sticker: 16px;   /* sticker/badge elements */
-
---shadow-sm:   0px 2px 7.6px 0px rgba(0,0,0,0.25);
---shadow-md:   0px 4px 4px 0px rgba(0,0,0,0.25);
---shadow-glow: 0px 0px 35px 0px rgba(0,0,0,0.10);
-```
-
-Dot indicators use `border-radius: 50%`. Data chart accents use `4px solid var(--color-violet)` borders or `8px dashed var(--color-red)` trend lines.
+- **Surfaces are square** (`--radius-0`): cards, notices, option buttons, images, the drawer. Rounded only: the 300×534 product tiles (`--radius-tile` 36px) and pill-shaped things (`--radius-pill`): inputs, tags, badges, steppers, the round close button.
+- **No borders** except the 1px `--purple` outline on inputs and the 2px ring of the radio dot. Depth comes from one shadow, `--shadow-card`, on every raised thing. Also `--shadow-drawer`, `--shadow-tile-active`, `--shadow-product`.
+- **Brand shapes:** the **cloud** (behind every CTA) and the **scallop edge** (40px strip of 72px half-circles where paper meets a coloured section; purple header/footer edges stay straight).
+- **Focus:** 4px solid `--red` outline, 3px offset, on every button, link and input (set globally).
+- **Motion:** two loops only — the ticker (22s) and the spinning sticker badge (20s) — both stop under `prefers-reduced-motion`. No scroll animations; no hover transitions beyond a 1px press on cloud buttons.
 
 ---
 
 ## Components
 
-### Buttons
+DS component classes live in the "KAADU DESIGN SYSTEM" / "KAADU COMPONENTS" blocks of [base.bundle.css](assets/base.bundle.css). Each DS component README says what the markup must provide.
 
-Two button types. Use the shared classes — never recreate button styles inline.
+### Buttons — the cloud
 
-**Primary "blob" CTA** — `.btn-primary`. Fagies font, cream background, red text, 2px black border, pill radius, drop shadow. Used for "JETZT KAUFEN", "JETZT PROBIEREN", primary single-action CTAs.
+Every CTA is a **cloud button**: a scalloped SVG cloud behind a Fagies label. **Buttons are never pills.** Render with the snippet — never hand-build one:
 
-**Secondary pill** — `.btn-secondary`. Banter Grotesk Semibold, cream background, 2px black border, pill radius, drop shadow. Black text. Used for "SHOP ÖFFNEN" and secondary actions.
+```liquid
+{%- render 'kd-button', label: section.settings.button_label, url: section.settings.button_link, variant: 'red', size: 'md' -%}
+```
 
-**Inverse secondary** — add `.btn-secondary-inverse` modifier on dark section backgrounds: transparent fill, cream border + cream text.
+- Variants: `primary` (purple / lime label), `red` (red / paper), `lime` (lime / red), `paper` (paper / red), `outline` (40px, Banter 12px, for "Details ↻" on photo cards). No variant = follows the section colour scheme's accent 1.
+- Sizes: default 60px/20px · `lg` 64/22 · `md` 56/18 · `sm` 52/16. `full: true` stretches it.
+- The cloud shape is `#kd-cloud` (`snippets/kd-cloud-defs.liquid`, rendered once in `layout/theme.liquid`).
+- One cloud button per block; verb first, two to three words. Never two same-colour clouds side by side, never a lime cloud on a lime ground.
+- Legacy `.btn-primary` / `.btn-secondary` render as masked clouds without shadow (`assets/kd-cloud.svg`) until their sections switch to the snippet.
 
-Hover: `translateY(-2px)` + deeper shadow. Press: returns to `translateY(0)`. Transitions ≤ 200ms `ease-out`.
+### Text links
 
-The DS also ships SVG blob PNGs at [kaadu-design-system/project/assets/buttons/](kaadu-design-system/project/assets/buttons/) (`btn-blob-1.png` … `btn-blob-4.png`) for when a truly irregular blob shape is needed; prefer `.btn-primary` (CSS-only) unless the design specifically calls for the PNG.
-
-One primary CTA per visual area — never two primary buttons side by side.
+Every linked text starts with **✶** and is underlined on hover only: `.kd-link`. Buttons never get the star.
 
 ### Cards
 
-`.card` — cream background, 2px solid black border, `--radius-card`, `--shadow-md`, `--space-8` padding.
+Square, `--paper`, `--shadow-card`, no border (`.card`, DS `.kd-card` for the 400×600 people cards).
 
-### Tickers / Marquees
+### Ticker
 
-A defining brand element: scrolling protest text along a Lime Green strip with red Fagies type, top/bottom 2px black borders, ~56px tall. See [kaadu-design-system/project/ui_kits/website/Ticker.jsx](kaadu-design-system/project/ui_kits/website/Ticker.jsx) for the implementation pattern (CSS `@keyframes` translateX, no JS).
+Lime band, red Fagies 34px, ✶ separators, `translateX(0 → -50%)` over 22s, `aria-hidden`, stops under reduced motion (DS Ticker).
 
 ### Logos
 
@@ -288,7 +266,7 @@ Stickers are the brand's expressive accent — apply slight rotation transforms 
 
 ### Iconography
 
-There is no dedicated icon font or icon library. The brand uses stickers, the mascot, and inline SVG snippets for any UI iconography.
+There is **no icon set** — don't add one. Glyphs are typed in the running font: ✶ (links, ticker), ✓ / ✕ (checklists), ← → (hints), ★ (ratings), − / + (steppers). The only drawn graphics are the brand's own illustrations, stickers and shapes.
 
 ---
 
@@ -404,8 +382,8 @@ There is no dedicated icon font or icon library. The brand uses stickers, the ma
 
 ## Accessibility Standards
 
-- Contrast ≥ **4.5:1** for body text; ≥ **3:1** for large text (18px+ regular, 14px+ bold). The `.bg-*` utilities already pair safe text colours.
-- Minimum text size: **14px**.
+- Contrast ≥ **4.5:1** for body text; ≥ **3:1** for large text (24px+) and focus rings/icons. Use only the DS ground/ink pairs (see Colour) — they all pass.
+- Minimum text size: **12px** (DS `label-sm`); the 10px option-button badge is the only exception. `--ink-muted` text is 12px+ only.
 - All interactive elements must have a visible `:focus-visible` style.
 - Tap targets ≥ **48px** in both dimensions.
 - `<a>` tags used as buttons: add `role="button"` and handle `keydown` Enter/Space.
@@ -416,30 +394,17 @@ There is no dedicated icon font or icon library. The brand uses stickers, the ma
 
 ## UX Standards
 
-- One `.btn-primary` per section. Never two primaries in the same visual area.
+- One cloud button per block. Never two same-colour clouds in the same visual area.
 - Forms must show clear error and success states.
 - No horizontal scroll at any viewport ≥ 320px.
-- Hover/focus transitions ≤ 200ms `ease-out`. Do not animate layout properties.
+- No hover transitions beyond the 1px press on cloud buttons; no scroll animations. Do not animate layout properties.
 - Mobile menus and drawers must trap focus and close on Escape.
 
 ---
 
-## Homepage Section Order (Figma — node 322:203)
+## Page Structure (redesign)
 
-1. **Header / Nav** — Kaadu wordmark, menu, cart
-2. **Hero** — H1 "Snack Like You Give a Damn." / "Justice Never Tasted So Sweet", primary CTA (pink bg)
-3. **Protest Ticker** — "ITS NOT FAIR!" marquee (lime bg, red text)
-4. **Mission / Promise** — brand statement
-5. **Founders** — "The Founders" (orange bg)
-6. **Metrics / Impact** — "Unsere Metriken" (lime bg)
-7. **3 Principles** — Radikal Fair / Menschen Zentriert / Schamlos Transparent (violet bg)
-8. **Origin Story** — "Wie Alles Begann" (cream bg)
-9. **Fairness für Kleinbauern** — farmer pay transparency (sky bg)
-10. **Transparent Pricing** — impact per CHF breakdown (cream bg)
-11. **Starke Jobs für lokale Frauen** — women's employment (violet bg)
-12. **Product Hero** — "The Snack That Changes Lives"
-13. **Newsletter** — email capture, "20% off first order" (violet bg)
-14. **Footer**
+Page structure and content come from the mockups (rough draft — sizes/colours from the DS): landing page (desktop + mobile), product page, cart drawer, Our Promise, Shamelessly Transparent, People Centred, Radically Fair, Manifesto, News (Shopify blog). Landing page order: announcement → header → hero → ticker → video problem → crunchys → Wer profitiert (people cards) → product → videos → "besser" stats → vision → comparison slider → cost split → quote → final CTA → join → footer.
 
 ---
 
@@ -458,15 +423,15 @@ Legacy classes have been removed from [base.bundle.css](assets/base.bundle.css) 
 | `custom-image-button-text` | `btn-label` | Use `btn-primary` if you also need the blob surface |
 | `custom-btn__surface` | `btn-secondary` | — |
 
-When editing a section that still feels off after migration, verify the layout against the matching prototype in [kaadu-design-system/project/ui_kits/website/](kaadu-design-system/project/ui_kits/website/).
+These pre-redesign classes are themselves legacy now — see "Type classes" for the `kd-` replacements.
 
 ---
 
 ## Development Workflow
 
-1. **Check Figma first** — fetch the relevant node before writing any code.
-2. **Read the design system** — for new components, open the matching specimen in [kaadu-design-system/project/preview/](kaadu-design-system/project/preview/) and the prototype in [kaadu-design-system/project/ui_kits/website/](kaadu-design-system/project/ui_kits/website/) before coding.
+1. **Read the design system first** — its README and the component README for what you're building (Artifact tool `read_file` on the DS link). Check the mockup only for the section's structure and content.
+2. **Work on `redesign`** — never commit redesign work to `main` (it's the GitHub-connected live theme).
 3. **Reuse before creating** — find the closest Shapes section and customise it. Only create a new file when nothing close exists.
 4. **Tokens & canonical classes only** — if you find yourself writing `style="font-size: 24px"` or `#ae0000`, stop and use the right class or `var(--*)` instead.
 5. **Test responsively** — check at 390, 768, 1200, 1440, 1920 and 2560px before marking done.
-6. **Verify against standards** — colour contrast, font sizes, spacing, heading hierarchy, and `.bg-*` text pairing must all pass.
+6. **Verify against standards** — DS ground/ink pairs, type classes, spacing tokens, heading hierarchy, cloud buttons (no pills) and the ✶ link rule must all pass.

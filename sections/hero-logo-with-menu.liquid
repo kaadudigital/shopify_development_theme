@@ -31,103 +31,80 @@
 
 {%- style -%}
       /* ========================================
-         PILL BUTTONS (CSS-only — no image assets)
+         HEADER BAR (DS Header) — purple band, logo left,
+         lime MENU cloud overlapping it, red shop cloud, starburst cart.
+         Cloud buttons use .kd-btn (assets/base.bundle.css).
          ======================================== */
-      #{{ section.id }} .custom-menu-button,
-      #{{ section.id }} .custom-shop-button,
-      #{{ section.id }} .custom-cart-button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        border: none;
-        cursor: pointer;
-        text-decoration: none;
-        border-radius: 50%;
-        box-shadow: var(--shadow-sm);
-        transition: transform 0.3s ease;
-      }
-
-      #{{ section.id }} .custom-menu-button:focus-visible,
-      #{{ section.id }} .custom-shop-button:focus-visible,
-      #{{ section.id }} .custom-cart-button:focus-visible {
-        outline: 3px solid var(--color-black);
-        outline-offset: 2px;
-      }
-
-      /* MENU / CLOSE — lime oval */
       #{{ section.id }} .custom-menu-button {
-        width: 96px;
-        height: 52px;
-        background-color: {{ accent_color }};
-        transform: rotate(-8deg);
+        transform: rotate(-6deg);
       }
 
       #{{ section.id }} .custom-menu-button:hover {
-        transform: rotate(-2deg) scale(1.04);
-      }
-
-      /* SHOP NOW — cream oval, red text */
-      #{{ section.id }} .custom-shop-button {
-        min-width: 120px;
-        height: 64px;
-        padding: 0 var(--space-3);
-        background-color: var(--color-cream);
-        color: var(--color-red);
-        transform: rotate(-4deg);
-        font-family: var(--font-display);
-        font-size: 20px;
-        line-height: 1.1;
-        text-transform: uppercase;
-        text-align: center;
-      }
-
-      #{{ section.id }} .custom-shop-button:hover {
-        transform: rotate(0deg) scale(1.04);
-      }
-
-      /* CART — red oval, cream text */
-      #{{ section.id }} .custom-cart-button {
-        width: 110px;
-        height: 60px;
-        background-color: var(--color-red);
-        color: var(--color-cream);
-        transform: rotate(4deg);
-        font-family: var(--font-display);
-        font-size: 24px;
-        line-height: 1.1;
-        text-transform: uppercase;
-      }
-
-      #{{ section.id }} .custom-cart-button:hover {
-        transform: rotate(1deg) scale(1.04);
+        transform: rotate(-2deg);
       }
 
       #{{ section.id }} .custom-menu-button-text {
-        color: var(--color-red);
         font-family: var(--font-display);
-        font-size: 24px;
-        line-height: 32px;
         font-weight: 400;
-        padding: 0;
       }
 
-      /* Icon-only variants (shown on mobile) */
-      #{{ section.id }} .pill-icon {
-        display: none;
+      /* CART — lime starburst sticker (DS: the cart icon is a starburst sticker) */
+      #{{ section.id }} .kd-cart-sticker {
+        position: relative;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
+        flex-shrink: 0;
+        width: 56px;
+        height: 56px;
+        color: var(--red);
+        text-decoration: none;
+        transform: rotate(-6deg);
       }
 
-      #{{ section.id }} .pill-icon .theme-icon {
-        width: 22px;
-        height: 22px;
+      #{{ section.id }} .kd-cart-sticker:hover {
+        transform: rotate(6deg);
       }
 
-      /* Theme icons ship with a hardcoded #000 stroke — follow the pill's
-         text colour instead. */
-      #{{ section.id }} .pill-icon .theme-icon path {
-        stroke: currentColor;
+      #{{ section.id }} .kd-cart-sticker__shape {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        fill: var(--lime);
+        filter: drop-shadow(var(--shadow-card));
+      }
+
+      #{{ section.id }} .kd-cart-sticker__label {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: var(--font-sans);
+        font-weight: 900;
+        font-size: 10px;
+        line-height: 1;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      #{{ section.id }} .kd-cart-sticker__count {
+        font-size: 20px;
+      }
+
+      @media (min-width: 1200px) {
+        #{{ section.id }} .kd-cart-sticker {
+          width: 88px;
+          height: 88px;
+        }
+
+        #{{ section.id }} .kd-cart-sticker__label {
+          font-size: 13px;
+        }
+
+        #{{ section.id }} .kd-cart-sticker__count {
+          font-size: 30px;
+        }
       }
 
       /* Menu button text container for animation */
@@ -190,6 +167,7 @@
         gap: var(--space-3);
       }
 
+      /* Logo: full colour, never recoloured; 72px tall on mobile, 110px on tablet, 160px from 1200px */
       #{{ section.id }} .responsive-logo-container {
         min-width: 0;
         flex-shrink: 1;
@@ -197,15 +175,52 @@
       }
 
       #{{ section.id }} .responsive-logo-container img {
+        display: block;
+        width: auto;
         max-width: 100%;
+        height: 72px;
       }
 
-      /* MENU pill overlaps the logo */
+      /* MENU cloud overlaps the logo's right edge */
       #{{ section.id }} .header-left {
         position: relative;
         z-index: 2;
-        margin-left: -38px;
+        margin-left: calc(-1 * var(--space-6));
         flex-shrink: 0;
+      }
+
+      /* Shop cloud + cart sit level with the logo baseline */
+      #{{ section.id }} .header-actions {
+        display: flex;
+        align-items: center;
+        gap: var(--space-4);
+        flex-shrink: 0;
+      }
+
+      @media (min-width: 768px) {
+        #{{ section.id }} .responsive-logo-container img {
+          height: 110px;
+        }
+
+        #{{ section.id }} .header-left,
+        #{{ section.id }} .header-actions {
+          margin-top: var(--space-6);
+        }
+      }
+
+      @media (min-width: 1200px) {
+        #{{ section.id }} .responsive-logo-container img {
+          height: 160px;
+        }
+
+        #{{ section.id }} .header-left {
+          margin-top: var(--space-9);
+          margin-left: calc(-1 * var(--space-9));
+        }
+
+        #{{ section.id }} .header-actions {
+          margin-top: var(--space-9);
+        }
       }
 
       #{{ section.id }} .header-spacer {
@@ -790,27 +805,20 @@
         }
       }
 
+      /* DS Header padding: 16px top, gutter sides, 8px bottom */
       #{{ section.id }} .section-content-custom-padding {
-        padding: var(--space-6) var(--space-4);
+        padding: var(--space-3) var(--gutter) var(--space-2);
       }
 
       @media (min-width: 768px) {
         #{{ section.id }} .section-content-custom-padding {
-          padding: var(--legacy-space-12) var(--space-6);
-        }
-      }
-
-      /* Sub-1600px desktops: ease the cart in from the screen edge. */
-      @media (min-width: 1024px) and (max-width: 1599px) {
-        #{{ section.id }} .custom-cart-button {
-          margin-right: var(--space-4);
+          padding: var(--space-4) var(--gutter) var(--space-2);
         }
       }
 
       /* Hide menu buttons toggle — logo-only header */
       #{{ section.id }}.hide-menu-buttons .header-left,
-      #{{ section.id }}.hide-menu-buttons .custom-shop-button,
-      #{{ section.id }}.hide-menu-buttons .custom-cart-button {
+      #{{ section.id }}.hide-menu-buttons .header-actions {
         display: none !important;
       }
   /* Dim all items when any item is hovered */
@@ -880,61 +888,29 @@
          RESPONSIVE STYLES
          ======================================== */
 
-      /* Mobile (max-width: 767px) */
+      /* Mobile (max-width: 767px) — MENU cloud 44px, shop cloud hidden, cart 56px */
       @media (max-width: 767px) {
         #{{ section.id }} .header-content-wrapper {
           gap: var(--space-2);
         }
 
-        #{{ section.id }} .responsive-logo-container {
-          width: auto !important;
-          min-width: 0 !important;
-          max-width: {{ section.settings.logo_width_mobile }}% !important;
-        }
-
-        #{{ section.id }} .header-left {
-          margin-top: -8px;
-        }
-
         #{{ section.id }} .custom-menu-button {
-          width: 82px;
-          height: 48px;
-        }
-
-        #{{ section.id }} .custom-menu-button-text {
-          font-size: 18px;
-          line-height: 24px;
+          height: 44px;
+          padding: 0 var(--space-5);
+          font-size: 15px;
         }
 
         .menu-text-wrapper {
-          min-width: 52px;
+          min-width: 44px;
         }
 
-        /* Shop + cart collapse to icon-only pills */
-        #{{ section.id }} .custom-shop-button,
-        #{{ section.id }} .custom-cart-button {
-          width: 52px;
-          min-width: 52px;
-          height: 48px;
-          padding: 0;
-        }
-
-        #{{ section.id }} .shop-label,
-        #{{ section.id }} .cart-label {
+        #{{ section.id }} .custom-shop-button {
           display: none;
-        }
-
-        #{{ section.id }} .pill-icon {
-          display: flex;
         }
       }
 
       /* Tablet (768px - 1023px) */
       @media (min-width: 768px) and (max-width: 1023px) {
-        #{{ section.id }} .responsive-logo-container {
-          max-width: {{ section.settings.logo_width_tablet }}% !important;
-        }
-
         #{{ section.id }} .menu-overlay {
           --menu-cloud-height: 130px;
         }
@@ -945,27 +921,6 @@
         #{{ section.id }} .menu-overlay {
           --menu-cloud-height: 170px;
           --menu-cloud-offset: -70px;
-        }
-      }
-
-      /* Desktop (1024px - 1439px) */
-      @media (min-width: 1024px) and (max-width: 1439px) {
-        #{{ section.id }} .responsive-logo-container {
-          max-width: {{ section.settings.logo_width_desktop }}px !important;
-        }
-      }
-
-      /* Large Desktop (1440px - 1999px) */
-      @media (min-width: 1440px) and (max-width: 1999px) {
-        #{{ section.id }} .responsive-logo-container {
-          max-width: {{ section.settings.logo_width_desktop_large }}px !important;
-        }
-      }
-
-      /* XL Desktop (2000px+) */
-      @media (min-width: 2000px) {
-        #{{ section.id }} .responsive-logo-container {
-          max-width: {{ section.settings.logo_width_desktop_xlarge }}px !important;
         }
       }
 
@@ -1020,11 +975,13 @@
           {%- comment -%} MENU / CLOSE pill — overlaps the logo {%- endcomment -%}
           <div class="header-left" id="menuButton-{{ section.id }}">
             <button
-              class="custom-menu-button"
+              class="kd-btn kd-btn--lime kd-btn--lg custom-menu-button"
+              type="button"
               aria-expanded="false"
               aria-controls="menuOverlay-{{ section.id }}"
             >
-              <span class="custom-menu-button-text">
+              <svg class="kd-btn__cloud" aria-hidden="true" focusable="false"><use href="#kd-cloud"></use></svg>
+              <span class="kd-btn__label custom-menu-button-text">
                 <span class="menu-text-wrapper">
                   <span class="menu-text">MENU</span>
                   <span class="close-text">CLOSE</span>
@@ -1035,17 +992,27 @@
 
           <div class="header-spacer" aria-hidden="true"></div>
 
-          {%- comment -%} SHOP NOW pill (icon-only on mobile) {%- endcomment -%}
-          <a class="custom-shop-button" href="{{ shop_url }}" aria-label="{{ section.settings.shop_label | default: 'Shop Now' | escape }}">
-            <span class="shop-label">{{ section.settings.shop_label | default: 'Shop Now' }}</span>
-            <span class="pill-icon" aria-hidden="true">{% render 'icon-bag' %}</span>
-          </a>
+          <div class="header-actions">
+            {%- comment -%} Shop cloud (hidden on mobile) {%- endcomment -%}
+            <a class="kd-btn kd-btn--red kd-btn--lg custom-shop-button" href="{{ shop_url }}">
+              <svg class="kd-btn__cloud" aria-hidden="true" focusable="false"><use href="#kd-cloud"></use></svg>
+              <span class="kd-btn__label">{{ section.settings.shop_label | default: 'Shop Now' }}</span>
+            </a>
 
-          {%- comment -%} CART pill (icon-only on mobile) {%- endcomment -%}
-          <a class="custom-cart-button" href="{{ routes.cart_url }}" aria-label="Cart">
-            <span class="cart-label">Cart</span>
-            <span class="pill-icon" aria-hidden="true">{% render 'icon-cart' %}</span>
-          </a>
+            {%- comment -%} Cart — lime starburst sticker with the item count {%- endcomment -%}
+            <a
+              class="kd-cart-sticker custom-cart-button"
+              href="{{ routes.cart_url }}"
+              aria-label="{{ 'layout.cart.title' | t | escape }} ({{ cart.item_count }})"
+            >
+              <svg class="kd-cart-sticker__shape" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+                <path d="M121.033 20.5772C123.249 18.916 125.172 18.1531 126.789 18.6378V18.6387C128.497 19.1526 129.736 20.8799 130.701 23.4962C131.657 26.0883 132.286 29.3918 132.883 32.8096C133.476 36.2063 134.037 39.7156 134.861 42.6446C135.652 45.4549 136.721 47.8752 138.421 49.1241L138.588 49.2413C140.421 50.4758 143.171 50.6034 146.193 50.294C149.242 49.9818 152.719 49.2044 156.094 48.4922C159.489 47.7758 162.779 47.1256 165.519 47.0352C168.202 46.9467 170.186 47.4025 171.277 48.6641L171.381 48.7891C172.458 50.1562 172.457 52.2368 171.714 54.8946C170.977 57.526 169.562 60.5523 168.052 63.6651C166.55 66.7587 164.956 69.936 163.91 72.8116C162.905 75.5732 162.353 78.1873 162.983 80.2364L163.049 80.4327C163.763 82.4657 165.876 84.1881 168.461 85.7432C171.07 87.3133 174.301 88.7914 177.406 90.2745C180.53 91.7669 183.526 93.2642 185.741 94.8897C187.975 96.5293 189.273 98.198 189.273 100C189.273 101.802 187.975 103.472 185.741 105.112C183.526 106.739 180.53 108.237 177.406 109.731C174.302 111.214 171.071 112.692 168.462 114.262C165.958 115.768 163.895 117.43 163.119 119.378L163.049 119.567C162.319 121.645 162.873 124.338 163.91 127.189C164.956 130.064 166.55 133.241 168.052 136.335C169.562 139.448 170.978 142.474 171.714 145.106C172.411 147.597 172.455 149.582 171.57 150.946L171.381 151.211C170.314 152.568 168.289 153.056 165.519 152.965C162.779 152.875 159.489 152.224 156.094 151.508C152.719 150.796 149.242 150.018 146.193 149.706C143.265 149.406 140.593 149.517 138.762 150.647L138.588 150.759C136.791 151.969 135.679 154.454 134.863 157.356C134.04 160.284 133.48 163.794 132.888 167.19C132.291 170.608 131.662 173.912 130.706 176.504C129.771 179.038 128.578 180.738 126.949 181.31L126.79 181.361C125.172 181.847 123.25 181.083 121.033 179.422C118.841 177.779 116.509 175.372 114.117 172.856C111.74 170.355 109.307 167.75 106.95 165.774C104.613 163.816 102.243 162.38 99.9871 162.38C97.7313 162.38 95.3608 163.815 93.0233 165.774C90.6665 167.75 88.2334 170.355 85.8563 172.856C83.4647 175.372 81.132 177.779 78.9402 179.422C76.7234 181.083 74.801 181.847 73.1834 181.361H73.1844C71.4765 180.848 70.237 179.12 69.2723 176.504C68.3165 173.912 67.6875 170.608 67.0906 167.19C66.4974 163.794 65.9365 160.285 65.1121 157.356C64.3211 154.545 63.2522 152.125 61.5526 150.876L61.3856 150.759C59.5519 149.524 56.8019 149.397 53.7801 149.706C50.7315 150.018 47.2544 150.796 43.8797 151.508C40.4843 152.224 37.1947 152.875 34.4539 152.965C31.771 153.053 29.7873 152.598 28.6961 151.336L28.5926 151.211C27.5157 149.844 27.5161 147.763 28.2596 145.106C28.9958 142.474 30.4112 139.448 31.9217 136.335C33.4229 133.241 35.0169 130.064 36.0633 127.189C37.0682 124.427 37.6204 121.813 36.9901 119.764L36.9246 119.567C36.2102 117.534 34.0972 115.812 31.5125 114.257C28.9029 112.687 25.6718 111.209 22.5672 109.726C19.4429 108.233 16.4468 106.736 14.2322 105.11C11.9986 103.471 10.7 101.802 10.7 100C10.7 98.198 11.9986 96.5283 14.2322 94.8878C16.4467 93.2613 19.443 91.7628 22.5672 90.2696C25.6718 88.7857 28.903 87.3068 31.5125 85.7374C34.0163 84.2315 36.0784 82.5699 36.8543 80.6221L36.9246 80.4327C37.6547 78.3556 37.1005 75.6621 36.0633 72.8116C35.017 69.936 33.4229 66.7587 31.9217 63.6651C30.4112 60.5523 28.9958 57.526 28.2596 54.8946C27.5625 52.4029 27.5185 50.4185 28.4031 49.0538L28.5926 48.7891C29.6593 47.4326 31.6841 46.9439 34.4539 47.0352C37.1948 47.1256 40.4843 47.7758 43.8797 48.4922C47.2544 49.2044 50.7315 49.9818 53.7801 50.294C56.7078 50.5938 59.3805 50.4834 61.2117 49.3536L61.3856 49.2413C63.1827 48.031 64.2947 45.5448 65.1102 42.6436C65.9334 39.7148 66.4934 36.2061 67.0858 32.8096C67.6818 29.3917 68.311 26.0882 69.2674 23.4962C70.2026 20.9617 71.3955 19.2614 73.0252 18.6905L73.1834 18.6387C74.801 18.1535 76.7234 18.9156 78.9402 20.5772C81.1321 22.22 83.4646 24.6284 85.8563 27.1446C88.2334 29.6454 90.6665 32.2506 93.0233 34.2256C95.3608 36.1846 97.7313 37.6202 99.9871 37.6202C102.243 37.62 104.613 36.1845 106.95 34.2256C109.307 32.2506 111.74 29.6454 114.117 27.1446C116.509 24.6284 118.841 22.22 121.033 20.5772Z"/>
+              </svg>
+              <span class="kd-cart-sticker__label" aria-hidden="true">
+                <span class="kd-cart-sticker__count" data-cart-count>{{ cart.item_count }}</span>
+              </span>
+            </a>
+          </div>
         </div>
       </div>
     </div>

@@ -10,25 +10,21 @@
 
 {%- if show_announcement_bar -%}
   <section
-    class="relative bg-scheme-background text-scheme-text {% if link != blank %}hover:bg-scheme-accent-1 hover:text-scheme-accent-1-contrast{% endif %} border-section-border border-b-section text-center {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %}"
+    class="kd-announce bg-scheme-background text-scheme-text {% if section.settings.display != 'static' %}kd-announce--scrolling{% endif %} {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %}"
     data-color-scheme="{{ section.settings.color_scheme }}"
     id="AnnouncementBar"
   >
     {%- if section.settings.display == 'static' -%}
+      {%- capture announce_text -%}
+        <span class="kd-announce__text{% if section.settings.text_mobile != blank %} kd-announce__text--desktop{% endif %}">{{ text }}</span>
+        {%- if section.settings.text_mobile != blank -%}
+          <span class="kd-announce__text kd-announce__text--mobile">{{ section.settings.text_mobile }}</span>
+        {%- endif -%}
+      {%- endcapture -%}
       {%- if link != blank -%}
-        <a
-          class="block w-full px-5 py-1 text-sm text-current lg:px-0 lg:py-2"
-          href="{{ link }}"
-        >
-          {{ text | escape }}
-        </a>
+        <a class="kd-announce__inner kd-announce__link" href="{{ link }}">{{ announce_text }}</a>
       {%- else -%}
-        <div
-          class="py-1 text-center text-sm text-current lg:py-2"
-          role="complementary"
-        >
-          <p class="px-5 lg:px-0">{{ text | escape }}</p>
-        </div>
+        <div class="kd-announce__inner" role="complementary">{{ announce_text }}</div>
       {%- endif -%}
     {%- else -%}
       {%- render 'scrolling-text', class: 'py-1 lg:py-2' %}
@@ -63,10 +59,17 @@
       "default": "scrolling_text"
     },
     {
-      "type": "text",
+      "type": "inline_richtext",
       "id": "text",
       "label": "t:sections.announcement_bar.settings.text.label",
+      "info": "One line, under 80 characters. Put a discount code in bold.",
       "default": "Announce something here"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "text_mobile",
+      "label": "Text on mobile",
+      "info": "Shorter version shown below 768px so the bar never wraps. Leave empty to use the text above."
     },
     {
       "type": "url",

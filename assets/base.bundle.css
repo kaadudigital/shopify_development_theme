@@ -7373,3 +7373,39 @@ body {
     display: none;
   }
 }
+
+/* ────────────────────────────────────────────────────────────────
+   KAADU COMPONENTS — restyled sections (DS component specs)
+   ──────────────────────────────────────────────────────────────── */
+
+/* ── ANNOUNCEMENT BAR (DS Announcement) — 37px band, one line, Banter 14/700 ── */
+.kd-announce {
+  position: relative;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: center;
+}
+.kd-announce__inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding-inline: var(--space-4);
+  color: inherit;
+  text-decoration: none;
+}
+.kd-announce__text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kd-announce__text strong, .kd-announce__text b { font-weight: 900; }
+.kd-announce__text p { margin: 0; }
+.kd-announce__link:hover .kd-announce__text { text-decoration: underline; text-underline-offset: 3px; }
+.kd-announce__text--desktop { display: none; }
+@media (min-width: 768px) {
+  .kd-announce { font-size: 14px; }
+  .kd-announce__inner { min-height: 37px; }
+  .kd-announce__text--desktop { display: inline; }
+  .kd-announce__text--mobile { display: none; }
+}
