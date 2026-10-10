@@ -119,7 +119,8 @@
 
     <style>
       :root {
-        --max-site-width: 1820px;
+        /* No site max-width (Kaadu DS, cobfoods-style large screens): bands run full width, only the gutter limits content. 100vw keeps min() in product-template valid. */
+        --max-site-width: 100vw;
       }
     </style>
 
