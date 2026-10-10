@@ -1,337 +1,93 @@
 # Kaadu — Shopify Theme Development Guide
 
-## Project Overview
+## Project
 
-E-commerce site for **Kaadu**, a Swiss fair-trade freeze-dried fruit brand. Primary market language is **German**; secondary is **English** (used for slogans and CTAs alongside German body copy). Built on the **Shapes theme (v3.0.4) by Switch Themes**, extended with custom sections. A redesign to the new Kaadu Design System is in progress on branch `redesign` (tag `pre-redesign` marks the state before it).
+E-commerce site for **Kaadu**, a Swiss fair-trade freeze-dried pineapple brand. German first (Swiss High German), English for slogans. Built on the **Shapes theme (v3.0.4) by Switch Themes**, heavily customised.
 
-- **Design system:** https://claude.ai/artifact/CnMT95HubMKA5CeChwNxBm (source of truth)
-- **Page mockups (rough draft):** https://claude.ai/artifact/DeWG7XTMTAJmdxb9iXNZ82
-- **Old Figma wireframe (pre-redesign):** `iVsw9LOw9Tqvq6hkvZMnpf`, node `322:203`
-- **Stack:** Shopify Liquid + CSS + vanilla JS. No React, no build step, no npm.
-- **Base theme:** Shapes by Switch Themes.
+- **Stack:** Shopify Liquid + CSS + vanilla JS. No React, no build step, no npm. No Shopify CLI installed locally — preview by pushing the branch to its GitHub-connected Shopify theme.
+- **Branches:** `main` is GitHub-connected to the store and receives "Update from Shopify" commits from the theme editor. The redesign happens on **`redesign`** (tag `pre-redesign` = state before it). Never commit redesign work to `main`.
 
 ---
 
-## Source of Truth
-
-**The Kaadu Design System is the authoritative spec:** https://claude.ai/artifact/CnMT95HubMKA5CeChwNxBm. Read its `project/README.md` (brand book + "Large screens"), `project/tokens.json` and `project/components/bundle.css` + `components/<Name>/README.md` before styling anything. Read it with the Artifact tool, not WebFetch.
+## Source of truth
 
 | Source | Authority |
 |---|---|
-| Kaadu Design System (link above) | Every token, size, colour, font, spacing, radius, shadow and component rule. Wins over everything below. |
-| Page mockups — https://claude.ai/artifact/DeWG7XTMTAJmdxb9iXNZ82 | A **rough draft**: which sections a page has, their order and content. Never take sizes or colours from it. |
-| [assets/base.bundle.css](assets/base.bundle.css) — "KAADU DESIGN SYSTEM" + "KAADU COMPONENTS" blocks | The theme's implementation of the DS. Mirror DS changes here. |
-| [kaadu-design-system/](kaadu-design-system/), brand PDF, `Kaadu Web Style Guide.docx` | **Superseded** pre-redesign references. Use only for logo/sticker asset files. |
+| **Kaadu Design System** — https://claude.ai/artifact/CnMT95HubMKA5CeChwNxBm | Every token, size, colour, font, spacing, radius, shadow, component, voice and imagery rule. Wins over everything else. |
+| **Page mockups** — https://claude.ai/artifact/DeWG7XTMTAJmdxb9iXNZ82 | A **rough draft**: which sections a page has, their order and content. Never take sizes, colours or fonts from it. |
+| [assets/base.bundle.css](assets/base.bundle.css) — "KAADU DESIGN SYSTEM" + "KAADU COMPONENTS" blocks | The theme's implementation of the DS. When the DS changes, mirror it here. |
+| [kaadu-design-system/](kaadu-design-system/), brand PDF, `Kaadu Web Style Guide.docx` | **Superseded.** Only a source of original logo/sticker files; nothing in the theme references them. |
 
-Where the DS is silent or contradicts itself, ask; if you must proceed, propose a value, mark it "proposed" in a comment, and say so.
+Read the DS with the Artifact tool (`read_file` on `project/README.md`, `project/tokens.json`, `project/components/bundle.css`, `project/components/<Name>/README.md`), not WebFetch. Its README covers voice, colour pairs, typography, layout/large screens, shapes, motion and imagery — this file does not repeat them.
 
----
-
-## Brand Identity
-
-### Mission
-Fair trade isn't a trend — it's a revolution. Amplifying producers' voices and redirecting profits back into the communities that fuel what we do.
-
-### Vision
-A world where disadvantaged farmers and workers in the Global South benefit fully from the fruits of their labour.
-
-### Values
-
-| Value | In practice |
-|---|---|
-| **Fairness above profit** | Fair pay, workers' right to voice, fairness in all operations |
-| **Transparency and integrity** | Open, honest communication; share wins and challenges equally |
-| **Empowerment** | Higher wages, community investment, a seat at the table for all stakeholders |
-
-### Personality
-Three archetypes simultaneously:
-- **The Transparent Leader** — open book, leads by showing the way
-- **The Empowerer** — lifts everyone it touches: farmers, workers, consumers
-- **The Rebel with a Cause** — challenges the status quo, disrupts norms, takes risks for what's right
-
-### Tone of Voice
-- **Bold and unapologetic.** No hedging, no corporate softness.
-- **Playfully radical.** Serious about justice, never self-righteous.
-- **Speaks directly** to the reader — "du/ihr" energy in German, no passive voice.
-- **Calls out injustice by name.** Brands itself as the rebel, not the charity.
-- **Radically transparent, daringly approachable.** Confidently inviting, never exclusive.
-
-### Approved Copy Phrases
-Use these verbatim in UI copy, headlines, and CTAs. Do not invent alternatives without a reason.
-
-**Primary taglines (hero, ad campaigns):**
-- *Snack Like You Give a Damn.*
-- *Justice Never Tasted So Sweet.*
-
-**Section headlines / supporting:**
-- *Radically Fair* — German: *Radikal Fair*
-- *Taste Oriented — People Focused*
-- *Shamelessly Transparent* — German: *Schamlos Transparent*
-- *Fairness für Kleinbauern*
-- *Starke Jobs für lokale Frauen*
-
-**Protest ticker (marquee):**
-- *ITS NOT FAIR! ITS NOT FAIR! ITS NOT FAIR!*
-
-**Product / lifestyle:**
-- *100 % Frucht. 0 % Ausbeutung.*
-- *Gefriergetrocknete Früchte — fair produziert, in der Ursprungsgemeinde verarbeitet, radikal transparent.*
-- *Get your crunch on with a snack that's changing lives.*
-
-### Casing & Copy Rules
-- **Display headlines (H1):** ALL CAPS via `text-transform: uppercase`. Enter in normal case in CMS for SEO.
-- **Section headlines (H2):** ALL CAPS via CSS.
-- **CTAs / buttons:** ALL CAPS via CSS. Bold Banter (labels, kickers, prices, card titles) is ALL CAPS too; regular-weight body copy never is.
-- **Body copy:** sentence case. Normal writing.
-- **No emoji** in UI copy — brand stickers and mascots serve that role. The only symbols are ✶ ✓ ✕ ← → ★ − +.
-- **Swiss High German:** ss, never ß ("Grösse"); address the reader as **du**; gender with the asterisk (Arbeiter*innen).
-- **Formats:** "CHF 4.45" (space, two decimals); "20 %" (space); «guillemets» for quotes; · as metadata separator. Unknown facts go in square brackets ("[Zahl]"), never invented.
-- Use specific numbers in impact copy (*"30–40% über Marktpreis"*, *"100% höhere Löhne"*).
-- German and English are mixed deliberately — English slogans for maximum punch.
+Where the DS is silent or contradicts itself, ask. If you must proceed, propose a value, mark it "proposed" in a code comment, and say so.
 
 ---
 
-## Visual Foundations
+## Decisions (redesign, 2026-10)
 
-All foundations are CSS custom properties on `:root` in the "KAADU DESIGN SYSTEM" block of [assets/base.bundle.css](assets/base.bundle.css), mirroring the DS `tokens.json`. **Never hardcode hex, font, or spacing values in Liquid or section CSS — always reference via `var(--*)`.** Token names are the DS's own (`--pink`, `--space-8`, …), unprefixed.
-
-### Colour
-
-| Token | Hex | Role |
-|---|---|---|
-| `--pink` | `#FFC6FF` | Default page ground: body, hero, comparison, quote. Ink: `--purple` (body), `--red` (headlines) |
-| `--purple` | `#542A76` | Brand ink on pink/lime; ground for header, footer, drawer head; primary cloud fill. Ink on it: `--paper` or `--lime` |
-| `--red` | `#AC0300` | Fagies headlines, kickers, errors, focus ring, announcement ground, secondary cloud. **Never body text** |
-| `--lime` | `#AEFF64` | Accent: ticker, notices, stickers, join section. Ink on it: `--red` (headlines) / `--purple` (body) |
-| `--paper` | `#FFFFF5` | Warm white: product/crunchys grounds, cards, inputs, drawer body; text on purple/red |
-| `--sky` | `#B7D9FF` | People section ground. Ink: `--red` headlines, `--ink` body |
-| `--ink` / `--black` | `#000000` | Body text on paper, sky, lime notices |
-| `--lilac`, `--orange` | `#E9A2E6`, `#FF781E` | Product option tiles only. Orange is never text and never a section ground |
-| `--logo-red` | `#AE0000` | The logo's own red — not a UI colour |
-
-**Proposed** (named by the DS but missing from its tokens.json; values from the mockups): `--ink-muted #6B6B6B` (12px+ only), `--paper-warm #FFF9EE`, `--grey #9A9A94`, `--charcoal #3A3A3A`, `--sage #6E7A6C` (video overlay only), `--tint-cocoa/plum/ochre/umber/forest` (people-card photo tints), `--overlay-card`, `--overlay-scrim`.
-
-**Grounds alternate by section:** pink → paper → sky → lime → purple. A page runs through at least four; **never two pink sections in a row**. Red is not a section ground (announcement bar and the CTA card only). Use `.kd-ground-{pink|paper|sky|lime|purple}` or the matching colour scheme. Never pair two light grounds (lime on paper, pink on paper), two dark inks (red on purple), or body text in red, lime or orange.
-
-**Colour schemes** (Theme settings) are mapped to the DS grounds, so sections keep using `color_scheme` settings: `scheme1` Pink · `scheme2` Red (announcement/CTA only) · `scheme3` Purple · `scheme4`/`scheme6` Paper · `scheme5` Lime · `scheme-f3c7…` Pink hero (black kicker/lead) · `scheme-389c…` Sky. Scheme `accent_1` / `accent_1_contrast` drive the default cloud-button colours.
-
-Legacy `--color-*` tokens and `.bg-*` / `.text-*` utilities still exist as aliases pointing at DS values. Don't use them in new code; remove them as sections migrate.
-
-### Typography
-
-Two faces, self-hosted in `assets/`: **Fagies** (`--font-display`, one weight, ALWAYS uppercase, never bold or synthesised) and **Banter Grotesk** (`--font-sans`) in **two weights only: Regular 400 and Semibold 600**. Every "bold" — labels, kickers, titles, prices — is Semibold 600; never set 700 or 900 (the browser would synthesise it). Semibold Banter is ALWAYS uppercase; regular-weight Banter never is. Fagies lives only in headlines, cloud buttons, the ticker and panel titles — **never on pills, tags, badges or stickers** (those are Banter Semibold).
-
-### Type classes
-
-DS styles are implemented as `kd-`-prefixed classes (the prefix avoids collisions with Shapes classes like `.price`). **Use only these; never invent font sizes.** Display sizes step at 768 / 1200 / 1441 (see "Layout & Large Screens").
-
-| Class | Spec (≥1200) | Use |
-|---|---|---|
-| `.kd-display-hero` | Fagies 76 / 0.98 | Hero h1, once per page |
-| `.kd-display-crunchys` | Fagies 84 / 0.92 | The one oversized claim per page |
-| `.kd-display-h2` | Fagies 64 / 0.95 | Section h2 |
-| `.kd-display-h2-tight` | Fagies 56 / 0.95 | Product title, comparison headline |
-| `.kd-display-quote` | Fagies 40 / 1.05 | The one pull quote |
-| `.kd-display-ticker` / `-drawer` | Fagies 34 / 26 | Ticker band / panel titles |
-| `.kd-lead` / `.kd-body-lg` | Banter 24/32 · 20/28, max 560px | Hero lead / section intro (mobile 18/25 · 17/24 — proposed) |
-| `.kd-body` / `.kd-body-sm` | Banter 16/1.45 · 13/1.4 | Running text / notices, cart |
-| `.kd-strong-lg/-/md/sm` | Banter 600, 24 · 20 · 18 · 16 | Card titles, claims, checklist rows, notice titles |
-| `.kd-label` / `-lg` / `-sm` | Banter 600, 13 · 16 · 12, tracked | Kickers above every h2 (in red), group labels, pills |
-| `.kd-price` / `.kd-announcement` | Banter 600, 22 · 14 | Prices / announcement bar |
-
-Legacy `.h1`, `.h2`, `.mega-heading` now follow the DS display steps. `.h3`, `.h4-subsection-heading`, `.body`, `.body-large`, `.caption`, `.btn-label` keep their old sizes until their sections migrate — don't use them in new code.
-
-### Spacing
-
-```css
---space-1: 4px;   --space-2: 8px;   --space-3: 12px;  --space-4: 16px;
---space-5: 20px;  --space-6: 24px;  --space-7: 28px;  --space-8: 40px;
---space-9: 48px;  --space-10: 56px; --space-11: 64px; --space-12: 80px;
---space-13: 96px;
---measure: 560px; --card-w: 400px; --page-max: 1440px; --content-max: 1800px;
---gutter-sm: 20px; --gutter-md: 32px; --gutter-lg: 64px; --gutter (stepped);
-```
-
-Inside components 4–28px (`space-1`…`space-7`); between blocks 40–64px. Sections: 72–96px vertical padding (`space-12`, `space-13`); paper sections run tighter at 40px (`space-8`).
-
-> `--space-8` and `--space-12` changed value in the redesign (32→40, 48→80). Pre-redesign uses were renamed to `--legacy-space-8` / `--legacy-space-12`; replace them as sections migrate.
-
-### Layout & Large Screens
-
-> **Redesign source of truth:** the Kaadu Design System (https://claude.ai/artifact/CnMT95HubMKA5CeChwNxBm) wins over the page mockups (https://claude.ai/artifact/DeWG7XTMTAJmdxb9iXNZ82), which are a rough draft — take page structure and content from the mockups, every size, colour, font and component rule from the design system.
->
-> **Redesign (branch `redesign`):** layout follows the new Kaadu Design System, section "Large screens" (https://claude.ai/artifact/CnMT95HubMKA5CeChwNxBm), modelled on cobfoods.com. These rules replace the old 1200px container and 12-column grid.
-
-- **Fluid and full width — no fixed page container.** Colour bands always run edge to edge. Only the gutter, the headline steps and a few caps change with the window.
-- **Breakpoints (mobile-first, `min-width`):** `768px` (tablet; below is mobile), `992px`, `1200px` (desktop spec applies), `1441px` (above the 1440 artboard), `1800px` (very large screens). Write mobile as the default and step up with `@media (min-width: …)`.
-- **Gutter (section `padding-inline`):** 20px below 768 → 32px from 768 → 64px from 1200. It never grows past 64px.
-- **Headlines step at breakpoints, never fluid** (no `clamp()` / `vw` on type):
-
-| Style | < 768 | ≥ 768 | ≥ 1200 (spec) | ≥ 1441 |
-|---|---|---|---|---|
-| Hero (`display-hero`) | 46 | 60 | 76 | 92 |
-| Crunchys claim | 48 | 64 | 84 | 100 |
-| Section H2 (`display-h2`) | 34 | 48 | 64 | 76 |
-| H2 tight (product, comparison) | 28 | 40 | 56 | 64 |
-| Pull quote | 28 | 32 | 40 | 48 |
-
-  Body, label and button sizes stay at spec above 768px.
-- **Images, background shapes and stickers scale with the window from 1200px up:** size them as a share of the 1440 artboard with a px cap, e.g. `width: min(calc(110 * var(--kd-px)), 140px)` where `--kd-px: calc(100vw / 1440)`. Below 1200px use fixed px. Never scale text this way. (This is the only allowed viewport-relative sizing — content layout itself stays Grid/Flexbox.)
-- **Text-beside-media rows** (hero, product, image-with-text) cap at 1800px, centred inside their full-bleed band (`.kd-wide`). Carousels, tickers and colour bands are never capped.
-- **Two-column layouts** stack below 768 and go side by side from 768. Product page: gallery and details 50/50, gap 20px → 48px from 1200.
-- Use CSS Grid and Flexbox. **Never use absolute/percentage positioning for content** — it breaks at unexpected viewport widths. Decorative shapes/stickers are the exception (see above).
-- Shopify does not support separate mobile/desktop section files. Every section must be responsive in a single file using media queries. Never swap layouts via JS.
-
-```css
-.my-section { padding-inline: 20px; }
-@media (min-width: 768px)  { .my-section { padding-inline: 32px; } }
-@media (min-width: 1200px) { .my-section { padding-inline: 64px; } }
-
-.my-row { display: grid; grid-template-columns: 1fr; gap: var(--space-5); }
-@media (min-width: 768px)  { .my-row { grid-template-columns: 1fr 1fr; } }
-@media (min-width: 1800px) { .my-row { max-width: 1800px; margin-inline: auto; } }
-```
-
-### Shape, radii & shadows
-
-- **Surfaces are square** (`--radius-0`): cards, notices, option buttons, images, the drawer. Rounded only: the 300×534 product tiles (`--radius-tile` 36px) and pill-shaped things (`--radius-pill`): inputs, tags, badges, steppers, the round close button.
-- **No borders** except the 1px `--purple` outline on inputs and the 2px ring of the radio dot. Depth comes from one shadow, `--shadow-card`, on every raised thing. Also `--shadow-drawer`, `--shadow-tile-active`, `--shadow-product`.
-- **Brand shapes:** the **cloud** (behind every CTA) and the **scallop edge** (40px strip of 72px half-circles where paper meets a coloured section; purple header/footer edges stay straight).
-- **Focus:** 4px solid `--red` outline, 3px offset, on every button, link and input (set globally).
-- **Motion:** two loops only — the ticker (22s) and the spinning sticker badge (20s) — both stop under `prefers-reduced-motion`. No scroll animations; no hover transitions beyond a 1px press on cloud buttons.
+- **Redesign in place**, not a fresh Shapes copy — ~90 stock files carry custom work.
+- **Large screens follow cobfoods.com** (written into the DS "Large screens" section): fluid full width, no page container.
+- **Existing stickers and background shapes are kept**: `snippets/block-sticker.liquid`, `block-background-shape.liquid`, `block-background-pattern.liquid`, `block-shape-divider.liquid`, `collection-shape-defs.liquid`, `shape-defs.liquid`, `static-sticker*.liquid` and the `website_shape_*` options in section schemas. Restyle around them; don't replace them with the DS `kd-tag--sticker`.
+- **Banter Grotesk: Regular 400 and Semibold 600 only.** Every "bold" is 600; never set 700/900 (the browser would synthesise it).
+- **The MENU overlay** in `hero-logo-with-menu` stays as it is for now (polish later).
+- **Frontend first:** subscriptions (selling plans / app) and shipping rules are **not set up in Shopify yet**. Build the configurator, Abo upsell and free-shipping UI against settings/placeholder data; wire the backend after.
 
 ---
 
-## Components
+## Approved copy
 
-DS component classes live in the "KAADU DESIGN SYSTEM" / "KAADU COMPONENTS" blocks of [base.bundle.css](assets/base.bundle.css). Each DS component README says what the markup must provide.
+Voice and copy rules (du, ss not ß, CHF 4.45, «guillemets», ✶ links, no emoji, [placeholders] for unknown facts) are in the DS README. Approved brand lines — use verbatim, don't invent alternatives:
 
-### Buttons — the cloud
+- Taglines: *Snack Like You Give a Damn.* · *Justice Never Tasted So Sweet.*
+- Pillars: *Radically Fair* / *Radikal Fair* · *People Centred* · *Shamelessly Transparent* / *Schamlos Transparent* · *Taste Oriented — People Focused*
+- Supporting: *Fairness für Kleinbauern* · *Starke Jobs für lokale Frauen* · *100 % Frucht. 0 % Ausbeutung.* · *Get your crunch on with a snack that's changing lives.*
+- Ticker: *It's not fair!*
 
-Every CTA is a **cloud button**: a scalloped SVG cloud behind a Fagies label. **Buttons are never pills.** Render with the snippet — never hand-build one:
+---
+
+## How the DS is implemented in this theme
+
+**Tokens** — DS names, unprefixed, on `:root` in `base.bundle.css` (`--pink`, `--red`, `--space-8`, `--gutter`, `--shadow-card`, …). **Never hardcode hex, font or spacing values** in Liquid or section CSS. Colours the DS used but never defined were added as **proposed** tokens (`--ink-muted`, `--paper-warm`, `--grey`, `--charcoal`, `--sage`, `--logo-red`, `--tint-*`, `--overlay-*`), in both the theme and the DS.
+
+**Spacing gotcha** — the DS `--space-8` is 40px and `--space-12` is 80px; the pre-redesign values (32/48px) were renamed to `--legacy-space-8` / `--legacy-space-12`. Replace those as sections migrate.
+
+**Type classes** — DS text styles are `kd-`-prefixed classes (the prefix avoids Shapes collisions like `.price`, `.label`): `.kd-display-hero`, `.kd-display-h2`, `.kd-display-h2-tight`, `.kd-display-crunchys`, `.kd-display-quote`, `.kd-lead`, `.kd-body`, `.kd-strong*`, `.kd-label*`, `.kd-price`, … Display sizes already step at 768 / 1200 / 1441. **Never invent font sizes.** `.kd-lead`/`.kd-body-lg` mobile sizes (18/25, 17/24) are proposed — the DS gives none.
+
+**Colour schemes** (Theme settings) are mapped to DS grounds, so sections keep their `color_scheme` setting: `scheme1` Pink · `scheme2` Red (announcement / CTA card only) · `scheme3` Purple · `scheme4`, `scheme6` Paper · `scheme5` Lime · `scheme-f3c7…` Pink hero (black kicker/lead) · `scheme-389c…` Sky. `accent_1` / `accent_1_contrast` are the default cloud-button colours. Plain DS grounds are also available as `.kd-ground-{pink|paper|sky|lime|purple}`.
+
+**Layout helpers** — `.kd-section` (full-bleed band with the stepped gutter 20/32/64), `.kd-wide` (caps text-beside-media rows at 1800px), `--kd-px` (1px of the 1440 artboard, for scaling decorations only — never type).
+
+**Cloud button** — every CTA. Never hand-build one, never a pill:
 
 ```liquid
 {%- render 'kd-button', label: section.settings.button_label, url: section.settings.button_link, variant: 'red', size: 'md' -%}
 ```
 
-- Variants: `primary` (purple / lime label), `red` (red / paper), `lime` (lime / red), `paper` (paper / red), `outline` (40px, Banter 12px, for "Details ↻" on photo cards). No variant = follows the section colour scheme's accent 1.
-- Sizes: default 60px/20px · `lg` 64/22 · `md` 56/18 · `sm` 52/16. `full: true` stretches it.
-- The cloud shape is `#kd-cloud` (`snippets/kd-cloud-defs.liquid`, rendered once in `layout/theme.liquid`).
-- One cloud button per block; verb first, two to three words. Never two same-colour clouds side by side, never a lime cloud on a lime ground.
-- Legacy `.btn-primary` / `.btn-secondary` render as masked clouds without shadow (`assets/kd-cloud.svg`) until their sections switch to the snippet.
+Variants `primary` · `red` · `lime` · `paper` · `outline`; sizes default (60px) · `lg` · `md` · `sm`; `full: true`. No variant = follows the colour scheme. The shape is `#kd-cloud` from `snippets/kd-cloud-defs.liquid` (rendered once in `layout/theme.liquid`).
 
-### Text links
+**Text links** — `.kd-link` adds the ✶ and hover-only underline. Buttons never get the star.
 
-Every linked text starts with **✶** and is underlined on hover only: `.kd-link`. Buttons never get the star.
+**Legacy (don't use in new code; remove as sections migrate)** — `--color-*` tokens and `.bg-*` / `.text-*` utilities alias DS values; `.h1`, `.h2`, `.mega-heading` follow the DS display steps; `.h3`, `.h4-subsection-heading`, `.body`, `.body-large`, `.caption`, `.btn-label` keep pre-redesign sizes; `.btn-primary` / `.btn-secondary` render as masked clouds without shadow (`assets/kd-cloud.svg`).
 
-### Cards
-
-Square, `--paper`, `--shadow-card`, no border (`.card`, DS `.kd-card` for the 400×600 people cards).
-
-### Ticker
-
-Lime band, red Fagies 34px, ✶ separators, `translateX(0 → -50%)` over 22s, `aria-hidden`, stops under reduced motion (DS Ticker).
-
-### Logos
-
-In [kaadu-design-system/project/assets/logo/](kaadu-design-system/project/assets/logo/):
-
-| File | When to use |
-|---|---|
-| `Kaadu_primary_red.svg` | Primary full logo (mascot + wordmark) — hero, OG images, email headers |
-| `Kaadu_primary_red_2.svg` | Variant of primary, alternate composition |
-| `Kaadu_wordmark_red.svg` | Wordmark only — space-constrained contexts |
-| `Kaadu_favicon_purple.svg` | Favicon / icon mark — browser tab, bookmarks, mobile home screen |
-
-**Clear space:** always surround the logo with space ≥ the height of the "K" in the logo. No other text, graphics, or images may enter this zone.
-
-**Never:** outline, recolour, distort, rotate, drop-shadow, or reduce-opacity the logo.
-
-### Stickers & Mascots
-
-In [kaadu-design-system/project/assets/stickers/](kaadu-design-system/project/assets/stickers/):
-
-| File | Role |
-|---|---|
-| `radically-fair-sticker.png` | "Radically Fair" hand-drawn text sticker |
-| `kaadu-logo-sticker.png` | Round logo sticker variant |
-| `banana-sticker.png` | Banana fruit mascot |
-| `mango-sticker.png` | Mango fruit mascot |
-
-Stickers are the brand's expressive accent — apply slight rotation transforms (`-8°` to `-15°`) for energy. Minimum size: 48px. Always `object-fit: contain`. Never distort the aspect ratio. Never outline, recolour, or stretch the mascot.
-
-> **Redesign decision (2026-10-10):** the theme's existing sticker and background-shape systems are **kept** through the redesign — `snippets/block-sticker.liquid`, `snippets/block-background-shape.liquid`, `snippets/block-background-pattern.liquid`, `snippets/collection-shape-defs.liquid` and the `website_shape_*` shape options in section schemas. Restyle around them; do not remove or replace them with the new design system's `kd-tag--sticker`. On large screens they scale per "Layout & Large Screens".
-
-### Iconography
-
-There is **no icon set** — don't add one. Glyphs are typed in the running font: ✶ (links, ticker), ✓ / ✕ (checklists), ← → (hints), ★ (ratings), − / + (steppers). The only drawn graphics are the brand's own illustrations, stickers and shapes.
+**Logo** — never recolour, distort, rotate, outline or shadow it; keep clear space ≥ the height of the "K". The header uses the full-colour wordmark on purple (`Kaadu_wordmark_red_RGB.svg` in Shopify Files).
 
 ---
 
-## Imagery & Photography
+## Shopify / Liquid coding standards
 
-### Aesthetic
-- High-saturation, warm-toned, outdoor.
-- Slightly elevated saturation filter — colours should pop.
-- Fields, grasslands, open skies, lush green grass — ground the brand in its agricultural story.
+### Files
+- **Sections** ([sections/](sections/)) — one file per section. New custom sections are prefixed `kaadu-`; legacy `custom-` files keep their prefix. Prefer restyling the closest existing section over creating a new one.
+- **Snippets** ([snippets/](snippets/)) — reusable partials via `{%- render -%}` (never `include`). DS building blocks are prefixed `kd-`.
+- **CSS** — shared styles in [assets/base.bundle.css](assets/base.bundle.css) (DS foundations, then components appended at the bottom). Section-specific CSS goes in the section's `{%- style -%}` block, scoped with `#{{ section.id }}`. No separate per-section CSS files; no `@import`.
+- **JS** — vanilla only, scoped per section instance (no page-wide singletons). No jQuery, no frameworks, nothing render-blocking in `<head>`.
 
-### Never
-- Studio settings, artificial lighting, seamless backdrops.
-- Polished corporate aesthetics, white-cyc product shots.
-- Desaturated or B&W treatments.
-
-### Product photography
-- Fun, quirky, approachable expressions.
-- Products in context — outdoor, in hands, lifestyle.
-- Slight tilt rotations (e.g. `-9°`) for energy.
-- SVG clipping masks / blob shapes over hero product images are an established brand technique — see [Hero.jsx](kaadu-design-system/project/ui_kits/website/Hero.jsx).
-
-### Models
-- Bold, playful, youthful outfits — funky rings, oversized jackets, statement accessories, vibrant patterns.
-- Casual yet expressive, never formal or polished.
-
-### Technical
-- **Format:** WebP primary, JPG/PNG fallback via `<picture>`. Never serve uncompressed PNGs or TIFFs.
-- Always set explicit `width` and `height` to prevent CLS.
-- `loading="eager"` only on the first visible image per page (hero, `section.index == 1`). All others `loading="lazy"`.
-- Use `fetchpriority="high"` on the hero image.
-
-```liquid
-<picture>
-  <source srcset="{{ image | image_url: width: 1200, format: 'webp' }}" type="image/webp">
-  <img
-    src="{{ image | image_url: width: 1200 }}"
-    alt="{{ image.alt | escape }}"
-    width="{{ image.width }}"
-    height="{{ image.height }}"
-    loading="lazy"
-  >
-</picture>
-```
-
-### Size targets
-
-| Type | Desktop | Mobile |
-|---|---|---|
-| Section banners | 1200px × 480px | full width × 280px |
-| Content images | max 720px wide | full width |
-| Thumbnails / stickers / mascots | 64–256px | 64–256px |
-
----
-
-## Shopify / Liquid Coding Standards
-
-### File organisation
-- **Sections** ([sections/](sections/)) — one file per section. Prefix new custom sections with `kaadu-` (e.g. `kaadu-hero.liquid`). Legacy `custom-` files keep their prefix.
-- **Snippets** ([snippets/](snippets/)) — reusable partials rendered via `{%- render -%}`. Use for any markup repeated across sections.
-- **CSS** ([assets/base.bundle.css](assets/base.bundle.css)) — all shared styles live here. Append new custom styles at the bottom. Do not create separate per-section CSS files unless the section has significant standalone styles.
-- **JS** — vanilla only. Use `document.addEventListener('DOMContentLoaded', …)`. No jQuery, no frameworks.
-
-### CSS rules
-- All colours, spacing, radii, shadows, and font families come from CSS custom properties on `:root` (defined in [base.bundle.css](assets/base.bundle.css)). Reference via `var(--*)`.
-- Use BEM-style naming for new components: `.block__element--modifier`.
-- Avoid `!important` except when overriding Shapes theme defaults — leave a comment explaining why.
-- **Never set font sizes, colours, or spacing via inline `style=""`.** The only exception: a dynamic value from a section setting that can't be a class — expose it as a CSS custom property on the section element.
+### CSS
+- Mobile-first: default styles for mobile, then `@media (min-width: 768px | 992px | 1200px | 1441px | 1800px)`.
+- Colours, spacing, radii, shadows and fonts only via `var(--*)`.
+- BEM-style names for new components: `.block__element--modifier`.
+- `!important` only to override Shapes defaults, with a comment saying why.
+- **No inline `style=""`** for sizes, colours or spacing. A dynamic value from a setting becomes a custom property on the section:
 
 ```liquid
 {%- style -%}
@@ -339,97 +95,35 @@ There is **no icon set** — don't add one. Glyphs are typed in the running font
 {%- endstyle -%}
 ```
 
-### Liquid rules
-- Use `{%- -%}` (dash tags) to strip whitespace.
-- Use `t:` translation keys for all user-facing strings in schema labels.
-- Always `| escape` user-supplied text in HTML attributes.
-- Use `section.index == 1` to enable `loading="eager"` and `fetchpriority="high"` on the hero image.
-- Prefer `{%- render -%}` over `{%- include -%}` (include is deprecated).
+### Liquid & schema
+- Dash tags `{%- -%}`; `| escape` user text in attributes.
+- Setting text is entered in normal case — uppercase is CSS-only.
+- Every setting has a sensible default; group with `header` settings; every section gets a `color_scheme` setting.
+- Changing a setting's `type` is fine if old values stay valid (e.g. `text` → `inline_richtext`); **never delete a setting that `templates/*.json` or `config/settings_data.json` still uses** — mark it unused in its `info` instead.
+- `config/settings_data.json`, `templates/*.json` and `sections/*-group.json` are also written by the theme editor: edit them surgically and check `git diff` shows only your change. Most round-trip byte-identically through `json.dumps(indent=2, ensure_ascii=False)` after the comment header; `page.impressum.json`, `product.preorder.json` and `list-collections.json` don't, so edit those as text.
 
-### Schema settings
-- Always provide sensible defaults.
-- Group related settings with `header` blocks.
-- Use `t:` keys for labels and info text.
-- Add a `color_scheme` select to every section.
+### Images
+- `image_url` + `image_tag` (or `<picture>` with a WebP source), explicit `width`/`height`, meaningful `alt` (decorative: `alt=""`).
+- First visible image (`section.index == 1`): `loading="eager"` + `fetchpriority="high"`; all others `loading="lazy"`.
 
 ---
 
-## SEO Standards
+## SEO, accessibility, UX
 
-- Exactly **one `<h1>`** per page — always the hero section.
-- Section titles are `<h2>`, sub-items `<h3>`. Never skip levels.
-- Text entered in settings/Metafields is **normal case** — `text-transform: uppercase` is CSS-only.
-- Every `<img>` has a meaningful `alt`. Decorative images use `alt=""`.
-- Use semantic HTML: `<section>`, `<article>`, `<nav>`, `<header>`, `<footer>`, `<main>`, `<time>`.
-- Product pages include `application/ld+json` structured data (`Product` schema).
-- Page title pattern: `{Page Name} — Kaadu`.
-- Meta descriptions: 140–160 characters.
+- Exactly **one `<h1>`** per page (the hero); section titles `<h2>`, sub-items `<h3>`, never skip levels. Semantic elements (`<section>`, `<nav>`, `<footer>`, `<time>`…). Product pages carry `Product` JSON-LD. Page titles `{Page} — Kaadu`; meta descriptions 140–160 characters.
+- Contrast: use only the DS ground/ink pairs (all ≥ 4.5:1). Minimum text 12px (the 10px option badge is the only exception); `--ink-muted` only at 12px+.
+- Visible focus everywhere (global 4px red ring), tap targets ≥ 48px, `aria-label` on icon-only controls, real `<button>`/`<a href>` elements.
+- Carousels and sliders: keyboard operable, `aria-live` where content changes. Menus and drawers trap focus and close on Escape.
+- No horizontal scroll at any width ≥ 320px. Motion only as the DS allows; everything stops under `prefers-reduced-motion`.
 
 ---
 
-## Performance Standards
+## Workflow
 
-- Hero image: `loading="eager"`, `fetchpriority="high"`, served at the correct intrinsic size.
-- All below-fold images: `loading="lazy"`.
-- No render-blocking JS in `<head>` — use `defer` or `async`.
-- Section-specific CSS lives in a `{%- style -%}` block in the section file, not in a separately loaded file.
-- Avoid `@import` inside CSS files — it blocks rendering.
-- SVG icons: inline via snippets — no extra HTTP request.
-
----
-
-## Accessibility Standards
-
-- Contrast ≥ **4.5:1** for body text; ≥ **3:1** for large text (24px+) and focus rings/icons. Use only the DS ground/ink pairs (see Colour) — they all pass.
-- Minimum text size: **12px** (DS `label-sm`); the 10px option-button badge is the only exception. `--ink-muted` text is 12px+ only.
-- All interactive elements must have a visible `:focus-visible` style.
-- Tap targets ≥ **48px** in both dimensions.
-- `<a>` tags used as buttons: add `role="button"` and handle `keydown` Enter/Space.
-- `aria-label` on icon-only buttons.
-- Carousels / sliders need keyboard navigation and `aria-live` regions.
-
----
-
-## UX Standards
-
-- One cloud button per block. Never two same-colour clouds in the same visual area.
-- Forms must show clear error and success states.
-- No horizontal scroll at any viewport ≥ 320px.
-- No hover transitions beyond the 1px press on cloud buttons; no scroll animations. Do not animate layout properties.
-- Mobile menus and drawers must trap focus and close on Escape.
-
----
-
-## Page Structure (redesign)
-
-Page structure and content come from the mockups (rough draft — sizes/colours from the DS): landing page (desktop + mobile), product page, cart drawer, Our Promise, Shamelessly Transparent, People Centred, Radically Fair, Manifesto, News (Shopify blog). Landing page order: announcement → header → hero → ticker → video problem → crunchys → Wer profitiert (people cards) → product → videos → "besser" stats → vision → comparison slider → cost split → quote → final CTA → join → footer.
-
----
-
-## Migration Notes — Legacy `.custom-*` classes
-
-Legacy classes have been removed from [base.bundle.css](assets/base.bundle.css) and all `.liquid` / `.json` references migrated. If you are reading old commits or branches, the mapping is:
-
-| Old class | New class | Visual difference |
-|---|---|---|
-| `custom-display-header` | `h1` | — (sizes match) |
-| `custom-section-headline` | `h2` | Desktop dropped 32px → 24px (per DS spec) |
-| `custom-body-xlarge` | `h2` | Folded into h2 (24px) |
-| `custom-body-large` | `body-large` | — (sizes match) |
-| `custom-body-default` | `body` | Desktop bumped 16px → 18px (per DS spec) |
-| `custom-button-text` | `btn-label` | — |
-| `custom-image-button-text` | `btn-label` | Use `btn-primary` if you also need the blob surface |
-| `custom-btn__surface` | `btn-secondary` | — |
-
-These pre-redesign classes are themselves legacy now — see "Type classes" for the `kd-` replacements.
-
----
-
-## Development Workflow
-
-1. **Read the design system first** — its README and the component README for what you're building (Artifact tool `read_file` on the DS link). Check the mockup only for the section's structure and content.
-2. **Work on `redesign`** — never commit redesign work to `main` (it's the GitHub-connected live theme).
-3. **Reuse before creating** — find the closest Shapes section and customise it. Only create a new file when nothing close exists.
-4. **Tokens & canonical classes only** — if you find yourself writing `style="font-size: 24px"` or `#ae0000`, stop and use the right class or `var(--*)` instead.
-5. **Test responsively** — check at 390, 768, 1200, 1440, 1920 and 2560px before marking done.
-6. **Verify against standards** — DS ground/ink pairs, type classes, spacing tokens, heading hierarchy, cloud buttons (no pills) and the ✶ link rule must all pass.
+1. **Read the DS** README and the component README for what you're building; check the mockup only for the section's structure and copy.
+2. **Restyle before creating** — find the closest existing section.
+3. **Tokens, `kd-` classes and `kd-button` only** — if you're typing a hex value, a px font size or a pill radius on a button, stop.
+4. **Keep the stickers/shapes blocks working** on every section you touch.
+5. **Validate** — schema JSON parses, braces balance, no stray `700`/`900` weights, no inline styles.
+6. **Test** at 390, 768, 1200, 1440, 1920 and 2560px in the branch preview before calling it done.
+7. **Commit to `redesign`** in small, reviewable batches.
