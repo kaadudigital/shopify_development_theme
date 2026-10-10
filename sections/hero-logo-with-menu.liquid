@@ -377,14 +377,15 @@
          mobile keeps overflow-y auto as a safety net for short viewports. */
       @media (min-width: 769px) {
         #{{ section.id }} .menu-content {
-          padding-inline: var(--space-6);
+          padding-inline: var(--gutter);
           overflow-y: hidden;
         }
       }
 
+      /* Full width like the header bar (no 1200px cap), so on 24"+ screens the
+         wordmark stays at the left edge, lined up with the header logo. */
       #{{ section.id }} .menu-layout {
         width: 100%;
-        max-width: var(--container-max);
         margin-inline: auto;
         min-height: 100%;
         display: flex;

@@ -186,11 +186,10 @@
 </div>
 
 <style>
-  /* Content never grows past the design-system container (1200px) —
-     on wider viewports the section background stays full-bleed while
-     the grid centres and whitespace absorbs the extra width. */
+  /* Text + image rows stop at the DS content max (1800px, cobfoods-style
+     large screens); the section background stays full-bleed. */
   .kaadu-iht__container {
-    max-width: var(--container-max);
+    max-width: var(--content-max);
   }
 
   /* Vertical rhythm per Kaadu Typography & Spacing Docs — mobile first,
