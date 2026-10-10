@@ -27,7 +27,6 @@
   assign account_url = section.settings.account_link | default: routes.account_url
   assign shop_url = section.settings.shop_link | default: routes.all_products_collection_url
   assign accent_color = section.settings.menu_accent_color | default: '#ACFF64'
-  assign menu_offset = section.settings.menu_button_offset | default: 0
   assign cart_content = section.settings.cart_content | default: 'count'
   assign cart_has_icon = false
   if section.settings.cart_icon_svg != blank or section.settings.cart_icon != blank
@@ -48,9 +47,24 @@
         transform: rotate(-6deg);
       }
 
-      /* Vertical nudge of the MENU cloud (setting "MENU button vertical offset") */
+      /* Nudge of the MENU cloud per device (settings "MENU button position") */
       #{{ section.id }} .header-left {
-        top: {{ menu_offset }}px;
+        top: {{ section.settings.menu_button_offset_y_mobile | default: 0 }}px;
+        left: {{ section.settings.menu_button_offset_x_mobile | default: 0 }}px;
+      }
+
+      @media (min-width: 768px) {
+        #{{ section.id }} .header-left {
+          top: {{ section.settings.menu_button_offset_y_tablet | default: 0 }}px;
+          left: {{ section.settings.menu_button_offset_x_tablet | default: 0 }}px;
+        }
+      }
+
+      @media (min-width: 1200px) {
+        #{{ section.id }} .header-left {
+          top: {{ section.settings.menu_button_offset | default: 0 }}px;
+          left: {{ section.settings.menu_button_offset_x | default: 0 }}px;
+        }
       }
 
       #{{ section.id }} .custom-menu-button:hover {
@@ -1018,7 +1032,7 @@
       {% endif %}
     >
       <div class="section-content px-section {% unless section.settings.disable_vertical_spacing %}section-content-custom-padding{% endunless %} {% if enable_overlay %}absolute top-0 left-0 right-0 pointer-events-none z-20{% endif %}">
-        <div class="mx-auto max-w-site header-content-wrapper">
+        <div class="header-content-wrapper">
           {%- comment -%} Logo — left {%- endcomment -%}
           {%- if logo != blank -%}
             <div class="responsive-logo-container">
@@ -1497,15 +1511,68 @@
       "default": false
     },
     {
+      "type": "paragraph",
+      "content": "MENU button position. Up/down: negative moves it up. Left/right: negative moves it left. Mobile is below 768px, tablet 768–1199px, desktop 1200px and up."
+    },
+    {
       "type": "range",
-      "id": "menu_button_offset",
-      "label": "MENU button vertical offset",
-      "info": "Negative values move the MENU button up.",
-      "min": -40,
-      "max": 40,
+      "id": "menu_button_offset_y_mobile",
+      "label": "Mobile: up / down",
+      "min": -50,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "menu_button_offset_x_mobile",
+      "label": "Mobile: left / right",
+      "min": -50,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "menu_button_offset_y_tablet",
+      "label": "Tablet: up / down",
+      "min": -50,
+      "max": 50,
       "step": 1,
       "unit": "px",
       "default": -18
+    },
+    {
+      "type": "range",
+      "id": "menu_button_offset_x_tablet",
+      "label": "Tablet: left / right",
+      "min": -50,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "menu_button_offset",
+      "label": "Desktop: up / down",
+      "min": -50,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": -18
+    },
+    {
+      "type": "range",
+      "id": "menu_button_offset_x",
+      "label": "Desktop: left / right",
+      "min": -50,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 0
     },
     {
       "type": "text",
