@@ -129,7 +129,7 @@
         "overlay_tagline_image": "shopify://shop_images/Kaadu_faviconv2_limegreen_RGB1-ezgif.com-png-to-webp-converter.webp",
         "account_label": "My Account",
         "account_link": "",
-        "show_utility_links": true,
+        "show_utility_links": false,
         "utility_account_label": "Account & Subscriptions",
         "contact_email": "hello@kaadu.ch",
         "menu_item_1_label": "Home",
