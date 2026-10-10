@@ -462,6 +462,22 @@
         }
       }
 
+      /* Desktop: the CLOSE pill sits at a fixed spot (right of the header logo),
+         so the wordmark gets a fixed height too (the 24" look, ~220px). Tall
+         27"+ screens no longer grow it, short laptops still scale it by height. */
+      @media (min-width: 1200px) {
+        #{{ section.id }} .menu-logo {
+          width: auto;
+        }
+
+        #{{ section.id }} .menu-logo img {
+          width: auto;
+          max-width: 100%;
+          height: min(220px, 22dvh);
+          max-height: none;
+        }
+      }
+
       /* Tablet: the gutter is only 32px, so drop the -40px pull and keep the
          wordmark inside the margin (desktop keeps the pull: 64px gutter). */
       @media (min-width: 769px) and (max-width: 1199px) {
