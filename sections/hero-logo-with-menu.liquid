@@ -373,6 +373,14 @@
         color: rgb(var(--color-scheme-text));
       }
 
+      /* Mobile: gap between the header logo and the first menu row
+         (setting "Mobile: space below the logo") */
+      @media (max-width: 768px) {
+        #{{ section.id }} .menu-content {
+          padding-top: calc(var(--menu-header-offset) + {{ section.settings.menu_top_space_mobile | default: 40 }}px);
+        }
+      }
+
       /* Desktop content is height-scaled to always fit, so lock scrolling;
          mobile keeps overflow-y auto as a safety net for short viewports. */
       @media (min-width: 769px) {
@@ -1665,6 +1673,17 @@
       "label": "Overlay color scheme",
       "info": "Background and text colours of the open menu.",
       "default": "scheme1"
+    },
+    {
+      "type": "range",
+      "id": "menu_top_space_mobile",
+      "label": "Mobile: space below the logo",
+      "info": "Gap between the header logo and the menu links when the menu is open (below 769px).",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 40
     },
     {
       "type": "color",
