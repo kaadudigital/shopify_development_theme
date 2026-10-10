@@ -454,6 +454,14 @@
         }
       }
 
+      /* Tablet: the gutter is only 32px, so drop the -40px pull and keep the
+         wordmark inside the margin (desktop keeps the pull: 64px gutter). */
+      @media (min-width: 769px) and (max-width: 1199px) {
+        #{{ section.id }} .menu-logo {
+          margin-left: 0;
+        }
+      }
+
       /* Tagline artwork — desktop only */
       #{{ section.id }} .menu-tagline {
         display: none;
