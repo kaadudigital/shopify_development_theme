@@ -6766,15 +6766,14 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
   font-display: swap;
 }
 
-/* The DS calls this file "Variable (600 900)", but it is the static Semibold
-   (byte-identical). Every bold/black weight in the DS renders with it until
-   real Banter Bold/Black files are added. */
+/* Banter has two weights only: Regular 400 and Semibold 600. Every "bold" in
+   the DS is Semibold — never set 700 or 900 (it would be synthesised). */
 @font-face {
   font-family: 'Banter Grotesk';
   src: url('BanterGrotesk-Semibold.woff2') format('woff2'),
        url('BanterGrotesk-Semibold.woff') format('woff'),
        url('BanterGrotesk-Semibold.otf') format('opentype');
-  font-weight: 600 900;
+  font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
@@ -6981,15 +6980,15 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
   font-family: var(--font-sans);
   text-transform: uppercase;
 }
-.kd-strong-lg     { font-weight: 700; font-size: 24px; line-height: 1.1; }
-.kd-strong        { font-weight: 700; font-size: 20px; line-height: 1.2; }
-.kd-strong-md     { font-weight: 700; font-size: 18px; line-height: 24px; }
-.kd-strong-sm     { font-weight: 700; font-size: 16px; line-height: 1.1; }
-.kd-label         { font-weight: 900; font-size: 13px; line-height: 1.2; letter-spacing: 0.06em; }
-.kd-label-lg      { font-weight: 900; font-size: 16px; line-height: 1.2; letter-spacing: 0.04em; }
-.kd-label-sm      { font-weight: 700; font-size: 12px; line-height: 1.2; letter-spacing: 0.06em; }
-.kd-announcement  { font-weight: 700; font-size: 14px; line-height: 1;   letter-spacing: 0.04em; }
-.kd-price         { font-weight: 900; font-size: 22px; line-height: 1.1; }
+.kd-strong-lg     { font-weight: 600; font-size: 24px; line-height: 1.1; }
+.kd-strong        { font-weight: 600; font-size: 20px; line-height: 1.2; }
+.kd-strong-md     { font-weight: 600; font-size: 18px; line-height: 24px; }
+.kd-strong-sm     { font-weight: 600; font-size: 16px; line-height: 1.1; }
+.kd-label         { font-weight: 600; font-size: 13px; line-height: 1.2; letter-spacing: 0.06em; }
+.kd-label-lg      { font-weight: 600; font-size: 16px; line-height: 1.2; letter-spacing: 0.04em; }
+.kd-label-sm      { font-weight: 600; font-size: 12px; line-height: 1.2; letter-spacing: 0.06em; }
+.kd-announcement  { font-weight: 600; font-size: 14px; line-height: 1;   letter-spacing: 0.04em; }
+.kd-price         { font-weight: 600; font-size: 22px; line-height: 1.1; }
 
 /* Legacy type classes — kept so un-migrated sections keep working.
    .h1 / .h2 / .mega-heading now follow the DS display steps. */
@@ -7098,7 +7097,7 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
 
 /* ── TEXT LINKS — every linked text starts with ✶, underline on hover only ── */
 .kd-link {
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
   text-decoration: none;
   color: inherit;
@@ -7220,7 +7219,7 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
   color: var(--paper);
   font-family: var(--font-sans);
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.06em;
 }
 .kd-btn--outline .kd-btn__cloud {
@@ -7383,7 +7382,7 @@ body {
   position: relative;
   font-family: var(--font-sans);
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -7399,7 +7398,7 @@ body {
   text-decoration: none;
 }
 .kd-announce__text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.kd-announce__text strong, .kd-announce__text b { font-weight: 900; }
+.kd-announce__text strong, .kd-announce__text b { font-weight: 600; }
 .kd-announce__text p { margin: 0; }
 .kd-announce__link:hover .kd-announce__text { text-decoration: underline; text-underline-offset: 3px; }
 .kd-announce__text--desktop { display: none; }

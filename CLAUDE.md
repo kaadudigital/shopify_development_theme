@@ -119,9 +119,7 @@ Legacy `--color-*` tokens and `.bg-*` / `.text-*` utilities still exist as alias
 
 ### Typography
 
-Two faces, self-hosted in `assets/`: **Fagies** (`--font-display`, one weight, ALWAYS uppercase, never bold or synthesised) and **Banter Grotesk** (`--font-sans`; 400 for running text, bold for labels). Bold Banter (600+) is ALWAYS uppercase; regular-weight Banter never is. Fagies lives only in headlines, cloud buttons, the ticker and panel titles — **never on pills, tags, badges or stickers** (those are Banter bold).
-
-> Banter Bold (700) / Black (900) files don't exist in the brand assets — the "600 900" face is the Semibold file, so every bold weight renders as Semibold until real files are added.
+Two faces, self-hosted in `assets/`: **Fagies** (`--font-display`, one weight, ALWAYS uppercase, never bold or synthesised) and **Banter Grotesk** (`--font-sans`) in **two weights only: Regular 400 and Semibold 600**. Every "bold" — labels, kickers, titles, prices — is Semibold 600; never set 700 or 900 (the browser would synthesise it). Semibold Banter is ALWAYS uppercase; regular-weight Banter never is. Fagies lives only in headlines, cloud buttons, the ticker and panel titles — **never on pills, tags, badges or stickers** (those are Banter Semibold).
 
 ### Type classes
 
@@ -137,9 +135,9 @@ DS styles are implemented as `kd-`-prefixed classes (the prefix avoids collision
 | `.kd-display-ticker` / `-drawer` | Fagies 34 / 26 | Ticker band / panel titles |
 | `.kd-lead` / `.kd-body-lg` | Banter 24/32 · 20/28, max 560px | Hero lead / section intro (mobile 18/25 · 17/24 — proposed) |
 | `.kd-body` / `.kd-body-sm` | Banter 16/1.45 · 13/1.4 | Running text / notices, cart |
-| `.kd-strong-lg/-/md/sm` | Banter 700, 24 · 20 · 18 · 16 | Card titles, claims, checklist rows, notice titles |
-| `.kd-label` / `-lg` / `-sm` | Banter 900, 13 · 16 · 12, tracked | Kickers above every h2 (in red), group labels, pills |
-| `.kd-price` / `.kd-announcement` | Banter 900 22 · 700 14 | Prices / announcement bar |
+| `.kd-strong-lg/-/md/sm` | Banter 600, 24 · 20 · 18 · 16 | Card titles, claims, checklist rows, notice titles |
+| `.kd-label` / `-lg` / `-sm` | Banter 600, 13 · 16 · 12, tracked | Kickers above every h2 (in red), group labels, pills |
+| `.kd-price` / `.kd-announcement` | Banter 600, 22 · 14 | Prices / announcement bar |
 
 Legacy `.h1`, `.h2`, `.mega-heading` now follow the DS display steps. `.h3`, `.h4-subsection-heading`, `.body`, `.body-large`, `.caption`, `.btn-label` keep their old sizes until their sections migrate — don't use them in new code.
 
