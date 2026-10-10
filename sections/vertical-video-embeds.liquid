@@ -24,19 +24,19 @@
   endif
 -%}
 <section
-  class="relative overflow-hidden bg-scheme-background  text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %} overflow-hidden"
+  id="{{ section.id }}"
+  class="kd-videos relative overflow-hidden bg-scheme-background  text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %} overflow-hidden"
   data-color-scheme="{{ section.settings.color_scheme }}"
 >
-  <div class="section-content relative z-10 py-section-vertical-spacing">
-    {% if section.settings.title != '' %}
-      <h2 class="inline-heading-rte font-heading heading-standard  heading-style break-words text-center {{ settings.heading_drop_shadow_style }}">
-        {{ section.settings.title }}
-      </h2>
-    {% endif %}
-
-    {% if section.settings.subheading != '' %}
-      <div class="inline-rte mx-auto mt-5 max-w-md text-center">
-        {{ section.settings.subheading }}
+  <div class="section-content relative z-10 kd-videos__inner">
+    {%- if section.settings.title != blank or section.settings.subheading != blank -%}
+      <div class="kd-section kd-heading kd-heading--center kd-videos__heading">
+        {%- if section.settings.title != blank -%}
+          <h2 class="kd-heading__title kd-display-h2">{{ section.settings.title }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subheading != blank -%}
+          <p class="kd-videos__intro kd-body-lg">{{ section.settings.subheading }}</p>
+        {%- endif -%}
       </div>
     {%- endif -%}
 
@@ -45,6 +45,12 @@
       collection: collection,
       image_shape: image_shape
     -%}
+
+    {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+      <div class="kd-section kd-videos__actions">
+        {%- render 'kd-button', label: section.settings.button_label, url: section.settings.button_link -%}
+      </div>
+    {%- endif -%}
   </div>
 
   {%- liquid
@@ -78,13 +84,23 @@
       "type": "inline_richtext",
       "id": "title",
       "label": "t:sections.featured_collection.settings.title.label",
-      "default": "t:sections.vertical_video_embeds.name"
+      "default": "Ungeschnitten oder so"
     },
     {
       "id": "subheading",
       "type": "inline_richtext",
-      "label": "t:sections.featured_collection.settings.subheading.label",
-      "default": "Use this text to share information."
+      "label": "t:sections.featured_collection.settings.subheading.label"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "info": "Cloud button below the videos, e.g. Zum Manifesto. Its colours follow the colour scheme."
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
     },
     {
       "type": "select",

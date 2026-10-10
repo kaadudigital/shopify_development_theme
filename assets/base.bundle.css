@@ -7635,3 +7635,339 @@ body {
 @media (min-width: 1200px) {
   .kd-is__row { column-gap: var(--space-10); }
 }
+
+/* ── PEOPLE CARDS (DS PeopleCard) — sections/kaadu-people-cards.liquid ──
+   400 × 600 snap cards (mobile 310 × 560, proposed). The carousel is never capped (DS Large screens). */
+.kd-people { padding-block: var(--space-8) var(--space-9); }
+.kd-people__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4) var(--space-6);
+  margin-bottom: var(--space-6);
+}
+.kd-people .kd-heading__title { color: rgb(var(--color-scheme-text)); }
+.kd-people__hint { margin: 0; font-size: 12px; }
+
+/* Tags (DS Tag) — Banter Semibold pills, never Fagies */
+.kd-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--paper);
+  color: var(--purple);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow: var(--shadow-card);
+}
+.kd-tag--lime { background: var(--lime); color: var(--purple); }
+.kd-tag--sticker { padding: 10px 18px; background: var(--lime); color: var(--red); font-size: 15px; transform: rotate(-6deg); }
+
+.kd-carousel {
+  display: flex;
+  gap: var(--space-3);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--gutter);
+  padding: 10px var(--gutter) 16px;
+  scrollbar-width: thin;
+}
+.kd-carousel:focus-visible { outline-offset: -4px; }
+
+.kd-card {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  width: min(310px, 80vw);
+  height: 560px;
+  overflow: hidden;
+  scroll-snap-align: start;
+  background: var(--tint-cocoa);
+  color: var(--paper);
+  box-shadow: var(--shadow-card);
+}
+.kd-card--tint-cocoa  { background: var(--tint-cocoa); }
+.kd-card--tint-plum   { background: var(--tint-plum); }
+.kd-card--tint-ochre  { background: var(--tint-ochre); }
+.kd-card--tint-umber  { background: var(--tint-umber); }
+.kd-card--tint-forest { background: var(--tint-forest); }
+.kd-card__photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.kd-card__fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(20, 5, 25, 0) 30%, rgba(20, 5, 25, 0.55) 60%, var(--overlay-card) 100%);
+}
+.kd-card.is-flipped .kd-card__fade { background: var(--overlay-card); }
+.kd-card__count { position: absolute; top: 14px; left: 16px; margin: 0; opacity: 0.8; }
+.kd-card__body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: 0 var(--space-5) var(--space-4);
+}
+.kd-card__body[hidden] { display: none; }
+.kd-card__stat {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 52px;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--red);
+  -webkit-text-stroke: 3px var(--paper);
+  paint-order: stroke fill;
+}
+.kd-card__title { margin: 0; color: var(--paper); }
+.kd-card__text, .kd-card__note { margin: 0; opacity: 0.9; }
+.kd-card__text > * { margin: 0; }
+.kd-card__fact { color: var(--lime); }
+.kd-card__fact > * { margin: 0; }
+.kd-card__actions { position: relative; padding: 0 var(--space-5) var(--space-5); }
+
+.kd-card--cta {
+  justify-content: space-between;
+  padding: var(--space-6) var(--space-5);
+  background: var(--red);
+}
+.kd-card__cta-top { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-4); }
+.kd-card__cta-top .kd-tag { margin: 0; }
+.kd-card__cta-heading {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: var(--paper);
+}
+.kd-people__footer { display: flex; justify-content: center; margin-top: var(--space-6); }
+
+@media (min-width: 768px) {
+  .kd-people { padding-block: var(--space-12) var(--space-12); }
+  .kd-people__hint { font-size: 14px; }
+  .kd-carousel { gap: var(--space-5); }
+  .kd-card { width: var(--card-w); height: 600px; scroll-snap-align: center; }
+  .kd-card__stat { font-size: 64px; }
+  .kd-card__body { padding: 0 var(--space-7) var(--space-4); }
+  .kd-card__actions { padding: 0 var(--space-7) var(--space-7); }
+  .kd-card--cta { padding: var(--space-6) var(--space-7); scroll-snap-align: start; }
+  .kd-card__cta-heading { font-size: 36px; }
+}
+
+/* ── PACK SELECTOR, interim DS skin — sections/custom-packaging-selector.liquid ──
+   Landing-page skin only; the DS configurator (mode toggle, pack grid, plan rows) replaces this
+   markup in the product-page phase. Scoped under .kd-pack so it outranks the section's own rules. */
+.kd-pack.pack-selector {
+  padding: var(--space-8) var(--gutter);
+  font-family: var(--font-sans);
+}
+.kd-pack .pack-selector__layout {
+  max-width: var(--content-max);
+  gap: var(--space-8);
+}
+@media (min-width: 768px) {
+  .kd-pack.pack-selector { padding-block: var(--space-12) var(--space-12); }
+  .kd-pack .pack-selector__layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-5); }
+}
+@media (min-width: 1200px) {
+  .kd-pack .pack-selector__layout { grid-template-columns: minmax(0, 560px) minmax(0, 1fr); gap: var(--space-10); }
+}
+
+/* Media: cut-out product shot, shadow-product, square thumbs */
+.kd-pack .pack-media__mainImg { filter: drop-shadow(var(--shadow-product)); }
+.kd-pack .pack-media__thumb { border-radius: var(--radius-0); box-shadow: var(--shadow-card); border: 0; }
+.kd-pack .pack-media__thumb.is-active { outline: 2px solid var(--purple); outline-offset: 2px; }
+
+/* Group labels (DS kd-group-label) */
+.kd-pack .pack-selector__heading {
+  font-family: var(--font-sans) !important; /* overrides legacy .h3 (!important there) */
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgb(var(--color-scheme-body-text));
+}
+
+/* Option tiles (DS OptionButton): square pink, purple when pressed, shadow-card, no border */
+.kd-pack .pack-option,
+.kd-pack .pack-subscribe,
+.kd-pack .pack-onetime,
+.kd-pack .pack-tier {
+  border: 0;
+  border-radius: var(--radius-0);
+  background: var(--pink);
+  color: var(--purple);
+  box-shadow: var(--shadow-card);
+}
+.kd-pack .pack-option[aria-checked="true"],
+.kd-pack .pack-subscribe[aria-checked="true"],
+.kd-pack .pack-onetime[aria-checked="true"] {
+  background: var(--purple);
+  color: var(--paper);
+}
+.kd-pack .pack-subscribe[aria-checked="true"] .pack-tier {
+  background: var(--pink);
+  color: var(--purple);
+}
+.kd-pack .pack-subscribe[aria-checked="true"] .pack-tier[aria-checked="true"] {
+  background: var(--paper);
+  color: var(--purple);
+  outline: 2px solid var(--lime);
+  outline-offset: -2px;
+}
+.kd-pack .pack-option__label,
+.kd-pack .pack-tier__title,
+.kd-pack .pack-subscribe__title,
+.kd-pack .pack-onetime__title {
+  font-family: var(--font-sans) !important; /* overrides legacy .btn-label / .h3 */
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.kd-pack .pack-tier__price-current,
+.kd-pack .pack-subscribe__price-current,
+.kd-pack .pack-onetime__price {
+  font-family: var(--font-sans);
+  font-size: 22px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.kd-pack .pack-tier__price-original,
+.kd-pack .pack-subscribe__price-original { font-size: 12px; opacity: 0.7; text-decoration: line-through; }
+.kd-pack .pack-tier__badge {
+  border-radius: var(--radius-pill);
+  background: var(--lime);
+  color: var(--purple);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Radio dots (DS kd-radio): 2px currentColor ring, filled when selected */
+.kd-pack .pack-option__check,
+.kd-pack .pack-subscribe__check,
+.kd-pack .pack-onetime__check {
+  border: 2px solid currentColor;
+  border-radius: var(--radius-pill);
+  background: transparent;
+}
+
+/* Stepper (DS Stepper): pink pill, purple −/+ */
+.kd-pack .pack-qty {
+  border-radius: var(--radius-pill);
+  background: var(--pink);
+  color: var(--purple);
+}
+.kd-pack .pack-qty__frame,
+.kd-pack .pack-qty__shape { display: none; }
+.kd-pack .pack-qty__btn {
+  font-family: var(--font-sans);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--purple);
+  border-radius: var(--radius-pill);
+}
+.kd-pack .pack-qty__input { font-weight: 600; color: var(--ink); background: transparent; }
+
+/* Accordion: no borders (DS) — rows separated by spacing, ✶-free summary in Banter Semibold */
+.kd-pack .pack-accordion__item { border: 0; box-shadow: none; }
+.kd-pack .pack-accordion__item + .pack-accordion__item { margin-top: var(--space-2); }
+.kd-pack .pack-accordion__summary { padding-block: var(--space-4); }
+.kd-pack .pack-accordion__label {
+  font-family: var(--font-sans) !important;
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  line-height: 24px !important;
+  text-transform: uppercase;
+}
+
+/* ── VIDEOS — sections/vertical-video-embeds.liquid ──
+   DS: centred heading, videos framed as the 300 × 534 rounded tiles (radius-tile, shadow-tile-active). */
+.kd-videos__inner { padding-block: var(--space-9) var(--space-9); }
+.kd-videos__heading { margin-bottom: var(--space-6); }
+.kd-videos .kd-heading__title { color: rgb(var(--color-scheme-text)); }
+.kd-videos__intro { margin: 0 auto; color: rgb(var(--color-scheme-body-text)); }
+.kd-videos .splide__slide > * {
+  overflow: hidden;
+  border-radius: var(--radius-tile);
+  box-shadow: var(--shadow-tile-active);
+}
+.kd-videos__actions { display: flex; justify-content: center; margin-top: var(--space-8); }
+@media (min-width: 768px) {
+  .kd-videos__inner { padding-block: var(--space-12) var(--space-12); }
+  .kd-videos__heading { margin-bottom: var(--space-8); }
+}
+
+/* ── STATS AROUND AN IMAGE ("besser") — sections/custom-image-with-highlights.liquid ──
+   DS: tight h2; ≥992: 320 / 400 / 320 grid, two stat tiles each side of a 400px image;
+   below 992: image then a 2 × 2 tile grid. Tiles: paper-warm, shadow-card, square. */
+.kd-iwh .kaadu-iwh__eyebrow { color: var(--red); }
+.kd-iwh .kaadu-iwh__heading { color: rgb(var(--color-scheme-text)); }
+.kd-iwh .kaadu-iwh__card,
+.kd-iwh .kaadu-iwh__card .card__surface {
+  background: var(--paper-warm);
+  color: var(--ink);
+  box-shadow: var(--shadow-card);
+}
+.kd-iwh .kaadu-iwh__card::before,
+.kd-iwh .kaadu-iwh__card::after { display: none; }
+.kd-iwh .kaadu-iwh__card-body { padding: var(--space-5) var(--space-4); }
+.kd-iwh__stat {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: var(--red);
+}
+.kd-iwh__caption {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+.kd-iwh__caption p { margin: 0; }
+
+.kd-iwh__desktop { display: none; }
+.kd-iwh__mobile .kaadu-iwh__carousel ul:not(.splide__list) {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+.kd-iwh__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+}
+.kd-iwh__note { margin: 0; color: rgb(var(--color-scheme-body-text)); font-weight: 600; }
+
+@media (min-width: 992px) {
+  .kd-iwh__mobile { display: none; }
+  .kd-iwh__desktop {
+    display: grid;
+    grid-template-columns: minmax(0, 320px) minmax(0, 400px) minmax(0, 320px);
+    justify-content: center;
+    gap: var(--space-6);
+  }
+  .kd-iwh__col { gap: var(--space-6); }
+  .kd-iwh .kaadu-iwh__card-body { min-height: 130px; padding: var(--space-6); }
+  .kd-iwh__stat { font-size: 34px; }
+  .kd-iwh__caption { font-size: 15px; }
+}

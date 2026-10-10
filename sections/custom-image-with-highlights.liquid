@@ -187,11 +187,11 @@
     <div class="{% if section.settings.display_on_card %}card__surface{% endif %} kaadu-iwh__card-body text-center lg:flex lg:flex-1 lg:items-center lg:justify-center">
       <div class="w-full">
         {% if block.settings.title != '' %}
-          <{{ block_heading_level }} class="kaadu-iwh__card-title h4-subsection-heading break-words">
+          <{{ block_heading_level }} class="kaadu-iwh__card-title kd-iwh__stat break-words">
             {{- block.settings.title -}}
           </{{ block_heading_level }}>
         {% endif %}
-        <div class="kaadu-iwh__card-text inline-rte body break-words">
+        <div class="kaadu-iwh__card-text kd-iwh__caption inline-rte break-words">
           {{ block.settings.text }}
         </div>
         {% if block.settings.cta_link and block.settings.cta_text != blank %}
@@ -247,7 +247,8 @@
 {%- endfor -%}
 
 <section
-  class="relative bg-scheme-background text-scheme-text  {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %} relative overflow-hidden"
+  id="{{ section.id }}"
+  class="kd-iwh relative bg-scheme-background text-scheme-text  {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %} relative overflow-hidden"
   data-color-scheme="{{ section.settings.color_scheme }}"
   style="--image-max-width: {{ image_max_width }}px;"
 >
@@ -262,39 +263,39 @@
     {%- if has_header -%}
       <div class="kaadu-iwh__header">
         {%- if section.settings.eyebrow != blank -%}
-          <p class="kaadu-iwh__eyebrow h3 break-words text-center">
+          <p class="kaadu-iwh__eyebrow kd-label break-words text-center">
             {{ section.settings.eyebrow | escape }}
           </p>
         {%- endif -%}
 
         {%- if section.settings.title != '' -%}
-          <h2 class="kaadu-iwh__heading inline-heading-rte h2 heading-style break-words text-center {{ settings.heading_drop_shadow_style }}">
+          <h2 class="kaadu-iwh__heading kd-display-h2-tight break-words text-center">
             {{ section.settings.title }}
           </h2>
         {%- endif -%}
       </div>
     {%- endif -%}
 
-    <div class="hidden grid-cols-4 gap-theme lg:grid {% if has_header %}kaadu-iwh__content{% endif %}">
+    <div class="kd-iwh__desktop {% if has_header %}kaadu-iwh__content{% endif %}">
       <!-- Left Column -->
-      <div class="col-span-1 flex flex-col {{ section.settings.block_alignment_on_desktop }} gap-theme">
+      <div class="kd-iwh__col flex flex-col {{ section.settings.block_alignment_on_desktop }}">
         {{ left_column_blocks }}
       </div>
 
       <!-- Middle Column -->
-      <div class="col-span-2 flex items-center justify-center">
+      <div class="kd-iwh__media flex items-center justify-center">
         <div class="w-full {% if settings.media_shadow_direction contains 'top' %}pt-media-shadow{% else %}pb-media-shadow{% endif %} max-w-[var(--image-max-width)]">
           {{ image }}
         </div>
       </div>
 
       <!-- Right Column -->
-      <div class="col-span-1 flex flex-col {{ section.settings.block_alignment_on_desktop }} gap-theme">
+      <div class="kd-iwh__col flex flex-col {{ section.settings.block_alignment_on_desktop }}">
         {{ right_column_blocks }}
       </div>
     </div>
 
-    <div class="lg:hidden">
+    <div class="kd-iwh__mobile">
       <div class="max-w-site {% if slideshow_on_mobile %}px-section{% endif %} lg:hidden {% if has_header %}kaadu-iwh__content{% endif %} {% if settings.media_shadow_direction contains 'top' %}pt-media-shadow{% else %}pb-media-shadow{% endif %}">
         {{ image }}
       </div>
@@ -342,6 +343,15 @@
         {%- endif -%}
       </div>
     </div>
+
+    {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+      <div class="kd-iwh__actions">
+        {%- render 'kd-button', label: section.settings.button_label, url: section.settings.button_link, variant: 'red' -%}
+        {%- if section.settings.button_note != blank -%}
+          <p class="kd-iwh__note kd-body-sm">{{ section.settings.button_note | escape }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
   </div>
 
   {%- liquid
@@ -381,6 +391,22 @@
       "type": "inline_richtext",
       "id": "title",
       "label": "t:common.settings.title.label"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "info": "Red cloud button below the tiles, e.g. Gratis probieren."
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "text",
+      "id": "button_note",
+      "label": "Note under the button"
     },
     {
       "type": "header",
@@ -1347,12 +1373,13 @@
         {
           "type": "text",
           "id": "title",
-          "label": "t:common.settings.title.label"
+          "label": "Stat",
+          "info": "The big number or word, e.g. 97 %"
         },
         {
           "type": "inline_richtext",
           "id": "text",
-          "label": "t:sections.text_columns_with_images.blocks.column.settings.text.label",
+          "label": "Caption",
           "default": "Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs."
         },
         {

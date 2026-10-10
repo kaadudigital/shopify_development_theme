@@ -279,80 +279,72 @@
         "row_image_position": "left"
       }
     },
-    "kaadu_problem_section_3BNCTG": {
-      "type": "kaadu-problem-section",
+    "kaadu_people_cards_wP7k2m": {
+      "type": "kaadu-people-cards",
       "blocks": {
-        "stakeholder_xzg9DB": {
-          "type": "stakeholder",
+        "card_1": {
+          "type": "card",
           "settings": {
-            "label": "Arbeiter*innen",
-            "eyebrow": "",
-            "body_text": "<p>In unserem Betrieb arbeiten ausschliesslich Frauen aus einkommensschwachen Familien der Region.</p>",
-            "highlight_text": "<p>Lohn +50%*, Pension, Versicherung, Gewinnbeteiligung — langfristig Mitbesitz.</p>",
-            "disclaimer_text": "*Im Vergleich zu ähnlicher Arbeit in der Region Vazhakulam, Kerala.",
-            "image": "shopify://shop_images/52f2f8584ac253803e2a8b475558b239c4b73ea3.jpg",
-            "image_alt": "",
-            "sticker_alt": "",
-            "sticker_width": 136,
-            "sticker_rotate": -14
+            "tint": "tint-cocoa",
+            "stat": "+50 %",
+            "title": "Arbeiter*innen",
+            "text": "<p>Lohn +50%*, Pension, Versicherung, Gewinnbeteiligung — langfristig Mitbesitz.</p>",
+            "back_text": "<p>In unserem Betrieb arbeiten ausschliesslich Frauen aus einkommensschwachen Familien der Region.</p>",
+            "back_note": "*Im Vergleich zu ähnlicher Arbeit in der Region Vazhakulam, Kerala.",
+            "image": "shopify://shop_images/52f2f8584ac253803e2a8b475558b239c4b73ea3.jpg"
           }
         },
-        "stakeholder_qdKADr": {
-          "type": "stakeholder",
+        "card_2": {
+          "type": "card",
           "settings": {
-            "label": "Kleinbauer*innen",
-            "eyebrow": "",
-            "body_text": "<p>Unsere Kleinbauer*innen in Vazhakulam erhalten 30–40% über Marktpreis für ihre Ananas — garantiert, unabhängig von Weltmarktschwankungen.</p>",
-            "highlight_text": "<p>Preis +30–40%*, garantierte Abnahme, langfristige Partnerschaft.</p>",
-            "disclaimer_text": "*Im Vergleich zu marktüblichen Ankaufspreisen in der Region Vazhakulam, Kerala.",
-            "image_alt": "",
-            "sticker_alt": "",
-            "sticker_width": 136,
-            "sticker_rotate": -10
+            "tint": "tint-plum",
+            "stat": "+30–40 %",
+            "title": "Kleinbauer*innen",
+            "text": "<p>Preis +30–40%*, garantierte Abnahme, langfristige Partnerschaft.</p>",
+            "back_text": "<p>Unsere Kleinbauer*innen in Vazhakulam erhalten 30–40% über Marktpreis für ihre Ananas — garantiert, unabhängig von Weltmarktschwankungen.</p>",
+            "back_note": "*Im Vergleich zu marktüblichen Ankaufspreisen in der Region Vazhakulam, Kerala."
           }
         },
-        "stakeholder_4iVqpn": {
-          "type": "stakeholder",
+        "card_3": {
+          "type": "card",
           "settings": {
-            "label": "Erntehelfer*innen",
-            "eyebrow": "Bei der Ernte",
-            "body_text": "<p>Erntehelfer*innen erhalten fairen Tageslohn, sichere Arbeitsbedingungen und Zugang zu unserem Gemeinschaftsfonds.</p>",
-            "highlight_text": "<p>Fairer Tageslohn, Schutzausrüstung, Gemeinschaftsfonds.</p>",
-            "disclaimer_text": "*Im Vergleich zu vergleichbarer Erntearbeit in der Region Vazhakulam, Kerala.",
-            "image_alt": "",
-            "sticker_alt": "",
-            "sticker_width": 136,
-            "sticker_rotate": -10
+            "tint": "tint-ochre",
+            "stat": "",
+            "title": "Erntehelfer*innen",
+            "text": "<p>Fairer Tageslohn, Schutzausrüstung, Gemeinschaftsfonds.</p>",
+            "back_text": "<p>Erntehelfer*innen erhalten fairen Tageslohn, sichere Arbeitsbedingungen und Zugang zu unserem Gemeinschaftsfonds.</p>",
+            "back_note": "*Im Vergleich zu vergleichbarer Erntearbeit in der Region Vazhakulam, Kerala."
           }
         },
-        "stakeholder_ykEEYQ": {
-          "type": "stakeholder",
+        "card_4": {
+          "type": "card",
           "settings": {
-            "label": "Natur × Community",
-            "eyebrow": "Für die Region",
-            "body_text": "<p>Ein Teil jedes Verkaufs fliesst zurück in die Gemeinde — in Bildung, Infrastruktur und den Schutz der lokalen Natur.</p>",
-            "highlight_text": "<p>Reinvestition in Bildung, Infrastruktur und Naturschutz vor Ort.</p>",
-            "disclaimer_text": "*Teil des Kaadu Gewinnbeteiligungsmodells in Vazhakulam, Kerala.",
-            "image_alt": "",
-            "sticker_alt": "",
-            "sticker_width": 136,
-            "sticker_rotate": -10
+            "tint": "tint-forest",
+            "stat": "",
+            "title": "Natur × Community",
+            "text": "<p>Reinvestition in Bildung, Infrastruktur und Naturschutz vor Ort.</p>",
+            "back_text": "<p>Ein Teil jedes Verkaufs fliesst zurück in die Gemeinde — in Bildung, Infrastruktur und den Schutz der lokalen Natur.</p>",
+            "back_note": "*Teil des Kaadu Gewinnbeteiligungsmodells in Vazhakulam, Kerala."
           }
         }
       },
       "block_order": [
-        "stakeholder_xzg9DB",
-        "stakeholder_qdKADr",
-        "stakeholder_4iVqpn",
-        "stakeholder_ykEEYQ"
+        "card_1",
+        "card_2",
+        "card_3",
+        "card_4"
       ],
-      "name": "Problem Section",
       "settings": {
-        "eyebrow_tag": "SNACK LIKE YOU GIVE A DAMN",
+        "kicker": "SNACK LIKE YOU GIVE A DAMN",
         "heading": "Wer profitiert[br]von Kaadu?",
-        "intro_text": "",
+        "hint": "← wischen oder scrollen →",
+        "details_label": "Details ↻",
+        "back_label": "Zurück ↻",
+        "link_label": "Mehr dazu ↓",
+        "button_label": "Unser Versprechen",
+        "button_link": "",
         "color_scheme": "scheme-389c794f-4614-44af-93cb-cbbfec11d15a",
-        "highlight_color_scheme": "scheme5"
+        "use_gradient_background": false
       }
     },
     "rich_text_w8w9Ah": {
@@ -384,7 +376,7 @@
         "content_width_desktop": "lg:w-2/3",
         "button_link": "",
         "button_label": "Shop Now",
-        "color_scheme": "scheme1",
+        "color_scheme": "scheme6",
         "use_gradient_background": false
       }
     },
@@ -458,7 +450,7 @@
         "nutrition_content": "",
         "shipping_label": "Versand",
         "shipping_content": "",
-        "color_scheme": "scheme1"
+        "color_scheme": "scheme6"
       }
     },
     "vertical_video_embeds_kJLBxQ": {
@@ -493,12 +485,14 @@
       ],
       "name": "t:sections.vertical_video_embeds.name",
       "settings": {
-        "title": "Vertikale Video-Einbettungen",
-        "subheading": "Use this text to share information.",
+        "title": "Ungeschnitten oder so",
+        "subheading": "",
         "slideshow_focus": "center",
         "autoscroll_mode": "1",
-        "color_scheme": "scheme4",
-        "use_gradient_background": false
+        "color_scheme": "scheme3",
+        "use_gradient_background": false,
+        "button_label": "Zum Manifesto",
+        "button_link": "/pages/manifesto"
       }
     },
     "image_with_highlights_mU9j66": {
@@ -507,8 +501,8 @@
         "highlight_MwnfGP": {
           "type": "highlight",
           "settings": {
-            "title": "",
-            "text": "97% NÄHRSTOFFE",
+            "title": "97 %",
+            "text": "Nährstoffe",
             "cta_link": "",
             "cta_text": "",
             "override_section_color_scheme": false,
@@ -518,8 +512,8 @@
         "highlight_MUzXKM": {
           "type": "highlight",
           "settings": {
-            "title": "",
-            "text": "100% FRUCHT",
+            "title": "100 %",
+            "text": "Frucht",
             "cta_link": "",
             "cta_text": "",
             "override_section_color_scheme": false,
@@ -529,8 +523,8 @@
         "highlight_gjXrHU": {
           "type": "highlight",
           "settings": {
-            "title": "",
-            "text": "REIF GEERNTET",
+            "title": "Reif",
+            "text": "geerntet",
             "cta_link": "",
             "cta_text": "",
             "override_section_color_scheme": false,
@@ -540,8 +534,8 @@
         "highlight_KRKBYm": {
           "type": "highlight",
           "settings": {
-            "title": "",
-            "text": "0 ZUSÄTZE",
+            "title": "0",
+            "text": "Zusätze",
             "cta_link": "",
             "cta_text": "",
             "override_section_color_scheme": false,
@@ -561,7 +555,7 @@
         "title": "BESSER AUF JEDE ART UND WEISE",
         "block_alignment_on_desktop": "justify-center",
         "display_on_card": true,
-        "slideshow_on_mobile": true,
+        "slideshow_on_mobile": false,
         "slideshow_focus": "center",
         "autoscroll_mode": "1",
         "mobile_arrow_background": "#fffff5",
@@ -573,7 +567,7 @@
         "blob_type": 1,
         "rotate_image": 0,
         "disable_media_style": false,
-        "color_scheme": "scheme2",
+        "color_scheme": "scheme1",
         "use_gradient_background": false
       }
     },
@@ -804,7 +798,7 @@
     "scrolling_text_j9kYtA",
     "custom_video_with_text_overlay_BWrhtb",
     "custom_image_section_anwQpJ",
-    "kaadu_problem_section_3BNCTG",
+    "kaadu_people_cards_wP7k2m",
     "rich_text_w8w9Ah",
     "pack_selector_cEiAYy",
     "vertical_video_embeds_kJLBxQ",
