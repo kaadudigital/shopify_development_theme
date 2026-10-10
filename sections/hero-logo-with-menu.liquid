@@ -1370,9 +1370,12 @@
     // The header bar sits above the overlay, so the links must sit in the
     // space *below* it. Expose that height as padding (not margin) via a custom
     // property, and keep it current as the header reflows.
+    // The overlay is fixed at the viewport top, so use where the bar *ends* on
+    // screen (includes the announcement bar above it), not just its height.
     function syncHeaderOffset() {
       const bar = document.getElementById('menubar-' + sectionId) || section;
-      menuOverlay.style.setProperty('--menu-header-offset', bar.offsetHeight + 'px');
+      const bottom = Math.max(bar.getBoundingClientRect().bottom, bar.offsetHeight);
+      menuOverlay.style.setProperty('--menu-header-offset', Math.round(bottom) + 'px');
     }
 
     syncHeaderOffset();
