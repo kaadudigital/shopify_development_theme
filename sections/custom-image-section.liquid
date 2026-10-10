@@ -3,8 +3,92 @@
   if section.index == 1
     assign preload = true
   endif
+
+  # "kd_row" = Kaadu DS flowing row (image beside a centred text column).
+  # "freeform" = legacy absolutely-positioned composition (x/y % per element).
+  assign is_row = false
+  if section.settings.layout == 'kd_row'
+    assign is_row = true
+  endif
+
+  case section.settings.heading_style
+    when 'mega-heading'
+      assign kd_heading_class = 'kd-display-crunchys'
+    when 'h1'
+      assign kd_heading_class = 'kd-display-hero'
+    when 'h3'
+      assign kd_heading_class = 'kd-display-h2-tight'
+    else
+      assign kd_heading_class = 'kd-display-h2'
+  endcase
+
+  assign kd_button_variant = 'red'
+  if section.settings.button_style == 'btn-primary'
+    assign kd_button_variant = 'primary'
+  endif
 -%}
 
+{%- if is_row -%}
+{% style %}
+  /* Row layout: only the heading / sub-heading sticker placement is setting-driven. */
+  .section-{{ section.id }} .hero-heading-wrap,
+  .section-{{ section.id }} .hero-subheading-wrap {
+    position: relative;
+    display: inline-block;
+  }
+  .section-{{ section.id }} .hero-heading-sticker,
+  .section-{{ section.id }} .hero-subheading-sticker {
+    position: absolute;
+    height: auto;
+    pointer-events: none;
+    z-index: 4;
+  }
+  .section-{{ section.id }} .hero-heading-sticker {
+    left: {{ section.settings.heading_sticker_x_desktop }}%;
+    top: {{ section.settings.heading_sticker_y_desktop }}%;
+    width: {{ section.settings.heading_sticker_width_desktop }}px;
+    transform: translate(-50%, -50%) rotate({{ section.settings.heading_sticker_rotate }}deg);
+  }
+  .section-{{ section.id }} .hero-subheading-sticker {
+    left: {{ section.settings.subheading_sticker_x_desktop }}%;
+    top: {{ section.settings.subheading_sticker_y_desktop }}%;
+    width: {{ section.settings.subheading_sticker_width_desktop }}px;
+    transform: translate(-50%, -50%) rotate({{ section.settings.subheading_sticker_rotate }}deg);
+  }
+  .section-{{ section.id }} .hero-subheading-sticker--2 {
+    left: {{ section.settings.subheading_sticker_2_x_desktop }}%;
+    top: {{ section.settings.subheading_sticker_2_y_desktop }}%;
+    width: {{ section.settings.subheading_sticker_2_width_desktop }}px;
+    transform: translate(-50%, -50%) rotate({{ section.settings.subheading_sticker_2_rotate }}deg);
+  }
+  @media (max-width: 767.98px) {
+    .section-{{ section.id }} .hero-heading-sticker {
+      left: {{ section.settings.heading_sticker_x_mobile }}%;
+      top: {{ section.settings.heading_sticker_y_mobile }}%;
+      width: {{ section.settings.heading_sticker_width_mobile }}px;
+    }
+    .section-{{ section.id }} .hero-subheading-sticker {
+      left: {{ section.settings.subheading_sticker_x_mobile }}%;
+      top: {{ section.settings.subheading_sticker_y_mobile }}%;
+      width: {{ section.settings.subheading_sticker_width_mobile }}px;
+    }
+    .section-{{ section.id }} .hero-subheading-sticker--2 {
+      left: {{ section.settings.subheading_sticker_2_x_mobile }}%;
+      top: {{ section.settings.subheading_sticker_2_y_mobile }}%;
+      width: {{ section.settings.subheading_sticker_2_width_mobile }}px;
+    }
+    {%- unless section.settings.heading_sticker_show_mobile %}
+    .section-{{ section.id }} .hero-heading-sticker { display: none; }
+    {% endunless -%}
+    {%- unless section.settings.subheading_sticker_show_mobile %}
+    .section-{{ section.id }} .hero-subheading-sticker:not(.hero-subheading-sticker--2) { display: none; }
+    {% endunless -%}
+    {%- unless section.settings.subheading_sticker_2_show_mobile %}
+    .section-{{ section.id }} .hero-subheading-sticker--2 { display: none; }
+    {% endunless -%}
+  }
+{% endstyle %}
+{%- else -%}
 {% style %}
   .section-{{ section.id }} {
     position: relative;
@@ -170,11 +254,81 @@
     }
   }
 {% endstyle %}
+{%- endif -%}
 
 <section
   class="section-{{ section.id }} bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %} relative overflow-hidden"
   data-color-scheme="{{ section.settings.color_scheme }}"
 >
+  {%- if is_row -%}
+    {%- liquid
+      assign row_image = section.settings.background_image | default: section.settings.background_image_mobile
+      assign quote_mode = false
+      if section.settings.heading == blank and section.settings.subheading != blank
+        assign quote_mode = true
+      endif
+    -%}
+    <div class="kd-is kd-section kd-is--image-{{ section.settings.row_image_position | default: 'left' }}{% if row_image == blank %} kd-is--no-image{% endif %}{% if quote_mode %} kd-is--quote{% endif %}">
+      <div class="kd-wide kd-is__row">
+        {%- if row_image != blank -%}
+          <div class="kd-is__media">
+            {{
+              row_image
+              | image_url: width: 1200
+              | image_tag:
+                class: 'kd-is__image',
+                widths: '400, 600, 800, 1000, 1200',
+                sizes: '(min-width: 1200px) 560px, (min-width: 768px) 45vw, 100vw',
+                loading: 'lazy'
+            }}
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.heading != blank -%}
+          <div class="kd-is__head">
+            <div class="hero-heading-wrap">
+              <{{ section.settings.heading_tag }} class="kd-is__title {{ kd_heading_class }}">
+                {{- section.settings.heading | replace: '[br]', '<br>' | replace: '[nbsp]', '&nbsp;' -}}
+              </{{ section.settings.heading_tag }}>
+              {%- if section.settings.heading_sticker_image != blank -%}
+                {{ section.settings.heading_sticker_image | image_url: width: 600 | image_tag: class: 'hero-heading-sticker', alt: '', loading: 'lazy' }}
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endif -%}
+
+        <div class="kd-is__body">
+          {%- if section.settings.subheading != blank -%}
+            <div class="hero-subheading-wrap">
+              {%- if quote_mode -%}
+                <blockquote class="kd-is__quote kd-display-quote">
+                  {{- section.settings.subheading | replace: '[br]', '<br>' | replace: '[nbsp]', '&nbsp;' -}}
+                </blockquote>
+              {%- else -%}
+                <p class="kd-is__subheading kd-body-lg">
+                  {{- section.settings.subheading | replace: '[br]', '<br>' | replace: '[nbsp]', '&nbsp;' -}}
+                </p>
+              {%- endif -%}
+              {%- if section.settings.subheading_sticker_image != blank -%}
+                {{ section.settings.subheading_sticker_image | image_url: width: 600 | image_tag: class: 'hero-subheading-sticker', alt: '', loading: 'lazy' }}
+              {%- endif -%}
+              {%- if section.settings.subheading_sticker_2_image != blank -%}
+                {{ section.settings.subheading_sticker_2_image | image_url: width: 600 | image_tag: class: 'hero-subheading-sticker hero-subheading-sticker--2', alt: '', loading: 'lazy' }}
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.body_text != blank -%}
+            <div class="kd-is__text rte kd-body-lg">{{ section.settings.body_text }}</div>
+          {%- endif -%}
+
+          {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+            {%- render 'kd-button', label: section.settings.button_label, url: section.settings.button_link, variant: kd_button_variant -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  {%- else -%}
   <div class="kaadu-is__container">
   {%- if section.settings.background_image != blank or section.settings.background_image_mobile != blank -%}
     {%- assign desktop_image = section.settings.background_image -%}
@@ -278,6 +432,8 @@
   {%- endif -%}
   </div>
 
+  {%- endif -%}
+
   {%- liquid
     for block in section.blocks
       case block.type
@@ -305,6 +461,43 @@
 {
   "name": "Custom Sticker Heading",
   "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "kd_row",
+          "label": "Design system row"
+        },
+        {
+          "value": "freeform",
+          "label": "Free-form (legacy)"
+        }
+      ],
+      "default": "freeform",
+      "info": "Design system row: image beside a centred text column that reflows on every screen. The position, size and height settings below only apply to Free-form, except the sticker settings. If there is no heading, the sub-heading is shown as a pull quote."
+    },
+    {
+      "type": "select",
+      "id": "row_image_position",
+      "label": "Image position (design system row)",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
     {
       "type": "header",
       "content": "Section Height"
@@ -428,9 +621,18 @@
       "label": "Heading tag",
       "info": "Only one H1 per page (the hero). Use H2 elsewhere.",
       "options": [
-        { "value": "h1", "label": "H1" },
-        { "value": "h2", "label": "H2" },
-        { "value": "h3", "label": "H3" }
+        {
+          "value": "h1",
+          "label": "H1"
+        },
+        {
+          "value": "h2",
+          "label": "H2"
+        },
+        {
+          "value": "h3",
+          "label": "H3"
+        }
       ],
       "default": "h2"
     },
@@ -440,10 +642,22 @@
       "label": "Heading style",
       "info": "Visual style applied to the heading text.",
       "options": [
-        { "value": "h1", "label": "H1 (64/72)" },
-        { "value": "h2", "label": "H2 (48/56)" },
-        { "value": "h3", "label": "H3 (24/32)" },
-        { "value": "mega-heading", "label": "Mega heading (96/100)" }
+        {
+          "value": "h1",
+          "label": "H1 (64/72)"
+        },
+        {
+          "value": "h2",
+          "label": "H2 (48/56)"
+        },
+        {
+          "value": "h3",
+          "label": "H3 (24/32)"
+        },
+        {
+          "value": "mega-heading",
+          "label": "Mega heading (96/100)"
+        }
       ],
       "default": "h2"
     },
@@ -459,9 +673,18 @@
       "id": "text_alignment_header",
       "label": "Text alignment",
       "options": [
-        { "value": "text-left", "label": "Left" },
-        { "value": "text-center", "label": "Center" },
-        { "value": "text-right", "label": "Right" }
+        {
+          "value": "text-left",
+          "label": "Left"
+        },
+        {
+          "value": "text-center",
+          "label": "Center"
+        },
+        {
+          "value": "text-right",
+          "label": "Right"
+        }
       ],
       "default": "text-left"
     },
@@ -876,9 +1099,18 @@
       "id": "text_alignment",
       "label": "Text alignment",
       "options": [
-        { "value": "text-left", "label": "Left" },
-        { "value": "text-center", "label": "Center" },
-        { "value": "text-right", "label": "Right" }
+        {
+          "value": "text-left",
+          "label": "Left"
+        },
+        {
+          "value": "text-center",
+          "label": "Center"
+        },
+        {
+          "value": "text-right",
+          "label": "Right"
+        }
       ],
       "default": "text-left"
     },
@@ -950,8 +1182,14 @@
       "id": "button_style",
       "label": "Button style",
       "options": [
-        { "value": "btn-primary", "label": "Primary (blob CTA)" },
-        { "value": "btn-secondary", "label": "Secondary (pill)" }
+        {
+          "value": "btn-primary",
+          "label": "Primary (blob CTA)"
+        },
+        {
+          "value": "btn-secondary",
+          "label": "Secondary (pill)"
+        }
       ],
       "default": "btn-secondary"
     },
@@ -2211,7 +2449,7 @@
           "label": "t:common.blocks.sticker.settings.vertical_position.label",
           "default": 80
         },
-                {
+        {
           "type": "range",
           "id": "horizontal_position_sm",
           "min": 0,
@@ -2417,6 +2655,16 @@
               "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
             },
             {
+              "value": "kd-scallop-patterned_1440x40",
+              "label": "Kaadu scallop",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "kd-scallop-mobile-patterned_416x30",
+              "label": "Kaadu scallop (mobile)",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
               "value": "circles-2.5-patterned_1200x54",
               "label": "t:common.blocks.shape_divider.settings.style.options.circles_2_5.label",
               "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
@@ -2580,6 +2828,16 @@
               "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
             },
             {
+              "value": "kd-scallop-patterned_1440x40",
+              "label": "Kaadu scallop",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "kd-scallop-mobile-patterned_416x30",
+              "label": "Kaadu scallop (mobile)",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
               "value": "circles-2.5-patterned_1200x54",
               "label": "t:common.blocks.shape_divider.settings.style.options.circles_2_5.label",
               "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
@@ -2726,7 +2984,11 @@
     }
   ],
   "disabled_on": {
-    "groups": ["header", "footer", "aside"]
+    "groups": [
+      "header",
+      "footer",
+      "aside"
+    ]
   }
 }
 {% endschema %}

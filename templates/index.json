@@ -92,7 +92,7 @@
         "button_text_color_mobile": "#f0f7f1",
         "button2_width_desktop": 230,
         "button2_width_mobile": 360,
-        "color_scheme": "",
+        "color_scheme": "scheme-f3c790b8-ce18-4811-87cf-e53b730fe742",
         "use_gradient_background": false
       }
     },
@@ -172,7 +172,7 @@
         "text_align": "text-center",
         "eyebrow": "ITS NOT FAIR!",
         "title": "AUSBEUTUNG IST TIEF VERANKERT",
-        "heading_tag": "h1",
+        "heading_tag": "h2",
         "richtext": "",
         "cta_url": "shopify://blogs/news",
         "cta_text": "VIDEO ANSEHEN",
@@ -274,7 +274,9 @@
         "button_label": "Shop Now",
         "button_style": "btn-secondary",
         "color_scheme": "scheme6",
-        "use_gradient_background": false
+        "use_gradient_background": false,
+        "layout": "kd_row",
+        "row_image_position": "left"
       }
     },
     "kaadu_problem_section_3BNCTG": {

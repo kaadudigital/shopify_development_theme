@@ -6,10 +6,11 @@
   endif
 -%}
 <section
+  id="{{ section.id }}"
   class="bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %} relative overflow-hidden"
   data-color-scheme="{{ section.settings.color_scheme }}"
 >
-  <div class="section-content relative z-10 py-section-vertical-spacing">
+  <div class="section-content relative z-10">
     {%- render 'image-with-text-custom',
       display_on_card: section.settings.display_on_card,
       image: section.settings.image,
@@ -80,6 +81,7 @@
     {
       "type": "checkbox",
       "id": "display_on_card",
+      "info": "Not used since the design-system redesign (sizes, colours and button shapes now come from the design system).",
       "label": "t:common.settings.display_on_card.label"
     },
     {
@@ -558,6 +560,7 @@
     {
       "type": "select",
       "id": "image_size",
+      "info": "Not used since the design-system redesign (sizes, colours and button shapes now come from the design system).",
       "label": "t:common.settings.image_size.label",
       "default": "half",
       "options": [
@@ -606,6 +609,7 @@
     {
       "type": "select",
       "id": "heading_size",
+      "info": "Not used since the design-system redesign (sizes, colours and button shapes now come from the design system).",
       "label": "t:sections.image_with_text.settings.heading_size.label",
       "options": [
         {
@@ -718,6 +722,7 @@
     {
       "type": "select",
       "id": "button2_link_type",
+      "info": "When both buttons are set, button 2 is the cloud button and button 1 becomes the ✶ text link beside it.",
       "label": "Second Button Link Type",
       "options": [
         {
@@ -758,28 +763,33 @@
     {
       "type": "image_picker",
       "id": "button2_image",
+      "info": "Not used since the design-system redesign (sizes, colours and button shapes now come from the design system).",
       "label": "Second Button Image (Desktop)"
     },
     {
       "type": "image_picker",
       "id": "button2_image_mobile",
+      "info": "Not used since the design-system redesign (sizes, colours and button shapes now come from the design system).",
       "label": "Second Button Image (Mobile)"
     },
     {
       "type": "color",
       "id": "button_text_color_desktop",
+      "info": "Not used since the design-system redesign (sizes, colours and button shapes now come from the design system).",
       "label": "Button Text Color (Desktop)",
       "default": "#ffffff"
     },
     {
       "type": "color",
       "id": "button_text_color_mobile",
+      "info": "Not used since the design-system redesign (sizes, colours and button shapes now come from the design system).",
       "label": "Button Text Color (Mobile)",
       "default": "#ffffff"
     },
     {
       "type": "range",
       "id": "button2_width_desktop",
+      "info": "Not used since the design-system redesign (sizes, colours and button shapes now come from the design system).",
       "label": "Second Button width (Desktop)",
       "min": 80,
       "max": 800,
@@ -790,6 +800,7 @@
     {
       "type": "range",
       "id": "button2_width_mobile",
+      "info": "Not used since the design-system redesign (sizes, colours and button shapes now come from the design system).",
       "label": "Second Button width (Mobile)",
       "min": 80,
       "max": 800,
@@ -2259,6 +2270,16 @@
               "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
             },
             {
+              "value": "kd-scallop-patterned_1440x40",
+              "label": "Kaadu scallop",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "kd-scallop-mobile-patterned_416x30",
+              "label": "Kaadu scallop (mobile)",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
               "value": "circles-2.5-patterned_1200x54",
               "label": "t:common.blocks.shape_divider.settings.style.options.circles_2_5.label",
               "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
@@ -2419,6 +2440,16 @@
             {
               "value": "circles-2-patterned_1200x35",
               "label": "t:common.blocks.shape_divider.settings.style.options.circles_2.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "kd-scallop-patterned_1440x40",
+              "label": "Kaadu scallop",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "kd-scallop-mobile-patterned_416x30",
+              "label": "Kaadu scallop (mobile)",
               "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
             },
             {

@@ -1,26 +1,43 @@
+{%- comment -%}
+  Kaadu DS Ticker: lime band, red Fagies, ✶ separators, 22s loop (stops under reduced motion).
+  Several phrases: separate them with "|" in the text setting. Styles: "TICKER" in assets/base.bundle.css.
+  The phrase group is rendered twice so translateX(0 → -50%) loops seamlessly.
+{%- endcomment -%}
+{%- liquid
+  assign phrases = section.settings.text | split: '|'
+  assign ticker_link = section.settings.link
+-%}
+{%- capture ticker_group -%}
+  {%- for i in (1..6) -%}
+    {%- for phrase in phrases -%}
+      {%- assign phrase_clean = phrase | strip -%}
+      {%- if phrase_clean != blank -%}
+        <span class="kd-ticker__item">{{ phrase_clean | escape }}</span><span class="kd-ticker__star">&#10038;</span>
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endfor -%}
+{%- endcapture -%}
+
 <section
+  id="{{ section.id }}"
   class="scrolling-text-section bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %}"
   data-color-scheme="{{ section.settings.color_scheme }}"
 >
-  {%- render 'scrolling-text',
-    class: 'py-2.5',
-    text_class: 'h1'
-  -%}
+  {%- if ticker_link != blank -%}
+    <a class="kd-ticker kd-ticker--link" href="{{ ticker_link }}" aria-label="{{ section.settings.text | replace: '|', ' · ' | escape }}">
+  {%- else -%}
+    <div class="kd-ticker">
+  {%- endif -%}
+      <div class="kd-ticker__track{% if section.settings.direction == 'reverse' %} kd-ticker__track--reverse{% endif %}" aria-hidden="true">
+        <div class="kd-ticker__group">{{ ticker_group }}</div>
+        <div class="kd-ticker__group">{{ ticker_group }}</div>
+      </div>
+  {%- if ticker_link != blank -%}
+    </a>
+  {%- else -%}
+    </div>
+  {%- endif -%}
 </section>
-
-{%- style -%}
-  #shopify-section-{{ section.id }} .scrolling-text-section {
-    --scrolling-text-shape-size: {{ section.settings.shape_size }}em;
-  }
-  #shopify-section-{{ section.id }} .scrolling-text-section .h1 {
-    letter-spacing: -0.01em;
-  }
-  #shopify-section-{{ section.id }} .scrolling-text__shape-svg {
-    height: var(--scrolling-text-shape-size);
-    width: var(--scrolling-text-shape-size);
-    object-fit: contain;
-  }
-{%- endstyle -%}
 
 {% schema %}
 {
@@ -34,14 +51,15 @@
       "type": "text",
       "id": "text",
       "label": "t:common.settings.text.label",
-      "default": "ITS NOT FAIR!"
+      "default": "ITS NOT FAIR!",
+      "info": "Separate several phrases with \"|\", e.g. It's not fair! | Fuck middlemen"
     },
     {
       "type": "checkbox",
       "id": "repeat_text",
       "default": true,
       "label": "t:common.settings.repeat_text.label",
-      "info": "t:common.settings.repeat_text.info"
+      "info": "Not used since the design-system redesign: the ticker always uses ✶ separators and the DS 22-second loop."
     },
     {
       "type": "header",
@@ -89,13 +107,14 @@
           "label": "t:common.options.flower.label"
         }
       ],
-      "default": "10_point_star"
+      "default": "10_point_star",
+      "info": "Not used since the design-system redesign: the ticker always uses ✶ separators and the DS 22-second loop."
     },
     {
       "type": "image_picker",
       "id": "between_text_image",
       "label": "Image",
-      "info": "Used when \"Image\" is selected above."
+      "info": "Not used since the design-system redesign: the ticker always uses ✶ separators and the DS 22-second loop."
     },
     {
       "type": "range",
@@ -105,7 +124,7 @@
       "step": 0.1,
       "unit": "em",
       "label": "Shape / image size",
-      "info": "Relative to the text height (1em = headline height).",
+      "info": "Not used since the design-system redesign: the ticker always uses ✶ separators and the DS 22-second loop.",
       "default": 0.6
     },
     {
@@ -113,14 +132,14 @@
       "id": "animate_shape_between_text",
       "default": true,
       "label": "t:common.settings.animate_shape_between_text.label",
-      "info": "Does not apply to an image."
+      "info": "Not used since the design-system redesign: the ticker always uses ✶ separators and the DS 22-second loop."
     },
     {
       "type": "checkbox",
       "id": "animate_image_between_text",
       "default": false,
       "label": "Rotate image",
-      "info": "Spins the image around its center, like the shape animation. Used when \"Image\" is selected above."
+      "info": "Not used since the design-system redesign: the ticker always uses ✶ separators and the DS 22-second loop."
     },
     {
       "type": "header",
@@ -138,7 +157,8 @@
       "max": 400,
       "step": 10,
       "label": "t:common.settings.speed.label",
-      "default": 120
+      "default": 120,
+      "info": "Not used since the design-system redesign: the ticker always uses ✶ separators and the DS 22-second loop."
     },
     {
       "type": "select",
