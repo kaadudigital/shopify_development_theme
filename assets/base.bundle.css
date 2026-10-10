@@ -6892,7 +6892,7 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
   --space-24:         96px;
   --space-32:         128px;
 
-  --container-max:            1200px;
+  --container-max:            var(--content-max); /* was 1200px; large screens follow the 1800px content max (cobfoods) */
   --grid-gutter-desktop:      24px;
   --grid-gutter-mobile:       16px;
   --section-padding-v:        64px;
