@@ -47,7 +47,8 @@
       heading_size: section.settings.heading_size,
       container_id: section.id,
       disable_media_style: section.settings.disable_media_style,
-      preload: preload
+      preload: preload,
+      heading_level: section.settings.heading_level
     -%}
   </div>
 
@@ -599,6 +600,27 @@
       "label": "t:sections.image_with_text.settings.title.label",
       "info": "Use [br] for a line break, [nbsp] for an extra space.",
       "default": "Image with text"
+    },
+    {
+      "type": "select",
+      "id": "heading_level",
+      "label": "Heading level",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Auto (H1 when first on the page)"
+        },
+        {
+          "value": "h1",
+          "label": "H1 — page hero"
+        },
+        {
+          "value": "h2",
+          "label": "H2 — section"
+        }
+      ],
+      "default": "auto",
+      "info": "A page has exactly one H1. H1 also switches on the hero type sizes."
     },
     {
       "type": "inline_richtext",
@@ -2599,7 +2621,11 @@
     }
   ],
   "disabled_on": {
-    "groups": ["header", "footer", "aside"]
+    "groups": [
+      "header",
+      "footer",
+      "aside"
+    ]
   }
 }
 {% endschema %}

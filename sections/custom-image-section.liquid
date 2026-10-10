@@ -301,9 +301,14 @@
           {%- if section.settings.subheading != blank -%}
             <div class="hero-subheading-wrap">
               {%- if quote_mode -%}
-                <blockquote class="kd-is__quote kd-display-quote">
-                  {{- section.settings.subheading | replace: '[br]', '<br>' | replace: '[nbsp]', '&nbsp;' -}}
-                </blockquote>
+                <figure class="kd-is__figure">
+                  <blockquote class="kd-is__quote kd-display-quote">
+                    {{- section.settings.subheading | replace: '[br]', '<br>' | replace: '[nbsp]', '&nbsp;' -}}
+                  </blockquote>
+                  {%- if section.settings.quote_cite != blank -%}
+                    <figcaption><cite class="kd-is__cite kd-tag">{{ section.settings.quote_cite | escape }}</cite></figcaption>
+                  {%- endif -%}
+                </figure>
               {%- else -%}
                 <p class="kd-is__subheading kd-body-lg">
                   {{- section.settings.subheading | replace: '[br]', '<br>' | replace: '[nbsp]', '&nbsp;' -}}
@@ -497,6 +502,12 @@
         }
       ],
       "default": "left"
+    },
+    {
+      "type": "text",
+      "id": "quote_cite",
+      "label": "Quote attribution (design system row)",
+      "info": "Shown as a pill under the pull quote, e.g. [NAME], Verarbeitung in Vadacode. No names without consent (DS)."
     },
     {
       "type": "header",

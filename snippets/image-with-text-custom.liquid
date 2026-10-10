@@ -19,7 +19,14 @@
 
   assign sizes = '(min-width: 1200px) 620px, (min-width: 768px) 50vw, 100vw'
 
-  if preload
+  assign is_hero = preload
+  if heading_level == 'h1'
+    assign is_hero = true
+  elsif heading_level == 'h2'
+    assign is_hero = false
+  endif
+
+  if is_hero
     assign heading_tag = 'h1'
     assign heading_class = 'kd-display-hero'
     assign kicker_class = 'kd-strong'
@@ -69,7 +76,7 @@
   endif
 
   assign row_classes = 'kd-iw kd-section kd-iw--image-' | append: image_position | append: ' kd-iw--m-' | append: mobile_align | append: ' kd-iw--d-' | append: desktop_align
-  if preload
+  if is_hero
     assign row_classes = row_classes | append: ' kd-iw--hero'
   endif
   if mobile_layout_order

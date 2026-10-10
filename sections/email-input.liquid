@@ -1,273 +1,61 @@
-{%- assign btn_text_mob = section.settings.button_text_mobile -%}
-
-{%- style -%}
-  #shopify-section-{{ section.id }} .email-signup-section {
-    position: relative;
-    overflow: hidden;
-    padding-block-start: {%- if section.settings.padding_top == 'none' -%}var(--space-2){%- elsif section.settings.padding_top == 'small' -%}var(--space-4){%- else -%}var(--legacy-space-8){%- endif -%};
-    padding-block-end: var(--legacy-space-8);
-    padding-inline: var(--space-4);
-  }
-  #shopify-section-{{ section.id }} .email-signup-container {
-    max-width: var(--container-max);
-    margin-inline: auto;
-  }
-  #shopify-section-{{ section.id }} .email-signup-heading {
-    text-align: center;
-    margin: 0 0 var(--space-6);
-  }
-  #shopify-section-{{ section.id }} .email-signup-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-2);
-    max-width: 600px;
-    margin-inline: auto;
-  }
-  #shopify-section-{{ section.id }} .email-signup-input {
-    flex: 1 1 auto;
-    min-width: 0;
-    height: 56px;
-    padding: var(--space-3) var(--space-6);
-    background-color: var(--color-cream);
-    color: var(--color-near-black);
-    border: 2px solid var(--color-black);
-    border-radius: {%- if section.settings.input_square -%}0{%- else -%}var(--radius-btn){%- endif -%};
-    outline: none;
-    box-shadow: var(--shadow-sm);
-    transition: border-color 0.15s ease-out, box-shadow 0.15s ease-out;
-  }
-  #shopify-section-{{ section.id }} .email-signup-input::placeholder {
-    color: var(--color-mid-grey);
-  }
-  #shopify-section-{{ section.id }} .email-signup-input:focus-visible {
-    border-color: var(--color-violet);
-    outline: 3px solid var(--color-cream);
-    outline-offset: 2px;
-  }
-
-  /* --- Submit: SVG burst (default, no image set) --- */
-  #shopify-section-{{ section.id }} .email-signup-submit {
-    flex: 0 0 auto;
-    width: 64px;
-    aspect-ratio: 78 / 73;
-    padding: 0;
-    background: transparent;
-    border: 0;
-    cursor: pointer;
-    transition: transform 0.15s ease-out;
-  }
-  #shopify-section-{{ section.id }} .email-signup-submit:hover {
-    transform: translateY(-2px) scale(1.05);
-  }
-  #shopify-section-{{ section.id }} .email-signup-submit:active {
-    transform: translateY(0) scale(1);
-  }
-  #shopify-section-{{ section.id }} .email-signup-submit:focus-visible {
-    outline: 3px solid var(--color-cream);
-    outline-offset: 4px;
-    border-radius: 50%;
-  }
-  #shopify-section-{{ section.id }} .email-signup-submit__burst {
-    width: 100%;
-    height: 100%;
-    display: block;
-    filter: drop-shadow(var(--shadow-sm));
-  }
-  #shopify-section-{{ section.id }} .email-signup-submit__spinner {
-    display: none;
-    transform-box: fill-box;
-    transform-origin: center;
-  }
-  #shopify-section-{{ section.id }} .email-signup-submit.is-loading {
-    pointer-events: none;
-    cursor: default;
-  }
-  #shopify-section-{{ section.id }} .email-signup-submit.is-loading .email-signup-submit__arrow {
-    display: none;
-  }
-  #shopify-section-{{ section.id }} .email-signup-submit.is-loading .email-signup-submit__spinner {
-    display: block;
-    animation: es-spin 0.75s linear infinite;
-  }
-  @keyframes es-spin {
-    from { transform: rotate(0deg); }
-    to   { transform: rotate(360deg); }
-  }
-
-  /* --- Submit: custom image mode --- */
-  #shopify-section-{{ section.id }} .email-signup-submit--image {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: auto;
-    aspect-ratio: unset;
-    padding: 0;
-  }
-  #shopify-section-{{ section.id }} .email-signup-submit__bg {
-    display: block;
-    width: {{ section.settings.button_image_width_mobile }}px;
-    height: auto;
-    object-fit: contain;
-  }
-  #shopify-section-{{ section.id }} .email-signup-submit__label {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;
-    font-family: var(--font-display);
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 1;
-    text-align: center;
-    text-transform: uppercase;
-    white-space: nowrap;
-    color: {{ section.settings.button_text_color }};
-  }
-  #shopify-section-{{ section.id }} .email-signup-submit__label--mobile {
-    display: none;
-  }
-
-  @media (max-width: 768px) {
-    {%- if btn_text_mob != blank -%}
-      #shopify-section-{{ section.id }} .email-signup-submit__label--desktop { display: none; }
-      #shopify-section-{{ section.id }} .email-signup-submit__label--mobile { display: flex; }
-    {%- else -%}
-      #shopify-section-{{ section.id }} .email-signup-submit__label { display: none; }
+{%- comment -%}
+  Kaadu DS join section (EmailForm): kicker, Fagies h2, optional image, intro, then the 560px form —
+  56px pill input (paper, 1px purple border) beside a red cloud button. Colours follow the colour scheme
+  (DS: the join section sits on lime). Styles: "JOIN" in assets/base.bundle.css.
+  No longer used: bg_class, input_square, button_image*, button_text_color, button_image_width*.
+{%- endcomment -%}
+<section
+  class="kd-join email-signup-section bg-scheme-background text-scheme-text{% if section.settings.padding_top == 'none' %} kd-join--tight-top{% endif %}"
+  data-color-scheme="{{ section.settings.color_scheme }}"
+  id="section-{{ section.id }}"
+>
+  <div class="kd-section kd-join__inner">
+    {%- if section.settings.kicker != blank or section.settings.heading != blank -%}
+      <div class="kd-heading kd-heading--center">
+        {%- if section.settings.kicker != blank -%}
+          <p class="kd-heading__kicker kd-label-lg">{{ section.settings.kicker | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="kd-heading__title kd-display-h2">{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+      </div>
     {%- endif -%}
-  }
 
-  #shopify-section-{{ section.id }} .email-signup-subtitle {
-    text-align: center;
-    margin: var(--space-6) 0 0;
-  }
-  #shopify-section-{{ section.id }} .email-signup-message {
-    text-align: center;
-    margin-top: var(--space-4);
-  }
+    {%- if section.settings.image != blank -%}
+      {{ section.settings.image | image_url: width: 400 | image_tag: class: 'kd-join__image', loading: 'lazy', alt: section.settings.image.alt }}
+    {%- endif -%}
 
-  @media (min-width: 769px) {
-    #shopify-section-{{ section.id }} .email-signup-section {
-      padding-block-start: {%- if section.settings.padding_top == 'none' -%}var(--space-2){%- elsif section.settings.padding_top == 'small' -%}var(--legacy-space-8){%- else -%}var(--section-padding-v){%- endif -%};
-      padding-block-end: var(--section-padding-v);
-      padding-inline: var(--space-6);
-    }
-    #shopify-section-{{ section.id }} .email-signup-heading {
-      margin-bottom: var(--legacy-space-8);
-    }
-    #shopify-section-{{ section.id }} .email-signup-input {
-      height: 64px;
-      padding: var(--space-4) var(--legacy-space-8);
-    }
-    #shopify-section-{{ section.id }} .email-signup-wrapper {
-      gap: var(--space-6);
-    }
-    #shopify-section-{{ section.id }} .email-signup-submit:not(.email-signup-submit--image) {
-      width: 80px;
-    }
-    #shopify-section-{{ section.id }} .email-signup-submit--image .email-signup-submit__bg {
-      width: {{ section.settings.button_image_width }}px;
-      height: auto;
-    }
-  }
-{%- endstyle -%}
-
-<section class="email-signup-section {{ section.settings.bg_class }}" id="section-{{ section.id }}">
-  <div class="email-signup-container">
-    {%- if section.settings.heading != blank -%}
-      <h2 class="email-signup-heading h2">{{ section.settings.heading }}</h2>
+    {%- if section.settings.text != blank -%}
+      <div class="kd-join__text kd-body-lg">{{ section.settings.text }}</div>
     {%- endif -%}
 
     <form
       method="post"
       action="/contact#contact_form"
       accept-charset="UTF-8"
-      class="contact-form email-signup-form"
+      class="contact-form email-signup-form kd-form"
       id="contact_form"
     >
       <input type="hidden" name="form_type" value="customer">
       <input type="hidden" name="contact[tags]" value="waitlist">
       <input type="hidden" name="utf8" value="✓">
 
-      <div class="email-signup-wrapper">
-        <input
-          type="email"
-          name="contact[email]"
-          placeholder="{{ section.settings.placeholder_text }}"
-          id="Email"
-          class="email-signup-input body"
-          required
-        >
-
-        <button
-          type="submit"
-          class="email-signup-submit{% if section.settings.button_image != blank %} email-signup-submit--image{% endif %}"
-          aria-label="{{ section.settings.button_text | default: 'Abonnieren' | escape }}"
-        >
-          {%- if section.settings.button_image != blank -%}
-            <picture>
-              {%- if section.settings.button_image_mobile != blank -%}
-                <source
-                  media="(max-width: 768px)"
-                  srcset="{{ section.settings.button_image_mobile | image_url: width: 280 }}"
-                >
-              {%- endif -%}
-              <img
-                src="{{ section.settings.button_image | image_url: width: 480 }}"
-                alt=""
-                aria-hidden="true"
-                loading="lazy"
-                class="email-signup-submit__bg"
-              >
-            </picture>
-            {%- if section.settings.button_text != blank -%}
-              <span class="email-signup-submit__label" aria-hidden="true">
-                <span class="email-signup-submit__label--desktop">{{ section.settings.button_text }}</span>
-                {%- if btn_text_mob != blank -%}
-                  <span class="email-signup-submit__label--mobile">{{ btn_text_mob }}</span>
-                {%- endif -%}
-              </span>
-            {%- endif -%}
-          {%- else -%}
-            <svg class="email-signup-submit__burst" viewBox="0 0 78 73" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M77.4617 33.3842C77.717 36.9325 67.6423 39.4471 66.7504 42.7188C65.8352 46.0756 73.2364 53.3107 71.2989 56.1732C69.3735 59.0178 59.8399 54.8969 57.0897 57.0507C54.4081 59.1509 56.1888 69.3978 52.896 70.6516C49.7463 71.8509 44.2411 63.0567 40.685 63.314C37.1289 63.5714 32.9397 73.0673 29.6509 72.334C26.2127 71.5673 26.5081 61.1701 23.5536 59.4779C20.5236 57.7424 11.6786 63.1934 9.36597 60.6555C7.03879 58.1017 13.3276 49.8758 11.9414 46.6856C10.5903 43.5763 0.260099 42.5384 0.00480744 38.9902C-0.250484 35.4419 9.82414 32.9272 10.7161 29.6555C11.6312 26.2988 4.23007 19.0637 6.16757 16.2012C8.09298 13.3566 17.6266 17.4775 20.3768 15.3236C23.0584 13.2235 21.2777 2.97659 24.5705 1.72278C27.7202 0.523441 33.2254 9.31768 36.7815 9.06031C40.3376 8.80294 44.5268 -0.69294 47.8156 0.0404044C51.2538 0.807061 50.9584 11.2042 53.9129 12.8965C56.9429 14.632 65.7878 9.18094 68.1005 11.7188C70.4277 14.2726 64.1389 22.4985 65.5251 25.6887C66.8762 28.7981 77.2064 29.836 77.4617 33.3842Z"
-                fill="var(--color-lime)"
-              />
-              <path
-                class="email-signup-submit__arrow"
-                d="M 24 36.5 L 50 36.5 M 42 28 L 53 36.5 L 42 45"
-                stroke="var(--color-violet)"
-                stroke-width="5.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                fill="none"
-              />
-              <circle
-                class="email-signup-submit__spinner"
-                cx="39"
-                cy="36.5"
-                r="11"
-                fill="none"
-                stroke="var(--color-violet)"
-                stroke-width="5.5"
-                stroke-linecap="round"
-                stroke-dasharray="52 17"
-              />
-            </svg>
-          {%- endif -%}
-        </button>
-      </div>
-
-      <div class="email-signup-message caption" hidden></div>
+      <label class="kd-sr" for="Email">{{ section.settings.placeholder_text | default: 'E-Mail' | escape }}</label>
+      <input
+        type="email"
+        name="contact[email]"
+        placeholder="{{ section.settings.placeholder_text | escape }}"
+        id="Email"
+        class="kd-input email-signup-input"
+        autocomplete="email"
+        required
+      >
+      {%- render 'kd-button', label: section.settings.button_text, type: 'submit', variant: 'red', size: 'md', class: 'email-signup-submit' -%}
     </form>
+    <div class="email-signup-message kd-error" role="alert" hidden></div>
 
     {%- if section.settings.subtitle != blank -%}
-      <p class="email-signup-subtitle caption">{{ section.settings.subtitle }}</p>
+      <p class="kd-join__subtitle kd-body-sm">{{ section.settings.subtitle }}</p>
     {%- endif -%}
   </div>
 
@@ -318,6 +106,12 @@
   "name": "Email Signup",
   "settings": [
     {
+      "type": "text",
+      "id": "kicker",
+      "label": "Kicker",
+      "info": "e.g. 20 % auf deinen ersten Crunch"
+    },
+    {
       "type": "header",
       "content": "Content"
     },
@@ -326,6 +120,17 @@
       "id": "heading",
       "label": "Heading",
       "default": "Bleib auf dem Laufenden"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "Optional illustration above the text (e.g. the Justice figure)."
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
     },
     {
       "type": "text",
@@ -343,7 +148,8 @@
       "type": "checkbox",
       "id": "input_square",
       "label": "Square input corners",
-      "default": false
+      "default": false,
+      "info": "Not used since the design-system redesign (the form uses the DS pill input and a red cloud button; the background comes from the colour scheme)."
     },
     {
       "type": "header",
@@ -353,20 +159,21 @@
       "type": "image_picker",
       "id": "button_image",
       "label": "Button image",
-      "info": "Optional. Replaces the default burst icon. Use a blob PNG from the design system."
+      "info": "Not used since the design-system redesign (the form uses the DS pill input and a red cloud button; the background comes from the colour scheme)."
     },
     {
       "type": "text",
       "id": "button_text",
       "label": "Button text",
-      "default": "Abonnieren",
+      "default": "Anmelden",
       "info": "Shown over the image (if set). Always used as the accessible aria-label."
     },
     {
       "type": "color",
       "id": "button_text_color",
       "label": "Button text color",
-      "default": "#000000"
+      "default": "#000000",
+      "info": "Not used since the design-system redesign (the form uses the DS pill input and a red cloud button; the background comes from the colour scheme)."
     },
     {
       "type": "range",
@@ -376,7 +183,8 @@
       "max": 400,
       "step": 4,
       "unit": "px",
-      "default": 200
+      "default": 200,
+      "info": "Not used since the design-system redesign (the form uses the DS pill input and a red cloud button; the background comes from the colour scheme)."
     },
     {
       "type": "header",
@@ -386,13 +194,13 @@
       "type": "image_picker",
       "id": "button_image_mobile",
       "label": "Button image (mobile)",
-      "info": "Optional. Falls back to the desktop image when not set."
+      "info": "Not used since the design-system redesign (the form uses the DS pill input and a red cloud button; the background comes from the colour scheme)."
     },
     {
       "type": "text",
       "id": "button_text_mobile",
       "label": "Button text (mobile)",
-      "info": "Leave blank to hide button text on mobile entirely."
+      "info": "Not used since the design-system redesign (the form uses the DS pill input and a red cloud button; the background comes from the colour scheme)."
     },
     {
       "type": "range",
@@ -402,7 +210,8 @@
       "max": 300,
       "step": 4,
       "unit": "px",
-      "default": 160
+      "default": 160,
+      "info": "Not used since the design-system redesign (the form uses the DS pill input and a red cloud button; the background comes from the colour scheme)."
     },
     {
       "type": "header",
@@ -413,9 +222,18 @@
       "id": "padding_top",
       "label": "Top spacing",
       "options": [
-        { "value": "none", "label": "Very small" },
-        { "value": "small", "label": "Small" },
-        { "value": "default", "label": "Default (Recommended)" }
+        {
+          "value": "none",
+          "label": "Very small"
+        },
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "default",
+          "label": "Default (Recommended)"
+        }
       ],
       "default": "default"
     },
@@ -428,21 +246,40 @@
       "id": "bg_class",
       "label": "Background color",
       "options": [
-        { "value": "bg-violet", "label": "Radical Violet (recommended for newsletter)" },
-        { "value": "bg-red", "label": "Brand Red" },
-        { "value": "bg-cream", "label": "Off-White Cream" },
-        { "value": "bg-pink", "label": "Light Pink" },
-        { "value": "bg-sky", "label": "Sky Blue" },
-        { "value": "bg-lime", "label": "Lime Green" }
+        {
+          "value": "bg-violet",
+          "label": "Radical Violet (recommended for newsletter)"
+        },
+        {
+          "value": "bg-red",
+          "label": "Brand Red"
+        },
+        {
+          "value": "bg-cream",
+          "label": "Off-White Cream"
+        },
+        {
+          "value": "bg-pink",
+          "label": "Light Pink"
+        },
+        {
+          "value": "bg-sky",
+          "label": "Sky Blue"
+        },
+        {
+          "value": "bg-lime",
+          "label": "Lime Green"
+        }
       ],
-      "default": "bg-violet"
+      "default": "bg-violet",
+      "info": "Not used since the design-system redesign (the form uses the DS pill input and a red cloud button; the background comes from the colour scheme)."
     },
     {
       "type": "color_scheme",
       "id": "color_scheme",
-      "default": "scheme1",
+      "default": "scheme3",
       "label": "t:common.settings.color_scheme.label",
-      "info": "Used by background pattern blocks."
+      "info": "DS: the join section sits on lime."
     }
   ],
   "blocks": [
@@ -513,11 +350,26 @@
           "label": "t:common.blocks.background_pattern.settings.color.label",
           "default": "text",
           "options": [
-            { "value": "text", "label": "t:common.options.text.label" },
-            { "value": "accent-1", "label": "t:common.options.accent_1.label" },
-            { "value": "accent-2", "label": "t:common.options.accent_2.label" },
-            { "value": "card", "label": "t:common.options.card.label" },
-            { "value": "background", "label": "t:common.options.background.label" }
+            {
+              "value": "text",
+              "label": "t:common.options.text.label"
+            },
+            {
+              "value": "accent-1",
+              "label": "t:common.options.accent_1.label"
+            },
+            {
+              "value": "accent-2",
+              "label": "t:common.options.accent_2.label"
+            },
+            {
+              "value": "card",
+              "label": "t:common.options.card.label"
+            },
+            {
+              "value": "background",
+              "label": "t:common.options.background.label"
+            }
           ]
         },
         {
@@ -572,9 +424,21 @@
           "label": "t:common.blocks.background_shape.settings.shape.label",
           "default": "square",
           "options": [
-            { "value": "square", "label": "t:common.blocks.background_shape.settings.shape.options.square.label", "group": "t:common.groups.basic" },
-            { "value": "circle", "label": "t:common.blocks.background_shape.settings.shape.options.circle.label", "group": "t:common.groups.basic" },
-            { "value": "blob", "label": "t:common.options.blob.label", "group": "t:common.groups.variable" }
+            {
+              "value": "square",
+              "label": "t:common.blocks.background_shape.settings.shape.options.square.label",
+              "group": "t:common.groups.basic"
+            },
+            {
+              "value": "circle",
+              "label": "t:common.blocks.background_shape.settings.shape.options.circle.label",
+              "group": "t:common.groups.basic"
+            },
+            {
+              "value": "blob",
+              "label": "t:common.options.blob.label",
+              "group": "t:common.groups.variable"
+            }
           ]
         },
         {
@@ -666,11 +530,26 @@
           "label": "t:common.settings.background_color.label",
           "default": "accent-1",
           "options": [
-            { "value": "text", "label": "t:common.options.text.label" },
-            { "value": "accent-1", "label": "t:common.options.accent_1.label" },
-            { "value": "accent-2", "label": "t:common.options.accent_2.label" },
-            { "value": "card", "label": "t:common.options.card.label" },
-            { "value": "background", "label": "t:common.options.background.label" }
+            {
+              "value": "text",
+              "label": "t:common.options.text.label"
+            },
+            {
+              "value": "accent-1",
+              "label": "t:common.options.accent_1.label"
+            },
+            {
+              "value": "accent-2",
+              "label": "t:common.options.accent_2.label"
+            },
+            {
+              "value": "card",
+              "label": "t:common.options.card.label"
+            },
+            {
+              "value": "background",
+              "label": "t:common.options.background.label"
+            }
           ]
         }
       ]
@@ -707,10 +586,25 @@
           "id": "shape",
           "label": "t:common.blocks.sticker.settings.shape.label",
           "options": [
-            { "value": "fit_to_text", "label": "t:common.blocks.sticker.settings.shape.options.fit_to_text.label" },
-            { "value": "circle", "label": "t:common.options.circle.label", "group": "t:common.groups.basic" },
-            { "value": "star_1", "label": "t:common.options.star_1.label", "group": "t:common.groups.stars" },
-            { "value": "star_2", "label": "t:common.options.star_2.label", "group": "t:common.groups.stars" }
+            {
+              "value": "fit_to_text",
+              "label": "t:common.blocks.sticker.settings.shape.options.fit_to_text.label"
+            },
+            {
+              "value": "circle",
+              "label": "t:common.options.circle.label",
+              "group": "t:common.groups.basic"
+            },
+            {
+              "value": "star_1",
+              "label": "t:common.options.star_1.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "star_2",
+              "label": "t:common.options.star_2.label",
+              "group": "t:common.groups.stars"
+            }
           ],
           "default": "star_1"
         },
@@ -719,11 +613,26 @@
           "id": "sticker_font_size",
           "label": "t:common.settings.sticker_font_size.label",
           "options": [
-            { "value": "1rem", "label": "t:common.options.extra_small.label" },
-            { "value": "1.25rem", "label": "t:common.options.small.label" },
-            { "value": "1.563rem", "label": "t:common.options.medium.label" },
-            { "value": "1.953rem", "label": "t:common.options.large.label" },
-            { "value": "2.441rem", "label": "t:common.options.extra_large.label" }
+            {
+              "value": "1rem",
+              "label": "t:common.options.extra_small.label"
+            },
+            {
+              "value": "1.25rem",
+              "label": "t:common.options.small.label"
+            },
+            {
+              "value": "1.563rem",
+              "label": "t:common.options.medium.label"
+            },
+            {
+              "value": "1.953rem",
+              "label": "t:common.options.large.label"
+            },
+            {
+              "value": "2.441rem",
+              "label": "t:common.options.extra_large.label"
+            }
           ],
           "default": "1.563rem",
           "info": "t:common.settings.sticker_font_size.info"
@@ -820,9 +729,18 @@
           "id": "rotation_animation",
           "label": "t:common.blocks.sticker.settings.rotation_animation.label",
           "options": [
-            { "value": "none", "label": "t:common.blocks.sticker.settings.rotation_animation.options.no_rotation.label" },
-            { "value": "constantly_rotate", "label": "t:common.blocks.sticker.settings.rotation_animation.options.constantly_rotate.label" },
-            { "value": "rotate_when_scrolling", "label": "t:common.blocks.sticker.settings.rotation_animation.options.rotate_only_when_page_is_scrolling.label" }
+            {
+              "value": "none",
+              "label": "t:common.blocks.sticker.settings.rotation_animation.options.no_rotation.label"
+            },
+            {
+              "value": "constantly_rotate",
+              "label": "t:common.blocks.sticker.settings.rotation_animation.options.constantly_rotate.label"
+            },
+            {
+              "value": "rotate_when_scrolling",
+              "label": "t:common.blocks.sticker.settings.rotation_animation.options.rotate_only_when_page_is_scrolling.label"
+            }
           ],
           "default": "none"
         },
@@ -858,11 +776,26 @@
           "label": "t:common.settings.background_color.label",
           "default": "bg-scheme-accent-1 text-scheme-accent-1-contrast",
           "options": [
-            { "value": "bg-scheme-text text-scheme-text-contrast", "label": "t:common.options.text.label" },
-            { "value": "bg-scheme-accent-1 text-scheme-accent-1-contrast", "label": "t:common.options.accent_1.label" },
-            { "value": "bg-scheme-accent-2 text-scheme-accent-2-contrast", "label": "t:common.options.accent_2.label" },
-            { "value": "bg-scheme-card text-scheme-card-text", "label": "t:common.options.card.label" },
-            { "value": "bg-scheme-background text-scheme-text", "label": "t:common.options.background.label" }
+            {
+              "value": "bg-scheme-text text-scheme-text-contrast",
+              "label": "t:common.options.text.label"
+            },
+            {
+              "value": "bg-scheme-accent-1 text-scheme-accent-1-contrast",
+              "label": "t:common.options.accent_1.label"
+            },
+            {
+              "value": "bg-scheme-accent-2 text-scheme-accent-2-contrast",
+              "label": "t:common.options.accent_2.label"
+            },
+            {
+              "value": "bg-scheme-card text-scheme-card-text",
+              "label": "t:common.options.card.label"
+            },
+            {
+              "value": "bg-scheme-background text-scheme-text",
+              "label": "t:common.options.background.label"
+            }
           ]
         }
       ]
@@ -878,8 +811,14 @@
           "id": "target_section",
           "default": "above",
           "options": [
-            { "value": "above", "label": "t:common.blocks.shape_divider.settings.target_section.options.section_above.label" },
-            { "value": "below", "label": "t:common.blocks.shape_divider.settings.target_section.options.section_below.label" }
+            {
+              "value": "above",
+              "label": "t:common.blocks.shape_divider.settings.target_section.options.section_above.label"
+            },
+            {
+              "value": "below",
+              "label": "t:common.blocks.shape_divider.settings.target_section.options.section_below.label"
+            }
           ],
           "info": "t:common.blocks.shape_divider.settings.target_section.info"
         },
@@ -896,11 +835,31 @@
           "id": "style",
           "default": "waves-1-patterned_1200x20",
           "options": [
-            { "value": "waves-1-patterned_1200x20", "label": "t:common.blocks.shape_divider.settings.style.options.waves_1.label", "group": "t:common.blocks.shape_divider.settings.style.group_patterned" },
-            { "value": "waves-2-patterned_1200x43", "label": "t:common.blocks.shape_divider.settings.style.options.waves_2.label", "group": "t:common.blocks.shape_divider.settings.style.group_patterned" },
-            { "value": "tilt-1-shape_1440x101", "label": "t:common.blocks.shape_divider.settings.style.options.tilt_1.label", "group": "t:common.settings.shape.label" },
-            { "value": "waves-1-shape_1440x261", "label": "t:common.blocks.shape_divider.settings.style.options.waves_1.label", "group": "t:common.settings.shape.label" },
-            { "value": "curve-shape_1440x149", "label": "t:common.blocks.shape_divider.settings.style.options.curve.label", "group": "t:common.settings.shape.label" }
+            {
+              "value": "waves-1-patterned_1200x20",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_1.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "waves-2-patterned_1200x43",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_2.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "tilt-1-shape_1440x101",
+              "label": "t:common.blocks.shape_divider.settings.style.options.tilt_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "waves-1-shape_1440x261",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "curve-shape_1440x149",
+              "label": "t:common.blocks.shape_divider.settings.style.options.curve.label",
+              "group": "t:common.settings.shape.label"
+            }
           ]
         },
         {
@@ -923,8 +882,14 @@
           "id": "animation_direction",
           "label": "t:common.blocks.shape_divider.settings.animation_direction.label",
           "options": [
-            { "value": "", "label": "t:common.options.right_to_left.label" },
-            { "value": "reverse", "label": "t:common.options.left_to_right.label" }
+            {
+              "value": "",
+              "label": "t:common.options.right_to_left.label"
+            },
+            {
+              "value": "reverse",
+              "label": "t:common.options.left_to_right.label"
+            }
           ],
           "default": ""
         }

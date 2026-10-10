@@ -40,3 +40,35 @@
     if (label && text) label.textContent = text;
   });
 })();
+
+/* [data-kd-compare]: comparison slider. The range input sets --kd-pos (reveal %) on the panel. */
+(function () {
+  'use strict';
+  document.addEventListener('input', function (event) {
+    var range = event.target.closest('.kd-compare__range');
+    if (!range) return;
+    var panel = range.closest('[data-kd-compare]');
+    if (panel) panel.style.setProperty('--kd-pos', range.value + '%');
+  });
+})();
+
+/* [data-kd-split]: cost split. Pressing a segment shows its title, amount and text in the detail notice. */
+(function () {
+  'use strict';
+  document.addEventListener('click', function (event) {
+    var seg = event.target.closest('.kd-split__seg');
+    if (!seg) return;
+    var split = seg.closest('[data-kd-split]');
+    if (!split) return;
+    split.querySelectorAll('.kd-split__seg').forEach(function (other) {
+      other.setAttribute('aria-pressed', other === seg ? 'true' : 'false');
+    });
+    var set = function (selector, value) {
+      var el = split.querySelector(selector);
+      if (el) el.textContent = value || '';
+    };
+    set('[data-kd-split-title]', seg.getAttribute('data-title'));
+    set('[data-kd-split-amount]', seg.getAttribute('data-amount'));
+    set('[data-kd-split-text]', seg.getAttribute('data-text'));
+  });
+})();

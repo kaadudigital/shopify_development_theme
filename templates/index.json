@@ -93,7 +93,8 @@
         "button2_width_desktop": 230,
         "button2_width_mobile": 360,
         "color_scheme": "scheme-f3c790b8-ce18-4811-87cf-e53b730fe742",
-        "use_gradient_background": false
+        "use_gradient_background": false,
+        "heading_level": "h1"
       }
     },
     "scrolling_text_j9kYtA": {
@@ -571,78 +572,6 @@
         "use_gradient_background": false
       }
     },
-    "custom_feature_infotile_knJnMQ": {
-      "type": "custom-feature-infotile",
-      "blocks": {
-        "info_tile_HBLN3L": {
-          "type": "info_tile",
-          "settings": {
-            "image": "shopify://shop_images/Group.png",
-            "heading": "RADILA FAIR",
-            "description": "Add details about this tile here.",
-            "link": "",
-            "borderless": true,
-            "square_corners": true,
-            "enable_shadow": true,
-            "image_shape_override": "default"
-          }
-        },
-        "info_tile_T69BfP": {
-          "type": "info_tile",
-          "settings": {
-            "heading": "Tile Heading",
-            "description": "Add details about this tile here.",
-            "link": "",
-            "borderless": true,
-            "square_corners": true,
-            "enable_shadow": false,
-            "image_shape_override": "default"
-          }
-        },
-        "info_tile_A7QDkH": {
-          "type": "info_tile",
-          "settings": {
-            "heading": "Tile Heading",
-            "description": "Add details about this tile here.",
-            "link": "",
-            "borderless": true,
-            "square_corners": true,
-            "enable_shadow": false,
-            "image_shape_override": "default"
-          }
-        }
-      },
-      "block_order": [
-        "info_tile_HBLN3L",
-        "info_tile_T69BfP",
-        "info_tile_A7QDkH"
-      ],
-      "custom_css": [],
-      "name": "Custom Info Tiles",
-      "settings": {
-        "eyebrow": "eyebrow",
-        "title": "Custom Info Tiles",
-        "subheading": "Share information using custom tiles",
-        "display_on_card": true,
-        "layout_mobile": "carousel",
-        "layout_desktop": "carousel",
-        "tiles_per_row_mobile": "2",
-        "tiles_per_row_desktop": 3,
-        "slideshow_focus": "center",
-        "mobile_slide_width": "three_fifths",
-        "desktop_slide_width": 35,
-        "autoscroll_enabled": true,
-        "autoscroll_direction": "1",
-        "image_fit": "cover",
-        "tiles_aspect_ratio": "natural",
-        "image_shape": "",
-        "color_scheme": "scheme3",
-        "use_gradient_background": false,
-        "arrow_background": "#fffff5",
-        "arrow_icon_color": "#000000",
-        "arrow_shape": "website_shape_star"
-      }
-    },
     "custom_image_section_Mafcmn": {
       "type": "custom-image-section",
       "blocks": {
@@ -737,37 +666,11 @@
         "button_link": "",
         "button_label": "Shop Now",
         "button_style": "btn-secondary",
-        "color_scheme": "",
-        "use_gradient_background": false
-      }
-    },
-    "custom_rich_text_with_image_yBcjeG": {
-      "type": "custom-rich-text-with-image",
-      "custom_css": [
-        "p {color: black;}",
-        ".kaadu-rtwi__image {position: relative; transform: translateX(-10px);}",
-        ".kaadu-rtwi__outer {padding-bottom: 16px;}",
-        "@media screen and (max-width: 767px) and (orientation: portrait) {.kaadu-rtwi__outer {padding-bottom: 12px; }}"
-      ],
-      "name": "Custom Rich Text Image",
-      "settings": {
-        "eyebrow": "20% OFF YOUR FIRST CRUNCH",
-        "title": "JOIN THE MISSION",
-        "title2": "",
-        "title3": "",
-        "subheading": "",
-        "rich_text": "<p>Perfektion ist nicht unser Ziel – Veränderung schon.Begleite uns auf dem Weg zu radikaler Fairness.</p>",
-        "image": "shopify://shop_images/Extra_Mascots-06.svg",
-        "image_caption": "",
-        "image_width_desktop": 320,
-        "image_width_mobile": 200,
-        "display_on_card": false,
-        "content_width_desktop": "lg:w-2/3",
-        "button_link": "",
-        "button_label": "Shop Now",
-        "button_style": "btn-secondary",
-        "color_scheme": "scheme5",
-        "use_gradient_background": false
+        "color_scheme": "scheme1",
+        "use_gradient_background": false,
+        "layout": "kd_row",
+        "row_image_position": "left",
+        "quote_cite": "[NAME], Verarbeitung in Vadacode"
       }
     },
     "email_input_dMpqpt": {
@@ -775,12 +678,12 @@
       "custom_css": [],
       "name": "Email Signup",
       "settings": {
-        "heading": "",
+        "heading": "Join the mission",
         "subtitle": "",
-        "placeholder_text": "E-mail",
+        "placeholder_text": "E-Mail",
         "input_square": false,
         "button_image": "shopify://shop_images/06d3f155e99649c6ad8f552f17b4bec9ac475189.png",
-        "button_text": "ANMELDEN",
+        "button_text": "Anmelden",
         "button_text_color": "#ae0000",
         "button_image_width": 128,
         "button_image_mobile": "shopify://shop_images/right_arrow_in_spiky_cloud.svg",
@@ -788,7 +691,211 @@
         "button_image_width_mobile": 64,
         "padding_top": "none",
         "bg_class": "bg-lime",
-        "color_scheme": "scheme5"
+        "color_scheme": "scheme5",
+        "kicker": "20 % auf deinen ersten Crunch",
+        "text": "<p>Perfektion ist nicht unser Ziel. Veränderung schon. Begleite uns auf dem Weg zu radikaler Fairness.</p>",
+        "image": "shopify://shop_images/Extra_Mascots-06.svg"
+      }
+    },
+    "image_with_text_custom_vision": {
+      "type": "image-with-text-custom",
+      "settings": {
+        "display_on_card": false,
+        "image_caption": "",
+        "crop": "",
+        "image_shape": "default",
+        "blob_type": 1,
+        "rotate_image": 0,
+        "image_position": "left",
+        "image_size": "half",
+        "disable_media_style": false,
+        "title": "Sind wir Mittelmänner?",
+        "h2_title": "Was uns antreibt",
+        "heading_size": "heading-feature",
+        "richtext": "<p>Wir kennen die Preise, die Leute und die Ausreden der Branche. Darum bauen wir eine Anlage, die am Ende den Frauen gehört, die darin arbeiten. Und wir zeigen jeden Rappen auf dem Weg dorthin.</p>",
+        "text_alignment": "text-left",
+        "mobile_text_alignment": "text-left",
+        "mobile_layout_order": false,
+        "button_link_type": "url",
+        "button_link": "",
+        "focus_element_id": "",
+        "button_label": "Wer profitiert? ↑",
+        "button_label_mobile": "",
+        "button2_link_type": "url",
+        "button2_link": "",
+        "focus_element2_id": "",
+        "button2_label": "Unsere Vision",
+        "button2_label_mobile": "",
+        "color_scheme": "scheme3",
+        "use_gradient_background": false,
+        "heading_level": "h2"
+      }
+    },
+    "kaadu_comparison_main": {
+      "type": "kaadu-comparison",
+      "blocks": {
+        "row_1": {
+          "type": "row",
+          "settings": {
+            "kaadu_text": "Reif geerntet",
+            "other_text": "Grün gepflückt"
+          }
+        },
+        "row_2": {
+          "type": "row",
+          "settings": {
+            "kaadu_text": "Ananas. Punkt.",
+            "other_text": "Zucker, Schwefel, Aromen"
+          }
+        },
+        "row_3": {
+          "type": "row",
+          "settings": {
+            "kaadu_text": "Löhne offen, +50 %",
+            "other_text": "Löhne unbekannt"
+          }
+        },
+        "row_4": {
+          "type": "row",
+          "settings": {
+            "kaadu_text": "Verarbeitet im Dorf",
+            "other_text": "Verarbeitet weit weg"
+          }
+        },
+        "row_5": {
+          "type": "row",
+          "settings": {
+            "kaadu_text": "Soll dem Team gehören",
+            "other_text": "Gehört einem Konzern"
+          }
+        }
+      },
+      "block_order": [
+        "row_1",
+        "row_2",
+        "row_3",
+        "row_4",
+        "row_5"
+      ],
+      "settings": {
+        "kicker": "Kaadu > Andere",
+        "heading": "Wir sind einfach besser.",
+        "kaadu_label": "Kaadu",
+        "other_label": "Der Rest",
+        "start_position": 55,
+        "slider_label": "Vergleich verschieben",
+        "footnote": "<p>«Der Rest» steht für das, was im Regal daneben liegt. Kein Hersteller wird genannt, jede Kaadu-Zeile ist belegbar. [Belege verlinken]</p>",
+        "color_scheme": "scheme1"
+      }
+    },
+    "kaadu_cost_split_main": {
+      "type": "kaadu-cost-split",
+      "blocks": {
+        "segment_1": {
+          "type": "segment",
+          "settings": {
+            "title": "Bauern",
+            "amount": "CHF [X.XX]",
+            "weight": 28,
+            "text": "Preis pro kg Frucht, weit über Markt. [CHF/kg und Marktpreis]"
+          }
+        },
+        "segment_2": {
+          "type": "segment",
+          "settings": {
+            "title": "Erntehelfer*innen",
+            "amount": "CHF [X.XX]",
+            "weight": 10,
+            "text": "Tageslohn fürs Schneiden. [Zahl und Vergleich]"
+          }
+        },
+        "segment_3": {
+          "type": "segment",
+          "settings": {
+            "title": "Team in Vadacode",
+            "amount": "CHF [X.XX]",
+            "weight": 20,
+            "text": "Lohn +50 %, Pension, Versicherung, Gewinnbeteiligung."
+          }
+        },
+        "segment_4": {
+          "type": "segment",
+          "settings": {
+            "title": "Beutel, Labor, Transport",
+            "amount": "CHF [X.XX]",
+            "weight": 16,
+            "text": "Kraftpapier-Beutel, Eurofins-Tests, Weg in die Schweiz."
+          }
+        },
+        "segment_5": {
+          "type": "segment",
+          "settings": {
+            "title": "Kaadu Schweiz",
+            "amount": "CHF [X.XX]",
+            "weight": 14,
+            "text": "Vertrieb, Marketing, MwSt. Auch das legen wir offen."
+          }
+        },
+        "segment_6": {
+          "type": "segment",
+          "settings": {
+            "title": "Ins Franchise",
+            "amount": "CHF [X.XX]",
+            "weight": 12,
+            "text": "Fliesst in die Übergabe der Anlage ans Team."
+          }
+        }
+      },
+      "block_order": [
+        "segment_1",
+        "segment_2",
+        "segment_3",
+        "segment_4",
+        "segment_5",
+        "segment_6"
+      ],
+      "settings": {
+        "kicker": "",
+        "heading": "Wo landen deine[br]CHF 4.45?",
+        "intro": "<p>Fair ist ein Wort. Das hier sind Zahlen. Klick auf einen Balken.</p>",
+        "footnote": "<p>Alle Beträge pro Beutel im 6er Pack, einmalig gekauft. Stand [Datum], Charge [Nr.]. Ändert sich etwas, ändert sich diese Grafik.</p>",
+        "button_label": "Wohin jeder Franken geht",
+        "button_link": "",
+        "color_scheme": "scheme6"
+      }
+    },
+    "image_with_text_custom_probier": {
+      "type": "image-with-text-custom",
+      "settings": {
+        "display_on_card": false,
+        "image_caption": "",
+        "crop": "",
+        "image_shape": "default",
+        "blob_type": 1,
+        "rotate_image": 0,
+        "image_position": "right",
+        "image_size": "half",
+        "disable_media_style": false,
+        "title": "Ein Beutel. Gratis. Nur CHF 3 Versand.",
+        "h2_title": "Probierpaket",
+        "heading_size": "heading-feature",
+        "richtext": "<p>Probier zuerst, entscheide dann. Gib den Code [CODE] im Shop ein, der Beutel kostet nichts, du zahlst CHF 3 Versand. Schmeckt es dir nicht, war es das. Schmeckt es, weisst du jetzt, was du kaufst.</p><p>Code [CODE] · 1 Beutel pro Haushalt · Danach ab CHF 5.05 pro Beutel im Abo</p>",
+        "text_alignment": "text-left",
+        "mobile_text_alignment": "text-left",
+        "mobile_layout_order": false,
+        "button_link_type": "url",
+        "button_link": "",
+        "focus_element_id": "",
+        "button_label": "",
+        "button_label_mobile": "",
+        "button2_link_type": "url",
+        "button2_link": "shopify://products/bananen-crunchys",
+        "focus_element2_id": "",
+        "button2_label": "Gratis probieren",
+        "button2_label_mobile": "",
+        "color_scheme": "scheme3",
+        "use_gradient_background": false,
+        "heading_level": "h2"
       }
     }
   },
@@ -803,9 +910,11 @@
     "pack_selector_cEiAYy",
     "vertical_video_embeds_kJLBxQ",
     "image_with_highlights_mU9j66",
-    "custom_feature_infotile_knJnMQ",
+    "image_with_text_custom_vision",
+    "kaadu_comparison_main",
+    "kaadu_cost_split_main",
     "custom_image_section_Mafcmn",
-    "custom_rich_text_with_image_yBcjeG",
+    "image_with_text_custom_probier",
     "email_input_dMpqpt"
   ]
 }
