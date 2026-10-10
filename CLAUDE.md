@@ -16,7 +16,7 @@ E-commerce site for **Kaadu**, a Swiss fair-trade freeze-dried pineapple brand. 
 | **Kaadu Design System** — https://claude.ai/artifact/CnMT95HubMKA5CeChwNxBm | Every token, size, colour, font, spacing, radius, shadow, component, voice and imagery rule. Wins over everything else. |
 | **Page mockups** — https://claude.ai/artifact/DeWG7XTMTAJmdxb9iXNZ82 | A **rough draft**: which sections a page has, their order and content. Never take sizes, colours or fonts from it. |
 | [assets/base.bundle.css](assets/base.bundle.css) — "KAADU DESIGN SYSTEM" + "KAADU COMPONENTS" blocks | The theme's implementation of the DS. When the DS changes, mirror it here. |
-| [kaadu-design-system/](kaadu-design-system/), brand PDF, `Kaadu Web Style Guide.docx` | **Superseded.** Only a source of original logo/sticker files; nothing in the theme references them. |
+| Old `kaadu-design-system/` folder, brand PDF, Typography & Spacing Docs, `Kaadu Web Style Guide.docx` | **Removed** (superseded). Recover original logo/sticker files from git: `git show pre-redesign:kaadu-design-system/project/assets/...` or `git checkout pre-redesign -- kaadu-design-system`. |
 
 Read the DS with the Artifact tool (`read_file` on `project/README.md`, `project/tokens.json`, `project/components/bundle.css`, `project/components/<Name>/README.md`), not WebFetch. Its README covers voice, colour pairs, typography, layout/large screens, shapes, motion and imagery — this file does not repeat them.
 

@@ -6,7 +6,6 @@ root: "."
 
 ignore:
   - node_modules/**
-  - kaadu-design-system/**
   - "**/*.pdf"
   - "**/*.docx"
   - "**/*.html"
