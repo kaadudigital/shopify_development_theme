@@ -30,7 +30,7 @@
   :root {
     --payment-button-height: 48px;
     --checkout-button-height: 48px;
-    --section-x-padding: 1.25rem;
+    --section-x-padding: var(--gutter); /* Kaadu DS gutter 20 / 32 / 64 (assets/base.bundle.css) */
     --grid-gap: 1.25rem;
     --icon-thickness: {{ settings.icon_thickness }};
     --header-height: 60px;
@@ -316,7 +316,6 @@
       --feature-heading-size: var(--type-scale-n{{ settings.desktop_feature_heading_scale }});
       --secondary-heading-size: var(--type-scale-n{{ settings.desktop_secondary_heading_scale }});
       --section-vertical-spacing: {{ vertical_spacing_between_sections[1] }};
-      --section-x-padding: 2.5rem;
       --grid-gap: 2.5rem;
     }
   }

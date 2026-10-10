@@ -127,7 +127,7 @@
         </div>
       </div>
 
-      <div class="{% if section.settings.style == 'inset' %}max-w-site px-5 lg:px-10 mx-auto{% else %}bg-scheme-text/80{% endif %}">
+      <div class="{% if section.settings.style == 'inset' %}max-w-site px-section mx-auto{% else %}bg-scheme-text/80{% endif %}">
         <div
           class="{{ container_class }}{% if section.settings.style == 'inset' %} media media--css-only{% else %} relative{% endif %} banner-section-content--h"
           {% if custom_aspect_h %}
