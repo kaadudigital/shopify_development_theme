@@ -6,6 +6,8 @@
     kicker in .kd-strong. Anywhere else: <h2> in .kd-display-h2, .kd-body-lg, red .kd-label kicker.
   - One cloud button + one ✶ text link (DS hero). When both buttons are set, button 2 is the cloud and
     button 1 the link; with only one button, it is the cloud. Cloud colours follow the colour scheme.
+  - Every text field accepts [br] / [BR] (line break) and [nbsp] / [NBSP] (non-breaking space).
+  - Mobile: cloud button on top, then the note (left) and the ✶ text link (right) on one row.
   - Optional cloud-button artwork (button2_image / button2_image_mobile, widths, label colours):
     replaces the DS cloud with brand artwork; the mobile artwork applies below 768px.
 {%- endcomment -%}
@@ -116,18 +118,18 @@
         -%}
       {%- endif -%}
       {%- if image_caption != blank -%}
-        <p class="kd-iw__caption kd-body-sm">{{ image_caption | escape }}</p>
+        <p class="kd-iw__caption kd-body-sm">{{ image_caption | escape | replace: '[BR]', '<br>' | replace: '[br]', '<br>' | replace: '[NBSP]', '&nbsp;' | replace: '[nbsp]', '&nbsp;' }}</p>
       {%- endif -%}
     </div>
 
     {%- if h2_title != blank or title != blank -%}
       <div class="kd-iw__head">
         {%- if h2_title != blank -%}
-          <p class="kd-iw__kicker {{ kicker_class }}">{{ h2_title }}</p>
+          <p class="kd-iw__kicker {{ kicker_class }}">{{ h2_title | replace: '[BR]', '<br>' | replace: '[br]', '<br>' | replace: '[NBSP]', '&nbsp;' | replace: '[nbsp]', '&nbsp;' }}</p>
         {%- endif -%}
         {%- if title != blank -%}
           <{{ heading_tag }} class="kd-iw__title {{ heading_class }}">
-            {{- title | escape | replace: '[br]', '<br>' | replace: '[nbsp]', '&nbsp;' -}}
+            {{- title | escape | replace: '[BR]', '<br>' | replace: '[br]', '<br>' | replace: '[NBSP]', '&nbsp;' | replace: '[nbsp]', '&nbsp;' -}}
           </{{ heading_tag }}>
         {%- endif -%}
       </div>
@@ -135,7 +137,7 @@
 
     <div class="kd-iw__body">
       {%- if richtext != blank -%}
-        <div class="kd-iw__text rte {{ text_class }}">{{ richtext }}</div>
+        <div class="kd-iw__text rte {{ text_class }}">{{ richtext | replace: '[BR]', '<br>' | replace: '[br]', '<br>' | replace: '[NBSP]', '&nbsp;' | replace: '[nbsp]', '&nbsp;' }}</div>
       {%- endif -%}
 
       {%- assign note_mobile = button_note_mobile | default: button_note -%}
@@ -172,7 +174,7 @@
             {%- endstyle -%}
           {%- endif -%}
           {%- capture c_label_html -%}
-            <span class="kd-iw__label--mobile">{{ c_label_m | escape }}</span><span class="kd-iw__label--desktop">{{ c_label | escape }}</span>
+            <span class="kd-iw__label--mobile">{{ c_label_m | escape | replace: '[BR]', '<br>' | replace: '[br]', '<br>' | replace: '[NBSP]', '&nbsp;' | replace: '[nbsp]', '&nbsp;' }}</span><span class="kd-iw__label--desktop">{{ c_label | escape | replace: '[BR]', '<br>' | replace: '[br]', '<br>' | replace: '[NBSP]', '&nbsp;' | replace: '[nbsp]', '&nbsp;' }}</span>
           {%- endcapture -%}
           {%- if c_type == 'focus_element' -%}
             {%- capture c_attrs -%}data-kd-focus="{{ c_focus | escape }}"{%- endcapture -%}
@@ -183,7 +185,7 @@
 
           {%- if link_source == '1' -%}
             {%- capture l_label_html -%}
-              <span class="kd-iw__label--mobile">{{ button_label_mobile_display | escape }}</span><span class="kd-iw__label--desktop">{{ button_label | escape }}</span>
+              <span class="kd-iw__label--mobile">{{ button_label_mobile_display | escape | replace: '[BR]', '<br>' | replace: '[br]', '<br>' | replace: '[NBSP]', '&nbsp;' | replace: '[nbsp]', '&nbsp;' }}</span><span class="kd-iw__label--desktop">{{ button_label | escape | replace: '[BR]', '<br>' | replace: '[br]', '<br>' | replace: '[NBSP]', '&nbsp;' | replace: '[nbsp]', '&nbsp;' }}</span>
             {%- endcapture -%}
             {%- if button_link_type == 'focus_element' -%}
               <button type="button" class="kd-link kd-iw__link" data-kd-focus="{{ focus_element_id | escape }}">{{ l_label_html }}</button>
@@ -195,10 +197,10 @@
       {%- endif -%}
       {%- if button_note != blank -%}
         {%- if note_mobile != button_note -%}
-          <p class="kd-iw__note kd-body-sm kd-iw__label--mobile">{{ note_mobile }}</p>
-          <p class="kd-iw__note kd-body-sm kd-iw__label--desktop">{{ button_note }}</p>
+          <p class="kd-iw__note kd-body-sm kd-iw__label--mobile">{{ note_mobile | replace: '[BR]', '<br>' | replace: '[br]', '<br>' | replace: '[NBSP]', '&nbsp;' | replace: '[nbsp]', '&nbsp;' }}</p>
+          <p class="kd-iw__note kd-body-sm kd-iw__label--desktop">{{ button_note | replace: '[BR]', '<br>' | replace: '[br]', '<br>' | replace: '[NBSP]', '&nbsp;' | replace: '[nbsp]', '&nbsp;' }}</p>
         {%- else -%}
-          <p class="kd-iw__note kd-body-sm">{{ button_note }}</p>
+          <p class="kd-iw__note kd-body-sm">{{ button_note | replace: '[BR]', '<br>' | replace: '[br]', '<br>' | replace: '[NBSP]', '&nbsp;' | replace: '[nbsp]', '&nbsp;' }}</p>
         {%- endif -%}
       {%- endif -%}
       {%- if cloud_source != '' or button_note != blank -%}
