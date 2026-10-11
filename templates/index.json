@@ -517,8 +517,8 @@
           "settings": {
             "title": "97 %",
             "text": "Nährstoffe",
-            "cta_link": "",
-            "cta_text": "",
+            "cta_link": "shopify://blogs/news",
+            "cta_text": "test",
             "override_section_color_scheme": false,
             "color_scheme": "scheme1"
           }
