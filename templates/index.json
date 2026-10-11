@@ -69,7 +69,7 @@
         "rotate_image": 0,
         "disable_media_style": false,
         "h2_title": "100% Frucht. 0% Ausbeutung.",
-        "title": "Snack like you give a damn.",
+        "title": "Snack like you [BR] give a damn.",
         "heading_level": "h1",
         "richtext": "<p>Gefriergetrocknete Früchte; fair produziert, in der Ursprungsgemeinde verarbeitet, radikal transparent.<br/><br/></p>",
         "text_alignment": "text-left",
@@ -185,7 +185,7 @@
         "button2_width_mobile": 190,
         "button_text_color_desktop": "#ae0000",
         "button_text_color_mobile": "#ffffff",
-        "color_scheme": "scheme1",
+        "color_scheme": "scheme2",
         "use_gradient_background": false
       }
     },
@@ -517,8 +517,8 @@
           "settings": {
             "title": "97 %",
             "text": "Nährstoffe",
-            "cta_link": "shopify://blogs/news",
-            "cta_text": "test",
+            "cta_link": "",
+            "cta_text": "",
             "override_section_color_scheme": false,
             "color_scheme": "scheme1"
           }
