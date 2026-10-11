@@ -5,6 +5,10 @@
     assign preload = true
   endif
 -%}
+{%- style -%}
+  #{{ section.id }} { --kd-iw-media: {{ section.settings.image_width_large | default: 45 }}%; }
+{%- endstyle -%}
+
 <section
   id="{{ section.id }}"
   class="bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %} relative overflow-hidden"
@@ -107,6 +111,17 @@
         }
       ],
       "info": "Tablet and desktop. On mobile the image sits above the text."
+    },
+    {
+      "type": "range",
+      "id": "image_width_large",
+      "label": "Image width on large screens",
+      "info": "Share of the row the image takes from 1441px (24\" and larger). Below that the design-system sizes apply.",
+      "min": 30,
+      "max": 60,
+      "step": 1,
+      "unit": "%",
+      "default": 45
     },
     {
       "type": "select",
