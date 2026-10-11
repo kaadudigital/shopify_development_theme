@@ -7551,7 +7551,7 @@ body {
 .kd-ticker {
   display: flex;
   align-items: center;
-  height: 48px;
+  min-height: 48px;
   overflow: hidden;
   color: rgb(var(--color-scheme-text));
   text-decoration: none;
@@ -7559,7 +7559,7 @@ body {
 .kd-ticker__track {
   display: flex;
   width: max-content;
-  animation: kd-tick 22s linear infinite;
+  animation: kd-tick var(--kd-ticker-duration, 22s) linear infinite;
 }
 .kd-ticker__track--reverse { animation-direction: reverse; }
 .kd-ticker__group {
@@ -7576,15 +7576,29 @@ body {
 }
 .kd-ticker__item { padding: 0 16px; }
 .kd-ticker__star { padding: 0 8px; font-size: 16px; }
+/* Section-setting separators: shape or image, sized relative to the text */
+.kd-ticker__sep { display: inline-flex; align-items: center; flex-shrink: 0; padding: 4px 8px; }
+.kd-ticker__shape { display: block; width: var(--kd-ticker-shape-size, 0.6em); height: var(--kd-ticker-shape-size, 0.6em); object-fit: contain; }
+.kd-ticker__shape--triangle { transform-origin: 50% 66.66%; }
+.kd-ticker__gap { display: inline-block; width: 16px; }
+/* Repeat off: each phrase crosses the full screen on its own */
+.kd-ticker__group--single .kd-ticker__item { padding-left: 100vw; }
+@media (prefers-reduced-motion: no-preference) {
+  .kd-ticker--spin-shapes .kd-ticker__shape--svg,
+  .kd-ticker--spin-images .kd-ticker__shape--img { animation: kd-spin 3s linear infinite; }
+}
+@keyframes kd-spin { to { transform: rotate(360deg); } }
 @keyframes kd-tick { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) {
   .kd-ticker__track { animation: none; }
 }
 @media (min-width: 768px) {
-  .kd-ticker { height: 64px; }
+  .kd-ticker { min-height: 64px; }
   .kd-ticker__group { font-size: 34px; }
   .kd-ticker__item { padding: 0 22px; }
   .kd-ticker__star { padding: 0 11px; font-size: 22px; }
+  .kd-ticker__sep { padding: 4px 11px; }
+  .kd-ticker__gap { width: 22px; }
 }
 
 /* ── VIDEO BAND — sections/custom-video-with-text-overlay.liquid ──
