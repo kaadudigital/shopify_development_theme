@@ -6,7 +6,10 @@
   endif
 -%}
 {%- style -%}
-  #{{ section.id }} { --kd-iw-media: {{ section.settings.image_width_large | default: 40 }}%; }
+  #{{ section.id }} {
+    --kd-iw-media: {{ section.settings.image_width_large | default: 40 }}%;
+    --kd-iw-link: rgb(var(--color-scheme-{{ section.settings.link_color | default: 'text' }}));
+  }
 {%- endstyle -%}
 
 <section
@@ -815,6 +818,39 @@
       "label": "Element ID to scroll to",
       "placeholder": "my-element-id",
       "info": "Without #. Used when the action is \"Scroll to an element\"."
+    },
+    {
+      "type": "select",
+      "id": "link_color",
+      "label": "Link colour",
+      "info": "From the section's colour scheme.",
+      "options": [
+        {
+          "value": "text",
+          "label": "Heading text"
+        },
+        {
+          "value": "body-text",
+          "label": "Body text"
+        },
+        {
+          "value": "eyebrow-text",
+          "label": "Kicker"
+        },
+        {
+          "value": "caption-text",
+          "label": "Caption"
+        },
+        {
+          "value": "accent-1",
+          "label": "Accent 1"
+        },
+        {
+          "value": "accent-2",
+          "label": "Accent 2"
+        }
+      ],
+      "default": "text"
     },
     {
       "type": "header",
