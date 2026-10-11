@@ -7411,7 +7411,7 @@ body {
 
 /* ── IMAGE WITH TEXT (hero / vision / final CTA) — snippets/image-with-text-custom.liquid ──
    Mobile: stacked (media → head → body; head first with --heading-first).
-   ≥768: two columns, media beside head + body. Hero media 620px (DS), others 560px. */
+   ≥768: two columns, media beside head + body. Hero media 620px (DS), others 560px; ≥1441 half / half. */
 .kd-iw {
   padding-block: var(--space-9) var(--space-9);
 }
@@ -7493,6 +7493,19 @@ body {
   .kd-iw--image-right .kd-iw__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 560px); }
   .kd-iw--hero .kd-iw__grid { grid-template-columns: minmax(0, 620px) minmax(0, 1fr); column-gap: var(--space-8); }
   .kd-iw--hero.kd-iw--image-right .kd-iw__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 620px); }
+}
+/* Large screens (cobfoods): media takes half the row and scales with it (the row
+   itself stops at 1800px via .kd-wide). At 1440 the DS 620px is already ~half,
+   so there is no jump. Paragraphs keep a readable measure. */
+@media (min-width: 1441px) {
+  .kd-iw__grid,
+  .kd-iw--image-right .kd-iw__grid,
+  .kd-iw--hero .kd-iw__grid,
+  .kd-iw--hero.kd-iw--image-right .kd-iw__grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: var(--space-12);
+  }
+  .kd-iw__text { max-width: 640px; }
 }
 
 /* ── TICKER (DS Ticker) — sections/scrolling-text.liquid ──
