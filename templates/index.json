@@ -93,6 +93,7 @@
         "button_link_type": "url",
         "button_link": "shopify://pages/contact",
         "focus_element_id": "",
+        "link_color": "accent-1",
         "color_scheme": "scheme-f3c790b8-ce18-4811-87cf-e53b730fe742",
         "use_gradient_background": false
       }
@@ -101,11 +102,11 @@
       "type": "scrolling-text",
       "name": "t:sections.scrolling_text.name",
       "settings": {
-        "text": "RADIKALE FAIRNESS OHNE KOMPROMISS",
+        "text": "fuck middleman | It's not fair!",
         "repeat_text": true,
-        "shape_between_text": "image",
+        "shape_between_text": "custom_star",
         "between_text_image": "shopify://shop_images/Kaadu_favicon_purple_RGB.png",
-        "shape_size": 2,
+        "shape_size": 1.2,
         "animate_shape_between_text": true,
         "animate_image_between_text": true,
         "link": "",
@@ -621,6 +622,7 @@
         "button_link_type": "url",
         "button_link": "",
         "focus_element_id": "",
+        "link_color": "text",
         "color_scheme": "scheme3",
         "use_gradient_background": false
       }
@@ -893,6 +895,7 @@
         "button_link_type": "url",
         "button_link": "",
         "focus_element_id": "",
+        "link_color": "text",
         "color_scheme": "scheme3",
         "use_gradient_background": false
       }
