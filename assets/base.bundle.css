@@ -7556,22 +7556,38 @@ body {
   .kd-iw--hero .kd-iw__grid { grid-template-columns: minmax(0, 620px) minmax(0, 1fr); column-gap: var(--space-8); }
   .kd-iw--hero.kd-iw--image-right .kd-iw__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 620px); }
 }
-/* Large screens (cobfoods): media takes a share of the row and scales with it
-   (the row itself stops at 1800px via .kd-wide). Share = --kd-iw-media, set by
-   the section ("Image width on large screens", default 40%). Paragraphs keep a
-   readable measure. */
+/* Large screens (cobfoods): media takes a share of the row and scales with it.
+   The text column stops at a readable width and the image + text pair is centred,
+   so the space left and right of the row is equal. Shares come from the section:
+   --kd-iw-media (1441–1799px, 24", default 40%) and --kd-iw-media-xl (≥1800px, 27",
+   default 46%; the row also drops the 1800px cap there). */
 @media (min-width: 1441px) {
   .kd-iw__grid,
   .kd-iw--hero .kd-iw__grid {
-    grid-template-columns: minmax(0, var(--kd-iw-media, 40%)) minmax(0, 1fr);
+    grid-template-columns: minmax(0, var(--kd-iw-media, 40%)) minmax(0, 720px);
+    justify-content: center;
     column-gap: var(--space-12);
   }
   .kd-iw--image-right .kd-iw__grid,
   .kd-iw--hero.kd-iw--image-right .kd-iw__grid {
-    grid-template-columns: minmax(0, 1fr) minmax(0, var(--kd-iw-media, 40%));
+    grid-template-columns: minmax(0, 720px) minmax(0, var(--kd-iw-media, 40%));
+    justify-content: center;
     column-gap: var(--space-12);
   }
   .kd-iw__text { max-width: 640px; }
+}
+@media (min-width: 1800px) {
+  .kd-iw .kd-wide { max-width: none; }
+  .kd-iw__grid,
+  .kd-iw--hero .kd-iw__grid {
+    grid-template-columns: minmax(0, var(--kd-iw-media-xl, 46%)) minmax(0, 760px);
+    column-gap: var(--space-13);
+  }
+  .kd-iw--image-right .kd-iw__grid,
+  .kd-iw--hero.kd-iw--image-right .kd-iw__grid {
+    grid-template-columns: minmax(0, 760px) minmax(0, var(--kd-iw-media-xl, 46%));
+    column-gap: var(--space-13);
+  }
 }
 
 /* ── TICKER (DS Ticker) — sections/scrolling-text.liquid ──

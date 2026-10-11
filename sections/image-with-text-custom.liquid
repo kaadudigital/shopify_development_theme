@@ -8,6 +8,7 @@
 {%- style -%}
   #{{ section.id }} {
     --kd-iw-media: {{ section.settings.image_width_large | default: 40 }}%;
+    --kd-iw-media-xl: {{ section.settings.image_width_xl | default: 46 }}%;
     --kd-iw-link: rgb(var(--color-scheme-{{ section.settings.link_color | default: 'text' }}));
   }
 {%- endstyle -%}
@@ -120,13 +121,24 @@
     {
       "type": "range",
       "id": "image_width_large",
-      "label": "Image width on large screens",
-      "info": "Share of the row the image takes from 1441px (24\" and larger). Below that the design-system sizes apply.",
+      "label": "Image width – 24\" screens",
+      "info": "Share of the row the image takes at 1441–1799px. Image and text are centred with equal space left and right. Below 1441px the design-system sizes apply.",
       "min": 30,
       "max": 60,
       "step": 1,
       "unit": "%",
       "default": 40
+    },
+    {
+      "type": "range",
+      "id": "image_width_xl",
+      "label": "Image width – 27\" and larger",
+      "info": "Share of the row the image takes from 1800px.",
+      "min": 30,
+      "max": 65,
+      "step": 1,
+      "unit": "%",
+      "default": 46
     },
     {
       "type": "select",
