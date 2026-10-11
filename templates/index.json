@@ -186,7 +186,8 @@
         "button_text_color_desktop": "#ae0000",
         "button_text_color_mobile": "#ffffff",
         "color_scheme": "scheme2",
-        "use_gradient_background": false
+        "use_gradient_background": false,
+        "video_trim": 10
       }
     },
     "custom_image_section_anwQpJ": {

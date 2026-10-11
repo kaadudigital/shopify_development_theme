@@ -35,12 +35,17 @@
       assign container_class = container_class | append: ' lg:aspect-[1_/_var(--custom-aspect-h)] lg:h-auto'
   endcase
 
+  # Black bars baked into the video: crop video_trim % off its top and bottom
+  assign trim = section.settings.video_trim | default: 0
+  assign trim_factor = 100 | minus: trim | minus: trim | times: 0.01
+
   if crop == 'natural' or crop_desktop == 'natural'
     if video != blank
       assign custom_aspect_h = video.sources[0].height | times: 1.00000000 | divided_by: video.sources[0].width
     else
       assign custom_aspect_h = 0.5625
     endif
+    assign custom_aspect_h = custom_aspect_h | times: trim_factor
   endif
 
   assign video_size_class = 'absolute inset-0 w-full h-full object-cover'
@@ -68,14 +73,45 @@
 -%}
 
 {%- comment -%}
-  Kaadu DS video band: the video sits under a dark sage gradient (DS: sage only under the video
-  overlay, keep the gradient), text on it is paper, the kicker lime, the CTA a purple cloud.
-  Styles: "VIDEO BAND" in assets/base.bundle.css. overlay_color / overlay_opacity and the
-  button2 image settings are no longer used.
+  Kaadu video band: the video under a dark gradient (or a solid overlay colour), centred kicker,
+  title, text and a cloud button. Colours follow the landing-page mockup by default (paper kicker,
+  red title with a light outline shadow, purple cloud with a paper label) and are settings.
+  Optional button artwork replaces the cloud. Styles: "VIDEO BAND" in assets/base.bundle.css.
 {%- endcomment -%}
 
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    --kd-video-kicker: {{ section.settings.kicker_color | default: '#FFFFF5' }};
+    --kd-video-title: {{ section.settings.title_color | default: '#AC0300' }};
+    --kd-video-shadow: {{ section.settings.title_shadow_color | default: '#FFFFF5' }};
+    --kd-video-shadow-m: {{ section.settings.title_shadow_color_mobile | default: '#AEFF64' }};
+    --kd-video-text: {{ section.settings.text_color | default: '#FFFFF5' }};
+    --kd-video-btn: {{ section.settings.button_color | default: '#542A76' }};
+    --kd-video-btn-label: {{ section.settings.button_label_color | default: '#FFFFF5' }};
+    {%- assign overlay_alpha = section.settings.overlay_opacity | times: 0.01 %}
+    --kd-video-overlay: {{ section.settings.overlay_color | default: '#000000' | color_modify: 'alpha', overlay_alpha }};
+  }
+  {%- if trim > 0 %}
+  #shopify-section-{{ section.id }} video {
+    top: {{ trim | times: 100.0 | divided_by: trim_factor | divided_by: 100 | prepend: '-' }}%;
+    bottom: auto;
+    height: {{ 100.0 | divided_by: trim_factor }}%;
+  }
+  {%- endif %}
+  {%- if section.settings.use_button_art and section.settings.button2_image != blank %}
+  #shopify-section-{{ section.id }} .kd-video__actions .kd-btn--art {
+    --kd-art-w: {{ section.settings.button2_width_desktop | default: 200 }}px;
+    --kd-art-ratio: {{ section.settings.button2_image.aspect_ratio }};
+    --kd-art-color: {{ section.settings.button_text_color_desktop | default: '#ffffff' }};
+    --kd-art-w-m: {{ section.settings.button2_width_mobile | default: 150 }}px;
+    --kd-art-ratio-m: {{ section.settings.button2_image_mobile.aspect_ratio | default: section.settings.button2_image.aspect_ratio }};
+    --kd-art-color-m: {{ section.settings.button_text_color_mobile | default: section.settings.button_text_color_desktop | default: '#ffffff' }};
+  }
+  {%- endif %}
+{%- endstyle -%}
+
 <section
-  class="grid bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %} {% unless section.settings.style == 'inset' %}full-bleed-section{% endunless %}"
+  class="kd-video{% unless section.settings.title_shadow %} kd-video--no-shadow{% endunless %} grid bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %} {% unless section.settings.style == 'inset' %}full-bleed-section{% endunless %}"
   data-color-scheme="{{ section.settings.color_scheme }}"
 >
   <div class="section-content {% if section.settings.style == 'inset' %}py-section-vertical-spacing{% endif %}">
@@ -110,10 +146,17 @@
           {% endif %}
           {% if section.settings.cta_url != blank and section.settings.cta_text != blank %}
             {%- capture cta_label -%}
+              {%- if section.settings.show_play_icon -%}
+                <svg class="kd-video__play" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 4l14 8-14 8z" fill="currentColor"/></svg>
+              {%- endif -%}
               <span class="kd-video__label--mobile">{{ cta_text_mobile_display | escape }}</span><span class="kd-video__label--desktop">{{ section.settings.cta_text | escape }}</span>
             {%- endcapture -%}
             <div class="kd-video__actions">
-              {%- render 'kd-button', label: cta_label, url: section.settings.cta_url, variant: 'primary', size: 'md' -%}
+              {%- if section.settings.use_button_art and section.settings.button2_image != blank -%}
+                {%- render 'kd-button', label: cta_label, url: section.settings.cta_url, size: 'md', art: section.settings.button2_image, art_mobile: section.settings.button2_image_mobile -%}
+              {%- else -%}
+                {%- render 'kd-button', label: cta_label, url: section.settings.cta_url, size: 'md' -%}
+              {%- endif -%}
             </div>
           {% endif %}
         {%- endcapture -%}
@@ -163,7 +206,7 @@
             {% endif %}
 
             {%- if section.settings.enable_overlay -%}
-              <div class="kd-video__overlay" aria-hidden="true"></div>
+              <div class="kd-video__overlay{% if section.settings.overlay_style == 'solid' %} kd-video__overlay--solid{% endif %}" aria-hidden="true"></div>
             {%- endif -%}
           </data-island>
         </div>
@@ -269,6 +312,17 @@
       "default": "widescreen"
     },
     {
+      "type": "range",
+      "id": "video_trim",
+      "label": "Hide black bars in the video",
+      "info": "Crops this much off the video's top and bottom, for videos with baked-in black bars.",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "%",
+      "default": 0
+    },
+    {
       "type": "header",
       "content": "Overlay"
     },
@@ -277,14 +331,30 @@
       "id": "enable_overlay",
       "label": "Enable video overlay",
       "default": false,
-      "info": "Darkens the video with the design-system gradient so the paper text stays readable. Keep it on."
+      "info": "Darkens the video so the text stays readable."
+    },
+    {
+      "type": "select",
+      "id": "overlay_style",
+      "label": "Overlay",
+      "options": [
+        {
+          "value": "gradient",
+          "label": "Design-system gradient"
+        },
+        {
+          "value": "solid",
+          "label": "Solid colour (below)"
+        }
+      ],
+      "default": "gradient"
     },
     {
       "type": "color",
       "id": "overlay_color",
       "label": "Overlay color",
       "default": "#000000",
-      "info": "Not used since the design-system redesign (the overlay is the DS sage gradient; the CTA is a purple cloud button)."
+      "info": "Used when Overlay is \"Solid colour\"."
     },
     {
       "type": "range",
@@ -294,8 +364,7 @@
       "max": 100,
       "step": 5,
       "unit": "%",
-      "default": 40,
-      "info": "Not used since the design-system redesign (the overlay is the DS sage gradient; the CTA is a purple cloud button)."
+      "default": 40
     },
     {
       "type": "header",
@@ -395,7 +464,7 @@
       "type": "text",
       "id": "eyebrow",
       "label": "Eyebrow",
-      "info": "Short overline above the title (H3 — Subheading style). Uses the colour scheme's eyebrow colour."
+      "info": "Short overline above the title."
     },
     {
       "type": "inline_richtext",
@@ -445,59 +514,121 @@
     },
     {
       "type": "header",
-      "content": "Custom image button"
+      "content": "Button artwork"
     },
     {
       "type": "paragraph",
-      "content": "Pick a button image to replace the default pill button. The button's height follows the image's own aspect ratio. Without an image the CTA falls back to the standard pill."
+      "content": "Replaces the cloud button with your own artwork. The button's height follows the image's aspect ratio; the mobile artwork applies below 768px."
+    },
+    {
+      "type": "checkbox",
+      "id": "use_button_art",
+      "label": "Use button artwork",
+      "default": false
     },
     {
       "type": "image_picker",
       "id": "button2_image",
-      "label": "Button image (Desktop)",
-      "info": "Not used since the design-system redesign (the overlay is the DS sage gradient; the CTA is a purple cloud button)."
+      "label": "Artwork (desktop)"
     },
     {
       "type": "image_picker",
       "id": "button2_image_mobile",
-      "label": "Button image (Mobile)",
-      "info": "Not used since the design-system redesign (the overlay is the DS sage gradient; the CTA is a purple cloud button)."
+      "label": "Artwork (mobile)"
     },
     {
       "type": "range",
       "id": "button2_width_desktop",
-      "label": "Button width (Desktop)",
+      "label": "Artwork width (desktop)",
       "min": 80,
       "max": 800,
       "step": 10,
       "unit": "px",
-      "default": 200,
-      "info": "Not used since the design-system redesign (the overlay is the DS sage gradient; the CTA is a purple cloud button)."
+      "default": 200
     },
     {
       "type": "range",
       "id": "button2_width_mobile",
-      "label": "Button width (Mobile)",
+      "label": "Artwork width (mobile)",
       "min": 80,
       "max": 800,
       "step": 10,
       "unit": "px",
-      "default": 150,
-      "info": "Not used since the design-system redesign (the overlay is the DS sage gradient; the CTA is a purple cloud button)."
+      "default": 150
     },
     {
       "type": "color",
       "id": "button_text_color_desktop",
-      "label": "Button label colour (Desktop)",
-      "default": "#AE0000",
-      "info": "Not used since the design-system redesign (the overlay is the DS sage gradient; the CTA is a purple cloud button)."
+      "label": "Artwork label colour (desktop)",
+      "default": "#AE0000"
     },
     {
       "type": "color",
       "id": "button_text_color_mobile",
-      "label": "Button label colour (Mobile)",
-      "default": "#AE0000",
-      "info": "Not used since the design-system redesign (the overlay is the DS sage gradient; the CTA is a purple cloud button)."
+      "label": "Artwork label colour (mobile)",
+      "default": "#AE0000"
+    },
+    {
+      "type": "header",
+      "content": "Text & button colours"
+    },
+    {
+      "type": "paragraph",
+      "content": "Defaults follow the landing-page mockup."
+    },
+    {
+      "type": "color",
+      "id": "kicker_color",
+      "label": "Eyebrow",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title",
+      "default": "#AC0300"
+    },
+    {
+      "type": "checkbox",
+      "id": "title_shadow",
+      "label": "Title outline shadow",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "title_shadow_color",
+      "label": "Title shadow (desktop)",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "title_shadow_color_mobile",
+      "label": "Title shadow (mobile)",
+      "default": "#AEFF64"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Body text",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Cloud button",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "button_label_color",
+      "label": "Cloud button label",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_play_icon",
+      "label": "Play icon in the button",
+      "default": true
     },
     {
       "type": "header",

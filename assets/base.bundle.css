@@ -7646,7 +7646,9 @@ body {
 }
 
 /* ── VIDEO BAND — sections/custom-video-with-text-overlay.liquid ──
-   DS: sage under the video, dark gradient on top, paper text, lime kicker, centred column max 760. */
+   Centred column max 760 over the video. Colours follow the landing-page mockup and come from
+   section settings (--kd-video-*): paper kicker, red title with a light outline shadow
+   (lime on mobile), purple cloud with a paper label. */
 .kd-video__overlay {
   position: absolute;
   inset: 0;
@@ -7654,24 +7656,38 @@ body {
   pointer-events: none;
   background: linear-gradient(180deg, rgba(60, 70, 60, 0.2) 0%, rgba(60, 70, 60, 0.6) 100%);
 }
+.kd-video__overlay--solid { background: var(--kd-video-overlay, transparent); }
 .kd-video__content {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-4);
   max-width: 760px;
-  color: var(--paper);
+  color: var(--kd-video-text, var(--paper));
 }
 .justify-start .kd-video__content { align-items: flex-start; }
 .justify-end   .kd-video__content { align-items: flex-end; }
-.kd-video__kicker { margin: 0; color: var(--lime); }
-.kd-video__title  { margin: 0; color: var(--paper); }
-.kd-video__text   { color: var(--paper); }
+.kd-video__kicker { margin: 0; color: var(--kd-video-kicker, var(--paper)); }
+.kd-video__title  {
+  margin: 0;
+  color: var(--kd-video-title, var(--red));
+  text-shadow: 2px 2px 0 var(--kd-video-shadow-m, var(--lime));
+}
+.kd-video--no-shadow .kd-video__title { text-shadow: none; }
+.kd-video__text   { color: var(--kd-video-text, var(--paper)); }
 .kd-video__text > :first-child { margin-top: 0; }
 .kd-video__text > :last-child  { margin-bottom: 0; }
 .kd-video__actions { margin-top: var(--space-2); }
+.kd-video__actions .kd-btn:not(.kd-btn--art) {
+  --kd-cloud: var(--kd-video-btn, var(--purple));
+  color: var(--kd-video-btn-label, var(--paper));
+}
+.kd-video__actions .kd-btn__label { display: inline-flex; align-items: center; gap: var(--space-2); }
+.kd-video__play { width: 1em; height: 1em; flex-shrink: 0; }
 .kd-video__label--desktop { display: none; }
 @media (min-width: 768px) {
+  .kd-video__title { text-shadow: -2px -2px 2px var(--kd-video-shadow, var(--paper)); }
+  .kd-video--no-shadow .kd-video__title { text-shadow: none; }
   .kd-video__label--mobile { display: none; }
   .kd-video__label--desktop { display: inline; }
 }
