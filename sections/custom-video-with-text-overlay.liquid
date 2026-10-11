@@ -92,6 +92,9 @@
     --kd-video-overlay: {{ section.settings.overlay_color | default: '#000000' | color_modify: 'alpha', overlay_alpha }};
   }
   {%- if trim > 0 %}
+  #shopify-section-{{ section.id }} .banner-section-content--h {
+    overflow: hidden;
+  }
   #shopify-section-{{ section.id }} video {
     top: {{ trim | times: 100.0 | divided_by: trim_factor | divided_by: 100 | prepend: '-' }}%;
     bottom: auto;
