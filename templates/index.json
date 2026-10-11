@@ -61,37 +61,37 @@
       "settings": {
         "image": "shopify://shop_images/Group_45.webp",
         "image_caption": "",
+        "image_position": "left",
         "crop": "",
         "image_shape": "default",
         "blob_type": 1,
         "rotate_image": 0,
-        "image_position": "left",
         "disable_media_style": false,
-        "title": "Snack like you give a damn.",
         "h2_title": "100% Frucht. 0% Ausbeutung.",
+        "title": "Snack like you give a damn.",
+        "heading_level": "h1",
         "richtext": "<p>Gefriergetrocknete Früchte; fair produziert, in der Ursprungsgemeinde verarbeitet, radikal transparent.<br/><br/></p>",
         "text_alignment": "text-left",
         "mobile_text_alignment": "text-center",
         "mobile_layout_order": false,
-        "button_link_type": "url",
-        "button_link": "shopify://pages/contact",
-        "focus_element_id": "",
-        "button_label": "SHOP OFFNEN",
-        "button_label_mobile": "",
+        "button2_label": "JETZT PROBIEREN",
+        "button2_label_mobile": "PROBIERPAKET BESTELLEN",
         "button2_link_type": "url",
         "button2_link": "shopify://products/bananen-crunchys",
         "focus_element2_id": "",
-        "button2_label": "JETZT PROBIEREN",
-        "button2_label_mobile": "PROBIERPAKET BESTELLEN",
         "button2_image": "shopify://shop_images/Artboard151.svg",
         "button2_image_mobile": "shopify://shop_images/Artboard12.svg",
+        "button2_width_desktop": 260,
+        "button2_width_mobile": 360,
         "button_text_color_desktop": "#ffffff",
         "button_text_color_mobile": "#f0f7f1",
-        "button2_width_desktop": 230,
-        "button2_width_mobile": 360,
+        "button_label": "SHOP OFFNEN",
+        "button_label_mobile": "",
+        "button_link_type": "url",
+        "button_link": "shopify://pages/contact",
+        "focus_element_id": "",
         "color_scheme": "scheme-f3c790b8-ce18-4811-87cf-e53b730fe742",
-        "use_gradient_background": false,
-        "heading_level": "h1"
+        "use_gradient_background": false
       }
     },
     "scrolling_text_j9kYtA": {
@@ -162,7 +162,7 @@
         "crop": "vertical",
         "crop_desktop": "natural",
         "enable_overlay": true,
-        "overlay_color": "#FFFFFF",
+        "overlay_color": "#ffffff",
         "overlay_opacity": 0,
         "display_on_card": false,
         "style": "full",
@@ -211,6 +211,9 @@
       ],
       "name": "Custom Sticker Heading",
       "settings": {
+        "layout": "kd_row",
+        "row_image_position": "left",
+        "quote_cite": "",
         "section_height_desktop": 730,
         "section_height_mobile": 600,
         "background_image": "shopify://shop_images/Hand_with_Crunchy.webp",
@@ -272,9 +275,7 @@
         "button_label": "Shop Now",
         "button_style": "btn-secondary",
         "color_scheme": "scheme6",
-        "use_gradient_background": false,
-        "layout": "kd_row",
-        "row_image_position": "left"
+        "use_gradient_background": false
       }
     },
     "kaadu_people_cards_wP7k2m": {
@@ -283,13 +284,15 @@
         "card_1": {
           "type": "card",
           "settings": {
+            "image": "shopify://shop_images/52f2f8584ac253803e2a8b475558b239c4b73ea3.jpg",
             "tint": "tint-cocoa",
             "stat": "+50 %",
             "title": "Arbeiter*innen",
             "text": "<p>Lohn +50%*, Pension, Versicherung, Gewinnbeteiligung — langfristig Mitbesitz.</p>",
             "back_text": "<p>In unserem Betrieb arbeiten ausschliesslich Frauen aus einkommensschwachen Familien der Region.</p>",
+            "back_fact": "",
             "back_note": "*Im Vergleich zu ähnlicher Arbeit in der Region Vazhakulam, Kerala.",
-            "image": "shopify://shop_images/52f2f8584ac253803e2a8b475558b239c4b73ea3.jpg"
+            "link": ""
           }
         },
         "card_2": {
@@ -300,7 +303,9 @@
             "title": "Kleinbauer*innen",
             "text": "<p>Preis +30–40%*, garantierte Abnahme, langfristige Partnerschaft.</p>",
             "back_text": "<p>Unsere Kleinbauer*innen in Vazhakulam erhalten 30–40% über Marktpreis für ihre Ananas — garantiert, unabhängig von Weltmarktschwankungen.</p>",
-            "back_note": "*Im Vergleich zu marktüblichen Ankaufspreisen in der Region Vazhakulam, Kerala."
+            "back_fact": "",
+            "back_note": "*Im Vergleich zu marktüblichen Ankaufspreisen in der Region Vazhakulam, Kerala.",
+            "link": ""
           }
         },
         "card_3": {
@@ -311,7 +316,9 @@
             "title": "Erntehelfer*innen",
             "text": "<p>Fairer Tageslohn, Schutzausrüstung, Gemeinschaftsfonds.</p>",
             "back_text": "<p>Erntehelfer*innen erhalten fairen Tageslohn, sichere Arbeitsbedingungen und Zugang zu unserem Gemeinschaftsfonds.</p>",
-            "back_note": "*Im Vergleich zu vergleichbarer Erntearbeit in der Region Vazhakulam, Kerala."
+            "back_fact": "",
+            "back_note": "*Im Vergleich zu vergleichbarer Erntearbeit in der Region Vazhakulam, Kerala.",
+            "link": ""
           }
         },
         "card_4": {
@@ -322,7 +329,9 @@
             "title": "Natur × Community",
             "text": "<p>Reinvestition in Bildung, Infrastruktur und Naturschutz vor Ort.</p>",
             "back_text": "<p>Ein Teil jedes Verkaufs fliesst zurück in die Gemeinde — in Bildung, Infrastruktur und den Schutz der lokalen Natur.</p>",
-            "back_note": "*Teil des Kaadu Gewinnbeteiligungsmodells in Vazhakulam, Kerala."
+            "back_fact": "",
+            "back_note": "*Teil des Kaadu Gewinnbeteiligungsmodells in Vazhakulam, Kerala.",
+            "link": ""
           }
         }
       },
@@ -485,12 +494,15 @@
       "settings": {
         "title": "Ungeschnitten oder so",
         "subheading": "",
+        "button_label": "Zum Manifesto",
+        "button_link": "/pages/manifesto",
         "slideshow_focus": "center",
         "autoscroll_mode": "1",
         "color_scheme": "scheme3",
         "use_gradient_background": false,
-        "button_label": "Zum Manifesto",
-        "button_link": "/pages/manifesto"
+        "arrow_background": "#fffff5",
+        "arrow_icon_color": "#000000",
+        "arrow_shape": "default"
       }
     },
     "image_with_highlights_mU9j66": {
@@ -551,6 +563,9 @@
       "settings": {
         "eyebrow": "",
         "title": "BESSER AUF JEDE ART UND WEISE",
+        "button_label": "",
+        "button_link": "",
+        "button_note": "",
         "block_alignment_on_desktop": "justify-center",
         "display_on_card": true,
         "slideshow_on_mobile": false,
@@ -569,160 +584,39 @@
         "use_gradient_background": false
       }
     },
-    "custom_image_section_Mafcmn": {
-      "type": "custom-image-section",
-      "blocks": {
-        "shape_divider_Ui9e84": {
-          "type": "shape_divider",
-          "settings": {
-            "target_section": "below",
-            "target_section_color_scheme": "scheme3",
-            "style": "circles-2.5-patterned_1200x54",
-            "enable_mobile_style": true,
-            "style_mobile": "circles-3-patterned_1200x67",
-            "flip_horizontal": false,
-            "enable_animation": true,
-            "animation_direction": ""
-          }
-        },
-        "background_pattern_NKpgdA": {
-          "type": "background_pattern",
-          "settings": {
-            "type": "custom_rectangles",
-            "color": "text",
-            "size": 104,
-            "opacity": 100,
-            "enable_parallax": false,
-            "parallax_speed": 3
-          }
-        }
-      },
-      "block_order": [
-        "shape_divider_Ui9e84",
-        "background_pattern_NKpgdA"
-      ],
-      "name": "Custom Sticker Heading",
-      "settings": {
-        "section_height_desktop": 880,
-        "section_height_mobile": 600,
-        "background_image": "shopify://shop_images/b7bcf4540261210886085fc72a3739f4765a8577.png",
-        "image_width_desktop": 585,
-        "image_width_mobile": 300,
-        "image_x_desktop": 20,
-        "image_y_desktop": 52,
-        "image_x_mobile": 30,
-        "image_y_mobile": 65,
-        "heading": "",
-        "heading_tag": "h2",
-        "heading_style": "h2",
-        "subheading": "«Zum ersten Mal zählt nicht nur meine Arbeit, sondern auch meine Stimme.»",
-        "text_alignment_header": "text-center",
-        "header_display_on_card": true,
-        "subheading_display_on_card": true,
-        "header_x_desktop": 65,
-        "header_y_desktop": 40,
-        "header_x_mobile": 55,
-        "header_y_mobile": 35,
-        "subheading_x_desktop": 65,
-        "subheading_y_desktop": 55,
-        "subheading_x_mobile": 50,
-        "subheading_y_mobile": 25,
-        "heading_sticker_width_desktop": 120,
-        "heading_sticker_width_mobile": 80,
-        "heading_sticker_rotate": -10,
-        "heading_sticker_show_mobile": true,
-        "heading_sticker_x_desktop": 100,
-        "heading_sticker_y_desktop": 0,
-        "heading_sticker_x_mobile": 100,
-        "heading_sticker_y_mobile": 0,
-        "subheading_sticker_image": "shopify://shop_images/Radically_fair.png",
-        "subheading_sticker_width_desktop": 240,
-        "subheading_sticker_width_mobile": 80,
-        "subheading_sticker_rotate": 0,
-        "subheading_sticker_show_mobile": false,
-        "subheading_sticker_x_desktop": 75,
-        "subheading_sticker_y_desktop": -30,
-        "subheading_sticker_x_mobile": 100,
-        "subheading_sticker_y_mobile": 0,
-        "subheading_sticker_2_image": "shopify://shop_images/appealing_banana.png",
-        "subheading_sticker_2_width_desktop": 180,
-        "subheading_sticker_2_width_mobile": 80,
-        "subheading_sticker_2_rotate": -5,
-        "subheading_sticker_2_show_mobile": false,
-        "subheading_sticker_2_x_desktop": 0,
-        "subheading_sticker_2_y_desktop": 120,
-        "subheading_sticker_2_x_mobile": 0,
-        "subheading_sticker_2_y_mobile": 100,
-        "body_text": "",
-        "body_display_on_card": false,
-        "text_alignment": "text-left",
-        "body_x_desktop": 65,
-        "body_y_desktop": 65,
-        "body_x_mobile": 55,
-        "body_y_mobile": 65,
-        "button_link": "",
-        "button_label": "Shop Now",
-        "button_style": "btn-secondary",
-        "color_scheme": "scheme1",
-        "use_gradient_background": false,
-        "layout": "kd_row",
-        "row_image_position": "left",
-        "quote_cite": "[NAME], Verarbeitung in Vadacode"
-      }
-    },
-    "email_input_dMpqpt": {
-      "type": "email-input",
-      "custom_css": [],
-      "name": "Email Signup",
-      "settings": {
-        "heading": "Join the mission",
-        "subtitle": "",
-        "placeholder_text": "E-Mail",
-        "input_square": false,
-        "button_image": "shopify://shop_images/06d3f155e99649c6ad8f552f17b4bec9ac475189.png",
-        "button_text": "Anmelden",
-        "button_text_color": "#ae0000",
-        "button_image_width": 128,
-        "button_image_mobile": "shopify://shop_images/right_arrow_in_spiky_cloud.svg",
-        "button_text_mobile": "",
-        "button_image_width_mobile": 64,
-        "padding_top": "none",
-        "bg_class": "bg-lime",
-        "color_scheme": "scheme5",
-        "kicker": "20 % auf deinen ersten Crunch",
-        "text": "<p>Perfektion ist nicht unser Ziel. Veränderung schon. Begleite uns auf dem Weg zu radikaler Fairness.</p>",
-        "image": "shopify://shop_images/Extra_Mascots-06.svg"
-      }
-    },
     "image_with_text_custom_vision": {
       "type": "image-with-text-custom",
       "settings": {
         "image_caption": "",
+        "image_position": "left",
         "crop": "",
         "image_shape": "default",
         "blob_type": 1,
         "rotate_image": 0,
-        "image_position": "left",
         "disable_media_style": false,
-        "title": "Sind wir Mittelmänner?",
         "h2_title": "Was uns antreibt",
+        "title": "Sind wir Mittelmänner?",
+        "heading_level": "h2",
         "richtext": "<p>Wir kennen die Preise, die Leute und die Ausreden der Branche. Darum bauen wir eine Anlage, die am Ende den Frauen gehört, die darin arbeiten. Und wir zeigen jeden Rappen auf dem Weg dorthin.</p>",
         "text_alignment": "text-left",
         "mobile_text_alignment": "text-left",
         "mobile_layout_order": false,
-        "button_link_type": "url",
-        "button_link": "",
-        "focus_element_id": "",
-        "button_label": "Wer profitiert? ↑",
-        "button_label_mobile": "",
+        "button2_label": "Unsere Vision",
+        "button2_label_mobile": "",
         "button2_link_type": "url",
         "button2_link": "",
         "focus_element2_id": "",
-        "button2_label": "Unsere Vision",
-        "button2_label_mobile": "",
+        "button2_width_desktop": 200,
+        "button2_width_mobile": 150,
+        "button_text_color_desktop": "#ffffff",
+        "button_text_color_mobile": "#ffffff",
+        "button_label": "Wer profitiert? ↑",
+        "button_label_mobile": "",
+        "button_link_type": "url",
+        "button_link": "",
+        "focus_element_id": "",
         "color_scheme": "scheme3",
-        "use_gradient_background": false,
-        "heading_level": "h2"
+        "use_gradient_background": false
       }
     },
     "kaadu_comparison_main": {
@@ -858,35 +752,164 @@
         "color_scheme": "scheme6"
       }
     },
+    "custom_image_section_Mafcmn": {
+      "type": "custom-image-section",
+      "blocks": {
+        "shape_divider_Ui9e84": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "below",
+            "target_section_color_scheme": "scheme3",
+            "style": "circles-2.5-patterned_1200x54",
+            "enable_mobile_style": true,
+            "style_mobile": "circles-3-patterned_1200x67",
+            "flip_horizontal": false,
+            "enable_animation": true,
+            "animation_direction": ""
+          }
+        },
+        "background_pattern_NKpgdA": {
+          "type": "background_pattern",
+          "settings": {
+            "type": "custom_rectangles",
+            "color": "text",
+            "size": 104,
+            "opacity": 100,
+            "enable_parallax": false,
+            "parallax_speed": 3
+          }
+        }
+      },
+      "block_order": [
+        "shape_divider_Ui9e84",
+        "background_pattern_NKpgdA"
+      ],
+      "name": "Custom Sticker Heading",
+      "settings": {
+        "layout": "kd_row",
+        "row_image_position": "left",
+        "quote_cite": "[NAME], Verarbeitung in Vadacode",
+        "section_height_desktop": 880,
+        "section_height_mobile": 600,
+        "background_image": "shopify://shop_images/b7bcf4540261210886085fc72a3739f4765a8577.png",
+        "image_width_desktop": 585,
+        "image_width_mobile": 300,
+        "image_x_desktop": 20,
+        "image_y_desktop": 52,
+        "image_x_mobile": 30,
+        "image_y_mobile": 65,
+        "heading": "",
+        "heading_tag": "h2",
+        "heading_style": "h2",
+        "subheading": "«Zum ersten Mal zählt nicht nur meine Arbeit, sondern auch meine Stimme.»",
+        "text_alignment_header": "text-center",
+        "header_display_on_card": true,
+        "subheading_display_on_card": true,
+        "header_x_desktop": 65,
+        "header_y_desktop": 40,
+        "header_x_mobile": 55,
+        "header_y_mobile": 35,
+        "subheading_x_desktop": 65,
+        "subheading_y_desktop": 55,
+        "subheading_x_mobile": 50,
+        "subheading_y_mobile": 25,
+        "heading_sticker_width_desktop": 120,
+        "heading_sticker_width_mobile": 80,
+        "heading_sticker_rotate": -10,
+        "heading_sticker_show_mobile": true,
+        "heading_sticker_x_desktop": 100,
+        "heading_sticker_y_desktop": 0,
+        "heading_sticker_x_mobile": 100,
+        "heading_sticker_y_mobile": 0,
+        "subheading_sticker_image": "shopify://shop_images/Radically_fair.png",
+        "subheading_sticker_width_desktop": 240,
+        "subheading_sticker_width_mobile": 80,
+        "subheading_sticker_rotate": 0,
+        "subheading_sticker_show_mobile": false,
+        "subheading_sticker_x_desktop": 75,
+        "subheading_sticker_y_desktop": -30,
+        "subheading_sticker_x_mobile": 100,
+        "subheading_sticker_y_mobile": 0,
+        "subheading_sticker_2_image": "shopify://shop_images/appealing_banana.png",
+        "subheading_sticker_2_width_desktop": 180,
+        "subheading_sticker_2_width_mobile": 80,
+        "subheading_sticker_2_rotate": -5,
+        "subheading_sticker_2_show_mobile": false,
+        "subheading_sticker_2_x_desktop": 0,
+        "subheading_sticker_2_y_desktop": 120,
+        "subheading_sticker_2_x_mobile": 0,
+        "subheading_sticker_2_y_mobile": 100,
+        "body_text": "",
+        "body_display_on_card": false,
+        "text_alignment": "text-left",
+        "body_x_desktop": 65,
+        "body_y_desktop": 65,
+        "body_x_mobile": 55,
+        "body_y_mobile": 65,
+        "button_link": "",
+        "button_label": "Shop Now",
+        "button_style": "btn-secondary",
+        "color_scheme": "scheme1",
+        "use_gradient_background": false
+      }
+    },
     "image_with_text_custom_probier": {
       "type": "image-with-text-custom",
       "settings": {
         "image_caption": "",
+        "image_position": "right",
         "crop": "",
         "image_shape": "default",
         "blob_type": 1,
         "rotate_image": 0,
-        "image_position": "right",
         "disable_media_style": false,
-        "title": "Ein Beutel. Gratis. Nur CHF 3 Versand.",
         "h2_title": "Probierpaket",
+        "title": "Ein Beutel. Gratis. Nur CHF 3 Versand.",
+        "heading_level": "h2",
         "richtext": "<p>Probier zuerst, entscheide dann. Gib den Code [CODE] im Shop ein, der Beutel kostet nichts, du zahlst CHF 3 Versand. Schmeckt es dir nicht, war es das. Schmeckt es, weisst du jetzt, was du kaufst.</p><p>Code [CODE] · 1 Beutel pro Haushalt · Danach ab CHF 5.05 pro Beutel im Abo</p>",
         "text_alignment": "text-left",
         "mobile_text_alignment": "text-left",
         "mobile_layout_order": false,
-        "button_link_type": "url",
-        "button_link": "",
-        "focus_element_id": "",
-        "button_label": "",
-        "button_label_mobile": "",
+        "button2_label": "Gratis probieren",
+        "button2_label_mobile": "",
         "button2_link_type": "url",
         "button2_link": "shopify://products/bananen-crunchys",
         "focus_element2_id": "",
-        "button2_label": "Gratis probieren",
-        "button2_label_mobile": "",
+        "button2_width_desktop": 200,
+        "button2_width_mobile": 150,
+        "button_text_color_desktop": "#ffffff",
+        "button_text_color_mobile": "#ffffff",
+        "button_label": "",
+        "button_label_mobile": "",
+        "button_link_type": "url",
+        "button_link": "",
+        "focus_element_id": "",
         "color_scheme": "scheme3",
-        "use_gradient_background": false,
-        "heading_level": "h2"
+        "use_gradient_background": false
+      }
+    },
+    "email_input_dMpqpt": {
+      "type": "email-input",
+      "custom_css": [],
+      "name": "Email Signup",
+      "settings": {
+        "kicker": "20 % auf deinen ersten Crunch",
+        "heading": "Join the mission",
+        "image": "shopify://shop_images/Extra_Mascots-06.svg",
+        "text": "<p>Perfektion ist nicht unser Ziel. Veränderung schon. Begleite uns auf dem Weg zu radikaler Fairness.</p>",
+        "subtitle": "",
+        "placeholder_text": "E-Mail",
+        "input_square": false,
+        "button_image": "shopify://shop_images/06d3f155e99649c6ad8f552f17b4bec9ac475189.png",
+        "button_text": "Anmelden",
+        "button_text_color": "#ae0000",
+        "button_image_width": 128,
+        "button_image_mobile": "shopify://shop_images/right_arrow_in_spiky_cloud.svg",
+        "button_text_mobile": "",
+        "button_image_width_mobile": 64,
+        "padding_top": "none",
+        "bg_class": "bg-lime",
+        "color_scheme": "scheme5"
       }
     }
   },
