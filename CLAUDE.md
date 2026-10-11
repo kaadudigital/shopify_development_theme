@@ -66,6 +66,8 @@ Voice and copy rules (du, ss not ß, CHF 4.45, «guillemets», ✶ links, no emo
 
 Variants `primary` · `red` · `lime` · `paper` · `outline`; sizes default (60px) · `lg` · `md` · `sm`; `full: true`. No variant = follows the colour scheme. The shape is `#kd-cloud` from `snippets/kd-cloud-defs.liquid` (rendered once in `layout/theme.liquid`).
 
+**Exception — button artwork:** `kd-button` takes optional `art` / `art_mobile` images that replace the cloud (`.kd-btn--art`; mobile artwork below 768px). Only where a section offers artwork settings (image-with-text: "Artwork (desktop/mobile)"); sizes and label colour come from `--kd-art-*` custom properties.
+
 **Text links** — `.kd-link` adds the ✶ and hover-only underline. Buttons never get the star.
 
 **Legacy (don't use in new code; remove as sections migrate)** — `--color-*` tokens and `.bg-*` / `.text-*` utilities alias DS values; `.h1`, `.h2`, `.mega-heading` follow the DS display steps; `.h3`, `.h4-subsection-heading`, `.body`, `.body-large`, `.caption`, `.btn-label` keep pre-redesign sizes; `.btn-primary` / `.btn-secondary` render as masked clouds without shadow (`assets/kd-cloud.svg`).
