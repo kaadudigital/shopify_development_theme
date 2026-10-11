@@ -191,19 +191,6 @@
     "custom_image_section_anwQpJ": {
       "type": "custom-image-section",
       "blocks": {
-        "shape_divider_JY77dF": {
-          "type": "shape_divider",
-          "settings": {
-            "target_section": "above",
-            "target_section_color_scheme": "scheme3",
-            "style": "circles-2.5-patterned_1200x54",
-            "enable_mobile_style": false,
-            "style_mobile": "waves-1-patterned_1200x20",
-            "flip_horizontal": false,
-            "enable_animation": false,
-            "animation_direction": ""
-          }
-        },
         "shape_divider_HHiMPK": {
           "type": "shape_divider",
           "settings": {
@@ -219,7 +206,6 @@
         }
       },
       "block_order": [
-        "shape_divider_JY77dF",
         "shape_divider_HHiMPK"
       ],
       "custom_css": [
