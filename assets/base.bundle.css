@@ -7470,6 +7470,14 @@ body {
 .kd-iw__text > :last-child { margin-bottom: 0; }
 .kd-iw__caption { margin: var(--space-2) 0 0; text-align: center; }
 
+/* Buttons + the note under them, aligned with the text column */
+.kd-iw__cta {
+  display: flex;
+  flex-direction: column;
+  align-items: inherit;
+  gap: var(--space-3);
+}
+.kd-iw__note { margin: 0; color: rgb(var(--color-scheme-body-text)); }
 .kd-iw__actions {
   display: flex;
   flex-wrap: wrap;

@@ -138,6 +138,10 @@
         <div class="kd-iw__text rte {{ text_class }}">{{ richtext }}</div>
       {%- endif -%}
 
+      {%- assign note_mobile = button_note_mobile | default: button_note -%}
+      {%- if cloud_source != '' or button_note != blank -%}
+        <div class="kd-iw__cta">
+      {%- endif -%}
       {%- if cloud_source != '' -%}
         <div class="kd-iw__actions">
           {%- liquid
@@ -187,6 +191,17 @@
               <a class="kd-link kd-iw__link" href="{{ button_link }}">{{ l_label_html }}</a>
             {%- endif -%}
           {%- endif -%}
+        </div>
+      {%- endif -%}
+      {%- if button_note != blank -%}
+        {%- if note_mobile != button_note -%}
+          <p class="kd-iw__note kd-body-sm kd-iw__label--mobile">{{ note_mobile }}</p>
+          <p class="kd-iw__note kd-body-sm kd-iw__label--desktop">{{ button_note }}</p>
+        {%- else -%}
+          <p class="kd-iw__note kd-body-sm">{{ button_note }}</p>
+        {%- endif -%}
+      {%- endif -%}
+      {%- if cloud_source != '' or button_note != blank -%}
         </div>
       {%- endif -%}
     </div>

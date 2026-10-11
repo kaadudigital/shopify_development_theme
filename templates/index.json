@@ -866,7 +866,7 @@
         "h2_title": "Probierpaket",
         "title": "Ein Beutel. Gratis. Nur CHF 3 Versand.",
         "heading_level": "h2",
-        "richtext": "<p>Probier zuerst, entscheide dann. Gib den Code [CODE] im Shop ein, der Beutel kostet nichts, du zahlst CHF 3 Versand. Schmeckt es dir nicht, war es das. Schmeckt es, weisst du jetzt, was du kaufst.</p><p>Code [CODE] · 1 Beutel pro Haushalt · Danach ab CHF 5.05 pro Beutel im Abo</p>",
+        "richtext": "<p>Probier zuerst, entscheide dann. Gib den Code [CODE] im Shop ein, der Beutel kostet nichts, du zahlst CHF 3 Versand. Schmeckt es dir nicht, war es das. Schmeckt es, weisst du jetzt, was du kaufst.</p>",
         "text_alignment": "text-left",
         "mobile_text_alignment": "text-left",
         "mobile_layout_order": false,
@@ -885,7 +885,8 @@
         "button_link": "",
         "focus_element_id": "",
         "color_scheme": "scheme3",
-        "use_gradient_background": false
+        "use_gradient_background": false,
+        "button_note": "Code [CODE] · 1 Beutel pro Haushalt · Danach ab CHF 5.05 pro Beutel im Abo"
       }
     },
     "email_input_dMpqpt": {
