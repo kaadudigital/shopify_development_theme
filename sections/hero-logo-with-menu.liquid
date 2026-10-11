@@ -83,8 +83,9 @@
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        width: 56px;
-        height: 56px;
+        --kd-cart-size: {{ section.settings.cart_size_mobile | default: 56 }}px;
+        width: var(--kd-cart-size);
+        height: var(--kd-cart-size);
         color: {{ section.settings.cart_text_color | default: '#ac0300' }};
         text-decoration: none;
         transform: rotate(-6deg);
@@ -110,14 +111,15 @@
         align-items: center;
         font-family: var(--font-sans);
         font-weight: 600;
-        font-size: 10px;
+        font-size: max(10px, calc(var(--kd-cart-size) * 0.16));
         line-height: 1;
         letter-spacing: 0.06em;
         text-transform: uppercase;
       }
 
+      /* Count and badge scale with the sticker size */
       #{{ section.id }} .kd-cart-sticker__count {
-        font-size: 20px;
+        font-size: calc(var(--kd-cart-size) * 0.35);
       }
 
       /* Custom icon inside the sticker; inline SVG code follows the text colour via currentColor */
@@ -143,8 +145,8 @@
         position: absolute;
         top: 4%;
         right: 4%;
-        min-width: 20px;
-        height: 20px;
+        min-width: max(18px, calc(var(--kd-cart-size) * 0.32));
+        height: max(18px, calc(var(--kd-cart-size) * 0.32));
         padding: 0 5px;
         border-radius: 999px;
         display: flex;
@@ -154,7 +156,7 @@
         color: {{ section.settings.cart_shape_color | default: '#ACFF64' }};
         font-family: var(--font-sans);
         font-weight: 600;
-        font-size: 11px;
+        font-size: max(11px, calc(var(--kd-cart-size) * 0.15));
         line-height: 1;
         transform: rotate(6deg);
       }
@@ -163,24 +165,15 @@
         display: none;
       }
 
+      @media (min-width: 768px) {
+        #{{ section.id }} .kd-cart-sticker {
+          --kd-cart-size: {{ section.settings.cart_size_tablet | default: 56 }}px;
+        }
+      }
+
       @media (min-width: 1200px) {
         #{{ section.id }} .kd-cart-sticker {
-          width: 88px;
-          height: 88px;
-        }
-
-        #{{ section.id }} .kd-cart-sticker__label {
-          font-size: 13px;
-        }
-
-        #{{ section.id }} .kd-cart-sticker__count {
-          font-size: 30px;
-        }
-
-        #{{ section.id }} .kd-cart-sticker__badge {
-          min-width: 26px;
-          height: 26px;
-          font-size: 13px;
+          --kd-cart-size: {{ section.settings.cart_size_desktop | default: 88 }}px;
         }
       }
 
@@ -1625,6 +1618,39 @@
     {
       "type": "header",
       "content": "Cart Button"
+    },
+    {
+      "type": "range",
+      "id": "cart_size_mobile",
+      "label": "Sticker size – mobile",
+      "min": 40,
+      "max": 140,
+      "step": 2,
+      "unit": "px",
+      "default": 56,
+      "info": "Mobile: below 768px. Count, label and badge scale with the sticker."
+    },
+    {
+      "type": "range",
+      "id": "cart_size_tablet",
+      "label": "Sticker size – tablet",
+      "min": 40,
+      "max": 140,
+      "step": 2,
+      "unit": "px",
+      "default": 56,
+      "info": "Tablet: 768–1199px."
+    },
+    {
+      "type": "range",
+      "id": "cart_size_desktop",
+      "label": "Sticker size – desktop",
+      "min": 40,
+      "max": 140,
+      "step": 2,
+      "unit": "px",
+      "default": 88,
+      "info": "Desktop: 1200px and wider."
     },
     {
       "type": "color",
