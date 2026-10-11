@@ -298,9 +298,9 @@
         min-width: var(--space-2);
       }
 
-      /* While the menu is open the shop button steps aside (the CLOSE pill and
-         cart stay), and on desktop the header logo yields to the giant overlay
-         wordmark. visibility:hidden also removes the shop pill from tab order. */
+      /* While the menu is open the shop button steps aside; the header logo,
+         CLOSE pill and cart stay exactly where they were with the menu closed.
+         visibility:hidden also removes the shop pill from tab order. */
       #{{ section.id }} .custom-shop-button {
         transition: opacity 0.3s ease-out, visibility 0s 0.3s, transform 0.3s ease;
       }
@@ -311,9 +311,11 @@
         pointer-events: none;
       }
 
+      /* The overlay's own wordmark only keeps its space (the header logo shows
+         through above it), so the left column layout doesn't move. */
       @media (min-width: 769px) {
-        #{{ section.id }}.menu-open .responsive-logo-container {
-          opacity: 0;
+        #{{ section.id }} .menu-logo {
+          visibility: hidden;
         }
       }
 
