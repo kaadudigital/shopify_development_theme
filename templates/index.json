@@ -63,6 +63,7 @@
         "image_caption": "",
         "image_position": "left",
         "image_width_large": 40,
+        "image_width_xl": 46,
         "crop": "",
         "image_shape": "default",
         "blob_type": 1,
@@ -141,31 +142,19 @@
             "color_scheme": "scheme1",
             "color": "bg-scheme-accent-1 text-scheme-accent-1-contrast"
           }
-        },
-        "shape_divider_96CcGb": {
-          "type": "shape_divider",
-          "settings": {
-            "target_section": "below",
-            "target_section_color_scheme": "scheme6",
-            "style": "circles-2.5-patterned_1200x54",
-            "enable_mobile_style": false,
-            "style_mobile": "waves-1-patterned_1200x20",
-            "flip_horizontal": false,
-            "enable_animation": false,
-            "animation_direction": ""
-          }
         }
       },
       "block_order": [
-        "sticker_LNbtUW",
-        "shape_divider_96CcGb"
+        "sticker_LNbtUW"
       ],
       "name": "Custom Video Text Overlay",
       "settings": {
         "video": "shopify://files/videos/Kaadu for instagram.mp4",
         "crop": "vertical",
         "crop_desktop": "natural",
+        "video_trim": 11,
         "enable_overlay": true,
+        "overlay_style": "gradient",
         "overlay_color": "#ffffff",
         "overlay_opacity": 0,
         "display_on_card": false,
@@ -179,15 +168,24 @@
         "cta_url": "shopify://blogs/news",
         "cta_text": "VIDEO ANSEHEN",
         "cta_text_mobile": "",
+        "use_button_art": false,
         "button2_image": "shopify://shop_images/Artboard151.svg",
         "button2_image_mobile": "shopify://shop_images/Artboard151.svg",
         "button2_width_desktop": 200,
         "button2_width_mobile": 190,
         "button_text_color_desktop": "#ae0000",
         "button_text_color_mobile": "#ffffff",
+        "kicker_color": "#fffff5",
+        "title_color": "#ac0300",
+        "title_shadow": true,
+        "title_shadow_color": "#fffff5",
+        "title_shadow_color_mobile": "#aeff64",
+        "text_color": "#fffff5",
+        "button_color": "#542a76",
+        "button_label_color": "#fffff5",
+        "show_play_icon": true,
         "color_scheme": "scheme2",
-        "use_gradient_background": false,
-        "video_trim": 11
+        "use_gradient_background": false
       }
     },
     "custom_image_section_anwQpJ": {
@@ -595,6 +593,7 @@
         "image_caption": "",
         "image_position": "left",
         "image_width_large": 40,
+        "image_width_xl": 46,
         "crop": "",
         "image_shape": "default",
         "blob_type": 1,
@@ -868,6 +867,7 @@
         "image_caption": "",
         "image_position": "right",
         "image_width_large": 40,
+        "image_width_xl": 46,
         "crop": "",
         "image_shape": "default",
         "blob_type": 1,
