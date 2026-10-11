@@ -13,8 +13,8 @@ E-commerce site for **Kaadu**, a Swiss fair-trade freeze-dried pineapple brand. 
 
 | Source | Authority |
 |---|---|
-| **Kaadu Design System** — https://claude.ai/artifact/CnMT95HubMKA5CeChwNxBm | Every token, size, colour, font, spacing, radius, shadow, component, voice and imagery rule. Wins over everything else. |
-| **Page mockups** — https://claude.ai/artifact/DeWG7XTMTAJmdxb9iXNZ82 | A **rough draft**: which sections a page has, their order and content. Never take sizes, colours or fonts from it. |
+| **Kaadu Design System** — https://claude.ai/artifact/CnMT95HubMKA5CeChwNxBm | Every token, size, font, spacing, radius, shadow, component, voice and imagery rule. Wins for **spacing and sizes**, always. |
+| **Page mockups** — https://claude.ai/artifact/DeWG7XTMTAJmdxb9iXNZ82 | Which sections a page has, their order and content, and **text and button colours** (landing page: `project/Main.dc.html`, `project/Mobile.dc.html`) — the mockup wins over the DS for those, even where they disagree. Never take sizes or spacing from it. Make such colours section settings with the mockup values as defaults. |
 | [assets/base.bundle.css](assets/base.bundle.css) — "KAADU DESIGN SYSTEM" + "KAADU COMPONENTS" blocks | The theme's implementation of the DS. When the DS changes, mirror it here. |
 | Old `kaadu-design-system/` folder, brand PDF, Typography & Spacing Docs, `Kaadu Web Style Guide.docx` | **Removed** (superseded). Recover original logo/sticker files from git: `git show pre-redesign:kaadu-design-system/project/assets/...` or `git checkout pre-redesign -- kaadu-design-system`. |
 
