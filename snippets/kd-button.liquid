@@ -12,6 +12,9 @@
   - full      {Boolean} optional — stretch to the container width
   - class     {String}  optional — extra classes
   - attrs     {String}  optional — extra raw attributes (e.g. 'aria-pressed="false" name="add"')
+  - art        {Image}  optional — custom button artwork replacing the cloud (adds .kd-btn--art).
+                         Size/colour come from --kd-art-* custom properties set by the section.
+  - art_mobile {Image}  optional — artwork below 768px; falls back to art
 
   Usage:
     {%- render 'kd-button', label: section.settings.button_label, url: section.settings.button_link, variant: 'red' -%}
@@ -30,9 +33,21 @@
   if class != blank
     assign btn_classes = btn_classes | append: ' ' | append: class
   endif
+  if art != blank
+    assign btn_classes = btn_classes | append: ' kd-btn--art'
+  endif
 -%}
 {%- capture btn_inner -%}
-  <svg class="kd-btn__cloud" aria-hidden="true" focusable="false"><use href="#kd-cloud"></use></svg>
+  {%- if art != blank -%}
+    <picture class="kd-btn__art" aria-hidden="true">
+      {%- if art_mobile != blank -%}
+        <source media="(max-width: 767px)" srcset="{{ art_mobile | image_url: width: 800 }}">
+      {%- endif -%}
+      {{ art | image_url: width: 1000 | image_tag: alt: '', loading: 'eager', sizes: '400px' }}
+    </picture>
+  {%- else -%}
+    <svg class="kd-btn__cloud" aria-hidden="true" focusable="false"><use href="#kd-cloud"></use></svg>
+  {%- endif -%}
   <span class="kd-btn__label">{{ label }}</span>
 {%- endcapture -%}
 {%- if url != blank -%}

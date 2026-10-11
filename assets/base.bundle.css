@@ -7211,6 +7211,40 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
 .kd-btn--md { height: 56px; font-size: 18px; letter-spacing: 0; padding: 0 38px; }
 .kd-btn--sm { height: 52px; font-size: 16px; letter-spacing: 0; padding: 0 32px; }
 
+/* Custom artwork instead of the cloud (kd-button `art`). Not a DS button: an
+   opt-in override for brand artwork. Width, aspect ratio and label colour come
+   from --kd-art-* (desktop) and --kd-art-*-m (below 768px), set by the section. */
+.kd-btn.kd-btn--art {
+  height: auto;
+  width: var(--kd-art-w, 200px);
+  max-width: 100%;
+  aspect-ratio: var(--kd-art-ratio, 3);
+  padding: 0 var(--space-6);
+  color: var(--kd-art-color, inherit);
+  white-space: normal;
+  text-align: center;
+}
+.kd-btn__art {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.kd-btn__art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.kd-btn--art:hover .kd-btn__art { filter: brightness(1.04); }
+@media (max-width: 767px) {
+  .kd-btn.kd-btn--art {
+    width: var(--kd-art-w-m, var(--kd-art-w, 200px));
+    aspect-ratio: var(--kd-art-ratio-m, var(--kd-art-ratio, 3));
+    color: var(--kd-art-color-m, var(--kd-art-color, inherit));
+  }
+}
+
 /* Outline cloud — the small secondary action on photo cards ("Details ↻") */
 .kd-btn--outline {
   --kd-cloud: transparent;

@@ -6,8 +6,8 @@
     kicker in .kd-strong. Anywhere else: <h2> in .kd-display-h2, .kd-body-lg, red .kd-label kicker.
   - One cloud button + one ✶ text link (DS hero). When both buttons are set, button 2 is the cloud and
     button 1 the link; with only one button, it is the cloud. Cloud colours follow the colour scheme.
-  - Kept for compatibility but no longer used: heading_size, image_size, display_on_card,
-    button2_image(_mobile), button2_width_*, button_text_color_* (DS buttons are clouds, sizes come from the DS).
+  - Optional cloud-button artwork (button2_image / button2_image_mobile, widths, label colours):
+    replaces the DS cloud with brand artwork; the mobile artwork applies below 768px.
 {%- endcomment -%}
 {%- liquid
   unless loading
@@ -155,14 +155,26 @@
               assign c_label_m = button_label_mobile_display
             endif
           -%}
+          {%- if button2_image != blank -%}
+            {%- style -%}
+              #{{ section_id }} .kd-iw__actions .kd-btn--art {
+                --kd-art-w: {{ button2_width_desktop | default: 200 }}px;
+                --kd-art-ratio: {{ button2_image.aspect_ratio }};
+                --kd-art-color: {{ button_text_color_desktop | default: '#ffffff' }};
+                --kd-art-w-m: {{ button2_width_mobile | default: 150 }}px;
+                --kd-art-ratio-m: {{ button2_image_mobile.aspect_ratio | default: button2_image.aspect_ratio }};
+                --kd-art-color-m: {{ button_text_color_mobile | default: button_text_color_desktop | default: '#ffffff' }};
+              }
+            {%- endstyle -%}
+          {%- endif -%}
           {%- capture c_label_html -%}
             <span class="kd-iw__label--mobile">{{ c_label_m | escape }}</span><span class="kd-iw__label--desktop">{{ c_label | escape }}</span>
           {%- endcapture -%}
           {%- if c_type == 'focus_element' -%}
             {%- capture c_attrs -%}data-kd-focus="{{ c_focus | escape }}"{%- endcapture -%}
-            {%- render 'kd-button', label: c_label_html, size: 'lg', attrs: c_attrs -%}
+            {%- render 'kd-button', label: c_label_html, size: 'lg', attrs: c_attrs, art: button2_image, art_mobile: button2_image_mobile -%}
           {%- else -%}
-            {%- render 'kd-button', label: c_label_html, url: c_link, size: 'lg' -%}
+            {%- render 'kd-button', label: c_label_html, url: c_link, size: 'lg', art: button2_image, art_mobile: button2_image_mobile -%}
           {%- endif -%}
 
           {%- if link_source == '1' -%}

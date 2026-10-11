@@ -12,14 +12,12 @@
 >
   <div class="section-content relative z-10">
     {%- render 'image-with-text-custom',
-      display_on_card: section.settings.display_on_card,
       image: section.settings.image,
       image_caption: section.settings.image_caption,
       image_position: section.settings.image_position,
       text_alignment: section.settings.text_alignment,
       mobile_text_alignment: section.settings.mobile_text_alignment,
       mobile_layout_order: section.settings.mobile_layout_order,
-      image_size: section.settings.image_size,
       image_shape: section.settings.image_shape,
       section_id: section.id,
       blob_type: section.settings.blob_type,
@@ -44,7 +42,6 @@
       button2_width_mobile: section.settings.button2_width_mobile,
       button_text_color_desktop: section.settings.button_text_color_desktop,
       button_text_color_mobile: section.settings.button_text_color_mobile,
-      heading_size: section.settings.heading_size,
       container_id: section.id,
       disable_media_style: section.settings.disable_media_style,
       preload: preload,
@@ -77,33 +74,44 @@
 
 {% schema %}
 {
-  "name": "image with text custom",
+  "name": "Image with text",
   "settings": [
     {
-      "type": "checkbox",
-      "id": "display_on_card",
-      "info": "Not used since the design-system redesign (sizes, colours and button shapes now come from the design system).",
-      "label": "t:common.settings.display_on_card.label"
-    },
-    {
       "type": "header",
-      "content": "t:common.settings.header_image"
+      "content": "Image"
     },
     {
       "type": "image_picker",
       "id": "image",
-      "label": "t:common.settings.image.label"
+      "label": "Image"
     },
     {
       "type": "text",
       "id": "image_caption",
-      "label": "Image caption",
-      "info": "Optional. Displayed below the image in Small / Caption style."
+      "label": "Caption",
+      "info": "Optional, shown below the image."
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position",
+      "default": "right",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "info": "Tablet and desktop. On mobile the image sits above the text."
     },
     {
       "type": "select",
       "id": "crop",
-      "label": "t:common.settings.crop.label",
+      "label": "Crop",
       "options": [
         {
           "value": "",
@@ -127,7 +135,7 @@
     {
       "type": "select",
       "id": "image_shape",
-      "label": "t:common.settings.image_shape.label",
+      "label": "Shape",
       "options": [
         {
           "value": "website_shape_star",
@@ -519,8 +527,7 @@
           "label": "t:common.options.blob.label",
           "group": "t:common.groups.variable"
         }
-      ],
-      "info": "t:common.settings.image_shape.info"
+      ]
     },
     {
       "type": "range",
@@ -528,9 +535,9 @@
       "min": 1,
       "max": 20,
       "step": 1,
-      "label": "t:common.settings.blob_type.label",
+      "label": "Blob variant",
       "default": 1,
-      "info": "t:common.settings.blob_type.info"
+      "info": "Only for blob shapes."
     },
     {
       "type": "range",
@@ -539,67 +546,32 @@
       "max": 90,
       "step": 2,
       "unit": "deg",
-      "label": "t:common.settings.rotate.label",
+      "label": "Rotation",
       "default": 0
-    },
-    {
-      "type": "select",
-      "id": "image_position",
-      "label": "t:common.settings.image_position_on_desktop.label",
-      "default": "right",
-      "options": [
-        {
-          "value": "right",
-          "label": "t:common.options.right.label"
-        },
-        {
-          "value": "left",
-          "label": "t:common.options.left.label"
-        }
-      ]
-    },
-    {
-      "type": "select",
-      "id": "image_size",
-      "info": "Not used since the design-system redesign (sizes, colours and button shapes now come from the design system).",
-      "label": "t:common.settings.image_size.label",
-      "default": "half",
-      "options": [
-        {
-          "value": "third",
-          "label": "t:common.options.one_third.label"
-        },
-        {
-          "value": "half",
-          "label": "t:common.options.one_half.label"
-        },
-        {
-          "value": "three_fifths",
-          "label": "t:common.options.three_fifths.label"
-        },
-        {
-          "value": "two_thirds",
-          "label": "t:common.options.two_thirds.label"
-        }
-      ]
     },
     {
       "type": "checkbox",
       "id": "disable_media_style",
-      "label": "t:common.settings.disable_media_style.label",
-      "default": false,
-      "info": "t:common.settings.disable_media_style.info"
+      "label": "Plain image (no shape styling)",
+      "default": false
     },
     {
       "type": "header",
-      "content": "t:common.settings.header_content"
+      "content": "Text"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "h2_title",
+      "label": "Kicker",
+      "default": "Image with text sub heading",
+      "info": "Small line above the heading."
     },
     {
       "type": "text",
       "id": "title",
-      "label": "t:sections.image_with_text.settings.title.label",
-      "info": "Use [br] for a line break, [nbsp] for an extra space.",
-      "default": "Image with text"
+      "label": "Heading",
+      "default": "Image with text",
+      "info": "Use [br] for a line break, [nbsp] for a non-breaking space."
     },
     {
       "type": "select",
@@ -620,52 +592,33 @@
         }
       ],
       "default": "auto",
-      "info": "A page has exactly one H1. H1 also switches on the hero type sizes."
-    },
-    {
-      "type": "inline_richtext",
-      "id": "h2_title",
-      "label": "sub heading",
-      "default": "Image with text sub heading"
-    },
-    {
-      "type": "select",
-      "id": "heading_size",
-      "info": "Not used since the design-system redesign (sizes, colours and button shapes now come from the design system).",
-      "label": "t:sections.image_with_text.settings.heading_size.label",
-      "options": [
-        {
-          "value": "heading-standard",
-          "label": "t:common.options.standard.label"
-        },
-        {
-          "value": "heading-feature",
-          "label": "t:common.options.feature.label"
-        }
-      ],
-      "default": "heading-feature"
+      "info": "One H1 per page. H1 also uses the larger hero sizes."
     },
     {
       "type": "richtext",
       "id": "richtext",
-      "label": "t:common.settings.richtext.label"
+      "label": "Text"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
     },
     {
       "type": "select",
       "id": "text_alignment",
-      "label": "Desktop text alignment",
+      "label": "Text alignment (desktop)",
       "options": [
         {
           "value": "text-left",
-          "label": "t:common.options.left.label"
+          "label": "Left"
         },
         {
           "value": "text-center",
-          "label": "t:common.options.center.label"
+          "label": "Center"
         },
         {
           "value": "text-right",
-          "label": "t:common.options.right.label"
+          "label": "Right"
         }
       ],
       "default": "text-left"
@@ -673,19 +626,19 @@
     {
       "type": "select",
       "id": "mobile_text_alignment",
-      "label": "Mobile text alignment",
+      "label": "Text alignment (mobile)",
       "options": [
         {
           "value": "text-left",
-          "label": "t:common.options.left.label"
+          "label": "Left"
         },
         {
           "value": "text-center",
-          "label": "t:common.options.center.label"
+          "label": "Center"
         },
         {
           "value": "text-right",
-          "label": "t:common.options.right.label"
+          "label": "Right"
         }
       ],
       "default": "text-center"
@@ -693,67 +646,40 @@
     {
       "type": "checkbox",
       "id": "mobile_layout_order",
-      "label": "Mobile layout: Heading → Image → Text → Button",
-      "info": "When enabled, on mobile the heading will appear first, then image, then text, then button. When disabled, uses default mobile layout.",
+      "label": "Mobile: heading above the image",
       "default": true
     },
     {
       "type": "header",
-      "content": "t:common.settings.header_link"
+      "content": "Main button"
     },
     {
-      "type": "select",
-      "id": "button_link_type",
-      "label": "Button Link Type",
-      "options": [
-        {
-          "value": "url",
-          "label": "URL"
-        },
-        {
-          "value": "focus_element",
-          "label": "Focus Element by ID"
-        }
-      ],
-      "default": "url"
-    },
-    {
-      "type": "url",
-      "id": "button_link",
-      "label": "t:common.settings.button_link.label"
+      "type": "paragraph",
+      "content": "The cloud button. If only the text link below is filled in, the link becomes the cloud button instead."
     },
     {
       "type": "text",
-      "id": "focus_element_id",
-      "label": "Element ID to Focus",
-      "info": "Enter the ID of the element to focus (without the # symbol). Only used when 'Focus Element by ID' is selected above.",
-      "placeholder": "my-element-id"
+      "id": "button2_label",
+      "label": "Label"
     },
     {
       "type": "text",
-      "id": "button_label",
-      "label": "t:common.settings.button_label.label",
-      "default": "Shop Now"
-    },
-    {
-      "type": "text",
-      "id": "button_label_mobile",
-      "label": "Button label (Mobile)",
-      "info": "Leave empty to reuse the desktop label."
+      "id": "button2_label_mobile",
+      "label": "Label (mobile)",
+      "info": "Leave empty to use the label above."
     },
     {
       "type": "select",
       "id": "button2_link_type",
-      "info": "When both buttons are set, button 2 is the cloud button and button 1 becomes the ✶ text link beside it.",
-      "label": "Second Button Link Type",
+      "label": "Action",
       "options": [
         {
           "value": "url",
-          "label": "URL"
+          "label": "Link to a page"
         },
         {
           "value": "focus_element",
-          "label": "Focus Element by ID"
+          "label": "Scroll to an element on this page"
         }
       ],
       "default": "url"
@@ -761,58 +687,31 @@
     {
       "type": "url",
       "id": "button2_link",
-      "label": "second Button's link"
+      "label": "Link"
     },
     {
       "type": "text",
       "id": "focus_element2_id",
-      "label": "Second Button's Element ID to Focus",
-      "info": "Enter the ID of the element to focus (without the # symbol). Only used when 'Focus Element by ID' is selected above.",
-      "placeholder": "my-element-id"
-    },
-    {
-      "type": "text",
-      "id": "button2_label",
-      "label": "Second Button's label",
-      "default": "Second Button"
-    },
-    {
-      "type": "text",
-      "id": "button2_label_mobile",
-      "label": "Second Button's label (Mobile)",
-      "info": "Leave empty to reuse the desktop label."
+      "label": "Element ID to scroll to",
+      "placeholder": "my-element-id",
+      "info": "Without #. Used when the action is \"Scroll to an element\"."
     },
     {
       "type": "image_picker",
       "id": "button2_image",
-      "info": "Not used since the design-system redesign (sizes, colours and button shapes now come from the design system).",
-      "label": "Second Button Image (Desktop)"
+      "label": "Artwork (desktop)",
+      "info": "Optional. Replaces the cloud with your own image."
     },
     {
       "type": "image_picker",
       "id": "button2_image_mobile",
-      "info": "Not used since the design-system redesign (sizes, colours and button shapes now come from the design system).",
-      "label": "Second Button Image (Mobile)"
-    },
-    {
-      "type": "color",
-      "id": "button_text_color_desktop",
-      "info": "Not used since the design-system redesign (sizes, colours and button shapes now come from the design system).",
-      "label": "Button Text Color (Desktop)",
-      "default": "#ffffff"
-    },
-    {
-      "type": "color",
-      "id": "button_text_color_mobile",
-      "info": "Not used since the design-system redesign (sizes, colours and button shapes now come from the design system).",
-      "label": "Button Text Color (Mobile)",
-      "default": "#ffffff"
+      "label": "Artwork (mobile)",
+      "info": "Used below 768px. Leave empty to use the desktop artwork."
     },
     {
       "type": "range",
       "id": "button2_width_desktop",
-      "info": "Not used since the design-system redesign (sizes, colours and button shapes now come from the design system).",
-      "label": "Second Button width (Desktop)",
+      "label": "Artwork width (desktop)",
       "min": 80,
       "max": 800,
       "step": 10,
@@ -822,8 +721,7 @@
     {
       "type": "range",
       "id": "button2_width_mobile",
-      "info": "Not used since the design-system redesign (sizes, colours and button shapes now come from the design system).",
-      "label": "Second Button width (Mobile)",
+      "label": "Artwork width (mobile)",
       "min": 80,
       "max": 800,
       "step": 10,
@@ -831,19 +729,78 @@
       "default": 150
     },
     {
+      "type": "color",
+      "id": "button_text_color_desktop",
+      "label": "Label colour on artwork (desktop)",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color_mobile",
+      "label": "Label colour on artwork (mobile)",
+      "default": "#ffffff"
+    },
+    {
       "type": "header",
-      "content": "t:common.settings.header_color"
+      "content": "Text link"
+    },
+    {
+      "type": "paragraph",
+      "content": "Shown as a ✶ link next to the main button."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Label"
+    },
+    {
+      "type": "text",
+      "id": "button_label_mobile",
+      "label": "Label (mobile)",
+      "info": "Leave empty to use the label above."
+    },
+    {
+      "type": "select",
+      "id": "button_link_type",
+      "label": "Action",
+      "options": [
+        {
+          "value": "url",
+          "label": "Link to a page"
+        },
+        {
+          "value": "focus_element",
+          "label": "Scroll to an element on this page"
+        }
+      ],
+      "default": "url"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link"
+    },
+    {
+      "type": "text",
+      "id": "focus_element_id",
+      "label": "Element ID to scroll to",
+      "placeholder": "my-element-id",
+      "info": "Without #. Used when the action is \"Scroll to an element\"."
+    },
+    {
+      "type": "header",
+      "content": "Colours"
     },
     {
       "type": "color_scheme",
       "id": "color_scheme",
       "default": "scheme1",
-      "label": "t:common.settings.color_scheme.label"
+      "label": "Colour scheme"
     },
     {
       "type": "checkbox",
       "id": "use_gradient_background",
-      "label": "t:common.settings.use_gradient_background.label"
+      "label": "Use gradient background"
     }
   ],
   "blocks": [
@@ -2617,7 +2574,7 @@
   ],
   "presets": [
     {
-      "name": "image with text custom"
+      "name": "Image with text (Kaadu)"
     }
   ],
   "disabled_on": {

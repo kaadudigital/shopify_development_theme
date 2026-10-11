@@ -59,18 +59,15 @@
       ],
       "name": "image with text custom",
       "settings": {
-        "display_on_card": false,
         "image": "shopify://shop_images/Group_18_1.webp",
         "crop": "",
         "image_shape": "default",
         "blob_type": 1,
         "rotate_image": 0,
         "image_position": "right",
-        "image_size": "half",
         "disable_media_style": false,
         "title": "CRUNCH IN[nbsp] [br]PROGRESS..",
         "h2_title": "100% Frucht, 0% Ausbeutung.",
-        "heading_size": "heading-feature",
         "richtext": "<p>Gefriergetrocknete Früchte;  fair produziert, in der Ursprungsgemeinde verarbeitet, radikal transparent.</p>",
         "text_alignment": "text-center",
         "mobile_text_alignment": "text-center",
@@ -85,7 +82,6 @@
         "button2_label": "Second Button",
         "button_text_color_desktop": "#ffffff",
         "button_text_color_mobile": "#ffffff",
-        "button2_padding_topbottom": 20,
         "color_scheme": "",
         "use_gradient_background": false
       }
