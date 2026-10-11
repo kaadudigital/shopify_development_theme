@@ -463,10 +463,12 @@
           width: auto;
         }
 
+        /* Floor of 175px: shorter windows (13" laptops) no longer shrink the
+           wordmark away from the CLOSE pill. */
         #{{ section.id }} .menu-logo img {
           width: auto;
           max-width: 100%;
-          height: min(220px, 22dvh);
+          height: max(175px, min(220px, 22dvh));
           max-height: none;
         }
       }
@@ -537,6 +539,35 @@
 
         #{{ section.id }} .menu-content nav ul.menu-links li a {
           font-size: clamp(2.25rem, min(6vw, 8.5vh), 6rem);
+        }
+      }
+
+      /* Very short windows (13" laptops with browser chrome, ≤ 800px tall):
+         lift the links and shrink the side art so CONTACT and the social icons
+         stay above the cloud strip. */
+      @media (min-width: 769px) and (max-height: 800px) {
+        #{{ section.id }} .menu-nav {
+          margin-top: calc(-1 * var(--space-8));
+        }
+
+        #{{ section.id }} .menu-account {
+          margin-bottom: var(--space-4);
+        }
+
+        #{{ section.id }} .menu-content nav ul.menu-links li a {
+          font-size: clamp(2.25rem, min(6vw, 7.5vh), 6rem);
+        }
+
+        #{{ section.id }} .menu-side {
+          gap: var(--space-4);
+        }
+
+        #{{ section.id }} .menu-tagline-image {
+          max-height: 17dvh;
+        }
+
+        #{{ section.id }} .menu-tagline-sticker {
+          max-height: 9dvh;
         }
       }
 
