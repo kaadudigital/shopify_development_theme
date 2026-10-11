@@ -62,6 +62,7 @@
         "image": "shopify://shop_images/Group_45.webp",
         "image_caption": "",
         "image_position": "left",
+        "image_width_large": 40,
         "crop": "",
         "image_shape": "default",
         "blob_type": 1,
@@ -79,6 +80,8 @@
         "button2_link_type": "url",
         "button2_link": "shopify://products/bananen-crunchys",
         "focus_element2_id": "",
+        "button_note": "1 Beutel Ananas Crunchys, CHF 0 mit code [CODE]. [BR] Du zahlst nur CHF 3 Versand",
+        "button_note_mobile": "6ER PACK. CHF 6.30 PRO [NBSP] BEUTEL",
         "button2_image": "shopify://shop_images/Artboard151.svg",
         "button2_image_mobile": "shopify://shop_images/Artboard12.svg",
         "button2_width_desktop": 260,
@@ -589,6 +592,7 @@
       "settings": {
         "image_caption": "",
         "image_position": "left",
+        "image_width_large": 40,
         "crop": "",
         "image_shape": "default",
         "blob_type": 1,
@@ -606,6 +610,8 @@
         "button2_link_type": "url",
         "button2_link": "",
         "focus_element2_id": "",
+        "button_note": "",
+        "button_note_mobile": "",
         "button2_width_desktop": 200,
         "button2_width_mobile": 150,
         "button_text_color_desktop": "#ffffff",
@@ -858,6 +864,7 @@
       "settings": {
         "image_caption": "",
         "image_position": "right",
+        "image_width_large": 40,
         "crop": "",
         "image_shape": "default",
         "blob_type": 1,
@@ -875,6 +882,8 @@
         "button2_link_type": "url",
         "button2_link": "shopify://products/bananen-crunchys",
         "focus_element2_id": "",
+        "button_note": "Code [CODE] · 1 Beutel pro Haushalt · Danach ab CHF 5.05 pro Beutel im Abo",
+        "button_note_mobile": "",
         "button2_width_desktop": 200,
         "button2_width_mobile": 150,
         "button_text_color_desktop": "#ffffff",
@@ -885,8 +894,7 @@
         "button_link": "",
         "focus_element_id": "",
         "color_scheme": "scheme3",
-        "use_gradient_background": false,
-        "button_note": "Code [CODE] · 1 Beutel pro Haushalt · Danach ab CHF 5.05 pro Beutel im Abo"
+        "use_gradient_background": false
       }
     },
     "email_input_dMpqpt": {
