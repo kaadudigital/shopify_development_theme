@@ -6,7 +6,7 @@
   endif
 -%}
 {%- style -%}
-  #{{ section.id }} { --kd-iw-media: {{ section.settings.image_width_large | default: 45 }}%; }
+  #{{ section.id }} { --kd-iw-media: {{ section.settings.image_width_large | default: 40 }}%; }
 {%- endstyle -%}
 
 <section
@@ -121,7 +121,7 @@
       "max": 60,
       "step": 1,
       "unit": "%",
-      "default": 45
+      "default": 40
     },
     {
       "type": "select",

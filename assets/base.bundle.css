@@ -7445,7 +7445,7 @@ body {
 
 /* ── IMAGE WITH TEXT (hero / vision / final CTA) — snippets/image-with-text-custom.liquid ──
    Mobile: stacked (media → head → body; head first with --heading-first).
-   ≥768: two columns, media beside head + body. Hero media 620px (DS), others 560px; ≥1441 a setting-driven share (default 45%). */
+   ≥768: two columns, media beside head + body. Hero media 620px (DS), others 560px; ≥1441 a setting-driven share (default 40%). */
 .kd-iw {
   padding-block: var(--space-9) var(--space-9);
 }
@@ -7530,17 +7530,17 @@ body {
 }
 /* Large screens (cobfoods): media takes a share of the row and scales with it
    (the row itself stops at 1800px via .kd-wide). Share = --kd-iw-media, set by
-   the section ("Image width on large screens", default 45%). Paragraphs keep a
+   the section ("Image width on large screens", default 40%). Paragraphs keep a
    readable measure. */
 @media (min-width: 1441px) {
   .kd-iw__grid,
   .kd-iw--hero .kd-iw__grid {
-    grid-template-columns: minmax(0, var(--kd-iw-media, 45%)) minmax(0, 1fr);
+    grid-template-columns: minmax(0, var(--kd-iw-media, 40%)) minmax(0, 1fr);
     column-gap: var(--space-12);
   }
   .kd-iw--image-right .kd-iw__grid,
   .kd-iw--hero.kd-iw--image-right .kd-iw__grid {
-    grid-template-columns: minmax(0, 1fr) minmax(0, var(--kd-iw-media, 45%));
+    grid-template-columns: minmax(0, 1fr) minmax(0, var(--kd-iw-media, 40%));
     column-gap: var(--space-12);
   }
   .kd-iw__text { max-width: 640px; }
