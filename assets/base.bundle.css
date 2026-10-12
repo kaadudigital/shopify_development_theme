@@ -7714,7 +7714,10 @@ body {
   object-fit: cover;
   box-shadow: var(--shadow-card);
 }
+.kd-is--flat .kd-is__image { box-shadow: none; }
 .kd-is__head { grid-area: head; }
+/* Wraps head + body; transparent to the row grid, becomes the text block in the free canvas (section CSS). */
+.kd-is__text-group { display: contents; }
 .kd-is__body {
   grid-area: body;
   display: flex;

@@ -87,6 +87,83 @@
     .section-{{ section.id }} .hero-subheading-sticker--2 { display: none; }
     {% endunless -%}
   }
+
+  /* Per screen size (m <768, t 768–1199, d 1200–1799, xl ≥1800): image rotation, an optional
+     free canvas (image + text placed by X/Y % on a stage of fixed height) and an optional custom
+     button position anywhere in the section. The text group is a grid item, not positioned, so the
+     button's containing block stays the stage in both layouts. */
+  .section-{{ section.id }} .kd-is .kd-is__row { position: relative; }
+  {%- assign kd_bps = 'm,t,d,xl' | split: ',' -%}
+  {%- for bp in kd_bps -%}
+    {%- liquid
+      case bp
+        when 'm'
+          assign mq = '(max-width: 767.98px)'
+        when 't'
+          assign mq = '(min-width: 768px) and (max-width: 1199.98px)'
+        when 'd'
+          assign mq = '(min-width: 1200px) and (max-width: 1799.98px)'
+        else
+          assign mq = '(min-width: 1800px)'
+      endcase
+      assign k_rot = 'image_rotate_' | append: bp
+      assign k_on = 'canvas_' | append: bp
+      assign k_h = 'canvas_height_' | append: bp
+      assign k_ix = 'canvas_image_x_' | append: bp
+      assign k_iy = 'canvas_image_y_' | append: bp
+      assign k_iw = 'canvas_image_w_' | append: bp
+      assign k_tx = 'canvas_text_x_' | append: bp
+      assign k_ty = 'canvas_text_y_' | append: bp
+      assign k_bp = 'button_position_' | append: bp
+      assign k_bx = 'button_x_' | append: bp
+      assign k_by = 'button_y_' | append: bp
+      assign rot = section.settings[k_rot] | default: 0
+    -%}
+  @media {{ mq }} {
+    .section-{{ section.id }} .kd-is__media { transform: rotate({{ rot }}deg); }
+    {%- if section.settings[k_on] %}
+    .section-{{ section.id }} .kd-is .kd-is__row {
+      display: grid;
+      height: {{ section.settings[k_h] }}px;
+      grid-template-columns: {{ section.settings[k_tx] }}% 0 1fr;
+      grid-template-rows: {{ section.settings[k_ty] }}% 0 1fr;
+      grid-template-areas: none;
+      gap: 0;
+    }
+    .section-{{ section.id }} .kd-is .kd-is__media {
+      position: absolute;
+      left: {{ section.settings[k_ix] }}%;
+      top: {{ section.settings[k_iy] }}%;
+      width: {{ section.settings[k_iw] }}%;
+      max-width: none;
+      z-index: {% if section.settings.canvas_image_front %}3{% else %}0{% endif %};
+      transform: translate(-50%, -50%) rotate({{ rot }}deg);
+    }
+    /* A 0 × 0 grid cell at the text X/Y; centred items overflow it evenly, so the text centres on that point. */
+    .section-{{ section.id }} .kd-is .kd-is__text-group {
+      grid-area: 2 / 2;
+      justify-self: center;
+      align-self: center;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-6);
+      width: max-content;
+      max-width: min(90vw, 900px);
+    }
+    {%- endif -%}
+    {%- if section.settings[k_bp] == 'custom' %}
+    .section-{{ section.id }} .kd-is .kd-is__button {
+      position: absolute;
+      left: {{ section.settings[k_bx] }}%;
+      top: {{ section.settings[k_by] }}%;
+      transform: translate(-50%, -50%);
+      z-index: 4;
+    }
+    {%- endif %}
+  }
+  {%- endfor %}
 {% endstyle %}
 {%- else -%}
 {% style %}
@@ -268,7 +345,7 @@
         assign quote_mode = true
       endif
     -%}
-    <div class="kd-is kd-section kd-is--image-{{ section.settings.row_image_position | default: 'left' }}{% if row_image == blank %} kd-is--no-image{% endif %}{% if quote_mode %} kd-is--quote{% endif %}">
+    <div class="kd-is kd-section kd-is--image-{{ section.settings.row_image_position | default: 'left' }}{% if row_image == blank %} kd-is--no-image{% endif %}{% if quote_mode %} kd-is--quote{% endif %}{% unless section.settings.image_shadow %} kd-is--flat{% endunless %}">
       <div class="kd-wide kd-is__row">
         {%- if row_image != blank -%}
           <div class="kd-is__media">
@@ -284,6 +361,7 @@
           </div>
         {%- endif -%}
 
+        <div class="kd-is__text-group">
         {%- if section.settings.heading != blank -%}
           <div class="kd-is__head">
             <div class="hero-heading-wrap">
@@ -328,8 +406,11 @@
           {%- endif -%}
 
           {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
-            {%- render 'kd-button', label: section.settings.button_label, url: section.settings.button_link, variant: kd_button_variant -%}
+            <div class="kd-is__button">
+              {%- render 'kd-button', label: section.settings.button_label, url: section.settings.button_link, variant: kd_button_variant -%}
+            </div>
           {%- endif -%}
+        </div>
         </div>
       </div>
     </div>
@@ -485,7 +566,7 @@
         }
       ],
       "default": "freeform",
-      "info": "Design system row: image beside a centred text column that reflows on every screen. The position, size and height settings below only apply to Free-form, except the sticker settings. If there is no heading, the sub-heading is shown as a pull quote."
+      "info": "Design system row: image beside a centred text column that reflows on every screen; each screen size can switch to a free canvas under \"Image & button placement\". The legacy position, size and height settings further down only apply to Free-form, except the sticker settings. If there is no heading, the sub-heading is shown as a pull quote."
     },
     {
       "type": "select",
@@ -508,6 +589,491 @@
       "id": "quote_cite",
       "label": "Quote attribution (design system row)",
       "info": "Shown as a pill under the pull quote, e.g. [NAME], Verarbeitung in Vadacode. No names without consent (DS)."
+    },
+    {
+      "type": "header",
+      "content": "Image & button placement",
+      "info": "Design system row only. Set each screen size separately so the image and the heading meet the way you want. The free canvas places the image and the text block by X/Y (% of the section, measured to their centre) on a stage of fixed height."
+    },
+    {
+      "type": "checkbox",
+      "id": "image_shadow",
+      "label": "Image shadow",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "canvas_image_front",
+      "label": "Free canvas: image in front of the text",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Mobile"
+    },
+    {
+      "type": "range",
+      "id": "image_rotate_m",
+      "label": "Image rotation",
+      "min": -45,
+      "max": 45,
+      "step": 1,
+      "unit": "°",
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "canvas_m",
+      "label": "Free canvas",
+      "default": false,
+      "info": "Off = the design system row."
+    },
+    {
+      "type": "range",
+      "id": "canvas_height_m",
+      "label": "Free canvas: height",
+      "min": 300,
+      "max": 1200,
+      "step": 10,
+      "unit": "px",
+      "default": 720
+    },
+    {
+      "type": "range",
+      "id": "canvas_image_x_m",
+      "label": "Free canvas: image horizontal",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "canvas_image_y_m",
+      "label": "Free canvas: image vertical",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "canvas_image_w_m",
+      "label": "Free canvas: image width",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 90
+    },
+    {
+      "type": "range",
+      "id": "canvas_text_x_m",
+      "label": "Free canvas: text horizontal",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "canvas_text_y_m",
+      "label": "Free canvas: text vertical",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "button_position_m",
+      "label": "Button position",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "With the text"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "button_x_m",
+      "label": "Custom button: horizontal",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "button_y_m",
+      "label": "Custom button: vertical",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 92
+    },
+    {
+      "type": "header",
+      "content": "Tablet (768–1199px)"
+    },
+    {
+      "type": "range",
+      "id": "image_rotate_t",
+      "label": "Image rotation",
+      "min": -45,
+      "max": 45,
+      "step": 1,
+      "unit": "°",
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "canvas_t",
+      "label": "Free canvas",
+      "default": false,
+      "info": "Off = the design system row."
+    },
+    {
+      "type": "range",
+      "id": "canvas_height_t",
+      "label": "Free canvas: height",
+      "min": 300,
+      "max": 1200,
+      "step": 10,
+      "unit": "px",
+      "default": 560
+    },
+    {
+      "type": "range",
+      "id": "canvas_image_x_t",
+      "label": "Free canvas: image horizontal",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "canvas_image_y_t",
+      "label": "Free canvas: image vertical",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "canvas_image_w_t",
+      "label": "Free canvas: image width",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "canvas_text_x_t",
+      "label": "Free canvas: text horizontal",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "canvas_text_y_t",
+      "label": "Free canvas: text vertical",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 45
+    },
+    {
+      "type": "select",
+      "id": "button_position_t",
+      "label": "Button position",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "With the text"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "button_x_t",
+      "label": "Custom button: horizontal",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "button_y_t",
+      "label": "Custom button: vertical",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 85
+    },
+    {
+      "type": "header",
+      "content": "Desktop (1200–1799px)"
+    },
+    {
+      "type": "range",
+      "id": "image_rotate_d",
+      "label": "Image rotation",
+      "min": -45,
+      "max": 45,
+      "step": 1,
+      "unit": "°",
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "canvas_d",
+      "label": "Free canvas",
+      "default": false,
+      "info": "Off = the design system row."
+    },
+    {
+      "type": "range",
+      "id": "canvas_height_d",
+      "label": "Free canvas: height",
+      "min": 300,
+      "max": 1200,
+      "step": 10,
+      "unit": "px",
+      "default": 680
+    },
+    {
+      "type": "range",
+      "id": "canvas_image_x_d",
+      "label": "Free canvas: image horizontal",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 26
+    },
+    {
+      "type": "range",
+      "id": "canvas_image_y_d",
+      "label": "Free canvas: image vertical",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "canvas_image_w_d",
+      "label": "Free canvas: image width",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "canvas_text_x_d",
+      "label": "Free canvas: text horizontal",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 68
+    },
+    {
+      "type": "range",
+      "id": "canvas_text_y_d",
+      "label": "Free canvas: text vertical",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 45
+    },
+    {
+      "type": "select",
+      "id": "button_position_d",
+      "label": "Button position",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "With the text"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "button_x_d",
+      "label": "Custom button: horizontal",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 68
+    },
+    {
+      "type": "range",
+      "id": "button_y_d",
+      "label": "Custom button: vertical",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "27\" and larger (1800px+)"
+    },
+    {
+      "type": "range",
+      "id": "image_rotate_xl",
+      "label": "Image rotation",
+      "min": -45,
+      "max": 45,
+      "step": 1,
+      "unit": "°",
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "canvas_xl",
+      "label": "Free canvas",
+      "default": false,
+      "info": "Off = the design system row."
+    },
+    {
+      "type": "range",
+      "id": "canvas_height_xl",
+      "label": "Free canvas: height",
+      "min": 300,
+      "max": 1200,
+      "step": 10,
+      "unit": "px",
+      "default": 900
+    },
+    {
+      "type": "range",
+      "id": "canvas_image_x_xl",
+      "label": "Free canvas: image horizontal",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "canvas_image_y_xl",
+      "label": "Free canvas: image vertical",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "canvas_image_w_xl",
+      "label": "Free canvas: image width",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 38
+    },
+    {
+      "type": "range",
+      "id": "canvas_text_x_xl",
+      "label": "Free canvas: text horizontal",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 66
+    },
+    {
+      "type": "range",
+      "id": "canvas_text_y_xl",
+      "label": "Free canvas: text vertical",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 45
+    },
+    {
+      "type": "select",
+      "id": "button_position_xl",
+      "label": "Button position",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "With the text"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "button_x_xl",
+      "label": "Custom button: horizontal",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 66
+    },
+    {
+      "type": "range",
+      "id": "button_y_xl",
+      "label": "Custom button: vertical",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 80
     },
     {
       "type": "header",
