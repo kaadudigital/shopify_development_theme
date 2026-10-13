@@ -7813,6 +7813,17 @@ body {
   scrollbar-width: thin;
 }
 .kd-carousel:focus-visible { outline-offset: -4px; }
+/* People cards: when every card fits (24"/27" screens), the row centres (auto margins stay safe: they collapse
+   to 0 as soon as the row overflows and scrolls) and the header takes the row's width, so both line up. */
+.kd-people .kd-carousel > :first-child { margin-inline-start: auto; }
+.kd-people .kd-carousel > :last-child { margin-inline-end: auto; }
+@media (min-width: 768px) {
+  .kd-people .kd-people__header,
+  .kd-people .kd-people__footer {
+    max-width: calc(var(--kd-people-n, 4) * var(--card-w) + (var(--kd-people-n, 4) - 1) * var(--space-5) + 2 * var(--gutter));
+    margin-inline: auto;
+  }
+}
 /* People cards: no visible scrollbar (swipe, trackpad, Shift+wheel and arrow keys still scroll; the hint pill tells people). */
 .kd-people .kd-carousel { scrollbar-width: none; }
 .kd-people .kd-carousel::-webkit-scrollbar { display: none; }

@@ -48,6 +48,7 @@
     --kd-card-outline: {{ section.settings.card_outline_color }};
     --kd-card-outline-w: {{ section.settings.card_outline_width }}px;
     --kd-card-h-m: {{ section.settings.card_height_mobile | default: 420 }}px;
+    --kd-people-n: {{ total }};
   }
   @media (min-width: 768px) {
     #{{ section.id }} { --kd-card-mask: url("{{ shape_url }}"); }
