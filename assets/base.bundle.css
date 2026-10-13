@@ -8051,21 +8051,27 @@ body {
 .kd-pack__intro p { margin: 0; }
 .kd-pack__tagline { font-size: 17px; font-weight: 600; line-height: 1.2; }
 
-.kd-pack__notice {
+.kd-pack .kd-pack__notice {
   flex-direction: column;
   align-items: stretch;
   gap: var(--space-3);
   background: var(--kd-pc-notice-bg, var(--lime));
   color: var(--kd-pc-notice-fg, var(--purple));
 }
-.kd-pack__notice .kd-notice__title { color: var(--kd-pc-notice-title, var(--red)); }
+.kd-pack .kd-pack__notice .kd-notice__title { color: var(--kd-pc-notice-title, var(--red)); }
 .kd-pack__notice .kd-notice__text p { margin: 0; }
 .kd-pack__notice-btn { --kd-cloud: var(--kd-pc-notice-btn, var(--red)); color: var(--kd-pc-notice-btn-label, var(--paper)); }
 
 .kd-pack .kd-option { background: var(--kd-pc-opt-bg, var(--pink)); color: var(--kd-pc-opt-fg, var(--purple)); }
 .kd-pack .kd-option[aria-pressed="true"] { background: var(--kd-pc-opt-on-bg, var(--purple)); color: var(--kd-pc-opt-on-fg, var(--paper)); }
 .kd-pack .kd-badge, .kd-pack__pill--rec { background: var(--kd-pc-badge-bg, var(--lime)); color: var(--kd-pc-badge-fg, var(--purple)); }
-.kd-pack__packs { grid-template-columns: minmax(0, 1fr); }
+.kd-pack__packs { grid-template-columns: minmax(0, 1fr); gap: var(--space-3); }
+/* Mobile: 'Empfohlen' sits on the row's top edge like the pack badge, so the row text keeps its width. */
+@media (max-width: 767.98px) {
+  .kd-pack__plan-list .kd-option--row { position: relative; }
+  .kd-pack__pill--rec { position: absolute; top: -10px; right: 10px; }
+  .kd-pack__plan-list { gap: var(--space-3); }
+}
 .kd-pack__pack { flex-direction: row; align-items: center; justify-content: space-between; gap: var(--space-2); }
 .kd-pack__pack-main, .kd-pack__pack-meta { display: flex; flex-direction: column; gap: 2px; }
 .kd-pack__pack-meta { align-items: flex-end; text-align: right; }
@@ -8125,7 +8131,7 @@ body {
   .kd-pack__image { max-height: 480px; }
   .kd-pack__panel { gap: var(--space-5); }
   .kd-pack__tagline { font-size: 20px; }
-  .kd-pack__notice { flex-direction: row; align-items: center; justify-content: space-between; gap: var(--space-5); }
+  .kd-pack .kd-pack__notice { flex-direction: row; align-items: center; justify-content: space-between; gap: var(--space-5); }
   .kd-pack__notice-btn { flex-shrink: 0; }
   .kd-pack__packs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .kd-pack__pack { flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: var(--space-1); }
