@@ -93,6 +93,12 @@
      button position anywhere in the section. The text group is a grid item, not positioned, so the
      button's containing block stays the stage in both layouts. */
   .section-{{ section.id }} .kd-is .kd-is__row { position: relative; }
+  /* Image width per screen size (row column / free canvas): mobile, tablet, desktop, 24", 27". */
+  .section-{{ section.id }} .kd-is { --kd-is-w: {{ section.settings.image_width_mobile }}px; }
+  @media (min-width: 768px) { .section-{{ section.id }} .kd-is { --kd-is-w: {{ section.settings.image_width_tablet | default: 480 }}px; } }
+  @media (min-width: 1200px) { .section-{{ section.id }} .kd-is { --kd-is-w: {{ section.settings.image_width_desktop }}px; } }
+  @media (min-width: 1441px) { .section-{{ section.id }} .kd-is { --kd-is-w: {{ section.settings.image_width_24 | default: 480 }}px; } }
+  @media (min-width: 1800px) { .section-{{ section.id }} .kd-is { --kd-is-w: {{ section.settings.image_width_27 | default: 480 }}px; } }
   {%- assign kd_bps = 'm,t,d,xl' | split: ',' -%}
   {%- for bp in kd_bps -%}
     {%- liquid
@@ -111,7 +117,6 @@
       assign k_h = 'canvas_height_' | append: bp
       assign k_ix = 'canvas_image_x_' | append: bp
       assign k_iy = 'canvas_image_y_' | append: bp
-      assign k_iw = 'canvas_image_w_' | append: bp
       assign k_tx = 'canvas_text_x_' | append: bp
       assign k_ty = 'canvas_text_y_' | append: bp
       assign k_bp = 'button_position_' | append: bp
@@ -134,7 +139,7 @@
       position: absolute;
       left: {{ section.settings[k_ix] }}%;
       top: {{ section.settings[k_iy] }}%;
-      width: {{ section.settings[k_iw] }}%;
+      width: min(var(--kd-is-w), 100%);
       max-width: none;
       z-index: {% if section.settings.canvas_image_front %}3{% else %}0{% endif %};
       transform: translate(-50%, -50%) rotate({{ rot }}deg);
@@ -593,7 +598,7 @@
     {
       "type": "header",
       "content": "Image & button placement",
-      "info": "Design system row only. Set each screen size separately so the image and the heading meet the way you want. The free canvas places the image and the text block by X/Y (% of the section, measured to their centre) on a stage of fixed height."
+      "info": "Design system row only. Set each screen size separately so the image and the heading meet the way you want. The free canvas places the image (at its width from \"Background Image\") and the text block by X/Y (% of the section, measured to their centre) on a stage of fixed height."
     },
     {
       "type": "checkbox",
@@ -657,16 +662,6 @@
       "step": 1,
       "unit": "%",
       "default": 60
-    },
-    {
-      "type": "range",
-      "id": "canvas_image_w_m",
-      "label": "Free canvas: image width",
-      "min": 10,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 90
     },
     {
       "type": "range",
@@ -777,16 +772,6 @@
     },
     {
       "type": "range",
-      "id": "canvas_image_w_t",
-      "label": "Free canvas: image width",
-      "min": 10,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 44
-    },
-    {
-      "type": "range",
       "id": "canvas_text_x_t",
       "label": "Free canvas: text horizontal",
       "min": 0,
@@ -891,16 +876,6 @@
       "step": 1,
       "unit": "%",
       "default": 50
-    },
-    {
-      "type": "range",
-      "id": "canvas_image_w_d",
-      "label": "Free canvas: image width",
-      "min": 10,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 36
     },
     {
       "type": "range",
@@ -1011,16 +986,6 @@
     },
     {
       "type": "range",
-      "id": "canvas_image_w_xl",
-      "label": "Free canvas: image width",
-      "min": 10,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 38
-    },
-    {
-      "type": "range",
       "id": "canvas_text_x_xl",
       "label": "Free canvas: text horizontal",
       "min": 0,
@@ -1116,8 +1081,28 @@
     },
     {
       "type": "range",
+      "id": "image_width_mobile",
+      "label": "Image width – mobile",
+      "min": 80,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "default": 300
+    },
+    {
+      "type": "range",
+      "id": "image_width_tablet",
+      "label": "Image width – tablet (768–1199px)",
+      "min": 100,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "default": 480
+    },
+    {
+      "type": "range",
       "id": "image_width_desktop",
-      "label": "Image width (desktop)",
+      "label": "Image width – desktop (1200–1440px)",
       "min": 105,
       "max": 1200,
       "step": 15,
@@ -1126,13 +1111,24 @@
     },
     {
       "type": "range",
-      "id": "image_width_mobile",
-      "label": "Image width (mobile)",
-      "min": 80,
-      "max": 800,
-      "step": 10,
+      "id": "image_width_24",
+      "label": "Image width – 24\" screens (1441–1799px)",
+      "min": 200,
+      "max": 1800,
+      "step": 20,
       "unit": "px",
-      "default": 300
+      "default": 480
+    },
+    {
+      "type": "range",
+      "id": "image_width_27",
+      "label": "Image width – 27\" and larger (1800px+)",
+      "min": 200,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "default": 480,
+      "info": "Design system row and free canvas: the image never gets wider than the screen allows."
     },
     {
       "type": "header",

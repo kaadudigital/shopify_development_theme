@@ -7706,7 +7706,7 @@ body {
   text-align: center;
 }
 .kd-is--quote .kd-is__row { grid-template-areas: "media" "body"; }
-.kd-is__media { grid-area: media; width: 100%; max-width: 480px; }
+.kd-is__media { grid-area: media; width: 100%; max-width: var(--kd-is-w, 480px); }
 .kd-is__image {
   display: block;
   width: 100%;
@@ -7743,7 +7743,7 @@ body {
 @media (min-width: 768px) {
   .kd-is { padding-block: var(--space-12); }
   .kd-is__row {
-    grid-template-columns: minmax(0, 480px) minmax(0, 1fr);
+    grid-template-columns: minmax(0, var(--kd-is-w, 480px)) minmax(0, 1fr);
     grid-template-rows: 1fr auto auto 1fr;
     grid-template-areas: "media ." "media head" "media body" "media .";
     column-gap: var(--space-8);
@@ -7751,7 +7751,7 @@ body {
     align-items: center;
   }
   .kd-is--image-right .kd-is__row {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 480px);
+    grid-template-columns: minmax(0, 1fr) minmax(0, var(--kd-is-w, 480px));
     grid-template-areas: ". media" "head media" "body media" ". media";
   }
   .kd-is--quote .kd-is__row { grid-template-areas: "media ." "media body" "media body" "media ."; }
