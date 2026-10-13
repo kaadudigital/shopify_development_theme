@@ -88,7 +88,7 @@
     {% endunless -%}
   }
 
-  /* Per screen size (m <768, t 768–1199, d 1200–1799, xl ≥1800): image rotation, an optional
+  /* Per screen size (m <768, t 768–1199, d 1200–1440, l 1441–1799, xl ≥1800): image rotation, an optional
      free canvas (image + text placed by X/Y % on a stage of fixed height) and an optional custom
      button position anywhere in the section. The text group is a grid item, not positioned, so the
      button's containing block stays the stage in both layouts. */
@@ -99,7 +99,7 @@
   @media (min-width: 1200px) { .section-{{ section.id }} .kd-is { --kd-is-w: {{ section.settings.image_width_desktop }}px; } }
   @media (min-width: 1441px) { .section-{{ section.id }} .kd-is { --kd-is-w: {{ section.settings.image_width_24 | default: 480 }}px; } }
   @media (min-width: 1800px) { .section-{{ section.id }} .kd-is { --kd-is-w: {{ section.settings.image_width_27 | default: 480 }}px; } }
-  {%- assign kd_bps = 'm,t,d,xl' | split: ',' -%}
+  {%- assign kd_bps = 'm,t,d,l,xl' | split: ',' -%}
   {%- for bp in kd_bps -%}
     {%- liquid
       case bp
@@ -108,7 +108,9 @@
         when 't'
           assign mq = '(min-width: 768px) and (max-width: 1199.98px)'
         when 'd'
-          assign mq = '(min-width: 1200px) and (max-width: 1799.98px)'
+          assign mq = '(min-width: 1200px) and (max-width: 1440.98px)'
+        when 'l'
+          assign mq = '(min-width: 1441px) and (max-width: 1799.98px)'
         else
           assign mq = '(min-width: 1800px)'
       endcase
@@ -850,7 +852,7 @@
     },
     {
       "type": "header",
-      "content": "Desktop (1200–1799px)"
+      "content": "Desktop (1200–1440px)"
     },
     {
       "type": "range",
@@ -959,6 +961,113 @@
     {
       "type": "range",
       "id": "button_y_d",
+      "label": "Custom button: vertical",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "24\" screens (1441–1799px)"
+    },
+    {
+      "type": "range",
+      "id": "image_rotate_l",
+      "label": "Image rotation",
+      "min": -45,
+      "max": 45,
+      "step": 1,
+      "unit": "°",
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "canvas_l",
+      "label": "Free canvas",
+      "default": false,
+      "info": "Off = the design system row."
+    },
+    {
+      "type": "range",
+      "id": "canvas_height_l",
+      "label": "Free canvas: height",
+      "min": 300,
+      "max": 1200,
+      "step": 10,
+      "unit": "px",
+      "default": 680
+    },
+    {
+      "type": "range",
+      "id": "canvas_image_x_l",
+      "label": "Free canvas: image horizontal",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 26
+    },
+    {
+      "type": "range",
+      "id": "canvas_image_y_l",
+      "label": "Free canvas: image vertical",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "canvas_text_x_l",
+      "label": "Free canvas: text horizontal",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 68
+    },
+    {
+      "type": "range",
+      "id": "canvas_text_y_l",
+      "label": "Free canvas: text vertical",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 45
+    },
+    {
+      "type": "select",
+      "id": "button_position_l",
+      "label": "Button position",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "With the text"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "button_x_l",
+      "label": "Custom button: horizontal",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 68
+    },
+    {
+      "type": "range",
+      "id": "button_y_l",
       "label": "Custom button: vertical",
       "min": 0,
       "max": 100,
