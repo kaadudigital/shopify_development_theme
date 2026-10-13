@@ -9,11 +9,48 @@
   assign cta_cards = section.blocks | where: 'type', 'cta_card'
   assign total = cards.size | plus: cta_cards.size
   assign position = 0
+
+  assign shape_url = 'kd-card-shape.svg' | asset_url
+  if section.settings.card_shape != blank
+    assign shape_url = section.settings.card_shape | image_url: width: 1200
+  endif
+  assign shape_url_m = shape_url
+  if section.settings.card_shape_mobile != blank
+    assign shape_url_m = section.settings.card_shape_mobile | image_url: width: 1200
+  endif
 -%}
+
+{%- style -%}
+  #{{ section.id }} {
+    --kd-pc-kicker: {{ section.settings.kicker_color }};
+    --kd-pc-heading: {{ section.settings.heading_color }};
+    --kd-pc-hint: {{ section.settings.hint_color }};
+    --kd-pc-stat: {{ section.settings.stat_color }};
+    --kd-pc-stat-m: {{ section.settings.stat_color_mobile }};
+    --kd-pc-stat-outline: {{ section.settings.stat_outline_color }};
+    --kd-pc-text: {{ section.settings.card_text_color }};
+    --kd-pc-fact: {{ section.settings.fact_color }};
+    --kd-pc-card-btn: {{ section.settings.card_button_color }};
+    --kd-pc-cta-bg: {{ section.settings.cta_bg_color }};
+    --kd-pc-cta-text: {{ section.settings.cta_text_color }};
+    --kd-pc-cta-pill: {{ section.settings.cta_pill_color }};
+    --kd-pc-cta-pill-text: {{ section.settings.cta_pill_text_color }};
+    --kd-pc-cta-btn: {{ section.settings.cta_button_color }};
+    --kd-pc-cta-btn-label: {{ section.settings.cta_button_label_color }};
+    --kd-pc-btn: {{ section.settings.footer_button_color }};
+    --kd-pc-btn-label: {{ section.settings.footer_button_label_color }};
+    --kd-card-mask: url("{{ shape_url_m }}");
+    --kd-card-outline: {{ section.settings.card_outline_color }};
+    --kd-card-outline-w: {{ section.settings.card_outline_width }}px;
+  }
+  @media (min-width: 768px) {
+    #{{ section.id }} { --kd-card-mask: url("{{ shape_url }}"); }
+  }
+{%- endstyle -%}
 
 <section
   id="{{ section.id }}"
-  class="kd-people relative overflow-hidden bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %}"
+  class="kd-people{% if section.settings.card_shape_enabled %} kd-people--shaped{% if section.settings.card_outline %} kd-people--outlined{% endif %}{% endif %} relative overflow-hidden bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %}"
   data-color-scheme="{{ section.settings.color_scheme }}"
 >
   <div class="kd-section kd-people__header">
@@ -99,14 +136,14 @@
           <article class="kd-card kd-card--cta" {{ block.shopify_attributes }}>
             <div class="kd-card__cta-top">
               {%- if block.settings.pill != blank -%}
-                <p class="kd-tag kd-tag--lime">{{ block.settings.pill | escape }}</p>
+                <p class="kd-tag kd-card__pill">{{ block.settings.pill | escape }}</p>
               {%- endif -%}
               {%- if block.settings.heading != blank -%}
                 <h3 class="kd-card__cta-heading">{{ block.settings.heading | escape }}</h3>
               {%- endif -%}
             </div>
             {%- if block.settings.button_label != blank and block.settings.button_link != blank -%}
-              {%- render 'kd-button', label: block.settings.button_label, url: block.settings.button_link, variant: 'lime', size: 'md', full: true -%}
+              {%- render 'kd-button', label: block.settings.button_label, url: block.settings.button_link, size: 'md', full: true, class: 'kd-card__cta-button' -%}
             {%- endif -%}
           </article>
       {%- endcase -%}
@@ -115,7 +152,7 @@
 
   {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
     <div class="kd-section kd-people__footer">
-      {%- render 'kd-button', label: section.settings.button_label, url: section.settings.button_link, variant: 'primary', size: 'md' -%}
+      {%- render 'kd-button', label: section.settings.button_label, url: section.settings.button_link, size: 'md', class: 'kd-people__button' -%}
     </div>
   {%- endif -%}
 
@@ -208,6 +245,159 @@
       "type": "url",
       "id": "button_link",
       "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Card frame",
+      "info": "The cards (and the CTA card) take the shape of an SVG: its filled area becomes the card, stretched to the card size."
+    },
+    {
+      "type": "checkbox",
+      "id": "card_shape_enabled",
+      "label": "Shaped frame",
+      "default": true,
+      "info": "Off = plain rectangular cards."
+    },
+    {
+      "type": "image_picker",
+      "id": "card_shape",
+      "label": "Frame shape (SVG)",
+      "info": "Upload an SVG with one filled shape. Empty = the Kaadu cloud frame."
+    },
+    {
+      "type": "image_picker",
+      "id": "card_shape_mobile",
+      "label": "Frame shape – mobile (SVG)",
+      "info": "Optional; below 768px. Empty = the shape above."
+    },
+    {
+      "type": "checkbox",
+      "id": "card_outline",
+      "label": "Outline",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "card_outline_color",
+      "label": "Outline colour",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "range",
+      "id": "card_outline_width",
+      "label": "Outline width",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "default": 3
+    },
+    {
+      "type": "header",
+      "content": "Text & button colours",
+      "info": "Defaults follow the landing-page mockup."
+    },
+    {
+      "type": "color",
+      "id": "kicker_color",
+      "label": "Kicker",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "hint_color",
+      "label": "Scroll hint text",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "stat_color",
+      "label": "Card stat – desktop",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "stat_color_mobile",
+      "label": "Card stat – mobile",
+      "default": "#AEFF64"
+    },
+    {
+      "type": "color",
+      "id": "stat_outline_color",
+      "label": "Card stat outline",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "card_text_color",
+      "label": "Card text",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "fact_color",
+      "label": "Card fact (back)",
+      "default": "#AEFF64"
+    },
+    {
+      "type": "color",
+      "id": "card_button_color",
+      "label": "Card button (outline and label)",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "cta_bg_color",
+      "label": "CTA card background",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "cta_text_color",
+      "label": "CTA card text",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "cta_pill_color",
+      "label": "CTA card pill",
+      "default": "#AEFF64"
+    },
+    {
+      "type": "color",
+      "id": "cta_pill_text_color",
+      "label": "CTA card pill text",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "cta_button_color",
+      "label": "CTA card button",
+      "default": "#AEFF64"
+    },
+    {
+      "type": "color",
+      "id": "cta_button_label_color",
+      "label": "CTA card button label",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "footer_button_color",
+      "label": "Button below the carousel",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "footer_button_label_color",
+      "label": "Button below the carousel – label",
+      "default": "#FFFFF5"
     },
     {
       "type": "header",
