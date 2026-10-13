@@ -22,8 +22,13 @@
 
 {%- style -%}
   #{{ section.id }} {
+    {%- if section.settings.heading_follows_scheme %}
+    --kd-pc-kicker: rgb(var(--color-scheme-text));
+    --kd-pc-heading: rgb(var(--color-scheme-text));
+    {%- else %}
     --kd-pc-kicker: {{ section.settings.kicker_color }};
     --kd-pc-heading: {{ section.settings.heading_color }};
+    {%- endif %}
     --kd-pc-hint: {{ section.settings.hint_color }};
     --kd-pc-stat: {{ section.settings.stat_color }};
     --kd-pc-stat-m: {{ section.settings.stat_color_mobile }};
@@ -318,6 +323,13 @@
       "type": "header",
       "content": "Text & button colours",
       "info": "Defaults follow the landing-page mockup."
+    },
+    {
+      "type": "checkbox",
+      "id": "heading_follows_scheme",
+      "label": "Kicker and heading follow the colour scheme",
+      "default": false,
+      "info": "On = they take the colour scheme's text colour (e.g. white on purple) and the two colours below are ignored. Off = the colours below."
     },
     {
       "type": "color",
