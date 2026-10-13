@@ -72,3 +72,27 @@
     set('[data-kd-split-text]', seg.getAttribute('data-text'));
   });
 })();
+
+/* Cloud buttons: when a button is wider than the cloud's own proportion (3149 × 889, ~3.5 : 1, +10 % slack),
+   add .kd-btn--wide so the CSS swaps the stretched cloud for copies at natural proportion (kd-button.liquid). */
+(function () {
+  'use strict';
+  var RATIO = (3149.217 / 889.043) * 1.1;
+  function check(button) {
+    var h = button.offsetHeight;
+    if (!h) return;
+    button.classList.toggle('kd-btn--wide', button.offsetWidth / h > RATIO);
+  }
+  var observer = 'ResizeObserver' in window
+    ? new ResizeObserver(function (entries) { entries.forEach(function (entry) { check(entry.target); }); })
+    : null;
+  function init(root) {
+    root.querySelectorAll('.kd-btn').forEach(function (button) {
+      if (!button.querySelector('.kd-btn__cloud--tiled')) return;
+      check(button);
+      if (observer) observer.observe(button);
+    });
+  }
+  init(document);
+  document.addEventListener('shopify:section:load', function (event) { init(event.target); });
+})();

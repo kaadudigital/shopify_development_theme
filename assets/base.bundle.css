@@ -7198,6 +7198,12 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
   gap: 6px;
 }
 .kd-btn:hover .kd-btn__cloud { filter: drop-shadow(var(--shadow-card)) brightness(1.04); }
+/* Wide buttons (ratio above the cloud's own ~3.5 : 1, flagged by kaadu.js): hide the stretched cloud and show
+   three copies at natural proportion (left, centre, right) in one SVG, so they merge into one longer cloud
+   under a single drop shadow. */
+.kd-btn__cloud--tiled { display: none; }
+.kd-btn--wide .kd-btn__cloud { display: none; }
+.kd-btn--wide .kd-btn__cloud--tiled { display: block; }
 .kd-btn:active { transform: translateY(1px); }
 .kd-btn[disabled], .kd-btn[aria-disabled="true"] { opacity: 0.5; cursor: not-allowed; }
 .kd-btn--full { display: flex; width: 100%; }

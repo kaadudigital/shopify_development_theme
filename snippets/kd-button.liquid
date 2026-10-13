@@ -47,6 +47,14 @@
     </picture>
   {%- else -%}
     <svg class="kd-btn__cloud" aria-hidden="true" focusable="false"><use href="#kd-cloud"></use></svg>
+    {%- unless variant == 'outline' -%}
+      {%- comment -%} Wide buttons (kaadu.js adds .kd-btn--wide): the cloud at its own proportion from both ends and the centre, so the bumps never stretch. {%- endcomment -%}
+      <svg class="kd-btn__cloud kd-btn__cloud--tiled" aria-hidden="true" focusable="false">
+        <svg viewBox="0 0 3149.217 889.043" preserveAspectRatio="xMinYMid meet"><use href="#kd-cloud-path"></use></svg>
+        <svg viewBox="0 0 3149.217 889.043" preserveAspectRatio="xMidYMid meet"><use href="#kd-cloud-path"></use></svg>
+        <svg viewBox="0 0 3149.217 889.043" preserveAspectRatio="xMaxYMid meet"><use href="#kd-cloud-path"></use></svg>
+      </svg>
+    {%- endunless -%}
   {%- endif -%}
   <span class="kd-btn__label">{{ label }}</span>
 {%- endcapture -%}
