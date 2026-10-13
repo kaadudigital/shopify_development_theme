@@ -1,1568 +1,342 @@
+{%- comment -%}
+  Kaadu product configurator (landing-page mockup, "PRODUKT"): product photo beside the intro (stars, title,
+  tagline), the first-order notice, the Einmalig / Im Abo choice, three pack options, the delivery rhythm (Abo only),
+  the stepper and the cart button with the running total. DS components: OptionButton (.kd-option), Notice,
+  Stepper, cloud button. Styles: "PACK CONFIGURATOR" in assets/base.bundle.css; behaviour: [data-kd-config] in
+  assets/kaadu.js.
+
+  Prices: each pack has a one-time price (its variant's price when a product + variant ID are set, else the
+  price setting) and a bag count. Abo prices = pack price minus the delivery rhythm's discount (packs can opt out).
+  "Spar %" per pack compares the price per bag with the reference price per bag. Totals round to 5 Rappen.
+  Subscriptions are frontend-only until selling plans exist: the plan ID setting is sent as selling_plan when set.
+{%- endcomment -%}
 {%- liquid
   assign product = all_products[section.settings.product]
-  assign purchase_options = "1,2,3" | split: ","
-  assign tiers = "1,2,3" | split: ","
-  assign media_indexes = "1,2,3,4,5,6" | split: ","
-
-  assign default_variant = blank
-  assign has_selling_plans = false
-  if product != blank
-    assign default_variant = product.selected_or_first_available_variant
-    if default_variant != blank and default_variant.selling_plan_allocations.size > 0
-      assign has_selling_plans = true
-    endif
+  assign packs = '1,2,3' | split: ','
+  assign default_pack = section.settings.default_pack | default: '2' | plus: 0
+  assign default_tier = section.settings.default_tier | default: '2' | plus: 0
+  assign default_mode = section.settings.default_mode | default: 'abo'
+  assign title = section.settings.title
+  if title == blank and product != blank
+    assign title = product.title
   endif
-
-  # 'default' (plain square) and 'custom' (merchant-uploaded image) are this
-  # section's own keywords. Anything else is a shape-defs silhouette, applied to
-  # the arrow as a clip path.
-  assign nav_shape_style = section.settings.nav_shape_style | default: 'default'
-  assign nav_shape_image = section.settings.nav_shape_image
-  assign nav_shape_keywords = 'default,custom' | split: ','
-  assign nav_shape_clip = ''
-  unless nav_shape_keywords contains nav_shape_style
-    assign nav_shape_clip = nav_shape_style
-    assign nav_shape_style = 'shaped'
-  endunless
-  if nav_shape_style == 'custom' and nav_shape_image == blank
-    assign nav_shape_style = 'default'
+  assign image = section.settings.gallery_image_1
+  if image == blank and product != blank
+    assign image = product.featured_image
   endif
-  assign nav_shape_id = section.id | append: '-navshape'
-
-  # Clip-path shapes for the product media and the radio ticks. `shape-defs`
-  # ignores anything containing 'default', so that doubles as the "no shape" state.
-  assign image_shape = section.settings.image_shape | default: 'default'
-  assign check_shape = section.settings.check_shape | default: 'default'
-  assign image_shape_id = 'packimg-' | append: section.id
-  assign check_shape_id = 'packcheck-' | append: section.id
-
-  assign has_image_shape = false
-  unless image_shape contains 'default' or image_shape == blank
-    assign has_image_shape = true
-  endunless
-
-  assign has_check_shape = false
-  unless check_shape contains 'default' or check_shape == blank
-    assign has_check_shape = true
-  endunless
-
-  assign benefit_icon_style = section.settings.benefit_icon_style | default: 'star'
-  assign benefit_icon_size = section.settings.benefit_icon_size | default: 12
+  assign image_mobile = section.settings.image_mobile | default: image
+  assign qty = section.settings.qty_default | default: 1
+  if qty < 1
+    assign qty = 1
+  endif
 -%}
 
-<div
-  id="{{ section.id }}"
-  class="pack-selector kd-pack bg-scheme-background text-scheme-text"
-  data-color-scheme="{{ section.settings.color_scheme }}"
-  data-image-shape="{% if has_image_shape %}shaped{% else %}default{% endif %}"
-  data-check-shape="{% if has_check_shape %}shaped{% else %}default{% endif %}"
->
-  {%- if has_image_shape -%}
-    {%- render 'shape-defs', shape: image_shape, shape_id: image_shape_id, index: section.index -%}
-  {%- endif -%}
-  {%- if has_check_shape -%}
-    {%- render 'shape-defs', shape: check_shape, shape_id: check_shape_id, index: section.index -%}
-  {%- endif -%}
-  {%- style -%}
+{%- style -%}
+  #{{ section.id }} {
+    --kd-pc-bg: {{ section.settings.bg_color_mobile }};
+    --kd-pc-fg: {{ section.settings.text_color_mobile }};
+    --kd-pc-title: {{ section.settings.title_color }};
+    --kd-pc-notice-bg: {{ section.settings.promo_bg_mobile }};
+    --kd-pc-notice-title: {{ section.settings.promo_title_color_mobile }};
+    --kd-pc-notice-fg: {{ section.settings.promo_text_color_mobile }};
+    --kd-pc-notice-btn: {{ section.settings.promo_button_color }};
+    --kd-pc-notice-btn-label: {{ section.settings.promo_button_label_color }};
+    --kd-pc-opt-bg: {{ section.settings.option_bg }};
+    --kd-pc-opt-fg: {{ section.settings.option_text }};
+    --kd-pc-opt-on-bg: {{ section.settings.option_active_bg }};
+    --kd-pc-opt-on-fg: {{ section.settings.option_active_text }};
+    --kd-pc-badge-bg: {{ section.settings.badge_bg }};
+    --kd-pc-badge-fg: {{ section.settings.badge_text }};
+    --kd-pc-save-bg: {{ section.settings.plan_badge_bg }};
+    --kd-pc-save-fg: {{ section.settings.plan_badge_text }};
+    --kd-pc-save-on-bg: {{ section.settings.plan_badge_active_bg }};
+    --kd-pc-save-on-fg: {{ section.settings.plan_badge_active_text }};
+    --kd-pc-stepper: {{ section.settings.stepper_bg }};
+    --kd-pc-stepper-fg: {{ section.settings.stepper_text }};
+    --kd-pc-cart: {{ section.settings.cart_button_color_mobile }};
+    --kd-pc-cart-label: {{ section.settings.cart_button_label_color }};
+  }
+  @media (min-width: 768px) {
     #{{ section.id }} {
-      --pack-benefit-icon-size: {{ benefit_icon_size }}px;
-      {%- if has_image_shape %}
-      --pack-img-clip: url(#clip-{{ image_shape_id }});
-      {%- endif %}
-      {%- if has_check_shape %}
-      --pack-check-clip: url(#clip-{{ check_shape_id }});
-      {%- endif %}
+      --kd-pc-bg: {{ section.settings.bg_color }};
+      --kd-pc-fg: {{ section.settings.text_color }};
+      --kd-pc-notice-bg: {{ section.settings.promo_bg }};
+      --kd-pc-notice-title: {{ section.settings.promo_title_color }};
+      --kd-pc-notice-fg: {{ section.settings.promo_text_color }};
+      --kd-pc-cart: {{ section.settings.cart_button_color }};
     }
-  {%- endstyle -%}
-  {%- if nav_shape_style == 'custom' -%}
-    {%- style -%}
-      #{{ section.id }} {
-        --nav-shape: url('{{ nav_shape_image | image_url: width: 200 }}');
-      }
-    {%- endstyle -%}
-  {%- endif -%}
-  {%- if nav_shape_clip != blank -%}
-    {%- render 'shape-defs', shape: nav_shape_clip, shape_id: nav_shape_id, index: section.index -%}
-    {%- style -%}
-      #{{ section.id }} {
-        --nav-clip: url(#clip-{{ nav_shape_id }});
-      }
-    {%- endstyle -%}
-  {%- endif -%}
-  <div class="pack-selector__layout">
+  }
+{%- endstyle -%}
 
-    {%- comment -%} Product media / gallery {%- endcomment -%}
-    {%- assign product_image_media = product.media | where: 'media_type', 'image' -%}
-    <div class="pack-media">
-      {%- if product != blank and product_image_media.size > 0 -%}
-        <div class="pack-media__main" data-nav-shape="{{ nav_shape_style }}">
-          {%- for media in product_image_media -%}
-            <div class="pack-media__mainItem{% if forloop.first %} is-active{% endif %}" data-media-index="{{ media.id }}">
-              <picture>
-                <source srcset="{{ media | image_url: width: 1200, format: 'webp' }}" type="image/webp">
-                <img
-                  src="{{ media | image_url: width: 1200 }}"
-                  alt="{{ media.alt | default: product.title | escape }}"
-                  width="{{ media.width }}"
-                  height="{{ media.height }}"
-                  class="pack-media__mainImg"
-                  {%- if forloop.first and section.index == 1 -%}
-                    loading="eager" fetchpriority="high"
-                  {%- else -%}
-                    loading="lazy"
-                  {%- endif -%}
-                >
-              </picture>
-            </div>
-          {%- endfor -%}
-          {%- if product_image_media.size > 1 -%}
-            <button type="button" class="pack-media__nav pack-media__nav--prev" aria-label="{{ 'Previous image' | escape }}" onclick="packSelector.navigateMedia(-1)">
-              <svg width="18" height="17" viewBox="0 0 18 17" fill="none" aria-hidden="true"><path d="M16.577 9.806h1.062V7.68h-1.062v2.126zM.954 7.992a1.001 1.001 0 0 0 0 1.502l6.76 6.76a1.001 1.001 0 1 0 1.503-1.502L3.208 8.743l6.009-6.01A1.001 1.001 0 1 0 7.714 1.23L.954 7.993zM16.577 7.68H1.705v2.126h14.872V7.68z" fill="currentColor"/></svg>
-            </button>
-            <button type="button" class="pack-media__nav pack-media__nav--next" aria-label="{{ 'Next image' | escape }}" onclick="packSelector.navigateMedia(1)">
-              <svg width="18" height="17" viewBox="0 0 18 17" fill="none" aria-hidden="true"><path d="M1.75 7.46H.687v2.125H1.75V7.46zm15.622 1.813a1.001 1.001 0 0 0 0-1.502L10.612 1.01a1.001 1.001 0 1 0-1.502 1.502l6.009 6.01-6.009 6.01a1.001 1.001 0 1 0 1.502 1.502l6.76-6.76zM1.75 9.584h14.871V7.46H1.75v2.126z" fill="currentColor"/></svg>
-            </button>
+<section
+  id="{{ section.id }}"
+  class="kd-pack kd-section relative overflow-hidden"
+  data-color-scheme="{{ section.settings.color_scheme }}"
+  data-kd-config
+>
+  <div class="kd-wide kd-pack__row">
+    <div class="kd-pack__media">
+      {%- if image != blank -%}
+        <picture>
+          {%- if section.settings.image_mobile != blank -%}
+            <source media="(max-width: 767.98px)" srcset="{{ image_mobile | image_url: width: 800 }}">
+          {%- endif -%}
+          {{
+            image
+            | image_url: width: 1400
+            | image_tag:
+              class: 'kd-pack__image',
+              widths: '400, 600, 800, 1000, 1200, 1400',
+              sizes: '(min-width: 1441px) 640px, (min-width: 992px) 560px, 90vw',
+              loading: 'lazy',
+              alt: section.settings.image_alt
+          }}
+        </picture>
+      {%- endif -%}
+    </div>
+
+    <div class="kd-pack__panel">
+      {%- if section.settings.show_reviews and section.settings.reviews_text != blank -%}
+        <p class="kd-pack__reviews kd-label">
+          <span aria-hidden="true" class="kd-pack__stars">★★★★★</span>
+          {%- if section.settings.reviews_link != blank -%}
+            <a href="{{ section.settings.reviews_link }}">{{ section.settings.reviews_text | escape }}</a>
+          {%- else -%}
+            <span>{{ section.settings.reviews_text | escape }}</span>
+          {%- endif -%}
+        </p>
+      {%- endif -%}
+
+      {%- if title != blank -%}
+        <h2 class="kd-pack__title kd-display-h2-tight">{{ title | escape }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.tagline != blank or section.settings.description != blank -%}
+        <div class="kd-pack__intro">
+          {%- if section.settings.tagline != blank -%}
+            <p class="kd-pack__tagline">{{ section.settings.tagline | escape }}</p>
+          {%- endif -%}
+          {%- if section.settings.description != blank -%}
+            <p class="kd-pack__desc kd-body">{{ section.settings.description | escape }}</p>
           {%- endif -%}
         </div>
+      {%- endif -%}
 
-        <div class="pack-media__thumbs">
-          {%- for media in product_image_media -%}
-            <button
-              type="button"
-              class="pack-media__thumb{% if forloop.first %} is-active{% endif %}"
-              data-media-index="{{ media.id }}"
-              aria-label="{{ product.title | escape }} — {{ 'Image' }} {{ forloop.index }}"
-              onclick="packSelector.selectMedia('{{ media.id }}')"
-            >
-              <img src="{{ media | image_url: width: 160 }}" alt="" width="80" height="80" loading="lazy">
-            </button>
-          {%- endfor -%}
+      {%- if section.settings.show_promo and section.settings.promo_title != blank -%}
+        <div class="kd-notice kd-pack__notice">
+          <div class="kd-notice__body">
+            <p class="kd-notice__title">{{ section.settings.promo_title | escape }}</p>
+            {%- if section.settings.promo_text != blank -%}
+              <div class="kd-notice__text">{{ section.settings.promo_text }}</div>
+            {%- endif -%}
+          </div>
+          {%- if section.settings.promo_button_label != blank and section.settings.promo_button_link != blank -%}
+            {%- render 'kd-button', label: section.settings.promo_button_label, url: section.settings.promo_button_link, size: 'sm', class: 'kd-pack__notice-btn' -%}
+          {%- endif -%}
         </div>
-      {%- else -%}
-        {%- assign manual_media_count = 0 -%}
-        {%- for i in media_indexes -%}
-          {%- assign media_key = "gallery_image_" | append: i -%}
-          {%- assign media_image = section.settings[media_key] -%}
-          {%- if media_image != blank -%}
-            {%- assign manual_media_count = manual_media_count | plus: 1 -%}
+      {%- endif -%}
+
+      <div class="kd-options kd-options--2" role="group" aria-label="{{ section.settings.mode_group_label | escape }}" data-kd-config-group="mode">
+        <button type="button" class="kd-option" data-value="once" aria-pressed="{% if default_mode == 'once' %}true{% else %}false{% endif %}">
+          <span class="kd-option__label">{{ section.settings.mode_once_label | escape }}</span>
+          {%- if section.settings.mode_once_sub != blank -%}<span class="kd-option__sub">{{ section.settings.mode_once_sub | escape }}</span>{%- endif -%}
+        </button>
+        <button type="button" class="kd-option" data-value="abo" aria-pressed="{% if default_mode == 'abo' %}true{% else %}false{% endif %}">
+          <span class="kd-option__label">{{ section.settings.mode_abo_label | escape }}</span>
+          {%- if section.settings.mode_abo_sub != blank -%}<span class="kd-option__sub">{{ section.settings.mode_abo_sub | escape }}</span>{%- endif -%}
+        </button>
+      </div>
+
+      {%- if section.settings.options_label != blank -%}
+        <p class="kd-group-label" id="{{ section.id }}-packs">{{ section.settings.options_label | escape }}</p>
+      {%- endif -%}
+      <div class="kd-options kd-options--3 kd-pack__packs" role="group" aria-labelledby="{{ section.id }}-packs" data-kd-config-group="pack">
+        {%- for i in packs -%}
+          {%- liquid
+            assign k_label = 'option' | append: i | append: '_label'
+            assign k_variant = 'option' | append: i | append: '_variant_id'
+            assign k_free = 'pack' | append: i | append: '_free_shipping'
+            assign label = section.settings[k_label]
+            assign variant_id = section.settings[k_variant]
+            assign n = forloop.index
+          -%}
+          {%- if label != blank -%}
+            <button type="button" class="kd-option kd-pack__pack" data-value="{{ n }}" aria-pressed="{% if n == default_pack %}true{% else %}false{% endif %}">
+              {%- if section.settings[k_free] and section.settings.free_shipping_badge != blank -%}
+                <span class="kd-badge">{{ section.settings.free_shipping_badge | escape }}</span>
+              {%- endif -%}
+              <span class="kd-pack__pack-main">
+                <span class="kd-option__label">{{ label | escape }}</span>
+                <span class="kd-option__price" data-price></span>
+              </span>
+              <span class="kd-pack__pack-meta">
+                <span class="kd-option__meta" data-meta></span>
+                <span class="kd-option__was" data-was hidden></span>
+              </span>
+            </button>
           {%- endif -%}
         {%- endfor -%}
-        <div class="pack-media__main" data-nav-shape="{{ nav_shape_style }}">
-          {%- for i in media_indexes -%}
-            {%- assign media_key = "gallery_image_" | append: i -%}
-            {%- assign media_image = section.settings[media_key] -%}
-            {%- if media_image != blank -%}
-              <div class="pack-media__mainItem{% if forloop.first %} is-active{% endif %}" data-media-index="{{ i }}">
-                <picture>
-                  <source srcset="{{ media_image | image_url: width: 1200, format: 'webp' }}" type="image/webp">
-                  <img
-                    src="{{ media_image | image_url: width: 1200 }}"
-                    alt="{{ media_image.alt | default: section.settings.title | escape }}"
-                    width="{{ media_image.width }}"
-                    height="{{ media_image.height }}"
-                    class="pack-media__mainImg"
-                    {%- if forloop.first and section.index == 1 -%}
-                      loading="eager" fetchpriority="high"
-                    {%- else -%}
-                      loading="lazy"
-                    {%- endif -%}
-                  >
-                </picture>
-              </div>
-            {%- endif -%}
-          {%- endfor -%}
-          {%- if manual_media_count > 1 -%}
-            <button type="button" class="pack-media__nav pack-media__nav--prev" aria-label="{{ 'Previous image' | escape }}" onclick="packSelector.navigateMedia(-1)">
-              <svg width="18" height="17" viewBox="0 0 18 17" fill="none" aria-hidden="true"><path d="M16.577 9.806h1.062V7.68h-1.062v2.126zM.954 7.992a1.001 1.001 0 0 0 0 1.502l6.76 6.76a1.001 1.001 0 1 0 1.503-1.502L3.208 8.743l6.009-6.01A1.001 1.001 0 1 0 7.714 1.23L.954 7.993zM16.577 7.68H1.705v2.126h14.872V7.68z" fill="currentColor"/></svg>
-            </button>
-            <button type="button" class="pack-media__nav pack-media__nav--next" aria-label="{{ 'Next image' | escape }}" onclick="packSelector.navigateMedia(1)">
-              <svg width="18" height="17" viewBox="0 0 18 17" fill="none" aria-hidden="true"><path d="M1.75 7.46H.687v2.125H1.75V7.46zm15.622 1.813a1.001 1.001 0 0 0 0-1.502L10.612 1.01a1.001 1.001 0 1 0-1.502 1.502l6.009 6.01-6.009 6.01a1.001 1.001 0 1 0 1.502 1.502l6.76-6.76zM1.75 9.584h14.871V7.46H1.75v2.126z" fill="currentColor"/></svg>
-            </button>
-          {%- endif -%}
-        </div>
+      </div>
 
-        <div class="pack-media__thumbs">
-          {%- for i in media_indexes -%}
-            {%- assign media_key = "gallery_image_" | append: i -%}
-            {%- assign media_image = section.settings[media_key] -%}
-            {%- if media_image != blank -%}
-              <button
-                type="button"
-                class="pack-media__thumb{% if forloop.first %} is-active{% endif %}"
-                data-media-index="{{ i }}"
-                aria-label="{{ section.settings.title | escape }} — {{ 'Image' }} {{ forloop.index }}"
-                onclick="packSelector.selectMedia('{{ i }}')"
-              >
-                <img src="{{ media_image | image_url: width: 160 }}" alt="" width="80" height="80" loading="lazy">
+      <div class="kd-pack__plans" data-kd-config-plans>
+        {%- if section.settings.frequency_label != blank -%}
+          <p class="kd-group-label" id="{{ section.id }}-plans">{{ section.settings.frequency_label | escape }}</p>
+        {%- endif -%}
+        <div class="kd-pack__plan-list" role="group" aria-labelledby="{{ section.id }}-plans" data-kd-config-group="plan">
+          {%- for i in packs -%}
+            {%- liquid
+              assign k_title = 'tier' | append: i | append: '_title'
+              assign k_sub = 'tier' | append: i | append: '_subtitle'
+              assign k_rec = 'tier' | append: i | append: '_recommended'
+              assign n = forloop.index
+            -%}
+            {%- if section.settings[k_title] != blank -%}
+              <button type="button" class="kd-option kd-option--row" data-value="{{ n }}" aria-pressed="{% if n == default_tier %}true{% else %}false{% endif %}">
+                <span class="kd-pack__plan-name">
+                  <span class="kd-radio" aria-hidden="true"></span>
+                  <span class="kd-pack__plan-text">
+                    <span class="kd-option__label">{{ section.settings[k_title] | escape }}</span>
+                    {%- if section.settings[k_sub] != blank -%}<span class="kd-option__sub">{{ section.settings[k_sub] | escape }}</span>{%- endif -%}
+                  </span>
+                </span>
+                <span class="kd-pack__plan-end">
+                  {%- if section.settings[k_rec] and section.settings.recommended_badge != blank -%}
+                    <span class="kd-pack__pill kd-pack__pill--rec">{{ section.settings.recommended_badge | escape }}</span>
+                  {%- endif -%}
+                  <span class="kd-pack__plan-price" data-price></span>
+                  <span class="kd-pack__pill kd-pack__pill--save" data-save></span>
+                </span>
               </button>
             {%- endif -%}
           {%- endfor -%}
         </div>
-      {%- endif -%}
-    </div>
+      </div>
 
-  <div class="pack-selector__inner">
-    <p class="pack-selector__heading h3">
-      {{ section.settings.title }}
-    </p>
+      <form action="/cart/add" method="post" class="kd-pack__buy" data-kd-config-form>
+        <input type="hidden" name="id" value="">
+        <input type="hidden" name="selling_plan" value="" disabled>
+        <div class="kd-pack__stepper" role="group" aria-label="{{ section.settings.qty_label | escape }}">
+          <svg class="kd-pack__stepper-cloud" aria-hidden="true" focusable="false"><use href="#kd-cloud"></use></svg>
+          <button type="button" data-step="-1" aria-label="{{ section.settings.qty_less_label | escape }}">−</button>
+          <output aria-live="polite">{{ qty }}</output>
+          <input type="hidden" name="quantity" value="{{ qty }}">
+          <button type="button" data-step="1" aria-label="{{ section.settings.qty_more_label | escape }}">+</button>
+        </div>
+        {%- capture cart_label -%}
+          <span class="kd-pack__label--mobile">{{ section.settings.button_label_mobile | default: section.settings.button_label | escape }}</span><span class="kd-pack__label--desktop">{{ section.settings.button_label | escape }}</span>&nbsp;·&nbsp;<span data-total></span>
+        {%- endcapture -%}
+        {%- render 'kd-button', label: cart_label, type: 'submit', size: 'lg', class: 'kd-pack__cart' -%}
+      </form>
 
-    {%- comment -%} Purchase options (pack size) {%- endcomment -%}
-    <div class="pack-selector__options" role="radiogroup" aria-label="{{ section.settings.options_label | escape }}">
-      {%- if product != blank and product.variants.size > 0 -%}
-        {%- for variant in product.variants -%}
-          <button
-            type="button"
-            class="pack-option"
-            data-index="{{ variant.id }}"
-            data-variant-id="{{ variant.id }}"
-            role="radio"
-            aria-checked="false"
-            {% unless variant.available %}disabled{% endunless %}
-            onclick="packSelector.selectOption('{{ variant.id }}')"
-          >
-            <span class="pack-option__check" aria-hidden="true"></span>
-            <span class="pack-option__label btn-label">{{ variant.title }}</span>
-          </button>
-        {%- endfor -%}
-      {%- else -%}
-        {%- for i in purchase_options -%}
-          {%- assign option_label_key = "option" | append: i | append: "_label" -%}
-          {%- assign option_variant_key = "option" | append: i | append: "_variant_id" -%}
-          {%- assign option_label = section.settings[option_label_key] -%}
-          {%- assign option_variant_id = section.settings[option_variant_key] -%}
-          {%- if option_label != blank -%}
-            <button
-              type="button"
-              class="pack-option"
-              data-index="{{ i }}"
-              data-variant-id="{{ option_variant_id }}"
-              role="radio"
-              aria-checked="false"
-              onclick="packSelector.selectOption('{{ i }}')"
-            >
-              <span class="pack-option__check" aria-hidden="true"></span>
-              <span class="pack-option__label btn-label">{{ option_label }}</span>
-            </button>
-          {%- endif -%}
-        {%- endfor -%}
-      {%- endif -%}
-    </div>
-
-    {%- comment -%} Frequency / subscription {%- endcomment -%}
-    <p class="pack-selector__heading h3">{{ section.settings.frequency_label }}</p>
-
-    <div class="pack-frequency" data-collapse-onetime="{% if section.settings.collapse_subscribe_on_onetime %}true{% else %}false{% endif %}">
-      <button
-        type="button"
-        class="pack-subscribe"
-        data-frequency="subscribe"
-        role="radio"
-        aria-checked="false"
-        onclick="packSelector.selectFrequency('subscribe')"
-      >
-        {%- if has_selling_plans -%}
-          {%- assign first_allocation = default_variant.selling_plan_allocations.first -%}
-          <span class="pack-subscribe__header">
-            <span class="pack-subscribe__title-row">
-              <span class="pack-subscribe__check" aria-hidden="true"></span>
-              <span class="pack-subscribe__title h3">{{ section.settings.subscribe_title }}</span>
-            </span>
-            <span class="pack-subscribe__price">
-              {%- if first_allocation.compare_at_price > first_allocation.price -%}
-                <span class="pack-subscribe__price-original">{{ first_allocation.compare_at_price | money }}</span>
-              {%- endif -%}
-              <span class="pack-subscribe__price-current">{{ first_allocation.price | money }}</span>
-            </span>
-          </span>
-
-          <span class="pack-subscribe__tiers">
-            {%- for allocation in default_variant.selling_plan_allocations -%}
-              {%- assign tier_save = '' -%}
-              {%- if allocation.compare_at_price > allocation.price -%}
-                {%- assign tier_discount = allocation.compare_at_price | minus: allocation.price -%}
-                {%- assign tier_save_percent = tier_discount | times: 100.0 | divided_by: allocation.compare_at_price | round -%}
-                {%- assign tier_save = 'Save ' | append: tier_save_percent | append: '%' -%}
-              {%- endif -%}
-              <span
-                class="pack-tier"
-                data-tier="{{ allocation.selling_plan.id }}"
-                data-selling-plan="{{ allocation.selling_plan.id }}"
-                role="radio"
-                aria-checked="false"
-                tabindex="0"
-                onclick="event.stopPropagation(); packSelector.selectTier('{{ allocation.selling_plan.id }}')"
-                onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();packSelector.selectTier('{{ allocation.selling_plan.id }}');}"
-              >
-                <span class="pack-tier__info">
-                  <span class="pack-tier__title btn-label">{{ allocation.selling_plan.name }}</span>
-                  {%- if allocation.selling_plan.description != blank -%}
-                    <span class="pack-tier__subtitle caption">{{ allocation.selling_plan.description }}</span>
-                  {%- endif -%}
-                </span>
-                <span class="pack-tier__pricing">
-                  <span class="pack-tier__price-row">
-                    {%- if allocation.compare_at_price > allocation.price -%}
-                      <span class="pack-tier__price-original">{{ allocation.compare_at_price | money }}</span>
-                    {%- endif -%}
-                    <span class="pack-tier__price-current">{{ allocation.price | money }}</span>
-                    {%- if tier_save != blank -%}
-                      <span class="pack-tier__badge">{{ tier_save }}</span>
-                    {%- endif -%}
-                  </span>
-                </span>
-              </span>
-            {%- endfor -%}
-          </span>
-        {%- else -%}
-          <span class="pack-subscribe__header">
-            <span class="pack-subscribe__title-row">
-              <span class="pack-subscribe__check" aria-hidden="true"></span>
-              <span class="pack-subscribe__title h3">{{ section.settings.subscribe_title }}</span>
-            </span>
-            <span class="pack-subscribe__price">
-              {%- if section.settings.tier1_price_original != blank -%}
-                <span class="pack-subscribe__price-original">{{ section.settings.tier1_price_original }}</span>
-              {%- endif -%}
-              <span class="pack-subscribe__price-current">{{ section.settings.tier1_price_current }}</span>
-            </span>
-          </span>
-
-          <span class="pack-subscribe__tiers">
-            {%- for i in tiers -%}
-              {%- assign tier_title_key = "tier" | append: i | append: "_title" -%}
-              {%- assign tier_title = section.settings[tier_title_key] -%}
-              {%- if tier_title != blank -%}
-                {%- assign tier_subtitle_key = "tier" | append: i | append: "_subtitle" -%}
-                {%- assign tier_price_original_key = "tier" | append: i | append: "_price_original" -%}
-                {%- assign tier_price_current_key = "tier" | append: i | append: "_price_current" -%}
-                {%- assign tier_price_unit_key = "tier" | append: i | append: "_price_unit" -%}
-                {%- assign tier_save_key = "tier" | append: i | append: "_save_badge" -%}
-                {%- assign tier_selling_plan_key = "tier" | append: i | append: "_selling_plan_id" -%}
-                {%- assign tier_subtitle = section.settings[tier_subtitle_key] -%}
-                {%- assign tier_price_original = section.settings[tier_price_original_key] -%}
-                {%- assign tier_price_current = section.settings[tier_price_current_key] -%}
-                {%- assign tier_price_unit = section.settings[tier_price_unit_key] -%}
-                {%- assign tier_save = section.settings[tier_save_key] -%}
-                {%- assign tier_selling_plan = section.settings[tier_selling_plan_key] -%}
-                <span
-                  class="pack-tier"
-                  data-tier="{{ i }}"
-                  data-selling-plan="{{ tier_selling_plan }}"
-                  role="radio"
-                  aria-checked="false"
-                  tabindex="0"
-                  onclick="event.stopPropagation(); packSelector.selectTier('{{ i }}')"
-                  onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();packSelector.selectTier('{{ i }}');}"
-                >
-                  <span class="pack-tier__info">
-                    <span class="pack-tier__title btn-label">{{ tier_title }}</span>
-                    {%- if tier_subtitle != blank -%}
-                      <span class="pack-tier__subtitle caption">{{ tier_subtitle }}</span>
-                    {%- endif -%}
-                  </span>
-                  <span class="pack-tier__pricing">
-                    <span class="pack-tier__price-row">
-                      {%- if tier_price_original != blank -%}
-                        <span class="pack-tier__price-original">{{ tier_price_original }}</span>
-                      {%- endif -%}
-                      <span class="pack-tier__price-current">{{ tier_price_current }}</span>
-                      {%- if tier_save != blank -%}
-                        <span class="pack-tier__badge">{{ tier_save }}</span>
-                      {%- endif -%}
-                    </span>
-                    {%- if tier_price_unit != blank -%}
-                      <span class="pack-tier__price-unit caption">{{ tier_price_unit }}</span>
-                    {%- endif -%}
-                  </span>
-                </span>
-              {%- endif -%}
-            {%- endfor -%}
-          </span>
-        {%- endif -%}
-
-        {%- if section.settings.benefit1_text != blank or section.settings.benefit2_text != blank or section.settings.benefit3_text != blank -%}
-          <span class="pack-subscribe__benefits">
-            {%- for benefit in (1..3) -%}
-              {%- assign benefit_text_key = "benefit" | append: benefit | append: "_text" -%}
-              {%- assign benefit_text = section.settings[benefit_text_key] -%}
-              {%- assign benefit_icon_svg_key = "benefit" | append: benefit | append: "_icon_svg" -%}
-              {%- assign benefit_icon_image_key = "benefit" | append: benefit | append: "_icon_image" -%}
-              {%- if benefit_text != blank -%}
-                <span class="pack-subscribe__benefit">
-                  {%- render 'pack-benefit-icon',
-                    style: benefit_icon_style,
-                    svg_code: section.settings[benefit_icon_svg_key],
-                    icon_image: section.settings[benefit_icon_image_key],
-                    fallback_svg_code: section.settings.benefit_icon_svg,
-                    fallback_icon_image: section.settings.benefit_icon_image,
-                    size: benefit_icon_size
-                  -%}
-                  {{ benefit_text }}
-                </span>
-              {%- endif -%}
-            {%- endfor -%}
-          </span>
-        {%- endif -%}
-      </button>
-
-      <button
-        type="button"
-        class="pack-onetime"
-        data-frequency="onetime"
-        role="radio"
-        aria-checked="false"
-        onclick="packSelector.selectFrequency('onetime')"
-      >
-        <span class="pack-onetime__row">
-          <span class="pack-onetime__title-row">
-            <span class="pack-onetime__check" aria-hidden="true"></span>
-            <span class="pack-onetime__title h3">{{ section.settings.onetime_title }}</span>
-          </span>
-          <span class="pack-onetime__price">
-            {%- if default_variant != blank -%}
-              {{ default_variant.price | money }}
-            {%- else -%}
-              {{ section.settings.onetime_price }}
-            {%- endif -%}
-          </span>
-        </span>
-        {%- if section.settings.onetime_caption != blank -%}
-          <span class="pack-onetime__caption caption">{{ section.settings.onetime_caption }}</span>
-        {%- endif -%}
-      </button>
-    </div>
-
-    {%- comment -%} Quantity + Add to cart {%- endcomment -%}
-    <form action="/cart/add" method="post" class="pack-selector__form">
-      <input type="hidden" name="id" id="selected-variant-id" value="">
-      <input type="hidden" name="selling_plan" id="selected-selling-plan" value="">
+      <p class="kd-pack__foot" data-foot></p>
 
       {%- liquid
-        assign qty_shape_desktop = section.settings.qty_border_style_desktop | default: 'cloud'
-        assign qty_shape_mobile = section.settings.qty_border_style_mobile | default: 'dashed'
-
-        assign qty_custom_image_desktop = section.settings.qty_shape_image_desktop
-        assign qty_custom_image_mobile = section.settings.qty_shape_image_mobile
-
-        # 'dashed', 'cloud' and 'custom' are the stepper's own frame styles;
-        # anything else is a shape-defs silhouette. The stepper is a wide bar,
-        # so a shape is drawn as an outline frame behind the controls rather
-        # than clipped — clipping a 1:1 silhouette to a bar would cut the
-        # buttons off at the points, the same reason the uploaded-image option
-        # already paints a stretched background instead.
-        assign qty_shape_keywords = 'dashed,cloud,custom' | split: ','
-
-        assign qty_shape_clip_desktop = ''
-        unless qty_shape_keywords contains qty_shape_desktop
-          assign qty_shape_clip_desktop = qty_shape_desktop
-          assign qty_shape_desktop = 'shaped'
-        endunless
-
-        assign qty_shape_clip_mobile = ''
-        unless qty_shape_keywords contains qty_shape_mobile
-          assign qty_shape_clip_mobile = qty_shape_mobile
-          assign qty_shape_mobile = 'shaped'
-        endunless
-
-        assign qty_shape_id_desktop = section.id | append: '-qtyshaped'
-        assign qty_shape_id_mobile = section.id | append: '-qtyshapem'
-
-        if qty_shape_desktop == 'custom' and qty_custom_image_desktop == blank
-          assign qty_shape_desktop = 'dashed'
-        endif
-        if qty_shape_mobile == 'custom' and qty_custom_image_mobile == blank
-          assign qty_shape_mobile = 'dashed'
-        endif
-      -%}
-      {%- if qty_shape_clip_desktop != blank -%}
-        {%- render 'shape-defs', shape: qty_shape_clip_desktop, shape_id: qty_shape_id_desktop, index: section.index -%}
-      {%- endif -%}
-      {%- if qty_shape_clip_mobile != blank -%}
-        {%- render 'shape-defs', shape: qty_shape_clip_mobile, shape_id: qty_shape_id_mobile, index: section.index -%}
-      {%- endif -%}
-      {%- if qty_shape_desktop == 'custom' or qty_shape_mobile == 'custom' -%}
-        {%- style -%}
-          #{{ section.id }} {
-            {%- if qty_shape_desktop == 'custom' -%}
-              --qty-shape-desktop: url('{{ qty_custom_image_desktop | image_url: width: 400 }}');
-            {%- endif -%}
-            {%- if qty_shape_mobile == 'custom' -%}
-              --qty-shape-mobile: url('{{ qty_custom_image_mobile | image_url: width: 400 }}');
-            {%- endif -%}
-          }
-        {%- endstyle -%}
-      {%- endif -%}
-      <div class="pack-qty" data-shape-desktop="{{ qty_shape_desktop }}" data-shape-mobile="{{ qty_shape_mobile }}">
-        {%- if qty_shape_desktop == 'cloud' or qty_shape_mobile == 'cloud' -%}
-          <svg class="pack-qty__frame pack-qty__frame--cloud" viewBox="0 0 150 78" preserveAspectRatio="xMidYMid meet" fill="none" aria-hidden="true">
-            <mask id="pack-qty-cloud-mask-{{ section.id }}" fill="#fff">
-              <path d="M44.521 5.209a8.256 8.256 0 0 1 2.935-3.69 8.43 8.43 0 0 1 9.103-.352 8.28 8.28 0 0 1 3.218 3.452 8.28 8.28 0 0 1 3.218-3.45 8.43 8.43 0 0 1 9.102.351 8.257 8.257 0 0 1 2.933 3.69 8.256 8.256 0 0 1 2.935-3.69 8.43 8.43 0 0 1 9.103-.352 8.28 8.28 0 0 1 3.218 3.452 8.265 8.265 0 0 1 2.932-3.277A8.427 8.427 0 0 1 101.752 1a8.295 8.295 0 0 1 3.192 3.031A8.302 8.302 0 0 1 108.14.998a8.43 8.43 0 0 1 8.537.344 8.275 8.275 0 0 1 2.934 3.277A8.299 8.299 0 0 1 123.524.8a8.447 8.447 0 0 1 5.472-.584 8.359 8.359 0 0 1 4.65 2.904 8.17 8.17 0 0 1 1.809 5.132c0 .07-.007.144-.007.215a8.39 8.39 0 0 1 3.157-1.542 8.456 8.456 0 0 1 3.52-.12 8.407 8.407 0 0 1 3.257 1.322 8.284 8.284 0 0 1 2.415 2.531 8.138 8.138 0 0 1 .812 6.75 8.216 8.216 0 0 1-1.748 3.02 8.344 8.344 0 0 1-2.853 2.04 8.319 8.319 0 0 1 3.728 3.184 8.158 8.158 0 0 1-.397 9.29 8.336 8.336 0 0 1-3.986 2.864 8.337 8.337 0 0 1 3.986 2.864 8.158 8.158 0 0 1 .397 9.29 8.318 8.318 0 0 1-3.728 3.185 8.35 8.35 0 0 1 2.876 2.06 8.214 8.214 0 0 1 1.748 3.054 8.142 8.142 0 0 1-.893 6.798 8.294 8.294 0 0 1-2.479 2.513 8.453 8.453 0 0 1-6.86 1.06 8.388 8.388 0 0 1-3.139-1.644 8.175 8.175 0 0 1-1.613 6.904 8.357 8.357 0 0 1-4.651 2.906 8.443 8.443 0 0 1-5.473-.585 8.295 8.295 0 0 1-3.913-3.823 8.265 8.265 0 0 1-2.932 3.282 8.427 8.427 0 0 1-8.541.343 8.291 8.291 0 0 1-3.193-3.036 8.28 8.28 0 0 1-3.191 3.036 8.42 8.42 0 0 1-8.537-.343 8.259 8.259 0 0 1-2.93-3.282 8.27 8.27 0 0 1-3.215 3.46 8.421 8.421 0 0 1-9.11-.352 8.247 8.247 0 0 1-2.93-3.699 8.248 8.248 0 0 1-2.931 3.698 8.421 8.421 0 0 1-9.11.353 8.272 8.272 0 0 1-3.214-3.46 8.27 8.27 0 0 1-3.215 3.46 8.421 8.421 0 0 1-9.11-.352 8.247 8.247 0 0 1-2.93-3.699 8.248 8.248 0 0 1-2.931 3.699 8.422 8.422 0 0 1-9.11.353 8.272 8.272 0 0 1-3.215-3.461 8.299 8.299 0 0 1-3.915 3.823 8.449 8.449 0 0 1-5.475.587 8.364 8.364 0 0 1-4.654-2.906 8.177 8.177 0 0 1-1.809-5.135c.003-.552.06-1.102.17-1.643a8.391 8.391 0 0 1-3.154 1.56 8.456 8.456 0 0 1-3.524.136 8.41 8.41 0 0 1-3.266-1.313 8.29 8.29 0 0 1-2.426-2.527 8.142 8.142 0 0 1-.826-6.757 8.217 8.217 0 0 1 1.747-3.025 8.347 8.347 0 0 1 2.856-2.043 8.316 8.316 0 0 1-3.726-3.184 8.159 8.159 0 0 1 .395-9.29 8.34 8.34 0 0 1 3.985-2.865 8.34 8.34 0 0 1-3.985-2.864 8.158 8.158 0 0 1-.396-9.29 8.315 8.315 0 0 1 3.727-3.185 8.346 8.346 0 0 1-2.833-2.026 8.218 8.218 0 0 1-1.744-2.994 8.144 8.144 0 0 1 .76-6.713 8.285 8.285 0 0 1 2.37-2.54 8.407 8.407 0 0 1 3.216-1.358 8.456 8.456 0 0 1 3.498.061 8.398 8.398 0 0 1 3.166 1.47c0-.04-.007-.08-.007-.12a8.18 8.18 0 0 1 1.813-5.13A8.367 8.367 0 0 1 19.88.213a8.452 8.452 0 0 1 5.471.584 8.302 8.302 0 0 1 3.916 3.818 8.28 8.28 0 0 1 3.218-3.452 8.43 8.43 0 0 1 9.103.351 8.256 8.256 0 0 1 2.935 3.69l-.003.005Z"/>
-            </mask>
-            <path d="M44.521 5.209a8.256 8.256 0 0 1 2.935-3.69 8.43 8.43 0 0 1 9.103-.352 8.28 8.28 0 0 1 3.218 3.452 8.28 8.28 0 0 1 3.218-3.45 8.43 8.43 0 0 1 9.102.351 8.257 8.257 0 0 1 2.933 3.69 8.256 8.256 0 0 1 2.935-3.69 8.43 8.43 0 0 1 9.103-.352 8.28 8.28 0 0 1 3.218 3.452 8.265 8.265 0 0 1 2.932-3.277A8.427 8.427 0 0 1 101.752 1a8.295 8.295 0 0 1 3.192 3.031A8.302 8.302 0 0 1 108.14.998a8.43 8.43 0 0 1 8.537.344 8.275 8.275 0 0 1 2.934 3.277A8.299 8.299 0 0 1 123.524.8a8.447 8.447 0 0 1 5.472-.584 8.359 8.359 0 0 1 4.65 2.904 8.17 8.17 0 0 1 1.809 5.132c0 .07-.007.144-.007.215a8.39 8.39 0 0 1 3.157-1.542 8.456 8.456 0 0 1 3.52-.12 8.407 8.407 0 0 1 3.257 1.322 8.284 8.284 0 0 1 2.415 2.531 8.138 8.138 0 0 1 .812 6.75 8.216 8.216 0 0 1-1.748 3.02 8.344 8.344 0 0 1-2.853 2.04 8.319 8.319 0 0 1 3.728 3.184 8.158 8.158 0 0 1-.397 9.29 8.336 8.336 0 0 1-3.986 2.864 8.337 8.337 0 0 1 3.986 2.864 8.158 8.158 0 0 1 .397 9.29 8.318 8.318 0 0 1-3.728 3.185 8.35 8.35 0 0 1 2.876 2.06 8.214 8.214 0 0 1 1.748 3.054 8.142 8.142 0 0 1-.893 6.798 8.294 8.294 0 0 1-2.479 2.513 8.453 8.453 0 0 1-6.86 1.06 8.388 8.388 0 0 1-3.139-1.644 8.175 8.175 0 0 1-1.613 6.904 8.357 8.357 0 0 1-4.651 2.906 8.443 8.443 0 0 1-5.473-.585 8.295 8.295 0 0 1-3.913-3.823 8.265 8.265 0 0 1-2.932 3.282 8.427 8.427 0 0 1-8.541.343 8.291 8.291 0 0 1-3.193-3.036 8.28 8.28 0 0 1-3.191 3.036 8.42 8.42 0 0 1-8.537-.343 8.259 8.259 0 0 1-2.93-3.282 8.27 8.27 0 0 1-3.215 3.46 8.421 8.421 0 0 1-9.11-.352 8.247 8.247 0 0 1-2.93-3.699 8.248 8.248 0 0 1-2.931 3.698 8.421 8.421 0 0 1-9.11.353 8.272 8.272 0 0 1-3.214-3.46 8.27 8.27 0 0 1-3.215 3.46 8.421 8.421 0 0 1-9.11-.352 8.247 8.247 0 0 1-2.93-3.699 8.248 8.248 0 0 1-2.931 3.699 8.422 8.422 0 0 1-9.11.353 8.272 8.272 0 0 1-3.215-3.461 8.299 8.299 0 0 1-3.915 3.823 8.449 8.449 0 0 1-5.475.587 8.364 8.364 0 0 1-4.654-2.906 8.177 8.177 0 0 1-1.809-5.135c.003-.552.06-1.102.17-1.643a8.391 8.391 0 0 1-3.154 1.56 8.456 8.456 0 0 1-3.524.136 8.41 8.41 0 0 1-3.266-1.313 8.29 8.29 0 0 1-2.426-2.527 8.142 8.142 0 0 1-.826-6.757 8.217 8.217 0 0 1 1.747-3.025 8.347 8.347 0 0 1 2.856-2.043 8.316 8.316 0 0 1-3.726-3.184 8.159 8.159 0 0 1 .395-9.29 8.34 8.34 0 0 1 3.985-2.865 8.34 8.34 0 0 1-3.985-2.864 8.158 8.158 0 0 1-.396-9.29 8.315 8.315 0 0 1 3.727-3.185 8.346 8.346 0 0 1-2.833-2.026 8.218 8.218 0 0 1-1.744-2.994 8.144 8.144 0 0 1 .76-6.713 8.285 8.285 0 0 1 2.37-2.54 8.407 8.407 0 0 1 3.216-1.358 8.456 8.456 0 0 1 3.498.061 8.398 8.398 0 0 1 3.166 1.47c0-.04-.007-.08-.007-.12a8.18 8.18 0 0 1 1.813-5.13A8.367 8.367 0 0 1 19.88.213a8.452 8.452 0 0 1 5.471.584 8.302 8.302 0 0 1 3.916 3.818 8.28 8.28 0 0 1 3.218-3.452 8.43 8.43 0 0 1 9.103.351 8.256 8.256 0 0 1 2.935 3.69l-.003.005Z" stroke="currentColor" stroke-width="2" mask="url(#pack-qty-cloud-mask-{{ section.id }})"/>
-          </svg>
-        {%- endif -%}
-        {%- if qty_shape_desktop == 'custom' -%}
-          <span class="pack-qty__shape pack-qty__shape--desktop" aria-hidden="true"></span>
-        {%- endif -%}
-        {%- if qty_shape_mobile == 'custom' -%}
-          <span class="pack-qty__shape pack-qty__shape--mobile" aria-hidden="true"></span>
-        {%- endif -%}
-        {%- comment -%}
-          shape-defs also publishes each silhouette as `#outline-<id>`, a stroked
-          path carrying vector-effect="non-scaling-stroke", so stretching the
-          1:1 viewBox across the bar keeps the outline an even 2px.
-        {%- endcomment -%}
-        {%- if qty_shape_clip_desktop != blank -%}
-          <svg class="pack-qty__frame pack-qty__frame--shaped-desktop" viewBox="0 0 200 200" preserveAspectRatio="none" fill="none" aria-hidden="true">
-            <use href="#outline-{{ qty_shape_id_desktop }}" fill="none" stroke="currentColor" stroke-width="2"/>
-          </svg>
-        {%- endif -%}
-        {%- if qty_shape_clip_mobile != blank -%}
-          <svg class="pack-qty__frame pack-qty__frame--shaped-mobile" viewBox="0 0 200 200" preserveAspectRatio="none" fill="none" aria-hidden="true">
-            <use href="#outline-{{ qty_shape_id_mobile }}" fill="none" stroke="currentColor" stroke-width="2"/>
-          </svg>
-        {%- endif -%}
-        <span class="pack-qty__label caption">{{ section.settings.qty_label }}</span>
-        <button type="button" class="pack-qty__btn" aria-label="{{ 'products.product.quantity.decrease_html' | t: product: '' | default: 'Decrease quantity' | escape }}" onclick="packSelector.changeQty(-1)">&minus;</button>
-        <input type="number" name="quantity" id="pack-qty-input" class="pack-qty__input" value="{{ section.settings.qty_default | default: 1 }}" min="1" inputmode="numeric">
-        <button type="button" class="pack-qty__btn" aria-label="{{ 'products.product.quantity.increase_html' | t: product: '' | default: 'Increase quantity' | escape }}" onclick="packSelector.changeQty(1)">+</button>
-      </div>
-
-      {%- render 'kd-button', label: section.settings.button_label, type: 'submit', variant: 'primary', size: 'lg', full: true, class: 'pack-selector__submit' -%}
-    </form>
-
-    {%- comment -%} Ingredients / Nutrition / Shipping accordion {%- endcomment -%}
-    {%- liquid
-      assign nutrition_has_content = false
-      if section.settings.nutrition_content_type == 'image'
-        if section.settings.nutrition_image != blank
+        assign nutrition_has_content = false
+        if section.settings.nutrition_content_type == 'image'
+          if section.settings.nutrition_image != blank
+            assign nutrition_has_content = true
+          endif
+        elsif section.settings.nutrition_content != blank
           assign nutrition_has_content = true
         endif
-      elsif section.settings.nutrition_content != blank
-        assign nutrition_has_content = true
-      endif
-    -%}
-    {%- if section.settings.ingredients_content != blank or nutrition_has_content or section.settings.shipping_content != blank -%}
-      <div class="pack-accordion">
-        {%- if section.settings.ingredients_content != blank -%}
-          <details class="pack-accordion__item">
-            <summary class="pack-accordion__summary">
-              <span class="pack-accordion__label h3">{{ section.settings.ingredients_label }}</span>
-              <svg class="pack-accordion__icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 4L7 10L13 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </summary>
-            <div class="pack-accordion__panel body-large">{{ section.settings.ingredients_content }}</div>
-          </details>
-        {%- endif -%}
-        {%- if nutrition_has_content -%}
-          <details class="pack-accordion__item">
-            <summary class="pack-accordion__summary">
-              <span class="pack-accordion__label h3">{{ section.settings.nutrition_label }}</span>
-              <svg class="pack-accordion__icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 4L7 10L13 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </summary>
-            <div class="pack-accordion__panel{% if section.settings.nutrition_content_type != 'image' %} body-large{% endif %}">
-              {%- if section.settings.nutrition_content_type == 'image' -%}
-                <img
-                  src="{{ section.settings.nutrition_image | image_url: width: 800 }}"
-                  alt="{{ section.settings.nutrition_image.alt | default: section.settings.nutrition_label | escape }}"
-                  width="{{ section.settings.nutrition_image.width }}"
-                  height="{{ section.settings.nutrition_image.height }}"
-                  loading="lazy"
-                  class="pack-accordion__image"
-                >
-              {%- else -%}
-                {{ section.settings.nutrition_content }}
-              {%- endif -%}
-            </div>
-          </details>
-        {%- endif -%}
-        {%- if section.settings.shipping_content != blank -%}
-          <details class="pack-accordion__item">
-            <summary class="pack-accordion__summary">
-              <span class="pack-accordion__label h3">{{ section.settings.shipping_label }}</span>
-              <svg class="pack-accordion__icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 4L7 10L13 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </summary>
-            <div class="pack-accordion__panel body-large">{{ section.settings.shipping_content }}</div>
-          </details>
-        {%- endif -%}
-      </div>
-    {%- endif -%}
-  </div>
-  </div>
-</div>
-
-{%- if product != blank -%}
-  <script type="application/ld+json">
-    {{ product | structured_data }}
-  </script>
-
-  <script type="application/json" id="pack-selector-pricing-{{ section.id }}">
-    {
-      "onetime": {
-        {%- for variant in product.variants -%}
-          "{{ variant.id }}": {{ variant.price | money | strip_html | json }}{% unless forloop.last %},{% endunless %}
-        {%- endfor -%}
-      }{%- if has_selling_plans -%},
-      "subscriptions": {
-        {%- for variant in product.variants -%}
-          "{{ variant.id }}": {
-            {%- for allocation in variant.selling_plan_allocations -%}
-              {%- assign tier_save = '' -%}
-              {%- if allocation.compare_at_price > allocation.price -%}
-                {%- assign tier_discount = allocation.compare_at_price | minus: allocation.price -%}
-                {%- assign tier_save_percent = tier_discount | times: 100.0 | divided_by: allocation.compare_at_price | round -%}
-                {%- assign tier_save = 'Save ' | append: tier_save_percent | append: '%' -%}
-              {%- endif -%}
-              "{{ allocation.selling_plan.id }}": {
-                "price": {{ allocation.price | money | strip_html | json }},
-                "compareAtPrice": {% if allocation.compare_at_price > allocation.price %}{{ allocation.compare_at_price | money | strip_html | json }}{% else %}null{% endif %},
-                "save": {% if tier_save != blank %}{{ tier_save | json }}{% else %}null{% endif %}
-              }{% unless forloop.last %},{% endunless %}
-            {%- endfor -%}
-          }{% unless forloop.last %},{% endunless %}
-        {%- endfor -%}
-      }
+      -%}
+      {%- if section.settings.ingredients_content != blank or nutrition_has_content or section.settings.shipping_content != blank -%}
+        <div class="kd-pack__details">
+          {%- if section.settings.ingredients_content != blank -%}
+            <details class="kd-pack__detail">
+              <summary class="kd-label-lg">{{ section.settings.ingredients_label | escape }}</summary>
+              <div class="kd-pack__detail-body kd-body rte">{{ section.settings.ingredients_content }}</div>
+            </details>
+          {%- endif -%}
+          {%- if nutrition_has_content -%}
+            <details class="kd-pack__detail">
+              <summary class="kd-label-lg">{{ section.settings.nutrition_label | escape }}</summary>
+              <div class="kd-pack__detail-body kd-body rte">
+                {%- if section.settings.nutrition_content_type == 'image' -%}
+                  {{ section.settings.nutrition_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: section.settings.nutrition_label }}
+                {%- else -%}
+                  {{ section.settings.nutrition_content }}
+                {%- endif -%}
+              </div>
+            </details>
+          {%- endif -%}
+          {%- if section.settings.shipping_content != blank -%}
+            <details class="kd-pack__detail">
+              <summary class="kd-label-lg">{{ section.settings.shipping_label | escape }}</summary>
+              <div class="kd-pack__detail-body kd-body rte">{{ section.settings.shipping_content }}</div>
+            </details>
+          {%- endif -%}
+        </div>
       {%- endif -%}
+    </div>
+  </div>
+
+  {%- comment -%} Data for assets/kaadu.js: packs (bags, one-time price in CHF, variant, Abo discount on/off, free shipping) and plans. {%- endcomment -%}
+  <script type="application/json" data-kd-config-data>
+    {
+      "mode": {{ default_mode | json }},
+      "pack": {{ default_pack }},
+      "plan": {{ default_tier }},
+      "currency": {{ section.settings.currency_prefix | default: 'CHF' | json }},
+      "reference": {{ section.settings.reference_price | default: '4.45' | json }},
+      "perBag": {{ section.settings.per_bag_text | json }},
+      "save": {{ section.settings.save_text | json }},
+      "was": {{ section.settings.was_text | json }},
+      "shipFree": {{ section.settings.shipping_free_text | json }},
+      "shipPaid": {{ section.settings.shipping_paid_text | json }},
+      "footExtra": {{ section.settings.footnote_extra | json }},
+      "packs": [
+        {%- for i in packs -%}
+          {%- liquid
+            assign k_label = 'option' | append: i | append: '_label'
+            assign k_variant = 'option' | append: i | append: '_variant_id'
+            assign k_bags = 'pack' | append: i | append: '_bags'
+            assign k_price = 'pack' | append: i | append: '_price'
+            assign k_disc = 'pack' | append: i | append: '_abo_discount'
+            assign k_free = 'pack' | append: i | append: '_free_shipping'
+            assign variant_id = section.settings[k_variant] | strip
+            assign price = section.settings[k_price] | default: '0'
+            if product != blank and variant_id != blank
+              for v in product.variants
+                assign vid = v.id | append: ''
+                if vid == variant_id
+                  assign price = v.price | divided_by: 100.0
+                endif
+              endfor
+            endif
+          -%}
+          {%- if section.settings[k_label] != blank -%}
+            {%- if pack_sep -%},{%- endif -%}{%- assign pack_sep = true -%}
+            { "n": {{ forloop.index }}, "bags": {{ section.settings[k_bags] | default: 1 }}, "price": {{ price | json }}, "variant": {{ variant_id | json }}, "aboDiscount": {{ section.settings[k_disc] | json }}, "freeShip": {{ section.settings[k_free] | json }} }
+          {%- endif -%}
+        {%- endfor -%}
+      ],
+      "plans": [
+        {%- for i in packs -%}
+          {%- liquid
+            assign k_title = 'tier' | append: i | append: '_title'
+            assign k_disc = 'tier' | append: i | append: '_discount'
+            assign k_plan = 'tier' | append: i | append: '_selling_plan_id'
+          -%}
+          {%- if section.settings[k_title] != blank -%}
+            {%- if plan_sep -%},{%- endif -%}{%- assign plan_sep = true -%}
+            { "n": {{ forloop.index }}, "discount": {{ section.settings[k_disc] | default: 0 }}, "sellingPlan": {{ section.settings[k_plan] | strip | json }} }
+          {%- endif -%}
+        {%- endfor -%}
+      ]
     }
   </script>
-{%- endif -%}
-
-<style>
-  .pack-selector {
-    padding: var(--space-6) var(--space-4);
-    font-family: var(--font-body);
-    max-width: 100%;
-    overflow-x: hidden;
-  }
-  .pack-selector__layout {
-    max-width: var(--container-max);
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-6);
-    min-width: 0;
-  }
-  @media (min-width: 769px) {
-    .pack-selector__layout {
-      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-      gap: var(--legacy-space-8);
-      align-items: start;
-    }
-  }
-  .pack-selector__inner {
-    max-width: 480px;
-    margin: 0 auto;
-    width: 100%;
-    min-width: 0;
-  }
-  @media (min-width: 769px) {
-    .pack-selector__inner {
-      max-width: 640px;
-      margin: 0;
-    }
-  }
-
-  /* Product media */
-  .pack-media {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-  }
-  .pack-media__main {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 4 / 5;
-    overflow: hidden;
-    background: var(--color-cream);
-  }
-  .pack-media__mainItem {
-    display: none;
-    position: absolute;
-    inset: 0;
-  }
-  .pack-media__mainItem.is-active {
-    display: block;
-  }
-  .pack-media__mainImg {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .pack-media__nav {
-    position: absolute;
-    top: 50%;
-    z-index: 2;
-    transform: translateY(-50%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    background: var(--color-cream);
-    border: 2px solid var(--color-black);
-    color: var(--color-near-black);
-    cursor: pointer;
-    transition: transform 0.15s ease-out;
-  }
-  .pack-media__nav:hover {
-    transform: translateY(-50%) scale(1.05);
-  }
-  .pack-media__main[data-nav-shape="custom"] .pack-media__nav {
-    background: transparent;
-    background-image: var(--nav-shape);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 100% 100%;
-    border: none;
-  }
-  /* Squared to 48px because the shapes are authored on a 1:1 viewBox — a 40px
-     rectangle would stretch them — and 48px meets the minimum tap target. The
-     border goes because a clip path slices it off mid-edge. */
-  .pack-media__main[data-nav-shape="shaped"] .pack-media__nav {
-    width: var(--legacy-space-12);
-    height: var(--legacy-space-12);
-    border: none;
-    -webkit-clip-path: var(--nav-clip);
-    clip-path: var(--nav-clip);
-  }
-  .pack-media__main[data-nav-shape="shaped"] .pack-media__nav:focus-visible {
-    outline: 2px solid var(--color-red);
-    outline-offset: 2px;
-  }
-  .pack-media__nav--prev {
-    left: var(--space-3);
-  }
-  .pack-media__nav--next {
-    right: var(--space-3);
-  }
-  .pack-media__thumbs {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-  }
-  .pack-media__thumb {
-    width: 64px;
-    height: 64px;
-    padding: 0;
-    overflow: hidden;
-    cursor: pointer;
-    background: var(--color-cream);
-    border: 2px solid var(--color-black);
-    flex-shrink: 0;
-  }
-  .pack-media__thumb.is-active {
-    border-color: var(--color-red);
-  }
-  .pack-media__thumb img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  /* Custom shape for the product media. The clip cuts any border away, so the
-     shaped thumbs drop their frame and show selection through opacity/scale. */
-  .pack-selector[data-image-shape="shaped"] .pack-media__mainImg {
-    clip-path: var(--pack-img-clip);
-  }
-  .pack-selector[data-image-shape="shaped"] .pack-media__main {
-    background: transparent;
-  }
-  .pack-selector[data-image-shape="shaped"] .pack-media__thumb {
-    background: transparent;
-    border: none;
-    overflow: visible;
-    opacity: 0.55;
-    transition: opacity 0.15s ease-out, transform 0.15s ease-out;
-  }
-  .pack-selector[data-image-shape="shaped"] .pack-media__thumb img {
-    clip-path: var(--pack-img-clip);
-  }
-  .pack-selector[data-image-shape="shaped"] .pack-media__thumb:hover {
-    opacity: 0.85;
-  }
-  /* The clip removes the border, so focus needs its own ring to stay visible. */
-  .pack-selector[data-image-shape="shaped"] .pack-media__thumb:focus-visible {
-    opacity: 1;
-    outline: 2px solid var(--color-red);
-    outline-offset: 2px;
-  }
-  .pack-selector[data-image-shape="shaped"] .pack-media__thumb.is-active {
-    opacity: 1;
-    transform: scale(1.08);
-  }
-
-  /* Accordion */
-  .pack-accordion {
-    margin-top: var(--legacy-space-8);
-    border-top: 2px solid var(--color-black);
-  }
-  .pack-accordion__item {
-    border-bottom: 2px solid var(--color-black);
-  }
-  .pack-accordion__summary {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-3);
-    padding: var(--space-4) 0;
-    cursor: pointer;
-    list-style: none;
-  }
-  .pack-accordion__summary::-webkit-details-marker {
-    display: none;
-  }
-  .pack-accordion__label {
-    margin: 0;
-    color: rgb(var(--color-scheme-text));
-    min-width: 0;
-    overflow-wrap: break-word;
-  }
-  .pack-accordion__icon {
-    flex-shrink: 0;
-    color: rgb(var(--color-scheme-text));
-    transition: transform 0.2s ease-out;
-  }
-  .pack-accordion__item[open] .pack-accordion__icon {
-    transform: rotate(180deg);
-  }
-  .pack-accordion__panel {
-    padding: 0 0 var(--space-4);
-    color: rgb(var(--color-scheme-text));
-  }
-  .pack-accordion__image {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-  }
-  .pack-selector__heading {
-    color: rgb(var(--color-scheme-text));
-    margin: 0 0 var(--space-4);
-  }
-
-  /* Purchase options */
-  .pack-selector__options {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-    margin-bottom: var(--space-6);
-  }
-  .pack-option {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    width: 100%;
-    background: var(--color-cream);
-    padding: var(--space-3) var(--space-4);
-    cursor: pointer;
-    font-family: inherit;
-    text-align: left;
-    transition: background 0.15s ease-out;
-  }
-  .pack-option__check {
-    flex-shrink: 0;
-    width: 20px;
-    height: 20px;
-    border: 2px solid var(--color-black);
-    background: var(--color-cream);
-    position: relative;
-  }
-  .pack-option[aria-checked="true"] {
-    background: var(--color-lime);
-  }
-  .pack-option[aria-checked="true"] .pack-option__check {
-    background: var(--color-black);
-  }
-  .pack-option[aria-checked="true"] .pack-option__check::after {
-    content: "";
-    position: absolute;
-    left: 5px;
-    top: 1px;
-    width: 5px;
-    height: 10px;
-    border: solid var(--color-cream);
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
-  }
-  .pack-option__label {
-    color: var(--color-near-black);
-  }
-
-  /* Frequency block */
-  .pack-frequency {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-    margin-bottom: var(--space-6);
-  }
-
-  .pack-subscribe {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    background: var(--color-cream);
-    padding: var(--space-4);
-    cursor: pointer;
-    font-family: inherit;
-    text-align: left;
-    gap: var(--space-4);
-    transition: background 0.15s ease-out;
-  }
-  .pack-subscribe[aria-checked="true"] {
-    background: var(--color-yellow);
-  }
-  .pack-subscribe__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-3);
-    flex-wrap: wrap;
-  }
-  .pack-subscribe__title-row {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    min-width: 0;
-  }
-  .pack-subscribe__title {
-    overflow-wrap: break-word;
-  }
-  .pack-subscribe__check {
-    flex-shrink: 0;
-    width: 20px;
-    height: 20px;
-    border: 2px solid var(--color-black);
-    background: var(--color-cream);
-    position: relative;
-  }
-  .pack-subscribe[aria-checked="true"] .pack-subscribe__check {
-    background: var(--color-black);
-  }
-  .pack-subscribe[aria-checked="true"] .pack-subscribe__check::after {
-    content: "";
-    position: absolute;
-    left: 5px;
-    top: 1px;
-    width: 5px;
-    height: 10px;
-    border: solid var(--color-cream);
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
-  }
-  .pack-subscribe__title {
-    margin: 0;
-    color: var(--color-near-black);
-  }
-  .pack-subscribe__price {
-    display: flex;
-    align-items: baseline;
-    gap: var(--space-2);
-    font-family: var(--font-heading);
-    font-weight: 700;
-    flex-wrap: wrap;
-  }
-  .pack-subscribe__price-original {
-    color: var(--color-mid-grey);
-    text-decoration: line-through;
-    font-size: 16px;
-  }
-  .pack-subscribe__price-current {
-    color: var(--color-near-black);
-    font-size: 20px;
-  }
-
-  .pack-subscribe__tiers {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-  }
-  .pack-tier {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-2) var(--space-3);
-    background: var(--color-cream);
-    border: 2px solid var(--color-black);
-    padding: var(--space-3) var(--space-4);
-    cursor: pointer;
-    transition: background 0.15s ease-out, border-color 0.15s ease-out;
-  }
-  .pack-subscribe[aria-checked="true"] .pack-tier {
-    background: var(--color-yellow);
-  }
-  .pack-subscribe[aria-checked="true"] .pack-tier[aria-checked="true"] {
-    background: var(--color-cream);
-    border-color: var(--color-red);
-  }
-  .pack-tier__info {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    min-width: 0;
-    flex: 1 1 auto;
-  }
-  .pack-tier__title,
-  .pack-tier__subtitle {
-    overflow-wrap: break-word;
-  }
-  .pack-tier__title {
-    color: var(--color-near-black);
-  }
-  .pack-tier__subtitle {
-    color: var(--color-near-black);
-  }
-  .pack-tier__pricing {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 2px;
-    flex-shrink: 0;
-  }
-  .pack-tier__price-row {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    flex-wrap: wrap;
-    justify-content: flex-end;
-  }
-  .pack-tier__price-original {
-    color: var(--color-mid-grey);
-    text-decoration: line-through;
-    font-family: var(--font-heading);
-    font-size: 13px;
-  }
-  .pack-tier__price-current {
-    color: var(--color-near-black);
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: 16px;
-  }
-  .pack-tier__badge {
-    background: var(--color-pink);
-    color: var(--color-black);
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: 11px;
-    padding: 3px 12px;
-    border-radius: var(--radius-btn);
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-  .pack-tier__price-unit {
-    color: var(--color-near-black);
-  }
-
-  .pack-subscribe__benefits {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
-  }
-  .pack-subscribe__benefit {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    font-size: 14px;
-    color: var(--color-near-black);
-  }
-  .pack-subscribe__benefit-icon {
-    flex-shrink: 0;
-    width: var(--pack-benefit-icon-size, 12px);
-    height: var(--pack-benefit-icon-size, 12px);
-    color: var(--color-red);
-  }
-  .pack-subscribe__benefit-icon--svg {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-  /* Merchant-supplied SVG carries its own width/height attributes; override so
-     it obeys the icon size setting instead. */
-  .pack-subscribe__benefit-icon--svg > svg,
-  .pack-subscribe__benefit-icon--svg > img {
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
-  img.pack-subscribe__benefit-icon {
-    object-fit: contain;
-  }
-
-  /* Contract the subscribe block to its header while the one-time option is
-     chosen. display:none also drops the tier radios out of the tab order, which
-     is right — no tier is selectable in that state. */
-  .pack-frequency[data-collapse-onetime="true"][data-frequency-state="onetime"] .pack-subscribe__tiers,
-  .pack-frequency[data-collapse-onetime="true"][data-frequency-state="onetime"] .pack-subscribe__benefits {
-    display: none;
-  }
-
-  .pack-onetime {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
-    width: 100%;
-    background: var(--color-cream);
-    padding: var(--space-3) var(--space-4);
-    cursor: pointer;
-    font-family: inherit;
-    text-align: left;
-  }
-  .pack-onetime[aria-checked="true"] {
-    background: var(--color-lime);
-  }
-  .pack-onetime__row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-2) var(--space-3);
-  }
-  .pack-onetime__title-row {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    min-width: 0;
-  }
-  .pack-onetime__title {
-    overflow-wrap: break-word;
-  }
-  .pack-onetime__check {
-    flex-shrink: 0;
-    width: 20px;
-    height: 20px;
-    border: 2px solid var(--color-black);
-    background: var(--color-cream);
-    position: relative;
-  }
-  .pack-onetime[aria-checked="true"] .pack-onetime__check {
-    background: var(--color-black);
-  }
-  .pack-onetime[aria-checked="true"] .pack-onetime__check::after {
-    content: "";
-    position: absolute;
-    left: 5px;
-    top: 1px;
-    width: 5px;
-    height: 10px;
-    border: solid var(--color-cream);
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
-  }
-
-  /* Custom shape for the radio ticks. The clip-path removes the square border,
-     so the frame is rebuilt as two stacked silhouettes: a black outer and an
-     inset cream inner, leaving a 2px ring. Selecting fills the shape solid,
-     which replaces the tick glyph — a checkmark reads poorly inside a star. */
-  .pack-selector[data-check-shape="shaped"] .pack-option__check,
-  .pack-selector[data-check-shape="shaped"] .pack-subscribe__check,
-  .pack-selector[data-check-shape="shaped"] .pack-onetime__check {
-    width: 24px;
-    height: 24px;
-    border: none;
-    background: var(--color-black);
-    clip-path: var(--pack-check-clip);
-  }
-  .pack-selector[data-check-shape="shaped"] .pack-option__check::before,
-  .pack-selector[data-check-shape="shaped"] .pack-subscribe__check::before,
-  .pack-selector[data-check-shape="shaped"] .pack-onetime__check::before {
-    content: "";
-    position: absolute;
-    inset: 2px;
-    background: var(--color-cream);
-    clip-path: var(--pack-check-clip);
-    transition: background 0.15s ease-out;
-  }
-  .pack-selector[data-check-shape="shaped"] .pack-option[aria-checked="true"] .pack-option__check::before,
-  .pack-selector[data-check-shape="shaped"] .pack-subscribe[aria-checked="true"] .pack-subscribe__check::before,
-  .pack-selector[data-check-shape="shaped"] .pack-onetime[aria-checked="true"] .pack-onetime__check::before {
-    background: var(--color-black);
-  }
-  .pack-selector[data-check-shape="shaped"] .pack-option[aria-checked="true"] .pack-option__check::after,
-  .pack-selector[data-check-shape="shaped"] .pack-subscribe[aria-checked="true"] .pack-subscribe__check::after,
-  .pack-selector[data-check-shape="shaped"] .pack-onetime[aria-checked="true"] .pack-onetime__check::after {
-    display: none;
-  }
-  .pack-onetime__title {
-    margin: 0;
-    color: var(--color-near-black);
-  }
-  .pack-onetime__price {
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: 18px;
-    color: var(--color-near-black);
-  }
-  .pack-onetime__caption {
-    color: var(--color-red);
-    padding-left: calc(20px + var(--space-3));
-  }
-
-  /* Qty + submit */
-  .pack-selector__form {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-4);
-    flex-wrap: wrap;
-  }
-  .pack-qty {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-2) var(--space-3);
-  }
-  .pack-qty__frame {
-    display: none;
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    color: var(--color-black);
-    pointer-events: none;
-  }
-  .pack-qty__shape {
-    display: none;
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
-  @media (max-width: 768px) {
-    .pack-qty[data-shape-mobile="dashed"] {
-      border: 2px dashed var(--color-black);
-      aspect-ratio: auto;
-      padding: var(--space-2) var(--space-3);
-    }
-    .pack-qty[data-shape-mobile="cloud"] {
-      border: none;
-      aspect-ratio: 150 / 78;
-      justify-content: center;
-      padding: var(--space-3) var(--space-6);
-    }
-    .pack-qty[data-shape-mobile="cloud"] .pack-qty__frame--cloud {
-      display: block;
-    }
-    .pack-qty[data-shape-mobile="custom"] {
-      border: none;
-      aspect-ratio: 150 / 78;
-      justify-content: center;
-      padding: var(--space-3) var(--space-6);
-    }
-    .pack-qty[data-shape-mobile="custom"] .pack-qty__shape--mobile {
-      display: block;
-      background-image: var(--qty-shape-mobile);
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: 100% 100%;
-    }
-    .pack-qty[data-shape-mobile="shaped"] {
-      border: none;
-      aspect-ratio: 150 / 78;
-      justify-content: center;
-      padding: var(--space-3) var(--space-6);
-    }
-    .pack-qty[data-shape-mobile="shaped"] .pack-qty__frame--shaped-mobile {
-      display: block;
-    }
-  }
-  @media (min-width: 769px) {
-    .pack-qty[data-shape-desktop="dashed"] {
-      border: 2px dashed var(--color-black);
-      aspect-ratio: auto;
-      padding: var(--space-2) var(--space-3);
-    }
-    .pack-qty[data-shape-desktop="cloud"] {
-      border: none;
-      aspect-ratio: 150 / 78;
-      justify-content: center;
-      padding: var(--space-3) var(--space-6);
-    }
-    .pack-qty[data-shape-desktop="cloud"] .pack-qty__frame--cloud {
-      display: block;
-    }
-    .pack-qty[data-shape-desktop="custom"] {
-      border: none;
-      aspect-ratio: 150 / 78;
-      justify-content: center;
-      padding: var(--space-3) var(--space-6);
-    }
-    .pack-qty[data-shape-desktop="custom"] .pack-qty__shape--desktop {
-      display: block;
-      background-image: var(--qty-shape-desktop);
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: 100% 100%;
-    }
-    .pack-qty[data-shape-desktop="shaped"] {
-      border: none;
-      aspect-ratio: 150 / 78;
-      justify-content: center;
-      padding: var(--space-3) var(--space-6);
-    }
-    .pack-qty[data-shape-desktop="shaped"] .pack-qty__frame--shaped-desktop {
-      display: block;
-    }
-  }
-  .pack-qty__label,
-  .pack-qty__btn,
-  .pack-qty__input {
-    position: relative;
-    z-index: 1;
-  }
-  .pack-qty__label {
-    color: rgb(var(--color-scheme-text));
-    text-transform: uppercase;
-    margin-right: var(--space-1);
-  }
-  .pack-qty__btn {
-    width: 32px;
-    height: 32px;
-    min-width: 48px;
-    min-height: 32px;
-    border: none;
-    background: transparent;
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: 18px;
-    color: rgb(var(--color-scheme-text));
-    cursor: pointer;
-    line-height: 1;
-  }
-  .pack-qty__input {
-    width: 32px;
-    border: none;
-    background: transparent;
-    text-align: center;
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: 16px;
-    color: rgb(var(--color-scheme-text));
-    -moz-appearance: textfield;
-  }
-  .pack-qty__input::-webkit-outer-spin-button,
-  .pack-qty__input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-
-  .pack-selector__submit {
-    flex: 1 1 auto;
-    min-width: 200px;
-  }
-
-  @media (max-width: 480px) {
-    .pack-selector__form {
-      flex-direction: column;
-      align-items: stretch;
-    }
-    .pack-qty {
-      justify-content: center;
-    }
-  }
-</style>
-
-<script>
-  window.packSelector = (function () {
-    var state = { option: null, frequency: null, tier: null };
-
-    var pricingData = null;
-    {%- if product != blank -%}
-      (function () {
-        var script = document.getElementById('pack-selector-pricing-{{ section.id }}');
-        if (script) {
-          try {
-            pricingData = JSON.parse(script.textContent);
-          } catch (e) {
-            pricingData = null;
-          }
-        }
-      })();
-    {%- endif -%}
-
-    function optionButtons() {
-      return document.querySelectorAll('.pack-option');
-    }
-
-    function setOrRemoveSpan(row, className, text, insertBeforeEl) {
-      var el = row.querySelector('.' + className);
-      if (text) {
-        if (!el) {
-          el = document.createElement('span');
-          el.className = className;
-          if (insertBeforeEl) {
-            row.insertBefore(el, insertBeforeEl);
-          } else {
-            row.appendChild(el);
-          }
-        }
-        el.textContent = text;
-      } else if (el) {
-        el.remove();
-      }
-    }
-
-    function updateTierPricing(tierEl, data) {
-      var priceRow = tierEl.querySelector('.pack-tier__price-row');
-      if (!priceRow) return;
-      var currentEl = priceRow.querySelector('.pack-tier__price-current');
-      setOrRemoveSpan(priceRow, 'pack-tier__price-original', data.compareAtPrice, currentEl);
-      if (currentEl) currentEl.textContent = data.price;
-      setOrRemoveSpan(priceRow, 'pack-tier__badge', data.save, null);
-    }
-
-    function syncSubscribeHeaderFromTier(tierId) {
-      var tierEl = document.querySelector('.pack-tier[data-tier="' + tierId + '"]');
-      var headerContainer = document.querySelector('.pack-subscribe__price');
-      var headerCurrent = document.querySelector('.pack-subscribe__price-current');
-      if (!tierEl || !headerContainer || !headerCurrent) return;
-
-      var tierOriginalEl = tierEl.querySelector('.pack-tier__price-original');
-      var tierCurrentEl = tierEl.querySelector('.pack-tier__price-current');
-
-      setOrRemoveSpan(headerContainer, 'pack-subscribe__price-original', tierOriginalEl ? tierOriginalEl.textContent : null, headerCurrent);
-      if (tierCurrentEl) headerCurrent.textContent = tierCurrentEl.textContent;
-    }
-
-    function updatePricesForVariant(variantId) {
-      if (!pricingData) return;
-
-      var onetimePrice = document.querySelector('.pack-onetime__price');
-      if (onetimePrice && pricingData.onetime && pricingData.onetime[variantId] !== undefined) {
-        onetimePrice.textContent = pricingData.onetime[variantId];
-      }
-
-      if (!pricingData.subscriptions || !pricingData.subscriptions[variantId]) return;
-      var variantPlans = pricingData.subscriptions[variantId];
-      var tierEls = document.querySelectorAll('.pack-tier');
-      var firstPlanId = null;
-
-      tierEls.forEach(function (tierEl, i) {
-        var planId = tierEl.getAttribute('data-tier');
-        if (i === 0) firstPlanId = planId;
-        var data = variantPlans[planId];
-        if (data) updateTierPricing(tierEl, data);
-      });
-
-      syncSubscribeHeaderFromTier(state.tier || firstPlanId);
-    }
-
-    function selectOption(index) {
-      optionButtons().forEach(function (btn) {
-        btn.setAttribute('aria-checked', btn.getAttribute('data-index') === index ? 'true' : 'false');
-      });
-      state.option = index;
-      updateVariant();
-      updatePricesForVariant(index);
-    }
-
-    function selectFrequency(frequency) {
-      var subscribe = document.querySelector('.pack-subscribe');
-      var onetime = document.querySelector('.pack-onetime');
-      if (subscribe) subscribe.setAttribute('aria-checked', frequency === 'subscribe' ? 'true' : 'false');
-      if (onetime) onetime.setAttribute('aria-checked', frequency === 'onetime' ? 'true' : 'false');
-
-      // Drives the collapsed state in CSS. It lives on the container rather than
-      // keying off .pack-subscribe[aria-checked="false"] because the markup ships
-      // unchecked — that would render the tiers collapsed and pop them open once
-      // this runs on DOMContentLoaded.
-      var frequencyGroup = document.querySelector('.pack-frequency');
-      if (frequencyGroup) frequencyGroup.setAttribute('data-frequency-state', frequency);
-
-      state.frequency = frequency;
-
-      if (frequency === 'subscribe' && !state.tier) {
-        var firstTier = document.querySelector('.pack-tier');
-        if (firstTier) selectTier(firstTier.getAttribute('data-tier'));
-      }
-      updateVariant();
-    }
-
-    function selectTier(tier) {
-      document.querySelectorAll('.pack-tier').forEach(function (el) {
-        el.setAttribute('aria-checked', el.getAttribute('data-tier') === tier ? 'true' : 'false');
-      });
-      state.tier = tier;
-      selectFrequency('subscribe');
-      syncSubscribeHeaderFromTier(tier);
-    }
-
-    function selectMedia(index) {
-      document.querySelectorAll('.pack-media__mainItem').forEach(function (el) {
-        el.classList.toggle('is-active', el.getAttribute('data-media-index') === index);
-      });
-      document.querySelectorAll('.pack-media__thumb').forEach(function (el) {
-        el.classList.toggle('is-active', el.getAttribute('data-media-index') === index);
-      });
-    }
-
-    function navigateMedia(direction) {
-      var items = document.querySelectorAll('.pack-media__mainItem');
-      if (items.length < 2) return;
-      var currentIndex = 0;
-      items.forEach(function (el, i) {
-        if (el.classList.contains('is-active')) currentIndex = i;
-      });
-      var nextIndex = (currentIndex + direction + items.length) % items.length;
-      selectMedia(items[nextIndex].getAttribute('data-media-index'));
-    }
-
-    function changeQty(delta) {
-      var input = document.getElementById('pack-qty-input');
-      if (!input) return;
-      var next = (parseInt(input.value, 10) || 1) + delta;
-      if (next < 1) next = 1;
-      input.value = next;
-    }
-
-    function updateVariant() {
-      var variantInput = document.getElementById('selected-variant-id');
-      var sellingPlanInput = document.getElementById('selected-selling-plan');
-      var selectedOption = document.querySelector('.pack-option[aria-checked="true"]');
-
-      if (variantInput) {
-        variantInput.value = selectedOption ? selectedOption.getAttribute('data-variant-id') : '';
-      }
-      if (sellingPlanInput) {
-        if (state.frequency === 'subscribe' && state.tier) {
-          var tierEl = document.querySelector('.pack-tier[data-tier="' + state.tier + '"]');
-          sellingPlanInput.value = tierEl ? (tierEl.getAttribute('data-selling-plan') || '') : '';
-        } else {
-          sellingPlanInput.value = '';
-        }
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-      var firstOption = document.querySelector('.pack-option');
-      if (firstOption) selectOption(firstOption.getAttribute('data-index'));
-      selectFrequency('subscribe');
-    });
-
-    return {
-      selectOption: selectOption,
-      selectFrequency: selectFrequency,
-      selectTier: selectTier,
-      selectMedia: selectMedia,
-      navigateMedia: navigateMedia,
-      changeQty: changeQty
-    };
-  })();
-</script>
+</section>
 
 {% schema %}
 {
   "name": "Custom Packaging Selector",
+  "tag": "section",
   "settings": [
     {
-      "type": "text",
-      "id": "title",
-      "label": "Section Title",
-      "default": "WÄHL DEINE MENGE"
-    },
-    {
       "type": "header",
-      "content": "Product"
+      "content": "Product",
+      "info": "When a product and variant IDs are set, pack prices come from the variants; otherwise from the price fields below."
     },
     {
       "type": "product",
@@ -1571,2369 +345,557 @@
       "info": "When set, purchase options, prices, subscription tiers and gallery images are pulled live from this product's variants, selling plans and media — the fields below are used only as a fallback when no product is selected."
     },
     {
-      "type": "header",
-      "content": "Product Media"
-    },
-    {
       "type": "image_picker",
       "id": "gallery_image_1",
-      "label": "Main Image"
+      "label": "Product photo",
+      "info": "Packshot, ideally on a transparent background. Empty = the product's main image."
     },
     {
       "type": "image_picker",
-      "id": "gallery_image_2",
-      "label": "Gallery Image 2"
+      "id": "image_mobile",
+      "label": "Product photo – mobile",
+      "info": "Optional; below 768px."
     },
     {
-      "type": "image_picker",
-      "id": "gallery_image_3",
-      "label": "Gallery Image 3"
+      "type": "text",
+      "id": "image_alt",
+      "label": "Photo alt text",
+      "default": "Kaadu Ananas Crunchys, Beutel mit Ananasstücken"
     },
     {
-      "type": "image_picker",
-      "id": "gallery_image_4",
-      "label": "Gallery Image 4"
+      "type": "header",
+      "content": "Intro"
     },
     {
-      "type": "image_picker",
-      "id": "gallery_image_5",
-      "label": "Gallery Image 5"
+      "type": "checkbox",
+      "id": "show_reviews",
+      "label": "Show stars and reviews link",
+      "default": true
     },
     {
-      "type": "image_picker",
-      "id": "gallery_image_6",
-      "label": "Gallery Image 6"
+      "type": "text",
+      "id": "reviews_text",
+      "label": "Reviews text",
+      "default": "[Anzahl] Bewertungen"
+    },
+    {
+      "type": "url",
+      "id": "reviews_link",
+      "label": "Reviews link"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Ananas Crunchys",
+      "info": "Empty = the product title."
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "100 % Frucht. 0 % Ausbeutung."
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Short description",
+      "default": "Nur Ananas, gefriergetrocknet. Ohne Zusätze, ohne Schwefel, ohne Zuckerzusatz."
+    },
+    {
+      "type": "header",
+      "content": "First-order notice"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_promo",
+      "label": "Show the notice",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "promo_title",
+      "label": "Title",
+      "default": "Erste Bestellung: 1 Beutel gratis"
+    },
+    {
+      "type": "richtext",
+      "id": "promo_text",
+      "label": "Text",
+      "default": "<p>Du zahlst nur <strong>CHF 3.00 Versand.</strong> Danach CHF 4.45 pro Beutel. Code <strong>[CODE]</strong>.</p>"
+    },
+    {
+      "type": "text",
+      "id": "promo_button_label",
+      "label": "Button label",
+      "default": "Gratis probieren"
+    },
+    {
+      "type": "url",
+      "id": "promo_button_link",
+      "label": "Button link",
+      "info": "E.g. a discount link: /discount/YOURCODE?redirect=/cart. The button is hidden without a link."
+    },
+    {
+      "type": "header",
+      "content": "Purchase type"
+    },
+    {
+      "type": "text",
+      "id": "mode_group_label",
+      "label": "Group label (screen readers)",
+      "default": "Kaufart"
+    },
+    {
+      "type": "text",
+      "id": "mode_once_label",
+      "label": "One-time",
+      "default": "Einmalig"
+    },
+    {
+      "type": "text",
+      "id": "mode_once_sub",
+      "label": "One-time – line 2",
+      "default": "Ohne Abo, ohne Bindung"
+    },
+    {
+      "type": "text",
+      "id": "mode_abo_label",
+      "label": "Subscription",
+      "default": "Im Abo"
+    },
+    {
+      "type": "text",
+      "id": "mode_abo_sub",
+      "label": "Subscription – line 2",
+      "default": "Bis 20 % sparen, keine Lieferkosten"
     },
     {
       "type": "select",
-      "id": "image_shape",
-      "label": "Product Image Shape",
-      "info": "Applies to the main product image and the preview thumbnails.",
-      "default": "default",
+      "id": "default_mode",
+      "label": "Selected at start",
+      "default": "abo",
       "options": [
         {
-          "value": "website_shape_star",
-          "label": "custom star",
-          "group": "custom shapes"
+          "value": "abo",
+          "label": "Im Abo"
         },
         {
-          "value": "website_shape_bun",
-          "label": "custom bun",
-          "group": "custom shapes"
-        },
-        {
-          "value": "website_shape_frame",
-          "label": "custom frame",
-          "group": "custom shapes"
-        },
-        {
-          "value": "website_shape_pancake",
-          "label": "custom pancake",
-          "group": "custom shapes"
-        },
-        {
-          "value": "website_shape_cloud",
-          "label": "custom cloud",
-          "group": "custom shapes"
-        },
-        {
-          "value": "default",
-          "label": "t:common.options.default.label",
-          "group": "t:common.groups.fit_to_image"
-        },
-        {
-          "value": "default_ellipse",
-          "label": "t:common.options.ellipse.label",
-          "group": "t:common.groups.fit_to_image"
-        },
-        {
-          "value": "default_pill",
-          "label": "t:common.options.pill.label",
-          "group": "t:common.groups.fit_to_image"
-        },
-        {
-          "value": "default_archway",
-          "label": "t:common.options.archway.label",
-          "group": "t:common.groups.fit_to_image"
-        },
-        {
-          "value": "diamond",
-          "label": "t:common.options.diamond.label",
-          "group": "t:common.groups.basic"
-        },
-        {
-          "value": "triangle_1",
-          "label": "t:common.options.triangle_1.label",
-          "group": "t:common.groups.basic"
-        },
-        {
-          "value": "triangle_2",
-          "label": "t:common.options.triangle_2.label",
-          "group": "t:common.groups.basic"
-        },
-        {
-          "value": "pentagon",
-          "label": "t:common.options.pentagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "hexagon",
-          "label": "t:common.options.hexagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "heptagon",
-          "label": "t:common.options.heptagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "octagon",
-          "label": "t:common.options.octagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "nonagon",
-          "label": "t:common.options.nonagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "decagon",
-          "label": "t:common.options.decagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_pentagon",
-          "label": "t:common.options.rounded_pentagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_hexagon",
-          "label": "t:common.options.rounded_hexagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_heptagon",
-          "label": "t:common.options.rounded_heptagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_octagon",
-          "label": "t:common.options.rounded_octagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_nonagon",
-          "label": "t:common.options.rounded_nonagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_decagon",
-          "label": "t:common.options.rounded_decagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "star_1",
-          "label": "t:common.options.star_1.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "star_2",
-          "label": "t:common.options.star_2.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "star_3",
-          "label": "t:common.options.star_3.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "star_4",
-          "label": "t:common.options.star_4.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "star_5",
-          "label": "t:common.options.star_5.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "star_6",
-          "label": "t:common.options.star_6.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "abstract_star_1",
-          "label": "t:common.options.abstract_star_1.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "abstract_star_2",
-          "label": "t:common.options.abstract_star_2.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "abstract_star_3",
-          "label": "t:common.options.abstract_star_3.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "scalloped_circle_1",
-          "label": "t:common.options.scalloped_circle_1.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "scalloped_circle_2",
-          "label": "t:common.options.scalloped_circle_2.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "scalloped_circle_3",
-          "label": "t:common.options.scalloped_circle_3.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "scalloped_circle_4",
-          "label": "t:common.options.scalloped_circle_4.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "scalloped_circle_5",
-          "label": "t:common.options.scalloped_circle_5.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "scalloped_circle_6",
-          "label": "t:common.options.scalloped_circle_6.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "parallelogram",
-          "label": "t:common.options.parallelogram.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "squircle",
-          "label": "t:common.options.squircle.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "scalloped_square_1",
-          "label": "t:common.options.scalloped_square_1.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "scalloped_square_2",
-          "label": "t:common.options.scalloped_square_2.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "leaf",
-          "label": "t:common.options.leaf.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "clipped_square",
-          "label": "t:common.options.clipped.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "convex_square",
-          "label": "t:common.options.convex.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "twisted_square",
-          "label": "t:common.options.twisted.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "trapeze",
-          "label": "t:common.options.trapeze.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "pinched",
-          "label": "t:common.options.pinched.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "pixelated",
-          "label": "t:common.options.pixelated.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "overlapped",
-          "label": "t:common.options.overlapped.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "zig_zag",
-          "label": "t:common.options.zig_zag.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "zig_zag_tear",
-          "label": "t:common.options.zig_zag_tear.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "wave_tear",
-          "label": "t:common.options.wave_tear.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "flower",
-          "label": "t:common.options.flower.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "flower_bloom",
-          "label": "t:common.options.flower_bloom.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "concave",
-          "label": "t:common.options.concave.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "flag",
-          "label": "t:common.options.flag.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "abstract_oval",
-          "label": "t:common.options.abstract_oval.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "cross",
-          "label": "t:common.options.cross.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "quatrefoil",
-          "label": "t:common.options.quatrefoil.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "quadrant",
-          "label": "t:common.options.quadrant.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "wind",
-          "label": "t:common.options.wind.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "windmill",
-          "label": "t:common.options.windmill.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "heart",
-          "label": "t:common.options.heart.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "mirrored_pyramids",
-          "label": "t:common.options.mirrored_pyramids.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "plus",
-          "label": "t:common.options.plus.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "double_pill_1",
-          "label": "t:common.options.double_pill_1.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "double_pill_2",
-          "label": "t:common.options.double_pill_2.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "triple_pill_1",
-          "label": "t:common.options.triple_pill_1.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "triple_pill_2",
-          "label": "t:common.options.triple_pill_2.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "crown",
-          "label": "t:common.options.crown.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "stair",
-          "label": "t:common.options.stair.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "pancake_stack",
-          "label": "t:common.options.pancake_stack.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "asterisk",
-          "label": "t:common.options.asterisk.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "overlapping_squares",
-          "label": "t:common.options.overlapping_squares.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "brush_stroke",
-          "label": "t:common.options.brush_stroke.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "blob",
-          "label": "t:common.options.blob.label",
-          "group": "t:common.groups.variable"
+          "value": "once",
+          "label": "Einmalig"
         }
       ]
     },
     {
       "type": "header",
-      "content": "Media Navigation Arrows"
-    },
-    {
-      "type": "select",
-      "id": "nav_shape_style",
-      "label": "Navigation Button Shape",
-      "options": [
-        {
-          "value": "website_shape_star",
-          "label": "custom star",
-          "group": "custom shapes"
-        },
-        {
-          "value": "website_shape_bun",
-          "label": "custom bun",
-          "group": "custom shapes"
-        },
-        {
-          "value": "website_shape_frame",
-          "label": "custom frame",
-          "group": "custom shapes"
-        },
-        {
-          "value": "website_shape_pancake",
-          "label": "custom pancake",
-          "group": "custom shapes"
-        },
-        {
-          "value": "website_shape_cloud",
-          "label": "custom cloud",
-          "group": "custom shapes"
-        },
-        {
-          "value": "default",
-          "label": "Square (default)",
-          "group": "basic"
-        },
-        {
-          "value": "custom",
-          "label": "Custom (uploaded image)",
-          "group": "basic"
-        },
-        {
-          "value": "diamond",
-          "label": "t:common.options.diamond.label",
-          "group": "t:common.groups.basic"
-        },
-        {
-          "value": "triangle_1",
-          "label": "t:common.options.triangle_1.label",
-          "group": "t:common.groups.basic"
-        },
-        {
-          "value": "triangle_2",
-          "label": "t:common.options.triangle_2.label",
-          "group": "t:common.groups.basic"
-        },
-        {
-          "value": "pentagon",
-          "label": "t:common.options.pentagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "hexagon",
-          "label": "t:common.options.hexagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "heptagon",
-          "label": "t:common.options.heptagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "octagon",
-          "label": "t:common.options.octagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "nonagon",
-          "label": "t:common.options.nonagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "decagon",
-          "label": "t:common.options.decagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_pentagon",
-          "label": "t:common.options.rounded_pentagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_hexagon",
-          "label": "t:common.options.rounded_hexagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_heptagon",
-          "label": "t:common.options.rounded_heptagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_octagon",
-          "label": "t:common.options.rounded_octagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_nonagon",
-          "label": "t:common.options.rounded_nonagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_decagon",
-          "label": "t:common.options.rounded_decagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "star_1",
-          "label": "t:common.options.star_1.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "star_2",
-          "label": "t:common.options.star_2.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "star_3",
-          "label": "t:common.options.star_3.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "star_4",
-          "label": "t:common.options.star_4.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "star_5",
-          "label": "t:common.options.star_5.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "star_6",
-          "label": "t:common.options.star_6.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "abstract_star_1",
-          "label": "t:common.options.abstract_star_1.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "abstract_star_2",
-          "label": "t:common.options.abstract_star_2.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "abstract_star_3",
-          "label": "t:common.options.abstract_star_3.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "scalloped_circle_1",
-          "label": "t:common.options.scalloped_circle_1.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "scalloped_circle_2",
-          "label": "t:common.options.scalloped_circle_2.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "scalloped_circle_3",
-          "label": "t:common.options.scalloped_circle_3.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "scalloped_circle_4",
-          "label": "t:common.options.scalloped_circle_4.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "scalloped_circle_5",
-          "label": "t:common.options.scalloped_circle_5.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "scalloped_circle_6",
-          "label": "t:common.options.scalloped_circle_6.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "parallelogram",
-          "label": "t:common.options.parallelogram.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "squircle",
-          "label": "t:common.options.squircle.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "scalloped_square_1",
-          "label": "t:common.options.scalloped_square_1.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "scalloped_square_2",
-          "label": "t:common.options.scalloped_square_2.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "leaf",
-          "label": "t:common.options.leaf.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "clipped_square",
-          "label": "t:common.options.clipped.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "convex_square",
-          "label": "t:common.options.convex.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "twisted_square",
-          "label": "t:common.options.twisted.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "trapeze",
-          "label": "t:common.options.trapeze.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "pinched",
-          "label": "t:common.options.pinched.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "pixelated",
-          "label": "t:common.options.pixelated.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "overlapped",
-          "label": "t:common.options.overlapped.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "zig_zag",
-          "label": "t:common.options.zig_zag.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "zig_zag_tear",
-          "label": "t:common.options.zig_zag_tear.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "wave_tear",
-          "label": "t:common.options.wave_tear.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "flower",
-          "label": "t:common.options.flower.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "flower_bloom",
-          "label": "t:common.options.flower_bloom.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "concave",
-          "label": "t:common.options.concave.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "flag",
-          "label": "t:common.options.flag.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "abstract_oval",
-          "label": "t:common.options.abstract_oval.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "cross",
-          "label": "t:common.options.cross.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "quatrefoil",
-          "label": "t:common.options.quatrefoil.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "quadrant",
-          "label": "t:common.options.quadrant.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "wind",
-          "label": "t:common.options.wind.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "windmill",
-          "label": "t:common.options.windmill.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "heart",
-          "label": "t:common.options.heart.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "mirrored_pyramids",
-          "label": "t:common.options.mirrored_pyramids.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "plus",
-          "label": "t:common.options.plus.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "double_pill_1",
-          "label": "t:common.options.double_pill_1.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "double_pill_2",
-          "label": "t:common.options.double_pill_2.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "triple_pill_1",
-          "label": "t:common.options.triple_pill_1.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "triple_pill_2",
-          "label": "t:common.options.triple_pill_2.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "crown",
-          "label": "t:common.options.crown.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "stair",
-          "label": "t:common.options.stair.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "pancake_stack",
-          "label": "t:common.options.pancake_stack.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "asterisk",
-          "label": "t:common.options.asterisk.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "overlapping_squares",
-          "label": "t:common.options.overlapping_squares.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "brush_stroke",
-          "label": "t:common.options.brush_stroke.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "blob",
-          "label": "t:common.options.blob.label",
-          "group": "t:common.groups.variable"
-        }
-      ],
-      "default": "default",
-      "info": "Custom shapes and the shape library clip the arrow; 'Custom (uploaded image)' paints the picked image behind it."
-    },
-    {
-      "type": "image_picker",
-      "id": "nav_shape_image",
-      "label": "Navigation Button Custom Shape",
-      "info": "Used when Shape is set to Custom. Upload any SVG/PNG — it renders with its own colors, stretched to fill the button. Falls back to Square if empty."
-    },
-    {
-      "type": "header",
-      "content": "Purchase Options"
+      "content": "Packs",
+      "info": "Up to three; a pack without a label is hidden."
     },
     {
       "type": "text",
       "id": "options_label",
-      "label": "Options group label (accessibility)",
-      "default": "Purchase options"
+      "label": "Group label",
+      "default": "Packungsgrösse"
+    },
+    {
+      "type": "text",
+      "id": "reference_price",
+      "label": "Reference price per bag (CHF)",
+      "default": "4.45",
+      "info": "'Spar %' on each pack compares its price per bag with this."
+    },
+    {
+      "type": "text",
+      "id": "free_shipping_badge",
+      "label": "Free-shipping badge",
+      "default": "Gratis Versand"
+    },
+    {
+      "type": "select",
+      "id": "default_pack",
+      "label": "Selected at start",
+      "default": "2",
+      "options": [
+        {
+          "value": "1",
+          "label": "Pack 1"
+        },
+        {
+          "value": "2",
+          "label": "Pack 2"
+        },
+        {
+          "value": "3",
+          "label": "Pack 3"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Pack 1"
     },
     {
       "type": "text",
       "id": "option1_label",
-      "label": "Option 1 Label",
-      "default": "6ER PACK"
+      "label": "Label",
+      "default": "3er Pack"
     },
     {
       "type": "text",
       "id": "option1_variant_id",
-      "label": "Option 1 Variant ID"
+      "label": "Variant ID",
+      "info": "Numeric ID of the product variant this pack adds to the cart."
+    },
+    {
+      "type": "number",
+      "id": "pack1_bags",
+      "label": "Bags in the pack",
+      "default": 3
+    },
+    {
+      "type": "text",
+      "id": "pack1_price",
+      "label": "One-time price (CHF)",
+      "default": "13.35",
+      "info": "Used when no product variant is linked."
+    },
+    {
+      "type": "checkbox",
+      "id": "pack1_abo_discount",
+      "label": "Abo discount applies",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "pack1_free_shipping",
+      "label": "Free shipping",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Pack 2"
     },
     {
       "type": "text",
       "id": "option2_label",
-      "label": "Option 2 Label",
-      "default": "9ER PACK"
+      "label": "Label",
+      "default": "6er Pack"
     },
     {
       "type": "text",
       "id": "option2_variant_id",
-      "label": "Option 2 Variant ID"
+      "label": "Variant ID",
+      "info": "Numeric ID of the product variant this pack adds to the cart."
+    },
+    {
+      "type": "number",
+      "id": "pack2_bags",
+      "label": "Bags in the pack",
+      "default": 6
+    },
+    {
+      "type": "text",
+      "id": "pack2_price",
+      "label": "One-time price (CHF)",
+      "default": "24.90",
+      "info": "Used when no product variant is linked."
+    },
+    {
+      "type": "checkbox",
+      "id": "pack2_abo_discount",
+      "label": "Abo discount applies",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pack2_free_shipping",
+      "label": "Free shipping",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Pack 3"
     },
     {
       "type": "text",
       "id": "option3_label",
-      "label": "Option 3 Label (leave empty for none)"
+      "label": "Label",
+      "default": "12er Pack"
     },
     {
       "type": "text",
       "id": "option3_variant_id",
-      "label": "Option 3 Variant ID"
+      "label": "Variant ID",
+      "info": "Numeric ID of the product variant this pack adds to the cart."
     },
     {
-      "type": "select",
-      "id": "check_shape",
-      "label": "Tickbox Shape",
-      "info": "Applies to the tickbox on the pack options, the subscribe option and the one-time option.",
-      "default": "default",
-      "options": [
-        {
-          "value": "website_shape_star",
-          "label": "custom star",
-          "group": "custom shapes"
-        },
-        {
-          "value": "website_shape_bun",
-          "label": "custom bun",
-          "group": "custom shapes"
-        },
-        {
-          "value": "website_shape_frame",
-          "label": "custom frame",
-          "group": "custom shapes"
-        },
-        {
-          "value": "website_shape_pancake",
-          "label": "custom pancake",
-          "group": "custom shapes"
-        },
-        {
-          "value": "website_shape_cloud",
-          "label": "custom cloud",
-          "group": "custom shapes"
-        },
-        {
-          "value": "default",
-          "label": "t:common.options.default.label",
-          "group": "t:common.groups.fit_to_image"
-        },
-        {
-          "value": "default_ellipse",
-          "label": "t:common.options.ellipse.label",
-          "group": "t:common.groups.fit_to_image"
-        },
-        {
-          "value": "default_pill",
-          "label": "t:common.options.pill.label",
-          "group": "t:common.groups.fit_to_image"
-        },
-        {
-          "value": "default_archway",
-          "label": "t:common.options.archway.label",
-          "group": "t:common.groups.fit_to_image"
-        },
-        {
-          "value": "diamond",
-          "label": "t:common.options.diamond.label",
-          "group": "t:common.groups.basic"
-        },
-        {
-          "value": "triangle_1",
-          "label": "t:common.options.triangle_1.label",
-          "group": "t:common.groups.basic"
-        },
-        {
-          "value": "triangle_2",
-          "label": "t:common.options.triangle_2.label",
-          "group": "t:common.groups.basic"
-        },
-        {
-          "value": "pentagon",
-          "label": "t:common.options.pentagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "hexagon",
-          "label": "t:common.options.hexagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "heptagon",
-          "label": "t:common.options.heptagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "octagon",
-          "label": "t:common.options.octagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "nonagon",
-          "label": "t:common.options.nonagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "decagon",
-          "label": "t:common.options.decagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_pentagon",
-          "label": "t:common.options.rounded_pentagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_hexagon",
-          "label": "t:common.options.rounded_hexagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_heptagon",
-          "label": "t:common.options.rounded_heptagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_octagon",
-          "label": "t:common.options.rounded_octagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_nonagon",
-          "label": "t:common.options.rounded_nonagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_decagon",
-          "label": "t:common.options.rounded_decagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "star_1",
-          "label": "t:common.options.star_1.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "star_2",
-          "label": "t:common.options.star_2.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "star_3",
-          "label": "t:common.options.star_3.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "star_4",
-          "label": "t:common.options.star_4.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "star_5",
-          "label": "t:common.options.star_5.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "star_6",
-          "label": "t:common.options.star_6.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "abstract_star_1",
-          "label": "t:common.options.abstract_star_1.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "abstract_star_2",
-          "label": "t:common.options.abstract_star_2.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "abstract_star_3",
-          "label": "t:common.options.abstract_star_3.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "scalloped_circle_1",
-          "label": "t:common.options.scalloped_circle_1.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "scalloped_circle_2",
-          "label": "t:common.options.scalloped_circle_2.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "scalloped_circle_3",
-          "label": "t:common.options.scalloped_circle_3.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "scalloped_circle_4",
-          "label": "t:common.options.scalloped_circle_4.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "scalloped_circle_5",
-          "label": "t:common.options.scalloped_circle_5.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "scalloped_circle_6",
-          "label": "t:common.options.scalloped_circle_6.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "parallelogram",
-          "label": "t:common.options.parallelogram.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "squircle",
-          "label": "t:common.options.squircle.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "scalloped_square_1",
-          "label": "t:common.options.scalloped_square_1.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "scalloped_square_2",
-          "label": "t:common.options.scalloped_square_2.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "leaf",
-          "label": "t:common.options.leaf.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "clipped_square",
-          "label": "t:common.options.clipped.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "convex_square",
-          "label": "t:common.options.convex.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "twisted_square",
-          "label": "t:common.options.twisted.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "trapeze",
-          "label": "t:common.options.trapeze.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "pinched",
-          "label": "t:common.options.pinched.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "pixelated",
-          "label": "t:common.options.pixelated.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "overlapped",
-          "label": "t:common.options.overlapped.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "zig_zag",
-          "label": "t:common.options.zig_zag.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "zig_zag_tear",
-          "label": "t:common.options.zig_zag_tear.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "wave_tear",
-          "label": "t:common.options.wave_tear.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "flower",
-          "label": "t:common.options.flower.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "flower_bloom",
-          "label": "t:common.options.flower_bloom.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "concave",
-          "label": "t:common.options.concave.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "flag",
-          "label": "t:common.options.flag.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "abstract_oval",
-          "label": "t:common.options.abstract_oval.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "cross",
-          "label": "t:common.options.cross.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "quatrefoil",
-          "label": "t:common.options.quatrefoil.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "quadrant",
-          "label": "t:common.options.quadrant.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "wind",
-          "label": "t:common.options.wind.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "windmill",
-          "label": "t:common.options.windmill.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "heart",
-          "label": "t:common.options.heart.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "mirrored_pyramids",
-          "label": "t:common.options.mirrored_pyramids.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "plus",
-          "label": "t:common.options.plus.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "double_pill_1",
-          "label": "t:common.options.double_pill_1.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "double_pill_2",
-          "label": "t:common.options.double_pill_2.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "triple_pill_1",
-          "label": "t:common.options.triple_pill_1.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "triple_pill_2",
-          "label": "t:common.options.triple_pill_2.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "crown",
-          "label": "t:common.options.crown.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "stair",
-          "label": "t:common.options.stair.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "pancake_stack",
-          "label": "t:common.options.pancake_stack.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "asterisk",
-          "label": "t:common.options.asterisk.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "overlapping_squares",
-          "label": "t:common.options.overlapping_squares.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "brush_stroke",
-          "label": "t:common.options.brush_stroke.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "blob",
-          "label": "t:common.options.blob.label",
-          "group": "t:common.groups.variable"
-        }
-      ]
-    },
-    {
-      "type": "header",
-      "content": "Frequency"
-    },
-    {
-      "type": "text",
-      "id": "frequency_label",
-      "label": "Frequency Label",
-      "default": "WÄHLE DEIN ABO"
-    },
-    {
-      "type": "text",
-      "id": "subscribe_title",
-      "label": "Subscribe Title",
-      "default": "ABO & SPAREN"
-    },
-    {
-      "type": "paragraph",
-      "content": "The price shown next to the title always mirrors whichever tier is currently selected (defaults to Tier 1) — it updates automatically and isn't set separately."
-    },
-    {
-      "type": "text",
-      "id": "tier1_title",
-      "label": "Tier 1 Title",
-      "default": "GELEGENTLICHER SNACKER"
-    },
-    {
-      "type": "text",
-      "id": "tier1_subtitle",
-      "label": "Tier 1 Subtitle",
-      "default": "Lieferung alle 8 Wochen"
-    },
-    {
-      "type": "text",
-      "id": "tier1_price_original",
-      "label": "Tier 1 Original Price",
-      "default": "CHF 37.90"
-    },
-    {
-      "type": "text",
-      "id": "tier1_price_current",
-      "label": "Tier 1 Current Price",
-      "default": "CHF 36.00"
-    },
-    {
-      "type": "text",
-      "id": "tier1_price_unit",
-      "label": "Tier 1 Per-unit Price",
-      "default": "CHF 3.00/Pack"
-    },
-    {
-      "type": "text",
-      "id": "tier1_save_badge",
-      "label": "Tier 1 Save Badge",
-      "default": "SPAR 5%"
-    },
-    {
-      "type": "text",
-      "id": "tier1_selling_plan_id",
-      "label": "Tier 1 Selling Plan ID"
-    },
-    {
-      "type": "text",
-      "id": "tier2_title",
-      "label": "Tier 2 Title",
-      "default": "ÜBERZEUGTER SNACKER"
-    },
-    {
-      "type": "text",
-      "id": "tier2_subtitle",
-      "label": "Tier 2 Subtitle",
-      "default": "Lieferung alle 4 Wochen"
-    },
-    {
-      "type": "text",
-      "id": "tier2_price_original",
-      "label": "Tier 2 Original Price",
-      "default": "CHF 37.90"
-    },
-    {
-      "type": "text",
-      "id": "tier2_price_current",
-      "label": "Tier 2 Current Price",
-      "default": "CHF 32.20"
-    },
-    {
-      "type": "text",
-      "id": "tier2_price_unit",
-      "label": "Tier 2 Per-unit Price",
-      "default": "CHF 2.68/Pack"
-    },
-    {
-      "type": "text",
-      "id": "tier2_save_badge",
-      "label": "Tier 2 Save Badge",
-      "default": "SPAR 15%"
-    },
-    {
-      "type": "text",
-      "id": "tier2_selling_plan_id",
-      "label": "Tier 2 Selling Plan ID"
-    },
-    {
-      "type": "text",
-      "id": "tier3_title",
-      "label": "Tier 3 Title",
-      "default": "VOLL DABEI SNACKER"
-    },
-    {
-      "type": "text",
-      "id": "tier3_subtitle",
-      "label": "Tier 3 Subtitle",
-      "default": "Lieferung alle 2 Wochen"
-    },
-    {
-      "type": "text",
-      "id": "tier3_price_original",
-      "label": "Tier 3 Original Price",
-      "default": "CHF 37.90"
-    },
-    {
-      "type": "text",
-      "id": "tier3_price_current",
-      "label": "Tier 3 Current Price",
-      "default": "CHF 30.30"
-    },
-    {
-      "type": "text",
-      "id": "tier3_price_unit",
-      "label": "Tier 3 Per-unit Price",
-      "default": "CHF 2.53/Pack"
-    },
-    {
-      "type": "text",
-      "id": "tier3_save_badge",
-      "label": "Tier 3 Save Badge",
-      "default": "SPAR 20%"
-    },
-    {
-      "type": "text",
-      "id": "tier3_selling_plan_id",
-      "label": "Tier 3 Selling Plan ID"
-    },
-    {
-      "type": "text",
-      "id": "benefit1_text",
-      "label": "Benefit 1",
-      "default": "Gratis Versand"
-    },
-    {
-      "type": "text",
-      "id": "benefit2_text",
-      "label": "Benefit 2",
-      "default": "Jederzeit pausieren, kündigen oder verschieben"
-    },
-    {
-      "type": "text",
-      "id": "benefit3_text",
-      "label": "Benefit 3",
-      "default": "30 Tage Geld-zurück-Garantie"
-    },
-    {
-      "type": "select",
-      "id": "benefit_icon_style",
-      "label": "Benefit Icon",
-      "default": "star",
-      "options": [
-        {
-          "value": "star",
-          "label": "Built-in star"
-        },
-        {
-          "value": "custom",
-          "label": "Custom SVG or image"
-        },
-        {
-          "value": "none",
-          "label": "No icon"
-        }
-      ]
-    },
-    {
-      "type": "range",
-      "id": "benefit_icon_size",
-      "label": "Benefit Icon Size",
-      "min": 10,
-      "max": 48,
-      "step": 2,
-      "unit": "px",
+      "type": "number",
+      "id": "pack3_bags",
+      "label": "Bags in the pack",
       "default": 12
     },
     {
-      "type": "textarea",
-      "id": "benefit_icon_svg",
-      "label": "Benefit Icon SVG (all benefits)",
-      "info": "Paste raw <svg> code. Used when Benefit Icon is set to Custom. Use fill=\"currentColor\" to inherit the accent colour."
-    },
-    {
-      "type": "image_picker",
-      "id": "benefit_icon_image",
-      "label": "Benefit Icon Image (all benefits)",
-      "info": "Used when Benefit Icon is set to Custom and no SVG code is given."
-    },
-    {
-      "type": "textarea",
-      "id": "benefit1_icon_svg",
-      "label": "Benefit 1 Icon SVG (override)"
-    },
-    {
-      "type": "image_picker",
-      "id": "benefit1_icon_image",
-      "label": "Benefit 1 Icon Image (override)"
-    },
-    {
-      "type": "textarea",
-      "id": "benefit2_icon_svg",
-      "label": "Benefit 2 Icon SVG (override)"
-    },
-    {
-      "type": "image_picker",
-      "id": "benefit2_icon_image",
-      "label": "Benefit 2 Icon Image (override)"
-    },
-    {
-      "type": "textarea",
-      "id": "benefit3_icon_svg",
-      "label": "Benefit 3 Icon SVG (override)"
-    },
-    {
-      "type": "image_picker",
-      "id": "benefit3_icon_image",
-      "label": "Benefit 3 Icon Image (override)"
-    },
-    {
-      "type": "header",
-      "content": "One Time Purchase"
-    },
-    {
       "type": "text",
-      "id": "onetime_title",
-      "label": "One Time Purchase Title",
-      "default": "EINMALIG KAUFEN"
-    },
-    {
-      "type": "text",
-      "id": "onetime_price",
-      "label": "One Time Purchase Price",
-      "default": "CHF 37.90"
-    },
-    {
-      "type": "text",
-      "id": "onetime_caption",
-      "label": "One Time Purchase Caption",
-      "default": "Kein gratis Versand"
+      "id": "pack3_price",
+      "label": "One-time price (CHF)",
+      "default": "39.90",
+      "info": "Used when no product variant is linked."
     },
     {
       "type": "checkbox",
-      "id": "collapse_subscribe_on_onetime",
-      "label": "Collapse subscribe block when one-time is selected",
-      "info": "Contracts the subscribe option to its title and price while the one-time option is chosen.",
+      "id": "pack3_abo_discount",
+      "label": "Abo discount applies",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pack3_free_shipping",
+      "label": "Free shipping",
       "default": true
     },
     {
       "type": "header",
-      "content": "Quantity"
+      "content": "Delivery rhythm (Abo)",
+      "info": "Shown only when 'Im Abo' is selected."
+    },
+    {
+      "type": "text",
+      "id": "frequency_label",
+      "label": "Group label",
+      "default": "Lieferrhythmus"
+    },
+    {
+      "type": "text",
+      "id": "recommended_badge",
+      "label": "Recommended badge",
+      "default": "Empfohlen"
+    },
+    {
+      "type": "select",
+      "id": "default_tier",
+      "label": "Selected at start",
+      "default": "2",
+      "options": [
+        {
+          "value": "1",
+          "label": "Rhythm 1"
+        },
+        {
+          "value": "2",
+          "label": "Rhythm 2"
+        },
+        {
+          "value": "3",
+          "label": "Rhythm 3"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Rhythm 1"
+    },
+    {
+      "type": "text",
+      "id": "tier1_title",
+      "label": "Title",
+      "default": "Alle 8 Wochen"
+    },
+    {
+      "type": "text",
+      "id": "tier1_subtitle",
+      "label": "Line 2",
+      "default": "Unter 1 Beutel pro Woche"
+    },
+    {
+      "type": "range",
+      "id": "tier1_discount",
+      "label": "Abo discount",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "%",
+      "default": 5
+    },
+    {
+      "type": "checkbox",
+      "id": "tier1_recommended",
+      "label": "Recommended",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "tier1_selling_plan_id",
+      "label": "Selling plan ID",
+      "info": "Sent with the cart when Abo is chosen. Empty until subscriptions are set up."
+    },
+    {
+      "type": "header",
+      "content": "Rhythm 2"
+    },
+    {
+      "type": "text",
+      "id": "tier2_title",
+      "label": "Title",
+      "default": "Alle 4 Wochen"
+    },
+    {
+      "type": "text",
+      "id": "tier2_subtitle",
+      "label": "Line 2",
+      "default": "1 bis 2 Beutel pro Woche"
+    },
+    {
+      "type": "range",
+      "id": "tier2_discount",
+      "label": "Abo discount",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "%",
+      "default": 15
+    },
+    {
+      "type": "checkbox",
+      "id": "tier2_recommended",
+      "label": "Recommended",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "tier2_selling_plan_id",
+      "label": "Selling plan ID",
+      "info": "Sent with the cart when Abo is chosen. Empty until subscriptions are set up."
+    },
+    {
+      "type": "header",
+      "content": "Rhythm 3"
+    },
+    {
+      "type": "text",
+      "id": "tier3_title",
+      "label": "Title",
+      "default": "Alle 2 Wochen"
+    },
+    {
+      "type": "text",
+      "id": "tier3_subtitle",
+      "label": "Line 2",
+      "default": "3 Beutel pro Woche"
+    },
+    {
+      "type": "range",
+      "id": "tier3_discount",
+      "label": "Abo discount",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "%",
+      "default": 20
+    },
+    {
+      "type": "checkbox",
+      "id": "tier3_recommended",
+      "label": "Recommended",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "tier3_selling_plan_id",
+      "label": "Selling plan ID",
+      "info": "Sent with the cart when Abo is chosen. Empty until subscriptions are set up."
+    },
+    {
+      "type": "header",
+      "content": "Quantity & cart button"
     },
     {
       "type": "text",
       "id": "qty_label",
-      "label": "Quantity Label",
-      "default": "MENGE:"
+      "label": "Stepper label (screen readers)",
+      "default": "Menge"
+    },
+    {
+      "type": "text",
+      "id": "qty_less_label",
+      "label": "Minus button (screen readers)",
+      "default": "Weniger"
+    },
+    {
+      "type": "text",
+      "id": "qty_more_label",
+      "label": "Plus button (screen readers)",
+      "default": "Mehr"
     },
     {
       "type": "number",
       "id": "qty_default",
-      "label": "Default Quantity",
+      "label": "Quantity at start",
       "default": 1
-    },
-    {
-      "type": "select",
-      "id": "qty_border_style_desktop",
-      "label": "Quantity Stepper Shape (desktop)",
-      "options": [
-        {
-          "value": "website_shape_star",
-          "label": "custom star",
-          "group": "custom shapes"
-        },
-        {
-          "value": "website_shape_bun",
-          "label": "custom bun",
-          "group": "custom shapes"
-        },
-        {
-          "value": "website_shape_frame",
-          "label": "custom frame",
-          "group": "custom shapes"
-        },
-        {
-          "value": "website_shape_pancake",
-          "label": "custom pancake",
-          "group": "custom shapes"
-        },
-        {
-          "value": "website_shape_cloud",
-          "label": "custom cloud",
-          "group": "custom shapes"
-        },
-        {
-          "value": "dashed",
-          "label": "Dashed pill",
-          "group": "basic"
-        },
-        {
-          "value": "cloud",
-          "label": "Cloud (scalloped)",
-          "group": "basic"
-        },
-        {
-          "value": "custom",
-          "label": "Custom (uploaded image)",
-          "group": "basic"
-        },
-        {
-          "value": "diamond",
-          "label": "t:common.options.diamond.label",
-          "group": "t:common.groups.basic"
-        },
-        {
-          "value": "triangle_1",
-          "label": "t:common.options.triangle_1.label",
-          "group": "t:common.groups.basic"
-        },
-        {
-          "value": "triangle_2",
-          "label": "t:common.options.triangle_2.label",
-          "group": "t:common.groups.basic"
-        },
-        {
-          "value": "pentagon",
-          "label": "t:common.options.pentagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "hexagon",
-          "label": "t:common.options.hexagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "heptagon",
-          "label": "t:common.options.heptagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "octagon",
-          "label": "t:common.options.octagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "nonagon",
-          "label": "t:common.options.nonagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "decagon",
-          "label": "t:common.options.decagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_pentagon",
-          "label": "t:common.options.rounded_pentagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_hexagon",
-          "label": "t:common.options.rounded_hexagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_heptagon",
-          "label": "t:common.options.rounded_heptagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_octagon",
-          "label": "t:common.options.rounded_octagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_nonagon",
-          "label": "t:common.options.rounded_nonagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_decagon",
-          "label": "t:common.options.rounded_decagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "star_1",
-          "label": "t:common.options.star_1.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "star_2",
-          "label": "t:common.options.star_2.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "star_3",
-          "label": "t:common.options.star_3.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "star_4",
-          "label": "t:common.options.star_4.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "star_5",
-          "label": "t:common.options.star_5.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "star_6",
-          "label": "t:common.options.star_6.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "abstract_star_1",
-          "label": "t:common.options.abstract_star_1.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "abstract_star_2",
-          "label": "t:common.options.abstract_star_2.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "abstract_star_3",
-          "label": "t:common.options.abstract_star_3.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "scalloped_circle_1",
-          "label": "t:common.options.scalloped_circle_1.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "scalloped_circle_2",
-          "label": "t:common.options.scalloped_circle_2.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "scalloped_circle_3",
-          "label": "t:common.options.scalloped_circle_3.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "scalloped_circle_4",
-          "label": "t:common.options.scalloped_circle_4.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "scalloped_circle_5",
-          "label": "t:common.options.scalloped_circle_5.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "scalloped_circle_6",
-          "label": "t:common.options.scalloped_circle_6.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "parallelogram",
-          "label": "t:common.options.parallelogram.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "squircle",
-          "label": "t:common.options.squircle.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "scalloped_square_1",
-          "label": "t:common.options.scalloped_square_1.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "scalloped_square_2",
-          "label": "t:common.options.scalloped_square_2.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "leaf",
-          "label": "t:common.options.leaf.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "clipped_square",
-          "label": "t:common.options.clipped.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "convex_square",
-          "label": "t:common.options.convex.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "twisted_square",
-          "label": "t:common.options.twisted.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "trapeze",
-          "label": "t:common.options.trapeze.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "pinched",
-          "label": "t:common.options.pinched.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "pixelated",
-          "label": "t:common.options.pixelated.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "overlapped",
-          "label": "t:common.options.overlapped.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "zig_zag",
-          "label": "t:common.options.zig_zag.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "zig_zag_tear",
-          "label": "t:common.options.zig_zag_tear.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "wave_tear",
-          "label": "t:common.options.wave_tear.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "flower",
-          "label": "t:common.options.flower.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "flower_bloom",
-          "label": "t:common.options.flower_bloom.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "concave",
-          "label": "t:common.options.concave.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "flag",
-          "label": "t:common.options.flag.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "abstract_oval",
-          "label": "t:common.options.abstract_oval.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "cross",
-          "label": "t:common.options.cross.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "quatrefoil",
-          "label": "t:common.options.quatrefoil.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "quadrant",
-          "label": "t:common.options.quadrant.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "wind",
-          "label": "t:common.options.wind.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "windmill",
-          "label": "t:common.options.windmill.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "heart",
-          "label": "t:common.options.heart.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "mirrored_pyramids",
-          "label": "t:common.options.mirrored_pyramids.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "plus",
-          "label": "t:common.options.plus.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "double_pill_1",
-          "label": "t:common.options.double_pill_1.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "double_pill_2",
-          "label": "t:common.options.double_pill_2.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "triple_pill_1",
-          "label": "t:common.options.triple_pill_1.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "triple_pill_2",
-          "label": "t:common.options.triple_pill_2.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "crown",
-          "label": "t:common.options.crown.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "stair",
-          "label": "t:common.options.stair.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "pancake_stack",
-          "label": "t:common.options.pancake_stack.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "asterisk",
-          "label": "t:common.options.asterisk.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "overlapping_squares",
-          "label": "t:common.options.overlapping_squares.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "brush_stroke",
-          "label": "t:common.options.brush_stroke.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "blob",
-          "label": "t:common.options.blob.label",
-          "group": "t:common.groups.variable"
-        }
-      ],
-      "default": "cloud",
-      "info": "Shapes are drawn as an outline frame around the stepper."
-    },
-    {
-      "type": "image_picker",
-      "id": "qty_shape_image_desktop",
-      "label": "Quantity Stepper Custom Shape (desktop)",
-      "info": "Used when Shape (desktop) is set to Custom. Upload any SVG/PNG — it renders with its own colors, stretched to fill the stepper. Falls back to Dashed pill if empty."
-    },
-    {
-      "type": "select",
-      "id": "qty_border_style_mobile",
-      "label": "Quantity Stepper Shape (mobile)",
-      "options": [
-        {
-          "value": "website_shape_star",
-          "label": "custom star",
-          "group": "custom shapes"
-        },
-        {
-          "value": "website_shape_bun",
-          "label": "custom bun",
-          "group": "custom shapes"
-        },
-        {
-          "value": "website_shape_frame",
-          "label": "custom frame",
-          "group": "custom shapes"
-        },
-        {
-          "value": "website_shape_pancake",
-          "label": "custom pancake",
-          "group": "custom shapes"
-        },
-        {
-          "value": "website_shape_cloud",
-          "label": "custom cloud",
-          "group": "custom shapes"
-        },
-        {
-          "value": "dashed",
-          "label": "Dashed pill",
-          "group": "basic"
-        },
-        {
-          "value": "cloud",
-          "label": "Cloud (scalloped)",
-          "group": "basic"
-        },
-        {
-          "value": "custom",
-          "label": "Custom (uploaded image)",
-          "group": "basic"
-        },
-        {
-          "value": "diamond",
-          "label": "t:common.options.diamond.label",
-          "group": "t:common.groups.basic"
-        },
-        {
-          "value": "triangle_1",
-          "label": "t:common.options.triangle_1.label",
-          "group": "t:common.groups.basic"
-        },
-        {
-          "value": "triangle_2",
-          "label": "t:common.options.triangle_2.label",
-          "group": "t:common.groups.basic"
-        },
-        {
-          "value": "pentagon",
-          "label": "t:common.options.pentagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "hexagon",
-          "label": "t:common.options.hexagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "heptagon",
-          "label": "t:common.options.heptagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "octagon",
-          "label": "t:common.options.octagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "nonagon",
-          "label": "t:common.options.nonagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "decagon",
-          "label": "t:common.options.decagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_pentagon",
-          "label": "t:common.options.rounded_pentagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_hexagon",
-          "label": "t:common.options.rounded_hexagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_heptagon",
-          "label": "t:common.options.rounded_heptagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_octagon",
-          "label": "t:common.options.rounded_octagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_nonagon",
-          "label": "t:common.options.rounded_nonagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_decagon",
-          "label": "t:common.options.rounded_decagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "star_1",
-          "label": "t:common.options.star_1.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "star_2",
-          "label": "t:common.options.star_2.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "star_3",
-          "label": "t:common.options.star_3.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "star_4",
-          "label": "t:common.options.star_4.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "star_5",
-          "label": "t:common.options.star_5.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "star_6",
-          "label": "t:common.options.star_6.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "abstract_star_1",
-          "label": "t:common.options.abstract_star_1.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "abstract_star_2",
-          "label": "t:common.options.abstract_star_2.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "abstract_star_3",
-          "label": "t:common.options.abstract_star_3.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "scalloped_circle_1",
-          "label": "t:common.options.scalloped_circle_1.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "scalloped_circle_2",
-          "label": "t:common.options.scalloped_circle_2.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "scalloped_circle_3",
-          "label": "t:common.options.scalloped_circle_3.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "scalloped_circle_4",
-          "label": "t:common.options.scalloped_circle_4.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "scalloped_circle_5",
-          "label": "t:common.options.scalloped_circle_5.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "scalloped_circle_6",
-          "label": "t:common.options.scalloped_circle_6.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "parallelogram",
-          "label": "t:common.options.parallelogram.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "squircle",
-          "label": "t:common.options.squircle.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "scalloped_square_1",
-          "label": "t:common.options.scalloped_square_1.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "scalloped_square_2",
-          "label": "t:common.options.scalloped_square_2.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "leaf",
-          "label": "t:common.options.leaf.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "clipped_square",
-          "label": "t:common.options.clipped.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "convex_square",
-          "label": "t:common.options.convex.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "twisted_square",
-          "label": "t:common.options.twisted.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "trapeze",
-          "label": "t:common.options.trapeze.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "pinched",
-          "label": "t:common.options.pinched.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "pixelated",
-          "label": "t:common.options.pixelated.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "overlapped",
-          "label": "t:common.options.overlapped.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "zig_zag",
-          "label": "t:common.options.zig_zag.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "zig_zag_tear",
-          "label": "t:common.options.zig_zag_tear.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "wave_tear",
-          "label": "t:common.options.wave_tear.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "flower",
-          "label": "t:common.options.flower.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "flower_bloom",
-          "label": "t:common.options.flower_bloom.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "concave",
-          "label": "t:common.options.concave.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "flag",
-          "label": "t:common.options.flag.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "abstract_oval",
-          "label": "t:common.options.abstract_oval.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "cross",
-          "label": "t:common.options.cross.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "quatrefoil",
-          "label": "t:common.options.quatrefoil.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "quadrant",
-          "label": "t:common.options.quadrant.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "wind",
-          "label": "t:common.options.wind.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "windmill",
-          "label": "t:common.options.windmill.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "heart",
-          "label": "t:common.options.heart.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "mirrored_pyramids",
-          "label": "t:common.options.mirrored_pyramids.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "plus",
-          "label": "t:common.options.plus.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "double_pill_1",
-          "label": "t:common.options.double_pill_1.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "double_pill_2",
-          "label": "t:common.options.double_pill_2.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "triple_pill_1",
-          "label": "t:common.options.triple_pill_1.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "triple_pill_2",
-          "label": "t:common.options.triple_pill_2.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "crown",
-          "label": "t:common.options.crown.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "stair",
-          "label": "t:common.options.stair.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "pancake_stack",
-          "label": "t:common.options.pancake_stack.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "asterisk",
-          "label": "t:common.options.asterisk.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "overlapping_squares",
-          "label": "t:common.options.overlapping_squares.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "brush_stroke",
-          "label": "t:common.options.brush_stroke.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "blob",
-          "label": "t:common.options.blob.label",
-          "group": "t:common.groups.variable"
-        }
-      ],
-      "default": "dashed",
-      "info": "Shapes are drawn as an outline frame around the stepper."
-    },
-    {
-      "type": "image_picker",
-      "id": "qty_shape_image_mobile",
-      "label": "Quantity Stepper Custom Shape (mobile)",
-      "info": "Used when Shape (mobile) is set to Custom. Upload any SVG/PNG — it renders with its own colors, stretched to fill the stepper. Falls back to Dashed pill if empty."
-    },
-    {
-      "type": "header",
-      "content": "Submit Button"
     },
     {
       "type": "text",
       "id": "button_label",
-      "label": "Button Label",
-      "default": "IN DEN WARENKORB"
+      "label": "Button label",
+      "default": "In den Warenkorb",
+      "info": "The total is added after it."
+    },
+    {
+      "type": "text",
+      "id": "button_label_mobile",
+      "label": "Button label – mobile",
+      "default": "Warenkorb"
     },
     {
       "type": "header",
-      "content": "Ingredients"
+      "content": "Footnote",
+      "info": "Price per bag and the shipping note are added automatically in front."
+    },
+    {
+      "type": "text",
+      "id": "currency_prefix",
+      "label": "Currency",
+      "default": "CHF"
+    },
+    {
+      "type": "text",
+      "id": "per_bag_text",
+      "label": "'per bag'",
+      "default": "pro Beutel"
+    },
+    {
+      "type": "text",
+      "id": "save_text",
+      "label": "'save'",
+      "default": "Spar"
+    },
+    {
+      "type": "text",
+      "id": "was_text",
+      "label": "'instead of'",
+      "default": "statt"
+    },
+    {
+      "type": "text",
+      "id": "shipping_free_text",
+      "label": "Free shipping",
+      "default": "Gratis Versand"
+    },
+    {
+      "type": "text",
+      "id": "shipping_paid_text",
+      "label": "Paid shipping",
+      "default": "Versand CHF [X]"
+    },
+    {
+      "type": "text",
+      "id": "footnote_extra",
+      "label": "More",
+      "default": "Lieferung in [X] Werktagen · Abo jederzeit pausieren oder kündigen"
+    },
+    {
+      "type": "header",
+      "content": "Details (optional)",
+      "info": "Fold-out texts under the cart button; hidden when empty."
     },
     {
       "type": "text",
@@ -3945,10 +907,6 @@
       "type": "richtext",
       "id": "ingredients_content",
       "label": "Ingredients Content"
-    },
-    {
-      "type": "header",
-      "content": "Nutrition Facts"
     },
     {
       "type": "text",
@@ -3985,10 +943,6 @@
       "info": "Used when Content is set to Image / SVG. Accepts JPG, PNG or SVG."
     },
     {
-      "type": "header",
-      "content": "Shipping"
-    },
-    {
       "type": "text",
       "id": "shipping_label",
       "label": "Shipping Label",
@@ -4001,7 +955,176 @@
     },
     {
       "type": "header",
-      "content": "Color"
+      "content": "Colours",
+      "info": "Defaults follow the landing-page mockup (desktop paper, mobile pink)."
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background – desktop",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "bg_color_mobile",
+      "label": "Background – mobile",
+      "default": "#FFC6FF"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text – desktop",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "text_color_mobile",
+      "label": "Text – mobile",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "promo_bg",
+      "label": "Notice background – desktop",
+      "default": "#B7D9FF"
+    },
+    {
+      "type": "color",
+      "id": "promo_bg_mobile",
+      "label": "Notice background – mobile",
+      "default": "#AEFF64"
+    },
+    {
+      "type": "color",
+      "id": "promo_title_color",
+      "label": "Notice title – desktop",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "promo_title_color_mobile",
+      "label": "Notice title – mobile",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "promo_text_color",
+      "label": "Notice text – desktop",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "promo_text_color_mobile",
+      "label": "Notice text – mobile",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "promo_button_color",
+      "label": "Notice button",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "promo_button_label_color",
+      "label": "Notice button label",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "option_bg",
+      "label": "Option",
+      "default": "#FFC6FF"
+    },
+    {
+      "type": "color",
+      "id": "option_text",
+      "label": "Option text",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "option_active_bg",
+      "label": "Selected option",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "option_active_text",
+      "label": "Selected option text",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "badge_bg",
+      "label": "Badges (Gratis Versand, Empfohlen)",
+      "default": "#AEFF64"
+    },
+    {
+      "type": "color",
+      "id": "badge_text",
+      "label": "Badge text",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "plan_badge_bg",
+      "label": "Spar badge",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "plan_badge_text",
+      "label": "Spar badge text",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "plan_badge_active_bg",
+      "label": "Spar badge – selected rhythm",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "plan_badge_active_text",
+      "label": "Spar badge text – selected rhythm",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "stepper_bg",
+      "label": "Stepper",
+      "default": "#FFC6FF"
+    },
+    {
+      "type": "color",
+      "id": "stepper_text",
+      "label": "Stepper signs",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "cart_button_color",
+      "label": "Cart button – desktop",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "cart_button_color_mobile",
+      "label": "Cart button – mobile",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "cart_button_label_color",
+      "label": "Cart button label",
+      "default": "#FFFFF5"
     },
     {
       "type": "color_scheme",

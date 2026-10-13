@@ -151,3 +151,107 @@
   init(document);
   document.addEventListener('shopify:section:load', function (event) { init(event.target); });
 })();
+
+/* [data-kd-config]: product configurator (sections/custom-packaging-selector.liquid). Keeps mode (once/abo), pack,
+   delivery plan and quantity in aria-pressed / the stepper, fills every price from the JSON data (prices round to
+   5 Rappen), shows the delivery rows only for Abo, and keeps the cart form's id / selling_plan / quantity in sync. */
+(function () {
+  'use strict';
+  function money(currency, value) { return currency + ' ' + (Math.round(value * 20) / 20).toFixed(2); }
+  function setup(root) {
+    if (root.kdConfig) return;
+    var dataEl = root.querySelector('[data-kd-config-data]');
+    if (!dataEl) return;
+    var data;
+    try { data = JSON.parse(dataEl.textContent); } catch (e) { return; }
+    root.kdConfig = true;
+    var state = { mode: data.mode === 'once' ? 'once' : 'abo', pack: data.pack, plan: data.plan, qty: 1 };
+    var form = root.querySelector('[data-kd-config-form]');
+    var qtyOut = form && form.querySelector('output');
+    var qtyInput = form && form.querySelector('input[name="quantity"]');
+    if (qtyInput) state.qty = Math.max(1, parseInt(qtyInput.value, 10) || 1);
+    var ref = parseFloat(String(data.reference).replace(',', '.')) || 0;
+    function pack(n) { return data.packs.filter(function (p) { return p.n === n; })[0] || data.packs[0]; }
+    function plan(n) { return data.plans.filter(function (p) { return p.n === n; })[0] || data.plans[0]; }
+    function price(p) { return parseFloat(String(p.price).replace(',', '.')) || 0; }
+    function unitPrice(p, isAbo) {
+      var pl = plan(state.plan);
+      var disc = isAbo && p.aboDiscount && pl ? pl.discount / 100 : 0;
+      return price(p) * (1 - disc);
+    }
+    function render() {
+      var isAbo = state.mode === 'abo';
+      root.querySelectorAll('[data-kd-config-group]').forEach(function (group) {
+        var key = group.getAttribute('data-kd-config-group');
+        group.querySelectorAll('[data-value]').forEach(function (btn) {
+          btn.setAttribute('aria-pressed', String(btn.getAttribute('data-value') === String(state[key])));
+        });
+      });
+      root.querySelectorAll('[data-kd-config-group="pack"] [data-value]').forEach(function (btn) {
+        var p = pack(parseInt(btn.getAttribute('data-value'), 10));
+        var unit = unitPrice(p, isAbo);
+        var per = unit / (p.bags || 1);
+        var save = ref ? Math.round((1 - per / ref) * 100) : 0;
+        btn.querySelector('[data-price]').textContent = money(data.currency, unit);
+        btn.querySelector('[data-meta]').textContent = data.currency + ' ' + per.toFixed(2) + ' ' + data.perBag + (save > 0 ? ' · ' + data.save + ' ' + save + ' %' : '');
+        var was = btn.querySelector('[data-was]');
+        var showWas = unit < price(p) - 0.001;
+        was.hidden = !showWas;
+        was.textContent = showWas ? data.was + ' ' + money(data.currency, price(p)) : '';
+      });
+      var current = pack(state.pack);
+      root.querySelectorAll('[data-kd-config-group="plan"] [data-value]').forEach(function (btn) {
+        var pl = plan(parseInt(btn.getAttribute('data-value'), 10));
+        var disc = current.aboDiscount ? pl.discount : 0;
+        btn.querySelector('[data-price]').textContent = money(data.currency, price(current) * (1 - disc / 100));
+        btn.querySelector('[data-save]').textContent = disc > 0 ? data.save + ' ' + disc + ' %' : '';
+      });
+      var plans = root.querySelector('[data-kd-config-plans]');
+      if (plans) plans.hidden = !isAbo;
+      var unit = unitPrice(current, isAbo);
+      root.querySelectorAll('[data-total]').forEach(function (el) { el.textContent = money(data.currency, unit * state.qty); });
+      var foot = root.querySelector('[data-foot]');
+      if (foot) {
+        var ship = isAbo || current.freeShip ? data.shipFree : data.shipPaid;
+        foot.textContent = [data.currency + ' ' + (unit / (current.bags || 1)).toFixed(2) + ' ' + data.perBag, ship, data.footExtra].filter(Boolean).join(' · ');
+      }
+      if (form) {
+        form.querySelector('input[name="id"]').value = current.variant || '';
+        var sp = form.querySelector('input[name="selling_plan"]');
+        var spId = isAbo ? (plan(state.plan) || {}).sellingPlan : '';
+        sp.value = spId || '';
+        sp.disabled = !spId;
+        if (qtyInput) qtyInput.value = state.qty;
+        if (qtyOut) qtyOut.textContent = state.qty;
+      }
+    }
+    root.addEventListener('click', function (event) {
+      var option = event.target.closest('[data-kd-config-group] [data-value]');
+      if (option && root.contains(option)) {
+        var key = option.closest('[data-kd-config-group]').getAttribute('data-kd-config-group');
+        var value = option.getAttribute('data-value');
+        state[key] = key === 'mode' ? value : parseInt(value, 10);
+        render();
+        return;
+      }
+      var step = event.target.closest('[data-step]');
+      if (step && root.contains(step)) {
+        state.qty = Math.min(99, Math.max(1, state.qty + parseInt(step.getAttribute('data-step'), 10)));
+        render();
+      }
+    });
+    if (form) {
+      form.addEventListener('submit', function (event) {
+        // No variant linked yet (frontend first): don't send an empty cart request.
+        if (!form.querySelector('input[name="id"]').value) {
+          event.preventDefault();
+          if (window.console) console.warn('[Kaadu] Pack configurator: no variant ID set for this pack.');
+        }
+      });
+    }
+    render();
+  }
+  function init(scope) { scope.querySelectorAll('[data-kd-config]').forEach(setup); }
+  init(document);
+  document.addEventListener('shopify:section:load', function (event) { init(event.target); });
+})();

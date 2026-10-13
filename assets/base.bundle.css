@@ -7975,134 +7975,185 @@ body {
   .kd-people--shaped .kd-card--cta { padding: var(--space-11) var(--space-10); }
 }
 
-/* ── PACK SELECTOR, interim DS skin — sections/custom-packaging-selector.liquid ──
-   Landing-page skin only; the DS configurator (mode toggle, pack grid, plan rows) replaces this
-   markup in the product-page phase. Scoped under .kd-pack so it outranks the section's own rules. */
-.kd-pack.pack-selector {
-  padding: var(--space-8) var(--gutter);
-  font-family: var(--font-sans);
-}
-.kd-pack .pack-selector__layout {
-  max-width: var(--content-max);
-  gap: var(--space-8);
-}
-@media (min-width: 768px) {
-  .kd-pack.pack-selector { padding-block: var(--space-12) var(--space-12); }
-  .kd-pack .pack-selector__layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-5); }
-}
-@media (min-width: 1200px) {
-  .kd-pack .pack-selector__layout { grid-template-columns: minmax(0, 560px) minmax(0, 1fr); gap: var(--space-10); }
-}
-
-/* Media: cut-out product shot, shadow-product, square thumbs */
-.kd-pack .pack-media__mainImg { filter: drop-shadow(var(--shadow-product)); }
-.kd-pack .pack-media__thumb { border-radius: var(--radius-0); box-shadow: var(--shadow-card); border: 0; }
-.kd-pack .pack-media__thumb.is-active { outline: 2px solid var(--purple); outline-offset: 2px; }
-
-/* Group labels (DS kd-group-label) */
-.kd-pack .pack-selector__heading {
-  font-family: var(--font-sans) !important; /* overrides legacy .h3 (!important there) */
-  font-size: 12px !important;
-  font-weight: 600 !important;
-  line-height: 1.2 !important;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: rgb(var(--color-scheme-body-text));
-}
-
-/* Option tiles (DS OptionButton): square pink, purple when pressed, shadow-card, no border */
-.kd-pack .pack-option,
-.kd-pack .pack-subscribe,
-.kd-pack .pack-onetime,
-.kd-pack .pack-tier {
+/* ── PACK CONFIGURATOR — sections/custom-packaging-selector.liquid (landing-page mockup "PRODUKT") ──
+   DS OptionButton / Badge / Radio / Group label (ported from the DS bundle), Notice, Stepper, cloud button.
+   Colours are section settings (--kd-pc-*, mockup defaults: paper + ink on desktop, pink + purple on mobile).
+   Mobile: photo, intro, notice, options stacked; packs as rows. ≥992: photo column beside the panel. */
+.kd-options { display: grid; gap: var(--space-2); }
+.kd-options--2 { grid-template-columns: 1fr 1fr; }
+.kd-options--3 { grid-template-columns: 1fr 1fr 1fr; }
+.kd-option {
+  position: relative;
+  box-sizing: border-box;
+  min-height: 56px;
+  padding: 14px 14px 12px;
   border: 0;
-  border-radius: var(--radius-0);
   background: var(--pink);
   color: var(--purple);
+  font-family: var(--font-sans);
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2px;
   box-shadow: var(--shadow-card);
 }
-.kd-pack .pack-option[aria-checked="true"],
-.kd-pack .pack-subscribe[aria-checked="true"],
-.kd-pack .pack-onetime[aria-checked="true"] {
-  background: var(--purple);
-  color: var(--paper);
-}
-.kd-pack .pack-subscribe[aria-checked="true"] .pack-tier {
-  background: var(--pink);
-  color: var(--purple);
-}
-.kd-pack .pack-subscribe[aria-checked="true"] .pack-tier[aria-checked="true"] {
-  background: var(--paper);
-  color: var(--purple);
-  outline: 2px solid var(--lime);
-  outline-offset: -2px;
-}
-.kd-pack .pack-option__label,
-.kd-pack .pack-tier__title,
-.kd-pack .pack-subscribe__title,
-.kd-pack .pack-onetime__title {
-  font-family: var(--font-sans) !important; /* overrides legacy .btn-label / .h3 */
-  font-size: 14px !important;
-  font-weight: 600 !important;
-  line-height: 1.2 !important;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-}
-.kd-pack .pack-tier__price-current,
-.kd-pack .pack-subscribe__price-current,
-.kd-pack .pack-onetime__price {
-  font-family: var(--font-sans);
-  font-size: 22px;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-.kd-pack .pack-tier__price-original,
-.kd-pack .pack-subscribe__price-original { font-size: 12px; opacity: 0.7; text-decoration: line-through; }
-.kd-pack .pack-tier__badge {
+.kd-option[aria-pressed="true"] { background: var(--purple); color: var(--paper); }
+.kd-option__label { font-size: 14px; font-weight: 600; line-height: 1.2; text-transform: uppercase; }
+.kd-option__sub { font-size: 12px; font-weight: 600; line-height: 1.3; opacity: 0.85; }
+.kd-option__price { font-size: 22px; font-weight: 600; line-height: 1.1; }
+.kd-option__meta { font-size: 12px; font-weight: 600; line-height: 1.3; }
+.kd-option__was { font-size: 12px; line-height: 1.3; opacity: 0.7; text-decoration: line-through; }
+.kd-option--row { flex-direction: row; justify-content: space-between; align-items: center; min-height: 52px; padding: var(--space-2) 14px; gap: var(--space-2); }
+.kd-radio { width: 14px; height: 14px; box-sizing: border-box; border-radius: var(--radius-pill); border: 2px solid currentColor; flex-shrink: 0; }
+.kd-option[aria-pressed="true"] .kd-radio { background: currentColor; }
+.kd-badge {
+  position: absolute;
+  top: -10px;
+  right: 10px;
+  padding: 3px 8px;
   border-radius: var(--radius-pill);
   background: var(--lime);
   color: var(--purple);
   font-size: 10px;
   font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
+  white-space: nowrap;
 }
+.kd-group-label { margin: 0; font-size: 12px; font-weight: 600; line-height: 1.2; letter-spacing: 0.06em; text-transform: uppercase; }
 
-/* Radio dots (DS kd-radio): 2px currentColor ring, filled when selected */
-.kd-pack .pack-option__check,
-.kd-pack .pack-subscribe__check,
-.kd-pack .pack-onetime__check {
-  border: 2px solid currentColor;
-  border-radius: var(--radius-pill);
-  background: transparent;
-}
-
-/* Stepper (DS Stepper): pink pill, purple −/+ */
-.kd-pack .pack-qty {
-  border-radius: var(--radius-pill);
-  background: var(--pink);
-  color: var(--purple);
-}
-.kd-pack .pack-qty__frame,
-.kd-pack .pack-qty__shape { display: none; }
-.kd-pack .pack-qty__btn {
+.kd-pack {
+  padding-block: var(--space-8) var(--space-9);
+  background: var(--kd-pc-bg, var(--paper));
+  color: var(--kd-pc-fg, var(--ink));
   font-family: var(--font-sans);
-  font-size: 22px;
-  font-weight: 600;
-  color: var(--purple);
-  border-radius: var(--radius-pill);
 }
-.kd-pack .pack-qty__input { font-weight: 600; color: var(--ink); background: transparent; }
+.kd-pack__row { display: flex; flex-direction: column; gap: var(--space-4); }
+.kd-pack__media { display: flex; align-items: center; justify-content: center; }
+.kd-pack__image {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 280px;
+  filter: drop-shadow(var(--shadow-product));
+}
+.kd-pack__panel { display: flex; flex-direction: column; gap: var(--space-4); min-width: 0; }
+.kd-pack__reviews { display: flex; align-items: center; gap: var(--space-2); margin: 0; }
+.kd-pack__stars { letter-spacing: 2px; }
+.kd-pack__reviews a { color: inherit; }
+.kd-pack__title { margin: 0; color: var(--kd-pc-title, var(--red)); }
+.kd-pack__intro { display: flex; flex-direction: column; gap: 6px; }
+.kd-pack__intro p { margin: 0; }
+.kd-pack__tagline { font-size: 17px; font-weight: 600; line-height: 1.2; }
 
-/* Accordion: no borders (DS) — rows separated by spacing, ✶-free summary in Banter Semibold */
-.kd-pack .pack-accordion__item { border: 0; box-shadow: none; }
-.kd-pack .pack-accordion__item + .pack-accordion__item { margin-top: var(--space-2); }
-.kd-pack .pack-accordion__summary { padding-block: var(--space-4); }
-.kd-pack .pack-accordion__label {
-  font-family: var(--font-sans) !important;
-  font-size: 18px !important;
-  font-weight: 600 !important;
-  line-height: 24px !important;
+.kd-pack__notice {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-3);
+  background: var(--kd-pc-notice-bg, var(--lime));
+  color: var(--kd-pc-notice-fg, var(--purple));
+}
+.kd-pack__notice .kd-notice__title { color: var(--kd-pc-notice-title, var(--red)); }
+.kd-pack__notice .kd-notice__text p { margin: 0; }
+.kd-pack__notice-btn { --kd-cloud: var(--kd-pc-notice-btn, var(--red)); color: var(--kd-pc-notice-btn-label, var(--paper)); }
+
+.kd-pack .kd-option { background: var(--kd-pc-opt-bg, var(--pink)); color: var(--kd-pc-opt-fg, var(--purple)); }
+.kd-pack .kd-option[aria-pressed="true"] { background: var(--kd-pc-opt-on-bg, var(--purple)); color: var(--kd-pc-opt-on-fg, var(--paper)); }
+.kd-pack .kd-badge, .kd-pack__pill--rec { background: var(--kd-pc-badge-bg, var(--lime)); color: var(--kd-pc-badge-fg, var(--purple)); }
+.kd-pack__packs { grid-template-columns: minmax(0, 1fr); }
+.kd-pack__pack { flex-direction: row; align-items: center; justify-content: space-between; gap: var(--space-2); }
+.kd-pack__pack-main, .kd-pack__pack-meta { display: flex; flex-direction: column; gap: 2px; }
+.kd-pack__pack-meta { align-items: flex-end; text-align: right; }
+.kd-pack__pack .kd-option__price { font-size: 18px; }
+
+.kd-pack__plans { display: flex; flex-direction: column; gap: var(--space-4); }
+.kd-pack__plans[hidden] { display: none; }
+.kd-pack__plan-list { display: flex; flex-direction: column; gap: 6px; }
+.kd-pack__plan-name, .kd-pack__plan-end { display: flex; align-items: center; gap: 10px; }
+.kd-pack__plan-end { gap: var(--space-2); flex-shrink: 0; }
+.kd-pack__plan-text { display: flex; flex-direction: column; gap: 1px; }
+.kd-pack__plan-price { font-size: 15px; font-weight: 600; }
+.kd-pack__pill {
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
+  white-space: nowrap;
+}
+.kd-pack__pill--save { background: var(--kd-pc-save-bg, var(--red)); color: var(--kd-pc-save-fg, var(--paper)); }
+.kd-pack .kd-option[aria-pressed="true"] .kd-pack__pill--save { background: var(--kd-pc-save-on-bg, var(--paper)); color: var(--kd-pc-save-on-fg, var(--ink)); }
+.kd-pack__pill--save:empty { display: none; }
+
+.kd-pack__buy { display: flex; align-items: center; gap: 10px; margin: 0; }
+.kd-pack__stepper { position: relative; z-index: 0; display: inline-flex; align-items: center; flex-shrink: 0; color: var(--kd-pc-stepper-fg, var(--purple)); }
+.kd-pack__stepper-cloud { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; fill: var(--kd-pc-stepper, var(--pink)); }
+.kd-pack__stepper button {
+  width: 42px;
+  height: 52px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-family: var(--font-sans);
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.kd-pack__stepper output { width: 30px; text-align: center; font-size: 16px; font-weight: 600; }
+.kd-pack__cart { flex-grow: 1; min-width: 0; --kd-cloud: var(--kd-pc-cart, var(--red)); color: var(--kd-pc-cart-label, var(--paper)); font-size: 16px; }
+.kd-pack__label--desktop { display: none; }
+.kd-pack__foot { margin: 0; font-size: 12px; font-weight: 600; line-height: 1.4; text-align: center; }
+
+.kd-pack__details { display: flex; flex-direction: column; border-top: 1px solid currentColor; }
+.kd-pack__detail { border-bottom: 1px solid currentColor; }
+.kd-pack__detail summary { padding: var(--space-4) 0; cursor: pointer; list-style: none; }
+.kd-pack__detail summary::-webkit-details-marker { display: none; }
+.kd-pack__detail summary::after { content: "+"; float: right; }
+.kd-pack__detail[open] summary::after { content: "−"; }
+.kd-pack__detail-body { padding-bottom: var(--space-4); }
+.kd-pack__detail-body img { max-width: 100%; height: auto; }
+
+@media (min-width: 768px) {
+  .kd-pack { padding-block: var(--space-12); }
+  .kd-pack__image { max-height: 480px; }
+  .kd-pack__panel { gap: var(--space-5); }
+  .kd-pack__tagline { font-size: 20px; }
+  .kd-pack__notice { flex-direction: row; align-items: center; justify-content: space-between; gap: var(--space-5); }
+  .kd-pack__notice-btn { flex-shrink: 0; }
+  .kd-pack__packs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .kd-pack__pack { flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: var(--space-1); }
+  .kd-pack__pack-meta { align-items: flex-start; text-align: left; }
+  .kd-pack__pack .kd-option__price { font-size: 22px; }
+  .kd-pack__plan-price { font-size: 16px; }
+  .kd-pack__buy { gap: 14px; }
+  .kd-pack__stepper button { width: 48px; height: 58px; font-size: 22px; }
+  .kd-pack__stepper output { width: 40px; font-size: 18px; }
+  .kd-pack__cart { font-size: 19px; }
+  .kd-pack__label--mobile { display: none; }
+  .kd-pack__label--desktop { display: inline; }
+  .kd-pack__foot { font-size: 13px; text-align: left; }
+}
+@media (min-width: 992px) {
+  .kd-pack__row { flex-direction: row; align-items: center; justify-content: center; gap: var(--space-10); }
+  .kd-pack__media { flex: 0 0 min(560px, 42%); }
+  .kd-pack__image { max-height: 760px; }
+  .kd-pack__panel { flex: 1 1 0; max-width: 720px; }
+}
+@media (min-width: 1441px) {
+  .kd-pack__media { flex-basis: 640px; }
+  .kd-pack__row { gap: var(--space-12); }
+}
+@media (min-width: 1800px) {
+  .kd-pack__media { flex-basis: 760px; }
+  .kd-pack__image { max-height: 900px; }
+  .kd-pack__panel { max-width: 800px; }
 }
 
 /* ── VIDEOS — sections/vertical-video-embeds.liquid ──
