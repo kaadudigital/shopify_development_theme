@@ -99,3 +99,55 @@
   init(document);
   document.addEventListener('shopify:section:load', function (event) { init(event.target); });
 })();
+
+/* [data-kd-autoplay]: carousel auto-scroll (people cards). Every interval it scrolls one card on and loops back
+   at the end. Pauses while hovered, focused, touched or off screen and while the tab is hidden; stops for good once
+   the visitor scrolls by hand; never runs with prefers-reduced-motion or when nothing overflows.
+   data-autoplay-desktop / -mobile ("true"/"false", mobile < 768px), data-autoplay-interval in ms. */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var mobile = window.matchMedia('(max-width: 767.98px)');
+  function setup(track) {
+    if (track.kdAutoplay) return;
+    track.kdAutoplay = true;
+    var interval = Math.max(2000, parseInt(track.getAttribute('data-autoplay-interval'), 10) || 4000);
+    var paused = 0, visible = false, stopped = false, auto = false, timer = null;
+    function enabled() {
+      if (stopped || reduce.matches || document.hidden || !visible || paused) return false;
+      if (track.getAttribute(mobile.matches ? 'data-autoplay-mobile' : 'data-autoplay-desktop') !== 'true') return false;
+      return track.scrollWidth - track.clientWidth > 4;
+    }
+    function step() {
+      if (!enabled()) return;
+      var card = track.firstElementChild;
+      if (!card) return;
+      var gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+      var max = track.scrollWidth - track.clientWidth;
+      auto = true;
+      if (track.scrollLeft >= max - 4) track.scrollTo({ left: 0, behavior: 'smooth' });
+      else track.scrollBy({ left: card.getBoundingClientRect().width + gap, behavior: 'smooth' });
+      setTimeout(function () { auto = false; }, 900);
+    }
+    function start() { clearInterval(timer); timer = setInterval(step, interval); }
+    function hold() { paused++; }
+    function release() { paused = Math.max(0, paused - 1); }
+    track.addEventListener('mouseenter', hold);
+    track.addEventListener('mouseleave', release);
+    track.addEventListener('focusin', hold);
+    track.addEventListener('focusout', release);
+    track.addEventListener('pointerdown', function () { stopped = true; });
+    track.addEventListener('wheel', function () { stopped = true; }, { passive: true });
+    track.addEventListener('keydown', function () { stopped = true; });
+    track.addEventListener('scroll', function () { if (!auto) stopped = true; }, { passive: true });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) { visible = entries[0].isIntersecting; }, { threshold: 0.4 }).observe(track);
+    } else {
+      visible = true;
+    }
+    start();
+  }
+  function init(root) { root.querySelectorAll('[data-kd-autoplay]').forEach(setup); }
+  init(document);
+  document.addEventListener('shopify:section:load', function (event) { init(event.target); });
+})();

@@ -84,6 +84,12 @@
 
   <div
     class="kd-carousel"
+    {%- if section.settings.autoplay or section.settings.autoplay_mobile %}
+      data-kd-autoplay
+      data-autoplay-desktop="{{ section.settings.autoplay }}"
+      data-autoplay-mobile="{{ section.settings.autoplay_mobile }}"
+      data-autoplay-interval="{{ section.settings.autoplay_interval | times: 1000 }}"
+    {%- endif %}
     role="region"
     aria-label="{{ section.settings.heading | remove: '[br]' | strip_html | escape }}"
     tabindex="0"
@@ -229,6 +235,33 @@
       "label": "Scroll hint – mobile",
       "default": "← wischen →",
       "info": "Below 768px. Empty = the scroll hint above."
+    },
+    {
+      "type": "header",
+      "content": "Auto-scroll",
+      "info": "Moves to the next card on its own and loops back at the end. Pauses while the visitor hovers, taps, focuses or scrolls the cards, stops for good once they scroll by hand, and stays off for people who turned off animations on their device. Does nothing when every card already fits on screen."
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Auto-scroll on desktop and tablet",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay_mobile",
+      "label": "Auto-scroll on mobile",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_interval",
+      "label": "Time per card",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "default": 4
     },
     {
       "type": "header",
