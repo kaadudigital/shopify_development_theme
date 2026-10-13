@@ -53,6 +53,11 @@
   @media (min-width: 768px) {
     #{{ section.id }} { --kd-card-mask: url("{{ shape_url }}"); }
   }
+  {%- comment -%} All cards fit (n × 400px card + 20px gaps + 2 × 64px gutter): nothing to scroll, so no scroll hint. {%- endcomment -%}
+  {%- assign fit_width = total | times: 420 | minus: 20 | plus: 128 -%}
+  @media (min-width: {{ fit_width }}px) {
+    #{{ section.id }} .kd-people__hint { visibility: hidden; }
+  }
 {%- endstyle -%}
 
 <section
