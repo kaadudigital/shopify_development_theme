@@ -48,16 +48,17 @@
   {%- else -%}
     <svg class="kd-btn__cloud" aria-hidden="true" focusable="false"><use href="#kd-cloud"></use></svg>
     {%- unless variant == 'outline' -%}
-      {%- comment -%} Wide buttons (kaadu.js adds .kd-btn--wide / --wider): the cloud cut into halves or thirds at its own
-        proportion (sliced to the button height), set side by side, so the bumps never stretch. {%- endcomment -%}
+      {%- comment -%} Wide buttons (kaadu.js adds .kd-btn--wide / --wider): the cloud in two halves, each trimmed to 85 %
+        of its width (left end / right end) and set side by side; the seam falls on mirror points of the shape.
+        --wide: halves at natural proportion (sliced to the button height); --wider: halves stretched, but far
+        less than one stretched cloud. {%- endcomment -%}
       <svg class="kd-btn__cloud kd-btn__cloud--halves" aria-hidden="true" focusable="false">
-        <svg width="50.1%" viewBox="0 0 3149.217 889.043" preserveAspectRatio="xMinYMid slice"><use href="#kd-cloud-path"></use></svg>
-        <svg x="49.9%" width="50.1%" viewBox="0 0 3149.217 889.043" preserveAspectRatio="xMaxYMid slice"><use href="#kd-cloud-path"></use></svg>
+        <svg width="50.1%" viewBox="0 0 2676.834 889.043" preserveAspectRatio="xMinYMid slice"><use href="#kd-cloud-path"></use></svg>
+        <svg x="49.9%" width="50.1%" viewBox="472.383 0 2676.834 889.043" preserveAspectRatio="xMaxYMid slice"><use href="#kd-cloud-path"></use></svg>
       </svg>
-      <svg class="kd-btn__cloud kd-btn__cloud--thirds" aria-hidden="true" focusable="false">
-        <svg width="33.5%" viewBox="0 0 3149.217 889.043" preserveAspectRatio="xMinYMid slice"><use href="#kd-cloud-path"></use></svg>
-        <svg x="33.3%" width="33.5%" viewBox="0 0 3149.217 889.043" preserveAspectRatio="xMidYMid slice"><use href="#kd-cloud-path"></use></svg>
-        <svg x="66.6%" width="33.4%" viewBox="0 0 3149.217 889.043" preserveAspectRatio="xMaxYMid slice"><use href="#kd-cloud-path"></use></svg>
+      <svg class="kd-btn__cloud kd-btn__cloud--halves-stretched" aria-hidden="true" focusable="false">
+        <svg width="50.1%" viewBox="0 0 2676.834 889.043" preserveAspectRatio="none"><use href="#kd-cloud-path"></use></svg>
+        <svg x="49.9%" width="50.1%" viewBox="472.383 0 2676.834 889.043" preserveAspectRatio="none"><use href="#kd-cloud-path"></use></svg>
       </svg>
     {%- endunless -%}
   {%- endif -%}
