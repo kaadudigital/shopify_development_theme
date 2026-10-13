@@ -7199,10 +7199,10 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
 }
 .kd-btn:hover .kd-btn__cloud { filter: drop-shadow(var(--shadow-card)) brightness(1.04); }
 /* Wide buttons (flagged by kaadu.js from the button's proportion): hide the stretched cloud and show the cloud
-   cut into halves (--wide, up to 2× the cloud's ~3.5 : 1) or thirds (--wider), each part at natural proportion. */
-.kd-btn__cloud--halves, .kd-btn__cloud--thirds { display: none; }
+   cut into two halves: at natural proportion (--wide) or, for very wide buttons, slightly stretched (--wider). */
+.kd-btn__cloud--halves, .kd-btn__cloud--halves-stretched { display: none; }
 .kd-btn--wide .kd-btn__cloud, .kd-btn--wider .kd-btn__cloud { display: none; }
-.kd-btn--wide .kd-btn__cloud--halves, .kd-btn--wider .kd-btn__cloud--thirds { display: block; }
+.kd-btn--wide .kd-btn__cloud--halves, .kd-btn--wider .kd-btn__cloud--halves-stretched { display: block; }
 .kd-btn:active { transform: translateY(1px); }
 .kd-btn[disabled], .kd-btn[aria-disabled="true"] { opacity: 0.5; cursor: not-allowed; }
 .kd-btn--full { display: flex; width: 100%; }
