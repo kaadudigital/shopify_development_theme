@@ -7808,6 +7808,9 @@ body {
   scrollbar-width: thin;
 }
 .kd-carousel:focus-visible { outline-offset: -4px; }
+/* People cards: no visible scrollbar (swipe, trackpad, Shift+wheel and arrow keys still scroll; the hint pill tells people). */
+.kd-people .kd-carousel { scrollbar-width: none; }
+.kd-people .kd-carousel::-webkit-scrollbar { display: none; }
 
 .kd-card {
   position: relative;
