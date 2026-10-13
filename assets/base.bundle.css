@@ -7899,6 +7899,11 @@ body {
 .kd-people .kd-heading__kicker { color: var(--kd-pc-kicker, var(--red)); }
 .kd-people .kd-heading__title { color: var(--kd-pc-heading, rgb(var(--color-scheme-text))); }
 .kd-people__hint { color: var(--kd-pc-hint, var(--purple)); }
+.kd-people__hint--desktop { display: none; }
+@media (min-width: 768px) {
+  .kd-people__hint--mobile { display: none; }
+  .kd-people__hint--desktop { display: inline; }
+}
 .kd-people .kd-card { color: var(--kd-pc-text, var(--paper)); }
 .kd-people .kd-card__title { color: inherit; }
 .kd-people .kd-card__stat { color: var(--kd-pc-stat-m, var(--red)); -webkit-text-stroke-color: var(--kd-pc-stat-outline, var(--paper)); }

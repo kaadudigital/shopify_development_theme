@@ -64,7 +64,10 @@
       {%- endif -%}
     </div>
     {%- if section.settings.hint != blank -%}
-      <p class="kd-people__hint kd-tag" aria-hidden="true">{{ section.settings.hint | escape }}</p>
+      {%- assign hint_mobile = section.settings.hint_mobile | default: section.settings.hint -%}
+      <p class="kd-people__hint kd-tag" aria-hidden="true">
+        <span class="kd-people__hint--mobile">{{ hint_mobile | escape }}</span><span class="kd-people__hint--desktop">{{ section.settings.hint | escape }}</span>
+      </p>
     {%- endif -%}
   </div>
 
@@ -208,6 +211,13 @@
       "id": "hint",
       "label": "Scroll hint",
       "default": "← wischen oder scrollen →"
+    },
+    {
+      "type": "text",
+      "id": "hint_mobile",
+      "label": "Scroll hint – mobile",
+      "default": "← wischen →",
+      "info": "Below 768px. Empty = the scroll hint above."
     },
     {
       "type": "header",
