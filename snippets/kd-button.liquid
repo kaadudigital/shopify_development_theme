@@ -48,11 +48,16 @@
   {%- else -%}
     <svg class="kd-btn__cloud" aria-hidden="true" focusable="false"><use href="#kd-cloud"></use></svg>
     {%- unless variant == 'outline' -%}
-      {%- comment -%} Wide buttons (kaadu.js adds .kd-btn--wide): the cloud at its own proportion from both ends and the centre, so the bumps never stretch. {%- endcomment -%}
-      <svg class="kd-btn__cloud kd-btn__cloud--tiled" aria-hidden="true" focusable="false">
-        <svg viewBox="0 0 3149.217 889.043" preserveAspectRatio="xMinYMid meet"><use href="#kd-cloud-path"></use></svg>
-        <svg viewBox="0 0 3149.217 889.043" preserveAspectRatio="xMidYMid meet"><use href="#kd-cloud-path"></use></svg>
-        <svg viewBox="0 0 3149.217 889.043" preserveAspectRatio="xMaxYMid meet"><use href="#kd-cloud-path"></use></svg>
+      {%- comment -%} Wide buttons (kaadu.js adds .kd-btn--wide / --wider): the cloud cut into halves or thirds at its own
+        proportion (sliced to the button height), set side by side, so the bumps never stretch. {%- endcomment -%}
+      <svg class="kd-btn__cloud kd-btn__cloud--halves" aria-hidden="true" focusable="false">
+        <svg width="50.1%" viewBox="0 0 3149.217 889.043" preserveAspectRatio="xMinYMid slice"><use href="#kd-cloud-path"></use></svg>
+        <svg x="49.9%" width="50.1%" viewBox="0 0 3149.217 889.043" preserveAspectRatio="xMaxYMid slice"><use href="#kd-cloud-path"></use></svg>
+      </svg>
+      <svg class="kd-btn__cloud kd-btn__cloud--thirds" aria-hidden="true" focusable="false">
+        <svg width="33.5%" viewBox="0 0 3149.217 889.043" preserveAspectRatio="xMinYMid slice"><use href="#kd-cloud-path"></use></svg>
+        <svg x="33.3%" width="33.5%" viewBox="0 0 3149.217 889.043" preserveAspectRatio="xMidYMid slice"><use href="#kd-cloud-path"></use></svg>
+        <svg x="66.6%" width="33.4%" viewBox="0 0 3149.217 889.043" preserveAspectRatio="xMaxYMid slice"><use href="#kd-cloud-path"></use></svg>
       </svg>
     {%- endunless -%}
   {%- endif -%}

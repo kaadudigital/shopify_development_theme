@@ -74,21 +74,24 @@
 })();
 
 /* Cloud buttons: when a button is wider than the cloud's own proportion (3149 × 889, ~3.5 : 1, +10 % slack),
-   add .kd-btn--wide so the CSS swaps the stretched cloud for copies at natural proportion (kd-button.liquid). */
+   add .kd-btn--wide (cloud in two halves) or, beyond twice that, .kd-btn--wider (three thirds), so the CSS swaps the
+   stretched cloud for parts at natural proportion (kd-button.liquid). */
 (function () {
   'use strict';
-  var RATIO = (3149.217 / 889.043) * 1.1;
+  var CLOUD = 3149.217 / 889.043;
   function check(button) {
     var h = button.offsetHeight;
     if (!h) return;
-    button.classList.toggle('kd-btn--wide', button.offsetWidth / h > RATIO);
+    var ratio = button.offsetWidth / h;
+    button.classList.toggle('kd-btn--wide', ratio > CLOUD * 1.1 && ratio <= CLOUD * 2);
+    button.classList.toggle('kd-btn--wider', ratio > CLOUD * 2);
   }
   var observer = 'ResizeObserver' in window
     ? new ResizeObserver(function (entries) { entries.forEach(function (entry) { check(entry.target); }); })
     : null;
   function init(root) {
     root.querySelectorAll('.kd-btn').forEach(function (button) {
-      if (!button.querySelector('.kd-btn__cloud--tiled')) return;
+      if (!button.querySelector('.kd-btn__cloud--halves')) return;
       check(button);
       if (observer) observer.observe(button);
     });
