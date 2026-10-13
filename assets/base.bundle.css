@@ -7903,7 +7903,8 @@ body {
 .kd-people .kd-card__title { color: inherit; }
 .kd-people .kd-card__stat { color: var(--kd-pc-stat-m, var(--red)); -webkit-text-stroke-color: var(--kd-pc-stat-outline, var(--paper)); }
 .kd-people .kd-card__fact { color: var(--kd-pc-fact, var(--lime)); }
-.kd-people .kd-card__actions .kd-btn--outline { color: var(--kd-pc-card-btn, var(--paper)); }
+.kd-people .kd-card__actions .kd-btn--outline:not([aria-pressed="true"]) { color: var(--kd-pc-card-btn, var(--paper)); }
+.kd-people .kd-card__actions .kd-btn--outline[aria-pressed="true"] { --kd-cloud: var(--kd-pc-card-btn, var(--paper)); }
 .kd-people .kd-card--cta { background: var(--kd-pc-cta-bg, var(--red)); color: var(--kd-pc-cta-text, var(--paper)); }
 .kd-people .kd-card__cta-heading { color: inherit; }
 .kd-people .kd-card__pill { background: var(--kd-pc-cta-pill, var(--lime)); color: var(--kd-pc-cta-pill-text, var(--purple)); }
