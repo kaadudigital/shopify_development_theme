@@ -42,6 +42,7 @@
     --kd-card-mask: url("{{ shape_url_m }}");
     --kd-card-outline: {{ section.settings.card_outline_color }};
     --kd-card-outline-w: {{ section.settings.card_outline_width }}px;
+    --kd-card-h-m: {{ section.settings.card_height_mobile | default: 420 }}px;
   }
   @media (min-width: 768px) {
     #{{ section.id }} { --kd-card-mask: url("{{ shape_url }}"); }
@@ -269,6 +270,17 @@
       "id": "card_shape_mobile",
       "label": "Frame shape – mobile (SVG)",
       "info": "Optional; below 768px. Empty = the shape above."
+    },
+    {
+      "type": "range",
+      "id": "card_height_mobile",
+      "label": "Card height – mobile (shaped frame)",
+      "min": 360,
+      "max": 560,
+      "step": 10,
+      "unit": "px",
+      "default": 420,
+      "info": "Cards are 310px wide on mobile. 420px keeps the cloud frame close to its natural proportion; go taller if long back texts get cut off."
     },
     {
       "type": "checkbox",

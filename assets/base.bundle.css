@@ -7937,6 +7937,10 @@ body {
 .kd-people--shaped .kd-card__body { padding: 0 var(--space-8) var(--space-4); }
 .kd-people--shaped .kd-card__actions { padding: 0 var(--space-8) var(--space-9); }
 .kd-people--shaped .kd-card--cta { padding: var(--space-9) var(--space-8); }
+@media (max-width: 767.98px) {
+  /* The frame is close to square; a 310 × 560 card stretches it, so shaped cards are shorter on mobile (setting). */
+  .kd-people--shaped .kd-card { height: var(--kd-card-h-m, 420px); }
+}
 
 @media (min-width: 768px) {
   .kd-people .kd-card__stat { color: var(--kd-pc-stat, var(--red)); }
