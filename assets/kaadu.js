@@ -234,6 +234,18 @@
         render();
         return;
       }
+      var trial = event.target.closest('[data-kd-config-trial]');
+      if (trial && root.contains(trial)) {
+        state.mode = 'once';
+        state.pack = data.packs[0] ? data.packs[0].n : state.pack;
+        render();
+        var cart = form && form.querySelector('button[type="submit"]');
+        if (cart) {
+          cart.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+          cart.focus({ preventScroll: true });
+        }
+        return;
+      }
       var step = event.target.closest('[data-step]');
       if (step && root.contains(step)) {
         state.qty = Math.min(99, Math.max(1, state.qty + parseInt(step.getAttribute('data-step'), 10)));

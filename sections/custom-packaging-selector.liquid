@@ -130,8 +130,20 @@
               <div class="kd-notice__text">{{ section.settings.promo_text }}</div>
             {%- endif -%}
           </div>
-          {%- if section.settings.promo_button_label != blank and section.settings.promo_button_link != blank -%}
-            {%- render 'kd-button', label: section.settings.promo_button_label, url: section.settings.promo_button_link, size: 'sm', class: 'kd-pack__notice-btn' -%}
+          {%- if section.settings.promo_button_label != blank -%}
+            {%- liquid
+              assign promo_url = section.settings.promo_button_link
+              assign promo_code = section.settings.promo_code | strip
+              if promo_url == blank and promo_code != blank
+                assign promo_url = promo_code | url_encode | prepend: '/discount/' | append: '?redirect=/cart'
+              endif
+            -%}
+            {%- if promo_url != blank -%}
+              {%- render 'kd-button', label: section.settings.promo_button_label, url: promo_url, size: 'sm', class: 'kd-pack__notice-btn' -%}
+            {%- else -%}
+              {%- comment -%} No link or code yet: the button picks the smallest pack as a one-time trial and moves to the cart button. {%- endcomment -%}
+              {%- render 'kd-button', label: section.settings.promo_button_label, size: 'sm', class: 'kd-pack__notice-btn', attrs: 'data-kd-config-trial' -%}
+            {%- endif -%}
           {%- endif -%}
         </div>
       {%- endif -%}
@@ -434,7 +446,13 @@
       "type": "url",
       "id": "promo_button_link",
       "label": "Button link",
-      "info": "E.g. a discount link: /discount/YOURCODE?redirect=/cart. The button is hidden without a link."
+      "info": "Optional. Without a link the button uses the discount code below; without either it selects the first pack as a one-time purchase and jumps to the cart button."
+    },
+    {
+      "type": "text",
+      "id": "promo_code",
+      "label": "Discount code",
+      "info": "Shopify discount code for the first order. The button then applies it and opens the cart (/discount/CODE?redirect=/cart). Also replace [CODE] in the text above."
     },
     {
       "type": "header",
