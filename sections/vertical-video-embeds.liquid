@@ -177,8 +177,8 @@
             <p class="kd-videos__hint kd-label">
               {{- section.settings.hint | escape -}}
               {%- if section.settings.hint_show_count -%}
-                {%- if section.settings.hint != blank %} · {% endif -%}
-                {{ clips.size }} {% if clips.size == 1 %}Clip{% else %}Clips{% endif %}
+                {%- if section.settings.hint != blank %}&nbsp;· {% endif -%}
+                {{ clips.size }}&nbsp;{% if clips.size == 1 %}Clip{% else %}Clips{% endif %}
               {%- endif -%}
             </p>
           {%- endif -%}

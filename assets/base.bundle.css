@@ -8290,7 +8290,7 @@ span.kd-phone__play { cursor: default; }
 .kd-phone__clip.is-playing .kd-phone__title { display: none; }
 
 .kd-videos__nav { display: flex; align-items: center; justify-content: center; gap: var(--space-2); color: var(--kd-vid-hint); }
-.kd-videos__hint { margin: 0; text-transform: uppercase; color: inherit; }
+.kd-videos__hint { margin: 0; text-transform: uppercase; color: inherit; text-wrap: balance; }
 .kd-videos__arrow {
   display: inline-flex;
   align-items: center;
