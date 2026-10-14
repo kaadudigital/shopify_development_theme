@@ -120,6 +120,19 @@
     "custom_video_with_text_overlay_BWrhtb": {
       "type": "custom-video-with-text-overlay",
       "blocks": {
+        "shape_divider_h8VPdN": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "below",
+            "target_section_color_scheme": "scheme4",
+            "style": "circles-2.5-patterned_1200x54",
+            "enable_mobile_style": false,
+            "style_mobile": "circles-3-patterned_1200x67",
+            "flip_horizontal": false,
+            "enable_animation": false,
+            "animation_direction": ""
+          }
+        },
         "sticker_LNbtUW": {
           "type": "sticker",
           "settings": {
@@ -145,6 +158,7 @@
         }
       },
       "block_order": [
+        "shape_divider_h8VPdN",
         "sticker_LNbtUW"
       ],
       "name": "Custom Video Text Overlay",
@@ -191,7 +205,7 @@
     "custom_image_section_anwQpJ": {
       "type": "custom-image-section",
       "blocks": {
-        "shape_divider_HHiMPK": {
+        "shape_divider_DFWNNt": {
           "type": "shape_divider",
           "settings": {
             "target_section": "below",
@@ -206,7 +220,7 @@
         }
       },
       "block_order": [
-        "shape_divider_HHiMPK"
+        "shape_divider_DFWNNt"
       ],
       "custom_css": [
         ".hero-bg-image {z-index: 6;}",
@@ -241,7 +255,7 @@
         "button_position_t": "default",
         "button_x_t": 72,
         "button_y_t": 85,
-        "image_rotate_d": -3,
+        "image_rotate_d": 3,
         "canvas_d": true,
         "canvas_height_d": 600,
         "canvas_image_x_d": 21,
