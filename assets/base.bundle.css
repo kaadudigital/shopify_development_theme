@@ -8164,20 +8164,178 @@ body {
 }
 
 /* ── VIDEOS — sections/vertical-video-embeds.liquid ──
-   DS: centred heading, videos framed as the 300 × 534 rounded tiles (radius-tile, shadow-tile-active). */
-.kd-videos__inner { padding-block: var(--space-9) var(--space-9); }
-.kd-videos__heading { margin-bottom: var(--space-6); }
-.kd-videos .kd-heading__title { color: rgb(var(--color-scheme-text)); }
-.kd-videos__intro { margin: 0 auto; color: rgb(var(--color-scheme-body-text)); }
-.kd-videos .splide__slide > * {
-  overflow: hidden;
-  border-radius: var(--radius-tile);
-  box-shadow: var(--shadow-tile-active);
+   Mockup: heading, intro, one phone frame with the clips swiping inside its screen, ← hint · n Clips →, cloud
+   button. Colours are section settings (mockup: paper on red, pink cloud with red label). DS spacing: 48 / 80px
+   section padding, 40px between blocks, 12px phone → hint. The phone is --kd-phone-w wide (section CSS; scales
+   with --kd-px from 1200px); screen and notch are placed in shares of the 370 × 668 frame. */
+section.kd-videos { background-color: var(--kd-vid-bg, rgb(var(--color-scheme-background))); }
+.kd-videos__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "head" "stage" "cta";
+  justify-items: center;
+  row-gap: var(--space-8);
+  padding-block: var(--space-9);
+  text-align: center;
 }
-.kd-videos__actions { display: flex; justify-content: center; margin-top: var(--space-8); }
+.kd-videos__heading { grid-area: head; }
+.kd-videos .kd-heading__title { color: var(--kd-vid-heading); }
+.kd-videos__intro { margin: 0 auto; color: var(--kd-vid-text); }
+.kd-videos__d { display: none; }
+.kd-videos__stage { grid-area: stage; display: flex; flex-direction: column; align-items: center; gap: var(--space-3); }
+.kd-videos__actions { grid-area: cta; display: flex; justify-content: center; }
+.kd-videos__button { --kd-cloud: var(--kd-vid-btn); color: var(--kd-vid-btn-label); }
+
+.kd-phone {
+  position: relative;
+  width: var(--kd-phone-w, 330px);
+  aspect-ratio: 370 / 668;
+  flex-shrink: 0;
+}
+.kd-phone__frame {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.kd-phone__notch {
+  position: absolute;
+  z-index: 3;
+  top: 6.57%;
+  left: 57.18%;
+  width: 20.27%;
+  height: 3.6%;
+  border-radius: 999px;
+  background: #111;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.kd-phone__screen {
+  position: absolute;
+  z-index: 1;
+  left: 23.43%;
+  top: 4.78%;
+  width: 67.49%;
+  height: 67.17%;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border-radius: calc(var(--kd-phone-w, 330px) * 0.081);
+  background: #111;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+.kd-phone__screen::-webkit-scrollbar { display: none; }
+.kd-phone__screen:focus-visible { outline: 4px solid var(--red); outline-offset: 3px; }
+.kd-phone__clip {
+  position: relative;
+  flex: 0 0 100%;
+  height: 100%;
+  overflow: hidden;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  background: var(--kd-clip-bg, var(--pink));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.kd-phone__media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: cover;
+}
+.kd-phone__embed > * { width: 100% !important; height: 100% !important; min-width: 0 !important; max-width: none !important; margin: 0 !important; border: 0 !important; }
+.kd-phone__play {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  border: 0;
+  background: rgba(0, 0, 0, 0.55);
+  color: var(--paper);
+  cursor: pointer;
+}
+.kd-phone__play svg { width: 32px; height: 32px; fill: currentColor; }
+.kd-phone__play:focus-visible { outline: 4px solid var(--red); outline-offset: 3px; }
+span.kd-phone__play { cursor: default; }
+.kd-phone__title {
+  position: absolute;
+  z-index: 1;
+  left: 14px;
+  right: 14px;
+  bottom: 18px;
+  margin: 0;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 20px;
+  text-align: center;
+  color: var(--kd-vid-clip-title);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+}
+.kd-phone__clip.is-playing .kd-phone__play,
+.kd-phone__clip.is-playing .kd-phone__poster,
+.kd-phone__clip.is-playing .kd-phone__title { display: none; }
+
+.kd-videos__nav { display: flex; align-items: center; justify-content: center; gap: var(--space-2); color: var(--kd-vid-hint); }
+.kd-videos__hint { margin: 0; text-transform: uppercase; color: inherit; }
+.kd-videos__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--kd-vid-arrow);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+.kd-videos--arrow-bg .kd-videos__arrow { width: 44px; background: var(--kd-vid-arrow-bg); }
+.kd-videos__arrow:focus-visible { outline: 4px solid var(--red); outline-offset: 3px; }
+.kd-videos__source { color: var(--kd-vid-hint); font-weight: 600; font-size: 14px; }
+.kd-videos__source[hidden] { display: none; }
+
 @media (min-width: 768px) {
-  .kd-videos__inner { padding-block: var(--space-12) var(--space-12); }
-  .kd-videos__heading { margin-bottom: var(--space-8); }
+  .kd-videos__inner { padding-block: var(--space-12); }
+  .kd-videos__d { display: inline; }
+  .kd-videos__m { display: none; }
+  .kd-phone__play { width: 80px; height: 80px; }
+  .kd-phone__play svg { width: 40px; height: 40px; }
+}
+/* "Text left, phone right" from 992px: heading and button stacked left, phone right. */
+@media (min-width: 992px) {
+  .kd-videos--left .kd-videos__inner {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: 1fr auto 1fr;
+    grid-template-areas: ". stage" "head stage" "cta stage";
+    column-gap: var(--space-10);
+    row-gap: 0;
+    justify-items: start;
+    text-align: left;
+  }
+  .kd-videos--left .kd-videos__heading { align-items: flex-start; text-align: left; margin-bottom: var(--space-8); }
+  .kd-videos--left .kd-videos__intro { margin: 0; }
+  .kd-videos--left .kd-videos__actions { align-self: start; }
+}
+@media (min-width: 1200px) {
+  .kd-videos--left .kd-videos__inner { column-gap: var(--space-13); }
 }
 
 /* ── STATS AROUND AN IMAGE ("besser") — sections/custom-image-with-highlights.liquid ──
