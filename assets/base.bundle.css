@@ -8129,7 +8129,9 @@ body {
 @media (min-width: 768px) {
   .kd-pack { padding-block: var(--space-12); }
   .kd-pack__image { max-height: 480px; }
-  .kd-pack__panel { gap: var(--space-5); }
+  /* One capped column (intro, options, stepper + button share its edges) keeps the option tiles and the cloud
+     button near their natural proportions on wide screens; photo + column stay centred as a group. */
+  .kd-pack__panel { gap: var(--space-5); width: 100%; max-width: 600px; align-self: center; }
   .kd-pack__tagline { font-size: 20px; }
   .kd-pack .kd-pack__notice { flex-direction: row; align-items: center; justify-content: space-between; gap: var(--space-5); }
   .kd-pack__notice-btn { flex-shrink: 0; }
@@ -8150,7 +8152,7 @@ body {
   .kd-pack__row { flex-direction: row; align-items: center; justify-content: center; gap: var(--space-10); }
   .kd-pack__media { flex: 0 0 min(560px, 42%); }
   .kd-pack__image { max-height: 760px; }
-  .kd-pack__panel { flex: 1 1 0; max-width: 720px; }
+  .kd-pack__panel { flex: 1 1 0; align-self: auto; }
 }
 @media (min-width: 1441px) {
   .kd-pack__media { flex-basis: 640px; }
@@ -8159,7 +8161,6 @@ body {
 @media (min-width: 1800px) {
   .kd-pack__media { flex-basis: 760px; }
   .kd-pack__image { max-height: 900px; }
-  .kd-pack__panel { max-width: 800px; }
 }
 
 /* ── VIDEOS — sections/vertical-video-embeds.liquid ──
