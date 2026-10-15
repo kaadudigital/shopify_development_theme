@@ -8431,7 +8431,6 @@ section.kd-iwh {
   aspect-ratio: 1;
   border-radius: 0;
   background-color: var(--paper) !important; /* beats the placeholder's Tailwind !bg-neutral-100 */
-  color: var(--kd-iwh-stat, rgb(var(--color-scheme-card-text)));
 }
 
 /* Tiles */
