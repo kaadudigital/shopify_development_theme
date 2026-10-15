@@ -1,61 +1,135 @@
 {%- comment -%}
-  Kaadu DS join section (EmailForm): kicker, Fagies h2, optional image, intro, then the 560px form —
-  56px pill input (paper, 1px purple border) beside a red cloud button. Colours follow the colour scheme
-  (DS: the join section sits on lime). Styles: "JOIN" in assets/base.bundle.css.
-  No longer used: bg_class, input_square, button_image*, button_text_color, button_image_width*.
+  Kaadu DS join section (EmailForm): kicker, Fagies h2, optional image, intro, then the 560px form — 56px pill input
+  beside a cloud button (or the button artwork, if set). Colours: «Use the colours below» (mockup: lime ground, ink kicker
+  and text, red heading and cloud), else the colour scheme. Styles: "JOIN" in assets/base.bundle.css.
+  After signing up: an inline success pill (Shopify customer form, ?customer_posted=true) or a redirect to a page.
+  Not used: bg_class (the colour scheme / colour settings replace it).
 {%- endcomment -%}
-<section
-  class="kd-join email-signup-section bg-scheme-background text-scheme-text{% if section.settings.padding_top == 'none' %} kd-join--tight-top{% endif %}"
-  data-color-scheme="{{ section.settings.color_scheme }}"
-  id="section-{{ section.id }}"
->
-  <div class="kd-section kd-join__inner">
-    {%- if section.settings.kicker != blank or section.settings.heading != blank -%}
-      <div class="kd-heading kd-heading--center">
-        {%- if section.settings.kicker != blank -%}
-          <p class="kd-heading__kicker kd-label-lg">{{ section.settings.kicker | escape }}</p>
+{%- liquid
+  assign s = section.settings
+  assign after = s.after_signup | default: 'page'
+  assign join_classes = 'kd-join email-signup-section bg-scheme-background text-scheme-text'
+  if s.padding_top == 'none'
+    assign join_classes = join_classes | append: ' kd-join--tight-top'
+  endif
+  if s.input_square
+    assign join_classes = join_classes | append: ' kd-join--square'
+  endif
+  if s.hide_image_mobile
+    assign join_classes = join_classes | append: ' kd-join--m-noimg'
+  endif
+  assign label_m = s.button_text_mobile | default: s.button_text
+-%}
+
+{%- style -%}
+  #section-{{ section.id }} {
+    {%- comment -%} Section colours only when "Use the colours below" is on; otherwise every --kd-join-* is unset and the
+      CSS falls back to the colour scheme. {%- endcomment -%}
+    {%- if s.use_custom_colors -%}
+      {%- liquid
+        assign join_colors = 'bg:background_color,kicker:kicker_color,heading:heading_color,text:text_color,input-bg:input_bg_color,input:input_text_color,btn:button_color,btn-label:button_label_color,success-bg:success_bg_color,success:success_text_color,error:error_color' | split: ','
+      -%}
+      {%- for pair in join_colors -%}
+        {%- assign kv = pair | split: ':' -%}
+        {%- assign value = s[kv[1]] -%}
+        {%- if value != blank %}
+    --kd-join-{{ kv[0] }}: {{ value }};
         {%- endif -%}
-        {%- if section.settings.heading != blank -%}
-          <h2 class="kd-heading__title kd-display-h2">{{ section.settings.heading | escape }}</h2>
+      {%- endfor %}
+    {%- endif %}
+  }
+  {%- if s.button_image != blank or s.button_image_mobile != blank %}
+  #section-{{ section.id }} .kd-btn--art {
+    --kd-art-w: {{ s.button_image_width | default: 200 }}px;
+    --kd-art-ratio: {{ s.button_image.aspect_ratio | default: s.button_image_mobile.aspect_ratio | default: 3 }};
+    --kd-art-color: {{ s.button_text_color | default: 'inherit' }};
+    --kd-art-w-m: {{ s.button_image_width_mobile | default: 160 }}px;
+    --kd-art-ratio-m: {{ s.button_image_mobile.aspect_ratio | default: s.button_image.aspect_ratio | default: 3 }};
+  }
+  {%- endif %}
+{%- endstyle -%}
+
+<section class="{{ join_classes }}" data-color-scheme="{{ s.color_scheme }}" id="section-{{ section.id }}">
+  <div class="kd-section kd-join__inner">
+    {%- if s.kicker != blank or s.heading != blank -%}
+      <div class="kd-heading kd-heading--center">
+        {%- if s.kicker != blank -%}
+          <p class="kd-heading__kicker kd-label-lg">{{ s.kicker | escape }}</p>
+        {%- endif -%}
+        {%- if s.heading != blank -%}
+          <h2 class="kd-heading__title kd-display-h2">{{ s.heading | escape }}</h2>
         {%- endif -%}
       </div>
     {%- endif -%}
 
-    {%- if section.settings.image != blank -%}
-      {{ section.settings.image | image_url: width: 400 | image_tag: class: 'kd-join__image', loading: 'lazy', alt: section.settings.image.alt }}
+    {%- if s.image != blank -%}
+      {{ s.image | image_url: width: 400 | image_tag: class: 'kd-join__image', loading: 'lazy', alt: s.image.alt }}
     {%- endif -%}
 
-    {%- if section.settings.text != blank -%}
-      <div class="kd-join__text kd-body-lg">{{ section.settings.text }}</div>
+    {%- if s.text != blank -%}
+      {%- if s.text_mobile != blank -%}
+        <div class="kd-join__text kd-join__text--m kd-body-lg">{{ s.text_mobile }}</div>
+        <div class="kd-join__text kd-join__text--d kd-body-lg">{{ s.text }}</div>
+      {%- else -%}
+        <div class="kd-join__text kd-body-lg">{{ s.text }}</div>
+      {%- endif -%}
     {%- endif -%}
 
-    <form
-      method="post"
-      action="/contact#contact_form"
-      accept-charset="UTF-8"
-      class="contact-form email-signup-form kd-form"
-      id="contact_form"
-    >
-      <input type="hidden" name="form_type" value="customer">
-      <input type="hidden" name="contact[tags]" value="waitlist">
-      <input type="hidden" name="utf8" value="✓">
+    {%- form 'customer', id: 'kd-join-form', class: 'contact-form email-signup-form kd-form' -%}
+      {%- if form.posted_successfully? -%}
+        {%- if after == 'message' -%}
+          <p class="kd-success kd-join__success" role="status" tabindex="-1">
+            {%- if s.success_text_mobile != blank -%}
+              <span class="kd-join__m">{{ s.success_text_mobile | escape }}</span><span class="kd-join__d">{{ s.success_text | escape }}</span>
+            {%- else -%}
+              {{ s.success_text | escape }}
+            {%- endif -%}
+          </p>
+        {%- else -%}
+          <script>
+            {%- comment -%} Old behaviour: go to the success page (setting, else …/waitlist-success next to this page). {%- endcomment -%}
+            (function () {
+              var target = {{ s.success_page | json }};
+              if (!target) {
+                var parts = window.location.pathname.split('/');
+                parts[parts.length - 1] = 'waitlist-success';
+                target = parts.join('/');
+                if (target === '/waitlist-success') target = '/pages/waitlist-success';
+              }
+              window.location.replace(target);
+            })();
+          </script>
+        {%- endif -%}
+      {%- else -%}
+        <input type="hidden" name="contact[tags]" value="waitlist">
+        <label class="kd-sr" for="Email-{{ section.id }}">{{ s.placeholder_text | default: 'E-Mail' | escape }}</label>
+        <input
+          type="email"
+          name="contact[email]"
+          placeholder="{{ s.placeholder_text | escape }}"
+          id="Email-{{ section.id }}"
+          class="kd-input email-signup-input"
+          autocomplete="email"
+          required
+          {% if form.errors %}aria-invalid="true" aria-describedby="Email-error-{{ section.id }}"{% endif %}
+        >
+        {%- capture btn_label -%}
+          {%- if label_m != s.button_text -%}
+            <span class="kd-join__m">{{ label_m | escape }}</span><span class="kd-join__d">{{ s.button_text | escape }}</span>
+          {%- else -%}
+            {{ s.button_text | escape }}
+          {%- endif -%}
+        {%- endcapture -%}
+        {%- capture btn_attrs -%}aria-label="{{ s.button_text | escape }}"{%- endcapture -%}
+        {%- render 'kd-button', label: btn_label, type: 'submit', size: 'md', class: 'email-signup-submit kd-join__button', attrs: btn_attrs, art: s.button_image, art_mobile: s.button_image_mobile -%}
+      {%- endif -%}
+    {%- endform -%}
+    {%- if form.errors -%}
+      <p class="kd-error kd-join__error" id="Email-error-{{ section.id }}" role="alert">{{ s.error_text | default: 'Das ist keine E-Mail-Adresse. Nochmal.' | escape }}</p>
+    {%- endif -%}
 
-      <label class="kd-sr" for="Email">{{ section.settings.placeholder_text | default: 'E-Mail' | escape }}</label>
-      <input
-        type="email"
-        name="contact[email]"
-        placeholder="{{ section.settings.placeholder_text | escape }}"
-        id="Email"
-        class="kd-input email-signup-input"
-        autocomplete="email"
-        required
-      >
-      {%- render 'kd-button', label: section.settings.button_text, type: 'submit', variant: 'red', size: 'md', class: 'email-signup-submit' -%}
-    </form>
-    <div class="email-signup-message kd-error" role="alert" hidden></div>
-
-    {%- if section.settings.subtitle != blank -%}
-      <p class="kd-join__subtitle kd-body-sm">{{ section.settings.subtitle }}</p>
+    {%- if s.subtitle != blank -%}
+      <p class="kd-join__subtitle kd-body-sm">{{ s.subtitle }}</p>
     {%- endif -%}
   </div>
 
@@ -65,7 +139,7 @@
         when 'background_shape'
           render 'block-background-shape', block: block
         when 'background_pattern'
-          render 'block-background-pattern', block: block, scheme: section.settings.color_scheme
+          render 'block-background-pattern', block: block, scheme: s.color_scheme
       endcase
     endfor
   -%}
@@ -83,18 +157,19 @@
 -%}
 
 <script>
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get('customer_posted') === 'true') {
-    const pathParts = window.location.pathname.split('/');
-    pathParts[pathParts.length - 1] = 'waitlist-success';
-    window.location.replace(pathParts.join('/'));
-  }
-
   document.addEventListener('DOMContentLoaded', function () {
-    const form = document.querySelector('.email-signup-form');
+    var section = document.getElementById('section-{{ section.id }}');
+    if (!section) return;
+    var success = section.querySelector('.kd-join__success');
+    if (success) {
+      success.scrollIntoView({ block: 'center' });
+      success.focus({ preventScroll: true });
+    }
+    var form = section.querySelector('.email-signup-form');
     if (!form) return;
-    const btn = form.querySelector('.email-signup-submit');
+    var btn = form.querySelector('.email-signup-submit');
     form.addEventListener('submit', function () {
+      if (!btn) return;
       btn.classList.add('is-loading');
       btn.disabled = true;
     });
@@ -128,9 +203,22 @@
       "info": "Optional illustration above the text (e.g. the Justice figure)."
     },
     {
+      "type": "checkbox",
+      "id": "hide_image_mobile",
+      "label": "Hide image on mobile",
+      "info": "Below 768px.",
+      "default": false
+    },
+    {
       "type": "richtext",
       "id": "text",
       "label": "Text"
+    },
+    {
+      "type": "richtext",
+      "id": "text_mobile",
+      "label": "Text (mobile)",
+      "info": "Below 768px. Empty: the text above."
     },
     {
       "type": "text",
@@ -149,7 +237,51 @@
       "id": "input_square",
       "label": "Square input corners",
       "default": false,
-      "info": "Not used since the design-system redesign (the form uses the DS pill input and a red cloud button; the background comes from the colour scheme)."
+      "info": "Square corners instead of the pill."
+    },
+    {
+      "type": "header",
+      "content": "After signing up"
+    },
+    {
+      "type": "select",
+      "id": "after_signup",
+      "label": "Then",
+      "default": "page",
+      "options": [
+        {
+          "value": "message",
+          "label": "Show a message here"
+        },
+        {
+          "value": "page",
+          "label": "Go to a success page"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "success_text",
+      "label": "Message",
+      "default": "Du bist dabei. Dein 20 %-Code kommt per Mail."
+    },
+    {
+      "type": "text",
+      "id": "success_text_mobile",
+      "label": "Message (mobile)",
+      "info": "Below 768px. Empty: the message above."
+    },
+    {
+      "type": "url",
+      "id": "success_page",
+      "label": "Success page",
+      "info": "Empty: the «waitlist-success» page."
+    },
+    {
+      "type": "text",
+      "id": "error_text",
+      "label": "Error message",
+      "default": "Das ist keine E-Mail-Adresse. Nochmal."
     },
     {
       "type": "header",
@@ -159,21 +291,21 @@
       "type": "image_picker",
       "id": "button_image",
       "label": "Button image",
-      "info": "Not used since the design-system redesign (the form uses the DS pill input and a red cloud button; the background comes from the colour scheme)."
+      "info": "Optional artwork replacing the cloud button (desktop; also mobile when no mobile image is set)."
     },
     {
       "type": "text",
       "id": "button_text",
       "label": "Button text",
       "default": "Anmelden",
-      "info": "Shown over the image (if set). Always used as the accessible aria-label."
+      "info": "Button label (also the accessible name when artwork is used)."
     },
     {
       "type": "color",
       "id": "button_text_color",
       "label": "Button text color",
       "default": "#000000",
-      "info": "Not used since the design-system redesign (the form uses the DS pill input and a red cloud button; the background comes from the colour scheme)."
+      "info": "Label colour on the button artwork."
     },
     {
       "type": "range",
@@ -184,7 +316,7 @@
       "step": 4,
       "unit": "px",
       "default": 200,
-      "info": "Not used since the design-system redesign (the form uses the DS pill input and a red cloud button; the background comes from the colour scheme)."
+      "info": "Width of the button artwork (desktop)."
     },
     {
       "type": "header",
@@ -194,13 +326,13 @@
       "type": "image_picker",
       "id": "button_image_mobile",
       "label": "Button image (mobile)",
-      "info": "Not used since the design-system redesign (the form uses the DS pill input and a red cloud button; the background comes from the colour scheme)."
+      "info": "Artwork below 768px. Empty: the desktop artwork."
     },
     {
       "type": "text",
       "id": "button_text_mobile",
       "label": "Button text (mobile)",
-      "info": "Not used since the design-system redesign (the form uses the DS pill input and a red cloud button; the background comes from the colour scheme)."
+      "info": "Button label below 768px. Empty: the label above."
     },
     {
       "type": "range",
@@ -211,7 +343,7 @@
       "step": 4,
       "unit": "px",
       "default": 160,
-      "info": "Not used since the design-system redesign (the form uses the DS pill input and a red cloud button; the background comes from the colour scheme)."
+      "info": "Width of the button artwork below 768px."
     },
     {
       "type": "header",
@@ -272,14 +404,87 @@
         }
       ],
       "default": "bg-violet",
-      "info": "Not used since the design-system redesign (the form uses the DS pill input and a red cloud button; the background comes from the colour scheme)."
+      "info": "Not used: the colour scheme or «Use the colours below» set the background."
     },
     {
       "type": "color_scheme",
       "id": "color_scheme",
       "default": "scheme3",
       "label": "t:common.settings.color_scheme.label",
-      "info": "DS: the join section sits on lime."
+      "info": "Applies when «Use the colours below instead of the colour scheme» is off. DS: the join section sits on lime."
+    },
+    {
+      "type": "checkbox",
+      "id": "use_custom_colors",
+      "label": "Use the colours below instead of the colour scheme",
+      "info": "Off: background, text, input, button and messages follow the colour scheme above.",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#AEFF64"
+    },
+    {
+      "type": "color",
+      "id": "kicker_color",
+      "label": "Kicker",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "input_bg_color",
+      "label": "Input background",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "input_text_color",
+      "label": "Input text and border",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "button_label_color",
+      "label": "Button label",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "success_bg_color",
+      "label": "Message background",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "success_text_color",
+      "label": "Message text",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "error_color",
+      "label": "Error text",
+      "default": "#AC0300"
     }
   ],
   "blocks": [

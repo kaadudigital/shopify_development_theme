@@ -8874,12 +8874,41 @@ section.kd-split-section { background-color: var(--kd-split-bg, rgb(var(--color-
   text-align: center;
 }
 .kd-join--tight-top .kd-join__inner { padding-top: var(--space-6); }
-.kd-join .kd-heading__kicker { color: var(--red); }
-.kd-join .kd-heading__title { color: rgb(var(--color-scheme-text)); }
+/* Colours: --kd-join-* when the section's «Use the colours below» is on, else the colour scheme */
+section.kd-join { background-color: var(--kd-join-bg, rgb(var(--color-scheme-background))); }
+.kd-join .kd-heading__kicker { color: var(--kd-join-kicker, rgb(var(--color-scheme-eyebrow-text, var(--color-scheme-text)))); }
+.kd-join .kd-heading__title { color: var(--kd-join-heading, rgb(var(--color-scheme-text))); }
 .kd-join__image { width: 200px; height: auto; }
-.kd-join__text { max-width: var(--measure); color: rgb(var(--color-scheme-body-text)); }
+.kd-join__text { max-width: var(--measure); color: var(--kd-join-text, rgb(var(--color-scheme-body-text))); }
 .kd-join__text p { margin: 0; }
-.kd-join__subtitle { margin: 0; color: rgb(var(--color-scheme-body-text)); }
+.kd-join__subtitle { margin: 0; color: var(--kd-join-text, rgb(var(--color-scheme-body-text))); }
+.kd-join .kd-input {
+  border-color: var(--kd-join-input, rgb(var(--color-scheme-text)));
+  background: var(--kd-join-input-bg, rgb(var(--color-scheme-card, 255, 255, 245)));
+  color: var(--kd-join-input, rgb(var(--color-scheme-card-text, 84, 42, 118)));
+}
+.kd-join--square .kd-input { border-radius: 0; }
+.kd-join .kd-btn:not(.kd-btn--art) {
+  --kd-cloud: var(--kd-join-btn, rgb(var(--color-scheme-accent-1)));
+  color: var(--kd-join-btn-label, rgb(var(--color-scheme-accent-1-contrast)));
+}
+.kd-join .kd-success {
+  background: var(--kd-join-success-bg, rgb(var(--color-scheme-accent-1)));
+  color: var(--kd-join-success, rgb(var(--color-scheme-accent-1-contrast)));
+  text-wrap: balance;
+  justify-content: center;
+}
+.kd-join .kd-error { color: var(--kd-join-error, rgb(var(--color-scheme-text))); }
+.kd-join__d, .kd-join__text--d { display: none; }
+.kd-join .email-signup-form:has(.kd-success) { justify-content: center; }
+@media (max-width: 767.98px) {
+  .kd-join--m-noimg .kd-join__image { display: none; }
+}
+@media (min-width: 768px) {
+  .kd-join__m, .kd-join__text--m { display: none; }
+  .kd-join__d { display: inline; }
+  .kd-join__text--d { display: block; }
+}
 
 .kd-form {
   display: flex;
