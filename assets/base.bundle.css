@@ -6819,6 +6819,7 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
 
   /* Shadow */
   --shadow-card:        0 4px 14px rgba(0, 0, 0, 0.12);
+  --shadow-card-dark:   0 4px 14px rgba(0, 0, 0, 0.35); /* proposed: the card shadow made visible on dark grounds (purple / red) */
   --shadow-drawer:      -8px 0 30px rgba(0, 0, 0, 0.2);
   --shadow-tile-active: 0 14px 30px rgba(0, 0, 0, 0.28), inset 0 0 0 2px #3a3a3a;
   --shadow-product:     0 12px 24px rgba(0, 0, 0, 0.14);
@@ -7187,7 +7188,7 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
   height: 100%;
   overflow: visible;
   fill: var(--kd-cloud);
-  filter: drop-shadow(var(--shadow-card));
+  filter: drop-shadow(var(--kd-btn-shadow, var(--shadow-card)));
   pointer-events: none;
 }
 .kd-btn__label {
@@ -7197,7 +7198,7 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
   align-items: center;
   gap: 6px;
 }
-.kd-btn:hover .kd-btn__cloud { filter: drop-shadow(var(--shadow-card)) brightness(1.04); }
+.kd-btn:hover .kd-btn__cloud { filter: drop-shadow(var(--kd-btn-shadow, var(--shadow-card))) brightness(1.04); }
 /* Wide buttons (flagged by kaadu.js from the button's proportion): hide the stretched cloud and show the cloud
    cut into two halves: at natural proportion (--wide) or, for very wide buttons, slightly stretched (--wider). */
 .kd-btn__cloud--halves, .kd-btn__cloud--halves-stretched { display: none; }
@@ -7239,7 +7240,7 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  filter: drop-shadow(var(--shadow-card)); /* same shadow as the cloud, following the artwork's own outline */
+  filter: drop-shadow(var(--kd-btn-shadow, var(--shadow-card))); /* same shadow as the cloud, following the artwork's own outline */
 }
 .kd-btn__art img {
   display: block;
@@ -7247,7 +7248,7 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
   height: 100%;
   object-fit: contain;
 }
-.kd-btn--art:hover .kd-btn__art { filter: drop-shadow(var(--shadow-card)) brightness(1.04); }
+.kd-btn--art:hover .kd-btn__art { filter: drop-shadow(var(--kd-btn-shadow, var(--shadow-card))) brightness(1.04); }
 @media (max-width: 767px) {
   .kd-btn.kd-btn--art {
     width: var(--kd-art-w-m, var(--kd-art-w, 200px));

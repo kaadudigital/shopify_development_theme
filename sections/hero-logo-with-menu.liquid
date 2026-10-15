@@ -101,8 +101,12 @@
         width: 100%;
         height: 100%;
         fill: {{ section.settings.cart_shape_color | default: '#ACFF64' }};
-        filter: drop-shadow(var(--shadow-card));
+        filter: drop-shadow(var(--kd-btn-shadow, var(--shadow-card)));
       }
+
+      /* The DS card shadow (12 % black) disappears on the dark header ground; the header's buttons use the stronger
+         --shadow-card-dark (proposed token). */
+      #{{ section.id }} { --kd-btn-shadow: var(--shadow-card-dark); }
 
       #{{ section.id }} .kd-cart-sticker__label {
         position: relative;
