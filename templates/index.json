@@ -641,7 +641,8 @@
         "phone_position": 50,
         "phone_position_mobile": 50,
         "swipe_direction": "horizontal",
-        "swipe_direction_mobile": "vertical"
+        "swipe_direction_mobile": "vertical",
+        "use_custom_colors": true
       }
     },
     "image_with_highlights_mU9j66": {

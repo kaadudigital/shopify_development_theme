@@ -25,16 +25,20 @@
 
 {%- style -%}
   #{{ section.id }} {
-    {%- if section.settings.background_color != blank %}
-    --kd-vid-bg: {{ section.settings.background_color }};
+    {%- comment -%} Section colours only when "Use the colours below" is on; otherwise every --kd-vid-* is unset and the
+      CSS falls back to the colour scheme (background, text, body text, accent 1 / accent 1 contrast). {%- endcomment -%}
+    {%- if section.settings.use_custom_colors -%}
+      {%- liquid
+        assign vid_colors = 'bg:background_color,heading:heading_color,text:text_color,hint:hint_color,clip-title:clip_title_color,btn:button_color,btn-label:button_label_color,arrow:arrow_icon_color' | split: ','
+      -%}
+      {%- for pair in vid_colors -%}
+        {%- assign kv = pair | split: ':' -%}
+        {%- assign value = section.settings[kv[1]] -%}
+        {%- if value != blank %}
+    --kd-vid-{{ kv[0] }}: {{ value }};
+        {%- endif -%}
+      {%- endfor %}
     {%- endif %}
-    --kd-vid-heading: {{ section.settings.heading_color | default: 'currentColor' }};
-    --kd-vid-text: {{ section.settings.text_color | default: 'currentColor' }};
-    --kd-vid-hint: {{ section.settings.hint_color | default: 'currentColor' }};
-    --kd-vid-clip-title: {{ section.settings.clip_title_color | default: '#fffff5' }};
-    --kd-vid-btn: {{ section.settings.button_color | default: 'var(--pink)' }};
-    --kd-vid-btn-label: {{ section.settings.button_label_color | default: 'var(--red)' }};
-    --kd-vid-arrow: {{ section.settings.arrow_icon_color | default: 'currentColor' }};
     --kd-vid-arrow-bg: {{ section.settings.arrow_background | default: 'transparent' }};
     --kd-phone-w: {{ phone_w_m }}px;
     --kd-phone-x: {{ section.settings.phone_position_mobile | default: 50 | divided_by: 100.0 }};
@@ -443,11 +447,18 @@
       "label": "t:common.settings.use_gradient_background.label"
     },
     {
+      "type": "checkbox",
+      "id": "use_custom_colors",
+      "label": "Use the colours below",
+      "default": true,
+      "info": "On: background, heading, intro, hint, clip titles, button and arrows use the colours below (mockup values). Off: they all come from the colour scheme above."
+    },
+    {
       "type": "color",
       "id": "background_color",
       "label": "Background",
       "default": "#AC0300",
-      "info": "Overrides the colour scheme background. Clear it to use the scheme."
+      "info": "Clear it to keep the scheme background while using the other colours below."
     },
     {
       "type": "color",

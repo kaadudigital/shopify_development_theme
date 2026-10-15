@@ -6,6 +6,8 @@
   - url       {String}  optional — renders <a href>; without it a <button>
   - variant   {String}  optional — 'primary' (purple/lime), 'red' (red/paper), 'lime' (lime/red),
                          'paper' (paper/red), 'outline' (card secondary, Banter 12px).
+  - cloud     {String}  optional — 'long': the mockup's long cloud (~6.7 : 1) for long labels (adds .kd-btn--long).
+                         CSS can also switch a button to it by class (e.g. .kd-pack__cart).
                          Blank = follows the section colour scheme (accent 1 / accent 1 contrast).
   - size      {String}  optional — 'lg' 64px, 'md' 56px, 'sm' 52px; blank = 60px
   - type      {String}  optional — button type when no url (default 'button')
@@ -26,6 +28,9 @@
   endif
   if size != blank
     assign btn_classes = btn_classes | append: ' kd-btn--' | append: size
+  endif
+  if cloud == 'long'
+    assign btn_classes = btn_classes | append: ' kd-btn--long'
   endif
   if full
     assign btn_classes = btn_classes | append: ' kd-btn--full'
@@ -48,6 +53,7 @@
   {%- else -%}
     <svg class="kd-btn__cloud" aria-hidden="true" focusable="false"><use href="#kd-cloud"></use></svg>
     {%- unless variant == 'outline' -%}
+      <svg class="kd-btn__cloud kd-btn__cloud--long" aria-hidden="true" focusable="false"><use href="#kd-cloud-long"></use></svg>
       {%- comment -%} Wide buttons (kaadu.js adds .kd-btn--wide / --wider): the cloud in two halves, each trimmed to 85 %
         of its width (left end / right end) and set side by side; the seam falls on mirror points of the shape.
         --wide: halves at natural proportion (sliced to the button height); --wider: halves stretched, but far

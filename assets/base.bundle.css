@@ -7203,6 +7203,11 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
 .kd-btn__cloud--halves, .kd-btn__cloud--halves-stretched { display: none; }
 .kd-btn--wide .kd-btn__cloud, .kd-btn--wider .kd-btn__cloud { display: none; }
 .kd-btn--wide .kd-btn__cloud--halves, .kd-btn--wider .kd-btn__cloud--halves-stretched { display: block; }
+/* Long cloud (mockup, 1200 × 180): replaces every other cloud on .kd-btn--long and on the pack configurator's cart
+   button, whose label + total is too long for the 3.5 : 1 cloud. */
+.kd-btn__cloud--long { display: none; }
+.kd-btn--long .kd-btn__cloud, .kd-pack__cart .kd-btn__cloud { display: none; }
+.kd-btn--long .kd-btn__cloud.kd-btn__cloud--long, .kd-pack__cart .kd-btn__cloud.kd-btn__cloud--long { display: block; }
 .kd-btn:active { transform: translateY(1px); }
 .kd-btn[disabled], .kd-btn[aria-disabled="true"] { opacity: 0.5; cursor: not-allowed; }
 .kd-btn--full { display: flex; width: 100%; }
@@ -8179,8 +8184,8 @@ section.kd-videos { background-color: var(--kd-vid-bg, rgb(var(--color-scheme-ba
   text-align: center;
 }
 .kd-videos__heading { grid-area: head; }
-.kd-videos .kd-heading__title { color: var(--kd-vid-heading); }
-.kd-videos__intro { margin: 0 auto; color: var(--kd-vid-text); }
+.kd-videos .kd-heading__title { color: var(--kd-vid-heading, rgb(var(--color-scheme-text))); }
+.kd-videos__intro { margin: 0 auto; color: var(--kd-vid-text, rgb(var(--color-scheme-body-text, var(--color-scheme-text)))); }
 .kd-videos__d { display: none; }
 /* Stage = full-width row; the rig (phone, hint, link) sits between two spacers whose grow factors split the free
    space by --kd-phone-x (0 left … 0.5 centre … 1 right). */
@@ -8189,7 +8194,7 @@ section.kd-videos { background-color: var(--kd-vid-bg, rgb(var(--color-scheme-ba
 .kd-videos__stage::after  { content: ""; flex: calc(1 - var(--kd-phone-x, 0.5)) 1 0; }
 .kd-videos__rig { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); }
 .kd-videos__actions { grid-area: cta; display: flex; justify-content: center; }
-.kd-videos__button { --kd-cloud: var(--kd-vid-btn); color: var(--kd-vid-btn-label); }
+.kd-videos__button { --kd-cloud: var(--kd-vid-btn, rgb(var(--color-scheme-accent-1))); color: var(--kd-vid-btn-label, rgb(var(--color-scheme-accent-1-contrast))); }
 
 .kd-phone {
   position: relative;
@@ -8289,7 +8294,7 @@ span.kd-phone__play { cursor: default; }
   font-size: 15px;
   line-height: 20px;
   text-align: center;
-  color: var(--kd-vid-clip-title);
+  color: var(--kd-vid-clip-title, var(--paper));
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
   pointer-events: none;
 }
@@ -8297,7 +8302,7 @@ span.kd-phone__play { cursor: default; }
 .kd-phone__clip.is-playing .kd-phone__poster,
 .kd-phone__clip.is-playing .kd-phone__title { display: none; }
 
-.kd-videos__nav { display: flex; align-items: center; justify-content: center; gap: var(--space-2); color: var(--kd-vid-hint); }
+.kd-videos__nav { display: flex; align-items: center; justify-content: center; gap: var(--space-2); color: var(--kd-vid-hint, rgb(var(--color-scheme-text))); }
 .kd-videos__hint { margin: 0; text-transform: uppercase; color: inherit; text-wrap: balance; }
 .kd-videos__arrow {
   display: inline-flex;
@@ -8308,7 +8313,7 @@ span.kd-phone__play { cursor: default; }
   padding: 0;
   border: 0;
   background: none;
-  color: var(--kd-vid-arrow);
+  color: var(--kd-vid-arrow, inherit);
   font-family: var(--font-sans);
   font-weight: 600;
   font-size: 16px;
@@ -8317,7 +8322,7 @@ span.kd-phone__play { cursor: default; }
 }
 .kd-videos--arrow-bg .kd-videos__arrow { width: 44px; background: var(--kd-vid-arrow-bg); }
 .kd-videos__arrow:focus-visible { outline: 4px solid var(--red); outline-offset: 3px; }
-.kd-videos__source { color: var(--kd-vid-hint); font-weight: 600; font-size: 14px; }
+.kd-videos__source { color: var(--kd-vid-hint, rgb(var(--color-scheme-text))); font-weight: 600; font-size: 14px; }
 .kd-videos__glyph-v { display: none; }
 /* Up-and-down swiping (Reels): the clips stack in a column and snap vertically; at either end the scroll chains
    to the page. Mobile and desktop are switched separately. */
