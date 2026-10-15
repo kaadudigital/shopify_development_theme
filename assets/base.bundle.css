@@ -8922,3 +8922,71 @@ section.kd-split-section { background-color: var(--kd-split-bg, rgb(var(--color-
 
 /* ── SHARED: in-page anchor (a section's «Anchor» setting) — lands a little above the section ── */
 .kd-anchor { position: absolute; top: 0; left: 0; scroll-margin-top: var(--space-6); }
+
+/* ── TRIAL CTA — sections/kaadu-trial-cta.liquid ──
+   "Ein Beutel gratis" (#probieren): centred heading with a code badge, inline star and pineapple piece, text, cloud
+   button and note, framed by floating pineapple pieces. Piece positions are the mockup's (desktop 1440 / mobile 390
+   artboard) in --kd-trial-u units. Colours are section settings (--kd-trial-*); unset, everything follows the
+   colour scheme (badge + star: accent 2, button: accent 1). */
+section.kd-trial { position: relative; background-color: var(--kd-trial-bg, rgb(var(--color-scheme-background))); --kd-trial-u: min(1px, calc(100vw / 390)); }
+.kd-trial__inner { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: var(--space-5); padding-block: var(--space-11) var(--space-10); text-align: center; }
+.kd-trial__d { display: none; }
+.kd-trial__head { position: relative; }
+.kd-trial__heading { margin: 0; color: var(--kd-trial-heading, rgb(var(--color-scheme-text))); line-height: 1.02; }
+.kd-trial__star { display: inline-block; width: 0.7em; height: 0.7em; vertical-align: middle; fill: var(--kd-trial-star, rgb(var(--color-scheme-accent-2))); stroke: var(--kd-trial-star-line, rgb(var(--color-scheme-text))); stroke-width: 1; stroke-linejoin: round; }
+.kd-trial__inline-piece { display: inline-block; width: auto; height: 0.9em; margin: 0 0.08em; vertical-align: middle; transform: rotate(-12deg); }
+.kd-trial__badge {
+  position: absolute;
+  top: -46px;
+  left: -14px;
+  z-index: 1;
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border-radius: 50%;
+  background: var(--kd-trial-badge, rgb(var(--color-scheme-accent-2)));
+  color: var(--kd-trial-badge-text, rgb(var(--color-scheme-accent-2-contrast)));
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  transform: rotate(-12deg);
+  box-shadow: var(--shadow-card);
+}
+.kd-trial__text { position: relative; max-width: 560px; color: var(--kd-trial-text, rgb(var(--color-scheme-body-text, var(--color-scheme-text)))); }
+.kd-trial__text p { margin: 0; }
+.kd-trial__button { --kd-cloud: var(--kd-trial-btn, rgb(var(--color-scheme-accent-1))); color: var(--kd-trial-btn-label, rgb(var(--color-scheme-accent-1-contrast))); }
+.kd-trial__note { position: relative; margin: 0; color: var(--kd-trial-note, rgb(var(--color-scheme-text))); }
+/* Floating pieces */
+.kd-trial__pieces { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.kd-trial__piece { position: absolute; height: auto; transform: rotate(var(--r, 0deg)) scaleX(var(--f, 1)); filter: drop-shadow(var(--shadow-product)); }
+.kd-trial__piece--d { display: none; }
+.kd-trial__piece--m1 { left: calc(-14 * var(--kd-trial-u)); top: calc(24 * var(--kd-trial-u)); width: calc(64 * var(--kd-trial-u)); --r: -18deg; }
+.kd-trial__piece--m2 { right: calc(14 * var(--kd-trial-u)); top: calc(16 * var(--kd-trial-u)); width: calc(52 * var(--kd-trial-u)); --r: 14deg; --f: -1; }
+.kd-trial__piece--m3 { left: calc(-12 * var(--kd-trial-u)); bottom: calc(70 * var(--kd-trial-u)); width: calc(44 * var(--kd-trial-u)); --r: 28deg; }
+.kd-trial__piece--m4 { right: calc(-30 * var(--kd-trial-u)); bottom: calc(120 * var(--kd-trial-u)); width: calc(64 * var(--kd-trial-u)); --r: -30deg; --f: -1; }
+.kd-trial__piece--m5 { left: calc(120 * var(--kd-trial-u)); bottom: calc(26 * var(--kd-trial-u)); width: calc(40 * var(--kd-trial-u)); --r: 40deg; }
+@keyframes kd-trial-float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -12px; } }
+.kd-trial__pieces--float .kd-trial__piece { animation: kd-trial-float 4s ease-in-out infinite; }
+.kd-trial__pieces--float .kd-trial__piece:nth-child(2n) { animation-duration: 5.2s; animation-delay: -1.3s; }
+.kd-trial__pieces--float .kd-trial__piece:nth-child(3n) { animation-duration: 3.6s; animation-delay: -2.1s; }
+@media (prefers-reduced-motion: reduce) { .kd-trial__pieces--float .kd-trial__piece { animation: none; } }
+@media (min-width: 768px) {
+  section.kd-trial { --kd-trial-u: min(1px, var(--kd-px)); }
+  .kd-trial__inner { gap: var(--space-7); padding-block: var(--space-13) calc(var(--space-13) + var(--space-2)); }
+  .kd-trial__d { display: inline; }
+  div.kd-trial__d { display: block; }
+  .kd-trial__m { display: none; }
+  .kd-trial__head { max-width: 900px; }
+  .kd-trial__badge { left: -70px; padding: var(--space-3) var(--space-4); }
+  .kd-trial__piece--m { display: none; }
+  .kd-trial__piece--d { display: block; }
+  .kd-trial__piece--d1 { left: calc(40 * var(--kd-trial-u)); top: calc(70 * var(--kd-trial-u)); width: calc(120 * var(--kd-trial-u)); --r: -18deg; }
+  .kd-trial__piece--d2 { left: calc(170 * var(--kd-trial-u)); top: calc(300 * var(--kd-trial-u)); width: calc(90 * var(--kd-trial-u)); --r: 25deg; }
+  .kd-trial__piece--d3 { left: calc(-20 * var(--kd-trial-u)); top: calc(420 * var(--kd-trial-u)); width: calc(150 * var(--kd-trial-u)); --r: 40deg; --f: -1; }
+  .kd-trial__piece--d4 { left: calc(260 * var(--kd-trial-u)); top: calc(470 * var(--kd-trial-u)); width: calc(70 * var(--kd-trial-u)); --r: -30deg; }
+  .kd-trial__piece--d5 { right: calc(60 * var(--kd-trial-u)); top: calc(40 * var(--kd-trial-u)); width: calc(110 * var(--kd-trial-u)); --r: 12deg; --f: -1; }
+  .kd-trial__piece--d6 { right: calc(230 * var(--kd-trial-u)); top: calc(150 * var(--kd-trial-u)); width: calc(80 * var(--kd-trial-u)); --r: -35deg; }
+  .kd-trial__piece--d7 { right: calc(-10 * var(--kd-trial-u)); top: calc(290 * var(--kd-trial-u)); width: calc(140 * var(--kd-trial-u)); --r: -12deg; }
+  .kd-trial__piece--d8 { right: calc(180 * var(--kd-trial-u)); top: calc(430 * var(--kd-trial-u)); width: calc(100 * var(--kd-trial-u)); --r: 20deg; --f: -1; }
+}
+@media (min-width: 1441px) {
+  section.kd-trial { --kd-trial-u: min(var(--kd-px), 1.4px); }
+}
