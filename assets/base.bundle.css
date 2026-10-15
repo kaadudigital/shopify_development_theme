@@ -8958,7 +8958,7 @@ section.kd-join { background-color: var(--kd-join-bg, rgb(var(--color-scheme-bac
 /* ── TRIAL CTA — sections/kaadu-trial-cta.liquid ──
    "Ein Beutel gratis" (#probieren): centred heading with a code badge, inline star and pineapple piece, text, cloud
    button and note, framed by floating pineapple pieces. Piece positions are the mockup's (desktop 1440 / mobile 390
-   artboard) in --kd-trial-u units. Colours are section settings (--kd-trial-*); unset, everything follows the
+   artboard): sizes and side offsets in --kd-trial-u units, desktop heights as a share of the 681px mockup section. Colours are section settings (--kd-trial-*); unset, everything follows the
    colour scheme (badge + star: accent 2, button: accent 1). */
 section.kd-trial { position: relative; background-color: var(--kd-trial-bg, rgb(var(--color-scheme-background))); --kd-trial-u: min(1px, calc(100vw / 390)); }
 .kd-trial__inner { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: var(--space-5); padding-block: var(--space-11) var(--space-10); text-align: center; }
@@ -8969,7 +8969,7 @@ section.kd-trial { position: relative; background-color: var(--kd-trial-bg, rgb(
 .kd-trial__inline-piece { display: inline-block; width: auto; height: 0.9em; margin: 0 0.08em; vertical-align: middle; transform: rotate(-12deg); }
 .kd-trial__badge {
   position: absolute;
-  top: -46px;
+  top: -56px;
   left: -14px;
   z-index: 1;
   margin: 0;
@@ -9010,14 +9010,18 @@ section.kd-trial { position: relative; background-color: var(--kd-trial-bg, rgb(
   .kd-trial__badge { left: -70px; padding: var(--space-3) var(--space-4); }
   .kd-trial__piece--m { display: none; }
   .kd-trial__piece--d { display: block; }
-  .kd-trial__piece--d1 { left: calc(40 * var(--kd-trial-u)); top: calc(70 * var(--kd-trial-u)); width: calc(120 * var(--kd-trial-u)); --r: -18deg; }
-  .kd-trial__piece--d2 { left: calc(170 * var(--kd-trial-u)); top: calc(300 * var(--kd-trial-u)); width: calc(90 * var(--kd-trial-u)); --r: 25deg; }
-  .kd-trial__piece--d3 { left: calc(-20 * var(--kd-trial-u)); top: calc(420 * var(--kd-trial-u)); width: calc(150 * var(--kd-trial-u)); --r: 40deg; --f: -1; }
-  .kd-trial__piece--d4 { left: calc(260 * var(--kd-trial-u)); top: calc(470 * var(--kd-trial-u)); width: calc(70 * var(--kd-trial-u)); --r: -30deg; }
-  .kd-trial__piece--d5 { right: calc(60 * var(--kd-trial-u)); top: calc(40 * var(--kd-trial-u)); width: calc(110 * var(--kd-trial-u)); --r: 12deg; --f: -1; }
-  .kd-trial__piece--d6 { right: calc(230 * var(--kd-trial-u)); top: calc(150 * var(--kd-trial-u)); width: calc(80 * var(--kd-trial-u)); --r: -35deg; }
-  .kd-trial__piece--d7 { right: calc(-10 * var(--kd-trial-u)); top: calc(290 * var(--kd-trial-u)); width: calc(140 * var(--kd-trial-u)); --r: -12deg; }
-  .kd-trial__piece--d8 { right: calc(180 * var(--kd-trial-u)); top: calc(430 * var(--kd-trial-u)); width: calc(100 * var(--kd-trial-u)); --r: 20deg; --f: -1; }
+  .kd-trial__piece--d1 { left: calc(40 * var(--kd-trial-u)); top: 10.3%; width: calc(120 * var(--kd-trial-u)); --r: -18deg; }
+  .kd-trial__piece--d2 { left: calc(170 * var(--kd-trial-u)); top: 44.1%; width: calc(90 * var(--kd-trial-u)); --r: 25deg; }
+  .kd-trial__piece--d3 { left: calc(-20 * var(--kd-trial-u)); top: 61.7%; width: calc(150 * var(--kd-trial-u)); --r: 40deg; --f: -1; }
+  .kd-trial__piece--d4 { left: calc(260 * var(--kd-trial-u)); top: 69.0%; width: calc(70 * var(--kd-trial-u)); --r: -30deg; }
+  .kd-trial__piece--d5 { right: calc(60 * var(--kd-trial-u)); top: 5.9%; width: calc(110 * var(--kd-trial-u)); --r: 12deg; --f: -1; }
+  .kd-trial__piece--d6 { right: calc(230 * var(--kd-trial-u)); top: 22.0%; width: calc(80 * var(--kd-trial-u)); --r: -35deg; }
+  .kd-trial__piece--d7 { right: calc(-10 * var(--kd-trial-u)); top: 42.6%; width: calc(140 * var(--kd-trial-u)); --r: -12deg; }
+  .kd-trial__piece--d8 { right: calc(180 * var(--kd-trial-u)); top: 63.1%; width: calc(100 * var(--kd-trial-u)); --r: 20deg; --f: -1; }
+}
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  /* Tablet: the inner pieces would crowd the heading */
+  .kd-trial__piece--d2, .kd-trial__piece--d4, .kd-trial__piece--d6, .kd-trial__piece--d8 { display: none; }
 }
 @media (min-width: 1441px) {
   section.kd-trial { --kd-trial-u: min(var(--kd-px), 1.4px); }
