@@ -1,7 +1,7 @@
 {%- comment -%}
   Kaadu cost split ("Wo landen deine CHF 4.45?"), as in the landing-page mockup: heading + intro beside an
-  illustration, a bar of segments sized by weight (flex-grow; desktop shows the amount, mobile a list of rows with
-  title, amount and a fill of 30 % + the share), and a lime detail box with the pressed segment's photo (stake
+  illustration, a bar of segments sized by their share of the total (flex-grow; desktop shows the amount, mobile a
+  list of rows with title, amount and a fill of the same share), and a lime detail box with the pressed segment's photo (stake
   shape, circle on mobile), title and text (aria-live). Mobile has its own heading, intro and footnote; the button
   is desktop-only unless switched on. Colours are section settings (--kd-split-*); with «Use the colours below»
   off everything follows the colour scheme. Styles: "COST SPLIT" in assets/base.bundle.css; behaviour:
@@ -9,12 +9,20 @@
 {%- endcomment -%}
 {%- liquid
   assign segments = section.blocks | where: 'type', 'segment'
-  assign max_weight = 1
+  # Share of each segment = its amount / the sum of all amounts. Amounts are read from the text ("CHF 1.20",
+  # "1,20", "CHF 1.–"); while any of them is not a number yet ("CHF [X.XX]"), the "Bar width" weights are used.
   assign has_photo = false
+  assign amounts_ok = true
+  assign amount_total = 0.0
+  assign weight_total = 0.0
   for seg in segments
-    if seg.settings.weight > max_weight
-      assign max_weight = seg.settings.weight
+    assign weight_total = weight_total | plus: seg.settings.weight
+    assign amt = seg.settings.amount | upcase | remove: 'CHF' | remove: 'FR.' | remove: ' ' | remove: "'" | remove: '–' | remove: '-' | replace: ',', '.'
+    assign num = amt | times: 1.0
+    if amt == blank or amt contains '[' or num <= 0
+      assign amounts_ok = false
     endif
+    assign amount_total = amount_total | plus: num
     if seg.settings.image != blank
       assign has_photo = true
     endif
@@ -86,11 +94,18 @@
     <div class="kd-wide kd-split" data-kd-split>
       <div class="kd-split__bar" role="group" aria-label="{{ section.settings.heading | remove: '[br]' | escape }}">
         {%- for seg in segments -%}
-          {%- assign share = seg.settings.weight | times: 70.0 | divided_by: max_weight | plus: 30 | round -%}
+          {%- liquid
+            if amounts_ok
+              assign amt = seg.settings.amount | upcase | remove: 'CHF' | remove: 'FR.' | remove: ' ' | remove: "'" | remove: '–' | remove: '-' | replace: ',', '.'
+              assign share = amt | times: 100.0 | divided_by: amount_total
+            else
+              assign share = seg.settings.weight | times: 100.0 | divided_by: weight_total
+            endif
+          -%}
           <button
             type="button"
             class="kd-split__seg"
-            style="--kd-grow: {{ seg.settings.weight }}; --kd-share: {{ share }}%;"
+            style="--kd-grow: {{ share | round: 3 }}; --kd-share: {{ share | round: 2 }}%;"
             aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}"
             aria-controls="kd-split-detail-{{ section.id }}"
             data-index="{{ forloop.index0 }}"
@@ -316,17 +331,17 @@
           "id": "amount",
           "label": "Amount",
           "default": "CHF [X.XX]",
-          "info": "Format: CHF 1.20 (unknown values in square brackets)."
+          "info": "Format: CHF 1.20 (unknown values in square brackets). Sizes the bar: amount ÷ sum of all amounts."
         },
         {
           "type": "range",
           "id": "weight",
-          "label": "Bar width (share)",
+          "label": "Bar width (until the amounts are known)",
           "min": 1,
           "max": 60,
           "step": 1,
           "default": 15,
-          "info": "Relative width of this segment in the bar — set it to the share of the price."
+          "info": "Only used while any amount is still a placeholder. Once every amount is a number, each bar is sized by its amount as a share of the sum of all amounts."
         },
         {
           "type": "textarea",
