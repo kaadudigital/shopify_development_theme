@@ -8103,7 +8103,9 @@ body {
 .kd-pack .kd-option[aria-pressed="true"] .kd-pack__pill--save { background: var(--kd-pc-save-on-bg, var(--paper)); color: var(--kd-pc-save-on-fg, var(--ink)); }
 .kd-pack__pill--save:empty { display: none; }
 
-.kd-pack__buy { display: flex; align-items: center; gap: 10px; margin: 0; }
+/* The cart button keeps its full label plus the cloud's 40px padding (never squeezed). When stepper and button
+   don't fit side by side, the row wraps in reverse: button on top at full width, stepper centred below. */
+.kd-pack__buy { display: flex; flex-wrap: wrap-reverse; align-items: center; justify-content: center; gap: var(--space-4) 10px; margin: 0; }
 .kd-pack__stepper { position: relative; z-index: 0; display: inline-flex; align-items: center; flex-shrink: 0; color: var(--kd-pc-stepper-fg, var(--purple)); }
 .kd-pack__stepper-cloud { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; fill: var(--kd-pc-stepper, var(--pink)); }
 .kd-pack__stepper button {
@@ -8118,7 +8120,7 @@ body {
   cursor: pointer;
 }
 .kd-pack__stepper output { width: 30px; text-align: center; font-size: 16px; font-weight: 600; }
-.kd-pack__cart { flex-grow: 1; min-width: 0; --kd-cloud: var(--kd-pc-cart, var(--red)); color: var(--kd-pc-cart-label, var(--paper)); font-size: 16px; }
+.kd-pack__cart { flex: 1 0 auto; --kd-cloud: var(--kd-pc-cart, var(--red)); color: var(--kd-pc-cart-label, var(--paper)); font-size: 16px; }
 .kd-pack__label--desktop { display: none; }
 .kd-pack__foot { margin: 0; font-size: 12px; font-weight: 600; line-height: 1.4; text-align: center; }
 
@@ -8324,6 +8326,12 @@ span.kd-phone__play { cursor: default; }
 .kd-videos__arrow:focus-visible { outline: 4px solid var(--red); outline-offset: 3px; }
 .kd-videos__source { color: var(--kd-vid-hint, rgb(var(--color-scheme-text))); font-weight: 600; font-size: 14px; }
 .kd-videos__glyph-v { display: none; }
+/* Mobile: the stage runs edge to edge (no gutter) and the rig is exactly as wide as the phone, so «Phone position on
+   mobile» has the whole free width to work with; the hint wraps under the phone. */
+@media (max-width: 767.98px) {
+  .kd-videos__stage { margin-inline: calc(-1 * var(--gutter)); }
+  .kd-videos__rig { width: var(--kd-phone-w); }
+}
 /* Up-and-down swiping (Reels): the clips stack in a column and snap vertically; at either end the scroll chains
    to the page. Mobile and desktop are switched separately. */
 @media (max-width: 767.98px) {
