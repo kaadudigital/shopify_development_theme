@@ -50,6 +50,7 @@
       richtext: section.settings.richtext,
       richtext_mobile: section.settings.richtext_mobile,
       hide_image_mobile: section.settings.hide_image_mobile,
+      image_shadow: section.settings.image_shadow,
       mobile_link_position: section.settings.mobile_link_position,
       button_link: section.settings.button_link,
       button2_link: section.settings.button2_link,
@@ -602,6 +603,13 @@
       "type": "checkbox",
       "id": "disable_media_style",
       "label": "Plain image (no shape styling)",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "image_shadow",
+      "label": "Shadow under the image",
+      "info": "Design-system card shadow around the image (and the empty placeholder).",
       "default": false
     },
     {

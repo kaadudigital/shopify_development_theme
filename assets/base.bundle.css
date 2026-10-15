@@ -7483,8 +7483,10 @@ section.kd-iw-band { --media-border-radius: 0px; background-color: var(--kd-iw-b
   --kd-cloud: var(--kd-iw-btn, rgb(var(--color-scheme-accent-1, 84, 42, 118)));
   color: var(--kd-iw-btn-label, rgb(var(--color-scheme-accent-1-contrast, 174, 255, 100)));
 }
-/* Picture: square corners and the card shadow; the empty placeholder is a light tint of the heading colour */
-.kd-iw .media--css-only:not(.media--disable-styles) { --media-drop-shadow-display: none; box-shadow: var(--shadow-card); }
+/* Picture: square corners, no theme drop shadow; the DS card shadow only with «Shadow under the image» (.kd-iw--shadow).
+   The empty placeholder is a light tint of the heading colour. */
+.kd-iw .media--css-only:not(.media--disable-styles) { --media-drop-shadow-display: none; }
+.kd-iw--shadow .media--css-only:not(.media--disable-styles) { box-shadow: var(--shadow-card); }
 .kd-iw .media__styled-element--placeholder-svg {
   border-radius: 0;
   background-color: color-mix(in srgb, var(--kd-iw-heading, rgb(var(--color-scheme-text))) 8%, transparent) !important; /* beats Tailwind !bg-neutral-100 */
