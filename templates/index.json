@@ -543,8 +543,8 @@
         "nutrition_content": "",
         "shipping_label": "Versand",
         "shipping_content": "",
-        "color_scheme": "scheme6",
-        "use_custom_colors": true,
+        "color_scheme": "scheme3",
+        "use_custom_colors": false,
         "bg_color": "#fffff5",
         "bg_color_mobile": "#ffc6ff",
         "text_color": "#1a1a1a",
@@ -732,14 +732,14 @@
         "color_scheme": "scheme6",
         "use_custom_colors": true,
         "use_gradient_background": false,
-        "background_color": "#FFC6FF",
-        "heading_color": "#AC0300",
-        "text_color": "#1A1A1A",
-        "tile_color": "#FFF9EE",
-        "stat_color": "#AC0300",
-        "caption_color": "#1A1A1A",
-        "button_color": "#AC0300",
-        "button_label_color": "#FFFFF5"
+        "background_color": "#ffc6ff",
+        "heading_color": "#ac0300",
+        "text_color": "#1a1a1a",
+        "tile_color": "#fff9ee",
+        "stat_color": "#ac0300",
+        "caption_color": "#1a1a1a",
+        "button_color": "#ac0300",
+        "button_label_color": "#fffff5"
       }
     },
     "image_with_text_custom_vision": {
@@ -817,24 +817,7 @@
           "type": "row",
           "settings": {
             "kaadu_text": "Soll dem Team gehören",
-            "other_text": "Gehört einem Konzern",
-            "show_on_mobile": false
-          }
-        },
-        "note_1": {
-          "type": "note",
-          "settings": {
-            "title": "Einkauf:",
-            "text": "direkt, A-Preis für jede Grösse.",
-            "show_on": "mobile"
-          }
-        },
-        "note_2": {
-          "type": "note",
-          "settings": {
-            "title": "Eigentum:",
-            "text": "soll dem Team gehören.",
-            "show_on": "mobile"
+            "other_text": "Gehört einem Konzern"
           }
         }
       },
@@ -843,27 +826,20 @@
         "row_2",
         "row_3",
         "row_4",
-        "row_5",
-        "note_1",
-        "note_2"
+        "row_5"
       ],
       "settings": {
         "kicker": "Kaadu > Andere",
         "heading": "Wir sind einfach besser.",
-        "mobile_kicker": "Zieh den Regler",
-        "mobile_heading": "Kaadu vs. der Rest im Regal",
         "kaadu_label": "Kaadu",
         "kaadu_logo": "shopify://shop_images/Kaadu_wordmark_red_RGB.svg",
+        "kaadu_image": "shopify://shop_images/Adobe_Express_-_file.webp",
         "other_label": "Der Rest",
+        "other_image": "shopify://shop_images/ChatGPT_Image_31._Marz_2025_12_40_06.png",
         "start_position": 55,
         "slider_label": "Vergleich verschieben",
-        "rock_enabled": true,
-        "rock_amount": 8,
-        "rock_delay": 2,
         "footnote": "<p>«Der Rest» steht für das, was im Regal daneben liegt. Kein Hersteller wird genannt, jede Kaadu-Zeile ist belegbar. [Belege verlinken]</p>",
-        "mobile_footnote": "<p>«Der Rest» steht für das, was im Regal daneben liegt. Kein Hersteller wird genannt. [Belege verlinken]</p>",
-        "color_scheme": "scheme1",
-        "use_custom_colors": true
+        "color_scheme": "scheme1"
       }
     },
     "kaadu_cost_split_main": {
