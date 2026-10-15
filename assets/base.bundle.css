@@ -7239,6 +7239,7 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  filter: drop-shadow(var(--shadow-card)); /* same shadow as the cloud, following the artwork's own outline */
 }
 .kd-btn__art img {
   display: block;
@@ -7246,7 +7247,7 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
   height: 100%;
   object-fit: contain;
 }
-.kd-btn--art:hover .kd-btn__art { filter: brightness(1.04); }
+.kd-btn--art:hover .kd-btn__art { filter: drop-shadow(var(--shadow-card)) brightness(1.04); }
 @media (max-width: 767px) {
   .kd-btn.kd-btn--art {
     width: var(--kd-art-w-m, var(--kd-art-w, 200px));
