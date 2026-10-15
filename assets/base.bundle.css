@@ -8467,6 +8467,7 @@ section.kd-iwh {
   text-wrap: balance;
   color: var(--kd-iwh-caption, rgb(var(--color-scheme-body-text, var(--color-scheme-text))));
 }
+.kd-iwh__tile--card .kd-iwh__stat { color: var(--kd-iwh-stat, rgb(var(--color-scheme-card-text))); }
 .kd-iwh__tile--card .kd-iwh__caption { color: var(--kd-iwh-caption, rgb(var(--color-scheme-card-text))); }
 /* A tile with its own colour scheme takes that scheme's card colours */
 .kd-iwh__tile--card[data-color-scheme] { background: rgb(var(--color-scheme-card)); }
