@@ -174,6 +174,7 @@
           <img class="kd-phone__frame" src="{{ 'kaadu-phone-frame.webp' | asset_url }}" alt="" width="740" height="1336" loading="lazy">
           <span class="kd-phone__notch" aria-hidden="true"></span>
         </div>
+        </div>
 
         <div class="kd-videos__nav">
           {%- if clips.size > 1 -%}
@@ -193,7 +194,6 @@
           {%- endif -%}
         </div>
         <a class="kd-link kd-videos__source" href="#" target="_blank" rel="noopener" data-kd-phone-source hidden></a>
-        </div>
       </div>
     {%- endif -%}
 
@@ -302,7 +302,7 @@
       "step": 5,
       "unit": "%",
       "default": 50,
-      "info": "Tablet and desktop: 0 % = left edge, 50 % = centred, 100 % = right edge. The hint and arrows move with the phone. Only for the centred layout."
+      "info": "Tablet and desktop: 0 % = left edge, 50 % = centred, 100 % = right edge. Only the phone moves; the hint stays centred. Only for the centred layout."
     },
     {
       "type": "range",

@@ -8170,6 +8170,33 @@ body {
   .kd-pack__image { max-height: 900px; }
 }
 
+/* Pack configurator with «Use the colours below» off: every colour from the section's colour scheme. Text on the
+   cards (options, notice, stepper) is the scheme's card text, the only ink that reads on the card in every scheme. */
+.kd-pack--scheme {
+  --kd-pc-bg: rgb(var(--color-scheme-background));
+  --kd-pc-fg: rgb(var(--color-scheme-body-text, var(--color-scheme-text)));
+  --kd-pc-title: rgb(var(--color-scheme-text));
+  --kd-pc-notice-bg: rgb(var(--color-scheme-card));
+  --kd-pc-notice-title: rgb(var(--color-scheme-card-text));
+  --kd-pc-notice-fg: rgb(var(--color-scheme-card-text));
+  --kd-pc-notice-btn: rgb(var(--color-scheme-accent-2));
+  --kd-pc-notice-btn-label: rgb(var(--color-scheme-accent-2-contrast));
+  --kd-pc-opt-bg: rgb(var(--color-scheme-card));
+  --kd-pc-opt-fg: rgb(var(--color-scheme-card-text));
+  --kd-pc-opt-on-bg: rgb(var(--color-scheme-accent-1));
+  --kd-pc-opt-on-fg: rgb(var(--color-scheme-accent-1-contrast));
+  --kd-pc-badge-bg: rgb(var(--color-scheme-accent-1-contrast));
+  --kd-pc-badge-fg: rgb(var(--color-scheme-accent-1));
+  --kd-pc-save-bg: rgb(var(--color-scheme-accent-2));
+  --kd-pc-save-fg: rgb(var(--color-scheme-accent-2-contrast));
+  --kd-pc-save-on-bg: rgb(var(--color-scheme-card));
+  --kd-pc-save-on-fg: rgb(var(--color-scheme-card-text));
+  --kd-pc-stepper: rgb(var(--color-scheme-card));
+  --kd-pc-stepper-fg: rgb(var(--color-scheme-card-text));
+  --kd-pc-cart: rgb(var(--color-scheme-accent-1));
+  --kd-pc-cart-label: rgb(var(--color-scheme-accent-1-contrast));
+}
+
 /* ── VIDEOS — sections/vertical-video-embeds.liquid ──
    Mockup: heading, intro, one phone frame with the clips swiping inside its screen, ← hint · n Clips →, cloud
    button. Colours are section settings (mockup: paper on red, pink cloud with red label). DS spacing: 48 / 80px
@@ -8189,12 +8216,12 @@ section.kd-videos { background-color: var(--kd-vid-bg, rgb(var(--color-scheme-ba
 .kd-videos .kd-heading__title { color: var(--kd-vid-heading, rgb(var(--color-scheme-text))); }
 .kd-videos__intro { margin: 0 auto; color: var(--kd-vid-text, rgb(var(--color-scheme-body-text, var(--color-scheme-text)))); }
 .kd-videos__d { display: none; }
-/* Stage = full-width row; the rig (phone, hint, link) sits between two spacers whose grow factors split the free
-   space by --kd-phone-x (0 left … 0.5 centre … 1 right). */
-.kd-videos__stage { grid-area: stage; justify-self: stretch; display: flex; }
-.kd-videos__stage::before { content: ""; flex: var(--kd-phone-x, 0.5) 1 0; }
-.kd-videos__stage::after  { content: ""; flex: calc(1 - var(--kd-phone-x, 0.5)) 1 0; }
-.kd-videos__rig { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); }
+/* Stage = phone row, then the hint and link, always centred. In the row the phone sits between two spacers whose
+   grow factors split the free space by --kd-phone-x (0 left … 0.5 centre … 1 right); the hint doesn't move. */
+.kd-videos__stage { grid-area: stage; justify-self: stretch; display: flex; flex-direction: column; align-items: center; gap: var(--space-3); }
+.kd-videos__rig { display: flex; align-self: stretch; }
+.kd-videos__rig::before { content: ""; flex: var(--kd-phone-x, 0.5) 1 0; }
+.kd-videos__rig::after  { content: ""; flex: calc(1 - var(--kd-phone-x, 0.5)) 1 0; }
 .kd-videos__actions { grid-area: cta; display: flex; justify-content: center; }
 .kd-videos__button { --kd-cloud: var(--kd-vid-btn, rgb(var(--color-scheme-accent-1))); color: var(--kd-vid-btn-label, rgb(var(--color-scheme-accent-1-contrast))); }
 
@@ -8326,11 +8353,10 @@ span.kd-phone__play { cursor: default; }
 .kd-videos__arrow:focus-visible { outline: 4px solid var(--red); outline-offset: 3px; }
 .kd-videos__source { color: var(--kd-vid-hint, rgb(var(--color-scheme-text))); font-weight: 600; font-size: 14px; }
 .kd-videos__glyph-v { display: none; }
-/* Mobile: the stage runs edge to edge (no gutter) and the rig is exactly as wide as the phone, so «Phone position on
-   mobile» has the whole free width to work with; the hint wraps under the phone. */
+/* Mobile: the phone row runs edge to edge (no gutter), so «Phone position on mobile» has the whole screen width;
+   the hint stays inside the gutter. */
 @media (max-width: 767.98px) {
-  .kd-videos__stage { margin-inline: calc(-1 * var(--gutter)); }
-  .kd-videos__rig { width: var(--kd-phone-w); }
+  .kd-videos__rig { margin-inline: calc(-1 * var(--gutter)); }
 }
 /* Up-and-down swiping (Reels): the clips stack in a column and snap vertically; at either end the scroll chains
    to the page. Mobile and desktop are switched separately. */
@@ -8367,7 +8393,7 @@ span.kd-phone__play { cursor: default; }
   .kd-videos--left .kd-videos__heading { align-items: flex-start; text-align: left; margin-bottom: var(--space-8); }
   .kd-videos--left .kd-videos__intro { margin: 0; }
   .kd-videos--left .kd-videos__actions { align-self: start; }
-  .kd-videos--left .kd-videos__stage::before, .kd-videos--left .kd-videos__stage::after { display: none; }
+  .kd-videos--left .kd-videos__rig::before, .kd-videos--left .kd-videos__rig::after { display: none; }
 }
 @media (min-width: 1200px) {
   .kd-videos--left .kd-videos__inner { column-gap: var(--space-13); }

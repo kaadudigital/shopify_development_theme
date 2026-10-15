@@ -570,7 +570,8 @@
         "cart_button_color": "#542a76",
         "cart_button_color_mobile": "#ac0300",
         "cart_button_label_color": "#fffff5",
-        "color_scheme": "scheme6"
+        "color_scheme": "scheme6",
+        "use_custom_colors": true
       }
     },
     "vertical_video_embeds_kJLBxQ": {

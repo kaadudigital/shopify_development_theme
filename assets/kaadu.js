@@ -282,7 +282,7 @@
     if (phone.kdPhone) return;
     phone.kdPhone = true;
     var track = phone.querySelector('[data-kd-phone-track]');
-    var stage = phone.parentElement; // .kd-videos__rig
+    var stage = phone.closest('.kd-videos__stage') || phone.parentElement;
     var prev = stage.querySelector('[data-kd-phone-prev]');
     var next = stage.querySelector('[data-kd-phone-next]');
     var source = stage.querySelector('[data-kd-phone-source]');

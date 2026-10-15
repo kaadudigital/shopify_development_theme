@@ -31,6 +31,8 @@
   endif
 -%}
 
+{%- comment -%} «Use the colours below» off: no section colours; .kd-pack--scheme maps every colour to the colour scheme. {%- endcomment -%}
+{%- if section.settings.use_custom_colors -%}
 {%- style -%}
   #{{ section.id }} {
     --kd-pc-bg: {{ section.settings.bg_color_mobile }};
@@ -67,10 +69,11 @@
     }
   }
 {%- endstyle -%}
+{%- endif -%}
 
 <section
   id="{{ section.id }}"
-  class="kd-pack kd-section relative overflow-hidden"
+  class="kd-pack kd-section relative overflow-hidden{% unless section.settings.use_custom_colors %} kd-pack--scheme{% endunless %}"
   data-color-scheme="{{ section.settings.color_scheme }}"
   data-kd-config
 >
@@ -977,6 +980,19 @@
       "info": "Defaults follow the landing-page mockup (desktop paper, mobile pink)."
     },
     {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme1"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_custom_colors",
+      "label": "Use the colours below",
+      "default": true,
+      "info": "On: every colour below (mockup values). Off: all colours come from the colour scheme — background and text, cards for the options and notice, accent 1 for the selected option and cart button, accent 2 for the notice button and Spar badges."
+    },
+    {
       "type": "color",
       "id": "bg_color",
       "label": "Background – desktop",
@@ -1143,12 +1159,6 @@
       "id": "cart_button_label_color",
       "label": "Cart button label",
       "default": "#FFFFF5"
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "Color scheme",
-      "default": "scheme1"
     }
   ],
   "presets": [
