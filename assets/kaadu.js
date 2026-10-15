@@ -42,21 +42,21 @@
 })();
 
 /* [data-kd-compare]: comparison slider. The range input sets --kd-pos (reveal %) on the panel. While nobody touches
-   it the panel rocks gently around the range value, to show it can be moved: starts data-rock-delay ms after the
-   last interaction, sways ±data-rock-amount % (one swing every 2.6 s, eased in), and glides back to the value as
-   soon as the visitor hovers, presses or focuses it. Only on screen, never with prefers-reduced-motion. */
+   it the panel rocks slowly around the range value, to show it can be moved: starts data-rock-delay ms after the
+   last interaction, sways ±data-rock-distance px on a sine (one back-and-forth every data-rock-speed ms, eased in
+   over the first half swing), and glides back to the value as soon as the visitor hovers, presses or focuses it.
+   Only on screen, never with prefers-reduced-motion. */
 (function () {
   'use strict';
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-  var PERIOD = 2600;
-  var RAMP = 900;
   function setup(panel) {
     if (panel.kdCompare) return;
     panel.kdCompare = true;
     var range = panel.querySelector('.kd-compare__range');
     if (!range) return;
     var rock = panel.getAttribute('data-rock') === 'true';
-    var amount = parseFloat(panel.getAttribute('data-rock-amount')) || 8;
+    var distance = parseFloat(panel.getAttribute('data-rock-distance')) || 12;
+    var period = Math.max(2000, parseInt(panel.getAttribute('data-rock-speed'), 10) || 6000);
     var delay = Math.max(500, parseInt(panel.getAttribute('data-rock-delay'), 10) || 2000);
     var hover = false, focus = false, press = false, visible = false;
     var idleAt = 0, start = 0, raf = 0;
@@ -69,13 +69,15 @@
       var base = parseFloat(range.value) || 55;
       if (hover || focus || press || reduce.matches || now < idleAt) {
         start = 0;
-        if (Math.abs(pos - base) > 0.05) show(pos + (base - pos) * 0.2);
+        if (Math.abs(pos - base) > 0.05) show(pos + (base - pos) * 0.12);
         else if (pos !== base) show(base);
       } else {
         if (!start) start = now;
         var t = now - start;
-        var ramp = Math.min(1, t / RAMP);
-        var value = base + amount * ramp * Math.sin((2 * Math.PI * t) / PERIOD);
+        var ramp = Math.min(1, t / (period / 2));
+        ramp = ramp * ramp * (3 - 2 * ramp);
+        var amount = (distance / Math.max(1, panel.offsetWidth)) * 100;
+        var value = base + amount * ramp * Math.sin((2 * Math.PI * t) / period);
         show(Math.min(96, Math.max(4, value)));
       }
       raf = requestAnimationFrame(frame);

@@ -1,8 +1,8 @@
 {%- comment -%}
   Kaadu comparison slider ("Kaadu > Andere"), as in the landing-page mockup. Two full-size layers; the Kaadu layer is
   revealed with a clip-path driven by --kd-pos behind a 2px edge. A native range input drives it, so it works with
-  keyboard and touch. Each layer: label top, photo in the middle, list at the bottom. While nobody touches it the
-  handle rocks gently back and forth (data-rock-*), to show that it can be moved. Mobile has its own kicker, heading
+  keyboard and touch. Each layer: its photo covers the whole frame, label on top, list at the bottom. While nobody
+  touches it the handle rocks slowly a few px back and forth (data-rock-*), to show that it can be moved. Mobile has its own kicker, heading
   and footnote, rows can be hidden there, and info cards ("note" blocks) sit under the slider.
   Colours are section settings (--kd-cmp-*); with «Use the colours below» off everything follows the colour scheme.
   Styles: "COMPARISON" in assets/base.bundle.css; behaviour: [data-kd-compare] in assets/kaadu.js.
@@ -59,9 +59,10 @@
       class="kd-compare"
       data-kd-compare
       data-rock="{{ section.settings.rock_enabled }}"
-      data-rock-amount="{{ section.settings.rock_amount }}"
+      data-rock-distance="{{ section.settings.rock_distance }}"
+      data-rock-speed="{{ section.settings.rock_speed | times: 1000 }}"
       data-rock-delay="{{ section.settings.rock_delay | times: 1000 }}"
-      style="--kd-pos: {{ start }}%;"
+      style="--kd-pos: {{ start }}%; --kd-cmp-shade: {{ section.settings.photo_shade | divided_by: 100.0 }};"
     >
       {%- comment -%} Base layer: "Der Rest" (right side) {%- endcomment -%}
       <div class="kd-compare__layer kd-compare__layer--other">
@@ -71,7 +72,7 @@
           {%- endif -%}
           <div class="kd-compare__media">
             {%- if section.settings.other_image != blank -%}
-              {{ section.settings.other_image | image_url: width: 900 | image_tag: class: 'kd-compare__photo', loading: 'lazy', sizes: '(min-width: 1200px) 360px, 45vw' }}
+              {{ section.settings.other_image | image_url: width: 2200 | image_tag: class: 'kd-compare__photo', loading: 'lazy', widths: '600, 900, 1200, 1600, 2200', sizes: '(min-width: 1441px) 77vw, (min-width: 1200px) 1100px, calc(100vw - 40px)' }}
             {%- endif -%}
           </div>
           <ul class="kd-compare__list">
@@ -94,7 +95,7 @@
           {%- endif -%}
           <div class="kd-compare__media">
             {%- if section.settings.kaadu_image != blank -%}
-              {{ section.settings.kaadu_image | image_url: width: 900 | image_tag: class: 'kd-compare__photo', loading: 'lazy', sizes: '(min-width: 1200px) 360px, 45vw' }}
+              {{ section.settings.kaadu_image | image_url: width: 2200 | image_tag: class: 'kd-compare__photo', loading: 'lazy', widths: '600, 900, 1200, 1600, 2200', sizes: '(min-width: 1441px) 77vw, (min-width: 1200px) 1100px, calc(100vw - 40px)' }}
             {%- endif -%}
           </div>
           <ul class="kd-compare__list">
@@ -268,13 +269,34 @@
     },
     {
       "type": "range",
-      "id": "rock_amount",
-      "label": "Rock distance",
-      "min": 2,
-      "max": 20,
+      "id": "rock_distance",
+      "label": "Rock distance (each way)",
+      "min": 4,
+      "max": 40,
       "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "rock_speed",
+      "label": "One back-and-forth takes",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "unit": "s",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "photo_shade",
+      "label": "Darken photos",
+      "info": "Helps the label and list stay readable on busy photos.",
+      "min": 0,
+      "max": 60,
+      "step": 5,
       "unit": "%",
-      "default": 8
+      "default": 0
     },
     {
       "type": "range",

@@ -8566,7 +8566,7 @@ section.kd-iwh {
 
 /* ── COMPARISON — sections/kaadu-comparison.liquid ──
    Kaadu layer (lime, left) over the "Der Rest" layer (grey, right), revealed with clip-path at --kd-pos. Each layer:
-   label top, photo centred, list at the bottom. Colours are section settings (--kd-cmp-*); unset, everything follows
+   photo covering the whole frame (darkened by --kd-cmp-shade), label top, list at the bottom. Colours are section settings (--kd-cmp-*); unset, everything follows
    the colour scheme (Kaadu side + handle: accent 1, other side + info cards: card colours). */
 section.kd-compare-section { background-color: var(--kd-cmp-bg, rgb(var(--color-scheme-background))); }
 .kd-compare-section__inner { padding-block: var(--space-9) var(--space-10); display: flex; flex-direction: column; align-items: center; gap: var(--space-4); }
@@ -8609,13 +8609,17 @@ section.kd-compare-section { background-color: var(--kd-cmp-bg, rgb(var(--color-
 .kd-compare__layer--kaadu .kd-compare__pill { background: var(--kd-cmp-kaadu-text, rgb(var(--color-scheme-accent-1-contrast))); color: var(--kd-cmp-kaadu-bg, rgb(var(--color-scheme-accent-1))); }
 .kd-compare__layer--other .kd-compare__pill { background: var(--kd-cmp-pill-bg, rgb(var(--color-scheme-text))); color: var(--kd-cmp-pill-text, rgb(var(--color-scheme-background))); }
 .kd-compare__logo { display: block; width: auto; height: 40px; }
-.kd-compare__media { flex: 1 1 auto; min-height: 0; align-self: stretch; display: flex; align-items: center; justify-content: center; }
-.kd-compare__photo { display: block; width: auto; max-width: min(100%, 220px); max-height: 100%; aspect-ratio: 4 / 3; object-fit: cover; box-shadow: var(--shadow-card); }
+.kd-compare__col > * { position: relative; z-index: 1; }
+.kd-compare__col > .kd-compare__media { position: absolute; inset: 0; z-index: 0; margin: 0; }
+.kd-compare__media:has(.kd-compare__photo)::after { content: ""; position: absolute; inset: 0; background: rgb(0 0 0 / var(--kd-cmp-shade, 0)); }
+.kd-compare__photo { display: block; width: 100%; height: 100%; object-fit: cover; }
+/* On a photo the list sits on a panel in its side's colour, so it stays readable */
+.kd-compare__col:has(.kd-compare__photo) .kd-compare__list { padding: 8px 10px; box-shadow: var(--shadow-card); }
+.kd-compare__col--kaadu:has(.kd-compare__photo) .kd-compare__list { background: var(--kd-cmp-kaadu-bg, rgb(var(--color-scheme-accent-1))); }
+.kd-compare__col--other:has(.kd-compare__photo) .kd-compare__list { background: var(--kd-cmp-other-bg, rgb(var(--color-scheme-card))); }
 .kd-compare__list { display: flex; flex-direction: column; gap: 4px; margin: 0; padding: 0; list-style: none; font-size: 13px !important; line-height: 18px !important; }
 .kd-compare__list li { display: flex; gap: 0.3em; font-size: inherit !important; line-height: inherit !important; text-transform: none; letter-spacing: 0; }
-/* Mobile: the other side's list is left-aligned with ✕ in front (mockup) */
-.kd-compare__col--other .kd-compare__list { align-self: flex-start; }
-.kd-compare__col--other .kd-compare__mark { order: -1; }
+.kd-compare__col--other .kd-compare__list { align-items: flex-end; text-align: right; }
 .kd-compare__row--desktop { display: none !important; }
 .kd-compare__edge {
   position: absolute;
@@ -8680,11 +8684,9 @@ section.kd-compare-section { background-color: var(--kd-cmp-bg, rgb(var(--color-
   .kd-compare__col { padding: var(--space-5); gap: var(--space-4); }
   .kd-compare__pill { font-size: 16px; padding: 8px 16px; }
   .kd-compare__list { gap: 6px; font-size: 18px !important; line-height: 24px !important; }
-  .kd-compare__col--other .kd-compare__list { align-self: flex-end; text-align: right; }
-  .kd-compare__col--other .kd-compare__mark { order: 0; }
+  .kd-compare__col:has(.kd-compare__photo) .kd-compare__list { padding: 14px 18px; }
   .kd-compare__row--desktop { display: flex !important; }
   .kd-compare__logo { height: 56px; }
-  .kd-compare__photo { max-width: min(100%, 360px); }
   .kd-compare__handle { width: 60px; height: 60px; font-size: 20px; }
   .kd-compare-section__notes { max-width: 1100px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
   .kd-compare-section__notes:not(:has(.kd-compare-section__card--desktop, .kd-compare-section__card--all)) { display: none; }
