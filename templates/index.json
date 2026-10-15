@@ -69,6 +69,7 @@
         "blob_type": 1,
         "rotate_image": 0,
         "disable_media_style": false,
+        "image_shadow": false,
         "hide_image_mobile": false,
         "h2_title": "100% Frucht. 0% Ausbeutung.",
         "title": "Snack like you [BR] give a damn.",
@@ -362,7 +363,15 @@
         "button_label": "Shop Now",
         "button_style": "btn-secondary",
         "color_scheme": "scheme6",
-        "use_gradient_background": false
+        "use_custom_colors": false,
+        "use_gradient_background": false,
+        "background_color": "#ffc6ff",
+        "heading_color": "#ac0300",
+        "text_color": "#1a1a1a",
+        "quote_color": "#ac0300",
+        "quote_bg_color": "#ffc6ff",
+        "cite_color": "#1a1a1a",
+        "cite_bg_color": "#ffc6ff"
       }
     },
     "kaadu_people_cards_wP7k2m": {
@@ -765,6 +774,7 @@
         "blob_type": 1,
         "rotate_image": 0,
         "disable_media_style": false,
+        "image_shadow": false,
         "hide_image_mobile": true,
         "h2_title": "Was uns antreibt",
         "title": "Sind wir Mittelmänner?",
@@ -910,6 +920,35 @@
         "card_text_color": "#542a76"
       }
     },
+    "kaadu_trial_cta": {
+      "type": "kaadu-trial-cta",
+      "settings": {
+        "badge": "Code[br][CODE]",
+        "heading": "Ein Beutel [star][br]gratis [piece] nur[br]CHF 3 Versand",
+        "mobile_heading": "Ein Beutel [star][br]gratis [piece][br]nur CHF 3[br]Versand",
+        "text": "<p>Probier zuerst, entscheide dann. Code [CODE] im Shop eingeben, der Beutel kostet nichts.</p>",
+        "mobile_text": "",
+        "button_label": "Gratis probieren",
+        "button_link": "",
+        "note": "1 Beutel pro Haushalt · danach ab CHF 5.05 pro Beutel im Abo",
+        "mobile_note": "1 Beutel pro Haushalt · danach ab CHF 5.05 im Abo",
+        "anchor_id": "probieren",
+        "show_pieces": true,
+        "animate_pieces": true,
+        "color_scheme": "scheme6",
+        "use_custom_colors": true,
+        "background_color": "#fffff5",
+        "heading_color": "#542a76",
+        "text_color": "#1a1a1a",
+        "note_color": "#542a76",
+        "badge_color": "#eef72e",
+        "badge_text_color": "#542a76",
+        "star_color": "#aeff64",
+        "star_line_color": "#542a76",
+        "button_color": "#542a76",
+        "button_label_color": "#aeff64"
+      }
+    },
     "kaadu_cost_split_main": {
       "type": "kaadu-cost-split",
       "blocks": {
@@ -919,7 +958,8 @@
             "title": "Bauern",
             "amount": "CHF [X.XX]",
             "weight": 28,
-            "text": "Preis pro kg Frucht, weit über Markt. [CHF/kg und Marktpreis]"
+            "text": "Preis pro kg Frucht, weit über Markt. [CHF/kg und Marktpreis]",
+            "image": "shopify://shop_images/Gemini_Generated_Image_s3trfs3trfs3trfs_3.jpg"
           }
         },
         "segment_2": {
@@ -979,16 +1019,33 @@
       "settings": {
         "kicker": "",
         "heading": "Wo landen deine[br]CHF 4.45?",
-        "mobile_intro": "<p>Fair ist ein Wort. Das hier sind Zahlen. Tipp auf einen Balken.</p>",
-        "mobile_footnote": "<p>Pro Beutel im 6er Pack, einmalig gekauft. Stand [Datum], Charge [Nr.].</p>",
-        "show_image": true,
-        "show_button_mobile": false,
-        "use_custom_colors": true,
         "intro": "<p>Fair ist ein Wort. Das hier sind Zahlen. Klick auf einen Balken.</p>",
+        "mobile_heading": "",
+        "mobile_intro": "<p>Fair ist ein Wort. Das hier sind Zahlen. Tipp auf einen Balken.</p>",
+        "show_image": true,
+        "image_alt": "Ananas-Figur mit Lupe prüft Rupien, Franken und Abrechnungen",
         "footnote": "<p>Alle Beträge pro Beutel im 6er Pack, einmalig gekauft. Stand [Datum], Charge [Nr.]. Ändert sich etwas, ändert sich diese Grafik.</p>",
+        "mobile_footnote": "<p>Pro Beutel im 6er Pack, einmalig gekauft. Stand [Datum], Charge [Nr.].</p>",
         "button_label": "Wohin jeder Franken geht",
         "button_link": "",
-        "color_scheme": "scheme6"
+        "show_button_mobile": false,
+        "color_scheme": "scheme6",
+        "use_custom_colors": true,
+        "background_color": "#fffff5",
+        "heading_color": "#ac0300",
+        "text_color": "#1a1a1a",
+        "bar_color": "#fff9ee",
+        "bar_text_color": "#542a76",
+        "fill_color": "#ffc6ff",
+        "active_color": "#ac0300",
+        "active_text_color": "#fffff5",
+        "detail_color": "#aeff64",
+        "detail_title_color": "#ac0300",
+        "detail_text_color": "#1a1a1a",
+        "photo_color": "#ffc6ff",
+        "outline_color": "#1a1a1a",
+        "button_color": "#542a76",
+        "button_label_color": "#fffff5"
       }
     },
     "custom_image_section_Mafcmn": {
@@ -1150,31 +1207,13 @@
         "color_scheme": "scheme1",
         "use_custom_colors": true,
         "use_gradient_background": false,
-        "background_color": "#FFC6FF",
-        "heading_color": "#AC0300",
-        "text_color": "#1A1A1A",
-        "quote_color": "#AC0300",
-        "quote_bg_color": "#FFC6FF",
-        "cite_color": "#1A1A1A",
-        "cite_bg_color": "#FFC6FF"
-      }
-    },
-    "kaadu_trial_cta": {
-      "type": "kaadu-trial-cta",
-      "settings": {
-        "badge": "Code[br][CODE]",
-        "heading": "Ein Beutel [star][br]gratis [piece] nur[br]CHF 3 Versand",
-        "mobile_heading": "Ein Beutel [star][br]gratis [piece][br]nur CHF 3[br]Versand",
-        "text": "<p>Probier zuerst, entscheide dann. Code [CODE] im Shop eingeben, der Beutel kostet nichts.</p>",
-        "button_label": "Gratis probieren",
-        "button_link": "",
-        "note": "1 Beutel pro Haushalt · danach ab CHF 5.05 pro Beutel im Abo",
-        "mobile_note": "1 Beutel pro Haushalt · danach ab CHF 5.05 im Abo",
-        "anchor_id": "probieren",
-        "show_pieces": true,
-        "animate_pieces": true,
-        "color_scheme": "scheme6",
-        "use_custom_colors": true
+        "background_color": "#ffc6ff",
+        "heading_color": "#ac0300",
+        "text_color": "#1a1a1a",
+        "quote_color": "#ac0300",
+        "quote_bg_color": "#ffc6ff",
+        "cite_color": "#1a1a1a",
+        "cite_bg_color": "#ffc6ff"
       }
     },
     "image_with_text_custom_probier": {
@@ -1190,6 +1229,7 @@
         "blob_type": 1,
         "rotate_image": 0,
         "disable_media_style": false,
+        "image_shadow": false,
         "hide_image_mobile": false,
         "h2_title": "Probierpaket",
         "title": "Ein Beutel. Gratis. Nur CHF 3 Versand.",
@@ -1242,12 +1282,12 @@
         "text_mobile": "<p>Perfektion ist nicht unser Ziel. Veränderung schon.</p>",
         "subtitle": "",
         "placeholder_text": "E-Mail",
+        "input_square": false,
         "after_signup": "message",
         "success_text": "Du bist dabei. Dein 20 %-Code kommt per Mail.",
         "success_text_mobile": "Du bist dabei. Dein Code kommt per Mail.",
         "success_page": "",
         "error_text": "Das ist keine E-Mail-Adresse. Nochmal.",
-        "input_square": false,
         "button_image": "shopify://shop_images/06d3f155e99649c6ad8f552f17b4bec9ac475189.png",
         "button_text": "Anmelden",
         "button_text_color": "#ae0000",
@@ -1259,17 +1299,17 @@
         "bg_class": "bg-lime",
         "color_scheme": "scheme5",
         "use_custom_colors": true,
-        "background_color": "#AEFF64",
-        "kicker_color": "#1A1A1A",
-        "heading_color": "#AC0300",
-        "text_color": "#1A1A1A",
-        "input_bg_color": "#FFFFF5",
-        "input_text_color": "#542A76",
-        "button_color": "#AC0300",
-        "button_label_color": "#FFFFF5",
-        "success_bg_color": "#542A76",
-        "success_text_color": "#FFFFF5",
-        "error_color": "#AC0300"
+        "background_color": "#aeff64",
+        "kicker_color": "#1a1a1a",
+        "heading_color": "#ac0300",
+        "text_color": "#1a1a1a",
+        "input_bg_color": "#fffff5",
+        "input_text_color": "#542a76",
+        "button_color": "#ac0300",
+        "button_label_color": "#fffff5",
+        "success_bg_color": "#542a76",
+        "success_text_color": "#fffff5",
+        "error_color": "#ac0300"
       }
     }
   },
