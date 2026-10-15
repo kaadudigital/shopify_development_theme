@@ -451,10 +451,7 @@
         "footer_button_color": "#542a76",
         "footer_button_label_color": "#fffff5",
         "color_scheme": "scheme-389c794f-4614-44af-93cb-cbbfec11d15a",
-        "use_gradient_background": false,
-        "autoplay": true,
-        "autoplay_mobile": true,
-        "autoplay_interval": 4
+        "use_gradient_background": false
       }
     },
     "pack_selector_cEiAYy": {
@@ -578,28 +575,28 @@
         "video_embed_iLrwYH": {
           "type": "video_embed",
           "settings": {
-            "video_url": "https://www.tiktok.com/@alex.svg/video/7624184846646021398?is_from_webapp=1&sender_device=pc",
-            "video_embed_code": "",
             "title": "",
-            "placeholder_color": "#e9a2e6"
+            "placeholder_color": "#e9a2e6",
+            "video_url": "https://www.tiktok.com/@alex.svg/video/7624184846646021398?is_from_webapp=1&sender_device=pc",
+            "video_embed_code": ""
           }
         },
         "video_embed_Tqj7Ed": {
           "type": "video_embed",
           "settings": {
-            "video_url": "https://www.tiktok.com/@alex.svg/video/7660550945939410198?is_from_webapp=1&sender_device=pc",
-            "video_embed_code": "",
             "title": "",
-            "placeholder_color": "#ff781e"
+            "placeholder_color": "#ff781e",
+            "video_url": "https://www.tiktok.com/@alex.svg/video/7660550945939410198?is_from_webapp=1&sender_device=pc",
+            "video_embed_code": ""
           }
         },
         "video_embed_6GaFRt": {
           "type": "video_embed",
           "settings": {
-            "video_url": "https://www.tiktok.com/@alex.svg/video/7677984987571948802?is_from_webapp=1&sender_device=pc",
-            "video_embed_code": "",
             "title": "",
-            "placeholder_color": "#b7d9ff"
+            "placeholder_color": "#b7d9ff",
+            "video_url": "https://www.tiktok.com/@alex.svg/video/7677984987571948802?is_from_webapp=1&sender_device=pc",
+            "video_embed_code": ""
           }
         }
       },
@@ -611,26 +608,28 @@
       "name": "t:sections.vertical_video_embeds.name",
       "settings": {
         "title": "Ungeschnitten oder so",
+        "title_mobile": "Aus Kerala. Ungeschnitten.",
         "subheading": "Überzeug dich selbst von unserer Radikalen fairness, schamlose transparenz mit Menschen im Zentrum",
+        "subheading_mobile": "Schau, warum sie Kaadu essen und wem das etwas bringt.",
         "button_label": "Zum Manifesto",
         "button_link": "/pages/manifesto",
-        "slideshow_focus": "center",
-        "autoscroll_mode": "1",
-        "color_scheme": "scheme3",
-        "use_gradient_background": false,
-        "arrow_background": "",
-        "arrow_icon_color": "#fffff5",
-        "arrow_shape": "default",
-        "title_mobile": "Aus Kerala. Ungeschnitten.",
-        "subheading_mobile": "Schau, warum sie Kaadu essen und wem das etwas bringt.",
         "phone_width": 370,
         "phone_width_mobile": 330,
+        "phone_position": 50,
+        "phone_position_mobile": 50,
+        "swipe_direction": "horizontal",
+        "swipe_direction_mobile": "vertical",
         "hint": "Wischen für den nächsten Clip",
         "hint_show_count": true,
         "tiktok_link_label": "Auf TikTok ansehen",
         "instagram_link_label": "Auf Instagram ansehen",
+        "slideshow_focus": "center",
+        "autoscroll_mode": "1",
         "autoscroll_mobile": true,
         "autoscroll_interval": 6,
+        "color_scheme": "scheme3",
+        "use_gradient_background": false,
+        "use_custom_colors": true,
         "background_color": "#ac0300",
         "heading_color": "#fffff5",
         "text_color": "#fffff5",
@@ -638,11 +637,9 @@
         "clip_title_color": "#fffff5",
         "button_color": "#ffc6ff",
         "button_label_color": "#ac0300",
-        "phone_position": 50,
-        "phone_position_mobile": 50,
-        "swipe_direction": "horizontal",
-        "swipe_direction_mobile": "vertical",
-        "use_custom_colors": true
+        "arrow_icon_color": "#fffff5",
+        "arrow_background": "",
+        "arrow_shape": "default"
       }
     },
     "image_with_highlights_mU9j66": {
