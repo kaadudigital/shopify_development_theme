@@ -77,6 +77,9 @@
   data-color-scheme="{{ section.settings.color_scheme }}"
   data-kd-config
 >
+  {%- if section.settings.anchor_id != blank -%}
+    <span id="{{ section.settings.anchor_id | handleize }}" class="kd-anchor" aria-hidden="true"></span>
+  {%- endif -%}
   <div class="kd-wide kd-pack__row">
     <div class="kd-pack__media">
       {%- if image != blank -%}
@@ -348,6 +351,13 @@
   "name": "Custom Packaging Selector",
   "tag": "section",
   "settings": [
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anchor",
+      "default": "produkt",
+      "info": "Buttons elsewhere on the page can jump here with /#produkt."
+    },
     {
       "type": "header",
       "content": "Product",

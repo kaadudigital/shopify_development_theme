@@ -8399,20 +8399,55 @@ span.kd-phone__play { cursor: default; }
   .kd-videos--left .kd-videos__inner { column-gap: var(--space-13); }
 }
 
-/* ── STATS AROUND AN IMAGE ("besser") — sections/custom-image-with-highlights.liquid ──
-   DS: tight h2; ≥992: 320 / 400 / 320 grid, two stat tiles each side of a 400px image;
-   below 992: image then a 2 × 2 tile grid. Tiles: paper-warm, shadow-card, square. */
-.kd-iwh .kaadu-iwh__eyebrow { color: var(--red); }
-.kd-iwh .kaadu-iwh__heading { color: rgb(var(--color-scheme-text)); }
-.kd-iwh .kaadu-iwh__card,
-.kd-iwh .kaadu-iwh__card .card__surface {
-  background: var(--paper-warm);
-  color: var(--ink);
-  box-shadow: var(--shadow-card);
+/* ── STATS AROUND AN IMAGE ("Perfekt in jeder Weise") — sections/custom-image-with-highlights.liquid ──
+   Mockup: heading, intro, two stat tiles each side of a square picture (≥992: 320 / image / 320 grid, scaling with
+   --kd-px from 1441, capped at 1.4×), below 992 the picture above a 2 × 2 tile grid (4 in a row from 768), then a
+   cloud button. Colours are section settings (--kd-iwh-*); unset, everything follows the colour scheme.
+   DS spacing: 48 / 80px section padding, 24 / 40px between blocks, 16px heading → intro, 12 / 24px tile gaps. */
+section.kd-iwh {
+  --media-border-radius: 0px;
+  background-color: var(--kd-iwh-bg, rgb(var(--color-scheme-background)));
 }
-.kd-iwh .kaadu-iwh__card::before,
-.kd-iwh .kaadu-iwh__card::after { display: none; }
-.kd-iwh .kaadu-iwh__card-body { padding: var(--space-5) var(--space-4); }
+.kd-iwh__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+  padding-block: var(--space-9);
+}
+.kd-iwh__head { display: flex; flex-direction: column; align-items: center; gap: var(--space-4); text-align: center; }
+.kd-iwh__eyebrow { margin: 0; color: var(--kd-iwh-heading, rgb(var(--color-scheme-text))); }
+.kd-iwh__heading { margin: 0; color: var(--kd-iwh-heading, rgb(var(--color-scheme-text))); }
+.kd-iwh__intro { color: var(--kd-iwh-text, rgb(var(--color-scheme-body-text, var(--color-scheme-text)))); text-wrap: pretty; }
+.kd-iwh__intro p { margin: 0; }
+.kd-iwh__intro p + p { margin-top: var(--space-3); }
+
+/* Picture: square, no radius, card shadow; the empty placeholder is paper instead of grey */
+.kd-iwh__media { width: 100%; max-width: var(--image-max-width); }
+.kd-iwh .media--css-only:not(.media--disable-styles) { --media-drop-shadow-display: none; box-shadow: var(--shadow-card); }
+.kd-iwh .media__styled-element--placeholder-svg {
+  display: block;
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 0;
+  background-color: var(--paper) !important; /* beats the placeholder's Tailwind !bg-neutral-100 */
+}
+
+/* Tiles */
+.kd-iwh__tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  box-sizing: border-box;
+  min-height: 110px;
+  margin: 0;
+  padding: var(--space-4) var(--space-3);
+  list-style: none;
+  text-align: center;
+}
+.kd-iwh__tile--card { background: var(--kd-iwh-tile, rgb(var(--color-scheme-card))); box-shadow: var(--shadow-card); }
 .kd-iwh__stat {
   margin: 0;
   font-family: var(--font-sans);
@@ -8420,44 +8455,84 @@ span.kd-phone__play { cursor: default; }
   font-weight: 600;
   line-height: 1.05;
   text-transform: uppercase;
-  color: var(--red);
+  overflow-wrap: anywhere;
+  color: var(--kd-iwh-stat, rgb(var(--color-scheme-text)));
 }
 .kd-iwh__caption {
+  margin: 0;
   font-family: var(--font-sans);
   font-size: 13px;
   font-weight: 600;
   line-height: 1.3;
-  text-transform: uppercase;
+  text-wrap: balance;
+  color: var(--kd-iwh-caption, rgb(var(--color-scheme-body-text, var(--color-scheme-text))));
 }
-.kd-iwh__caption p { margin: 0; }
+.kd-iwh__tile--card .kd-iwh__caption { color: var(--kd-iwh-caption, rgb(var(--color-scheme-card-text))); }
+/* A tile with its own colour scheme takes that scheme's card colours */
+.kd-iwh__tile--card[data-color-scheme] { background: rgb(var(--color-scheme-card)); }
+.kd-iwh__tile[data-color-scheme] .kd-iwh__stat,
+.kd-iwh__tile[data-color-scheme] .kd-iwh__caption { color: rgb(var(--color-scheme-card-text)); }
+.kd-iwh__tile-link { margin-top: var(--space-2); color: inherit; }
+.kd-iwh__d { display: none; }
 
 .kd-iwh__desktop { display: none; }
-.kd-iwh__mobile .kaadu-iwh__carousel ul:not(.splide__list) {
+.kd-iwh__mobile { display: flex; flex-direction: column; align-items: center; gap: var(--space-6); width: 100%; }
+.kd-iwh__grid:not(.splide__list) {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-3);
+  margin: 0;
+  padding: 0;
 }
-.kd-iwh__actions {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-3);
-  margin-top: var(--space-8);
-}
-.kd-iwh__note { margin: 0; color: rgb(var(--color-scheme-body-text)); font-weight: 600; }
+.kaadu-iwh__carousel { width: 100%; }
+.kd-iwh__carousel--slides .kd-iwh__tile { width: 70%; }
+.kd-iwh__carousel--slides .splide__track { padding-bottom: var(--space-4); }
+.kaadu-iwh__arrows { display: flex; align-items: center; justify-content: space-between; margin-top: var(--space-4); }
 
+.kd-iwh__actions { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); }
+.kd-iwh__button { --kd-cloud: var(--kd-iwh-btn, rgb(var(--color-scheme-accent-1))); color: var(--kd-iwh-btn-label, rgb(var(--color-scheme-accent-1-contrast))); }
+.kd-iwh__note { margin: 0; color: var(--kd-iwh-text, rgb(var(--color-scheme-body-text, var(--color-scheme-text)))); font-weight: 600; }
+
+@media (max-width: 767.98px) {
+  .kd-iwh--intro-d .kd-iwh__intro { display: none; }
+  .kd-iwh .kd-iwh__mobile .media__styled-element--placeholder-svg { aspect-ratio: auto; height: 240px; }
+  /* Mobile mockup: the long cloud */
+  .kd-iwh__button .kd-btn__cloud { display: none; }
+  .kd-iwh__button .kd-btn__cloud.kd-btn__cloud--long { display: block; }
+}
+@media (max-width: 991.98px) {
+  .kd-iwh__d { display: none; }
+  .kd-iwh__m { display: inline; }
+}
+@media (min-width: 768px) {
+  .kd-iwh__inner { gap: var(--space-8); padding-block: var(--space-12); }
+  .kd-iwh__grid:not(.splide__list) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
 @media (min-width: 992px) {
+  .kd-iwh__d { display: inline; }
+  .kd-iwh__m { display: none; }
   .kd-iwh__mobile { display: none; }
   .kd-iwh__desktop {
     display: grid;
-    grid-template-columns: minmax(0, 320px) minmax(0, 400px) minmax(0, 320px);
+    grid-template-columns: minmax(0, 320px) minmax(0, var(--image-max-width)) minmax(0, 320px);
     justify-content: center;
+    align-items: center;
     gap: var(--space-6);
+    width: 100%;
   }
-  .kd-iwh__col { gap: var(--space-6); }
-  .kd-iwh .kaadu-iwh__card-body { min-height: 130px; padding: var(--space-6); }
+  .kd-iwh__desktop .kd-iwh__media { max-width: none; }
+  .kd-iwh__col { display: flex; flex-direction: column; gap: var(--space-6); align-self: stretch; }
+  .kd-iwh__tile { min-height: 130px; padding: var(--space-4); }
   .kd-iwh__stat { font-size: 34px; }
   .kd-iwh__caption { font-size: 15px; }
+}
+@media (min-width: 1441px) {
+  .kd-iwh__desktop {
+    grid-template-columns:
+      minmax(0, min(calc(320 * var(--kd-px)), 448px))
+      minmax(0, min(calc(var(--kd-iwh-img) * var(--kd-px)), calc(var(--kd-iwh-img) * 1.4px)))
+      minmax(0, min(calc(320 * var(--kd-px)), 448px));
+  }
 }
 
 /* ── SHARED: screen-reader-only text + Notice (DS Notice: lime offer panel, square, shadow-card) ── */
@@ -8704,3 +8779,5 @@ span.kd-phone__play { cursor: default; }
   .kd-form .kd-btn { width: auto; flex-shrink: 0; }
 }
 
+/* ── SHARED: in-page anchor (a section's «Anchor» setting) — lands a little above the section ── */
+.kd-anchor { position: absolute; top: 0; left: 0; scroll-margin-top: var(--space-6); }
