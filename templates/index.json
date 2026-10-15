@@ -74,7 +74,7 @@
         "heading_level": "h1",
         "richtext": "<p>Gefriergetrocknete Früchte; fair produziert, in der Ursprungsgemeinde verarbeitet, radikal transparent.<br/><br/></p>",
         "text_alignment": "text-left",
-        "mobile_text_alignment": "text-center",
+        "mobile_text_alignment": "text-left",
         "mobile_layout_order": false,
         "button2_label": "GRATIS PROBIEREN",
         "button2_label_mobile": "JETZT PROBIEREN",
@@ -542,6 +542,8 @@
         "nutrition_content": "",
         "shipping_label": "Versand",
         "shipping_content": "",
+        "color_scheme": "scheme6",
+        "use_custom_colors": true,
         "bg_color": "#fffff5",
         "bg_color_mobile": "#ffc6ff",
         "text_color": "#1a1a1a",
@@ -569,9 +571,7 @@
         "stepper_text": "#542a76",
         "cart_button_color": "#542a76",
         "cart_button_color_mobile": "#ac0300",
-        "cart_button_label_color": "#fffff5",
-        "color_scheme": "scheme6",
-        "use_custom_colors": true
+        "cart_button_label_color": "#fffff5"
       }
     },
     "vertical_video_embeds_kJLBxQ": {
