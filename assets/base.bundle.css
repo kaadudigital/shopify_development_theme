@@ -8891,6 +8891,11 @@ section.kd-join { background-color: var(--kd-join-bg, rgb(var(--color-scheme-bac
 /* Button artwork keeps its own width (beats .kd-form .kd-btn { width: 100% }) */
 .kd-form .kd-btn.kd-btn--art { width: var(--kd-art-w, 200px); flex-shrink: 0; align-self: center; }
 @media (max-width: 767.98px) { .kd-form .kd-btn.kd-btn--art { width: var(--kd-art-w-m, var(--kd-art-w, 200px)); } }
+/* With button artwork the input and the artwork share one row on mobile too; the input gives up the width */
+@media (max-width: 767.98px) {
+  .kd-join--art .kd-form { flex-direction: row; align-items: center; }
+  .kd-join--art .kd-form .kd-input { flex: 1 1 auto; min-width: 0; }
+}
 .kd-join .kd-btn:not(.kd-btn--art) {
   --kd-cloud: var(--kd-join-btn, rgb(var(--color-scheme-accent-1)));
   color: var(--kd-join-btn-label, rgb(var(--color-scheme-accent-1-contrast)));

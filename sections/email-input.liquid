@@ -18,6 +18,9 @@
   if s.hide_image_mobile
     assign join_classes = join_classes | append: ' kd-join--m-noimg'
   endif
+  if s.button_image != blank or s.button_image_mobile != blank
+    assign join_classes = join_classes | append: ' kd-join--art'
+  endif
   # Mobile label: with artwork only the mobile label (blank = icon only, as before the redesign); without artwork it falls back to the label.
   assign label_m = s.button_text_mobile
   if s.button_image == blank and s.button_image_mobile == blank
