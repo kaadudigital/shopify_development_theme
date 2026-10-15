@@ -7530,6 +7530,20 @@ section.kd-iw-band { --media-border-radius: 0px; background-color: var(--kd-iw-b
   .kd-iw--m-right  .kd-iw__cta .kd-btn { justify-self: end; }
   .kd-iw__cta .kd-iw__note { grid-column: 1; text-align: left; }
   .kd-iw__cta .kd-iw__link { grid-column: 2; grid-row: 2; justify-self: end; text-align: right; }
+  /* «Centred under the button»: cloud and ✶ link form one column as wide as the cloud, the link centred below it */
+  .kd-iw--m-link-under .kd-iw__cta .kd-iw__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    grid-column: 1 / -1;
+    justify-self: start;
+    width: max-content;
+    max-width: 100%;
+  }
+  .kd-iw--m-center.kd-iw--m-link-under .kd-iw__cta .kd-iw__actions { justify-self: center; }
+  .kd-iw--m-right.kd-iw--m-link-under  .kd-iw__cta .kd-iw__actions { justify-self: end; }
+  .kd-iw--m-link-under .kd-iw__cta .kd-iw__link { text-align: center; }
 }
 .kd-iw__actions {
   display: flex;

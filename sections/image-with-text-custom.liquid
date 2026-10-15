@@ -50,6 +50,7 @@
       richtext: section.settings.richtext,
       richtext_mobile: section.settings.richtext_mobile,
       hide_image_mobile: section.settings.hide_image_mobile,
+      mobile_link_position: section.settings.mobile_link_position,
       button_link: section.settings.button_link,
       button2_link: section.settings.button2_link,
       button_link_type: section.settings.button_link_type,
@@ -859,6 +860,22 @@
       "label": "Element ID to scroll to",
       "placeholder": "my-element-id",
       "info": "Without #. Used when the action is \"Scroll to an element\"."
+    },
+    {
+      "type": "select",
+      "id": "mobile_link_position",
+      "label": "Text link position (mobile)",
+      "default": "beside",
+      "options": [
+        {
+          "value": "beside",
+          "label": "Right, beside the note"
+        },
+        {
+          "value": "under",
+          "label": "Centred under the button"
+        }
+      ]
     },
     {
       "type": "select",

@@ -6,7 +6,8 @@
     kicker in .kd-strong. Anywhere else: <h2> in .kd-display-h2, .kd-body-lg, red .kd-label kicker.
   - One cloud button + one ✶ text link (DS hero). When both buttons are set, button 2 is the cloud and
     button 1 the link; with only one button, it is the cloud. Cloud colours follow the colour scheme.
-  - Mobile extras: richtext_mobile (text below 768px), hide_image_mobile (.kd-iw--m-noimg).
+  - Mobile extras: richtext_mobile (text below 768px), hide_image_mobile (.kd-iw--m-noimg),
+    mobile_link_position 'under' (✶ link centred under the cloud, .kd-iw--m-link-under).
   - Every text field accepts [br] / [BR] (line break) and [nbsp] / [NBSP] (non-breaking space).
   - Mobile: cloud button on top, then the note (left) and the ✶ text link (right) on one row.
   - Optional cloud-button artwork (button2_image / button2_image_mobile, widths, label colours):
@@ -87,6 +88,9 @@
   endif
   if hide_image_mobile
     assign row_classes = row_classes | append: ' kd-iw--m-noimg'
+  endif
+  if mobile_link_position == 'under'
+    assign row_classes = row_classes | append: ' kd-iw--m-link-under'
   endif
 -%}
 

@@ -779,6 +779,7 @@
         "button_link_type": "focus_element",
         "button_link": "",
         "focus_element_id": "template--32174860960078__kaadu_people_cards_wP7k2m",
+        "mobile_link_position": "under",
         "link_color": "text",
         "color_scheme": "scheme3",
         "use_custom_colors": true,
