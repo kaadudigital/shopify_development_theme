@@ -817,7 +817,24 @@
           "type": "row",
           "settings": {
             "kaadu_text": "Soll dem Team gehören",
-            "other_text": "Gehört einem Konzern"
+            "other_text": "Gehört einem Konzern",
+            "show_on_mobile": false
+          }
+        },
+        "note_1": {
+          "type": "note",
+          "settings": {
+            "title": "Einkauf:",
+            "text": "direkt, A-Preis für jede Grösse.",
+            "show_on": "mobile"
+          }
+        },
+        "note_2": {
+          "type": "note",
+          "settings": {
+            "title": "Eigentum:",
+            "text": "soll dem Team gehören.",
+            "show_on": "mobile"
           }
         }
       },
@@ -826,18 +843,27 @@
         "row_2",
         "row_3",
         "row_4",
-        "row_5"
+        "row_5",
+        "note_1",
+        "note_2"
       ],
       "settings": {
         "kicker": "Kaadu > Andere",
         "heading": "Wir sind einfach besser.",
+        "mobile_kicker": "Zieh den Regler",
+        "mobile_heading": "Kaadu vs. der Rest im Regal",
         "kaadu_label": "Kaadu",
         "kaadu_logo": "shopify://shop_images/Kaadu_wordmark_red_RGB.svg",
         "other_label": "Der Rest",
         "start_position": 55,
         "slider_label": "Vergleich verschieben",
+        "rock_enabled": true,
+        "rock_amount": 8,
+        "rock_delay": 2,
         "footnote": "<p>«Der Rest» steht für das, was im Regal daneben liegt. Kein Hersteller wird genannt, jede Kaadu-Zeile ist belegbar. [Belege verlinken]</p>",
-        "color_scheme": "scheme1"
+        "mobile_footnote": "<p>«Der Rest» steht für das, was im Regal daneben liegt. Kein Hersteller wird genannt. [Belege verlinken]</p>",
+        "color_scheme": "scheme1",
+        "use_custom_colors": true
       }
     },
     "kaadu_cost_split_main": {

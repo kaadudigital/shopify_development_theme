@@ -1,13 +1,39 @@
 {%- comment -%}
-  Kaadu comparison slider ("Kaadu > Andere"). Two full-size layers; the Kaadu layer is revealed with a
-  clip-path driven by --kd-pos behind a 2px lime edge (DS Motion: the comparison reveals the Kaadu side
-  with a width percentage). A native range input drives it, so it works with keyboard and touch.
+  Kaadu comparison slider ("Kaadu > Andere"), as in the landing-page mockup. Two full-size layers; the Kaadu layer is
+  revealed with a clip-path driven by --kd-pos behind a 2px edge. A native range input drives it, so it works with
+  keyboard and touch. Each layer: label top, photo in the middle, list at the bottom. While nobody touches it the
+  handle rocks gently back and forth (data-rock-*), to show that it can be moved. Mobile has its own kicker, heading
+  and footnote, rows can be hidden there, and info cards ("note" blocks) sit under the slider.
+  Colours are section settings (--kd-cmp-*); with «Use the colours below» off everything follows the colour scheme.
   Styles: "COMPARISON" in assets/base.bundle.css; behaviour: [data-kd-compare] in assets/kaadu.js.
 {%- endcomment -%}
 {%- liquid
   assign rows = section.blocks | where: 'type', 'row'
+  assign notes = section.blocks | where: 'type', 'note'
   assign start = section.settings.start_position | default: 55
+  assign kicker_m = section.settings.mobile_kicker | default: section.settings.kicker
+  assign heading_m = section.settings.mobile_heading | default: section.settings.heading
+  assign footnote_m = section.settings.mobile_footnote | default: section.settings.footnote
 -%}
+
+{%- style -%}
+  #{{ section.id }} {
+    {%- comment -%} Only when "Use the colours below" is on; unset, the CSS falls back to the colour scheme. {%- endcomment -%}
+    {%- if section.settings.use_custom_colors -%}
+      {%- liquid
+        assign cmp_colors = 'bg:background_color,kicker:kicker_color,heading:heading_color,note:note_color,kaadu-bg:kaadu_bg_color,kaadu-text:kaadu_text_color,other-bg:other_bg_color,other-text:other_text_color,pill-bg:pill_bg_color,pill-text:pill_text_color,handle:handle_color,handle-arrow:handle_arrow_color,card:card_color,card-text:card_text_color' | split: ','
+      -%}
+      {%- for pair in cmp_colors -%}
+        {%- assign kv = pair | split: ':' -%}
+        {%- assign value = section.settings[kv[1]] -%}
+        {%- if value != blank %}
+    --kd-cmp-{{ kv[0] }}: {{ value }};
+        {%- endif -%}
+      {%- endfor %}
+    {%- endif %}
+  }
+{%- endstyle -%}
+
 <section
   id="{{ section.id }}"
   class="kd-compare-section relative overflow-hidden bg-scheme-background text-scheme-text"
@@ -15,28 +41,43 @@
 >
   <div class="kd-section kd-compare-section__inner">
     <div class="kd-heading kd-heading--center">
-      {%- if section.settings.kicker != blank -%}
-        <p class="kd-heading__kicker kd-label">{{ section.settings.kicker | escape }}</p>
+      {%- if section.settings.kicker != blank or kicker_m != blank -%}
+        <p class="kd-heading__kicker kd-label kd-compare-section__kicker">
+          {%- if section.settings.kicker != blank -%}<span class="kd-compare-section__d">{{ section.settings.kicker | escape }}</span>{%- endif -%}
+          {%- if kicker_m != blank -%}<span class="kd-compare-section__m">{{ kicker_m | escape }}</span>{%- endif -%}
+        </p>
       {%- endif -%}
-      {%- if section.settings.heading != blank -%}
-        <h2 class="kd-heading__title kd-display-h2-tight">{{ section.settings.heading | escape }}</h2>
+      {%- if section.settings.heading != blank or heading_m != blank -%}
+        <h2 class="kd-heading__title kd-display-h2-tight">
+          {%- if section.settings.heading != blank -%}<span class="kd-compare-section__d">{{ section.settings.heading | escape }}</span>{%- endif -%}
+          {%- if heading_m != blank -%}<span class="kd-compare-section__m">{{ heading_m | escape }}</span>{%- endif -%}
+        </h2>
       {%- endif -%}
     </div>
 
-    <div class="kd-compare" data-kd-compare style="--kd-pos: {{ start }}%;">
+    <div
+      class="kd-compare"
+      data-kd-compare
+      data-rock="{{ section.settings.rock_enabled }}"
+      data-rock-amount="{{ section.settings.rock_amount }}"
+      data-rock-delay="{{ section.settings.rock_delay | times: 1000 }}"
+      style="--kd-pos: {{ start }}%;"
+    >
       {%- comment -%} Base layer: "Der Rest" (right side) {%- endcomment -%}
       <div class="kd-compare__layer kd-compare__layer--other">
         <div class="kd-compare__col kd-compare__col--other">
           {%- if section.settings.other_label != blank -%}
             <p class="kd-compare__pill kd-tag">{{ section.settings.other_label | escape }}</p>
           {%- endif -%}
-          {%- if section.settings.other_image != blank -%}
-            {{ section.settings.other_image | image_url: width: 900 | image_tag: class: 'kd-compare__photo', loading: 'lazy', sizes: '(min-width: 1200px) 480px, 45vw' }}
-          {%- endif -%}
+          <div class="kd-compare__media">
+            {%- if section.settings.other_image != blank -%}
+              {{ section.settings.other_image | image_url: width: 900 | image_tag: class: 'kd-compare__photo', loading: 'lazy', sizes: '(min-width: 1200px) 360px, 45vw' }}
+            {%- endif -%}
+          </div>
           <ul class="kd-compare__list">
             {%- for row in rows -%}
               {%- if row.settings.other_text != blank -%}
-                <li class="kd-strong-md"><span>{{ row.settings.other_text | escape }}</span> <span aria-hidden="true">&#10005;</span></li>
+                <li class="kd-strong-md{% unless row.settings.show_on_mobile %} kd-compare__row--desktop{% endunless %}"><span>{{ row.settings.other_text | escape }}</span> <span class="kd-compare__mark" aria-hidden="true">&#10005;</span></li>
               {%- endif -%}
             {%- endfor -%}
           </ul>
@@ -49,15 +90,17 @@
           {%- if section.settings.kaadu_logo != blank -%}
             {{ section.settings.kaadu_logo | image_url: width: 300 | image_tag: class: 'kd-compare__logo', alt: section.settings.kaadu_label, loading: 'lazy' }}
           {%- elsif section.settings.kaadu_label != blank -%}
-            <p class="kd-compare__pill kd-tag kd-tag--lime">{{ section.settings.kaadu_label | escape }}</p>
+            <p class="kd-compare__pill kd-tag">{{ section.settings.kaadu_label | escape }}</p>
           {%- endif -%}
-          {%- if section.settings.kaadu_image != blank -%}
-            {{ section.settings.kaadu_image | image_url: width: 900 | image_tag: class: 'kd-compare__photo', loading: 'lazy', sizes: '(min-width: 1200px) 480px, 45vw' }}
-          {%- endif -%}
+          <div class="kd-compare__media">
+            {%- if section.settings.kaadu_image != blank -%}
+              {{ section.settings.kaadu_image | image_url: width: 900 | image_tag: class: 'kd-compare__photo', loading: 'lazy', sizes: '(min-width: 1200px) 360px, 45vw' }}
+            {%- endif -%}
+          </div>
           <ul class="kd-compare__list">
             {%- for row in rows -%}
               {%- if row.settings.kaadu_text != blank -%}
-                <li class="kd-strong-md"><span aria-hidden="true">&#10003;</span> <span>{{ row.settings.kaadu_text | escape }}</span></li>
+                <li class="kd-strong-md{% unless row.settings.show_on_mobile %} kd-compare__row--desktop{% endunless %}"><span class="kd-compare__mark" aria-hidden="true">&#10003;</span> <span>{{ row.settings.kaadu_text | escape }}</span></li>
               {%- endif -%}
             {%- endfor -%}
           </ul>
@@ -86,8 +129,22 @@
       {%- endfor -%}
     </table>
 
-    {%- if section.settings.footnote != blank -%}
-      <div class="kd-compare-section__note kd-body-sm">{{ section.settings.footnote }}</div>
+    {%- if notes.size > 0 -%}
+      <div class="kd-compare-section__notes">
+        {%- for note in notes -%}
+          <div class="kd-compare-section__card kd-compare-section__card--{{ note.settings.show_on }}" {{ note.shopify_attributes }}>
+            {%- if note.settings.title != blank -%}<strong>{{ note.settings.title | escape }}</strong> {% endif -%}
+            {{- note.settings.text | escape -}}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.footnote != blank or footnote_m != blank -%}
+      <div class="kd-compare-section__note kd-body-sm">
+        {%- if section.settings.footnote != blank -%}<div class="kd-compare-section__d">{{ section.settings.footnote }}</div>{%- endif -%}
+        {%- if footnote_m != blank -%}<div class="kd-compare-section__m">{{ footnote_m }}</div>{%- endif -%}
+      </div>
     {%- endif -%}
   </div>
 
@@ -133,6 +190,18 @@
       "id": "heading",
       "label": "Heading",
       "default": "Wir sind einfach besser."
+    },
+    {
+      "type": "text",
+      "id": "mobile_kicker",
+      "label": "Kicker on mobile",
+      "info": "Below 768px. Empty: same as desktop."
+    },
+    {
+      "type": "text",
+      "id": "mobile_heading",
+      "label": "Heading on mobile",
+      "info": "Below 768px. Empty: same as desktop."
     },
     {
       "type": "header",
@@ -191,9 +260,42 @@
       "default": "Vergleich verschieben"
     },
     {
+      "type": "checkbox",
+      "id": "rock_enabled",
+      "label": "Rock the slider while nobody touches it",
+      "info": "The handle sways gently back and forth to show it can be moved. Stops while the visitor hovers, drags or focuses it; never runs with reduced motion.",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "rock_amount",
+      "label": "Rock distance",
+      "min": 2,
+      "max": 20,
+      "step": 1,
+      "unit": "%",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "rock_delay",
+      "label": "Start rocking after",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "default": 2
+    },
+    {
       "type": "richtext",
       "id": "footnote",
       "label": "Footnote"
+    },
+    {
+      "type": "richtext",
+      "id": "mobile_footnote",
+      "label": "Footnote on mobile",
+      "info": "Below 768px. Empty: same as desktop."
     },
     {
       "type": "header",
@@ -203,8 +305,30 @@
       "type": "color_scheme",
       "id": "color_scheme",
       "label": "Colour scheme",
-      "default": "scheme1"
-    }
+      "default": "scheme1",
+      "info": "Applies when «Use the colours below instead of the colour scheme» is off."
+    },
+    {
+      "type": "checkbox",
+      "id": "use_custom_colors",
+      "label": "Use the colours below instead of the colour scheme",
+      "info": "Off: background and text follow the colour scheme, the Kaadu side and handle take its accent 1, the other side and info cards its card colours.",
+      "default": true
+    },
+    { "type": "color", "id": "background_color", "label": "Background", "default": "#FFC6FF" },
+    { "type": "color", "id": "kicker_color", "label": "Kicker", "default": "#542A76" },
+    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#AC0300" },
+    { "type": "color", "id": "note_color", "label": "Footnote", "default": "#542A76" },
+    { "type": "color", "id": "kaadu_bg_color", "label": "Kaadu side background", "default": "#AEFF64" },
+    { "type": "color", "id": "kaadu_text_color", "label": "Kaadu side text", "default": "#542A76" },
+    { "type": "color", "id": "other_bg_color", "label": "Other side background", "default": "#9A9A94" },
+    { "type": "color", "id": "other_text_color", "label": "Other side text", "default": "#FFFFF5" },
+    { "type": "color", "id": "pill_bg_color", "label": "Other side label background", "default": "#3A3A3A" },
+    { "type": "color", "id": "pill_text_color", "label": "Other side label text", "default": "#FFFFF5" },
+    { "type": "color", "id": "handle_color", "label": "Handle and edge", "default": "#AEFF64" },
+    { "type": "color", "id": "handle_arrow_color", "label": "Handle arrow", "default": "#AC0300" },
+    { "type": "color", "id": "card_color", "label": "Info card background", "default": "#FFF9EE" },
+    { "type": "color", "id": "card_text_color", "label": "Info card text", "default": "#542A76" }
   ],
   "blocks": [
     {
@@ -222,6 +346,41 @@
           "id": "other_text",
           "label": "Der Rest (✕)",
           "default": "Grün gepflückt"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_on_mobile",
+          "label": "Show on mobile",
+          "default": true
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "name": "Info card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Bold start",
+          "default": "Einkauf:"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "direkt, A-Preis für jede Grösse."
+        },
+        {
+          "type": "select",
+          "id": "show_on",
+          "label": "Show on",
+          "options": [
+            { "value": "mobile", "label": "Mobile only" },
+            { "value": "desktop", "label": "Desktop only" },
+            { "value": "all", "label": "All screens" }
+          ],
+          "default": "mobile"
         }
       ]
     },

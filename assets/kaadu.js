@@ -41,15 +41,70 @@
   });
 })();
 
-/* [data-kd-compare]: comparison slider. The range input sets --kd-pos (reveal %) on the panel. */
+/* [data-kd-compare]: comparison slider. The range input sets --kd-pos (reveal %) on the panel. While nobody touches
+   it the panel rocks gently around the range value, to show it can be moved: starts data-rock-delay ms after the
+   last interaction, sways ±data-rock-amount % (one swing every 2.6 s, eased in), and glides back to the value as
+   soon as the visitor hovers, presses or focuses it. Only on screen, never with prefers-reduced-motion. */
 (function () {
   'use strict';
-  document.addEventListener('input', function (event) {
-    var range = event.target.closest('.kd-compare__range');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var PERIOD = 2600;
+  var RAMP = 900;
+  function setup(panel) {
+    if (panel.kdCompare) return;
+    panel.kdCompare = true;
+    var range = panel.querySelector('.kd-compare__range');
     if (!range) return;
-    var panel = range.closest('[data-kd-compare]');
-    if (panel) panel.style.setProperty('--kd-pos', range.value + '%');
-  });
+    var rock = panel.getAttribute('data-rock') === 'true';
+    var amount = parseFloat(panel.getAttribute('data-rock-amount')) || 8;
+    var delay = Math.max(500, parseInt(panel.getAttribute('data-rock-delay'), 10) || 2000);
+    var hover = false, focus = false, press = false, visible = false;
+    var idleAt = 0, start = 0, raf = 0;
+    var pos = parseFloat(range.value) || 55;
+    function show(value) { pos = value; panel.style.setProperty('--kd-pos', value + '%'); }
+    function touch() { idleAt = performance.now() + delay; start = 0; }
+    function frame(now) {
+      raf = 0;
+      if (!visible) return;
+      var base = parseFloat(range.value) || 55;
+      if (hover || focus || press || reduce.matches || now < idleAt) {
+        start = 0;
+        if (Math.abs(pos - base) > 0.05) show(pos + (base - pos) * 0.2);
+        else if (pos !== base) show(base);
+      } else {
+        if (!start) start = now;
+        var t = now - start;
+        var ramp = Math.min(1, t / RAMP);
+        var value = base + amount * ramp * Math.sin((2 * Math.PI * t) / PERIOD);
+        show(Math.min(96, Math.max(4, value)));
+      }
+      raf = requestAnimationFrame(frame);
+    }
+    function run() { if (!raf && visible) raf = requestAnimationFrame(frame); }
+    range.addEventListener('input', function () { touch(); show(parseFloat(range.value)); });
+    if (!rock) return;
+    panel.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') hover = true; });
+    panel.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') { hover = false; touch(); } });
+    panel.addEventListener('pointerdown', function () { press = true; touch(); });
+    window.addEventListener('pointerup', function () { if (press) { press = false; touch(); } });
+    window.addEventListener('pointercancel', function () { if (press) { press = false; touch(); } });
+    range.addEventListener('focus', function () { focus = true; });
+    range.addEventListener('blur', function () { focus = false; touch(); });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        var was = visible;
+        visible = entries[0].isIntersecting;
+        if (visible && !was) { touch(); run(); }
+      }, { threshold: 0.35 }).observe(panel);
+    } else {
+      visible = true;
+      touch();
+      run();
+    }
+  }
+  function init(root) { root.querySelectorAll('[data-kd-compare]').forEach(setup); }
+  init(document);
+  document.addEventListener('shopify:section:load', function (event) { init(event.target); });
 })();
 
 /* [data-kd-split]: cost split. Pressing a segment shows its title, amount and text in the detail notice. */
