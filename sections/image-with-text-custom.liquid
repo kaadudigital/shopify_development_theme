@@ -10,12 +10,26 @@
     --kd-iw-media: {{ section.settings.image_width_large | default: 40 }}%;
     --kd-iw-media-xl: {{ section.settings.image_width_xl | default: 46 }}%;
     --kd-iw-link: rgb(var(--color-scheme-{{ section.settings.link_color | default: 'text' }}));
+    {%- comment -%} Section colours only when "Use the colours below" is on; otherwise every --kd-iw-* colour is unset and
+      the CSS falls back to the colour scheme (background, eyebrow, text, body text, accent 1 / contrast). {%- endcomment -%}
+    {%- if section.settings.use_custom_colors -%}
+      {%- liquid
+        assign iw_colors = 'bg:background_color,kicker:kicker_color,heading:heading_color,text:text_color,btn:button_color,btn-label:button_label_color,link:link_custom_color' | split: ','
+      -%}
+      {%- for pair in iw_colors -%}
+        {%- assign kv = pair | split: ':' -%}
+        {%- assign value = section.settings[kv[1]] -%}
+        {%- if value != blank %}
+    --kd-iw-{{ kv[0] }}: {{ value }};
+        {%- endif -%}
+      {%- endfor %}
+    {%- endif %}
   }
 {%- endstyle -%}
 
 <section
   id="{{ section.id }}"
-  class="bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %} relative overflow-hidden"
+  class="kd-iw-band bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %} relative overflow-hidden"
   data-color-scheme="{{ section.settings.color_scheme }}"
 >
   <div class="section-content relative z-10">
@@ -34,6 +48,8 @@
       title: section.settings.title,
       h2_title: section.settings.h2_title,
       richtext: section.settings.richtext,
+      richtext_mobile: section.settings.richtext_mobile,
+      hide_image_mobile: section.settings.hide_image_mobile,
       button_link: section.settings.button_link,
       button2_link: section.settings.button2_link,
       button_link_type: section.settings.button_link_type,
@@ -588,6 +604,13 @@
       "default": false
     },
     {
+      "type": "checkbox",
+      "id": "hide_image_mobile",
+      "label": "Hide image on mobile",
+      "info": "Below 768px only the text and buttons show.",
+      "default": false
+    },
+    {
       "type": "header",
       "content": "Text"
     },
@@ -630,6 +653,12 @@
       "type": "richtext",
       "id": "richtext",
       "label": "Text"
+    },
+    {
+      "type": "richtext",
+      "id": "richtext_mobile",
+      "label": "Text (mobile)",
+      "info": "Below 768px. Leave empty to use the text above."
     },
     {
       "type": "header",
@@ -835,7 +864,7 @@
       "type": "select",
       "id": "link_color",
       "label": "Link colour",
-      "info": "From the section's colour scheme.",
+      "info": "From the section's colour scheme. With «Use the colours below» on, the link colour below wins.",
       "options": [
         {
           "value": "text",
@@ -872,12 +901,62 @@
       "type": "color_scheme",
       "id": "color_scheme",
       "default": "scheme1",
-      "label": "Colour scheme"
+      "label": "Colour scheme",
+      "info": "Applies when «Use the colours below instead of the colour scheme» is off."
+    },
+    {
+      "type": "checkbox",
+      "id": "use_custom_colors",
+      "label": "Use the colours below instead of the colour scheme",
+      "info": "Off: background, text and buttons all follow the colour scheme above.",
+      "default": false
     },
     {
       "type": "checkbox",
       "id": "use_gradient_background",
       "label": "Use gradient background"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "kicker_color",
+      "label": "Kicker",
+      "default": "#AEFF64"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button",
+      "default": "#AEFF64"
+    },
+    {
+      "type": "color",
+      "id": "button_label_color",
+      "label": "Button label",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "link_custom_color",
+      "label": "Text link",
+      "default": "#FFFFF5"
     }
   ],
   "blocks": [

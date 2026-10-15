@@ -7473,9 +7473,31 @@ body {
 .kd-iw__head  { grid-area: head; display: flex; flex-direction: column; gap: var(--space-3); }
 .kd-iw__body  { grid-area: body; display: flex; flex-direction: column; gap: var(--space-6); }
 
-.kd-iw__kicker { margin: 0; color: rgb(var(--color-scheme-eyebrow-text)); }
-.kd-iw__title  { margin: 0; color: rgb(var(--color-scheme-text)); overflow-wrap: break-word; }
-.kd-iw__text   { color: rgb(var(--color-scheme-body-text)); }
+/* Colours: --kd-iw-* when the section's «Use the colours below» is on, else the colour scheme */
+section.kd-iw-band { --media-border-radius: 0px; background-color: var(--kd-iw-bg, rgb(var(--color-scheme-background))); }
+.kd-iw__kicker { margin: 0; color: var(--kd-iw-kicker, rgb(var(--color-scheme-eyebrow-text))); }
+.kd-iw__title  { margin: 0; color: var(--kd-iw-heading, rgb(var(--color-scheme-text))); overflow-wrap: break-word; }
+.kd-iw__text   { color: var(--kd-iw-text, rgb(var(--color-scheme-body-text))); }
+.kd-iw .kd-btn:not(.kd-btn--art) {
+  --kd-cloud: var(--kd-iw-btn, rgb(var(--color-scheme-accent-1, 84, 42, 118)));
+  color: var(--kd-iw-btn-label, rgb(var(--color-scheme-accent-1-contrast, 174, 255, 100)));
+}
+/* Picture: square corners and the card shadow; the empty placeholder is a light tint of the heading colour */
+.kd-iw .media--css-only:not(.media--disable-styles) { --media-drop-shadow-display: none; box-shadow: var(--shadow-card); }
+.kd-iw .media__styled-element--placeholder-svg {
+  border-radius: 0;
+  background-color: color-mix(in srgb, var(--kd-iw-heading, rgb(var(--color-scheme-text))) 8%, transparent) !important; /* beats Tailwind !bg-neutral-100 */
+  color: var(--kd-iw-kicker, rgb(var(--color-scheme-eyebrow-text)));
+}
+/* Optional mobile text / no image on mobile (section settings) */
+.kd-iw__text--d { display: none; }
+@media (max-width: 767.98px) {
+  .kd-iw--m-noimg .kd-iw__media { display: none; }
+}
+@media (min-width: 768px) {
+  .kd-iw__text--m { display: none; }
+  .kd-iw__text--d { display: block; }
+}
 .kd-iw__text > :first-child { margin-top: 0; }
 .kd-iw__text > :last-child { margin-bottom: 0; }
 .kd-iw__caption { margin: var(--space-2) 0 0; text-align: center; }
@@ -7487,7 +7509,7 @@ body {
   align-items: inherit;
   gap: var(--space-3);
 }
-.kd-iw__note { margin: 0; color: rgb(var(--color-scheme-body-text)); }
+.kd-iw__note { margin: 0; color: var(--kd-iw-text, rgb(var(--color-scheme-body-text))); }
 /* The ✶ link is always underlined here (label only, not the star) */
 .kd-iw__link .kd-iw__label--mobile,
 .kd-iw__link .kd-iw__label--desktop { text-decoration: underline; text-underline-offset: 3px; }
