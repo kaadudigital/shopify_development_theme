@@ -109,7 +109,8 @@
   document.addEventListener('shopify:section:load', function (event) { init(event.target); });
 })();
 
-/* [data-kd-split]: cost split. Pressing a segment shows its title, amount and text in the detail notice. */
+/* [data-kd-split]: cost split. Pressing a segment shows its title and text in the detail box, and its photo
+   ([data-kd-split-photo] = segment index; segments without a photo leave the shape empty). */
 (function () {
   'use strict';
   document.addEventListener('click', function (event) {
@@ -125,8 +126,11 @@
       if (el) el.textContent = value || '';
     };
     set('[data-kd-split-title]', seg.getAttribute('data-title'));
-    set('[data-kd-split-amount]', seg.getAttribute('data-amount'));
     set('[data-kd-split-text]', seg.getAttribute('data-text'));
+    var index = seg.getAttribute('data-index');
+    split.querySelectorAll('[data-kd-split-photo]').forEach(function (photo) {
+      photo.hidden = photo.getAttribute('data-kd-split-photo') !== index;
+    });
   });
 })();
 

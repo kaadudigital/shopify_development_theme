@@ -1,53 +1,99 @@
 {%- comment -%}
-  Kaadu cost split ("Wo landen deine CHF 4.45?"). A bar of segments sized by weight (flex-grow); pressing
-  one shows its detail in the lime notice below (aria-live). Below 768 the bar becomes a vertical list with
-  width-proportional fills. Styles: "COST SPLIT" in assets/base.bundle.css; behaviour: [data-kd-split] in kaadu.js.
+  Kaadu cost split ("Wo landen deine CHF 4.45?"), as in the landing-page mockup: heading + intro beside an
+  illustration, a bar of segments sized by weight (flex-grow; desktop shows the amount, mobile a list of rows with
+  title, amount and a fill of 30 % + the share), and a lime detail box with the pressed segment's photo (stake
+  shape, circle on mobile), title and text (aria-live). Mobile has its own heading, intro and footnote; the button
+  is desktop-only unless switched on. Colours are section settings (--kd-split-*); with «Use the colours below»
+  off everything follows the colour scheme. Styles: "COST SPLIT" in assets/base.bundle.css; behaviour:
+  [data-kd-split] in assets/kaadu.js.
 {%- endcomment -%}
 {%- liquid
   assign segments = section.blocks | where: 'type', 'segment'
   assign max_weight = 1
+  assign has_photo = false
   for seg in segments
     if seg.settings.weight > max_weight
       assign max_weight = seg.settings.weight
     endif
+    if seg.settings.image != blank
+      assign has_photo = true
+    endif
   endfor
   assign first = segments.first
+  assign heading_d = section.settings.heading | escape | replace: '[br]', '<br>'
+  assign heading_m = section.settings.mobile_heading | escape
+  if heading_m == blank
+    assign heading_m = section.settings.heading | escape | replace: '[br]', ' '
+  endif
+  assign intro_m = section.settings.mobile_intro | default: section.settings.intro
+  assign footnote_m = section.settings.mobile_footnote | default: section.settings.footnote
+  assign stake_id = 'kd-stake-' | append: section.id
 -%}
+
+{%- style -%}
+  #{{ section.id }} {
+    {%- comment -%} Only when "Use the colours below" is on; unset, the CSS falls back to the colour scheme. {%- endcomment -%}
+    {%- if section.settings.use_custom_colors -%}
+      {%- liquid
+        assign split_colors = 'bg:background_color,heading:heading_color,text:text_color,bar:bar_color,bar-text:bar_text_color,fill:fill_color,active:active_color,active-text:active_text_color,detail:detail_color,detail-title:detail_title_color,detail-text:detail_text_color,photo:photo_color,outline:outline_color,btn:button_color,btn-label:button_label_color' | split: ','
+      -%}
+      {%- for pair in split_colors -%}
+        {%- assign kv = pair | split: ':' -%}
+        {%- assign value = section.settings[kv[1]] -%}
+        {%- if value != blank %}
+    --kd-split-{{ kv[0] }}: {{ value }};
+        {%- endif -%}
+      {%- endfor %}
+    {%- endif %}
+  }
+{%- endstyle -%}
+
 <section
   id="{{ section.id }}"
   class="kd-split-section relative overflow-hidden bg-scheme-background text-scheme-text"
   data-color-scheme="{{ section.settings.color_scheme }}"
 >
   <div class="kd-section kd-split-section__inner">
-    <div class="kd-wide kd-split-section__top{% if section.settings.image == blank %} kd-split-section__top--no-image{% endif %}">
+    <div class="kd-wide kd-split-section__top{% unless section.settings.show_image %} kd-split-section__top--no-image{% endunless %}">
       <div class="kd-split-section__text">
         <div class="kd-heading">
           {%- if section.settings.kicker != blank -%}
             <p class="kd-heading__kicker kd-label">{{ section.settings.kicker | escape }}</p>
           {%- endif -%}
-          {%- if section.settings.heading != blank -%}
-            <h2 class="kd-heading__title kd-display-h2">{{ section.settings.heading | escape | replace: '[br]', '<br>' }}</h2>
+          {%- if heading_d != blank or heading_m != blank -%}
+            <h2 class="kd-heading__title kd-display-h2">
+              {%- if heading_d != blank -%}<span class="kd-split-section__d">{{ heading_d }}</span>{%- endif -%}
+              {%- if heading_m != blank -%}<span class="kd-split-section__m">{{ heading_m }}</span>{%- endif -%}
+            </h2>
           {%- endif -%}
         </div>
-        {%- if section.settings.intro != blank -%}
-          <div class="kd-split-section__intro kd-body-lg">{{ section.settings.intro }}</div>
+        {%- if section.settings.intro != blank or intro_m != blank -%}
+          <div class="kd-split-section__intro kd-body-lg">
+            {%- if section.settings.intro != blank -%}<div class="kd-split-section__d">{{ section.settings.intro }}</div>{%- endif -%}
+            {%- if intro_m != blank -%}<div class="kd-split-section__m">{{ intro_m }}</div>{%- endif -%}
+          </div>
         {%- endif -%}
       </div>
-      {%- if section.settings.image != blank -%}
-        {{ section.settings.image | image_url: width: 1200 | image_tag: class: 'kd-split-section__image', loading: 'lazy', sizes: '(min-width: 1200px) 560px, (min-width: 768px) 45vw, 100vw' }}
+      {%- if section.settings.show_image -%}
+        {%- if section.settings.image != blank -%}
+          {{ section.settings.image | image_url: width: 1100 | image_tag: class: 'kd-split-section__art', loading: 'lazy', sizes: '(min-width: 1441px) 30vw, (min-width: 768px) 420px, 240px' }}
+        {%- else -%}
+          <img class="kd-split-section__art" src="{{ 'kaadu-cost-illustration.webp' | asset_url }}" alt="{{ section.settings.image_alt | escape }}" width="1100" height="985" loading="lazy">
+        {%- endif -%}
       {%- endif -%}
     </div>
 
     <div class="kd-wide kd-split" data-kd-split>
       <div class="kd-split__bar" role="group" aria-label="{{ section.settings.heading | remove: '[br]' | escape }}">
         {%- for seg in segments -%}
-          {%- assign share = seg.settings.weight | times: 100.0 | divided_by: max_weight | round -%}
+          {%- assign share = seg.settings.weight | times: 70.0 | divided_by: max_weight | plus: 30 | round -%}
           <button
             type="button"
             class="kd-split__seg"
             style="--kd-grow: {{ seg.settings.weight }}; --kd-share: {{ share }}%;"
             aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}"
             aria-controls="kd-split-detail-{{ section.id }}"
+            data-index="{{ forloop.index0 }}"
             data-title="{{ seg.settings.title | escape }}"
             data-amount="{{ seg.settings.amount | escape }}"
             data-text="{{ seg.settings.text | escape }}"
@@ -61,22 +107,44 @@
       </div>
 
       {%- if first != blank -%}
-        <div class="kd-split__detail kd-notice" id="kd-split-detail-{{ section.id }}" aria-live="polite">
-          <div class="kd-notice__body">
-            <p class="kd-split__detail-title"><span data-kd-split-title>{{ first.settings.title | escape }}</span> · <span data-kd-split-amount>{{ first.settings.amount | escape }}</span></p>
-            <p class="kd-split__detail-text kd-body-lg" data-kd-split-text>{{ first.settings.text | escape }}</p>
-          </div>
+        <div class="kd-split__detail{% if has_photo %} kd-split__detail--photo{% endif %}" id="kd-split-detail-{{ section.id }}" aria-live="polite">
+          {%- if has_photo -%}
+            <div class="kd-split__photo" aria-hidden="true">
+              <svg class="kd-split__defs" width="0" height="0" focusable="false"><defs><clipPath id="{{ stake_id }}" clipPathUnits="objectBoundingBox"><path transform="scale(0.00070759 0.00083347) translate(-39.2614 -159.2549)" d="M1452.4857,917.6449c1.0778-48.5846-27.9164-92.3818-73.6171-120.5097,38.5133-26.3068,63.1427-64.7255,64.1026-107.9982,1.5536-70.0351-59.3786-130.1196-142.7725-147.655,14.5479-20.4067,23.0629-43.8495,23.6192-68.9279,1.8198-82.0337-82.0859-150.4288-187.4092-152.7652-4.2882-.0951-8.5437-.0683-12.7669.0554.0034-.1128.0112-.2255.0137-.3383,1.8198-82.0347-82.0868-150.4298-187.4091-152.7662-72.1424-1.6003-135.6136,28.2111-169.0347,73.5135-31.3792-46.7399-93.4661-79.3366-165.6085-80.9369-105.3223-2.3364-192.1793,62.2707-193.9991,144.3054-.1338,6.0327.2082,11.9893.9768,17.8539-26.7112-11.9658-57.443-19.1065-90.2551-19.8344-105.3232-2.3364-192.1793,62.2707-193.9991,144.3043-.9067,40.8711,19.4692,78.3536,53.1675,105.9707-78.5838,16.8154-136.7184,72.1527-138.2037,139.1061-1.121,50.5318,30.2935,95.8814,79.1982,123.8108-38.2672,26.2987-62.7186,64.5907-63.675,107.7025-1.6734,75.4368,69.1471,139.335,162.45,150.9427-11.6622,18.6887-18.4138,39.6383-18.907,61.8732-1.8198,82.0337,82.0859,150.4298,187.4082,152.7662,40.2771.8935,77.8454-8.0118,108.9984-23.9291,27.706,54.0559,94.715,93.0604,173.8034,94.8148,61.4882,1.364,116.6722-20.0951,152.3268-54.5114,29.341,15.4809,64.4381,24.86,102.3042,25.7,100.1031,2.2206,183.5161-56.0342,193.1009-132.2456,12.325,2.2372,25.1057,3.5533,38.2187,3.8442,105.3223,2.3364,192.1793-62.2707,193.9991-144.3043.0809-3.6478-.0157-7.2662-.2687-10.8556,60.8305-23.6191,102.9763-72.109,104.238-128.9859Z"></path></clipPath></defs></svg>
+              <div class="kd-split__photo-fill" style="--kd-stake: url(#{{ stake_id }});">
+                {%- for seg in segments -%}
+                  {%- if seg.settings.image != blank -%}
+                    <span class="kd-split__photo-item" data-kd-split-photo="{{ forloop.index0 }}"{% unless forloop.first %} hidden{% endunless %}>
+                      {{- seg.settings.image | image_url: width: 500 | image_tag: class: 'kd-split__photo-img', loading: 'lazy', sizes: '(min-width: 768px) 190px, 72px', alt: '' -}}
+                    </span>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+              <svg class="kd-split__outline" viewBox="39.2614 159.2549 1413.2533 1199.8099" preserveAspectRatio="none" focusable="false"><path d="M1452.4857,917.6449c1.0778-48.5846-27.9164-92.3818-73.6171-120.5097,38.5133-26.3068,63.1427-64.7255,64.1026-107.9982,1.5536-70.0351-59.3786-130.1196-142.7725-147.655,14.5479-20.4067,23.0629-43.8495,23.6192-68.9279,1.8198-82.0337-82.0859-150.4288-187.4092-152.7652-4.2882-.0951-8.5437-.0683-12.7669.0554.0034-.1128.0112-.2255.0137-.3383,1.8198-82.0347-82.0868-150.4298-187.4091-152.7662-72.1424-1.6003-135.6136,28.2111-169.0347,73.5135-31.3792-46.7399-93.4661-79.3366-165.6085-80.9369-105.3223-2.3364-192.1793,62.2707-193.9991,144.3054-.1338,6.0327.2082,11.9893.9768,17.8539-26.7112-11.9658-57.443-19.1065-90.2551-19.8344-105.3232-2.3364-192.1793,62.2707-193.9991,144.3043-.9067,40.8711,19.4692,78.3536,53.1675,105.9707-78.5838,16.8154-136.7184,72.1527-138.2037,139.1061-1.121,50.5318,30.2935,95.8814,79.1982,123.8108-38.2672,26.2987-62.7186,64.5907-63.675,107.7025-1.6734,75.4368,69.1471,139.335,162.45,150.9427-11.6622,18.6887-18.4138,39.6383-18.907,61.8732-1.8198,82.0337,82.0859,150.4298,187.4082,152.7662,40.2771.8935,77.8454-8.0118,108.9984-23.9291,27.706,54.0559,94.715,93.0604,173.8034,94.8148,61.4882,1.364,116.6722-20.0951,152.3268-54.5114,29.341,15.4809,64.4381,24.86,102.3042,25.7,100.1031,2.2206,183.5161-56.0342,193.1009-132.2456,12.325,2.2372,25.1057,3.5533,38.2187,3.8442,105.3223,2.3364,192.1793-62.2707,193.9991-144.3043.0809-3.6478-.0157-7.2662-.2687-10.8556,60.8305-23.6191,102.9763-72.109,104.238-128.9859Z" fill="none" vector-effect="non-scaling-stroke"></path></svg>
+            </div>
+          {%- endif -%}
+          <p class="kd-split__detail-title" data-kd-split-title>{{ first.settings.title | escape }}</p>
+          <p class="kd-split__detail-text kd-body-lg" data-kd-split-text>{{ first.settings.text | escape }}</p>
         </div>
       {%- endif -%}
     </div>
 
-    {%- if section.settings.footnote != blank or section.settings.button_label != blank -%}
+    {%- if section.settings.footnote != blank or footnote_m != blank or section.settings.button_label != blank -%}
       <div class="kd-wide kd-split-section__foot">
-        {%- if section.settings.footnote != blank -%}
-          <div class="kd-split-section__note kd-body-sm">{{ section.settings.footnote }}</div>
+        {%- if section.settings.footnote != blank or footnote_m != blank -%}
+          <div class="kd-split-section__note kd-body-sm">
+            {%- if section.settings.footnote != blank -%}<div class="kd-split-section__d">{{ section.settings.footnote }}</div>{%- endif -%}
+            {%- if footnote_m != blank -%}<div class="kd-split-section__m">{{ footnote_m }}</div>{%- endif -%}
+          </div>
         {%- endif -%}
         {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
-          {%- render 'kd-button', label: section.settings.button_label, url: section.settings.button_link, variant: 'primary' -%}
+          {%- liquid
+            assign btn_class = 'kd-split-section__button'
+            unless section.settings.show_button_mobile
+              assign btn_class = btn_class | append: ' kd-split-section__button--desktop'
+            endunless
+          -%}
+          {%- render 'kd-button', label: section.settings.button_label, url: section.settings.button_link, class: btn_class -%}
         {%- endif -%}
       </div>
     {%- endif -%}
@@ -132,9 +200,38 @@
       "default": "<p>Fair ist ein Wort. Das hier sind Zahlen. Klick auf einen Balken.</p>"
     },
     {
+      "type": "text",
+      "id": "mobile_heading",
+      "label": "Heading on mobile",
+      "info": "Below 768px. Empty: same as desktop, on one line ([br] ignored)."
+    },
+    {
+      "type": "richtext",
+      "id": "mobile_intro",
+      "label": "Intro on mobile",
+      "info": "Below 768px. Empty: same as desktop."
+    },
+    {
+      "type": "header",
+      "content": "Illustration"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "label": "Show illustration",
+      "default": true
+    },
+    {
       "type": "image_picker",
       "id": "image",
-      "label": "Photo"
+      "label": "Illustration",
+      "info": "Empty: the pineapple with the magnifying glass from the mockup."
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Illustration alt text",
+      "default": "Ananas-Figur mit Lupe prüft Rupien, Franken und Abrechnungen"
     },
     {
       "type": "header",
@@ -146,6 +243,12 @@
       "label": "Footnote"
     },
     {
+      "type": "richtext",
+      "id": "mobile_footnote",
+      "label": "Footnote on mobile",
+      "info": "Below 768px. Empty: same as desktop."
+    },
+    {
       "type": "text",
       "id": "button_label",
       "label": "Button label",
@@ -154,7 +257,14 @@
     {
       "type": "url",
       "id": "button_link",
-      "label": "Button link"
+      "label": "Button link",
+      "info": "The button only shows when it has a link."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_button_mobile",
+      "label": "Show the button on mobile",
+      "default": false
     },
     {
       "type": "header",
@@ -165,8 +275,30 @@
       "id": "color_scheme",
       "label": "Colour scheme",
       "default": "scheme6",
-      "info": "DS: the cost split sits on paper."
-    }
+      "info": "Applies when «Use the colours below instead of the colour scheme» is off."
+    },
+    {
+      "type": "checkbox",
+      "id": "use_custom_colors",
+      "label": "Use the colours below instead of the colour scheme",
+      "info": "Off: background and text follow the colour scheme, bars its card colours, the pressed bar and button its accent 1, the detail box its accent 2.",
+      "default": true
+    },
+    { "type": "color", "id": "background_color", "label": "Background", "default": "#FFFFF5" },
+    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#AC0300" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#1A1A1A" },
+    { "type": "color", "id": "bar_color", "label": "Bar", "default": "#FFF9EE" },
+    { "type": "color", "id": "bar_text_color", "label": "Bar text", "default": "#542A76" },
+    { "type": "color", "id": "fill_color", "label": "Bar fill (mobile)", "default": "#FFC6FF" },
+    { "type": "color", "id": "active_color", "label": "Pressed bar", "default": "#AC0300" },
+    { "type": "color", "id": "active_text_color", "label": "Pressed bar text", "default": "#FFFFF5" },
+    { "type": "color", "id": "detail_color", "label": "Detail box", "default": "#AEFF64" },
+    { "type": "color", "id": "detail_title_color", "label": "Detail title", "default": "#AC0300" },
+    { "type": "color", "id": "detail_text_color", "label": "Detail text", "default": "#1A1A1A" },
+    { "type": "color", "id": "photo_color", "label": "Photo background", "default": "#FFC6FF" },
+    { "type": "color", "id": "outline_color", "label": "Photo outline", "default": "#1A1A1A" },
+    { "type": "color", "id": "button_color", "label": "Button", "default": "#542A76" },
+    { "type": "color", "id": "button_label_color", "label": "Button label", "default": "#FFFFF5" }
   ],
   "blocks": [
     {
@@ -200,6 +332,12 @@
           "type": "textarea",
           "id": "text",
           "label": "Detail text"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo",
+          "info": "Shown in the detail box while this segment is pressed."
         }
       ]
     },

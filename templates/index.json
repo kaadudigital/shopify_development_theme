@@ -951,6 +951,11 @@
         "heading": "Wo landen deine[br]CHF 4.45?",
         "intro": "<p>Fair ist ein Wort. Das hier sind Zahlen. Klick auf einen Balken.</p>",
         "footnote": "<p>Alle Beträge pro Beutel im 6er Pack, einmalig gekauft. Stand [Datum], Charge [Nr.]. Ändert sich etwas, ändert sich diese Grafik.</p>",
+        "mobile_intro": "<p>Fair ist ein Wort. Das hier sind Zahlen. Tipp auf einen Balken.</p>",
+        "mobile_footnote": "<p>Pro Beutel im 6er Pack, einmalig gekauft. Stand [Datum], Charge [Nr.].</p>",
+        "show_image": true,
+        "show_button_mobile": false,
+        "use_custom_colors": true,
         "button_label": "Wohin jeder Franken geht",
         "button_link": "",
         "color_scheme": "scheme6"
