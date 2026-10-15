@@ -7476,7 +7476,8 @@ body {
 /* Colours: --kd-iw-* when the section's «Use the colours below» is on, else the colour scheme */
 section.kd-iw-band { --media-border-radius: 0px; background-color: var(--kd-iw-bg, rgb(var(--color-scheme-background))); }
 .kd-iw__kicker { margin: 0; color: var(--kd-iw-kicker, rgb(var(--color-scheme-eyebrow-text))); }
-.kd-iw__title  { margin: 0; color: var(--kd-iw-heading, rgb(var(--color-scheme-text))); overflow-wrap: break-word; }
+.kd-iw__head, .kd-iw__body { min-width: 0; } /* long words (MITTELMÄNNER?) must not push the column past the grid */
+.kd-iw__title  { margin: 0; color: var(--kd-iw-heading, rgb(var(--color-scheme-text))); overflow-wrap: break-word; hyphens: auto; }
 .kd-iw__text   { color: var(--kd-iw-text, rgb(var(--color-scheme-body-text))); }
 .kd-iw .kd-btn:not(.kd-btn--art) {
   --kd-cloud: var(--kd-iw-btn, rgb(var(--color-scheme-accent-1, 84, 42, 118)));
