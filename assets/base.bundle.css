@@ -7744,8 +7744,12 @@ section.kd-iw-band { --media-border-radius: 0px; background-color: var(--kd-iw-b
 /* ── IMAGE SECTION, design-system row — sections/custom-image-section.liquid (layout: kd_row) ──
    Mobile: heading → image → body, centred. ≥768: image beside a centred text column. */
 .kd-is {
+  position: relative; /* above the section's background pattern / shape layers (absolute, z-0, later in the DOM) */
+  z-index: 1;
   padding-block: var(--space-8);
 }
+/* Colours: --kd-is-* when the section's «Use the colours below» is on, else the colour scheme */
+section.kd-is-band { background-color: var(--kd-is-bg, rgb(var(--color-scheme-background))); }
 .kd-is__row {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -7774,9 +7778,9 @@ section.kd-iw-band { --media-border-radius: 0px; background-color: var(--kd-iw-b
   align-items: center;
   gap: var(--space-6);
 }
-.kd-is__title { margin: 0; color: rgb(var(--color-scheme-text)); max-width: 760px; }
-.kd-is__subheading { margin: 0; color: rgb(var(--color-scheme-body-text)); }
-.kd-is__text { color: rgb(var(--color-scheme-body-text)); }
+.kd-is__title { margin: 0; color: var(--kd-is-heading, rgb(var(--color-scheme-text))); max-width: 760px; }
+.kd-is__subheading { margin: 0; color: var(--kd-is-text, rgb(var(--color-scheme-body-text))); }
+.kd-is__text { color: var(--kd-is-text, rgb(var(--color-scheme-body-text))); }
 .kd-is__text > :first-child { margin-top: 0; }
 .kd-is__text > :last-child { margin-bottom: 0; }
 
@@ -7785,8 +7789,8 @@ section.kd-iw-band { --media-border-radius: 0px; background-color: var(--kd-iw-b
   margin: 0;
   max-width: 640px;
   padding: var(--space-6) var(--space-7);
-  background: var(--pink);
-  color: var(--red);
+  background: var(--kd-is-quote-bg, rgb(var(--color-scheme-background)));
+  color: var(--kd-is-quote, rgb(var(--color-scheme-text)));
 }
 
 @media (min-width: 768px) {
@@ -8851,7 +8855,14 @@ section.kd-split-section { background-color: var(--kd-split-bg, rgb(var(--color-
 /* Quote attribution pill (DS Quote: cite pill under the quote) */
 .kd-is__figure { display: flex; flex-direction: column; align-items: center; gap: var(--space-4); margin: 0; }
 .kd-is__figure figcaption { margin: 0; }
-.kd-is__cite { font-style: normal; background: var(--pink); }
+.kd-is__cite {
+  font-style: normal;
+  white-space: normal;
+  text-wrap: balance;
+  text-align: center;
+  background: var(--kd-is-cite-bg, rgb(var(--color-scheme-card)));
+  color: var(--kd-is-cite, rgb(var(--color-scheme-card-text)));
+}
 
 /* ── JOIN (DS EmailForm) — sections/email-input.liquid ── */
 .kd-join__inner {

@@ -982,7 +982,7 @@
           "settings": {
             "type": "custom_rectangles",
             "color": "text",
-            "size": 104,
+            "size": 56,
             "opacity": 100,
             "enable_parallax": false,
             "parallax_speed": 3
@@ -1118,7 +1118,15 @@
         "button_label": "Shop Now",
         "button_style": "btn-secondary",
         "color_scheme": "scheme1",
-        "use_gradient_background": false
+        "use_custom_colors": true,
+        "use_gradient_background": false,
+        "background_color": "#FFC6FF",
+        "heading_color": "#AC0300",
+        "text_color": "#1A1A1A",
+        "quote_color": "#AC0300",
+        "quote_bg_color": "#FFC6FF",
+        "cite_color": "#1A1A1A",
+        "cite_bg_color": "#FFC6FF"
       }
     },
     "image_with_text_custom_probier": {

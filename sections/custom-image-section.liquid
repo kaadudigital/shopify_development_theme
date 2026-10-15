@@ -30,6 +30,22 @@
 
 {%- if is_row -%}
 {% style %}
+  {%- comment -%} Section colours only when "Use the colours below" is on; otherwise every --kd-is-* colour is unset and the
+    CSS falls back to the colour scheme (background, text, body text, card / card text). {%- endcomment -%}
+  {%- if section.settings.use_custom_colors %}
+  .section-{{ section.id }} {
+    {%- liquid
+      assign is_colors = 'bg:background_color,heading:heading_color,text:text_color,quote:quote_color,quote-bg:quote_bg_color,cite:cite_color,cite-bg:cite_bg_color' | split: ','
+    -%}
+    {%- for pair in is_colors -%}
+      {%- assign kv = pair | split: ':' -%}
+      {%- assign value = section.settings[kv[1]] -%}
+      {%- if value != blank %}
+    --kd-is-{{ kv[0] }}: {{ value }};
+      {%- endif -%}
+    {%- endfor %}
+  }
+  {%- endif %}
   /* Row layout: only the heading / sub-heading sticker placement is setting-driven. */
   .section-{{ section.id }} .hero-heading-wrap,
   .section-{{ section.id }} .hero-subheading-wrap {
@@ -341,7 +357,7 @@
 {%- endif -%}
 
 <section
-  class="section-{{ section.id }} bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %} relative overflow-hidden"
+  class="section-{{ section.id }} kd-is-band bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %} relative overflow-hidden"
   data-color-scheme="{{ section.settings.color_scheme }}"
 >
   {%- if is_row -%}
@@ -1927,12 +1943,62 @@
       "type": "color_scheme",
       "id": "color_scheme",
       "default": "scheme1",
-      "label": "Color scheme"
+      "label": "Color scheme",
+      "info": "Applies when «Use the colours below instead of the colour scheme» is off."
+    },
+    {
+      "type": "checkbox",
+      "id": "use_custom_colors",
+      "label": "Use the colours below instead of the colour scheme",
+      "info": "Design-system row only. Off: background, heading, text, quote and name pill follow the colour scheme above.",
+      "default": false
     },
     {
       "type": "checkbox",
       "id": "use_gradient_background",
       "label": "Use gradient background"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#FFC6FF"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "quote_color",
+      "label": "Quote",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "quote_bg_color",
+      "label": "Quote background",
+      "default": "#FFC6FF"
+    },
+    {
+      "type": "color",
+      "id": "cite_color",
+      "label": "Name pill text",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "cite_bg_color",
+      "label": "Name pill background",
+      "default": "#FFC6FF"
     }
   ],
   "blocks": [
