@@ -637,7 +637,11 @@
         "hint_color": "#fffff5",
         "clip_title_color": "#fffff5",
         "button_color": "#ffc6ff",
-        "button_label_color": "#ac0300"
+        "button_label_color": "#ac0300",
+        "phone_position": 50,
+        "phone_position_mobile": 50,
+        "swipe_direction": "horizontal",
+        "swipe_direction_mobile": "vertical"
       }
     },
     "image_with_highlights_mU9j66": {

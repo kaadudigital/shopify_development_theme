@@ -269,7 +269,7 @@
 })();
 
 /* [data-kd-phone]: clips in the phone frame (sections/vertical-video-embeds.liquid). The screen is a scroll-snap
-   track, one clip per screen width. ← → step through and loop; leaving a clip pauses its video. A hosted video
+   track, one clip per screen (sideways, or up and down per screen size). Arrows step through and loop; leaving a clip pauses its video. A hosted video
    plays with sound on tap and pauses on a second tap. The «✶ Auf TikTok ansehen» link follows the clip on screen.
    Auto-advance (data-autoplay-desktop / -mobile, -direction 1 or -1, -interval in ms) runs only while nothing plays
    and the phone is on screen; it stops for good once the visitor swipes, scrolls or uses the arrows, and never
@@ -282,7 +282,7 @@
     if (phone.kdPhone) return;
     phone.kdPhone = true;
     var track = phone.querySelector('[data-kd-phone-track]');
-    var stage = phone.parentElement;
+    var stage = phone.parentElement; // .kd-videos__rig
     var prev = stage.querySelector('[data-kd-phone-prev]');
     var next = stage.querySelector('[data-kd-phone-next]');
     var source = stage.querySelector('[data-kd-phone-source]');
@@ -290,11 +290,18 @@
     var current = -1, auto = false, stopped = false, visible = false;
     var smooth = function () { return reduce.matches ? 'auto' : 'smooth'; };
 
-    function index() { return Math.round(track.scrollLeft / Math.max(1, track.clientWidth)); }
+    // Sideways or up-and-down, whichever the CSS set for this screen size (.kd-videos--m-/--d-vertical).
+    function vertical() { return getComputedStyle(track).flexDirection === 'column'; }
+    function index() {
+      return vertical()
+        ? Math.round(track.scrollTop / Math.max(1, track.clientHeight))
+        : Math.round(track.scrollLeft / Math.max(1, track.clientWidth));
+    }
     function go(i) {
       var n = clips.length;
       i = ((i % n) + n) % n;
-      track.scrollTo({ left: i * track.clientWidth, behavior: smooth() });
+      if (vertical()) track.scrollTo({ top: i * track.clientHeight, behavior: smooth() });
+      else track.scrollTo({ left: i * track.clientWidth, behavior: smooth() });
     }
     function stop(video) {
       if (!video) return;
@@ -333,10 +340,12 @@
     if (next) next.addEventListener('click', function () { stopped = true; go(index() + 1); });
     track.addEventListener('keydown', function (event) {
       if (event.target !== track) return;
-      if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      var keys = vertical() ? ['ArrowUp', 'ArrowDown'] : ['ArrowLeft', 'ArrowRight'];
+      var k = keys.indexOf(event.key);
+      if (k > -1) {
         event.preventDefault();
         stopped = true;
-        go(index() + (event.key === 'ArrowRight' ? 1 : -1));
+        go(index() + (k ? 1 : -1));
       }
     });
     track.addEventListener('click', function (event) {

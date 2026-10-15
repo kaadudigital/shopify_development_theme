@@ -37,9 +37,10 @@
     --kd-vid-arrow: {{ section.settings.arrow_icon_color | default: 'currentColor' }};
     --kd-vid-arrow-bg: {{ section.settings.arrow_background | default: 'transparent' }};
     --kd-phone-w: {{ phone_w_m }}px;
+    --kd-phone-x: {{ section.settings.phone_position_mobile | default: 50 | divided_by: 100.0 }};
   }
   @media (min-width: 768px) {
-    #{{ section.id }} { --kd-phone-w: {{ phone_w }}px; }
+    #{{ section.id }} { --kd-phone-w: {{ phone_w }}px; --kd-phone-x: {{ section.settings.phone_position | default: 50 | divided_by: 100.0 }}; }
   }
   {%- comment -%} From 1200px the phone grows with the window like the other decorations (DS: share of the 1440 artboard, capped). {%- endcomment %}
   @media (min-width: 1200px) {
@@ -55,7 +56,7 @@
 
 <section
   id="{{ section.id }}"
-  class="kd-videos kd-videos--{{ section.settings.slideshow_focus | default: 'center' }}{% if section.settings.arrow_background != blank %} kd-videos--arrow-bg{% endif %} relative overflow-hidden bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %}"
+  class="kd-videos kd-videos--{{ section.settings.slideshow_focus | default: 'center' }}{% if section.settings.arrow_background != blank %} kd-videos--arrow-bg{% endif %} kd-videos--d-{{ section.settings.swipe_direction | default: 'horizontal' }} kd-videos--m-{{ section.settings.swipe_direction_mobile | default: 'vertical' }} relative overflow-hidden bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %}"
   data-color-scheme="{{ section.settings.color_scheme }}"
 >
   <div class="section-content relative z-10 kd-videos__inner kd-section kd-wide">
@@ -88,6 +89,7 @@
 
     {%- if clips.size > 0 -%}
       <div class="kd-videos__stage">
+        <div class="kd-videos__rig">
         <div
           class="kd-phone"
           data-kd-phone
@@ -171,7 +173,7 @@
 
         <div class="kd-videos__nav">
           {%- if clips.size > 1 -%}
-            <button type="button" class="kd-videos__arrow" data-kd-phone-prev aria-label="Vorheriger Clip">←</button>
+            <button type="button" class="kd-videos__arrow" data-kd-phone-prev aria-label="Vorheriger Clip"><span class="kd-videos__glyph-h">←</span><span class="kd-videos__glyph-v">↑</span></button>
           {%- endif -%}
           {%- if section.settings.hint != blank or section.settings.hint_show_count -%}
             <p class="kd-videos__hint kd-label">
@@ -183,10 +185,11 @@
             </p>
           {%- endif -%}
           {%- if clips.size > 1 -%}
-            <button type="button" class="kd-videos__arrow" data-kd-phone-next aria-label="Nächster Clip">→</button>
+            <button type="button" class="kd-videos__arrow" data-kd-phone-next aria-label="Nächster Clip"><span class="kd-videos__glyph-h">→</span><span class="kd-videos__glyph-v">↓</span></button>
           {%- endif -%}
         </div>
         <a class="kd-link kd-videos__source" href="#" target="_blank" rel="noopener" data-kd-phone-source hidden></a>
+        </div>
       </div>
     {%- endif -%}
 
@@ -285,6 +288,61 @@
       "step": 10,
       "unit": "px",
       "default": 330
+    },
+    {
+      "type": "range",
+      "id": "phone_position",
+      "label": "Phone position",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 50,
+      "info": "Tablet and desktop: 0 % = left edge, 50 % = centred, 100 % = right edge. The hint and arrows move with the phone. Only for the centred layout."
+    },
+    {
+      "type": "range",
+      "id": "phone_position_mobile",
+      "label": "Phone position on mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "select",
+      "id": "swipe_direction",
+      "label": "Swipe direction",
+      "options": [
+        {
+          "value": "horizontal",
+          "label": "Sideways ← →"
+        },
+        {
+          "value": "vertical",
+          "label": "Up and down ↑ ↓ (like Reels)"
+        }
+      ],
+      "default": "horizontal",
+      "info": "Tablet and desktop. Up and down also catches the mouse wheel while the pointer is over the phone."
+    },
+    {
+      "type": "select",
+      "id": "swipe_direction_mobile",
+      "label": "Swipe direction on mobile",
+      "options": [
+        {
+          "value": "horizontal",
+          "label": "Sideways ← →"
+        },
+        {
+          "value": "vertical",
+          "label": "Up and down ↑ ↓ (like Reels)"
+        }
+      ],
+      "default": "vertical",
+      "info": "After the last clip the page scrolls on as normal."
     },
     {
       "type": "text",

@@ -8182,7 +8182,12 @@ section.kd-videos { background-color: var(--kd-vid-bg, rgb(var(--color-scheme-ba
 .kd-videos .kd-heading__title { color: var(--kd-vid-heading); }
 .kd-videos__intro { margin: 0 auto; color: var(--kd-vid-text); }
 .kd-videos__d { display: none; }
-.kd-videos__stage { grid-area: stage; display: flex; flex-direction: column; align-items: center; gap: var(--space-3); }
+/* Stage = full-width row; the rig (phone, hint, link) sits between two spacers whose grow factors split the free
+   space by --kd-phone-x (0 left … 0.5 centre … 1 right). */
+.kd-videos__stage { grid-area: stage; justify-self: stretch; display: flex; }
+.kd-videos__stage::before { content: ""; flex: var(--kd-phone-x, 0.5) 1 0; }
+.kd-videos__stage::after  { content: ""; flex: calc(1 - var(--kd-phone-x, 0.5)) 1 0; }
+.kd-videos__rig { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); }
 .kd-videos__actions { grid-area: cta; display: flex; justify-content: center; }
 .kd-videos__button { --kd-cloud: var(--kd-vid-btn); color: var(--kd-vid-btn-label); }
 
@@ -8219,6 +8224,9 @@ section.kd-videos { background-color: var(--kd-vid-bg, rgb(var(--color-scheme-ba
   top: 4.78%;
   width: 67.49%;
   height: 67.17%;
+  /* Whole pixels: a fractional height leaves the snapped last clip 1px short of the end, and the browser then keeps
+     an up-swipe inside the phone instead of scrolling the page on (Reels mode). 1.2127 = 668 / 370 × 67.17 %. */
+  height: round(down, calc(var(--kd-phone-w, 330px) * 1.2127), 1px);
   display: flex;
   overflow-x: auto;
   overflow-y: hidden;
@@ -8310,6 +8318,19 @@ span.kd-phone__play { cursor: default; }
 .kd-videos--arrow-bg .kd-videos__arrow { width: 44px; background: var(--kd-vid-arrow-bg); }
 .kd-videos__arrow:focus-visible { outline: 4px solid var(--red); outline-offset: 3px; }
 .kd-videos__source { color: var(--kd-vid-hint); font-weight: 600; font-size: 14px; }
+.kd-videos__glyph-v { display: none; }
+/* Up-and-down swiping (Reels): the clips stack in a column and snap vertically; at either end the scroll chains
+   to the page. Mobile and desktop are switched separately. */
+@media (max-width: 767.98px) {
+  .kd-videos--m-vertical .kd-phone__screen { flex-direction: column; overflow-x: hidden; overflow-y: auto; scroll-snap-type: y mandatory; overscroll-behavior: auto; }
+  .kd-videos--m-vertical .kd-videos__glyph-h { display: none; }
+  .kd-videos--m-vertical .kd-videos__glyph-v { display: inline; }
+}
+@media (min-width: 768px) {
+  .kd-videos--d-vertical .kd-phone__screen { flex-direction: column; overflow-x: hidden; overflow-y: auto; scroll-snap-type: y mandatory; overscroll-behavior: auto; }
+  .kd-videos--d-vertical .kd-videos__glyph-h { display: none; }
+  .kd-videos--d-vertical .kd-videos__glyph-v { display: inline; }
+}
 .kd-videos__source[hidden] { display: none; }
 
 @media (min-width: 768px) {
@@ -8333,6 +8354,7 @@ span.kd-phone__play { cursor: default; }
   .kd-videos--left .kd-videos__heading { align-items: flex-start; text-align: left; margin-bottom: var(--space-8); }
   .kd-videos--left .kd-videos__intro { margin: 0; }
   .kd-videos--left .kd-videos__actions { align-self: start; }
+  .kd-videos--left .kd-videos__stage::before, .kd-videos--left .kd-videos__stage::after { display: none; }
 }
 @media (min-width: 1200px) {
   .kd-videos--left .kd-videos__inner { column-gap: var(--space-13); }
