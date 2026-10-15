@@ -422,6 +422,9 @@
         "heading": "Wer profitiert[br]von Kaadu?",
         "hint": "← wischen oder scrollen →",
         "hint_mobile": "← wischen →",
+        "autoplay": true,
+        "autoplay_mobile": true,
+        "autoplay_interval": 4,
         "details_label": "Details ↻",
         "back_label": "Zurück ↻",
         "link_label": "Mehr dazu ↓",
@@ -451,10 +454,7 @@
         "footer_button_color": "#542a76",
         "footer_button_label_color": "#fffff5",
         "color_scheme": "scheme-389c794f-4614-44af-93cb-cbbfec11d15a",
-        "use_gradient_background": false,
-        "autoplay": true,
-        "autoplay_mobile": true,
-        "autoplay_interval": 4
+        "use_gradient_background": false
       }
     },
     "pack_selector_cEiAYy": {
@@ -475,6 +475,7 @@
         "promo_text": "<p>Du zahlst nur <strong>CHF 3.00 Versand.</strong> Danach CHF 4.45 pro Beutel. Code <strong>[CODE]</strong>.</p>",
         "promo_button_label": "Gratis probieren",
         "promo_button_link": "",
+        "promo_code": "",
         "mode_group_label": "Kaufart",
         "mode_once_label": "Einmalig",
         "mode_once_sub": "Ohne Abo, ohne Bindung",
@@ -619,7 +620,7 @@
         "phone_width": 370,
         "phone_width_mobile": 330,
         "phone_position": 50,
-        "phone_position_mobile": 50,
+        "phone_position_mobile": 20,
         "swipe_direction": "horizontal",
         "swipe_direction_mobile": "vertical",
         "hint": "Wischen für den nächsten Clip",
