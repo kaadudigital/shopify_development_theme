@@ -1083,7 +1083,7 @@
         "section_height_mobile": 600,
         "background_image": "shopify://shop_images/b7bcf4540261210886085fc72a3739f4765a8577.png",
         "image_width_mobile": 300,
-        "image_width_tablet": 480,
+        "image_width_tablet": 320,
         "image_width_desktop": 585,
         "image_width_24": 580,
         "image_width_27": 580,
@@ -1143,7 +1143,15 @@
         "button_label": "Shop Now",
         "button_style": "btn-secondary",
         "color_scheme": "scheme1",
-        "use_gradient_background": false
+        "use_custom_colors": true,
+        "use_gradient_background": false,
+        "background_color": "#FFC6FF",
+        "heading_color": "#AC0300",
+        "text_color": "#1A1A1A",
+        "quote_color": "#AC0300",
+        "quote_bg_color": "#FFC6FF",
+        "cite_color": "#1A1A1A",
+        "cite_bg_color": "#FFC6FF"
       }
     },
     "image_with_text_custom_probier": {
