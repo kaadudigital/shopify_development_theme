@@ -979,6 +979,11 @@
       "settings": {
         "kicker": "",
         "heading": "Wo landen deine[br]CHF 4.45?",
+        "mobile_intro": "<p>Fair ist ein Wort. Das hier sind Zahlen. Tipp auf einen Balken.</p>",
+        "mobile_footnote": "<p>Pro Beutel im 6er Pack, einmalig gekauft. Stand [Datum], Charge [Nr.].</p>",
+        "show_image": true,
+        "show_button_mobile": false,
+        "use_custom_colors": true,
         "intro": "<p>Fair ist ein Wort. Das hier sind Zahlen. Klick auf einen Balken.</p>",
         "footnote": "<p>Alle Beträge pro Beutel im 6er Pack, einmalig gekauft. Stand [Datum], Charge [Nr.]. Ändert sich etwas, ändert sich diese Grafik.</p>",
         "button_label": "Wohin jeder Franken geht",
@@ -1154,8 +1159,27 @@
         "cite_bg_color": "#FFC6FF"
       }
     },
+    "kaadu_trial_cta": {
+      "type": "kaadu-trial-cta",
+      "settings": {
+        "badge": "Code[br][CODE]",
+        "heading": "Ein Beutel [star][br]gratis [piece] nur[br]CHF 3 Versand",
+        "mobile_heading": "Ein Beutel [star][br]gratis [piece][br]nur CHF 3[br]Versand",
+        "text": "<p>Probier zuerst, entscheide dann. Code [CODE] im Shop eingeben, der Beutel kostet nichts.</p>",
+        "button_label": "Gratis probieren",
+        "button_link": "",
+        "note": "1 Beutel pro Haushalt · danach ab CHF 5.05 pro Beutel im Abo",
+        "mobile_note": "1 Beutel pro Haushalt · danach ab CHF 5.05 im Abo",
+        "anchor_id": "probieren",
+        "show_pieces": true,
+        "animate_pieces": true,
+        "color_scheme": "scheme6",
+        "use_custom_colors": true
+      }
+    },
     "image_with_text_custom_probier": {
       "type": "image-with-text-custom",
+      "disabled": true,
       "settings": {
         "image_caption": "",
         "image_position": "right",
@@ -1261,6 +1285,7 @@
     "image_with_highlights_mU9j66",
     "image_with_text_custom_vision",
     "kaadu_comparison_main",
+    "kaadu_trial_cta",
     "kaadu_cost_split_main",
     "custom_image_section_Mafcmn",
     "image_with_text_custom_probier",
