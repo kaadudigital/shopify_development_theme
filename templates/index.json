@@ -69,10 +69,12 @@
         "blob_type": 1,
         "rotate_image": 0,
         "disable_media_style": false,
+        "hide_image_mobile": false,
         "h2_title": "100% Frucht. 0% Ausbeutung.",
         "title": "Snack like you [BR] give a damn.",
         "heading_level": "h1",
         "richtext": "<p>Gefriergetrocknete Früchte; fair produziert, in der Ursprungsgemeinde verarbeitet, radikal transparent.<br/><br/></p>",
+        "richtext_mobile": "",
         "text_alignment": "text-left",
         "mobile_text_alignment": "text-left",
         "mobile_layout_order": false,
@@ -94,9 +96,18 @@
         "button_link_type": "url",
         "button_link": "shopify://pages/contact",
         "focus_element_id": "",
+        "mobile_link_position": "beside",
         "link_color": "accent-1",
         "color_scheme": "scheme-f3c790b8-ce18-4811-87cf-e53b730fe742",
-        "use_gradient_background": false
+        "use_custom_colors": false,
+        "use_gradient_background": false,
+        "background_color": "#ac0300",
+        "kicker_color": "#aeff64",
+        "heading_color": "#fffff5",
+        "text_color": "#fffff5",
+        "button_color": "#aeff64",
+        "button_label_color": "#ac0300",
+        "link_custom_color": "#fffff5"
       }
     },
     "scrolling_text_j9kYtA": {
@@ -761,7 +772,7 @@
         "richtext": "<p>Wir kennen die Preise, die Leute und die Ausreden der Branche. Darum bauen wir eine Anlage, die am Ende den Frauen gehört, die darin arbeiten. Und wir zeigen jeden Rappen auf dem Weg dorthin.</p>",
         "richtext_mobile": "<p>Wir kommen aus Kerala. Wir kennen die Preise, die Leute und die Ausreden der Branche. Darum bauen wir eine Anlage, die am Ende den Frauen gehört, die darin arbeiten. Und wir zeigen jeden Rappen auf dem Weg dorthin.</p>",
         "text_alignment": "text-left",
-        "mobile_text_alignment": "text-left",
+        "mobile_text_alignment": "text-center",
         "mobile_layout_order": false,
         "button2_label": "Unsere Vision",
         "button2_label_mobile": "",
@@ -784,13 +795,13 @@
         "color_scheme": "scheme3",
         "use_custom_colors": true,
         "use_gradient_background": false,
-        "background_color": "#AC0300",
-        "kicker_color": "#AEFF64",
-        "heading_color": "#FFFFF5",
-        "text_color": "#FFFFF5",
-        "button_color": "#AEFF64",
-        "button_label_color": "#AC0300",
-        "link_custom_color": "#FFFFF5"
+        "background_color": "#ac0300",
+        "kicker_color": "#aeff64",
+        "heading_color": "#fffff5",
+        "text_color": "#fffff5",
+        "button_color": "#aeff64",
+        "button_label_color": "#ac0300",
+        "link_custom_color": "#fffff5"
       }
     },
     "kaadu_comparison_main": {
@@ -800,28 +811,32 @@
           "type": "row",
           "settings": {
             "kaadu_text": "Reif geerntet",
-            "other_text": "Grün gepflückt"
+            "other_text": "Grün gepflückt",
+            "show_on_mobile": true
           }
         },
         "row_2": {
           "type": "row",
           "settings": {
             "kaadu_text": "Ananas. Punkt.",
-            "other_text": "Zucker, Schwefel, Aromen"
+            "other_text": "Zucker, Schwefel, Aromen",
+            "show_on_mobile": true
           }
         },
         "row_3": {
           "type": "row",
           "settings": {
             "kaadu_text": "Löhne offen, +50 %",
-            "other_text": "Löhne unbekannt"
+            "other_text": "Löhne unbekannt",
+            "show_on_mobile": true
           }
         },
         "row_4": {
           "type": "row",
           "settings": {
             "kaadu_text": "Verarbeitet im Dorf",
-            "other_text": "Verarbeitet weit weg"
+            "other_text": "Verarbeitet weit weg",
+            "show_on_mobile": true
           }
         },
         "row_5": {
@@ -873,11 +888,26 @@
         "rock_enabled": true,
         "rock_distance": 12,
         "rock_speed": 6,
+        "photo_shade": 0,
         "rock_delay": 2,
         "footnote": "<p>«Der Rest» steht für das, was im Regal daneben liegt. Kein Hersteller wird genannt, jede Kaadu-Zeile ist belegbar. [Belege verlinken]</p>",
         "mobile_footnote": "<p>«Der Rest» steht für das, was im Regal daneben liegt. Kein Hersteller wird genannt. [Belege verlinken]</p>",
         "color_scheme": "scheme1",
-        "use_custom_colors": true
+        "use_custom_colors": true,
+        "background_color": "#ffc6ff",
+        "kicker_color": "#542a76",
+        "heading_color": "#ac0300",
+        "note_color": "#542a76",
+        "kaadu_bg_color": "#aeff64",
+        "kaadu_text_color": "#542a76",
+        "other_bg_color": "#9a9a94",
+        "other_text_color": "#fffff5",
+        "pill_bg_color": "#3a3a3a",
+        "pill_text_color": "#fffff5",
+        "handle_color": "#aeff64",
+        "handle_arrow_color": "#ac0300",
+        "card_color": "#fff9ee",
+        "card_text_color": "#542a76"
       }
     },
     "kaadu_cost_split_main": {
@@ -951,11 +981,6 @@
         "heading": "Wo landen deine[br]CHF 4.45?",
         "intro": "<p>Fair ist ein Wort. Das hier sind Zahlen. Klick auf einen Balken.</p>",
         "footnote": "<p>Alle Beträge pro Beutel im 6er Pack, einmalig gekauft. Stand [Datum], Charge [Nr.]. Ändert sich etwas, ändert sich diese Grafik.</p>",
-        "mobile_intro": "<p>Fair ist ein Wort. Das hier sind Zahlen. Tipp auf einen Balken.</p>",
-        "mobile_footnote": "<p>Pro Beutel im 6er Pack, einmalig gekauft. Stand [Datum], Charge [Nr.].</p>",
-        "show_image": true,
-        "show_button_mobile": false,
-        "use_custom_colors": true,
         "button_label": "Wohin jeder Franken geht",
         "button_link": "",
         "color_scheme": "scheme6"
@@ -982,7 +1007,7 @@
           "settings": {
             "type": "custom_rectangles",
             "color": "text",
-            "size": 56,
+            "size": 104,
             "opacity": 100,
             "enable_parallax": false,
             "parallax_speed": 3
@@ -999,12 +1024,12 @@
         "row_image_position": "left",
         "quote_cite": "[NAME], Verarbeitung in Vadacode",
         "image_shadow": false,
-        "canvas_image_front": false,
+        "canvas_image_front": true,
         "image_rotate_m": 0,
         "canvas_m": false,
         "canvas_height_m": 720,
-        "canvas_image_x_m": 50,
-        "canvas_image_y_m": 60,
+        "canvas_image_x_m": 69,
+        "canvas_image_y_m": 78,
         "canvas_image_w_m": 90,
         "canvas_text_x_m": 50,
         "canvas_text_y_m": 16,
@@ -1023,10 +1048,10 @@
         "button_x_t": 72,
         "button_y_t": 85,
         "image_rotate_d": 0,
-        "canvas_d": false,
-        "canvas_height_d": 680,
-        "canvas_image_x_d": 26,
-        "canvas_image_y_d": 50,
+        "canvas_d": true,
+        "canvas_height_d": 640,
+        "canvas_image_x_d": 18,
+        "canvas_image_y_d": 66,
         "canvas_image_w_d": 36,
         "canvas_text_x_d": 68,
         "canvas_text_y_d": 45,
@@ -1034,10 +1059,10 @@
         "button_x_d": 68,
         "button_y_d": 80,
         "image_rotate_l": 0,
-        "canvas_l": false,
-        "canvas_height_l": 680,
+        "canvas_l": true,
+        "canvas_height_l": 490,
         "canvas_image_x_l": 26,
-        "canvas_image_y_l": 50,
+        "canvas_image_y_l": 70,
         "canvas_text_x_l": 68,
         "canvas_text_y_l": 45,
         "button_position_l": "default",
@@ -1058,7 +1083,7 @@
         "section_height_mobile": 600,
         "background_image": "shopify://shop_images/b7bcf4540261210886085fc72a3739f4765a8577.png",
         "image_width_mobile": 300,
-        "image_width_tablet": 320,
+        "image_width_tablet": 480,
         "image_width_desktop": 585,
         "image_width_24": 580,
         "image_width_27": 580,
@@ -1118,38 +1143,11 @@
         "button_label": "Shop Now",
         "button_style": "btn-secondary",
         "color_scheme": "scheme1",
-        "use_custom_colors": true,
-        "use_gradient_background": false,
-        "background_color": "#FFC6FF",
-        "heading_color": "#AC0300",
-        "text_color": "#1A1A1A",
-        "quote_color": "#AC0300",
-        "quote_bg_color": "#FFC6FF",
-        "cite_color": "#1A1A1A",
-        "cite_bg_color": "#FFC6FF"
-      }
-    },
-    "kaadu_trial_cta": {
-      "type": "kaadu-trial-cta",
-      "settings": {
-        "badge": "Code[br][CODE]",
-        "heading": "Ein Beutel [star][br]gratis [piece] nur[br]CHF 3 Versand",
-        "mobile_heading": "Ein Beutel [star][br]gratis [piece][br]nur CHF 3[br]Versand",
-        "text": "<p>Probier zuerst, entscheide dann. Code [CODE] im Shop eingeben, der Beutel kostet nichts.</p>",
-        "button_label": "Gratis probieren",
-        "button_link": "",
-        "note": "1 Beutel pro Haushalt · danach ab CHF 5.05 pro Beutel im Abo",
-        "mobile_note": "1 Beutel pro Haushalt · danach ab CHF 5.05 im Abo",
-        "anchor_id": "probieren",
-        "show_pieces": true,
-        "animate_pieces": true,
-        "color_scheme": "scheme6",
-        "use_custom_colors": true
+        "use_gradient_background": false
       }
     },
     "image_with_text_custom_probier": {
       "type": "image-with-text-custom",
-      "disabled": true,
       "settings": {
         "image_caption": "",
         "image_position": "right",
@@ -1160,10 +1158,12 @@
         "blob_type": 1,
         "rotate_image": 0,
         "disable_media_style": false,
+        "hide_image_mobile": false,
         "h2_title": "Probierpaket",
         "title": "Ein Beutel. Gratis. Nur CHF 3 Versand.",
         "heading_level": "h2",
         "richtext": "<p>Probier zuerst, entscheide dann. Gib den Code [CODE] im Shop ein, der Beutel kostet nichts, du zahlst CHF 3 Versand. Schmeckt es dir nicht, war es das. Schmeckt es, weisst du jetzt, was du kaufst.</p>",
+        "richtext_mobile": "",
         "text_alignment": "text-left",
         "mobile_text_alignment": "text-left",
         "mobile_layout_order": false,
@@ -1183,9 +1183,18 @@
         "button_link_type": "url",
         "button_link": "",
         "focus_element_id": "",
+        "mobile_link_position": "beside",
         "link_color": "text",
         "color_scheme": "scheme3",
-        "use_gradient_background": false
+        "use_custom_colors": false,
+        "use_gradient_background": false,
+        "background_color": "#ac0300",
+        "kicker_color": "#aeff64",
+        "heading_color": "#fffff5",
+        "text_color": "#fffff5",
+        "button_color": "#aeff64",
+        "button_label_color": "#ac0300",
+        "link_custom_color": "#fffff5"
       }
     },
     "email_input_dMpqpt": {
@@ -1225,7 +1234,6 @@
     "image_with_highlights_mU9j66",
     "image_with_text_custom_vision",
     "kaadu_comparison_main",
-    "kaadu_trial_cta",
     "kaadu_cost_split_main",
     "custom_image_section_Mafcmn",
     "image_with_text_custom_probier",
