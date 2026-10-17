@@ -37,6 +37,7 @@
     {%- endif %}
     --image-max-width: {{ section.settings.max_width }}px;
     --kd-iwh-img: {{ section.settings.max_width }};
+    --kd-iwh-tile-max: {{ section.settings.tile_max_width | default: 360 }}px;
   }
   {%- if section.settings.mobile_arrow_background != blank or section.settings.mobile_arrow_icon_color != blank %}
   {%- comment -%} Mobile carousel arrows. The ID selector outranks the theme's `.push-btn:hover .push-btn__surface`
@@ -804,6 +805,17 @@
       "step": 10,
       "unit": "px",
       "info": "Width of the picture from 992px. Mockup: 400 px."
+    },
+    {
+      "type": "range",
+      "id": "tile_max_width",
+      "label": "Highlight width – max",
+      "default": 360,
+      "min": 240,
+      "max": 480,
+      "step": 10,
+      "unit": "px",
+      "info": "From 992px: the highlight tiles beside the picture never get wider than this, so large screens don't add empty space around the text."
     },
     {
       "type": "select",

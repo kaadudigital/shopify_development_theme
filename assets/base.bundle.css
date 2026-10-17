@@ -8563,7 +8563,8 @@ section.kd-iwh {
   .kd-iwh__mobile { display: none; }
   .kd-iwh__desktop {
     display: grid;
-    grid-template-columns: minmax(0, 320px) minmax(0, var(--image-max-width)) minmax(0, 320px);
+    /* Tile columns capped by «Highlight width – max» (--kd-iwh-tile-max) */
+    grid-template-columns: minmax(0, min(320px, var(--kd-iwh-tile-max, 448px))) minmax(0, var(--image-max-width)) minmax(0, min(320px, var(--kd-iwh-tile-max, 448px)));
     justify-content: center;
     align-items: center;
     gap: var(--space-6);
@@ -8578,9 +8579,9 @@ section.kd-iwh {
 @media (min-width: 1441px) {
   .kd-iwh__desktop {
     grid-template-columns:
-      minmax(0, min(calc(320 * var(--kd-px)), 448px))
+      minmax(0, min(calc(320 * var(--kd-px)), var(--kd-iwh-tile-max, 448px)))
       minmax(0, min(calc(var(--kd-iwh-img) * var(--kd-px)), calc(var(--kd-iwh-img) * 1.4px)))
-      minmax(0, min(calc(320 * var(--kd-px)), 448px));
+      minmax(0, min(calc(320 * var(--kd-px)), var(--kd-iwh-tile-max, 448px)));
   }
 }
 
