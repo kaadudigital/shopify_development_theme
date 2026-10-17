@@ -7728,8 +7728,9 @@ section.kd-iw-band { --media-border-radius: 0px; background-color: var(--kd-iw-b
 .kd-video__text   { color: var(--kd-video-text, var(--paper)); }
 .kd-video__text > :first-child { margin-top: 0; }
 .kd-video__text > :last-child  { margin-bottom: 0; }
-/* Title/text → button: --kd-video-btn-gap (section setting, mobile / ≥768); the column gap (16px) is already there */
-.kd-video__actions { margin-top: calc(var(--kd-video-btn-gap, var(--space-6)) - var(--space-4)); }
+/* Title/text → button: --kd-video-btn-gap (section setting, mobile / ≥768). The column gap doesn't reach here
+   (title, text and button sit in one wrapper), so the margin is the whole space. */
+.kd-video__actions { margin-top: var(--kd-video-btn-gap, var(--space-6)); }
 .kd-video__actions .kd-btn:not(.kd-btn--art) {
   --kd-cloud: var(--kd-video-btn, var(--purple));
   color: var(--kd-video-btn-label, var(--paper));
