@@ -8453,6 +8453,11 @@ span.kd-phone__play { cursor: default; }
   :is(.kd-videos--left, .kd-videos--right) .kd-videos__rig::before,
   :is(.kd-videos--left, .kd-videos--right) .kd-videos__rig::after { display: none; }
 }
+/* Tablets (768–991): the text column is narrow (the phone is capped at 40 % of the screen in the section CSS), so a
+   long word in the heading («Ungeschnitten») may hyphenate instead of running under the phone. */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  :is(.kd-videos--left, .kd-videos--right) .kd-videos__title { hyphens: auto; overflow-wrap: break-word; }
+}
 @media (min-width: 992px) {
   :is(.kd-videos--left, .kd-videos--right) .kd-videos__inner { column-gap: var(--space-10); }
 }

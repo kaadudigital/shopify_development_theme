@@ -46,6 +46,10 @@
   @media (min-width: 768px) {
     #{{ section.id }} { --kd-phone-w: {{ phone_w }}px; --kd-phone-x: {{ section.settings.phone_position | default: 50 | divided_by: 100.0 }}; }
   }
+  {%- comment -%} Side by side on tablets (768–991): the phone takes at most 40 % of the screen, so the text column keeps room. {%- endcomment %}
+  @media (min-width: 768px) and (max-width: 991.98px) {
+    #{{ section.id }}.kd-videos--left, #{{ section.id }}.kd-videos--right { --kd-phone-w: min({{ phone_w }}px, 40vw); }
+  }
   {%- comment -%} From 1200px the phone grows with the window like the other decorations (DS: share of the 1440 artboard, capped). {%- endcomment %}
   @media (min-width: 1200px) {
     #{{ section.id }} { --kd-phone-w: max({{ phone_w }}px, min(calc({{ phone_w }} * var(--kd-px)), {{ phone_cap }}px)); }
