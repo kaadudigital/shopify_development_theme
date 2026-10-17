@@ -49,6 +49,55 @@
     text-transform: uppercase;
   }
 
+  /* Social links as icons (setting «Social links as»): --kd-social-icon = glyph / uploaded icon colour (blank: footer
+     text colour), --kd-social-accent = the lime outline / star of the built-in icons. 48px tap target. */
+  #{{ section.id }} {
+    --kd-social-size: {{ section.settings.social_icon_size | default: 40 }}px;
+    {%- if section.settings.social_icon_color != blank %}
+    --kd-social-icon: {{ section.settings.social_icon_color }};
+    {%- endif %}
+    {%- if section.settings.social_accent_color != blank %}
+    --kd-social-accent: {{ section.settings.social_accent_color }};
+    {%- endif %}
+  }
+  {%- for block in section.blocks -%}
+    {%- if block.type == 'social' and block.settings.icon != blank %}
+  #{{ section.id }} .kd-footer__social-link--{{ block.id }} { --kd-social-url: url({{ block.settings.icon | image_url: width: 192 }}); }
+    {%- endif -%}
+  {%- endfor %}
+  #{{ section.id }} .kd-footer__social--icons { gap: var(--space-2) var(--space-3); }
+  #{{ section.id }} .kd-footer__social--icons a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    min-height: 48px;
+  }
+  #{{ section.id }} .kd-footer__social--icons a::before { content: none; }
+  #{{ section.id }} .kd-social-icon { display: block; width: var(--kd-social-size); height: var(--kd-social-size); }
+  #{{ section.id }} .kd-social-icon__glyph { fill: var(--kd-social-icon, currentColor); }
+  #{{ section.id }} .kd-social-icon__accent { fill: var(--kd-social-accent, var(--lime)); }
+  #{{ section.id }} .kd-social-icon__accent--line {
+    fill: none;
+    stroke: var(--kd-social-accent, var(--lime));
+    stroke-width: 19;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  /* Uploaded icon: drawn in the icon colour through its shape (mask), so any single-colour SVG / PNG works */
+  #{{ section.id }} .kd-footer__social-mask {
+    display: block;
+    width: var(--kd-social-size);
+    height: var(--kd-social-size);
+    background: var(--kd-social-icon, currentColor);
+    -webkit-mask: var(--kd-social-url) center / contain no-repeat;
+    mask: var(--kd-social-url) center / contain no-repeat;
+  }
+  #{{ section.id }} .kd-footer__social--icons a:hover { text-decoration: none; transform: translateY(-2px); }
+  @media (prefers-reduced-motion: reduce) {
+    #{{ section.id }} .kd-footer__social--icons a:hover { transform: none; }
+  }
+
   #{{ section.id }} .kd-footer__note {
     margin: 0;
     font-size: 12px;
@@ -113,12 +162,50 @@
             <p class="kd-footer__mail">{{ section.settings.email }}</p>
           {%- endif -%}
           {%- if section.settings.show_social_icons -%}
-            <ul class="kd-footer__social">
-              {%- if section.settings.instagram_url != blank -%}
-                <li><a href="{{ section.settings.instagram_url }}" target="_blank" rel="noopener">Instagram</a></li>
-              {%- endif -%}
-              {%- if section.settings.tiktok_url != blank -%}
-                <li><a href="{{ section.settings.tiktok_url }}" target="_blank" rel="noopener">TikTok</a></li>
+            {%- liquid
+              assign social_blocks = section.blocks | where: 'type', 'social'
+              assign as_icons = false
+              if section.settings.social_style == 'icons'
+                assign as_icons = true
+              endif
+            -%}
+            <ul class="kd-footer__social{% if as_icons %} kd-footer__social--icons{% endif %}">
+              {%- if social_blocks.size > 0 -%}
+                {%- for block in social_blocks -%}
+                  {%- liquid
+                    assign net = block.settings.network
+                    assign name = block.settings.name
+                    if name == blank
+                      case net
+                        when 'instagram'
+                          assign name = 'Instagram'
+                        when 'tiktok'
+                          assign name = 'TikTok'
+                      endcase
+                    endif
+                  -%}
+                  {%- if block.settings.url != blank -%}
+                    <li {{ block.shopify_attributes }}>
+                      <a class="kd-footer__social-link--{{ block.id }}" href="{{ block.settings.url }}" target="_blank" rel="noopener"{% if as_icons %} aria-label="{{ name | escape }}"{% endif %}>
+                        {%- if as_icons and block.settings.icon != blank -%}
+                          <span class="kd-footer__social-mask" aria-hidden="true"></span>
+                        {%- elsif as_icons and net != 'other' -%}
+                          {%- render 'kd-social-icon', network: net, style: section.settings.social_icon_style -%}
+                        {%- else -%}
+                          {{- name | escape -}}
+                        {%- endif -%}
+                      </a>
+                    </li>
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- else -%}
+                {%- comment -%} Legacy: no «Social link» blocks yet → the old Instagram / TikTok URL settings {%- endcomment -%}
+                {%- if section.settings.instagram_url != blank -%}
+                  <li><a href="{{ section.settings.instagram_url }}" target="_blank" rel="noopener"{% if as_icons %} aria-label="Instagram"{% endif %}>{% if as_icons %}{% render 'kd-social-icon', network: 'instagram', style: section.settings.social_icon_style %}{% else %}Instagram{% endif %}</a></li>
+                {%- endif -%}
+                {%- if section.settings.tiktok_url != blank -%}
+                  <li><a href="{{ section.settings.tiktok_url }}" target="_blank" rel="noopener"{% if as_icons %} aria-label="TikTok"{% endif %}>{% if as_icons %}{% render 'kd-social-icon', network: 'tiktok', style: section.settings.social_icon_style %}{% else %}TikTok{% endif %}</a></li>
+                {%- endif -%}
               {%- endif -%}
             </ul>
           {%- endif -%}
@@ -188,14 +275,60 @@
       "default": true
     },
     {
+      "type": "select",
+      "id": "social_style",
+      "label": "Social links as",
+      "options": [
+        { "value": "text", "label": "Text" },
+        { "value": "icons", "label": "Icons" }
+      ],
+      "default": "text",
+      "info": "Add one «Social link» block per network (Sections → Custom Footer → Add block)."
+    },
+    {
+      "type": "select",
+      "id": "social_icon_style",
+      "label": "Built-in icon style",
+      "options": [
+        { "value": "outline", "label": "Cloud outline" },
+        { "value": "star", "label": "Star" }
+      ],
+      "default": "outline",
+      "info": "Kaadu icons for Instagram and TikTok. Other networks use the icon uploaded in their block."
+    },
+    {
+      "type": "range",
+      "id": "social_icon_size",
+      "label": "Icon size",
+      "min": 24,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "color",
+      "id": "social_icon_color",
+      "label": "Icon colour",
+      "info": "Leave empty to use the footer text colour. Also colours uploaded icons."
+    },
+    {
+      "type": "color",
+      "id": "social_accent_color",
+      "label": "Icon outline / star colour",
+      "info": "Built-in icons only. Leave empty for lime."
+    },
+    {
       "type": "url",
       "id": "instagram_url",
-      "label": "Instagram URL"
+      "label": "Instagram URL (old)",
+      "info": "Only used while there are no «Social link» blocks."
     },
     {
       "type": "url",
       "id": "tiktok_url",
-      "label": "TikTok URL"
+      "label": "TikTok URL (old)",
+      "info": "Only used while there are no «Social link» blocks."
     },
     {
       "type": "text",
@@ -247,6 +380,36 @@
     }
   ],
       "blocks": [
+    {
+      "type": "social",
+      "name": "Social link",
+      "settings": [
+        {
+          "type": "select",
+          "id": "network",
+          "label": "Network",
+          "options": [
+            { "value": "instagram", "label": "Instagram" },
+            { "value": "tiktok", "label": "TikTok" },
+            { "value": "other", "label": "Other" }
+          ],
+          "default": "instagram"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "info": "Shown as text, and read out by screen readers for icons. Empty: the network's name."
+        },
+        { "type": "url", "id": "url", "label": "Link" },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon (optional)",
+          "info": "Replaces the built-in Kaadu icon; needed for «Other». SVG or PNG from Files, drawn in the icon colour (single colour)."
+        }
+      ]
+    },
     {
       "type": "background_pattern",
       "name": "t:common.blocks.background_pattern.name",

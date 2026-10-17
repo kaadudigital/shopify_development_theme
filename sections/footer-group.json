@@ -66,9 +66,25 @@
             "enable_animation": false,
             "animation_direction": ""
           }
+        },
+        "social_instagram": {
+          "type": "social",
+          "settings": {
+            "network": "instagram",
+            "url": "https://www.instagram.com/eatkaadu"
+          }
+        },
+        "social_tiktok": {
+          "type": "social",
+          "settings": {
+            "network": "tiktok",
+            "url": "https://www.tiktok.com/@eatkaadu"
+          }
         }
       },
       "block_order": [
+        "social_instagram",
+        "social_tiktok",
         "shape_divider_aPNFjV"
       ],
       "custom_css": [
@@ -85,7 +101,8 @@
         "link_1_url": "https://www.kaadu.ch/policies/legal-notice",
         "link_2_text": "Datenschutz",
         "link_2_url": "shopify://policies/privacy-policy",
-        "color_scheme": "scheme3"
+        "color_scheme": "scheme3",
+        "social_style": "icons"
       }
     }
   },
