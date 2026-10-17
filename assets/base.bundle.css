@@ -8896,7 +8896,9 @@ section.kd-split-section { background-color: var(--kd-split-bg, rgb(var(--color-
 section.kd-join { background-color: var(--kd-join-bg, rgb(var(--color-scheme-background))); }
 .kd-join .kd-heading__kicker { color: var(--kd-join-kicker, rgb(var(--color-scheme-eyebrow-text, var(--color-scheme-text)))); }
 .kd-join .kd-heading__title { color: var(--kd-join-heading, rgb(var(--color-scheme-text))); }
-.kd-join__image { width: 200px; height: auto; }
+/* Width: section settings «Image width – mobile / tablet and up» (--kd-join-img-w-m / --kd-join-img-w) */
+.kd-join__image { width: var(--kd-join-img-w-m, 200px); max-width: 100%; height: auto; }
+@media (min-width: 768px) { .kd-join__image { width: var(--kd-join-img-w, 200px); } }
 .kd-join__text { max-width: var(--measure); color: var(--kd-join-text, rgb(var(--color-scheme-body-text))); }
 .kd-join__text p { margin: 0; }
 .kd-join__subtitle { margin: 0; color: var(--kd-join-text, rgb(var(--color-scheme-body-text))); }

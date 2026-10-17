@@ -45,6 +45,10 @@
       {%- endfor %}
     {%- endif %}
   }
+  #section-{{ section.id }} {
+    --kd-join-img-w-m: {{ s.image_width_mobile | default: 200 }}px;
+    --kd-join-img-w: {{ s.image_width | default: 200 }}px;
+  }
   {%- if s.button_image != blank or s.button_image_mobile != blank %}
   #section-{{ section.id }} .kd-btn--art {
     --kd-art-w: {{ s.button_image_width | default: 200 }}px;
@@ -70,7 +74,14 @@
     {%- endif -%}
 
     {%- if s.image != blank -%}
-      {{ s.image | image_url: width: 400 | image_tag: class: 'kd-join__image', loading: 'lazy', alt: s.image.alt }}
+      {%- liquid
+        assign img_w_m = s.image_width_mobile | default: 200
+        assign img_w_d = s.image_width | default: 200
+        assign img_max = img_w_m | at_least: img_w_d | times: 2 | at_most: s.image.width
+        assign img_widths = img_w_m | append: ',' | append: img_w_d | append: ',' | append: img_max
+        assign img_sizes = '(min-width: 768px) ' | append: img_w_d | append: 'px, ' | append: img_w_m | append: 'px'
+      -%}
+      {{ s.image | image_url: width: img_max | image_tag: class: 'kd-join__image', loading: 'lazy', alt: s.image.alt, widths: img_widths, sizes: img_sizes }}
     {%- endif -%}
 
     {%- if s.text != blank -%}
@@ -215,6 +226,27 @@
       "label": "Hide image on mobile",
       "info": "Below 768px.",
       "default": false
+    },
+    {
+      "type": "range",
+      "id": "image_width_mobile",
+      "label": "Image width – mobile",
+      "min": 80,
+      "max": 390,
+      "step": 10,
+      "unit": "px",
+      "default": 200,
+      "info": "Below 768px. Never wider than the screen allows."
+    },
+    {
+      "type": "range",
+      "id": "image_width",
+      "label": "Image width – tablet and up",
+      "min": 120,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "default": 200
     },
     {
       "type": "richtext",

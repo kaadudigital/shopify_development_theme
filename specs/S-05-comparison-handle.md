@@ -1,5 +1,5 @@
 # S-05 · Kaadu comparison slider — settable handle shape and arrow
-Status: approved · Owner: – · Files: `sections/kaadu-comparison.liquid`, `assets/base.bundle.css` (COMPARISON)
+Status: done · Owner: – · Files: `sections/kaadu-comparison.liquid`, `assets/base.bundle.css` (COMPARISON)
 
 ## Goal
 The round handle and the ↔ arrow (a text character today) can be swapped from the editor.
@@ -20,3 +20,9 @@ The round handle and the ↔ arrow (a text character today) can be swapped from 
 ## Decisions (2026-10-17)
 - Built-in **Cloud** handle as an option, next to Circle and **Custom image**.
 - Custom image is shown as uploaded (proposed; an SVG keeps its own colours).
+
+## Verification (2026-10-17, preview)
+- AC1 circle (default) and cloud measured centred on the edge (offset 0) at 390 and 1440; circle 44 / 60px, cloud 70 × 44 / 96 × 60. ✓
+- AC2 the range input covers the whole slider, so the tap target never depends on the handle size. ✓
+- AC3 default = circle + double arrow at today's 44 / 60px. ✓ (the ↔ glyph became an SVG arrow in the same colour)
+- Custom handle / arrow images: markup and CSS in place, **not tested live** — needs an image picked in the editor.
