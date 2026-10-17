@@ -240,6 +240,7 @@
       ],
       "name": "Custom Sticker Heading",
       "settings": {
+        "image_width_mobile_vw": 90,
         "row_image_position": "left",
         "quote_cite": "",
         "image_shadow": false,
@@ -344,8 +345,7 @@
         "quote_color": "#ac0300",
         "quote_bg_color": "#ffc6ff",
         "cite_color": "#1a1a1a",
-        "cite_bg_color": "#ffc6ff",
-        "image_width_mobile_vw": 90
+        "cite_bg_color": "#ffc6ff"
       }
     },
     "kaadu_people_cards_wP7k2m": {
@@ -1058,6 +1058,7 @@
       ],
       "name": "Custom Sticker Heading",
       "settings": {
+        "image_width_mobile_vw": 77,
         "row_image_position": "left",
         "quote_cite": "[NAME], Verarbeitung in Vadacode",
         "image_shadow": false,
@@ -1161,8 +1162,7 @@
         "quote_color": "#ac0300",
         "quote_bg_color": "#ffc6ff",
         "cite_color": "#1a1a1a",
-        "cite_bg_color": "#ffc6ff",
-        "image_width_mobile_vw": 77
+        "cite_bg_color": "#ffc6ff"
       }
     },
     "image_with_text_custom_probier": {
