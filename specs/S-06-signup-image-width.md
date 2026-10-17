@@ -1,5 +1,5 @@
 # S-06 · Email Signup — image width settings
-Status: approved · Owner: this session (handed over from the peer) · Files: `sections/email-input.liquid`, `assets/base.bundle.css`
+Status: done · Owner: this session (handed over from the peer) · Files: `sections/email-input.liquid`, `assets/base.bundle.css`
 
 ## Goal
 The optional image's width is settable: one value for mobile, one for tablet and up.
@@ -25,3 +25,9 @@ The optional image's width is settable: one value for mobile, one for tablet and
 - `use_custom_colors` right under `color_scheme`, default off; kd-join vars + fallbacks in base.bundle.css (JOIN block).
 - Mobile `.kd-join--art .kd-form` is `flex-direction: row`, input `flex: 1 1 auto; min-width: 0`, so the art button stays in the row;
   `.kd-form .kd-btn.kd-btn--art` keeps its set width.
+
+## Verification (2026-10-17, preview)
+- AC1 tablet and up: 200px at 768 / 1440 / 2560 (= setting). Mobile: the homepage has «Hide image on mobile» on, so the
+  image is hidden at 390 (as before); the mobile width applies as soon as that is switched off. ✓
+- AC2 defaults 200 / 200px = today's 200px. ✓
+- AC3 2× screens load `width=400` (srcset + sizes from the settings). ✓
