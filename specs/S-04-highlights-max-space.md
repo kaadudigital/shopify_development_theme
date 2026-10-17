@@ -1,5 +1,5 @@
 # S-04 · Bild mit Highlights — cap the tiles' empty space on large screens
-Status: approved · Owner: – · Files: `sections/custom-image-with-highlights.liquid`, `assets/base.bundle.css` (STATS AROUND AN IMAGE)
+Status: done · Owner: – · Files: `sections/custom-image-with-highlights.liquid`, `assets/base.bundle.css` (STATS AROUND AN IMAGE)
 
 ## Goal
 From 1441px the tile columns scale with the screen (320px × up to 1.4 = 448px), but the stat text doesn't, so
@@ -17,3 +17,8 @@ the tiles get ever more empty space around the text (seen at 2560: 448-wide tile
 
 ## Decisions (2026-10-17)
 - The problem is the empty space **inside the tiles**, left and right of the text → cap the tile width (setting, default 360px).
+
+## Verification (2026-10-17, preview)
+- AC1 tile width: 1200 / 1440 **320px** (unchanged), 1920 / 2560 **360px** (= max, identical). ✓
+- AC2 below 1441 unchanged (390 / 768 mobile grid, 1200 / 1440 320px). ✓
+- AC3 tile ↔ image gap untouched (`--space-6`). ✓

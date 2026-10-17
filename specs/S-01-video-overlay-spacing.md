@@ -1,5 +1,5 @@
 # S-01 · Custom Video Text Overlay — more space between title and button
-Status: approved · Owner: – · Files: `sections/custom-video-with-text-overlay.liquid`, `assets/base.bundle.css` (VIDEO BAND)
+Status: done · Owner: – · Files: `sections/custom-video-with-text-overlay.liquid`, `assets/base.bundle.css` (VIDEO BAND)
 
 ## Goal
 The button sits too close to the title. Give it more air on every screen size.
@@ -25,3 +25,8 @@ Title size, colours, video behaviour.
 
 ## Decisions (2026-10-17)
 - Space above the button is a **setting** (mobile and ≥768), defaults 40 / 56px.
+
+## Verification (2026-10-17, preview)
+- AC1 title → button measured: 390 **40px**; 768 / 1200 / 1440 / 1920 / 2560 **56px**. ✓
+- AC2 one margin on the button wrapper, so with intro text the space is text → button. ✓
+- AC3 tokens only (`--space-*`), no inline styles. ✓
