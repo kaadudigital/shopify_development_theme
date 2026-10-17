@@ -52,7 +52,7 @@
   /* Social links as icons (setting «Social links as»): --kd-social-icon = glyph / uploaded icon colour (blank: footer
      text colour), --kd-social-accent = the lime outline / star of the built-in icons. 48px tap target. */
   #{{ section.id }} {
-    --kd-social-size: {{ section.settings.social_icon_size | default: 40 }}px;
+    --kd-social-size: {{ section.settings.social_icon_size | default: 48 }}px;
     {%- if section.settings.social_icon_color != blank %}
     --kd-social-icon: {{ section.settings.social_icon_color }};
     {%- endif %}
@@ -73,7 +73,7 @@
     min-width: 48px;
     min-height: 48px;
   }
-  #{{ section.id }} .kd-footer__social--icons a::before { content: none; }
+  #{{ section.id }} .kd-footer__social.kd-footer__social--icons a::before { content: none; } /* beats the ✶ of text links below */
   #{{ section.id }} .kd-social-icon { display: block; width: var(--kd-social-size); height: var(--kd-social-size); }
   #{{ section.id }} .kd-social-icon__glyph { fill: var(--kd-social-icon, currentColor); }
   #{{ section.id }} .kd-social-icon__accent { fill: var(--kd-social-accent, var(--lime)); }
@@ -304,7 +304,7 @@
       "max": 64,
       "step": 2,
       "unit": "px",
-      "default": 40
+      "default": 48
     },
     {
       "type": "color",
