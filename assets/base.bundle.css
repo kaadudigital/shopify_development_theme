@@ -8015,12 +8015,18 @@ section.kd-is-band { background-color: var(--kd-is-bg, rgb(var(--color-scheme-ba
 .kd-people--shaped .kd-card__body { padding: 0 var(--space-8) var(--space-4); }
 .kd-people--shaped .kd-card__actions { padding: 0 var(--space-8) var(--space-9); }
 .kd-people--shaped .kd-card--cta { padding: var(--space-9) var(--space-8); }
+/* Without a «Mehr dazu» button the text is the last thing on the card: lift it clear of the scalloped bottom edge */
+.kd-people--shaped .kd-card__body:last-child { padding-bottom: var(--space-12); }
 @media (max-width: 767.98px) {
   /* Smaller insets on the 340px card so the text keeps room inside the scalloped frame */
   .kd-people--shaped .kd-card__count { top: var(--space-6); left: var(--space-8); }
-  .kd-people--shaped .kd-card__body { padding: 0 var(--space-7) var(--space-3); }
-  .kd-people--shaped .kd-card__actions { padding: 0 var(--space-7) var(--space-8); }
-  .kd-people--shaped .kd-card--cta { padding: var(--space-8) var(--space-7); }
+  .kd-people--shaped .kd-card__body { padding: 0 var(--space-8) var(--space-3); }
+  .kd-people--shaped .kd-card__body:last-child { padding-bottom: var(--space-9); }
+  .kd-people--shaped .kd-card__actions { padding: 0 var(--space-8) var(--space-8); }
+  /* Action card on the small card: DS Strong LG heading (24px) and Body SM text, so all five parts fit the frame */
+  .kd-people--shaped .kd-card--cta { padding: var(--space-8) var(--space-8) var(--space-9); }
+  .kd-people .kd-card__cta-heading { font-size: 24px; line-height: 1.1; }
+  .kd-people .kd-card__cta-text { font-size: 13px; line-height: 1.4; }
 }
 
 @media (min-width: 768px) {
