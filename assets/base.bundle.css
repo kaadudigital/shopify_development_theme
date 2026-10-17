@@ -8687,16 +8687,30 @@ section.kd-compare-section { background-color: var(--kd-cmp-bg, rgb(var(--color-
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: var(--kd-cmp-handle-size, 44px);
+  height: var(--kd-cmp-handle-size, 44px);
   border-radius: var(--radius-pill);
   background: var(--kd-cmp-handle, rgb(var(--color-scheme-accent-1)));
   color: var(--kd-cmp-handle-arrow, rgb(var(--color-scheme-accent-1-contrast)));
-  font-size: 14px;
-  font-weight: 600;
   transform: translate(-50%, -50%);
   box-shadow: var(--shadow-card);
 }
+/* Handle shapes (section setting «Handle shape»): cloud = #kd-cloud-path in the handle colour, wider than tall;
+   custom image = shown as uploaded. Both drop the circle's background. */
+.kd-compare__handle--cloud,
+.kd-compare__handle--image { background: none; border-radius: 0; box-shadow: none; }
+.kd-compare__handle--cloud { width: calc(var(--kd-cmp-handle-size, 44px) * 1.6); }
+.kd-compare__handle-shape {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  fill: var(--kd-cmp-handle, rgb(var(--color-scheme-accent-1)));
+  filter: drop-shadow(var(--shadow-card));
+}
+.kd-compare__arrow { position: relative; width: 45%; height: 45%; object-fit: contain; }
+.kd-compare__handle--cloud .kd-compare__arrow { width: 28%; }
 .kd-compare__range {
   position: absolute;
   inset: 0;
@@ -8736,7 +8750,6 @@ section.kd-compare-section { background-color: var(--kd-cmp-bg, rgb(var(--color-
   .kd-compare__col:has(.kd-compare__photo) .kd-compare__list { padding: 14px 18px; }
   .kd-compare__row--desktop { display: flex !important; }
   .kd-compare__logo { height: 56px; }
-  .kd-compare__handle { width: 60px; height: 60px; font-size: 20px; }
   .kd-compare-section__notes { max-width: 1100px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
   .kd-compare-section__notes:not(:has(.kd-compare-section__card--desktop, .kd-compare-section__card--all)) { display: none; }
   .kd-compare-section__notes:has(.kd-compare-section__card--desktop, .kd-compare-section__card--all) { display: grid; }

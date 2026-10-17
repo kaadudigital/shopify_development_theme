@@ -31,6 +31,10 @@
         {%- endif -%}
       {%- endfor %}
     {%- endif %}
+    --kd-cmp-handle-size: {{ section.settings.handle_size_mobile | default: 44 }}px;
+  }
+  @media (min-width: 768px) {
+    #{{ section.id }} { --kd-cmp-handle-size: {{ section.settings.handle_size | default: 60 }}px; }
   }
 {%- endstyle -%}
 
@@ -108,7 +112,32 @@
         </div>
       </div>
 
-      <div class="kd-compare__edge" aria-hidden="true"><span class="kd-compare__handle">&#8596;</span></div>
+      {%- liquid
+        assign handle_shape = section.settings.handle_shape | default: 'circle'
+        if handle_shape == 'image' and section.settings.handle_image == blank
+          assign handle_shape = 'circle'
+        endif
+        assign handle_arrow = section.settings.handle_arrow | default: 'default'
+        if handle_arrow == 'image' and section.settings.handle_arrow_image == blank
+          assign handle_arrow = 'default'
+        endif
+      -%}
+      <div class="kd-compare__edge" aria-hidden="true">
+        <span class="kd-compare__handle kd-compare__handle--{{ handle_shape }}">
+          {%- case handle_shape -%}
+            {%- when 'cloud' -%}
+              <svg class="kd-compare__handle-shape" viewBox="0 0 3149.217 889.043" preserveAspectRatio="none" focusable="false"><use href="#kd-cloud-path"></use></svg>
+            {%- when 'image' -%}
+              {{ section.settings.handle_image | image_url: width: 240 | image_tag: class: 'kd-compare__handle-shape', alt: '', loading: 'lazy' }}
+          {%- endcase -%}
+          {%- case handle_arrow -%}
+            {%- when 'default' -%}
+              <svg class="kd-compare__arrow" viewBox="0 0 24 24" focusable="false"><path d="M7 7l-5 5 5 5M17 7l5 5-5 5M2 12h20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            {%- when 'image' -%}
+              {{ section.settings.handle_arrow_image | image_url: width: 120 | image_tag: class: 'kd-compare__arrow kd-compare__arrow--image', alt: '', loading: 'lazy' }}
+          {%- endcase -%}
+        </span>
+      </div>
       <label class="kd-sr" for="kd-compare-{{ section.id }}">{{ section.settings.slider_label | escape }}</label>
       <input
         class="kd-compare__range"
@@ -259,6 +288,65 @@
       "id": "slider_label",
       "label": "Slider label (screen readers)",
       "default": "Vergleich verschieben"
+    },
+    {
+      "type": "header",
+      "content": "Handle"
+    },
+    {
+      "type": "select",
+      "id": "handle_shape",
+      "label": "Handle shape",
+      "options": [
+        { "value": "circle", "label": "Circle" },
+        { "value": "cloud", "label": "Cloud" },
+        { "value": "image", "label": "Custom image" }
+      ],
+      "default": "circle",
+      "info": "Circle and cloud take the «Handle and edge» colour. A custom image is shown as uploaded."
+    },
+    {
+      "type": "image_picker",
+      "id": "handle_image",
+      "label": "Custom handle image",
+      "info": "SVG or PNG, square works best. Used with «Custom image»."
+    },
+    {
+      "type": "select",
+      "id": "handle_arrow",
+      "label": "Arrow",
+      "options": [
+        { "value": "default", "label": "Double arrow" },
+        { "value": "image", "label": "Custom image" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "default",
+      "info": "The double arrow takes the «Handle arrow» colour."
+    },
+    {
+      "type": "image_picker",
+      "id": "handle_arrow_image",
+      "label": "Custom arrow image"
+    },
+    {
+      "type": "range",
+      "id": "handle_size_mobile",
+      "label": "Handle size – mobile",
+      "min": 40,
+      "max": 96,
+      "step": 2,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "handle_size",
+      "label": "Handle size – tablet and up",
+      "min": 40,
+      "max": 96,
+      "step": 2,
+      "unit": "px",
+      "default": 60
     },
     {
       "type": "checkbox",
