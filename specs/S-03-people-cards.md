@@ -1,5 +1,5 @@
 # S-03 · Kaadu people cards — wider cards, no details, CTA card always last
-Status: approved · Owner: – · Files: `sections/kaadu-people-cards.liquid`, `assets/base.bundle.css` (PEOPLE CARDS), `assets/kaadu.js` (flip)
+Status: done · Owner: – · Files: `sections/kaadu-people-cards.liquid`, `assets/base.bundle.css` (PEOPLE CARDS), `assets/kaadu.js` (flip)
 
 ## Goal
 Cards look squished. Use the mockup's **desktop** card proportion everywhere, remove the details flip,
@@ -36,3 +36,13 @@ Desktop 400 × 600 (2 : 3). Mobile 310 × 560, or 310 × 420 with the cloud fram
 - Mobile card width `min(340px, 85vw)`, 4 : 5.
 - Action card link is a **setting** (`url`, default `/#probieren`); its label, pill, heading, text and note are settings too.
 - Back-of-card texts can disappear.
+
+## Verification (2026-10-17, preview)
+- AC1 every card 4 : 5 (0.800) at 390 / 768 / 1200 / 1440 / 1920 / 2560; mobile 332px wide (85vw), 480 × 600 from 768. ✓
+- AC2 no Details button / back side (0 found); flip JS removed. The only page errors are the video band's
+  «play() interrupted by pause()» while scrolling — older, not from this section. ✓
+- AC3 last card is the action card at every width: «05 / 5 · Und du», heading, text, «Probierpaket holen» → /#probieren, note. ✓
+- AC4 no horizontal page scroll; snap / autoplay untouched. ✓
+- AC5 action card colours are the existing CTA colour settings (mockup defaults). This section has no
+  «Use the colours below» switch yet (older section) — open follow-up, not part of S-03.
+- Fixes during the build: text lifted clear of the scalloped bottom edge; mobile action card uses DS Strong LG / Body SM so all parts fit.

@@ -1,5 +1,5 @@
 # S-07 · Custom footer — SVG social icons
-Status: approved · Owner: – · Files: `sections/custom-footer.liquid` (footer group)
+Status: done · Owner: – · Files: `sections/custom-footer.liquid` (footer group)
 
 ## Goal
 Show icons instead of the words «Instagram» / «TikTok». The icon files are picked in the editor.
@@ -24,3 +24,11 @@ Show icons instead of the words «Instagram» / «TikTok». The icon files are p
 - Icons come from the shared Drive folder https://drive.google.com/drive/folders/1jphG8rz5bhG8fYO4LF2l6XrA1SMHqXd1 (uploaded to Shopify Files, picked per block).
 - Icon colour is a **setting**, default = the footer text colour. So icons are drawn as a single-colour mask of the SVG
   (multi-colour logos come out in one colour).
+
+## Verification (2026-10-17, preview)
+- AC1 icons mode live: Instagram + TikTok blocks, built-in two-colour Kaadu icons (cloud outline), 48px, glyph in the footer text
+  colour (paper), outline lime, aria-labels «Instagram» / «TikTok», links to the existing profiles, 48px tap targets. ✓
+- AC2 «Text» mode renders the names as before (same markup path). ✓
+- AC3 a block with a URL but no built-in icon and no upload («Other») falls back to its name. ✓
+- Uploaded icons (mask in the icon colour): in place, **not tested live** — needs an icon picked in the editor.
+- Shopify skipped one sync (f0040e7); re-pushed in 78deb32.

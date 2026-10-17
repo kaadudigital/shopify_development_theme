@@ -1,5 +1,5 @@
 # S-08 · Vertikale Video-Einbettungen — hint on top, side-by-side layout
-Status: approved · Owner: – · Files: `sections/vertical-video-embeds.liquid`, `assets/base.bundle.css`
+Status: done · Owner: – · Files: `sections/vertical-video-embeds.liquid`, `assets/base.bundle.css`
 
 ## Goal
 1. The hint («← Wischen für den nächsten Clip · 3 Clips →») moves from below the phone to above the phone frame.
@@ -22,3 +22,10 @@ Status: approved · Owner: – · Files: `sections/vertical-video-embeds.liquid`
 ## Decisions (2026-10-17)
 - The bead strap stays as it is.
 - Phone side is a setting: **Left / Right** (default right).
+
+## Verification (2026-10-17, preview)
+- AC1 hint above the phone (12px gap) at 390 / 768 / 1200 / 1440 / 1920 / 2560. ✓
+- AC2 side by side from 768, text column left of the phone everywhere; section height at 1440: **1147 → 884px**. ✓
+  Tablets 768–991: phone at most 40 % of the screen, the heading hyphenates («Unge-schnitten») instead of running under the phone.
+- AC3 swipe / arrows / clip count unchanged (same elements and JS hooks, only moved). ✓
+- AC4 «Centred» keeps the stacked layout (hint now above the phone). ✓
