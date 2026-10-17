@@ -7763,7 +7763,16 @@ section.kd-is-band { background-color: var(--kd-is-bg, rgb(var(--color-scheme-ba
   text-align: center;
 }
 .kd-is--quote .kd-is__row { grid-template-areas: "media" "body"; }
-.kd-is__media { grid-area: media; width: 100%; max-width: var(--kd-is-w, 480px); }
+/* Mobile: the image is --kd-is-w wide (setting in % of the screen), centred on the column even when it is wider
+   than the column (the negative margins let it run past the gutter; the section clips it). */
+.kd-is__media {
+  grid-area: media;
+  justify-self: start;
+  width: var(--kd-is-w, 90vw);
+  max-width: none;
+  margin-inline: calc((100% - var(--kd-is-w, 90vw)) / 2);
+}
+.kd-is__media picture { display: block; }
 .kd-is__image {
   display: block;
   width: 100%;
@@ -7773,6 +7782,13 @@ section.kd-is-band { background-color: var(--kd-is-bg, rgb(var(--color-scheme-ba
 }
 .kd-is--flat .kd-is__image { box-shadow: none; }
 .kd-is__head { grid-area: head; }
+/* «Heading on a card»: the heading sits on a card in the colour scheme's card colours */
+.kd-is__head--card {
+  padding: var(--space-4) var(--space-6);
+  background: rgb(var(--color-scheme-card));
+  box-shadow: var(--shadow-card);
+}
+.kd-is__head--card .kd-is__title { color: rgb(var(--color-scheme-card-text)); }
 /* Wraps head + body; transparent to the row grid, becomes the text block in the free canvas (section CSS). */
 .kd-is__text-group { display: contents; }
 .kd-is__body {
@@ -7815,7 +7831,7 @@ section.kd-is-band { background-color: var(--kd-is-bg, rgb(var(--color-scheme-ba
   .kd-is--quote.kd-is--image-right .kd-is__row { grid-template-areas: ". media" "body media" "body media" ". media"; }
   .kd-is--no-image .kd-is__row { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; grid-template-areas: "head" "body"; }
   .kd-is--quote.kd-is--no-image .kd-is__row { grid-template-areas: "body"; }
-  .kd-is__media { max-width: none; }
+  .kd-is__media { width: 100%; margin-inline: 0; justify-self: stretch; }
 }
 @media (min-width: 1200px) {
   .kd-is__row { column-gap: var(--space-10); }
