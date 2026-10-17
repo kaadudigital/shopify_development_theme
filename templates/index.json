@@ -475,7 +475,8 @@
         "footer_button_color": "#542a76",
         "footer_button_label_color": "#fffff5",
         "color_scheme": "scheme-389c794f-4614-44af-93cb-cbbfec11d15a",
-        "use_gradient_background": false
+        "use_gradient_background": false,
+        "action_button_link": "/#probieren"
       }
     },
     "pack_selector_cEiAYy": {

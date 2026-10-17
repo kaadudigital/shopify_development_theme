@@ -7822,8 +7822,9 @@ section.kd-is-band { background-color: var(--kd-is-bg, rgb(var(--color-scheme-ba
 }
 
 /* ── PEOPLE CARDS (DS PeopleCard) — sections/kaadu-people-cards.liquid ──
-   400 × 600 snap cards (mobile 310 × 560, proposed). The carousel is never capped (DS Large screens). */
-.kd-people { padding-block: var(--space-8) var(--space-9); }
+   4 : 5 snap cards as on the mockup's desktop board: 480 × 600, mobile min(340px, 85vw) wide (spec S-03).
+   The carousel is never capped (DS Large screens). */
+.kd-people { --kd-people-card-w: 480px; padding-block: var(--space-8) var(--space-9); }
 .kd-people__header {
   display: flex;
   flex-wrap: wrap;
@@ -7872,7 +7873,7 @@ section.kd-is-band { background-color: var(--kd-is-bg, rgb(var(--color-scheme-ba
 @media (min-width: 768px) {
   .kd-people .kd-people__header,
   .kd-people .kd-people__footer {
-    max-width: calc(var(--kd-people-n, 4) * var(--card-w) + (var(--kd-people-n, 4) - 1) * var(--space-5) + 2 * var(--gutter));
+    max-width: calc(var(--kd-people-n, 4) * var(--kd-people-card-w) + (var(--kd-people-n, 4) - 1) * var(--space-5) + 2 * var(--gutter));
     margin-inline: auto;
   }
 }
@@ -7887,8 +7888,8 @@ section.kd-is-band { background-color: var(--kd-is-bg, rgb(var(--color-scheme-ba
   flex-direction: column;
   justify-content: flex-end;
   flex-shrink: 0;
-  width: min(310px, 80vw);
-  height: 560px;
+  width: min(340px, 85vw);
+  aspect-ratio: 4 / 5;
   overflow: hidden;
   scroll-snap-align: start;
   background: var(--tint-cocoa);
@@ -7906,7 +7907,6 @@ section.kd-is-band { background-color: var(--kd-is-bg, rgb(var(--color-scheme-ba
   inset: 0;
   background: linear-gradient(180deg, rgba(20, 5, 25, 0) 30%, rgba(20, 5, 25, 0.55) 60%, var(--overlay-card) 100%);
 }
-.kd-card.is-flipped .kd-card__fade { background: var(--overlay-card); }
 .kd-card__count { position: absolute; top: 14px; left: 16px; margin: 0; opacity: 0.8; }
 .kd-card__body {
   position: relative;
@@ -7915,7 +7915,6 @@ section.kd-is-band { background-color: var(--kd-is-bg, rgb(var(--color-scheme-ba
   gap: var(--space-2);
   padding: 0 var(--space-5) var(--space-4);
 }
-.kd-card__body[hidden] { display: none; }
 .kd-card__stat {
   margin: 0;
   font-family: var(--font-display);
@@ -7938,7 +7937,10 @@ section.kd-is-band { background-color: var(--kd-is-bg, rgb(var(--color-scheme-ba
   padding: var(--space-6) var(--space-5);
   background: var(--red);
 }
-.kd-card__cta-top { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-4); }
+.kd-card__cta-top { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-3); }
+.kd-card__cta-text { margin: 0; }
+.kd-card__cta-bottom { display: flex; flex-direction: column; gap: var(--space-2); }
+.kd-card__cta-note { margin: 0; font-size: 12px; font-weight: 600; line-height: 1.35; text-align: center; }
 .kd-card__cta-top .kd-tag { margin: 0; }
 .kd-card__cta-heading {
   margin: 0;
@@ -7955,7 +7957,7 @@ section.kd-is-band { background-color: var(--kd-is-bg, rgb(var(--color-scheme-ba
   .kd-people { padding-block: var(--space-12) var(--space-12); }
   .kd-people__hint { font-size: 14px; }
   .kd-carousel { gap: var(--space-5); }
-  .kd-card { width: var(--card-w); height: 600px; scroll-snap-align: center; }
+  .kd-card { width: var(--kd-people-card-w); scroll-snap-align: center; }
   .kd-card__stat { font-size: 64px; }
   .kd-card__body { padding: 0 var(--space-7) var(--space-4); }
   .kd-card__actions { padding: 0 var(--space-7) var(--space-7); }
@@ -7979,8 +7981,7 @@ section.kd-is-band { background-color: var(--kd-is-bg, rgb(var(--color-scheme-ba
 .kd-people .kd-card__title { color: inherit; }
 .kd-people .kd-card__stat { color: var(--kd-pc-stat-m, var(--red)); -webkit-text-stroke-color: var(--kd-pc-stat-outline, var(--paper)); }
 .kd-people .kd-card__fact { color: var(--kd-pc-fact, var(--lime)); }
-.kd-people .kd-card__actions .kd-btn--outline:not([aria-pressed="true"]) { color: var(--kd-pc-card-btn, var(--paper)); }
-.kd-people .kd-card__actions .kd-btn--outline[aria-pressed="true"] { --kd-cloud: var(--kd-pc-card-btn, var(--paper)); }
+.kd-people .kd-card__actions .kd-btn--outline { color: var(--kd-pc-card-btn, var(--paper)); }
 .kd-people .kd-card--cta { background: var(--kd-pc-cta-bg, var(--red)); color: var(--kd-pc-cta-text, var(--paper)); }
 .kd-people .kd-card__cta-heading { color: inherit; }
 .kd-people .kd-card__pill { background: var(--kd-pc-cta-pill, var(--lime)); color: var(--kd-pc-cta-pill-text, var(--purple)); }
@@ -8015,8 +8016,11 @@ section.kd-is-band { background-color: var(--kd-is-bg, rgb(var(--color-scheme-ba
 .kd-people--shaped .kd-card__actions { padding: 0 var(--space-8) var(--space-9); }
 .kd-people--shaped .kd-card--cta { padding: var(--space-9) var(--space-8); }
 @media (max-width: 767.98px) {
-  /* The frame is close to square; a 310 × 560 card stretches it, so shaped cards are shorter on mobile (setting). */
-  .kd-people--shaped .kd-card { height: var(--kd-card-h-m, 420px); }
+  /* Smaller insets on the 340px card so the text keeps room inside the scalloped frame */
+  .kd-people--shaped .kd-card__count { top: var(--space-6); left: var(--space-8); }
+  .kd-people--shaped .kd-card__body { padding: 0 var(--space-7) var(--space-3); }
+  .kd-people--shaped .kd-card__actions { padding: 0 var(--space-7) var(--space-8); }
+  .kd-people--shaped .kd-card--cta { padding: var(--space-8) var(--space-7); }
 }
 
 @media (min-width: 768px) {

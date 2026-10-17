@@ -1,13 +1,21 @@
 {%- comment -%}
-  Kaadu DS PeopleCard carousel ("Wer profitiert"). Cards are 400 × 600 snap cards (mobile 310 × 560, proposed);
-  front: tint or photo under the dark fade, counter, outlined Fagies stat, title, one line; "Details ↻" swaps in
-  the back content (DS: no 3D transform). A card with a link shows "Mehr dazu" and navigates instead of flipping.
-  The CTA card is the solid red last card. Styles: "PEOPLE CARDS" in assets/base.bundle.css; flip: assets/kaadu.js.
+  Kaadu DS PeopleCard carousel ("Wer profitiert"). Cards are 4 : 5 snap cards as in the mockup's desktop board
+  (480 × 600; mobile min(340px, 85vw) wide) — spec S-03. Card: tint or photo under the dark fade, counter, outlined
+  Fagies stat, title, one line; a card with a link shows "Mehr dazu". No back side any more (S-03).
+  The action card is always the last card: «Action card» section settings, or a CTA card block if one exists
+  (its filled-in fields win). Styles: "PEOPLE CARDS" in assets/base.bundle.css.
 {%- endcomment -%}
 {%- liquid
   assign cards = section.blocks | where: 'type', 'card'
-  assign cta_cards = section.blocks | where: 'type', 'cta_card'
-  assign total = cards.size | plus: cta_cards.size
+  assign cta_block = section.blocks | where: 'type', 'cta_card' | first
+  assign show_action = section.settings.show_action_card
+  if cta_block
+    assign show_action = true
+  endif
+  assign total = cards.size
+  if show_action
+    assign total = total | plus: 1
+  endif
   assign position = 0
 
   assign shape_url = 'kd-card-shape.svg' | asset_url
@@ -47,14 +55,13 @@
     --kd-card-mask: url("{{ shape_url_m }}");
     --kd-card-outline: {{ section.settings.card_outline_color }};
     --kd-card-outline-w: {{ section.settings.card_outline_width }}px;
-    --kd-card-h-m: {{ section.settings.card_height_mobile | default: 420 }}px;
     --kd-people-n: {{ total }};
   }
   @media (min-width: 768px) {
     #{{ section.id }} { --kd-card-mask: url("{{ shape_url }}"); }
   }
-  {%- comment -%} All cards fit (n × 400px card + 20px gaps + 2 × 64px gutter): nothing to scroll, so no scroll hint. {%- endcomment -%}
-  {%- assign fit_width = total | times: 420 | minus: 20 | plus: 128 -%}
+  {%- comment -%} All cards fit (n × 480px card + 20px gaps + 2 × 64px gutter): nothing to scroll, so no scroll hint. {%- endcomment -%}
+  {%- assign fit_width = total | times: 500 | minus: 20 | plus: 128 -%}
   @media (min-width: {{ fit_width }}px) {
     #{{ section.id }} .kd-people__hint { visibility: hidden; }
   }
@@ -103,11 +110,11 @@
             {%- if block.settings.image != blank -%}
               {{
                 block.settings.image
-                | image_url: width: 800
+                | image_url: width: 960
                 | image_tag:
                   class: 'kd-card__photo',
-                  widths: '400, 600, 800',
-                  sizes: '(min-width: 768px) 400px, 310px',
+                  widths: '400, 600, 800, 960',
+                  sizes: '(min-width: 768px) 480px, min(340px, 85vw)',
                   loading: 'lazy',
                   alt: block.settings.image.alt
               }}
@@ -115,7 +122,7 @@
             <div class="kd-card__fade" aria-hidden="true"></div>
             <p class="kd-card__count kd-label-sm">{{ counter }}</p>
 
-            <div class="kd-card__body" id="kd-card-{{ block.id }}-front">
+            <div class="kd-card__body">
               {%- if block.settings.stat != blank -%}
                 <p class="kd-card__stat">{{ block.settings.stat | escape }}</p>
               {%- endif -%}
@@ -127,48 +134,48 @@
               {%- endif -%}
             </div>
 
-            {%- if block.settings.link == blank and block.settings.back_text != blank -%}
-              <div class="kd-card__body kd-card__body--back" id="kd-card-{{ block.id }}-back" hidden>
-                {%- if block.settings.title != blank -%}
-                  <h3 class="kd-card__title kd-strong">{{ block.settings.title | escape }}</h3>
-                {%- endif -%}
-                <div class="kd-card__text kd-body">{{ block.settings.back_text }}</div>
-                {%- if block.settings.back_fact != blank -%}
-                  <div class="kd-card__fact kd-strong-sm">{{ block.settings.back_fact }}</div>
-                {%- endif -%}
-                {%- if block.settings.back_note != blank -%}
-                  <p class="kd-card__note kd-body-sm">{{ block.settings.back_note | escape }}</p>
-                {%- endif -%}
+            {%- if block.settings.link != blank -%}
+              <div class="kd-card__actions">
+                {%- render 'kd-button', label: section.settings.link_label, url: block.settings.link, variant: 'outline' -%}
               </div>
             {%- endif -%}
-
-            <div class="kd-card__actions">
-              {%- if block.settings.link != blank -%}
-                {%- render 'kd-button', label: section.settings.link_label, url: block.settings.link, variant: 'outline' -%}
-              {%- elsif block.settings.back_text != blank -%}
-                {%- capture flip_attrs -%}data-kd-flip aria-pressed="false" aria-controls="kd-card-{{ block.id }}-front kd-card-{{ block.id }}-back" data-label-front="{{ section.settings.details_label | escape }}" data-label-back="{{ section.settings.back_label | escape }}"{%- endcapture -%}
-                {%- render 'kd-button', label: section.settings.details_label, variant: 'outline', attrs: flip_attrs -%}
-              {%- endif -%}
-            </div>
           </article>
 
-        {%- when 'cta_card' -%}
-          {%- assign position = position | plus: 1 -%}
-          <article class="kd-card kd-card--cta" {{ block.shopify_attributes }}>
-            <div class="kd-card__cta-top">
-              {%- if block.settings.pill != blank -%}
-                <p class="kd-tag kd-card__pill">{{ block.settings.pill | escape }}</p>
-              {%- endif -%}
-              {%- if block.settings.heading != blank -%}
-                <h3 class="kd-card__cta-heading">{{ block.settings.heading | escape }}</h3>
-              {%- endif -%}
-            </div>
-            {%- if block.settings.button_label != blank and block.settings.button_link != blank -%}
-              {%- render 'kd-button', label: block.settings.button_label, url: block.settings.button_link, size: 'md', full: true, class: 'kd-card__cta-button' -%}
-            {%- endif -%}
-          </article>
       {%- endcase -%}
     {%- endfor -%}
+
+    {%- if show_action -%}
+      {%- liquid
+        assign position = position | plus: 1
+        assign a_pill = cta_block.settings.pill | default: section.settings.action_pill
+        assign a_heading = cta_block.settings.heading | default: section.settings.action_heading
+        assign a_text = cta_block.settings.text | default: section.settings.action_text
+        assign a_label = cta_block.settings.button_label | default: section.settings.action_button_label
+        assign a_link = cta_block.settings.button_link | default: section.settings.action_button_link | default: '/#probieren'
+        assign a_note = cta_block.settings.note | default: section.settings.action_note
+      -%}
+      <article class="kd-card kd-card--cta" {% if cta_block %}{{ cta_block.shopify_attributes }}{% endif %}>
+        <div class="kd-card__cta-top">
+          <p class="kd-tag kd-card__pill">
+            {%- if position < 10 %}0{% endif %}{{ position }} / {{ total }}{% if a_pill != blank %} · {{ a_pill | escape }}{% endif -%}
+          </p>
+          {%- if a_heading != blank -%}
+            <h3 class="kd-card__cta-heading">{{ a_heading | escape }}</h3>
+          {%- endif -%}
+          {%- if a_text != blank -%}
+            <p class="kd-card__cta-text kd-body">{{ a_text | escape }}</p>
+          {%- endif -%}
+        </div>
+        <div class="kd-card__cta-bottom">
+          {%- if a_label != blank -%}
+            {%- render 'kd-button', label: a_label, url: a_link, size: 'md', full: true, class: 'kd-card__cta-button' -%}
+          {%- endif -%}
+          {%- if a_note != blank -%}
+            <p class="kd-card__cta-note">{{ a_note | escape }}</p>
+          {%- endif -%}
+        </div>
+      </article>
+    {%- endif -%}
   </div>
 
   {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
@@ -270,12 +277,14 @@
     {
       "type": "text",
       "id": "details_label",
+      "info": "Not used any more: cards have no back side (spec S-03).",
       "label": "Flip button (front)",
       "default": "Details ↻"
     },
     {
       "type": "text",
       "id": "back_label",
+      "info": "Not used any more.",
       "label": "Flip button (back)",
       "default": "Zurück ↻"
     },
@@ -285,6 +294,53 @@
       "label": "Link button",
       "default": "Mehr dazu ↓",
       "info": "Shown on cards that have a link instead of a back side."
+    },
+    {
+      "type": "header",
+      "content": "Action card (always the last card)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_action_card",
+      "label": "Show action card",
+      "default": true,
+      "info": "The pill gets the card number automatically («06 / 6 · …»). A CTA card block, if added, overrides these fields."
+    },
+    {
+      "type": "text",
+      "id": "action_pill",
+      "label": "Pill",
+      "default": "Und du"
+    },
+    {
+      "type": "text",
+      "id": "action_heading",
+      "label": "Heading",
+      "default": "Du veränderst eine ganze Gemeinschaft Biss für Biss"
+    },
+    {
+      "type": "text",
+      "id": "action_text",
+      "label": "Text",
+      "default": "Kein gutes Gewissen zum Draufkleben. Ein Snack, bei dem die Rechnung stimmt."
+    },
+    {
+      "type": "text",
+      "id": "action_button_label",
+      "label": "Button label",
+      "default": "Probierpaket holen"
+    },
+    {
+      "type": "url",
+      "id": "action_button_link",
+      "label": "Button link",
+      "info": "Empty: /#probieren (the trial section)."
+    },
+    {
+      "type": "text",
+      "id": "action_note",
+      "label": "Note under the button",
+      "default": "1 Beutel gratis mit Code [CODE] · nur CHF 3 Versand"
     },
     {
       "type": "header",
@@ -328,13 +384,13 @@
     {
       "type": "range",
       "id": "card_height_mobile",
-      "label": "Card height – mobile (shaped frame)",
+      "label": "Card height – mobile (not used)",
       "min": 360,
       "max": 560,
       "step": 10,
       "unit": "px",
       "default": 420,
-      "info": "Cards are 310px wide on mobile. 420px keeps the cloud frame close to its natural proportion; go taller if long back texts get cut off."
+      "info": "Not used any more: every card is 4 : 5, as on desktop."
     },
     {
       "type": "checkbox",
@@ -549,7 +605,7 @@
         },
         {
           "type": "header",
-          "content": "Back side"
+          "content": "Back side (not shown any more)"
         },
         {
           "type": "richtext",
@@ -597,6 +653,11 @@
         },
         {
           "type": "text",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "text",
           "id": "button_label",
           "label": "Button label",
           "default": "Probierpaket holen"
@@ -605,6 +666,11 @@
           "type": "url",
           "id": "button_link",
           "label": "Button link"
+        },
+        {
+          "type": "text",
+          "id": "note",
+          "label": "Note under the button"
         }
       ]
     },
