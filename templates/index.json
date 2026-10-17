@@ -650,7 +650,7 @@
         "hint_show_count": true,
         "tiktok_link_label": "Auf TikTok ansehen",
         "instagram_link_label": "Auf Instagram ansehen",
-        "slideshow_focus": "center",
+        "slideshow_focus": "left",
         "autoscroll_mode": "1",
         "autoscroll_mobile": true,
         "autoscroll_interval": 6,

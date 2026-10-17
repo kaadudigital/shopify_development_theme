@@ -8263,7 +8263,7 @@ section.kd-videos { background-color: var(--kd-vid-bg, rgb(var(--color-scheme-ba
 .kd-videos .kd-heading__title { color: var(--kd-vid-heading, rgb(var(--color-scheme-text))); }
 .kd-videos__intro { margin: 0 auto; color: var(--kd-vid-text, rgb(var(--color-scheme-body-text, var(--color-scheme-text)))); }
 .kd-videos__d { display: none; }
-/* Stage = phone row, then the hint and link, always centred. In the row the phone sits between two spacers whose
+/* Stage = hint (above the phone), phone row, then the source link, always centred. In the row the phone sits between two spacers whose
    grow factors split the free space by --kd-phone-x (0 left … 0.5 centre … 1 right); the hint doesn't move. */
 .kd-videos__stage { grid-area: stage; justify-self: stretch; display: flex; flex-direction: column; align-items: center; gap: var(--space-3); }
 .kd-videos__rig { display: flex; align-self: stretch; }
@@ -8426,24 +8426,34 @@ span.kd-phone__play { cursor: default; }
   .kd-phone__play { width: 80px; height: 80px; }
   .kd-phone__play svg { width: 40px; height: 40px; }
 }
-/* "Text left, phone right" from 992px: heading and button stacked left, phone right. */
-@media (min-width: 992px) {
-  .kd-videos--left .kd-videos__inner {
+/* Side by side from 768px (setting «Layout from tablet»): heading, intro and button in one column, the phone (with
+   the hint above it) in the other. --left = text left / phone right, --right = phone left / text right. */
+@media (min-width: 768px) {
+  .kd-videos--left .kd-videos__inner,
+  .kd-videos--right .kd-videos__inner {
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-rows: 1fr auto 1fr;
     grid-template-areas: ". stage" "head stage" "cta stage";
-    column-gap: var(--space-10);
+    column-gap: var(--space-8);
     row-gap: 0;
     justify-items: start;
     text-align: left;
   }
-  .kd-videos--left .kd-videos__heading { align-items: flex-start; text-align: left; margin-bottom: var(--space-8); }
-  .kd-videos--left .kd-videos__intro { margin: 0; }
-  .kd-videos--left .kd-videos__actions { align-self: start; }
-  .kd-videos--left .kd-videos__rig::before, .kd-videos--left .kd-videos__rig::after { display: none; }
+  .kd-videos--right .kd-videos__inner {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas: "stage ." "stage head" "stage cta";
+  }
+  :is(.kd-videos--left, .kd-videos--right) .kd-videos__heading { align-items: flex-start; text-align: left; margin-bottom: var(--space-8); }
+  :is(.kd-videos--left, .kd-videos--right) .kd-videos__intro { margin: 0; }
+  :is(.kd-videos--left, .kd-videos--right) .kd-videos__actions { align-self: start; }
+  :is(.kd-videos--left, .kd-videos--right) .kd-videos__rig::before,
+  :is(.kd-videos--left, .kd-videos--right) .kd-videos__rig::after { display: none; }
+}
+@media (min-width: 992px) {
+  :is(.kd-videos--left, .kd-videos--right) .kd-videos__inner { column-gap: var(--space-10); }
 }
 @media (min-width: 1200px) {
-  .kd-videos--left .kd-videos__inner { column-gap: var(--space-13); }
+  :is(.kd-videos--left, .kd-videos--right) .kd-videos__inner { column-gap: var(--space-13); }
 }
 
 /* ── STATS AROUND AN IMAGE ("Perfekt in jeder Weise") — sections/custom-image-with-highlights.liquid ──

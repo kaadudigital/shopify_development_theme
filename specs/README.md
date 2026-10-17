@@ -15,4 +15,4 @@ Status: `draft` → `approved` → `in progress` → `done`. Owner: the Claude s
 | [S-05](S-05-comparison-handle.md) | Kaadu comparison slider — settable handle shape and arrow | kaadu-comparison.liquid | done (custom image untested) | this session |
 | [S-06](S-06-signup-image-width.md) | Email Signup — image width settings | email-input.liquid | done | this session (from peer) |
 | [S-07](S-07-footer-social-icons.md) | Custom footer — SVG social icons | custom-footer.liquid | in progress | this session |
-| [S-08](S-08-vertical-videos-layout.md) | Vertikale Video-Einbettungen — hint on top, side layout | vertical-video-embeds.liquid | approved | – |
+| [S-08](S-08-vertical-videos-layout.md) | Vertikale Video-Einbettungen — hint on top, side layout | vertical-video-embeds.liquid | in progress | this session |

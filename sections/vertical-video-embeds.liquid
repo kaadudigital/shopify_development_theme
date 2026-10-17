@@ -93,6 +93,23 @@
 
     {%- if clips.size > 0 -%}
       <div class="kd-videos__stage">
+        <div class="kd-videos__nav">
+          {%- if clips.size > 1 -%}
+            <button type="button" class="kd-videos__arrow" data-kd-phone-prev aria-label="Vorheriger Clip"><span class="kd-videos__glyph-h">←</span><span class="kd-videos__glyph-v">↑</span></button>
+          {%- endif -%}
+          {%- if section.settings.hint != blank or section.settings.hint_show_count -%}
+            <p class="kd-videos__hint kd-label">
+              {{- section.settings.hint | escape -}}
+              {%- if section.settings.hint_show_count -%}
+                {%- if section.settings.hint != blank %}&nbsp;· {% endif -%}
+                {{ clips.size }}&nbsp;{% if clips.size == 1 %}Clip{% else %}Clips{% endif %}
+              {%- endif -%}
+            </p>
+          {%- endif -%}
+          {%- if clips.size > 1 -%}
+            <button type="button" class="kd-videos__arrow" data-kd-phone-next aria-label="Nächster Clip"><span class="kd-videos__glyph-h">→</span><span class="kd-videos__glyph-v">↓</span></button>
+          {%- endif -%}
+        </div>
         <div class="kd-videos__rig">
         <div
           class="kd-phone"
@@ -176,23 +193,6 @@
         </div>
         </div>
 
-        <div class="kd-videos__nav">
-          {%- if clips.size > 1 -%}
-            <button type="button" class="kd-videos__arrow" data-kd-phone-prev aria-label="Vorheriger Clip"><span class="kd-videos__glyph-h">←</span><span class="kd-videos__glyph-v">↑</span></button>
-          {%- endif -%}
-          {%- if section.settings.hint != blank or section.settings.hint_show_count -%}
-            <p class="kd-videos__hint kd-label">
-              {{- section.settings.hint | escape -}}
-              {%- if section.settings.hint_show_count -%}
-                {%- if section.settings.hint != blank %}&nbsp;· {% endif -%}
-                {{ clips.size }}&nbsp;{% if clips.size == 1 %}Clip{% else %}Clips{% endif %}
-              {%- endif -%}
-            </p>
-          {%- endif -%}
-          {%- if clips.size > 1 -%}
-            <button type="button" class="kd-videos__arrow" data-kd-phone-next aria-label="Nächster Clip"><span class="kd-videos__glyph-h">→</span><span class="kd-videos__glyph-v">↓</span></button>
-          {%- endif -%}
-        </div>
         <a class="kd-link kd-videos__source" href="#" target="_blank" rel="noopener" data-kd-phone-source hidden></a>
       </div>
     {%- endif -%}
@@ -302,7 +302,7 @@
       "step": 5,
       "unit": "%",
       "default": 50,
-      "info": "Tablet and desktop: 0 % = left edge, 50 % = centred, 100 % = right edge. Only the phone moves; the hint stays centred. Only for the centred layout."
+      "info": "Tablet and desktop: 0 % = left edge, 50 % = centred, 100 % = right edge. Only the phone moves; the hint stays centred. Only for the «Centred» layout."
     },
     {
       "type": "range",
@@ -352,7 +352,7 @@
     {
       "type": "text",
       "id": "hint",
-      "label": "Hint under the phone",
+      "label": "Hint above the phone",
       "default": "Wischen für den nächsten Clip"
     },
     {
@@ -381,7 +381,7 @@
     {
       "type": "select",
       "id": "slideshow_focus",
-      "label": "Layout from 992px",
+      "label": "Layout from tablet (768px)",
       "options": [
         {
           "value": "center",
@@ -389,11 +389,15 @@
         },
         {
           "value": "left",
-          "label": "Text left, phone right"
+          "label": "Side by side: phone right"
+        },
+        {
+          "value": "right",
+          "label": "Side by side: phone left"
         }
       ],
-      "default": "center",
-      "info": "Centred: everything stacked in the middle, as in the mockup. Left: heading, intro and button on the left, phone on the right."
+      "default": "left",
+      "info": "Side by side: heading, intro and button in one column, the phone in the other (more compact). Centred: everything stacked in the middle. Mobile is always stacked."
     },
     {
       "type": "select",
