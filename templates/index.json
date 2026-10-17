@@ -205,7 +205,7 @@
         "title_color": "#ac0300",
         "title_shadow": true,
         "title_shadow_color": "#fffff5",
-        "title_shadow_color_mobile": "#aeff64",
+        "title_shadow_color_mobile": "#FFFFF5",
         "text_color": "#fffff5",
         "button_color": "#542a76",
         "button_label_color": "#fffff5",
