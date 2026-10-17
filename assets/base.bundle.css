@@ -7728,7 +7728,8 @@ section.kd-iw-band { --media-border-radius: 0px; background-color: var(--kd-iw-b
 .kd-video__text   { color: var(--kd-video-text, var(--paper)); }
 .kd-video__text > :first-child { margin-top: 0; }
 .kd-video__text > :last-child  { margin-bottom: 0; }
-.kd-video__actions { margin-top: var(--space-2); }
+/* Title/text → button: --kd-video-btn-gap (section setting, mobile / ≥768); the column gap (16px) is already there */
+.kd-video__actions { margin-top: calc(var(--kd-video-btn-gap, var(--space-6)) - var(--space-4)); }
 .kd-video__actions .kd-btn:not(.kd-btn--art) {
   --kd-cloud: var(--kd-video-btn, var(--purple));
   color: var(--kd-video-btn-label, var(--paper));
