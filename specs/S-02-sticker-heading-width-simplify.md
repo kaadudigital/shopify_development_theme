@@ -43,3 +43,14 @@ Proposed:
 - `.kd-is` content keeps `position: relative; z-index: 1` (otherwise the background pattern paints over it).
 - Mafcmn (quote): `image_width_tablet` 320 (not squeezed at 768), pattern block size 56, `image_shadow` false — must survive the migration.
 - Send the peer before/after screenshots of Mafcmn.
+
+## Settings before → after (built 2026-10-17)
+134 settings → **107**. Removed (old free-form layout, values also removed from `index.json` and `page.who-we-are.json`):
+`layout`, `section_height_desktop/_mobile`, `image_x/y_desktop/_mobile`, `header_x/y_desktop/_mobile`,
+`subheading_x/y_desktop/_mobile`, `body_x/y_desktop/_mobile`, `text_alignment_header`, `subheading_display_on_card`,
+`body_display_on_card`, `text_alignment`, `canvas_image_w_m/_t/_d/_xl` (already unused), `image_width_mobile` (px).
+New: `image_width_mobile_vw` (50–150 % of the screen; Shopify allows at most 101 slider steps). `header_display_on_card` now works in the row layout («Heading on a card»).
+Groups now: Text · Button · Image · Free canvas (+ Mobile / Tablet / Desktop / 24" / 27") · Heading sticker ·
+Sub-heading sticker · Sub-heading sticker 2 · Colour (scheme and «Use the colours below» first).
+Migration values: Crunchys 90 % (= today's 350px at 390), quote 77 % (= 300px), Who-we-are 149 % (= 580px) plus
+free canvas on every size with its old image / heading positions, image in front, heading on a card.
