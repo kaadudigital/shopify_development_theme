@@ -12,16 +12,8 @@
   assign phone_w = section.settings.phone_width | default: 370
   assign phone_w_m = section.settings.phone_width_mobile | default: 330
   assign phone_cap = phone_w | times: 1.4 | round
-  assign arrow_shape = section.settings.arrow_shape
-  if arrow_shape == 'default'
-    assign arrow_shape = ''
-  endif
-  assign arrow_shape_id = section.id | append: '-arrow'
 -%}
 
-{%- if arrow_shape != blank and section.settings.arrow_background != blank -%}
-  {%- render 'shape-defs', shape: arrow_shape, shape_id: arrow_shape_id -%}
-{%- endif -%}
 
 {%- style -%}
   #{{ section.id }} {
@@ -39,12 +31,11 @@
         {%- endif -%}
       {%- endfor %}
     {%- endif %}
-    --kd-vid-arrow-bg: {{ section.settings.arrow_background | default: 'transparent' }};
     --kd-phone-w: {{ phone_w_m }}px;
     --kd-phone-x: {{ section.settings.phone_position_mobile | default: 50 | divided_by: 100.0 }};
   }
   @media (min-width: 768px) {
-    #{{ section.id }} { --kd-phone-w: {{ phone_w }}px; --kd-phone-x: {{ section.settings.phone_position | default: 50 | divided_by: 100.0 }}; }
+    #{{ section.id }} { --kd-phone-w: {{ phone_w }}px; --kd-phone-x: 0.5; }
   }
   {%- comment -%} Side by side on tablets (768–991): the phone takes at most 40 % of the screen, so the text column keeps room. {%- endcomment %}
   @media (min-width: 768px) and (max-width: 991.98px) {
@@ -54,17 +45,11 @@
   @media (min-width: 1200px) {
     #{{ section.id }} { --kd-phone-w: max({{ phone_w }}px, min(calc({{ phone_w }} * var(--kd-px)), {{ phone_cap }}px)); }
   }
-  {%- if arrow_shape != blank and section.settings.arrow_background != blank %}
-  #{{ section.id }} .kd-videos__arrow {
-    -webkit-clip-path: url(#clip-{{ arrow_shape_id }});
-    clip-path: url(#clip-{{ arrow_shape_id }});
-  }
-  {%- endif %}
 {%- endstyle -%}
 
 <section
   id="{{ section.id }}"
-  class="kd-videos kd-videos--{{ section.settings.slideshow_focus | default: 'center' }}{% if section.settings.arrow_background != blank %} kd-videos--arrow-bg{% endif %} kd-videos--d-{{ section.settings.swipe_direction | default: 'horizontal' }} kd-videos--m-{{ section.settings.swipe_direction_mobile | default: 'vertical' }} relative overflow-hidden bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %}"
+  class="kd-videos kd-videos--{{ section.settings.slideshow_focus | default: 'center' }} kd-videos--d-{{ section.settings.swipe_direction | default: 'horizontal' }} kd-videos--m-{{ section.settings.swipe_direction_mobile | default: 'vertical' }} relative overflow-hidden bg-scheme-background text-scheme-text"
   data-color-scheme="{{ section.settings.color_scheme }}"
 >
   <div class="section-content relative z-10 kd-videos__inner kd-section kd-wide">
@@ -120,7 +105,7 @@
           data-kd-phone
           data-autoplay-desktop="{% if section.settings.autoscroll_mode == '0' or section.settings.autoscroll_mode == blank %}false{% else %}true{% endif %}"
           data-autoplay-mobile="{% if section.settings.autoscroll_mode == '0' or section.settings.autoscroll_mode == blank or section.settings.autoscroll_mobile == false %}false{% else %}true{% endif %}"
-          data-autoplay-direction="{{ section.settings.autoscroll_mode | default: '1' }}"
+          data-autoplay-direction="1"
           data-autoplay-interval="{{ section.settings.autoscroll_interval | default: 6 | times: 1000 }}"
         >
           <div class="kd-phone__screen" data-kd-phone-track tabindex="0" role="region" aria-roledescription="carousel" aria-label="{{ section.settings.title | strip_html | escape }}">
@@ -236,6 +221,10 @@
   "name": "t:sections.vertical_video_embeds.name",
   "settings": [
     {
+      "type": "header",
+      "content": "Text"
+    },
+    {
       "type": "inline_richtext",
       "id": "title",
       "label": "Heading",
@@ -299,20 +288,9 @@
     },
     {
       "type": "range",
-      "id": "phone_position",
-      "label": "Phone position",
-      "min": 0,
-      "max": 100,
-      "step": 5,
-      "unit": "%",
-      "default": 50,
-      "info": "Tablet and desktop: 0 % = left edge, 50 % = centred, 100 % = right edge. Only the phone moves; the hint stays centred. Only for the «Centred» layout."
-    },
-    {
-      "type": "range",
       "id": "phone_position_mobile",
       "label": "Phone position on mobile",
-      "info": "0 % = phone at the left screen edge, 100 % = right screen edge. The free space is the screen width minus the phone width, so a narrower phone moves further.",
+      "info": "Below 768px: 0 % = left edge, 50 % = centred, 100 % = right edge. From tablet up the layout setting places the phone.",
       "min": 0,
       "max": 100,
       "step": 5,
@@ -401,7 +379,7 @@
         }
       ],
       "default": "left",
-      "info": "Side by side: heading, intro and button in one column, the phone in the other (more compact). Centred: everything stacked in the middle. Mobile is always stacked."
+      "info": "Side by side: heading, intro and button in one column, the phone in the other (more compact). Centred: everything stacked, phone in the middle. Mobile is always stacked."
     },
     {
       "type": "select",
@@ -410,11 +388,7 @@
       "options": [
         {
           "value": "1",
-          "label": "Forward"
-        },
-        {
-          "value": "-1",
-          "label": "Backward"
+          "label": "On"
         },
         {
           "value": "0",
@@ -442,7 +416,7 @@
     },
     {
       "type": "header",
-      "content": "t:common.settings.header_color"
+      "content": "Colour"
     },
     {
       "type": "color_scheme",
@@ -456,11 +430,6 @@
       "label": "Use the colours below instead of the colour scheme",
       "default": true,
       "info": "On: background, heading, intro, hint, clip titles, button and arrows use the colours below (mockup values). Off: they all come from the colour scheme above."
-    },
-    {
-      "type": "checkbox",
-      "id": "use_gradient_background",
-      "label": "t:common.settings.use_gradient_background.label"
     },
     {
       "type": "color",
@@ -507,404 +476,11 @@
       "default": "#AC0300"
     },
     {
-      "type": "header",
-      "content": "Arrows"
-    },
-    {
       "type": "color",
       "id": "arrow_icon_color",
       "label": "Arrow colour",
       "default": "#FFFFF5",
       "info": "Keep at least 3:1 contrast against the section or arrow background."
-    },
-    {
-      "type": "color",
-      "id": "arrow_background",
-      "label": "Arrow background",
-      "info": "Leave empty for plain ← → arrows as in the mockup. With a colour, the arrows sit on the shape below."
-    },
-    {
-      "type": "select",
-      "id": "arrow_shape",
-      "label": "Arrow background shape",
-      "info": "Silhouette behind the arrows; only used when an arrow background is set.",
-      "options": [
-        {
-          "value": "website_shape_star",
-          "label": "custom star",
-          "group": "custom shapes"
-        },
-        {
-          "value": "website_shape_bun",
-          "label": "custom bun",
-          "group": "custom shapes"
-        },
-        {
-          "value": "website_shape_frame",
-          "label": "custom frame",
-          "group": "custom shapes"
-        },
-        {
-          "value": "website_shape_pancake",
-          "label": "custom pancake",
-          "group": "custom shapes"
-        },
-        {
-          "value": "website_shape_cloud",
-          "label": "custom cloud",
-          "group": "custom shapes"
-        },
-        {
-          "value": "default",
-          "label": "t:common.options.default.label"
-        },
-        {
-          "value": "diamond",
-          "label": "t:common.options.diamond.label",
-          "group": "t:common.groups.basic"
-        },
-        {
-          "value": "triangle_1",
-          "label": "t:common.options.triangle_1.label",
-          "group": "t:common.groups.basic"
-        },
-        {
-          "value": "triangle_2",
-          "label": "t:common.options.triangle_2.label",
-          "group": "t:common.groups.basic"
-        },
-        {
-          "value": "pentagon",
-          "label": "t:common.options.pentagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "hexagon",
-          "label": "t:common.options.hexagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "heptagon",
-          "label": "t:common.options.heptagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "octagon",
-          "label": "t:common.options.octagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "nonagon",
-          "label": "t:common.options.nonagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "decagon",
-          "label": "t:common.options.decagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_pentagon",
-          "label": "t:common.options.rounded_pentagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_hexagon",
-          "label": "t:common.options.rounded_hexagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_heptagon",
-          "label": "t:common.options.rounded_heptagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_octagon",
-          "label": "t:common.options.rounded_octagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_nonagon",
-          "label": "t:common.options.rounded_nonagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "rounded_decagon",
-          "label": "t:common.options.rounded_decagon.label",
-          "group": "t:common.groups.polygons"
-        },
-        {
-          "value": "star_1",
-          "label": "t:common.options.star_1.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "star_2",
-          "label": "t:common.options.star_2.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "star_3",
-          "label": "t:common.options.star_3.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "star_4",
-          "label": "t:common.options.star_4.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "star_5",
-          "label": "t:common.options.star_5.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "star_6",
-          "label": "t:common.options.star_6.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "abstract_star_1",
-          "label": "t:common.options.abstract_star_1.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "abstract_star_2",
-          "label": "t:common.options.abstract_star_2.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "abstract_star_3",
-          "label": "t:common.options.abstract_star_3.label",
-          "group": "t:common.groups.stars"
-        },
-        {
-          "value": "scalloped_circle_1",
-          "label": "t:common.options.scalloped_circle_1.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "scalloped_circle_2",
-          "label": "t:common.options.scalloped_circle_2.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "scalloped_circle_3",
-          "label": "t:common.options.scalloped_circle_3.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "scalloped_circle_4",
-          "label": "t:common.options.scalloped_circle_4.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "scalloped_circle_5",
-          "label": "t:common.options.scalloped_circle_5.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "scalloped_circle_6",
-          "label": "t:common.options.scalloped_circle_6.label",
-          "group": "t:common.groups.scalloped_circles"
-        },
-        {
-          "value": "parallelogram",
-          "label": "t:common.options.parallelogram.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "squircle",
-          "label": "t:common.options.squircle.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "scalloped_square_1",
-          "label": "t:common.options.scalloped_square_1.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "scalloped_square_2",
-          "label": "t:common.options.scalloped_square_2.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "leaf",
-          "label": "t:common.options.leaf.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "clipped_square",
-          "label": "t:common.options.clipped.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "convex_square",
-          "label": "t:common.options.convex.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "twisted_square",
-          "label": "t:common.options.twisted.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "trapeze",
-          "label": "t:common.options.trapeze.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "pinched",
-          "label": "t:common.options.pinched.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "pixelated",
-          "label": "t:common.options.pixelated.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "overlapped",
-          "label": "t:common.options.overlapped.label",
-          "group": "t:common.groups.square"
-        },
-        {
-          "value": "zig_zag",
-          "label": "t:common.options.zig_zag.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "zig_zag_tear",
-          "label": "t:common.options.zig_zag_tear.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "wave_tear",
-          "label": "t:common.options.wave_tear.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "flower",
-          "label": "t:common.options.flower.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "flower_bloom",
-          "label": "t:common.options.flower_bloom.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "concave",
-          "label": "t:common.options.concave.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "flag",
-          "label": "t:common.options.flag.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "abstract_oval",
-          "label": "t:common.options.abstract_oval.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "cross",
-          "label": "t:common.options.cross.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "quatrefoil",
-          "label": "t:common.options.quatrefoil.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "quadrant",
-          "label": "t:common.options.quadrant.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "wind",
-          "label": "t:common.options.wind.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "windmill",
-          "label": "t:common.options.windmill.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "heart",
-          "label": "t:common.options.heart.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "mirrored_pyramids",
-          "label": "t:common.options.mirrored_pyramids.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "plus",
-          "label": "t:common.options.plus.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "double_pill_1",
-          "label": "t:common.options.double_pill_1.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "double_pill_2",
-          "label": "t:common.options.double_pill_2.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "triple_pill_1",
-          "label": "t:common.options.triple_pill_1.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "triple_pill_2",
-          "label": "t:common.options.triple_pill_2.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "crown",
-          "label": "t:common.options.crown.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "stair",
-          "label": "t:common.options.stair.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "pancake_stack",
-          "label": "t:common.options.pancake_stack.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "asterisk",
-          "label": "t:common.options.asterisk.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "overlapping_squares",
-          "label": "t:common.options.overlapping_squares.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "brush_stroke",
-          "label": "t:common.options.brush_stroke.label",
-          "group": "t:common.groups.miscellaneous"
-        },
-        {
-          "value": "blob",
-          "label": "t:common.options.blob.label",
-          "group": "t:common.groups.variable"
-        }
-      ],
-      "default": "default"
     }
   ],
   "blocks": [

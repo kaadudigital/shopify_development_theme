@@ -624,7 +624,6 @@
         "button_link": "/pages/manifesto",
         "phone_width": 370,
         "phone_width_mobile": 330,
-        "phone_position": 50,
         "phone_position_mobile": 20,
         "swipe_direction": "horizontal",
         "swipe_direction_mobile": "vertical",
@@ -638,7 +637,6 @@
         "autoscroll_interval": 6,
         "color_scheme": "scheme3",
         "use_custom_colors": true,
-        "use_gradient_background": false,
         "background_color": "#ac0300",
         "heading_color": "#fffff5",
         "text_color": "#fffff5",
@@ -646,9 +644,7 @@
         "clip_title_color": "#fffff5",
         "button_color": "#ffc6ff",
         "button_label_color": "#ac0300",
-        "arrow_icon_color": "#fffff5",
-        "arrow_background": "",
-        "arrow_shape": "default"
+        "arrow_icon_color": "#fffff5"
       }
     },
     "image_with_highlights_mU9j66": {

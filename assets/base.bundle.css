@@ -8422,7 +8422,6 @@ span.kd-phone__play { cursor: default; }
   line-height: 1;
   cursor: pointer;
 }
-.kd-videos--arrow-bg .kd-videos__arrow { width: 44px; background: var(--kd-vid-arrow-bg); }
 .kd-videos__arrow:focus-visible { outline: 4px solid var(--red); outline-offset: 3px; }
 .kd-videos__source { color: var(--kd-vid-hint, rgb(var(--color-scheme-text))); font-weight: 600; font-size: 14px; }
 .kd-videos__glyph-v { display: none; }
