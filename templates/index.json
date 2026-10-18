@@ -77,7 +77,7 @@
         "richtext": "<p>Gefriergetrocknete Früchte; fair produziert, in der Ursprungsgemeinde verarbeitet, radikal transparent.<br/><br/></p>",
         "richtext_mobile": "",
         "text_alignment": "text-left",
-        "mobile_text_alignment": "text-left",
+        "mobile_text_alignment": "text-center",
         "mobile_layout_order": false,
         "button2_label": "Gratis probieren",
         "button2_label_mobile": "Gratis probieiren",
@@ -1158,7 +1158,7 @@
         "subheading_sticker_2_width_desktop": 220,
         "subheading_sticker_2_width_mobile": 80,
         "subheading_sticker_2_rotate": -5,
-        "subheading_sticker_2_show_mobile": false,
+        "subheading_sticker_2_show_mobile": true,
         "subheading_sticker_2_x_desktop": 0,
         "subheading_sticker_2_y_desktop": 120,
         "subheading_sticker_2_x_mobile": 0,
@@ -1170,7 +1170,7 @@
         "heading_color": "#ac0300",
         "text_color": "#1a1a1a",
         "quote_color": "#ac0300",
-        "quote_bg_color": "#ffc6ff",
+        "quote_bg_color": "#FFFFF5",
         "cite_color": "#1a1a1a",
         "cite_bg_color": "#ffc6ff"
       }
