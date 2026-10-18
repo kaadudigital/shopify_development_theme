@@ -8880,6 +8880,14 @@ section.kd-split-section { background-color: var(--kd-split-bg, rgb(var(--color-
 .kd-split-section__note p { margin: 0; }
 .kd-split-section__button { --kd-cloud: var(--kd-split-btn, rgb(var(--color-scheme-accent-1))); color: var(--kd-split-btn-label, rgb(var(--color-scheme-accent-1-contrast))); }
 .kd-split-section__button--desktop { display: none; }
+/* «Heading and text alignment» (kicker, heading, intro) */
+.kd-split-section--text-center .kd-split-section__text { align-items: center; text-align: center; }
+.kd-split-section--text-right .kd-split-section__text { align-items: flex-end; text-align: right; }
+/* «Button position – mobile» */
+@media (max-width: 767.98px) {
+  .kd-split-section--btn-m-center .kd-split-section__button { align-self: center; }
+  .kd-split-section--btn-m-right .kd-split-section__button { align-self: flex-end; }
+}
 @media (min-width: 768px) {
   .kd-split-section__inner { padding-block: var(--space-12) var(--space-13); gap: var(--space-6); }
   .kd-split-section__d { display: inline; }

@@ -58,7 +58,7 @@
 
 <section
   id="{{ section.id }}"
-  class="kd-split-section relative overflow-hidden bg-scheme-background text-scheme-text"
+  class="kd-split-section kd-split-section--text-{{ section.settings.text_align | default: 'left' }} kd-split-section--btn-m-{{ section.settings.button_align_mobile | default: 'left' }} relative overflow-hidden bg-scheme-background text-scheme-text"
   data-color-scheme="{{ section.settings.color_scheme }}"
 >
   <div class="kd-section kd-split-section__inner">
@@ -209,6 +209,14 @@
       "info": "Use [br] for a line break."
     },
     {
+      "type": "select",
+      "id": "text_align",
+      "label": "Heading and text alignment",
+      "options": [{"value":"left","label":"Left"},{"value":"center","label":"Centred"},{"value":"right","label":"Right"}],
+      "default": "left",
+      "info": "Kicker, heading and intro, on every screen size."
+    },
+    {
       "type": "richtext",
       "id": "intro",
       "label": "Intro",
@@ -280,6 +288,14 @@
       "id": "show_button_mobile",
       "label": "Show the button on mobile",
       "default": false
+    },
+    {
+      "type": "select",
+      "id": "button_align_mobile",
+      "label": "Button position – mobile",
+      "options": [{"value":"left","label":"Left"},{"value":"center","label":"Centred"},{"value":"right","label":"Right"}],
+      "default": "left",
+      "info": "Below 768px. Tablet and desktop keep the button at the right end of the footnote row."
     },
     {
       "type": "header",
