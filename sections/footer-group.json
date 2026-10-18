@@ -54,6 +54,22 @@
     "custom_footer_tiyDdY": {
       "type": "custom-footer",
       "blocks": {
+        "social_instagram": {
+          "type": "social",
+          "settings": {
+            "network": "instagram",
+            "name": "",
+            "url": "https://www.instagram.com/eatkaadu"
+          }
+        },
+        "social_tiktok": {
+          "type": "social",
+          "settings": {
+            "network": "tiktok",
+            "name": "",
+            "url": "https://www.tiktok.com/@eatkaadu"
+          }
+        },
         "shape_divider_aPNFjV": {
           "type": "shape_divider",
           "settings": {
@@ -65,20 +81,6 @@
             "flip_horizontal": false,
             "enable_animation": false,
             "animation_direction": ""
-          }
-        },
-        "social_instagram": {
-          "type": "social",
-          "settings": {
-            "network": "instagram",
-            "url": "https://www.instagram.com/eatkaadu"
-          }
-        },
-        "social_tiktok": {
-          "type": "social",
-          "settings": {
-            "network": "tiktok",
-            "url": "https://www.tiktok.com/@eatkaadu"
           }
         }
       },
@@ -94,15 +96,20 @@
       "settings": {
         "email": "HELLO@KAADU.CH",
         "show_social_icons": true,
+        "social_style": "icons",
+        "social_icon_style": "outline",
+        "social_icon_size": 48,
+        "social_icon_color": "#FFFFF5",
+        "social_accent_color": "",
         "instagram_url": "https://www.instagram.com/eatkaadu",
         "tiktok_url": "https://www.tiktok.com/@eatkaadu",
+        "company_note": "Kaadu GmbH · Neuenkirch · Produziert von Amboo Foods, Vadacode, Kerala",
         "show_footer_links": true,
         "link_1_text": "Impressum",
         "link_1_url": "https://www.kaadu.ch/policies/legal-notice",
         "link_2_text": "Datenschutz",
         "link_2_url": "shopify://policies/privacy-policy",
-        "color_scheme": "scheme3",
-        "social_style": "icons"
+        "color_scheme": "scheme3"
       }
     }
   },
