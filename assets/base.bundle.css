@@ -8486,9 +8486,9 @@ span.kd-phone__play { cursor: default; }
 @media (min-width: 1200px) {
   :is(.kd-videos--left, .kd-videos--right) .kd-videos__inner { column-gap: var(--space-13); }
 }
-/* 21" and 24" screens (1200–1799): side margins like on 27" screens (~120px), so text and phone don't sit on the
-   screen edge; from 1800 the 1800px .kd-wide cap gives that margin already. */
-@media (min-width: 1200px) and (max-width: 1799.98px) {
+/* 21" and 24" screens (1200–1911): side margins like on 27" screens (~120px), so text and phone don't sit on the
+   screen edge; from 1912 the 1800px .kd-wide cap plus the gutter gives at least that margin. */
+@media (min-width: 1200px) and (max-width: 1911.98px) {
   :is(.kd-videos--left, .kd-videos--right) .kd-videos__inner { padding-inline: calc(var(--space-12) + var(--space-8)); }
 }
 
