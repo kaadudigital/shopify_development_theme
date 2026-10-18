@@ -1004,6 +1004,7 @@
       "settings": {
         "kicker": "",
         "heading": "Wo landen deine[br]CHF 4.45?",
+        "text_align": "left",
         "intro": "<p>Fair ist ein Wort. Das hier sind Zahlen. Klick auf einen Balken.</p>",
         "mobile_heading": "",
         "mobile_intro": "<p>Fair ist ein Wort. Das hier sind Zahlen. Tipp auf einen Balken.</p>",
@@ -1015,6 +1016,7 @@
         "button_label": "FINANZBERICHT",
         "button_link": "shopify://pages/waitlist",
         "show_button_mobile": true,
+        "button_align_mobile": "center",
         "color_scheme": "scheme-389c794f-4614-44af-93cb-cbbfec11d15a",
         "use_custom_colors": false,
         "background_color": "#fffff5",
@@ -1170,7 +1172,7 @@
         "heading_color": "#ac0300",
         "text_color": "#1a1a1a",
         "quote_color": "#ac0300",
-        "quote_bg_color": "#FFFFF5",
+        "quote_bg_color": "#fffff5",
         "cite_color": "#1a1a1a",
         "cite_bg_color": "#ffc6ff"
       }
