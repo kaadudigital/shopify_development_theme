@@ -1239,7 +1239,7 @@
         "kicker": "20 % auf deinen ersten Crunch",
         "heading": "Join the mission",
         "image": "shopify://shop_images/Extra_Mascots-06.svg",
-        "hide_image_mobile": true,
+        "hide_image_mobile": false,
         "image_width_mobile": 200,
         "image_width": 330,
         "text": "<p>Perfektion ist nicht unser Ziel. Veränderung schon. Begleite uns auf dem Weg zu radikaler Fairness.</p>",
