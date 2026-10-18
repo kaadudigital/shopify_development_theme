@@ -8486,6 +8486,11 @@ span.kd-phone__play { cursor: default; }
 @media (min-width: 1200px) {
   :is(.kd-videos--left, .kd-videos--right) .kd-videos__inner { column-gap: var(--space-13); }
 }
+/* 21" and 24" screens (1200–1799): side margins like on 27" screens (~120px), so text and phone don't sit on the
+   screen edge; from 1800 the 1800px .kd-wide cap gives that margin already. */
+@media (min-width: 1200px) and (max-width: 1799.98px) {
+  :is(.kd-videos--left, .kd-videos--right) .kd-videos__inner { padding-inline: calc(var(--space-12) + var(--space-8)); }
+}
 
 /* ── STATS AROUND AN IMAGE ("Perfekt in jeder Weise") — sections/custom-image-with-highlights.liquid ──
    Mockup: heading, intro, two stat tiles each side of a square picture (≥992: 320 / image / 320 grid, scaling with
