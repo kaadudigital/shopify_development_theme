@@ -29,3 +29,10 @@ Status: done · Owner: – · Files: `sections/vertical-video-embeds.liquid`, `a
   Tablets 768–991: phone at most 40 % of the screen, the heading hyphenates («Unge-schnitten») instead of running under the phone.
 - AC3 swipe / arrows / clip count unchanged (same elements and JS hooks, only moved). ✓
 - AC4 «Centred» keeps the stacked layout (hint now above the phone). ✓
+
+## Follow-ups (2026-10-18, user)
+- Large screens: side-by-side layout gets ~120px side margins from 1200 to 1911px (21" / 24"), like the 124px on 27"
+  (1920); from 1912 the 1800px cap gives it. Measured: 1200–1900 → 120px text / 120–144px phone, 1920 → 124px, 2560 → 444px. ✓
+- Settings simplified (33 → 29): removed arrow background + 77-shape picker, desktop phone position (centred layout only),
+  gradient background and «backward» auto-advance (values removed from index.json). Groups: Text · Phone · Layout and motion · Colour.
+  Re-checked live: hint above phone, ← → change clips, no page errors, no horizontal scroll at 390–2560. ✓
