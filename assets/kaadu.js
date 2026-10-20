@@ -229,7 +229,7 @@
         var per = unit / (p.bags || 1);
         var save = ref ? Math.round((1 - per / ref) * 100) : 0;
         btn.querySelector('[data-price]').textContent = money(data.currency, unit);
-        btn.querySelector('[data-meta]').textContent = data.currency + ' ' + per.toFixed(2) + ' ' + data.perBag + (save > 0 ? ' · ' + data.save + ' ' + save + ' %' : '');
+        btn.querySelector('[data-meta]').textContent = data.currency + ' ' + per.toFixed(2) + ' ' + data.perBag + (save > 0 ? ' · ' + data.save + '\u00a0' + save + '\u00a0%' : '');
         var was = btn.querySelector('[data-was]');
         var showWas = unit < price(p) - 0.001;
         was.hidden = !showWas;
@@ -240,7 +240,7 @@
         var pl = plan(parseInt(btn.getAttribute('data-value'), 10));
         var disc = current.aboDiscount ? pl.discount : 0;
         btn.querySelector('[data-price]').textContent = money(data.currency, price(current) * (1 - disc / 100));
-        btn.querySelector('[data-save]').textContent = disc > 0 ? data.save + ' ' + disc + ' %' : '';
+        btn.querySelector('[data-save]').textContent = disc > 0 ? data.save + '\u00a0' + disc + '\u00a0%' : '';
       });
       var plans = root.querySelector('[data-kd-config-plans]');
       if (plans) plans.hidden = !isAbo;

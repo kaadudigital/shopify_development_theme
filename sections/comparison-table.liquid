@@ -99,7 +99,7 @@
                   -%}
                   <td class="kd-ctable__cell{% if section.settings.highlighted_column == c %} kd-ctable__hl{% endif %}">
                     {%- if icon != blank -%}
-                      <span class="kd-ctable__icon{% if section.settings.show_border %} kd-ctable__icon--ring{% endif %} {{ section.settings.background_color }}">
+                      <span class="kd-ctable__icon{% if section.settings.show_border %} kd-ctable__icon--ring{% endif %}{% unless section.settings.use_custom_colors %} {{ section.settings.background_color }}{% endunless %}">
                         {%- render 'theme-icon', icon: icon -%}
                       </span>
                       <span class="sr-only">

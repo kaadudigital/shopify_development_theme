@@ -8247,26 +8247,26 @@ section.kd-is-band { background-color: var(--kd-is-bg, rgb(var(--color-scheme-ba
    space-5 gap, space-9 from 1200; the photo column stays in view while the details scroll. Long description,
    badges (DS has no seal size: 104px is the mockup's, proposed) and the optional ✶ before each tab title. */
 .kd-pack__long { display: flex; flex-direction: column; gap: 14px; padding-top: var(--space-3); border-top: 1px solid currentColor; }
-.kd-pack__long > * { margin: 0; }
-.kd-pack__seals { display: flex; flex-wrap: wrap; gap: 14px; margin: 0; padding: 0; list-style: none; }
+.kd-pack__long > *, .kd-pack__long.rte p { margin: 0; }
+.kd-pack__seals { display: grid; grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: 14px; margin: 0; padding: 0; list-style: none; }
 .kd-pack__seal {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 88px;
-  height: 88px;
+  width: 100%;
+  max-width: 104px;
+  aspect-ratio: 1;
   color: var(--kd-seal-fg, rgb(var(--color-scheme-accent-1-contrast)));
 }
 .kd-pack__seal-shape { position: absolute; inset: 0; width: 100%; height: 100%; fill: var(--kd-seal-bg, rgb(var(--color-scheme-accent-1))); filter: drop-shadow(var(--shadow-card)); }
-.kd-pack__seal-text { position: relative; width: 64%; font-size: 12px; font-weight: 600; line-height: 1.1; letter-spacing: 0.02em; text-align: center; text-transform: uppercase; hyphens: auto; }
+.kd-pack__seal-text { position: relative; width: 80%; font-size: 12px; font-weight: 600; line-height: 1.1; text-align: center; text-transform: uppercase; overflow-wrap: anywhere; }
 .kd-pack__details--stars summary::before { content: "\2736"; margin-right: var(--space-3); color: var(--lime); }
 .kd-pack__details--stars .kd-pack__detail:nth-child(4n+2) summary::before { color: var(--pink); }
 .kd-pack__details--stars .kd-pack__detail:nth-child(4n+3) summary::before { color: var(--purple); }
 .kd-pack__details--stars .kd-pack__detail:nth-child(4n+4) summary::before { color: var(--red); }
 .kd-pack--scheme .kd-pack__details--stars summary::before { color: rgb(var(--color-scheme-accent-1)); }
 @media (min-width: 768px) {
-  .kd-pack__seal { width: 104px; height: 104px; }
   .kd-pack--page .kd-pack__row { flex-direction: row; align-items: flex-start; justify-content: center; gap: var(--space-5); }
   .kd-pack--page .kd-pack__media { flex: 1 1 0; min-width: 0; position: sticky; top: var(--space-5); }
   .kd-pack--page .kd-pack__panel { flex: 1 1 0; max-width: none; align-self: auto; }
@@ -9168,7 +9168,7 @@ section.kd-ctable { background-color: var(--kd-ct-bg, rgb(var(--color-scheme-bac
 }
 .kd-ctable__corner { border: 0; background: transparent; }
 .kd-ctable__col { padding: var(--space-4) var(--space-2); border-bottom: 0; text-align: center; vertical-align: middle; height: 88px; }
-.kd-ctable__col .kd-display-drawer { display: block; font-size: 18px; overflow-wrap: anywhere; hyphens: auto; }
+.kd-ctable__col .kd-display-drawer { display: block; font-size: 16px; }
 .kd-ctable__logo { display: block; width: auto; max-width: 100%; height: 48px; margin-inline: auto; object-fit: contain; }
 .kd-ctable__label { padding: var(--space-3); min-height: 64px; height: 64px; text-align: left; font-size: 13px; overflow-wrap: anywhere; hyphens: auto; }
 .kd-ctable__cell { padding: var(--space-2); text-align: center; vertical-align: middle; }
