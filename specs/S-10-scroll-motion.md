@@ -31,3 +31,12 @@ line, stickers and pills pop in, cards come in one by one, the ticker runs only 
 - [ ] AC4 GSAP blocked: everything visible within 3 s.
 - [ ] AC5 Hero LCP not worse (baseline ≈ 600–700 ms at 1440, preview).
 - [ ] AC6 No horizontal scroll, no page errors.
+
+## Verification (2026-10-20, preview, pilot)
+- AC1 hero plays on load, people heading/kicker/hint/cards on scroll at 390 and 1440 (frames + videos). ✓
+- AC2 after scrolling the whole page nothing in scope stays hidden; when done, the section gets `.kd-motion-done`
+  and inline visibility/opacity/transform are cleared (the people hint stays hidden at 3400px, as its CSS wants). ✓
+- AC3 reduced motion: no `kd-motion` class, all visible. ✓  AC4 GSAP blocked: class dropped, all visible. ✓
+- AC5 hero LCP (1440, 6 runs): 628–1164 ms with motion vs 596–708 ms before and 560 ms with reduced motion. Within the
+  preview's run-to-run noise apart from one outlier; the image is never hidden. ✓ (watch on production)
+- AC6 no horizontal scroll, no new page errors (the `play()` warnings come from the existing videos). ✓
