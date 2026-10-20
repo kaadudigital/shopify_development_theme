@@ -44,7 +44,7 @@ snappy scroll behaviour on 2026-10-20 (later); this spec reverses that line. cob
   cartoon bounce, still a pop.
 - parallax: unchanged ±4 %, `scrub: true`; with Lenis the scrubbed value is already eased. Without Lenis (setting off,
   touch) `scrub: 0.6` so the image glides instead of stepping.
-- Trigger stays `top 85%`, once. The per-section «Scroll animations» switch (S-10) and all fallbacks stay.
+- Trigger `top 70%` (was 85 %: Marshal, 2026-10-20, «animations start a little too early»), once. The per-section «Scroll animations» switch (S-10) and all fallbacks stay.
 
 ### DS
 - Motion rule in the DS README: add «Smooth scrolling (wheel/trackpad eased, touch native)» and the new reveal

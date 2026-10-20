@@ -1,7 +1,7 @@
 /* Kaadu scroll motion (spec S-10, DS Motion «Scroll reveal»). GSAP 3.13 + ScrollTrigger + SplitText, loaded deferred
    from layout/theme.liquid only when the theme setting «Scroll animations» is on and not in the theme editor.
    html.kd-motion (set in <head>) pre-hides the first sections' targets in assets/base.bundle.css; sections further
-   down are hidden here before the visitor reaches them. Each section plays once when its top reaches 85 % of the
+   down are hidden here before the visitor reaches them. Each section plays once when its top reaches 70 % of the
    viewport (sections already in view play at once), then hands its elements back to the stylesheet. No reduced
    motion, no GSAP → the class goes and everything shows.
    Effects: words (headings slide up word by word from a line mask), rise (kicker, text, buttons fade up), pop
@@ -35,7 +35,7 @@
 
   var EASE = 'power3.out';           // fast start, long settle («snappy, then soft»); S-10 used power2.out
   var POP = 'back.out(1.4)';
-  var START = 'top 85%';
+  var START = 'top 70%';          // S-10 had 85 %: too early (Marshal, 2026-10-20), the section barely showed
   var SCRUB = lenis ? true : 0.6;    // without Lenis the parallax glides with a 0.6 s lag instead of stepping
   var STICKERS = '.sticker__rotate-container > *';
 
@@ -109,7 +109,7 @@
   function off(scope) { return !!(scope.matches('[data-kd-motion="off"]') || scope.querySelector('[data-kd-motion="off"]')); }
   function unique(arr) { return arr.filter(function (el, i) { return arr.indexOf(el) === i; }); }
   function inViewX(el) { var r = el.getBoundingClientRect(); return r.right > 0 && r.left < window.innerWidth; }
-  function inViewY(el) { var r = el.getBoundingClientRect(); return r.top < window.innerHeight * 0.85 && r.bottom > 0; }
+  function inViewY(el) { var r = el.getBoundingClientRect(); return r.top < window.innerHeight * 0.7 && r.bottom > 0; }
 
   function setup(section, entry) {
     if (section.kdMotion) return;

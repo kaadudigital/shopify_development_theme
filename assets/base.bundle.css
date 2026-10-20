@@ -9260,7 +9260,7 @@ section.kd-reviews { background-color: var(--kd-rv-bg, rgb(var(--color-scheme-ba
 /* ── SCROLL MOTION — assets/kaadu-motion.js (spec S-10, DS Motion «Scroll reveal») ──
    html.kd-motion is set in <head> only when motion runs (setting on, not the theme editor, no reduced motion) and is
    dropped again if the script never starts, so without JS nothing stays hidden. Targets wait hidden until their
-   section reaches 85 % of the viewport; GSAP then reveals them and, when done, marks the section .kd-motion-done and
+   section reaches 70 % of the viewport; GSAP then reveals them and, when done, marks the section .kd-motion-done and
    clears its inline styles, so the stylesheet decides again (e.g. a hint hidden on purpose). The hero image is never
    hidden (LCP).
    Sections further down are hidden by the script before the visitor reaches them; the rules here only cover what
