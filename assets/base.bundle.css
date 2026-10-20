@@ -8273,6 +8273,17 @@ section.kd-is-band { background-color: var(--kd-is-bg, rgb(var(--color-scheme-ba
   .kd-pack--page .kd-pack__panel { flex: 1 1 0; max-width: none; align-self: auto; }
   .kd-pack--page .kd-pack__image { max-height: min(856px, calc(100vh - 2 * var(--space-5))); }
 }
+/* Tablet / small desktop: the 50/50 panel is too narrow for three pack tiles, so packs and rhythms keep the mobile
+   rows (price right, «Empfohlen» on the row's top edge). */
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  .kd-pack--page .kd-pack__packs { grid-template-columns: minmax(0, 1fr); gap: var(--space-3); }
+  .kd-pack--page .kd-pack__pack { flex-direction: row; align-items: center; justify-content: space-between; gap: var(--space-2); }
+  .kd-pack--page .kd-pack__pack-meta { align-items: flex-end; text-align: right; }
+  .kd-pack--page .kd-pack__pack .kd-option__price { font-size: 18px; }
+  .kd-pack--page .kd-pack__plan-list { gap: var(--space-3); }
+  .kd-pack--page .kd-pack__plan-list .kd-option--row { position: relative; }
+  .kd-pack--page .kd-pack__pill--rec { position: absolute; top: -10px; right: 10px; }
+}
 @media (min-width: 1200px) {
   .kd-pack--page .kd-pack__row { gap: var(--space-9); }
 }
@@ -9184,15 +9195,17 @@ section.kd-ctable { background-color: var(--kd-ct-bg, rgb(var(--color-scheme-bac
 .kd-ctable__note p { margin: 0; }
 @media (min-width: 768px) {
   .kd-ctable__inner { padding-block: var(--space-13) var(--space-12); }
-  .kd-ctable__head { flex-direction: row; align-items: flex-end; gap: var(--space-11); }
-  .kd-ctable__head .kd-heading { flex: 1 1 0; }
-  .kd-ctable__intro { flex: 0 1 460px; }
   .kd-ctable__col { padding: 22px var(--space-4); height: 120px; }
   .kd-ctable__col .kd-display-drawer { font-size: 26px; }
   .kd-ctable__logo { height: 76px; }
   .kd-ctable__label { padding: 0 var(--space-6); height: 72px; font-size: 16px; }
   .kd-ctable__icon { width: 38px; height: 38px; }
   .kd-ctable__text { font-size: 15px; }
+}
+@media (min-width: 992px) {
+  .kd-ctable__head { flex-direction: row; align-items: flex-end; gap: var(--space-11); }
+  .kd-ctable__head .kd-heading { flex: 1 1 0; }
+  .kd-ctable__intro { flex: 0 1 460px; }
 }
 
 /* ── REVIEWS — sections/testimonials.liquid (product page mockup «Bewertungen») ──
