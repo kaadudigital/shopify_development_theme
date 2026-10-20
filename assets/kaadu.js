@@ -1,5 +1,13 @@
 /* Kaadu — small site-wide behaviours for the design-system components.
    Loaded with `defer` from layout/theme.liquid. Vanilla JS, no dependencies. */
+
+/* Scroll an element to the middle of the viewport: through Lenis when assets/kaadu-scroll.js runs (S-11), else
+   natively (instant under reduced motion). */
+function kdScrollIntoView(el) {
+  if (window.kdScrollTo) return window.kdScrollTo(el);
+  el.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+}
+
 (function () {
   'use strict';
 
@@ -11,7 +19,7 @@
     var target = document.getElementById(trigger.getAttribute('data-kd-focus'));
     if (!target) return;
     event.preventDefault();
-    target.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+    kdScrollIntoView(target);
     target.focus({ preventScroll: true });
   });
 })();
@@ -286,7 +294,7 @@
         render();
         var cart = form && form.querySelector('button[type="submit"]');
         if (cart) {
-          cart.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+          kdScrollIntoView(cart);
           cart.focus({ preventScroll: true });
         }
         return;

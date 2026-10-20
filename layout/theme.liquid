@@ -109,6 +109,11 @@
 
     <script src="{{ 'utils.js' | asset_url }}" defer></script>
     <script src="{{ 'kaadu.js' | asset_url }}" defer></script>
+    {%- comment -%} Smooth scrolling (S-11): Lenis before GSAP, so assets/kaadu-motion.js can drive it. {%- endcomment -%}
+    {%- if settings.kd_smooth_scroll and request.design_mode == false -%}
+      <script src="{{ 'lenis.min.js' | asset_url }}" defer></script>
+      <script src="{{ 'kaadu-scroll.js' | asset_url }}" defer></script>
+    {%- endif -%}
     {%- if settings.kd_scroll_motion and request.design_mode == false -%}
       <script src="{{ 'gsap.min.js' | asset_url }}" defer></script>
       <script src="{{ 'ScrollTrigger.min.js' | asset_url }}" defer></script>

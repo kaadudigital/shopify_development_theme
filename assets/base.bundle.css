@@ -9283,3 +9283,9 @@ html.kd-motion .shopify-section:not(.kd-motion-done):not(:has([data-kd-motion="o
   html.kd-motion :is(.kd-iw__title, .kd-iw__kicker, .kd-iw__text, .kd-iw__cta, .kd-iw__actions, .kd-iw__note, .kd-iw__caption, .kd-heading__title, .kd-heading__kicker, .kd-people__hint, .kd-card, .kd-btn, .kd-link),
   html.kd-motion .sticker__rotate-container > * { visibility: visible; }
 }
+/* Smooth scrolling (S-11, assets/kaadu-scroll.js): Lenis 1.3 eases the native scroll position. Its stylesheet,
+   reduced to what the theme needs: no fixed height on the root, and the inner scrollers Lenis leaves alone keep their
+   wheel to themselves. Left out on purpose: Lenis' `iframe { pointer-events: none }` (the video embeds must stay
+   clickable) and its `.lenis-stopped { overflow: clip }` (the menu and the cart drawer lock the page themselves). */
+html.lenis, html.lenis body { height: auto; }
+.lenis [data-lenis-prevent] { overscroll-behavior: contain; }

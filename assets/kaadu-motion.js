@@ -7,7 +7,10 @@
    Effects: words (headings slide up word by word from a line mask), rise (kicker, text, buttons fade up), pop
    (pills, badges and sticker artwork scale and turn in), cards (cards, tiles and rows come in one by one), media
    (images rise in; first-section images are never hidden, LCP) and parallax (scrubbed ±4 % on photos), plus the
-   ticker, which only runs while it is on screen.
+   ticker, which only runs while it is on screen. Timing (S-11): power3.out, headings 0.9 s, text and cards 0.8 s
+   with more overlap, a softer pop (back.out(1.4), −8°).
+   Smooth scrolling (S-11, assets/kaadu-scroll.js): when Lenis runs, GSAP's ticker drives it and ScrollTrigger
+   follows its eased position, so parallax glides; without it the parallax gets a 0.6 s scrub lag instead.
    The registry below lists, per section class, which elements get which effect. A section whose setting
    «Scroll animations» is off renders data-kd-motion="off" and is skipped. */
 (function () {
@@ -21,9 +24,19 @@
   gsap.registerPlugin(ScrollTrigger, window.SplitText);
   window.kdMotionStarted = true;
 
-  var EASE = 'power2.out';           // = cubic-bezier(.215,.61,.355,1), cobfoods' reveal curve
-  var POP = 'back.out(1.7)';
+  // Lenis (kaadu-scroll.js): one clock for both, and ScrollTrigger measures the eased scroll position.
+  var lenis = window.kdLenis;
+  if (lenis) {
+    if (lenis.kdStopLoop) lenis.kdStopLoop();
+    gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
+    gsap.ticker.lagSmoothing(0);
+    lenis.on('scroll', ScrollTrigger.update);
+  }
+
+  var EASE = 'power3.out';           // fast start, long settle («snappy, then soft»); S-10 used power2.out
+  var POP = 'back.out(1.4)';
   var START = 'top 85%';
+  var SCRUB = lenis ? true : 0.6;    // without Lenis the parallax glides with a 0.6 s lag instead of stepping
   var STICKERS = '.sticker__rotate-container > *';
 
   // Per section: words / rise / pop / cards / media / parallax selectors (inside the section's Shopify wrapper).
@@ -122,14 +135,14 @@
       // Relative to the element's own yPercent: free-canvas images are placed with translate(-50%, -50%).
       var base = gsap.getProperty(el, 'yPercent') || 0;
       gsap.fromTo(el, { yPercent: base - 4 }, { yPercent: base + 4, ease: 'none',
-        scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: true } });
+        scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: SCRUB } });
     });
 
     list(scope, entry.words).forEach(function (title, i) {
       var split = window.SplitText.create(title, { type: 'words,lines', mask: 'lines', autoSplit: true, linesClass: 'kd-motion-line' });
       gsap.set(title, { autoAlpha: 1 });
       revealed.push(title);
-      tl.from(split.words, { yPercent: 110, duration: 0.7, stagger: 0.06 }, i === 0 ? 0 : '<0.1');
+      tl.from(split.words, { yPercent: 110, duration: 0.9, stagger: 0.05 }, i === 0 ? 0 : '<0.1');
     });
 
     var media = list(scope, entry.media).concat(list(scope, entry.stage));
@@ -137,31 +150,31 @@
       revealed = revealed.concat(media);
       if (first) {
         // First section: its image may be the LCP element. Light scale only, never hidden.
-        media.forEach(function (m) { tl.fromTo(m.querySelector('img') || m, { scale: 1.06 }, { scale: 1, duration: 1.1 }, 0); });
+        media.forEach(function (m) { tl.fromTo(m.querySelector('img') || m, { scale: 1.06 }, { scale: 1, duration: 1.2 }, 0); });
       } else {
-        tl.fromTo(media, { y: 48, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.8 }, 0);
+        tl.fromTo(media, { y: 40, scale: 1.04, autoAlpha: 0 }, { y: 0, scale: 1, autoAlpha: 1, duration: 1.0 }, 0);
       }
     }
 
     var rise = list(scope, entry.rise);
     revealed = revealed.concat(rise);
-    if (rise.length) tl.fromTo(rise, { y: 24, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.6, stagger: 0.08 }, 0.25);
+    if (rise.length) tl.fromTo(rise, { y: 20, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.8, stagger: 0.07 }, 0.15);
 
     var cards = list(scope, entry.cards);
     if (cards.length) {
       var moving = entry.cardsInViewOnly ? cards.filter(inViewX) : cards;
       gsap.set(cards.filter(function (c) { return moving.indexOf(c) === -1; }), { autoAlpha: 1 });   // off-screen carousel cards just show
       revealed = revealed.concat(cards);
-      tl.fromTo(moving, { y: 40, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.6, stagger: 0.08 }, 0.3);
+      tl.fromTo(moving, { y: 32, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.8, stagger: 0.07 }, 0.2);
     }
 
     var fade = list(scope, entry.fade);
     revealed = revealed.concat(fade);
-    if (fade.length) tl.fromTo(fade, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5, stagger: 0.07, ease: 'none' }, 0.3);
+    if (fade.length) tl.fromTo(fade, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.6, stagger: 0.06, ease: 'none' }, 0.2);
 
     var pop = unique(list(scope, entry.pop).concat(list(scope, STICKERS)));
     revealed = revealed.concat(pop);
-    if (pop.length) tl.fromTo(pop, { scale: 0.6, rotation: -12, autoAlpha: 0 }, { scale: 1, rotation: 0, autoAlpha: 1, duration: 0.55, stagger: 0.08, ease: POP }, 0.45);
+    if (pop.length) tl.fromTo(pop, { scale: 0.72, rotation: -8, autoAlpha: 0 }, { scale: 1, rotation: 0, autoAlpha: 1, duration: 0.6, stagger: 0.07, ease: POP }, 0.35);
 
     if (first) {
       tl.play();
