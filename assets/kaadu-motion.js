@@ -45,22 +45,32 @@
     var tl = gsap.timeline({
       paused: true,
       defaults: { ease: EASE },
-      onComplete: function () { scope.classList.add('kd-motion-done'); }
+      onComplete: function () {
+        // Hand every target back to the stylesheet: the pre-hide stops (kd-motion-done) and the inline
+        // visibility/opacity/transform go, so CSS that hides an element on purpose wins again.
+        scope.classList.add('kd-motion-done');
+        gsap.set(revealed, { clearProps: 'visibility,opacity,transform' });
+      }
     });
+    var revealed = [];
 
     all(SEL.words).forEach(function (title, i) {
       var split = window.SplitText.create(title, { type: 'words,lines', mask: 'lines', autoSplit: true, linesClass: 'kd-motion-line' });
       gsap.set(title, { autoAlpha: 1 });
+      revealed.push(title);
       tl.from(split.words, { yPercent: 110, duration: 0.7, stagger: 0.06 }, i === 0 ? 0 : '<0.1');
     });
 
     var rise = all(SEL.rise);
+    revealed = revealed.concat(rise);
     if (rise.length) tl.fromTo(rise, { y: 24, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.6, stagger: 0.08 }, 0.25);
 
     var pop = all(SEL.pop);
+    revealed = revealed.concat(pop);
     if (pop.length) tl.fromTo(pop, { scale: 0.6, rotation: -12, autoAlpha: 0 }, { scale: 1, rotation: 0, autoAlpha: 1, duration: 0.55, stagger: 0.08, ease: POP }, 0.45);
 
     var cards = all(SEL.cards);
+    revealed = revealed.concat(cards);
     if (cards.length) {
       var visible = cards.filter(inView);
       var rest = cards.filter(function (c) { return visible.indexOf(c) === -1; });
