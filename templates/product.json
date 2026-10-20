@@ -215,7 +215,10 @@
           "settings": {
             "text": "Labor geprüft",
             "shape_color": "#fffff5",
-            "text_color": "#ac0300"
+            "text_color": "#ac0300",
+            "shape": "image",
+            "image": "shopify://shop_images/Kaadu_favicon_purple_RGB.png",
+            "show_text": false
           }
         },
         "badge_6": {
