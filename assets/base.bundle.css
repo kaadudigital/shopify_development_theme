@@ -9186,7 +9186,7 @@ section.kd-ctable { background-color: var(--kd-ct-bg, rgb(var(--color-scheme-bac
 }
 .kd-ctable__corner { border: 0; background: transparent; }
 .kd-ctable__col { padding: var(--space-4) var(--space-2); border-bottom: 0; text-align: center; vertical-align: middle; height: 88px; }
-.kd-ctable__col .kd-display-drawer { display: block; font-size: 16px; }
+.kd-ctable__col .kd-display-drawer { display: block; font-size: 14px; hyphens: auto; overflow-wrap: anywhere; }
 .kd-ctable__logo { display: block; width: auto; max-width: 100%; height: 48px; margin-inline: auto; object-fit: contain; }
 .kd-ctable__label { padding: var(--space-3); min-height: 64px; height: 64px; text-align: left; font-size: 13px; overflow-wrap: anywhere; hyphens: auto; }
 .kd-ctable__cell { padding: var(--space-2); text-align: center; vertical-align: middle; }
@@ -9273,6 +9273,10 @@ html.kd-motion .shopify-section:not(.kd-motion-done):has(.kd-iw--hero, .kd-peopl
   visibility: hidden;
 }
 .kd-motion-line { padding-bottom: 0.06em; margin-bottom: -0.06em; } /* line mask keeps Fagies descenders */
+/* SplitText's line mask clips both axes inline; a long word that already overflows its column (e.g.
+   «GEFRIERGETROCKNET.» at 390px) must keep its last letters, so only the vertical axis is clipped. !important beats
+   the inline style. */
+[class$="line-mask"] { overflow-x: visible !important; overflow-y: clip !important; }
 /* Ticker: the loop runs only while the band is on screen (kaadu-motion.js toggles .kd-ticker--live). */
 .kd-ticker--gated:not(.kd-ticker--live) .kd-ticker__track { animation-play-state: paused; }
 @media (prefers-reduced-motion: reduce) {
