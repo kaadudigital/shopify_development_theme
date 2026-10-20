@@ -8264,6 +8264,7 @@ section.kd-is-band { background-color: var(--kd-is-bg, rgb(var(--color-scheme-ba
   height: 104px;
   color: var(--kd-seal-fg, rgb(var(--color-scheme-accent-1-contrast)));
 }
+.kd-pack__seal-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
 .kd-pack__seal-shape { position: absolute; inset: 0; width: 100%; height: 100%; fill: var(--kd-seal-bg, rgb(var(--color-scheme-accent-1))); filter: drop-shadow(var(--shadow-card)); }
 .kd-pack__seal-text { position: relative; width: 72%; font-size: 12px; font-weight: 600; line-height: 1.1; text-align: center; text-transform: uppercase; overflow-wrap: anywhere; }
 .kd-pack__details--stars summary::before { content: "\2736"; margin-right: var(--space-3); color: var(--lime); }

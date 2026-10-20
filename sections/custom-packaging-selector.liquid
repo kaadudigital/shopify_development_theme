@@ -296,10 +296,32 @@
       {%- if section.blocks.size > 0 -%}
         <ul class="kd-pack__seals" role="list">
           {%- for block in section.blocks -%}
-            {%- if block.settings.text != blank -%}
-              <li class="kd-pack__seal kd-pack__seal--{{ block.id }}" {{ block.shopify_attributes }}>
-                <svg class="kd-pack__seal-shape" viewBox="0 0 200 200" aria-hidden="true" focusable="false"><path d="M100 0l13 27 24-17-3 30 30-4-17 24 27 13-27 13 17 24-30-4 3 30-24-17-13 27-13-27-24 17 3-30-30 4 17-24L0 100l27-13L10 63l30 4-3-30 24 17z"/></svg>
-                <span class="kd-pack__seal-text">{{ block.settings.text | escape }}</span>
+            {%- liquid
+              assign seal_image = blank
+              if block.settings.shape == 'image' and block.settings.image != blank
+                assign seal_image = block.settings.image
+              endif
+              assign seal_text = block.settings.text
+              if seal_image != blank and block.settings.show_text == false
+                assign seal_text = blank
+              endif
+            -%}
+            {%- if seal_text != blank or seal_image != blank -%}
+              <li class="kd-pack__seal kd-pack__seal--{{ block.id }}{% if seal_image != blank %} kd-pack__seal--image{% endif %}" {{ block.shopify_attributes }}>
+                {%- if seal_image != blank -%}
+                  {%- liquid
+                    assign seal_alt = ''
+                    if seal_text == blank
+                      assign seal_alt = block.settings.text | default: seal_image.alt
+                    endif
+                  -%}
+                  {{ seal_image | image_url: width: 312 | image_tag: class: 'kd-pack__seal-img', widths: '104, 208, 312', sizes: '104px', loading: 'lazy', alt: seal_alt }}
+                {%- else -%}
+                  <svg class="kd-pack__seal-shape" viewBox="0 0 200 200" aria-hidden="true" focusable="false"><path d="M100 0l13 27 24-17-3 30 30-4-17 24 27 13-27 13 17 24-30-4 3 30-24-17-13 27-13-27-24 17 3-30-30 4 17-24L0 100l27-13L10 63l30 4-3-30 24 17z"/></svg>
+                {%- endif -%}
+                {%- if seal_text != blank -%}
+                  <span class="kd-pack__seal-text">{{ seal_text | escape }}</span>
+                {%- endif -%}
               </li>
             {%- endif -%}
           {%- endfor -%}
@@ -1317,11 +1339,40 @@
           "default": "100 % Ananas"
         },
         {
+          "type": "select",
+          "id": "shape",
+          "label": "Shape",
+          "options": [
+            {
+              "value": "starburst",
+              "label": "Starburst"
+            },
+            {
+              "value": "image",
+              "label": "Image or SVG"
+            }
+          ],
+          "default": "starburst"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image or SVG",
+          "info": "Replaces the starburst when «Shape» is «Image or SVG». Upload PNG, WebP or SVG files under Content → Files. Shown at 104px."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_text",
+          "label": "Show the text on the image",
+          "default": true,
+          "info": "Off: only the image shows; the text becomes its alt text."
+        },
+        {
           "type": "color",
           "id": "shape_color",
           "label": "Shape colour",
           "default": "#AEFF64",
-          "info": "Used when «Use the colours below» is on; otherwise the colour scheme's button colours."
+          "info": "Starburst only. Used when «Use the colours below» is on; otherwise the colour scheme's button colours."
         },
         {
           "type": "color",
