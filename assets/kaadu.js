@@ -208,6 +208,10 @@
     if (qtyInput) state.qty = Math.max(1, parseInt(qtyInput.value, 10) || 1);
     var ref = parseFloat(String(data.reference).replace(',', '.')) || 0;
     function pack(n) { return data.packs.filter(function (p) { return p.n === n; })[0] || data.packs[0]; }
+    function available(p) { return !!p && p.available !== false; }
+    var firstAvailable = data.packs.filter(available)[0];
+    // A sold-out default pack: start on the first pack that can be bought.
+    if (!available(pack(state.pack)) && firstAvailable) state.pack = firstAvailable.n;
     function plan(n) { return data.plans.filter(function (p) { return p.n === n; })[0] || data.plans[0]; }
     function price(p) { return parseFloat(String(p.price).replace(',', '.')) || 0; }
     function unitPrice(p, isAbo) {
@@ -252,6 +256,11 @@
         foot.textContent = [data.currency + ' ' + (unit / (current.bags || 1)).toFixed(2) + ' ' + data.perBag, ship, data.footExtra].filter(Boolean).join(' · ');
       }
       if (form) {
+        var soldOut = !available(current);
+        var submit = form.querySelector('button[type="submit"]');
+        if (submit) submit.disabled = soldOut;
+        form.querySelectorAll('.kd-pack__label-buy').forEach(function (el) { el.hidden = soldOut; });
+        form.querySelectorAll('[data-soldout-label]').forEach(function (el) { el.hidden = !soldOut; });
         form.querySelector('input[name="id"]').value = current.variant || '';
         var sp = form.querySelector('input[name="selling_plan"]');
         var spId = isAbo ? (plan(state.plan) || {}).sellingPlan : '';
@@ -273,7 +282,7 @@
       var trial = event.target.closest('[data-kd-config-trial]');
       if (trial && root.contains(trial)) {
         state.mode = 'once';
-        state.pack = data.packs[0] ? data.packs[0].n : state.pack;
+        state.pack = firstAvailable ? firstAvailable.n : state.pack;
         render();
         var cart = form && form.querySelector('button[type="submit"]');
         if (cart) {
@@ -291,6 +300,7 @@
     if (form) {
       form.addEventListener('submit', function (event) {
         // No variant linked yet (frontend first): don't send an empty cart request.
+        if (!available(pack(state.pack))) { event.preventDefault(); return; }
         if (!form.querySelector('input[name="id"]').value) {
           event.preventDefault();
           if (window.console) console.warn('[Kaadu] Pack configurator: no variant ID set for this pack.');

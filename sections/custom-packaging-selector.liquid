@@ -9,6 +9,8 @@
   price setting) and a bag count. Abo prices = pack price minus the delivery rhythm's discount (packs can opt out).
   "Spar %" per pack compares the price per bag with the reference price per bag. Totals round to 5 Rappen.
   Subscriptions are frontend-only until selling plans exist: the plan ID setting is sent as selling_plan when set.
+  Sold-out packs (variant linked and not available in Shopify) are greyed out and can't be chosen; the configurator
+  starts on the first available pack, and when none is left the cart button shows the sold-out text, disabled.
 
   On the product template (product page mockup, "Produktseite") the section is the buy box: it falls back to the
   page's product, renders the title as the page's h1 plus the Product structured data, and lays out photo and panel
@@ -193,14 +195,27 @@
             assign k_variant = 'option' | append: i | append: '_variant_id'
             assign k_free = 'pack' | append: i | append: '_free_shipping'
             assign label = section.settings[k_label]
-            assign variant_id = section.settings[k_variant]
+            assign variant_id = section.settings[k_variant] | strip
             assign n = forloop.index
+            assign pack_available = true
+            if kd_product != blank and variant_id != blank
+              for v in kd_product.variants
+                assign vid = v.id | append: ''
+                if vid == variant_id and v.available == false
+                  assign pack_available = false
+                endif
+              endfor
+            endif
           -%}
           {%- if label != blank -%}
-            <button type="button" class="kd-option kd-pack__pack" data-value="{{ n }}" aria-pressed="{% if n == default_pack %}true{% else %}false{% endif %}">
-              {%- if section.settings[k_free] and section.settings.free_shipping_badge != blank -%}
-                <span class="kd-badge">{{ section.settings.free_shipping_badge | escape }}</span>
-              {%- endif -%}
+            <button type="button" class="kd-option kd-pack__pack{% unless pack_available %} kd-pack__pack--soldout{% endunless %}" data-value="{{ n }}" aria-pressed="{% if n == default_pack %}true{% else %}false{% endif %}"{% unless pack_available %} disabled{% endunless %}>
+              {%- unless pack_available -%}
+                <span class="kd-badge kd-badge--soldout">{{ section.settings.sold_out_text | default: 'Ausverkauft' | escape }}</span>
+              {%- else -%}
+                {%- if section.settings[k_free] and section.settings.free_shipping_badge != blank -%}
+                  <span class="kd-badge">{{ section.settings.free_shipping_badge | escape }}</span>
+                {%- endif -%}
+              {%- endunless -%}
               <span class="kd-pack__pack-main">
                 <span class="kd-option__label">{{ label | escape }}</span>
                 <span class="kd-option__price" data-price></span>
@@ -259,7 +274,7 @@
           <button type="button" data-step="1" aria-label="{{ section.settings.qty_more_label | escape }}">+</button>
         </div>
         {%- capture cart_label -%}
-          <span class="kd-pack__label--mobile">{{ section.settings.button_label_mobile | default: section.settings.button_label | escape }}</span><span class="kd-pack__label--desktop">{{ section.settings.button_label | escape }}</span>&nbsp;·&nbsp;<span data-total></span>
+          <span class="kd-pack__label-buy"><span class="kd-pack__label--mobile">{{ section.settings.button_label_mobile | default: section.settings.button_label | escape }}</span><span class="kd-pack__label--desktop">{{ section.settings.button_label | escape }}</span>&nbsp;·&nbsp;<span data-total></span></span><span class="kd-pack__label-soldout" data-soldout-label hidden>{{ section.settings.sold_out_text | default: 'Ausverkauft' | escape }}</span>
         {%- endcapture -%}
         {%- render 'kd-button', label: cart_label, type: 'submit', size: 'lg', class: 'kd-pack__cart' -%}
       </form>
@@ -358,6 +373,7 @@
       "shipFree": {{ section.settings.shipping_free_text | json }},
       "shipPaid": {{ section.settings.shipping_paid_text | json }},
       "footExtra": {{ section.settings.footnote_extra | json }},
+      "soldOut": {{ section.settings.sold_out_text | default: 'Ausverkauft' | json }},
       "packs": [
         {%- for i in packs -%}
           {%- liquid
@@ -369,18 +385,20 @@
             assign k_free = 'pack' | append: i | append: '_free_shipping'
             assign variant_id = section.settings[k_variant] | strip
             assign price = section.settings[k_price] | default: '0'
+            assign pack_available = true
             if kd_product != blank and variant_id != blank
               for v in kd_product.variants
                 assign vid = v.id | append: ''
                 if vid == variant_id
                   assign price = v.price | divided_by: 100.0
+                  assign pack_available = v.available
                 endif
               endfor
             endif
           -%}
           {%- if section.settings[k_label] != blank -%}
             {%- if pack_sep -%},{%- endif -%}{%- assign pack_sep = true -%}
-            { "n": {{ forloop.index }}, "bags": {{ section.settings[k_bags] | default: 1 }}, "price": {{ price | json }}, "variant": {{ variant_id | json }}, "aboDiscount": {{ section.settings[k_disc] | json }}, "freeShip": {{ section.settings[k_free] | json }} }
+            { "n": {{ forloop.index }}, "bags": {{ section.settings[k_bags] | default: 1 }}, "price": {{ price | json }}, "variant": {{ variant_id | json }}, "aboDiscount": {{ section.settings[k_disc] | json }}, "freeShip": {{ section.settings[k_free] | json }}, "available": {{ pack_available | json }} }
           {%- endif -%}
         {%- endfor -%}
       ],
@@ -595,6 +613,13 @@
       "id": "free_shipping_badge",
       "label": "Free-shipping badge",
       "default": "Gratis Versand"
+    },
+    {
+      "type": "text",
+      "id": "sold_out_text",
+      "label": "Sold-out label",
+      "default": "Ausverkauft",
+      "info": "Shown on a pack whose linked variant is sold out (the pack is greyed out), and on the cart button when every pack is sold out."
     },
     {
       "type": "select",

@@ -8175,6 +8175,11 @@ section.kd-is-band { background-color: var(--kd-is-bg, rgb(var(--color-scheme-ba
 .kd-pack__pill--save { background: var(--kd-pc-save-bg, var(--red)); color: var(--kd-pc-save-fg, var(--paper)); }
 .kd-pack .kd-option[aria-pressed="true"] .kd-pack__pill--save { background: var(--kd-pc-save-on-bg, var(--paper)); color: var(--kd-pc-save-on-fg, var(--ink)); }
 .kd-pack__pill--save:empty { display: none; }
+/* Sold-out pack (linked variant not available): greyed out, not selectable, «Ausverkauft» on the badge spot. */
+.kd-pack .kd-pack__pack--soldout { opacity: 0.45; box-shadow: none; cursor: not-allowed; }
+.kd-pack .kd-badge--soldout { background: var(--kd-pc-fg, var(--ink)); color: var(--kd-pc-bg, var(--paper)); }
+.kd-pack__cart:disabled { opacity: 0.45; cursor: not-allowed; }
+.kd-pack__label-buy[hidden], .kd-pack__label-soldout[hidden] { display: none; }
 
 /* The cart button keeps its full label plus the cloud's 40px padding (never squeezed). When stepper and button
    don't fit side by side, the row wraps in reverse: button on top at full width, stepper centred below. */
