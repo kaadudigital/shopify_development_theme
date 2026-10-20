@@ -88,7 +88,7 @@
 <section
   id="{{ section.id }}"
   class="scrolling-text-section bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %}"
-  data-color-scheme="{{ section.settings.color_scheme }}"
+  data-color-scheme="{{ section.settings.color_scheme }}"{% unless section.settings.scroll_motion %} data-kd-motion="off"{% endunless %}
 >
   {%- if ticker_link != blank -%}
     <a class="kd-ticker kd-ticker--link" href="{{ ticker_link }}" aria-label="{{ section.settings.text | replace: '|', ' · ' | escape }}">
@@ -283,6 +283,17 @@
       "type": "checkbox",
       "id": "use_gradient_background",
       "label": "Use gradient background"
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "checkbox",
+      "id": "scroll_motion",
+      "label": "Scroll animations",
+      "default": true,
+      "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations."
     }
   ],
   "presets": [

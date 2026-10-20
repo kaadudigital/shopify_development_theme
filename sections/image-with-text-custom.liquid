@@ -31,7 +31,7 @@
 <section
   id="{{ section.id }}"
   class="kd-iw-band bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %} relative overflow-hidden"
-  data-color-scheme="{{ section.settings.color_scheme }}"
+  data-color-scheme="{{ section.settings.color_scheme }}"{% unless section.settings.scroll_motion %} data-kd-motion="off"{% endunless %}
 >
   <div class="section-content relative z-10">
     {%- render 'image-with-text-custom',
@@ -994,6 +994,17 @@
       "id": "link_custom_color",
       "label": "Text link",
       "default": "#FFFFF5"
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "checkbox",
+      "id": "scroll_motion",
+      "label": "Scroll animations",
+      "default": true,
+      "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations."
     }
   ],
   "blocks": [

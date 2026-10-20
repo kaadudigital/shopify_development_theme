@@ -8,7 +8,8 @@
    (pills, badges and sticker artwork scale and turn in), cards (cards, tiles and rows come in one by one), media
    (images rise in; first-section images are never hidden, LCP) and parallax (scrubbed ±4 % on photos), plus the
    ticker, which only runs while it is on screen.
-   The registry below lists, per section class, which elements get which effect. */
+   The registry below lists, per section class, which elements get which effect. A section whose setting
+   «Scroll animations» is off renders data-kd-motion="off" and is skipped. */
 (function () {
   'use strict';
   var html = document.documentElement;
@@ -92,6 +93,7 @@
     if (typeof sel === 'function') return sel(scope);
     return Array.prototype.slice.call(scope.querySelectorAll(sel));
   }
+  function off(scope) { return !!(scope.matches('[data-kd-motion="off"]') || scope.querySelector('[data-kd-motion="off"]')); }
   function unique(arr) { return arr.filter(function (el, i) { return arr.indexOf(el) === i; }); }
   function inViewX(el) { var r = el.getBoundingClientRect(); return r.right > 0 && r.left < window.innerWidth; }
   function inViewY(el) { var r = el.getBoundingClientRect(); return r.top < window.innerHeight * 0.85 && r.bottom > 0; }
@@ -100,6 +102,7 @@
     if (section.kdMotion) return;
     section.kdMotion = true;
     var scope = section.closest('.shopify-section') || section;   // stickers sit beside the <section>, in the wrapper
+    if (off(scope)) return;                                       // section setting «Scroll animations» off
     var first = inViewY(section);                                 // already on screen at load: play now, never hide media
     var revealed = [];
     var tl = gsap.timeline({
@@ -116,7 +119,9 @@
 
     list(scope, entry.parallax).forEach(function (el) {
       el.kdParallax = true;
-      gsap.fromTo(el, { yPercent: -4 }, { yPercent: 4, ease: 'none',
+      // Relative to the element's own yPercent: free-canvas images are placed with translate(-50%, -50%).
+      var base = gsap.getProperty(el, 'yPercent') || 0;
+      gsap.fromTo(el, { yPercent: base - 4 }, { yPercent: base + 4, ease: 'none',
         scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: true } });
     });
 
@@ -171,6 +176,7 @@
   function setupTicker(ticker) {
     if (ticker.kdMotion) return;
     ticker.kdMotion = true;
+    if (off(ticker.closest('.shopify-section') || ticker)) return;
     ScrollTrigger.create({ trigger: ticker, start: 'top bottom', end: 'bottom top', toggleClass: { targets: ticker, className: 'kd-ticker--live' } });
     ticker.classList.add('kd-ticker--gated');
   }

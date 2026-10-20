@@ -51,7 +51,7 @@
 <section
   id="{{ section.id }}"
   class="kd-reviews kd-section relative overflow-hidden{% unless section.settings.display_on_card %} kd-reviews--flat{% endunless %}{% if section.settings.use_gradient_background and section.settings.use_custom_colors == false %} bg-scheme-gradient{% endif %}"
-  data-color-scheme="{{ section.settings.color_scheme }}"
+  data-color-scheme="{{ section.settings.color_scheme }}"{% unless section.settings.scroll_motion %} data-kd-motion="off"{% endunless %}
 >
   <div class="kd-reviews__inner relative z-10">
     {%- if section.settings.kicker != blank or section.settings.title != blank or section.settings.button_label != blank -%}
@@ -1170,6 +1170,17 @@
         }
       ],
       "default": "default"
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "checkbox",
+      "id": "scroll_motion",
+      "label": "Scroll animations",
+      "default": true,
+      "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations."
     }
   ],
   "blocks": [

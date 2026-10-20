@@ -90,7 +90,7 @@
 <section
   id="{{ section.id }}"
   class="kd-pack kd-section relative{% unless on_product_page %} overflow-hidden{% endunless %}{% unless section.settings.use_custom_colors %} kd-pack--scheme{% endunless %}{% if on_product_page %} kd-pack--page{% endif %}"
-  data-color-scheme="{{ section.settings.color_scheme }}"
+  data-color-scheme="{{ section.settings.color_scheme }}"{% unless section.settings.scroll_motion %} data-kd-motion="off"{% endunless %}
   data-kd-config
 >
   {%- if section.settings.anchor_id != blank -%}
@@ -1319,6 +1319,17 @@
       "id": "cart_button_label_color",
       "label": "Cart button label",
       "default": "#FFFFF5"
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "checkbox",
+      "id": "scroll_motion",
+      "label": "Scroll animations",
+      "default": true,
+      "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations."
     }
   ],
   "presets": [
