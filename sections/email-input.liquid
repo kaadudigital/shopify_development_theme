@@ -60,7 +60,7 @@
   {%- endif %}
 {%- endstyle -%}
 
-<section class="{{ join_classes }}" data-color-scheme="{{ s.color_scheme }}" id="section-{{ section.id }}">
+<section class="{{ join_classes }}" data-color-scheme="{{ s.color_scheme }}"{% unless section.settings.scroll_motion %} data-kd-motion="off"{% endunless %} id="section-{{ section.id }}">
   <div class="kd-section kd-join__inner">
     {%- if s.kicker != blank or s.heading != blank -%}
       <div class="kd-heading kd-heading--center">
@@ -524,7 +524,9 @@
       "id": "error_color",
       "label": "Error text",
       "default": "#AC0300"
-    }
+    },
+    {"type": "header", "content": "Animation"},
+    {"type": "checkbox", "id": "scroll_motion", "label": "Scroll animations", "default": true, "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations."}
   ],
   "blocks": [
     {

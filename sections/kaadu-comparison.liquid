@@ -42,6 +42,7 @@
   id="{{ section.id }}"
   class="kd-compare-section relative overflow-hidden bg-scheme-background text-scheme-text"
   data-color-scheme="{{ section.settings.color_scheme }}"
+  {% unless section.settings.scroll_motion %} data-kd-motion="off"{% endunless %}
 >
   <div class="kd-section kd-compare-section__inner">
     <div class="kd-heading kd-heading--center">
@@ -438,7 +439,9 @@
     { "type": "color", "id": "handle_color", "label": "Handle and edge", "default": "#AEFF64" },
     { "type": "color", "id": "handle_arrow_color", "label": "Handle arrow", "default": "#AC0300" },
     { "type": "color", "id": "card_color", "label": "Info card background", "default": "#FFF9EE" },
-    { "type": "color", "id": "card_text_color", "label": "Info card text", "default": "#542A76" }
+    { "type": "color", "id": "card_text_color", "label": "Info card text", "default": "#542A76" },
+    {"type": "header", "content": "Animation"},
+    {"type": "checkbox", "id": "scroll_motion", "label": "Scroll animations", "default": true, "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations."}
   ],
   "blocks": [
     {

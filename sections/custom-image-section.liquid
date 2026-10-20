@@ -189,6 +189,7 @@
 <section
   class="section-{{ section.id }} kd-is-band bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %} relative overflow-hidden"
   data-color-scheme="{{ section.settings.color_scheme }}"
+  {% unless section.settings.scroll_motion %} data-kd-motion="off"{% endunless %}
 >
     {%- liquid
       assign row_image = section.settings.background_image | default: section.settings.background_image_mobile
@@ -1384,7 +1385,9 @@
       "id": "cite_bg_color",
       "label": "Name pill background",
       "default": "#FFC6FF"
-    }
+    },
+    {"type": "header", "content": "Animation"},
+    {"type": "checkbox", "id": "scroll_motion", "label": "Scroll animations", "default": true, "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations."}
   ],
   "blocks": [
     {

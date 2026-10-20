@@ -71,6 +71,7 @@
   id="{{ section.id }}"
   class="kd-people{% if section.settings.card_shape_enabled %} kd-people--shaped{% if section.settings.card_outline %} kd-people--outlined{% endif %}{% endif %} relative overflow-hidden bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %}"
   data-color-scheme="{{ section.settings.color_scheme }}"
+  {% unless section.settings.scroll_motion %} data-kd-motion="off"{% endunless %}
 >
   <div class="kd-section kd-people__header">
     <div class="kd-heading">
@@ -544,7 +545,9 @@
       "id": "use_gradient_background",
       "label": "Use gradient background",
       "default": false
-    }
+    },
+    {"type": "header", "content": "Animation"},
+    {"type": "checkbox", "id": "scroll_motion", "label": "Scroll animations", "default": true, "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations."}
   ],
   "blocks": [
     {

@@ -170,6 +170,7 @@
   id="{{ section.id }}"
   class="kd-iwh kd-section relative overflow-hidden{% if section.settings.use_gradient_background %} bg-scheme-gradient{% endif %}{% unless section.settings.show_intro_on_mobile %} kd-iwh--intro-d{% endunless %}"
   data-color-scheme="{{ section.settings.color_scheme }}"
+  {% unless section.settings.scroll_motion %} data-kd-motion="off"{% endunless %}
 >
   <div class="kd-iwh__inner kd-wide relative z-10">
     {%- if section.settings.eyebrow != blank or section.settings.title != blank or section.settings.intro != blank -%}
@@ -1336,7 +1337,9 @@
       "id": "button_label_color",
       "label": "Button label",
       "default": "#FFFFF5"
-    }
+    },
+    {"type": "header", "content": "Animation"},
+    {"type": "checkbox", "id": "scroll_motion", "label": "Scroll animations", "default": true, "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations."}
   ],
   "blocks": [
     {

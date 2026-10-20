@@ -120,6 +120,7 @@
 <section
   class="kd-video{% unless section.settings.title_shadow %} kd-video--no-shadow{% endunless %} grid bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %} {% unless section.settings.style == 'inset' %}full-bleed-section{% endunless %}"
   data-color-scheme="{{ section.settings.color_scheme }}"
+  {% unless section.settings.scroll_motion %} data-kd-motion="off"{% endunless %}
 >
   <div class="section-content {% if section.settings.style == 'inset' %}py-section-vertical-spacing{% endif %}">
     <data-island
@@ -666,7 +667,9 @@
       "type": "checkbox",
       "id": "use_gradient_background",
       "label": "t:common.settings.use_gradient_background.label"
-    }
+    },
+    {"type": "header", "content": "Animation"},
+    {"type": "checkbox", "id": "scroll_motion", "label": "Scroll animations", "default": true, "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations."}
   ],
   "blocks": [
     {

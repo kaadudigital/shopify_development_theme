@@ -51,6 +51,7 @@
   id="{{ section.id }}"
   class="kd-videos kd-videos--{{ section.settings.slideshow_focus | default: 'center' }} kd-videos--d-{{ section.settings.swipe_direction | default: 'horizontal' }} kd-videos--m-{{ section.settings.swipe_direction_mobile | default: 'vertical' }} relative overflow-hidden bg-scheme-background text-scheme-text"
   data-color-scheme="{{ section.settings.color_scheme }}"
+  {% unless section.settings.scroll_motion %} data-kd-motion="off"{% endunless %}
 >
   <div class="section-content relative z-10 kd-videos__inner kd-section kd-wide">
     {%- liquid
@@ -481,7 +482,9 @@
       "label": "Arrow colour",
       "default": "#FFFFF5",
       "info": "Keep at least 3:1 contrast against the section or arrow background."
-    }
+    },
+    {"type": "header", "content": "Animation"},
+    {"type": "checkbox", "id": "scroll_motion", "label": "Scroll animations", "default": true, "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations."}
   ],
   "blocks": [
     {

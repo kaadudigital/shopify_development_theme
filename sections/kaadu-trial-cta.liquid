@@ -54,6 +54,7 @@
   id="{{ section.id }}"
   class="kd-trial relative overflow-hidden bg-scheme-background text-scheme-text"
   data-color-scheme="{{ section.settings.color_scheme }}"
+  {% unless section.settings.scroll_motion %} data-kd-motion="off"{% endunless %}
 >
   {%- if section.settings.anchor_id != blank -%}
     <span class="kd-anchor" id="{{ section.settings.anchor_id | handleize }}"></span>
@@ -312,7 +313,9 @@
       "id": "button_label_color",
       "label": "Button label",
       "default": "#AEFF64"
-    }
+    },
+    {"type": "header", "content": "Animation"},
+    {"type": "checkbox", "id": "scroll_motion", "label": "Scroll animations", "default": true, "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations."}
   ],
   "presets": [
     {
