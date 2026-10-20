@@ -9263,14 +9263,18 @@ section.kd-reviews { background-color: var(--kd-rv-bg, rgb(var(--color-scheme-ba
    section reaches 85 % of the viewport; GSAP then reveals them and, when done, marks the section .kd-motion-done and
    clears its inline styles, so the stylesheet decides again (e.g. a hint hidden on purpose). The hero image is never
    hidden (LCP).
-   Pilot scope: homepage hero (.kd-iw--hero) and people cards (.kd-people). */
+   Sections further down are hidden by the script before the visitor reaches them; the rules here only cover what
+   can be on screen at load (the homepage hero, the product page buy box) plus the people cards. */
 html.kd-motion .shopify-section:not(.kd-motion-done) .kd-iw--hero :is(.kd-iw__title, .kd-iw__kicker, .kd-iw__text, .kd-iw__cta, .kd-iw__actions, .kd-iw__note, .kd-iw__caption),
 html.kd-motion .shopify-section:not(.kd-motion-done) .kd-people :is(.kd-heading__title, .kd-heading__kicker, .kd-people__hint, .kd-card),
 html.kd-motion .shopify-section:not(.kd-motion-done) .kd-people__footer :is(.kd-btn, .kd-link),
+html.kd-motion .shopify-section:not(.kd-motion-done) .kd-pack--page :is(.kd-pack__title, .kd-pack__reviews, .kd-pack__intro, .kd-group-label, .kd-options--2, .kd-pack__pack, .kd-pack__plan-list .kd-option, .kd-pack__buy, .kd-pack__foot),
 html.kd-motion .shopify-section:not(.kd-motion-done):has(.kd-iw--hero, .kd-people) .sticker__rotate-container > * {
   visibility: hidden;
 }
 .kd-motion-line { padding-bottom: 0.06em; margin-bottom: -0.06em; } /* line mask keeps Fagies descenders */
+/* Ticker: the loop runs only while the band is on screen (kaadu-motion.js toggles .kd-ticker--live). */
+.kd-ticker--gated:not(.kd-ticker--live) .kd-ticker__track { animation-play-state: paused; }
 @media (prefers-reduced-motion: reduce) {
   html.kd-motion :is(.kd-iw__title, .kd-iw__kicker, .kd-iw__text, .kd-iw__cta, .kd-iw__actions, .kd-iw__note, .kd-iw__caption, .kd-heading__title, .kd-heading__kicker, .kd-people__hint, .kd-card, .kd-btn, .kd-link),
   html.kd-motion .sticker__rotate-container > * { visibility: visible; }
