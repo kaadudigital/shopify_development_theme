@@ -16,4 +16,4 @@ Status: `draft` → `approved` → `in progress` → `done`. Owner: the Claude s
 | [S-06](S-06-signup-image-width.md) | Email Signup — image width settings | email-input.liquid | done | this session (from peer) |
 | [S-07](S-07-footer-social-icons.md) | Custom footer — SVG social icons | custom-footer.liquid | done | this session |
 | [S-08](S-08-vertical-videos-layout.md) | Vertikale Video-Einbettungen — hint on top, side layout | vertical-video-embeds.liquid | done | this session |
-| [S-09](S-09-product-page.md) | Produktseite — product template to the mockup | product.json, custom-packaging-selector, comparison-table, testimonials, scrolling-text | in progress | product-page session |
+| [S-09](S-09-product-page.md) | Produktseite — product template to the mockup | product.json, custom-packaging-selector, comparison-table, testimonials, scrolling-text | built, in review | product-page session |

@@ -1,5 +1,5 @@
 # S-09 · Produktseite — product template to the mockup
-Status: in progress · Owner: session c70d7809 (product page) · Files: `templates/product.json`,
+Status: built, waiting for review · Owner: session c70d7809 (product page) · Files: `templates/product.json`,
 `sections/custom-packaging-selector.liquid`, `sections/comparison-table.liquid`, `sections/testimonials.liquid`,
 `sections/scrolling-text.liquid`, `assets/base.bundle.css`
 
@@ -35,3 +35,19 @@ existing sections wherever possible.
 - [ ] AC4 Each new switch off → colours follow the colour scheme.
 - [ ] AC5 Homepage pack selector unchanged.
 - [ ] AC6 No horizontal scroll at 390–2560; one `<h1>`.
+
+## Verification (2026-10-20, preview)
+- AC1 order and mockup colours at 1440. ✓ One `<h1>` («Ananas Crunchys»), Product JSON-LD (ProductGroup). ✓
+- AC2 390: buy box stacked, table fits (3 columns), reviews stacked. ✓ 768–1199: packs and rhythms as rows
+  (50/50 panel too narrow for three tiles); table heading stacks below 992. ✓
+- AC3 ✗ blocked by store setup: the 3er / 6er / 12er variants are sold out and Shopify answers «Variante kann nur
+  mit einem Verkaufsplan erworben werden» (variants require a selling plan). The form sends the right variant ID.
+- AC4 switch off simulated with scheme3 (pack selector, ticker, table, reviews): all readable. ✓
+- AC5 homepage pack selector: no blocks, new options default off. ✓
+- AC6 no horizontal scroll at 390 / 768 / 1200 / 1440 / 1920 / 2560, no page errors. ✓
+
+## Open
+- Badge text «Reif geerntet» / «Radically Fair» is wider than the burst at 12px (DS minimum).
+- Prices come from the product's variants (CHF 11.10 / 20.50 / 37.90), not the mockup / homepage values
+  (13.35 / 24.90 / 39.90).
+- Reviews and rating are placeholders until there is a reviews app or real quotes.
