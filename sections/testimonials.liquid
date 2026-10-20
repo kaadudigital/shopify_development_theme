@@ -1,15 +1,27 @@
-{%- render 'kaadu-carousel-arrows',
-  section_id: section.id,
-  shape: section.settings.arrow_shape,
-  bg: section.settings.arrow_background,
-  icon: section.settings.arrow_icon_color
--%}
-
+{%- comment -%}
+  Kaadu «Bewertungen» (product page mockup): kicker + h2 beside a cloud button, then review cards (paper, DS card
+  shadow, ★ rating, quote in «guillemets», source line). Layout «Grid» is the mockup (3 columns from 992px,
+  2 from 768px, stacked on mobile); «Carousel» keeps the stock slider. Styles: "REVIEWS" in assets/base.bundle.css.
+  Colours follow the colour scheme unless «Use the colours below» is on. Stickers, shapes and dividers stay blocks.
+{%- endcomment -%}
 {%- liquid
   assign testimonials = section.blocks | where: 'type', 'testimonial'
   assign crop = section.settings.crop
   assign image_count = 0
+  assign carousel = false
+  if section.settings.layout == 'carousel' and testimonials.size > 1
+    assign carousel = true
+  endif
 -%}
+
+{%- if carousel -%}
+  {%- render 'kaadu-carousel-arrows',
+    section_id: section.id,
+    shape: section.settings.arrow_shape,
+    bg: section.settings.arrow_background,
+    icon: section.settings.arrow_icon_color
+  -%}
+{%- endif -%}
 
 {%- render 'collection-shape-defs',
   shape: section.settings.image_shape,
@@ -17,25 +29,57 @@
   item_count: testimonials.size
 -%}
 
+{%- style -%}
+  #{{ section.id }} { --kd-rv-img: {{ section.settings.max_width }}px; }
+{%- endstyle -%}
+{%- if section.settings.use_custom_colors -%}
+{%- style -%}
+  #{{ section.id }} {
+    --kd-rv-bg: {{ section.settings.bg_color }};
+    --kd-rv-kicker: {{ section.settings.kicker_color }};
+    --kd-rv-heading: {{ section.settings.heading_color }};
+    --kd-rv-card: {{ section.settings.card_color }};
+    --kd-rv-text: {{ section.settings.text_color }};
+    --kd-rv-stars: {{ section.settings.stars_color }};
+    --kd-rv-source: {{ section.settings.source_color }};
+    --kd-rv-btn: {{ section.settings.button_color }};
+    --kd-rv-btn-label: {{ section.settings.button_label_color }};
+  }
+{%- endstyle -%}
+{%- endif -%}
+
 <section
-  class="relative overflow-hidden bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %}"
+  id="{{ section.id }}"
+  class="kd-reviews kd-section relative overflow-hidden{% unless section.settings.display_on_card %} kd-reviews--flat{% endunless %}{% if section.settings.use_gradient_background and section.settings.use_custom_colors == false %} bg-scheme-gradient{% endif %}"
   data-color-scheme="{{ section.settings.color_scheme }}"
 >
-  <div class="section-content py-section-vertical-spacing">
-    {% if section.settings.title != '' %}
-      <h2 class="inline-heading-rte font-heading heading-standard  heading-style break-words text-center {{ settings.heading_drop_shadow_style }}">
-        {{ section.settings.title }}
-      </h2>
-    {% endif %}
+  <div class="kd-reviews__inner relative z-10">
+    {%- if section.settings.kicker != blank or section.settings.title != blank or section.settings.button_label != blank -%}
+      <div class="kd-reviews__head kd-wide">
+        <div class="kd-heading">
+          {%- if section.settings.kicker != blank -%}
+            <p class="kd-heading__kicker kd-label">{{ section.settings.kicker | escape }}</p>
+          {%- endif -%}
+          {%- if section.settings.title != blank -%}
+            <h2 class="kd-heading__title kd-display-h2-tight">{{ section.settings.title }}</h2>
+          {%- endif -%}
+        </div>
+        {%- if section.settings.button_label != blank -%}
+          {%- render 'kd-button', label: section.settings.button_label, url: section.settings.button_link, size: 'sm', class: 'kd-reviews__btn' -%}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
 
     <div
-      {% if testimonials.size > 1 %}
+      {% if carousel %}
         id="slideshow-{{ section.id }}"
-        class="splide {% if section.settings.title != '' %}section-content-top-margin{% endif %}"
+        class="splide kd-reviews__slider"
+      {% else %}
+        class="kd-reviews__grid-wrap kd-wide"
       {% endif %}
     >
-      <div class="splide__track">
-        <ul class="splide__list  w-full {% if section.settings.title != '' %}{% if section.settings.display_on_card %}mt-5{% else %}mt-10{% endif %}{% endif %}">
+      <div class="{% if carousel %}splide__track{% endif %}">
+        <ul class="{% if carousel %}splide__list w-full{% else %}kd-reviews__grid{% endif %}" role="list">
           {%- for block in testimonials -%}
             {%- liquid
               assign shape_id = section.id
@@ -43,115 +87,88 @@
                 assign shape_id = section.id | append: '-' | append: forloop.index0
               endif
             -%}
-            <li
-              class="splide__slide w-4/5 {% if settings.card_shadow_direction contains 'top' %}pt-card-shadow{% else %}pb-card-shadow{% endif %}"
-              {{ block.shopify_attributes }}
-            >
-              <div class="{% if section.settings.display_on_card %}text-scheme-card-text card{% endif %}">
-                <div class="{% if section.settings.display_on_card %}bg-scheme-card card__surface p-5 h-full{% endif %} text-center">
-                  {%- if block.settings.image != blank -%}
-                    {%- liquid
-                      assign image_count = image_count | plus: 1
-
-                      assign loading = 'lazy'
-                      if forloop.first and section.index <= 3
-                        assign loading = 'eager'
-                      endif
-
-                      assign preload = false
-                      if section.index == 1 and image_count == 1
-                        assign preload = true
-                      endif
-
-                      assign max_width_px = section.settings.max_width | append: 'px'
+            <li class="{% if carousel %}splide__slide kd-reviews__slide{% endif %}" {{ block.shopify_attributes }}>
+              <figure class="kd-review">
+                {%- if block.settings.image != blank -%}
+                  {%- liquid
+                    assign image_count = image_count | plus: 1
+                    assign loading = 'lazy'
+                    if forloop.first and section.index <= 3
+                      assign loading = 'eager'
+                    endif
+                    assign preload = false
+                    if section.index == 1 and image_count == 1
+                      assign preload = true
+                    endif
+                    assign max_width_px = section.settings.max_width | append: 'px'
+                  -%}
+                  <div class="kd-review__media">
+                    {%- render 'media-image',
+                      media: block.settings.image,
+                      shape: section.settings.image_shape,
+                      shape_id: shape_id,
+                      is_card: section.settings.display_on_card,
+                      crop: crop,
+                      container_id: section.id,
+                      index: forloop.index0,
+                      disable_media_style: section.settings.disable_media_style,
+                      loading: loading,
+                      preload: preload,
+                      sizes: max_width_px,
+                      will_transform: true
                     -%}
-                    <div
-                      class="mx-auto mb-5 {% unless section.settings.disable_media_style %}{% if settings.media_shadow_direction contains 'top' %}pt-media-shadow{% else %}pb-media-shadow{% endif %}{% endunless %}"
-                      style="max-width: {{ max_width_px }}"
-                    >
-                      {%- render 'media-image',
-                        media: block.settings.image,
-                        shape: section.settings.image_shape,
-                        shape_id: shape_id,
-                        is_card: section.settings.display_on_card,
-                        crop: crop,
-                        container_id: section.id,
-                        index: forloop.index0,
-                        disable_media_style: section.settings.disable_media_style,
-                        loading: loading,
-                        preload: preload,
-                        sizes: max_width_px,
-                        will_transform: true
-                      -%}
-                    </div>
-                  {%- endif -%}
-                  <blockquote class="text-center {% if block.settings.image != blank %}mt-5{% endif %}">
-                    {%- if block.settings.rating != 'none' -%}
-                      {%- assign stars = block.settings.rating
-                        | split: '_'
-                        | first
-                        | plus: 0
-                      -%}
-                      <span class="mb-5 block text-center tracking-rating">
-                        {%- for i in (1..stars) -%}
-                          ★
-                        {%- endfor -%}
-                      </span>
-                    {%- endif -%}
-
-                    <div class="inline-rte font-body text-base">
-                      {{
-                        block.settings.quote
-                        | replace: '<p>', '<p>&#8220;'
-                        | replace: '</p>', '&#8221;</p>'
-                      }}
-                    </div>
-                    {% if block.settings.source != blank %}
-                      <footer class="font-heading mt-5 break-words">
-                        {{ block.settings.source }}
-                      </footer>
-                    {% endif %}
-                  </blockquote>
-                </div>
-              </div>
+                  </div>
+                {%- endif -%}
+                {%- if block.settings.rating != 'none' -%}
+                  {%- assign stars = block.settings.rating | split: '_' | first | plus: 0 -%}
+                  <p class="kd-review__stars"><span aria-hidden="true">
+                    {%- for i in (1..5) -%}{%- if i <= stars -%}★{%- else -%}☆{%- endif -%}{%- endfor -%}
+                  </span><span class="sr-only">{{ stars }} von 5</span></p>
+                {%- endif -%}
+                <blockquote class="kd-review__quote">
+                  «{{- block.settings.quote -}}»
+                </blockquote>
+                {%- if block.settings.source != blank -%}
+                  <figcaption class="kd-review__source kd-label">{{ block.settings.source | escape }}</figcaption>
+                {%- endif -%}
+              </figure>
             </li>
           {%- endfor -%}
         </ul>
       </div>
-      {% if section.blocks.size > 1 %}
+      {%- if carousel -%}
         <div class="splide__arrows mt-5 flex items-center justify-between px-section">
           {%- render 'splide-navigation' %}
         </div>
-      {% endif %}
 
-      <script class="slideshow-options" type="application/json">
-        {
-          "mediaQuery": "min",
-          "arrows": true,
-          "pagination": false,
-          "rewind": true,
-          "autoWidth": true,
-          "gap": "2.5rem",
-          "focus": "left",
-          "type": "loop",
-          "autoScroll": {
-            "autoStart": {% if section.settings.autoscroll_mode == '0' %}false{% else %}true{% endif %},
-            "speed": {{ section.settings.autoscroll_mode | plus: 0 | json }}
-          },
-          "padding": {
-            "left": "1.25rem",
-            "right": "1.25rem"
-          },
-          "clones": {{ section.blocks | where: 'type', 'testimonial' | size | times: 2 }}
-        }
-      </script>
-      <style>
-        @media (min-width: 990px) {
-          #slideshow-{{ section.id }} .splide__slide {
-            width: {{ section.settings.desktop_slide_width }}%;
+        <script class="slideshow-options" type="application/json">
+          {
+            "mediaQuery": "min",
+            "arrows": true,
+            "pagination": false,
+            "rewind": true,
+            "autoWidth": true,
+            "gap": "1.25rem",
+            "focus": "left",
+            "type": "loop",
+            "autoScroll": {
+              "autoStart": {% if section.settings.autoscroll_mode == '0' %}false{% else %}true{% endif %},
+              "speed": {{ section.settings.autoscroll_mode | plus: 0 | json }}
+            },
+            "padding": {
+              "left": "1.25rem",
+              "right": "1.25rem"
+            },
+            "clones": {{ testimonials.size | times: 2 }}
           }
-        }
-      </style>
+        </script>
+        <style>
+          #slideshow-{{ section.id }} .splide__slide { width: 80%; }
+          @media (min-width: 990px) {
+            #slideshow-{{ section.id }} .splide__slide { width: {{ section.settings.desktop_slide_width }}%; }
+          }
+        </style>
+      {%- endif -%}
     </div>
   </div>
 
@@ -186,12 +203,48 @@
       "type": "checkbox",
       "id": "display_on_card",
       "label": "t:common.settings.display_on_card.label",
-      "default": true
+      "default": true,
+      "info": "Cards on a paper surface with the DS shadow. Off: reviews sit on the section ground."
+    },
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Kicker",
+      "default": "Bewertungen"
     },
     {
       "id": "title",
       "type": "inline_richtext",
       "label": "t:common.settings.title.label"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Bewertung schreiben",
+      "info": "Leave empty to hide the button."
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid (3 columns on desktop)"
+        },
+        {
+          "value": "carousel",
+          "label": "Carousel"
+        }
+      ],
+      "default": "grid",
+      "info": "Carousel settings below apply to «Carousel» only."
     },
     {
       "type": "range",
@@ -201,7 +254,8 @@
       "step": 10,
       "unit": "px",
       "label": "t:sections.testimonials.settings.max_width.label",
-      "default": 100
+      "default": 100,
+      "info": "Width of the optional review photo."
     },
     {
       "type": "checkbox",
@@ -615,7 +669,8 @@
       "step": 5,
       "unit": "%",
       "label": "t:sections.testimonials.settings.desktop_slide_width.label",
-      "default": 20
+      "default": 20,
+      "info": "Carousel layout only."
     },
     {
       "type": "select",
@@ -635,7 +690,8 @@
           "label": "t:common.options.disabled.label"
         }
       ],
-      "default": "1"
+      "default": "1",
+      "info": "Carousel layout only."
     },
     {
       "type": "header",
@@ -649,8 +705,70 @@
     },
     {
       "type": "checkbox",
+      "id": "use_custom_colors",
+      "label": "Use the colours below instead of the colour scheme",
+      "default": false,
+      "info": "Off: every colour comes from the colour scheme above."
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background",
+      "default": "#B7D9FF"
+    },
+    {
+      "type": "color",
+      "id": "kicker_color",
+      "label": "Kicker",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "card_color",
+      "label": "Card",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Quote text",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "stars_color",
+      "label": "Stars",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "source_color",
+      "label": "Source line",
+      "default": "#6B6B6B"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "button_label_color",
+      "label": "Button label",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "checkbox",
       "id": "use_gradient_background",
-      "label": "t:common.settings.use_gradient_background.label"
+      "label": "t:common.settings.use_gradient_background.label",
+      "info": "Only when «Use the colours below» is off."
     },
     {
       "type": "header",
@@ -660,20 +778,21 @@
       "type": "color",
       "id": "arrow_background",
       "label": "Arrow background",
-      "default": "#FFFFF5"
+      "default": "#FFFFF5",
+      "info": "Carousel layout only."
     },
     {
       "type": "color",
       "id": "arrow_icon_color",
       "label": "Arrow icon color",
       "default": "#000000",
-      "info": "Keep at least 3:1 contrast against the arrow background."
+      "info": "Keep at least 3:1 contrast against the arrow background. Carousel layout only."
     },
     {
       "type": "select",
       "id": "arrow_shape",
       "label": "Arrow background shape",
-      "info": "Silhouette behind the carousel arrows.",
+      "info": "Silhouette behind the carousel arrows. Carousel layout only.",
       "options": [
         {
           "value": "website_shape_star",

@@ -164,132 +164,675 @@
         "hide_media_shadow": false,
         "color_scheme": "scheme1",
         "use_gradient_background": false
-      }
+      },
+      "disabled": true
     },
-    "image_with_highlights_fF4JxP": {
-      "type": "custom-image-with-highlights",
+    "pack_selector_pdp": {
+      "type": "custom-packaging-selector",
+      "name": "Custom Packaging Selector",
+      "settings": {
+        "anchor_id": "produkt",
+        "product": "",
+        "gallery_image_1": "shopify://shop_images/Wailtlist_new_image.webp",
+        "image_alt": "Kaadu Ananas Crunchys, Beutel mit Ananasstücken",
+        "show_reviews": true,
+        "reviews_text": "[Anzahl] Bewertungen",
+        "reviews_link": "",
+        "title": "",
+        "tagline": "100 % Frucht. 0 % Ausbeutung.",
+        "description": "Nur Ananas, gefriergetrocknet. Ohne Zusätze, ohne Schwefel, ohne Zuckerzusatz.",
+        "show_promo": false,
+        "promo_title": "Erste Bestellung: 1 Beutel gratis",
+        "promo_text": "<p>Du zahlst nur <strong>CHF 3.00 Versand.</strong> Danach CHF 4.45 pro Beutel. Code <strong>[CODE]</strong>.</p>",
+        "promo_button_label": "Gratis probieren",
+        "promo_button_link": "",
+        "promo_code": "",
+        "mode_group_label": "Kaufart",
+        "mode_once_label": "Einmalig",
+        "mode_once_sub": "Ohne Abo, ohne Bindung",
+        "mode_abo_label": "Im Abo",
+        "mode_abo_sub": "Bis 20 % sparen, keine Lieferkosten",
+        "default_mode": "abo",
+        "options_label": "Packungsgrösse",
+        "reference_price": "4.45",
+        "free_shipping_badge": "Gratis Versand",
+        "default_pack": "2",
+        "option1_label": "3er Pack",
+        "option1_variant_id": "60042603725134",
+        "pack1_bags": 3,
+        "pack1_price": "13.35",
+        "pack1_abo_discount": false,
+        "pack1_free_shipping": false,
+        "option2_label": "6er Pack",
+        "option2_variant_id": "60042603757902",
+        "pack2_bags": 6,
+        "pack2_price": "24.90",
+        "pack2_abo_discount": true,
+        "pack2_free_shipping": false,
+        "option3_label": "12er Pack",
+        "option3_variant_id": "60042603790670",
+        "pack3_bags": 12,
+        "pack3_price": "39.90",
+        "pack3_abo_discount": true,
+        "pack3_free_shipping": true,
+        "frequency_label": "Lieferrhythmus",
+        "recommended_badge": "Empfohlen",
+        "default_tier": "2",
+        "tier1_title": "Alle 8 Wochen",
+        "tier1_subtitle": "Unter 1 Beutel pro Woche",
+        "tier1_discount": 5,
+        "tier1_recommended": false,
+        "tier1_selling_plan_id": "",
+        "tier2_title": "Alle 4 Wochen",
+        "tier2_subtitle": "1 bis 2 Beutel pro Woche",
+        "tier2_discount": 15,
+        "tier2_recommended": true,
+        "tier2_selling_plan_id": "",
+        "tier3_title": "Alle 2 Wochen",
+        "tier3_subtitle": "3 Beutel pro Woche",
+        "tier3_discount": 20,
+        "tier3_recommended": false,
+        "tier3_selling_plan_id": "",
+        "qty_label": "Menge",
+        "qty_less_label": "Weniger",
+        "qty_more_label": "Mehr",
+        "qty_default": 1,
+        "button_label": "In den Warenkorb",
+        "button_label_mobile": "Warenkorb",
+        "currency_prefix": "CHF",
+        "per_bag_text": "pro Beutel",
+        "save_text": "Spar",
+        "was_text": "statt",
+        "shipping_free_text": "Gratis Versand",
+        "shipping_paid_text": "Versand CHF [X]",
+        "footnote_extra": "Lieferung in [X] Werktagen · Abo jederzeit pausieren oder kündigen",
+        "ingredients_label": "Zutaten",
+        "ingredients_content": "<p>Ananas (100 %). Das ist die ganze Liste.</p>",
+        "nutrition_label": "Nährwerte",
+        "nutrition_content_type": "text",
+        "nutrition_content": "<p>Pro 100 g: Energie [X] kcal, Fett [X] g, Kohlenhydrate [X] g (davon Zucker [X] g, natürlich aus der Frucht), Ballaststoffe [X] g, Eiweiss [X] g, Salz [X] g. [Nährwertanalyse einsetzen]</p>",
+        "shipping_label": "Versand",
+        "shipping_content": "<p>Gratis Versand im Abo und ab CHF 80. Sonst CHF [X]. Lieferung in [X] Werktagen aus unserem Lager in Neuenkirch.</p>",
+        "color_scheme": "scheme4",
+        "use_custom_colors": true,
+        "bg_color": "#fffff5",
+        "bg_color_mobile": "#fffff5",
+        "text_color": "#1a1a1a",
+        "text_color_mobile": "#1a1a1a",
+        "title_color": "#ac0300",
+        "promo_bg": "#b7d9ff",
+        "promo_bg_mobile": "#aeff64",
+        "promo_title_color": "#542a76",
+        "promo_title_color_mobile": "#ac0300",
+        "promo_text_color": "#1a1a1a",
+        "promo_text_color_mobile": "#542a76",
+        "promo_button_color": "#ac0300",
+        "promo_button_label_color": "#fffff5",
+        "option_bg": "#ffc6ff",
+        "option_text": "#542a76",
+        "option_active_bg": "#542a76",
+        "option_active_text": "#fffff5",
+        "badge_bg": "#aeff64",
+        "badge_text": "#542a76",
+        "plan_badge_bg": "#ac0300",
+        "plan_badge_text": "#fffff5",
+        "plan_badge_active_bg": "#fffff5",
+        "plan_badge_active_text": "#1a1a1a",
+        "stepper_bg": "#ffc6ff",
+        "stepper_text": "#542a76",
+        "cart_button_color": "#ac0300",
+        "cart_button_color_mobile": "#ac0300",
+        "cart_button_label_color": "#fffff5",
+        "storage_label": "Lagerung und Haltbarkeit",
+        "storage_content": "<p>9 Monate ungeöffnet. Nach dem Öffnen Beutel gut verschliessen, sonst zieht die Ananas Feuchtigkeit und wird zäh.</p>",
+        "details_stars": true,
+        "long_description_source": "custom",
+        "long_description": "<p>Reife Vazhakulam-Ananas, in Vadacode geschält, geschnitten und gefriergetrocknet. Aus 35 kg Frucht werden 1,5 kg Crunch.</p><p>Knusprig, süss, fruchtig. Ohne Zucker, Schwefel oder Aromen, weil die Ananas nichts davon braucht.</p><p>Und fair bis zum Feld: Wir kaufen direkt bei den Bauern und zahlen für jede Ananas denselben Preis, über dem Markt.</p>"
+      },
       "blocks": {
-        "shape_divider_RQXK6i": {
-          "type": "shape_divider",
+        "badge_1": {
+          "type": "badge",
           "settings": {
-            "target_section": "above",
-            "target_section_color_scheme": "scheme1",
-            "style": "circles-1-patterned_1200x16",
-            "flip_horizontal": false,
-            "enable_animation": false,
-            "animation_direction": ""
+            "text": "100 % Ananas",
+            "shape_color": "#aeff64",
+            "text_color": "#ac0300"
           }
         },
-        "highlight_6Cd9k9": {
-          "type": "highlight",
+        "badge_2": {
+          "type": "badge",
           "settings": {
-            "title": "",
-            "text": "Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.",
-            "cta_link": "",
-            "cta_text": "",
-            "override_section_color_scheme": false,
-            "color_scheme": ""
+            "text": "Ohne Zusätze",
+            "shape_color": "#ffc6ff",
+            "text_color": "#542a76"
           }
         },
-        "highlight_xewKVM": {
-          "type": "highlight",
+        "badge_3": {
+          "type": "badge",
           "settings": {
-            "title": "",
-            "text": "Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.",
-            "cta_link": "",
-            "cta_text": "",
-            "override_section_color_scheme": false,
-            "color_scheme": ""
+            "text": "Reif geerntet",
+            "shape_color": "#ac0300",
+            "text_color": "#fffff5"
           }
         },
-        "highlight_QFzHkR": {
-          "type": "highlight",
+        "badge_4": {
+          "type": "badge",
           "settings": {
-            "title": "",
-            "text": "Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.",
-            "cta_link": "",
-            "cta_text": "",
-            "override_section_color_scheme": false,
-            "color_scheme": ""
+            "text": "Radically Fair",
+            "shape_color": "#542a76",
+            "text_color": "#aeff64"
           }
         },
-        "highlight_4364VG": {
-          "type": "highlight",
+        "badge_5": {
+          "type": "badge",
           "settings": {
-            "title": "",
-            "text": "Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.",
-            "cta_link": "",
-            "cta_text": "",
-            "override_section_color_scheme": false,
-            "color_scheme": ""
+            "text": "Labor geprüft",
+            "shape_color": "#fffff5",
+            "text_color": "#ac0300"
           }
         },
-        "highlight_wyRzMT": {
-          "type": "highlight",
+        "badge_6": {
+          "type": "badge",
           "settings": {
-            "title": "",
-            "text": "Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.",
-            "cta_link": "",
-            "cta_text": "",
-            "override_section_color_scheme": false,
-            "color_scheme": ""
-          }
-        },
-        "highlight_hz8q9m": {
-          "type": "highlight",
-          "settings": {
-            "title": "",
-            "text": "Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.",
-            "cta_link": "",
-            "cta_text": "",
-            "override_section_color_scheme": false,
-            "color_scheme": ""
+            "text": "Kein Schwefel",
+            "shape_color": "#aeff64",
+            "text_color": "#542a76"
           }
         }
       },
       "block_order": [
-        "shape_divider_RQXK6i",
-        "highlight_6Cd9k9",
-        "highlight_xewKVM",
-        "highlight_QFzHkR",
-        "highlight_4364VG",
-        "highlight_wyRzMT",
-        "highlight_hz8q9m"
-      ],
-      "name": "t:sections.image_with_highlights.name",
+        "badge_1",
+        "badge_2",
+        "badge_3",
+        "badge_4",
+        "badge_5",
+        "badge_6"
+      ]
+    },
+    "scrolling_text_pdp": {
+      "type": "scrolling-text",
+      "name": "t:sections.scrolling_text.name",
       "settings": {
-        "title": "",
-        "block_alignment_on_desktop": "justify-center",
+        "text": "100 % Ananas | Gefriergetrocknet | Ohne Zusätze | Reif geerntet | Radically Fair | Knusprig | Direkt vom Bauern",
+        "repeat_text": true,
+        "shape_between_text": "kd_star",
+        "between_text_image": "shopify://shop_images/Kaadu_favicon_purple_RGB.png",
+        "shape_size": 1.2,
+        "animate_shape_between_text": true,
+        "animate_image_between_text": true,
+        "link": "",
+        "speed": 120,
+        "direction": "",
+        "color_scheme": "scheme2",
+        "use_gradient_background": false,
+        "use_custom_colors": true,
+        "bg_color": "#ac0300",
+        "text_color": "#fffff5",
+        "separator_color": "#aeff64"
+      }
+    },
+    "comparison_table_pdp": {
+      "type": "comparison-table",
+      "blocks": {
+        "row_1": {
+          "type": "row",
+          "settings": {
+            "title": "Premium Vazhakulam-Ananas",
+            "column_1_icon": "check_mark",
+            "column_1_text": "",
+            "column_2_icon": "check_close",
+            "column_2_text": "",
+            "column_3_icon": "",
+            "column_3_text": "",
+            "column_4_icon": "",
+            "column_4_text": ""
+          }
+        },
+        "row_2": {
+          "type": "row",
+          "settings": {
+            "title": "Reif geerntet, kurz gelagert",
+            "column_1_icon": "check_mark",
+            "column_1_text": "",
+            "column_2_icon": "check_close",
+            "column_2_text": "",
+            "column_3_icon": "",
+            "column_3_text": "",
+            "column_4_icon": "",
+            "column_4_text": ""
+          }
+        },
+        "row_3": {
+          "type": "row",
+          "settings": {
+            "title": "Kleine, süsse Früchte",
+            "column_1_icon": "check_mark",
+            "column_1_text": "",
+            "column_2_icon": "check_close",
+            "column_2_text": "",
+            "column_3_icon": "",
+            "column_3_text": "",
+            "column_4_icon": "",
+            "column_4_text": ""
+          }
+        },
+        "row_4": {
+          "type": "row",
+          "settings": {
+            "title": "Saftige Ananas = mehr Crunch",
+            "column_1_icon": "check_mark",
+            "column_1_text": "",
+            "column_2_icon": "check_close",
+            "column_2_text": "",
+            "column_3_icon": "",
+            "column_3_text": "",
+            "column_4_icon": "",
+            "column_4_text": ""
+          }
+        },
+        "row_5": {
+          "type": "row",
+          "settings": {
+            "title": "Radikal fair produziert",
+            "column_1_icon": "check_mark",
+            "column_1_text": "",
+            "column_2_icon": "check_close",
+            "column_2_text": "",
+            "column_3_icon": "",
+            "column_3_text": "",
+            "column_4_icon": "",
+            "column_4_text": ""
+          }
+        }
+      },
+      "block_order": [
+        "row_1",
+        "row_2",
+        "row_3",
+        "row_4",
+        "row_5"
+      ],
+      "settings": {
+        "kicker": "Produktvergleich",
+        "title": "Gefriergetrocknet ist nicht gleich gefriergetrocknet.",
+        "intro": "<p>Gefriertrocknen kann jeder. Den Unterschied macht die Frucht, bevor sie in den Trockner kommt. Zeile für Zeile.</p>",
+        "footnote": "Vergleich mit handelsüblicher gefriergetrockneter Ananas. Angaben zu anderen Produkten aus Herkunfts- und Produktangaben gängiger Anbieter [Quelle].",
+        "display_on_card": false,
+        "max_width": "",
+        "highlighted_column": "1",
+        "highlighted_column_color": "accent-1",
+        "show_scroll_left_to_right_on_mobile": true,
+        "column_1_title": "Kaadu",
+        "column_2_title": "Andere gefriergetrocknete",
+        "enable_column_3": false,
+        "column_3_title": "Column 3",
+        "enable_column_4": false,
+        "column_4_title": "Column 4",
+        "icon_thickness": 1.5,
+        "background_color": "bg-transparent text-scheme-text",
+        "show_border": true,
+        "color_scheme": "scheme1",
+        "use_gradient_background": false,
+        "use_custom_colors": true,
+        "bg_color": "#ffc6ff",
+        "kicker_color": "#ac0300",
+        "heading_color": "#ac0300",
+        "text_color": "#1a1a1a",
+        "cell_color": "#fffff5",
+        "table_text_color": "#542a76",
+        "line_color": "#542a76",
+        "highlight_color": "#aeff64",
+        "highlight_text_color": "#542a76",
+        "footnote_color": "#6b6b6b"
+      }
+    },
+    "testimonials_pdp": {
+      "type": "testimonials",
+      "blocks": {
+        "review_1": {
+          "type": "testimonial",
+          "settings": {
+            "rating": "5_stars",
+            "quote": "[Kundenstimme, ein bis zwei Sätze, echt.]",
+            "source": "[Name], [Ort] · Verifizierter Kauf"
+          }
+        },
+        "review_2": {
+          "type": "testimonial",
+          "settings": {
+            "rating": "5_stars",
+            "quote": "[Kundenstimme]",
+            "source": "[Name], [Ort] · Verifizierter Kauf"
+          }
+        },
+        "review_3": {
+          "type": "testimonial",
+          "settings": {
+            "rating": "4_stars",
+            "quote": "[Kundenstimme]",
+            "source": "[Name], [Ort] · Verifizierter Kauf"
+          }
+        }
+      },
+      "block_order": [
+        "review_1",
+        "review_2",
+        "review_3"
+      ],
+      "settings": {
+        "kicker": "Bewertungen",
+        "title": "[4.9] von 5. [Anzahl] Stimmen.",
+        "button_label": "Bewertung schreiben",
+        "button_link": "",
+        "layout": "grid",
         "display_on_card": true,
-        "slideshow_on_mobile": true,
-        "slideshow_focus": "center",
-        "max_width": 500,
+        "max_width": 100,
+        "disable_media_style": false,
+        "crop": "",
+        "image_shape": "default",
+        "desktop_slide_width": 30,
+        "autoscroll_mode": "0",
+        "color_scheme": "scheme1",
+        "use_gradient_background": false,
+        "use_custom_colors": true,
+        "bg_color": "#b7d9ff",
+        "kicker_color": "#ac0300",
+        "heading_color": "#ac0300",
+        "card_color": "#fffff5",
+        "text_color": "#1a1a1a",
+        "stars_color": "#ac0300",
+        "source_color": "#6b6b6b",
+        "button_color": "#542a76",
+        "button_label_color": "#fffff5"
+      }
+    },
+    "kaadu_comparison_pdp": {
+      "type": "kaadu-comparison",
+      "blocks": {
+        "row_1": {
+          "type": "row",
+          "settings": {
+            "kaadu_text": "Reif geerntet",
+            "other_text": "Grün gepflückt",
+            "show_on_mobile": true
+          }
+        },
+        "row_2": {
+          "type": "row",
+          "settings": {
+            "kaadu_text": "Ananas. Punkt.",
+            "other_text": "Zucker, Schwefel, Aromen",
+            "show_on_mobile": true
+          }
+        },
+        "row_3": {
+          "type": "row",
+          "settings": {
+            "kaadu_text": "Löhne offen, +50 %",
+            "other_text": "Löhne unbekannt",
+            "show_on_mobile": true
+          }
+        },
+        "row_4": {
+          "type": "row",
+          "settings": {
+            "kaadu_text": "Verarbeitet im Dorf",
+            "other_text": "Verarbeitet weit weg",
+            "show_on_mobile": true
+          }
+        },
+        "row_5": {
+          "type": "row",
+          "settings": {
+            "kaadu_text": "Soll dem Team gehören",
+            "other_text": "Gehört einem Konzern",
+            "show_on_mobile": false
+          }
+        },
+        "note_1": {
+          "type": "note",
+          "settings": {
+            "title": "Einkauf:",
+            "text": "direkt, A-Preis für jede Grösse.",
+            "show_on": "mobile"
+          }
+        },
+        "note_2": {
+          "type": "note",
+          "settings": {
+            "title": "Eigentum:",
+            "text": "soll dem Team gehören.",
+            "show_on": "mobile"
+          }
+        }
+      },
+      "block_order": [
+        "row_1",
+        "row_2",
+        "row_3",
+        "row_4",
+        "row_5",
+        "note_1",
+        "note_2"
+      ],
+      "settings": {
+        "kicker": "Kaadu > Andere",
+        "heading": "Wir sind einfach besser.",
+        "mobile_kicker": "Zieh den Regler",
+        "mobile_heading": "Kaadu vs. der Rest im Regal",
+        "kaadu_label": "Kaadu",
+        "kaadu_logo": "shopify://shop_images/Kaadu_wordmark_red_RGB.svg",
+        "kaadu_image": "shopify://shop_images/Adobe_Express_-_file.webp",
+        "other_label": "Der Rest",
+        "other_image": "shopify://shop_images/ChatGPT_Image_31._Marz_2025_12_40_06.png",
+        "start_position": 55,
+        "slider_label": "Vergleich verschieben",
+        "handle_shape": "image",
+        "handle_image": "shopify://shop_images/Vector_f1de3305-1aa4-4f1c-9b06-f17b521b7581.png",
+        "handle_arrow": "default",
+        "handle_size_mobile": 50,
+        "handle_size": 68,
+        "rock_enabled": true,
+        "rock_distance": 12,
+        "rock_speed": 6,
+        "photo_shade": 0,
+        "rock_delay": 2,
+        "footnote": "<p>«Der Rest» steht für das, was im Regal daneben liegt. Kein Hersteller wird genannt, jede Kaadu-Zeile ist belegbar. [Belege verlinken]</p>",
+        "mobile_footnote": "<p>«Der Rest» steht für das, was im Regal daneben liegt. Kein Hersteller wird genannt. [Belege verlinken]</p>",
+        "color_scheme": "scheme1",
+        "use_custom_colors": true,
+        "background_color": "#fffff5",
+        "kicker_color": "#542a76",
+        "heading_color": "#ac0300",
+        "note_color": "#542a76",
+        "kaadu_bg_color": "#aeff64",
+        "kaadu_text_color": "#542a76",
+        "other_bg_color": "#9a9a94",
+        "other_text_color": "#fffff5",
+        "pill_bg_color": "#3a3a3a",
+        "pill_text_color": "#fffff5",
+        "handle_color": "#aeff64",
+        "handle_arrow_color": "#ac0300",
+        "card_color": "#fff9ee",
+        "card_text_color": "#542a76"
+      }
+    },
+    "image_with_text_custom_vision_pdp": {
+      "type": "image-with-text-custom",
+      "settings": {
+        "image": "shopify://shop_images/Kaadu_Waitlist.png",
+        "image_caption": "",
+        "image_position": "left",
+        "image_width_large": 40,
+        "image_width_xl": 46,
         "crop": "",
         "image_shape": "default",
         "blob_type": 1,
         "rotate_image": 0,
         "disable_media_style": false,
-        "color_scheme": "scheme1",
-        "use_gradient_background": false
+        "image_shadow": false,
+        "hide_image_mobile": true,
+        "h2_title": "Was uns antreibt",
+        "title": "Sind wir Mittelmänner?",
+        "heading_level": "h2",
+        "richtext": "<p>Wir kennen die Preise, die Leute und die Ausreden der Branche. Darum bauen wir eine Anlage, die am Ende den Frauen gehört, die darin arbeiten. Und wir zeigen jeden Rappen auf dem Weg dorthin.</p>",
+        "richtext_mobile": "<p>Wir kommen aus Kerala. Wir kennen die Preise, die Leute und die Ausreden der Branche. Darum bauen wir eine Anlage, die am Ende den Frauen gehört, die darin arbeiten. Und wir zeigen jeden Rappen auf dem Weg dorthin.</p>",
+        "text_alignment": "text-left",
+        "mobile_text_alignment": "text-center",
+        "mobile_layout_order": false,
+        "button2_label": "Unsere Vision",
+        "button2_label_mobile": "",
+        "button2_link_type": "url",
+        "button2_link": "/pages/manifesto",
+        "focus_element2_id": "",
+        "button_note": "",
+        "button_note_mobile": "",
+        "button2_width_desktop": 200,
+        "button2_width_mobile": 150,
+        "button_text_color_desktop": "#ffffff",
+        "button_text_color_mobile": "#ffffff",
+        "button_label": "Wer profitiert? ↑",
+        "button_label_mobile": "",
+        "button_link_type": "url",
+        "button_link": "/#shopify-section-template--32174860960078__kaadu_people_cards_wP7k2m",
+        "focus_element_id": "",
+        "mobile_link_position": "under",
+        "link_color": "text",
+        "color_scheme": "scheme3",
+        "use_custom_colors": true,
+        "use_gradient_background": false,
+        "background_color": "#542a76",
+        "kicker_color": "#aeff64",
+        "heading_color": "#fffff5",
+        "text_color": "#fffff5",
+        "button_color": "#aeff64",
+        "button_label_color": "#ac0300",
+        "link_custom_color": "#fffff5"
       }
     },
-    "related-products": {
-      "type": "related-products",
+    "vertical_video_embeds_pdp": {
+      "type": "vertical-video-embeds",
+      "blocks": {
+        "video_embed_iLrwYH": {
+          "type": "video_embed",
+          "settings": {
+            "title": "",
+            "placeholder_color": "#e9a2e6",
+            "video_url": "https://www.tiktok.com/@alex.svg/video/7624184846646021398?is_from_webapp=1&sender_device=pc",
+            "video_embed_code": ""
+          }
+        },
+        "video_embed_Tqj7Ed": {
+          "type": "video_embed",
+          "settings": {
+            "title": "",
+            "placeholder_color": "#ff781e",
+            "video_url": "https://www.tiktok.com/@alex.svg/video/7660550945939410198?is_from_webapp=1&sender_device=pc",
+            "video_embed_code": ""
+          }
+        },
+        "video_embed_6GaFRt": {
+          "type": "video_embed",
+          "settings": {
+            "title": "",
+            "placeholder_color": "#b7d9ff",
+            "video_url": "https://www.tiktok.com/@alex.svg/video/7677984987571948802?is_from_webapp=1&sender_device=pc",
+            "video_embed_code": ""
+          }
+        }
+      },
+      "block_order": [
+        "video_embed_iLrwYH",
+        "video_embed_Tqj7Ed",
+        "video_embed_6GaFRt"
+      ],
+      "name": "t:sections.vertical_video_embeds.name",
       "settings": {
-        "display_on_card": false,
-        "enable_quick_buy": false,
-        "related_products_heading": "You may also like",
-        "max_products": "3",
-        "product_tiles_aspect_ratio": "",
-        "image_shape": "",
-        "color_scheme": "scheme1",
-        "use_gradient_background": false
+        "title": "Ungeschnitten oder so",
+        "title_mobile": "Aus Kerala. Ungeschnitten.",
+        "subheading": "Überzeug dich selbst von unserer Radikalen fairness, schamlose transparenz mit Menschen im Zentrum",
+        "subheading_mobile": "Schau, warum sie Kaadu essen und wem das etwas bringt.",
+        "button_label": "Zum Manifesto",
+        "button_link": "/pages/manifesto",
+        "phone_width": 370,
+        "phone_width_mobile": 330,
+        "phone_position_mobile": 20,
+        "swipe_direction": "horizontal",
+        "swipe_direction_mobile": "vertical",
+        "hint": "Wischen für den nächsten Clip",
+        "hint_show_count": true,
+        "tiktok_link_label": "Auf TikTok ansehen",
+        "instagram_link_label": "Auf Instagram ansehen",
+        "slideshow_focus": "left",
+        "autoscroll_mode": "1",
+        "autoscroll_mobile": true,
+        "autoscroll_interval": 6,
+        "color_scheme": "scheme3",
+        "use_custom_colors": true,
+        "background_color": "#ac0300",
+        "heading_color": "#fffff5",
+        "text_color": "#fffff5",
+        "hint_color": "#fffff5",
+        "clip_title_color": "#fffff5",
+        "button_color": "#ffc6ff",
+        "button_label_color": "#ac0300",
+        "arrow_icon_color": "#fffff5"
+      }
+    },
+    "email_input_pdp": {
+      "type": "email-input",
+      "custom_css": [],
+      "name": "Email Signup",
+      "settings": {
+        "kicker": "20 % auf deinen ersten Crunch",
+        "heading": "Join the mission",
+        "image": "shopify://shop_images/Extra_Mascots-06.svg",
+        "hide_image_mobile": false,
+        "image_width_mobile": 200,
+        "image_width": 330,
+        "text": "<p>Perfektion ist nicht unser Ziel. Veränderung schon. Begleite uns auf dem Weg zu radikaler Fairness.</p>",
+        "text_mobile": "<p>Perfektion ist nicht unser Ziel. Veränderung schon.</p>",
+        "subtitle": "",
+        "placeholder_text": "E-Mail",
+        "input_square": false,
+        "after_signup": "message",
+        "success_text": "Du bist dabei. Dein 20 %-Code kommt per Mail.",
+        "success_text_mobile": "Du bist dabei. Dein Code kommt per Mail.",
+        "success_page": "",
+        "error_text": "Das ist keine E-Mail-Adresse. Nochmal.",
+        "button_image": "shopify://shop_images/06d3f155e99649c6ad8f552f17b4bec9ac475189.png",
+        "button_text": "Anmelden",
+        "button_text_color": "#ae0000",
+        "button_image_width": 128,
+        "button_image_mobile": "shopify://shop_images/right_arrow_in_spiky_cloud.svg",
+        "button_text_mobile": "",
+        "button_image_width_mobile": 64,
+        "padding_top": "none",
+        "bg_class": "bg-lime",
+        "color_scheme": "scheme5",
+        "use_custom_colors": true,
+        "background_color": "#aeff64",
+        "kicker_color": "#1a1a1a",
+        "heading_color": "#ac0300",
+        "text_color": "#1a1a1a",
+        "input_bg_color": "#fffff5",
+        "input_text_color": "#542a76",
+        "button_color": "#ac0300",
+        "button_label_color": "#fffff5",
+        "success_bg_color": "#542a76",
+        "success_text_color": "#fffff5",
+        "error_color": "#ac0300"
       }
     }
   },
   "order": [
     "main",
-    "image_with_highlights_fF4JxP",
-    "related-products"
+    "pack_selector_pdp",
+    "scrolling_text_pdp",
+    "comparison_table_pdp",
+    "testimonials_pdp",
+    "kaadu_comparison_pdp",
+    "image_with_text_custom_vision_pdp",
+    "vertical_video_embeds_pdp",
+    "email_input_pdp"
   ]
 }

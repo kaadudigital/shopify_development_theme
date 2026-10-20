@@ -9,20 +9,31 @@
   price setting) and a bag count. Abo prices = pack price minus the delivery rhythm's discount (packs can opt out).
   "Spar %" per pack compares the price per bag with the reference price per bag. Totals round to 5 Rappen.
   Subscriptions are frontend-only until selling plans exist: the plan ID setting is sent as selling_plan when set.
+
+  On the product template (product page mockup, "Produktseite") the section is the buy box: it falls back to the
+  page's product, renders the title as the page's h1 plus the Product structured data, and lays out photo and panel
+  50/50 from 768px (.kd-pack--page). Long description, badge blocks and the storage accordion work on every page.
 {%- endcomment -%}
 {%- liquid
-  assign product = all_products[section.settings.product]
+  assign kd_product = all_products[section.settings.product]
+  assign on_product_page = false
+  if template.name == 'product'
+    assign on_product_page = true
+    if kd_product == blank
+      assign kd_product = product
+    endif
+  endif
   assign packs = '1,2,3' | split: ','
   assign default_pack = section.settings.default_pack | default: '2' | plus: 0
   assign default_tier = section.settings.default_tier | default: '2' | plus: 0
   assign default_mode = section.settings.default_mode | default: 'abo'
   assign title = section.settings.title
-  if title == blank and product != blank
-    assign title = product.title
+  if title == blank and kd_product != blank
+    assign title = kd_product.title
   endif
   assign image = section.settings.gallery_image_1
-  if image == blank and product != blank
-    assign image = product.featured_image
+  if image == blank and kd_product != blank
+    assign image = kd_product.featured_image
   endif
   assign image_mobile = section.settings.image_mobile | default: image
   assign qty = section.settings.qty_default | default: 1
@@ -58,6 +69,9 @@
     --kd-pc-cart: {{ section.settings.cart_button_color_mobile }};
     --kd-pc-cart-label: {{ section.settings.cart_button_label_color }};
   }
+  {%- for block in section.blocks %}
+  #{{ section.id }} .kd-pack__seal--{{ block.id }} { --kd-seal-bg: {{ block.settings.shape_color }}; --kd-seal-fg: {{ block.settings.text_color }}; }
+  {%- endfor %}
   @media (min-width: 768px) {
     #{{ section.id }} {
       --kd-pc-bg: {{ section.settings.bg_color }};
@@ -73,7 +87,7 @@
 
 <section
   id="{{ section.id }}"
-  class="kd-pack kd-section relative overflow-hidden{% unless section.settings.use_custom_colors %} kd-pack--scheme{% endunless %}"
+  class="kd-pack kd-section relative{% unless on_product_page %} overflow-hidden{% endunless %}{% unless section.settings.use_custom_colors %} kd-pack--scheme{% endunless %}{% if on_product_page %} kd-pack--page{% endif %}"
   data-color-scheme="{{ section.settings.color_scheme }}"
   data-kd-config
 >
@@ -114,7 +128,11 @@
       {%- endif -%}
 
       {%- if title != blank -%}
-        <h2 class="kd-pack__title kd-display-h2-tight">{{ title | escape }}</h2>
+        {%- if on_product_page -%}
+          <h1 class="kd-pack__title kd-display-h2-tight">{{ title | escape }}</h1>
+        {%- else -%}
+          <h2 class="kd-pack__title kd-display-h2-tight">{{ title | escape }}</h2>
+        {%- endif -%}
       {%- endif -%}
 
       {%- if section.settings.tagline != blank or section.settings.description != blank -%}
@@ -249,6 +267,31 @@
       <p class="kd-pack__foot" data-foot></p>
 
       {%- liquid
+        assign long_text = blank
+        if section.settings.long_description_source == 'product' and kd_product != blank
+          assign long_text = kd_product.description
+        elsif section.settings.long_description_source == 'custom'
+          assign long_text = section.settings.long_description
+        endif
+      -%}
+      {%- if long_text != blank -%}
+        <div class="kd-pack__long kd-body rte">{{ long_text }}</div>
+      {%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <ul class="kd-pack__seals" role="list">
+          {%- for block in section.blocks -%}
+            {%- if block.settings.text != blank -%}
+              <li class="kd-pack__seal kd-pack__seal--{{ block.id }}" {{ block.shopify_attributes }}>
+                <svg class="kd-pack__seal-shape" viewBox="0 0 200 200" aria-hidden="true" focusable="false"><path d="M100 0l13 27 24-17-3 30 30-4-17 24 27 13-27 13 17 24-30-4 3 30-24-17-13 27-13-27-24 17 3-30-30 4 17-24L0 100l27-13L10 63l30 4-3-30 24 17z"/></svg>
+                <span class="kd-pack__seal-text">{{ block.settings.text | escape }}</span>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      {%- liquid
         assign nutrition_has_content = false
         if section.settings.nutrition_content_type == 'image'
           if section.settings.nutrition_image != blank
@@ -258,8 +301,8 @@
           assign nutrition_has_content = true
         endif
       -%}
-      {%- if section.settings.ingredients_content != blank or nutrition_has_content or section.settings.shipping_content != blank -%}
-        <div class="kd-pack__details">
+      {%- if section.settings.ingredients_content != blank or nutrition_has_content or section.settings.shipping_content != blank or section.settings.storage_content != blank -%}
+        <div class="kd-pack__details{% if section.settings.details_stars %} kd-pack__details--stars{% endif %}">
           {%- if section.settings.ingredients_content != blank -%}
             <details class="kd-pack__detail">
               <summary class="kd-label-lg">{{ section.settings.ingredients_label | escape }}</summary>
@@ -284,10 +327,22 @@
               <div class="kd-pack__detail-body kd-body rte">{{ section.settings.shipping_content }}</div>
             </details>
           {%- endif -%}
+          {%- if section.settings.storage_content != blank -%}
+            <details class="kd-pack__detail">
+              <summary class="kd-label-lg">{{ section.settings.storage_label | escape }}</summary>
+              <div class="kd-pack__detail-body kd-body rte">{{ section.settings.storage_content }}</div>
+            </details>
+          {%- endif -%}
         </div>
       {%- endif -%}
     </div>
   </div>
+
+  {%- if on_product_page and kd_product == product -%}
+    <script type="application/ld+json">
+      {{ product | structured_data }}
+    </script>
+  {%- endif -%}
 
   {%- comment -%} Data for assets/kaadu.js: packs (bags, one-time price in CHF, variant, Abo discount on/off, free shipping) and plans. {%- endcomment -%}
   <script type="application/json" data-kd-config-data>
@@ -314,8 +369,8 @@
             assign k_free = 'pack' | append: i | append: '_free_shipping'
             assign variant_id = section.settings[k_variant] | strip
             assign price = section.settings[k_price] | default: '0'
-            if product != blank and variant_id != blank
-              for v in product.variants
+            if kd_product != blank and variant_id != blank
+              for v in kd_product.variants
                 assign vid = v.id | append: ''
                 if vid == variant_id
                   assign price = v.price | divided_by: 100.0
@@ -367,7 +422,7 @@
       "type": "product",
       "id": "product",
       "label": "Product",
-      "info": "When set, purchase options, prices, subscription tiers and gallery images are pulled live from this product's variants, selling plans and media — the fields below are used only as a fallback when no product is selected."
+      "info": "When set, purchase options, prices, subscription tiers and gallery images are pulled live from this product's variants, selling plans and media — the fields below are used only as a fallback when no product is selected. On a product page, leave empty to use that page's product."
     },
     {
       "type": "image_picker",
@@ -925,6 +980,36 @@
     },
     {
       "type": "header",
+      "content": "Long description"
+    },
+    {
+      "type": "select",
+      "id": "long_description_source",
+      "label": "Long description",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "product",
+          "label": "Product description"
+        },
+        {
+          "value": "custom",
+          "label": "Text below"
+        }
+      ],
+      "default": "none",
+      "info": "Shown below the footnote, above the badges. «Product description» uses the product's description from the Shopify admin."
+    },
+    {
+      "type": "richtext",
+      "id": "long_description",
+      "label": "Long description text"
+    },
+    {
+      "type": "header",
       "content": "Details (optional)",
       "info": "Fold-out texts under the cart button; hidden when empty."
     },
@@ -983,6 +1068,24 @@
       "type": "richtext",
       "id": "shipping_content",
       "label": "Shipping Content"
+    },
+    {
+      "type": "text",
+      "id": "storage_label",
+      "label": "Storage tab: title",
+      "default": "Lagerung und Haltbarkeit"
+    },
+    {
+      "type": "richtext",
+      "id": "storage_content",
+      "label": "Storage tab: content",
+      "info": "Leave empty to hide the tab."
+    },
+    {
+      "type": "checkbox",
+      "id": "details_stars",
+      "label": "Show a coloured ✶ before each tab title",
+      "default": false
     },
     {
       "type": "header",
@@ -1174,6 +1277,34 @@
   "presets": [
     {
       "name": "Custom Packaging Selector"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "badge",
+      "name": "Badge",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "100 % Ananas"
+        },
+        {
+          "type": "color",
+          "id": "shape_color",
+          "label": "Shape colour",
+          "default": "#AEFF64",
+          "info": "Used when «Use the colours below» is on; otherwise the colour scheme's button colours."
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text colour",
+          "default": "#AC0300"
+        }
+      ]
     }
   ]
 }

@@ -1,192 +1,127 @@
+{%- comment -%}
+  Kaadu «Produktvergleich» (product page mockup): kicker + h2 beside an intro, then a ✓ / ✕ table with a label
+  column and 2–4 product columns (header text or image, e.g. the Kaadu logo; one column highlighted), and a
+  footnote. Styles: "COMPARISON TABLE" in assets/base.bundle.css. Colours follow the colour scheme unless
+  «Use the colours below» is on (mockup: pink ground, paper cells, lime Kaadu column, purple lines and ink).
+  Stickers, background shapes/patterns and shape dividers stay as blocks.
+{%- endcomment -%}
 {%- liquid
-  assign max_width = section.settings.max_width
-  assign th_td_classes = 'w-[35vw] p-4 text-center border-general border-scheme-text lg:w-auto lg:p-5'
-  assign th_td_classes_heading = 'left-0 text-left w-[35vw] p-4 border-general border-scheme-text lg:w-auto lg:p-5'
-  assign highlight_classes = 'bg-[rgba(var(--color-highlight))] text-[rgba(var(--color-highlight-overlay))]'
-
-  assign mobile_sizes = '35vw'
-
-  assign enabled_columns = 2
-
+  assign columns = '1,2' | split: ','
   if section.settings.enable_column_3
-    assign enabled_columns = enabled_columns | plus: 1
+    assign columns = columns | push: '3'
   endif
-
   if section.settings.enable_column_4
-    assign enabled_columns = enabled_columns | plus: 1
+    assign columns = columns | push: '4'
   endif
-
-  assign total_columns = enabled_columns | plus: 1
-
-  assign desktop_sizes = 'calc(100vw / ' | append: total_columns | append: ')'
-
-  assign sizes = '(min-width: 990px) ' | append: desktop_sizes | append: ', ' | append: mobile_sizes
+  assign col_count = columns.size
+  assign rows = section.blocks | where: 'type', 'row'
 -%}
 
-{%- capture icon_attrs -%}
-style="--icon-thickness: {{ section.settings.icon_thickness }};"
-class="mx-auto block w-8 lg:w-10 rounded-full {% if section.settings.show_border %}border-[calc(var(--icon-thickness)_*_1px)]{% else %}border-0{% endif %} border-current {{  section.settings.background_color }}"
-{%- endcapture -%}
+{%- style -%}
+  #{{ section.id }} {
+    --kd-ct-cols: {{ col_count }};
+    --icon-thickness: {{ section.settings.icon_thickness }};
+    {%- if section.settings.highlighted_column_color == 'accent-2' %}
+    --kd-ct-hl-scheme: var(--color-scheme-accent-2);
+    --kd-ct-hl-scheme-fg: var(--color-scheme-accent-2-contrast);
+    {%- endif %}
+    {%- if section.settings.use_custom_colors %}
+    --kd-ct-bg: {{ section.settings.bg_color }};
+    --kd-ct-kicker: {{ section.settings.kicker_color }};
+    --kd-ct-heading: {{ section.settings.heading_color }};
+    --kd-ct-text: {{ section.settings.text_color }};
+    --kd-ct-cell: {{ section.settings.cell_color }};
+    --kd-ct-ink: {{ section.settings.table_text_color }};
+    --kd-ct-line: {{ section.settings.line_color }};
+    --kd-ct-hl: {{ section.settings.highlight_color }};
+    --kd-ct-hl-fg: {{ section.settings.highlight_text_color }};
+    --kd-ct-note: {{ section.settings.footnote_color }};
+    {%- endif %}
+  }
+{%- endstyle -%}
 
 <section
-  class="relative overflow-hidden bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %}"
+  id="{{ section.id }}"
+  class="kd-ctable kd-section relative overflow-hidden{% if section.settings.use_gradient_background and section.settings.use_custom_colors == false %} bg-scheme-gradient{% endif %}"
   data-color-scheme="{{ section.settings.color_scheme }}"
-  style="{% if section.settings.highlighted_column_color == 'accent-2' %}--color-highlight: var(--color-scheme-accent-2); --color-highlight-overlay: var(--color-scheme-accent-2-contrast);{% else %}--color-highlight: var(--color-scheme-accent-1); --color-highlight-overlay: var(--color-scheme-accent-1-contrast);{% endif %}"
 >
-  <div class="section-content py-section-vertical-spacing {% if section.settings.display_on_card %}px-section{% endif %} relative z-10 ">
-    <div class="{% if section.settings.display_on_card %}card{% endif %} mx-auto {{ max_width }}">
-      <div class="{% if section.settings.display_on_card %}card__surface p-5 lg:p-10{% endif %} section-content relative z-10 mx-auto text-center">
-        {% if section.settings.title != '' %}
-          <h2 class="inline-heading-rte font-heading heading-standard  heading-style break-words text-center {{ settings.heading_drop_shadow_style }}">
-            {{ section.settings.title }}
-          </h2>
-        {% endif %}
-
-        <div class="custom-scroll overflow-x-scroll lg:overflow-hidden {% if section.settings.display_on_card %}-mx-5 lg:mx-auto{% endif %}">
-          <div class="table px-section lg:mx-auto">
-            <table
-              class="comparison-table mx-auto w-full table-fixed {% if section.settings.title != '' or section.settings.richtext != blank %}section-content-top-margin{% endif %}"
-            >
-              <tr>
-                <th class="top-left-cell font-body border-b-0 border-l-0 border-t-0 font-normal {{ th_td_classes }}">
-                  {%- if section.settings.show_scroll_left_to_right_on_mobile -%}
-                    <span class="inline-block text-left text-sm lg:hidden">
-                      {{- 'general.accessibility.scroll_left_to_right' | t -}}
-                      &nbsp;
-                      <span class="inline-block">
-                        <span class="inline-block h-3 w-6 rotate-180">
-                          {%- render 'icon-arrow-right-wide' -%}
-                        </span>
-                        <span class="inline-block h-3 w-6">
-                          {%- render 'icon-arrow-right-wide' -%}
-                        </span>
-                      </span>
-                    </span>
-                  {%- endif -%}
-                </th>
-                <th class="font-heading heading-secondary break-words {{ th_td_classes }} {% if section.settings.highlighted_column == '1' %}{{ highlight_classes }}{%  endif %}">
-                  {% if section.settings.column_1_image != blank %}
-                    {{
-                      section.settings.column_1_image
-                      | image_url: width: 500
-                      | image_tag: sizes: sizes
-                    }}
-                  {% else %}
-                    {{ section.settings.column_1_title }}
-                  {% endif %}
-                </th>
-                <th class="font-heading heading-secondary break-words {{ th_td_classes }} {% if section.settings.highlighted_column == '2' %}{{ highlight_classes }}{%  endif %}">
-                  {% if section.settings.column_2_image != blank %}
-                    {{
-                      section.settings.column_2_image
-                      | image_url: width: 500
-                      | image_tag: sizes: sizes
-                    }}
-                  {% else %}
-                    {{ section.settings.column_2_title }}
-                  {% endif %}
-                </th>
-                {%- if section.settings.enable_column_3 -%}
-                  <th class="font-heading heading-secondary break-words {{ th_td_classes }} {% if section.settings.highlighted_column == '3' %}{{ highlight_classes }}{%  endif %}">
-                    {% if section.settings.column_3_image != blank %}
-                      {{
-                        section.settings.column_3_image
-                        | image_url: width: 500
-                        | image_tag: sizes: sizes
-                      }}
-                    {% else %}
-                      {{ section.settings.column_3_title }}
-                    {% endif %}
-                  </th>
-                {%- endif -%}
-                {%- if section.settings.enable_column_4 -%}
-                  <th class="font-heading heading-secondary break-words {{ th_td_classes }} {% if section.settings.highlighted_column == '4' %}{{ highlight_classes }}{%  endif %}">
-                    {% if section.settings.column_4_image != blank %}
-                      {{
-                        section.settings.column_4_image
-                        | image_url: width: 500
-                        | image_tag: sizes: sizes
-                      }}
-                    {% else %}
-                      {{ section.settings.column_4_title }}
-                    {% endif %}
-                  </th>
-                {%- endif -%}
-              </tr>
-
-              {%- assign rows = section.blocks | where: 'type', 'row' -%}
-              {%- for row in rows -%}
-                <tr>
-                  <th class="break-words font-normal {{ th_td_classes_heading }}">
-                    {{ row.settings.title }}
-                  </th>
-                  <td class="{{ th_td_classes }} {% if section.settings.highlighted_column == '1' %}{{ highlight_classes }}{%  endif %}">
-                    {%- if row.settings.column_1_icon != '' -%}
-                      <span
-                        {{ icon_attrs }}
-                      >
-                        {%- render 'theme-icon',
-                          icon: row.settings.column_1_icon
-                        -%}
-                      </span>
-                    {%- endif -%}
-                    <div class="inline-rte {% if row.settings.column_1_icon != '' %}mt-2{% endif %}">
-                      {{ row.settings.column_1_text }}
-                    </div>
-                  </td>
-                  <td class="{{ th_td_classes }} {% if section.settings.highlighted_column == '2' %}{{ highlight_classes }}{%  endif %}">
-                    {%- if row.settings.column_2_icon != '' -%}
-                      <span
-                        {{ icon_attrs }}
-                      >
-                        {%- render 'theme-icon',
-                          icon: row.settings.column_2_icon
-                        -%}
-                      </span>
-                    {%- endif -%}
-                    <div class="inline-rte {% if row.settings.column_2_icon != '' %}mt-2{% endif %}">
-                      {{ row.settings.column_2_text }}
-                    </div>
-                  </td>
-                  {%- if section.settings.enable_column_3 -%}
-                    <td class="{{ th_td_classes }} {% if section.settings.highlighted_column == '3' %}{{ highlight_classes }}{%  endif %}">
-                      {%- if row.settings.column_3_icon != '' -%}
-                        <span
-                          {{ icon_attrs }}
-                        >
-                          {%- render 'theme-icon',
-                            icon: row.settings.column_3_icon
-                          -%}
-                        </span>
-                      {%- endif -%}
-                      <div class="inline-rte {% if row.settings.column_3_icon != '' %}mt-2{% endif %}">
-                        {{ row.settings.column_3_text }}
-                      </div>
-                    </td>
-                  {%- endif -%}
-                  {%- if section.settings.enable_column_4 -%}
-                    <td class="{{ th_td_classes }} {% if section.settings.highlighted_column == '4' %}{{ highlight_classes }}{%  endif %}">
-                      {%- if row.settings.column_4_icon != '' -%}
-                        <span
-                          {{ icon_attrs }}
-                        >
-                          {%- render 'theme-icon',
-                            icon: row.settings.column_4_icon
-                          -%}
-                        </span>
-                      {%- endif -%}
-                      <div class="inline-rte {% if row.settings.column_4_icon != '' %}mt-2{% endif %}">
-                        {{ row.settings.column_4_text }}
-                      </div>
-                    </td>
-                  {%- endif -%}
-                </tr>
-              {%- endfor -%}
-            </table>
-          </div>
+  <div class="kd-ctable__inner kd-wide relative z-10">
+    {%- if section.settings.kicker != blank or section.settings.title != blank or section.settings.intro != blank -%}
+      <div class="kd-ctable__head">
+        <div class="kd-heading">
+          {%- if section.settings.kicker != blank -%}
+            <p class="kd-heading__kicker kd-label kd-ctable__kicker">{{ section.settings.kicker | escape }}</p>
+          {%- endif -%}
+          {%- if section.settings.title != blank -%}
+            <h2 class="kd-heading__title kd-display-h2 kd-ctable__title">{{ section.settings.title }}</h2>
+          {%- endif -%}
         </div>
+        {%- if section.settings.intro != blank -%}
+          <div class="kd-ctable__intro kd-body-lg">{{ section.settings.intro }}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="kd-ctable__frame{% if section.settings.display_on_card %} kd-ctable__frame--card{% endif %} {{ section.settings.max_width }}">
+      {%- if section.settings.show_scroll_left_to_right_on_mobile and col_count > 2 -%}
+        <p class="kd-ctable__hint kd-label-sm" aria-hidden="true">← {{ 'general.accessibility.scroll_left_to_right' | t }} →</p>
+      {%- endif -%}
+      <div class="kd-ctable__scroll">
+        <table class="kd-ctable__table{% if col_count > 2 %} kd-ctable__table--wide{% endif %}">
+          <thead>
+            <tr>
+              <td class="kd-ctable__corner"></td>
+              {%- for c in columns -%}
+                {%- liquid
+                  assign k_title = 'column_' | append: c | append: '_title'
+                  assign k_image = 'column_' | append: c | append: '_image'
+                -%}
+                <th scope="col" class="kd-ctable__col{% if section.settings.highlighted_column == c %} kd-ctable__hl{% endif %}">
+                  {%- if section.settings[k_image] != blank -%}
+                    {{ section.settings[k_image] | image_url: width: 400 | image_tag: class: 'kd-ctable__logo', widths: '200, 300, 400', sizes: '200px', loading: 'lazy', alt: section.settings[k_title] }}
+                  {%- else -%}
+                    <span class="kd-display-drawer">{{ section.settings[k_title] | escape }}</span>
+                  {%- endif -%}
+                </th>
+              {%- endfor -%}
+            </tr>
+          </thead>
+          <tbody>
+            {%- for row in rows -%}
+              <tr {{ row.shopify_attributes }}>
+                <th scope="row" class="kd-ctable__label kd-label-lg">{{ row.settings.title | escape }}</th>
+                {%- for c in columns -%}
+                  {%- liquid
+                    assign k_icon = 'column_' | append: c | append: '_icon'
+                    assign k_text = 'column_' | append: c | append: '_text'
+                    assign k_title = 'column_' | append: c | append: '_title'
+                    assign icon = row.settings[k_icon]
+                  -%}
+                  <td class="kd-ctable__cell{% if section.settings.highlighted_column == c %} kd-ctable__hl{% endif %}">
+                    {%- if icon != blank -%}
+                      <span class="kd-ctable__icon{% if section.settings.show_border %} kd-ctable__icon--ring{% endif %} {{ section.settings.background_color }}">
+                        {%- render 'theme-icon', icon: icon -%}
+                      </span>
+                      <span class="sr-only">
+                        {{- section.settings[k_title] | escape }}:
+                        {% case icon %}{% when 'check_mark', 'like' %}ja{% when 'check_close', 'thumbs_down' %}nein{% endcase -%}
+                      </span>
+                    {%- endif -%}
+                    {%- if row.settings[k_text] != blank -%}
+                      <span class="kd-ctable__text">{{ row.settings[k_text] }}</span>
+                    {%- endif -%}
+                  </td>
+                {%- endfor -%}
+              </tr>
+            {%- endfor -%}
+          </tbody>
+        </table>
       </div>
     </div>
+
+    {%- if section.settings.footnote != blank -%}
+      <div class="kd-ctable__note">{{ section.settings.footnote }}</div>
+    {%- endif -%}
   </div>
 
   {%- liquid
@@ -217,9 +152,27 @@ class="mx-auto block w-8 lg:w-10 rounded-full {% if section.settings.show_border
   "name": "t:sections.comparison_table.name",
   "settings": [
     {
+      "type": "text",
+      "id": "kicker",
+      "label": "Kicker",
+      "default": "Produktvergleich"
+    },
+    {
       "type": "inline_richtext",
       "id": "title",
       "label": "t:common.settings.title.label"
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Intro",
+      "info": "Beside the heading from tablet up, below it on mobile."
+    },
+    {
+      "type": "inline_richtext",
+      "id": "footnote",
+      "label": "Footnote",
+      "info": "Small text below the table."
     },
     {
       "type": "header",
@@ -229,7 +182,8 @@ class="mx-auto block w-8 lg:w-10 rounded-full {% if section.settings.show_border
       "type": "checkbox",
       "id": "display_on_card",
       "label": "t:common.settings.display_on_card.label",
-      "default": false
+      "default": false,
+      "info": "Puts the table on a card with the DS shadow."
     },
     {
       "type": "select",
@@ -253,7 +207,8 @@ class="mx-auto block w-8 lg:w-10 rounded-full {% if section.settings.show_border
           "label": "t:common.options.large.label"
         }
       ],
-      "default": ""
+      "default": "",
+      "info": "Table width. Default: 1000px (mockup)."
     },
     {
       "type": "select",
@@ -440,8 +395,76 @@ class="mx-auto block w-8 lg:w-10 rounded-full {% if section.settings.show_border
     },
     {
       "type": "checkbox",
+      "id": "use_custom_colors",
+      "label": "Use the colours below instead of the colour scheme",
+      "default": false,
+      "info": "Off: every colour comes from the colour scheme above (highlighted column = accent 1 or 2)."
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background",
+      "default": "#FFC6FF"
+    },
+    {
+      "type": "color",
+      "id": "kicker_color",
+      "label": "Kicker",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Intro text",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "cell_color",
+      "label": "Table cells",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "table_text_color",
+      "label": "Table text and icons",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "line_color",
+      "label": "Table lines",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "highlight_color",
+      "label": "Highlighted column",
+      "default": "#AEFF64"
+    },
+    {
+      "type": "color",
+      "id": "highlight_text_color",
+      "label": "Highlighted column text",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "footnote_color",
+      "label": "Footnote",
+      "default": "#6B6B6B"
+    },
+    {
+      "type": "checkbox",
       "id": "use_gradient_background",
-      "label": "t:common.settings.use_gradient_background.label"
+      "label": "t:common.settings.use_gradient_background.label",
+      "info": "Only when «Use the colours below» is off."
     }
   ],
   "blocks": [

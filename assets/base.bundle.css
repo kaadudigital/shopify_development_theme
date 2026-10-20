@@ -8243,6 +8243,39 @@ section.kd-is-band { background-color: var(--kd-is-bg, rgb(var(--color-scheme-ba
   .kd-pack__image { max-height: 900px; }
 }
 
+/* Product page buy box (product template, .kd-pack--page): DS product page — photo and details 50/50 from 768px,
+   space-5 gap, space-9 from 1200; the photo column stays in view while the details scroll. Long description,
+   badges (DS has no seal size: 104px is the mockup's, proposed) and the optional ✶ before each tab title. */
+.kd-pack__long { display: flex; flex-direction: column; gap: 14px; padding-top: var(--space-3); border-top: 1px solid currentColor; }
+.kd-pack__long > * { margin: 0; }
+.kd-pack__seals { display: flex; flex-wrap: wrap; gap: 14px; margin: 0; padding: 0; list-style: none; }
+.kd-pack__seal {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 88px;
+  height: 88px;
+  color: var(--kd-seal-fg, rgb(var(--color-scheme-accent-1-contrast)));
+}
+.kd-pack__seal-shape { position: absolute; inset: 0; width: 100%; height: 100%; fill: var(--kd-seal-bg, rgb(var(--color-scheme-accent-1))); filter: drop-shadow(var(--shadow-card)); }
+.kd-pack__seal-text { position: relative; width: 64%; font-size: 12px; font-weight: 600; line-height: 1.1; letter-spacing: 0.02em; text-align: center; text-transform: uppercase; hyphens: auto; }
+.kd-pack__details--stars summary::before { content: "\2736"; margin-right: var(--space-3); color: var(--lime); }
+.kd-pack__details--stars .kd-pack__detail:nth-child(4n+2) summary::before { color: var(--pink); }
+.kd-pack__details--stars .kd-pack__detail:nth-child(4n+3) summary::before { color: var(--purple); }
+.kd-pack__details--stars .kd-pack__detail:nth-child(4n+4) summary::before { color: var(--red); }
+.kd-pack--scheme .kd-pack__details--stars summary::before { color: rgb(var(--color-scheme-accent-1)); }
+@media (min-width: 768px) {
+  .kd-pack__seal { width: 104px; height: 104px; }
+  .kd-pack--page .kd-pack__row { flex-direction: row; align-items: flex-start; justify-content: center; gap: var(--space-5); }
+  .kd-pack--page .kd-pack__media { flex: 1 1 0; min-width: 0; position: sticky; top: var(--space-5); }
+  .kd-pack--page .kd-pack__panel { flex: 1 1 0; max-width: none; align-self: auto; }
+  .kd-pack--page .kd-pack__image { max-height: min(856px, calc(100vh - 2 * var(--space-5))); }
+}
+@media (min-width: 1200px) {
+  .kd-pack--page .kd-pack__row { gap: var(--space-9); }
+}
+
 /* Pack configurator with «Use the colours below» off: every colour from the section's colour scheme. Text on the
    cards (options, notice, stepper) is the scheme's card text, the only ink that reads on the card in every scheme. */
 .kd-pack--scheme {
@@ -9104,4 +9137,100 @@ section.kd-trial { position: relative; background-color: var(--kd-trial-bg, rgb(
 }
 @media (min-width: 1441px) {
   section.kd-trial { --kd-trial-u: min(var(--kd-px), 1.4px); }
+}
+
+/* ── COMPARISON TABLE — sections/comparison-table.liquid (product page mockup «Produktvergleich») ──
+   Kicker + h2 beside the intro, a ✓ / ✕ table (label column 1.25fr, product columns 1fr each, 2px lines, one
+   highlighted column), footnote. Colours: --kd-ct-* when «Use the colours below» is on, else the colour scheme.
+   Table width 1000px and the 2px lines are the mockup's (DS has no table; proposed). */
+section.kd-ctable { background-color: var(--kd-ct-bg, rgb(var(--color-scheme-background))); color: var(--kd-ct-text, rgb(var(--color-scheme-body-text, var(--color-scheme-text)))); }
+.kd-ctable__inner { display: flex; flex-direction: column; gap: var(--space-7); padding-block: var(--space-12); }
+.kd-ctable__head { display: flex; flex-direction: column; gap: var(--space-5); }
+.kd-ctable .kd-heading__kicker { color: var(--kd-ct-kicker, rgb(var(--color-scheme-text))); }
+.kd-ctable .kd-heading__title { color: var(--kd-ct-heading, rgb(var(--color-scheme-text))); }
+.kd-ctable__title p { margin: 0; }
+.kd-ctable__intro > * { margin: 0; }
+.kd-ctable__frame { width: 100%; max-width: 1000px; margin-inline: auto; }
+.kd-ctable__frame--card { padding: var(--space-5); background: var(--kd-ct-cell, rgb(var(--color-scheme-card))); box-shadow: var(--shadow-card); }
+.kd-ctable__hint { margin: 0 0 var(--space-2); text-align: center; }
+.kd-ctable__scroll { overflow-x: auto; }
+.kd-ctable__table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  color: var(--kd-ct-ink, rgb(var(--color-scheme-card-text)));
+}
+.kd-ctable__table--wide { min-width: calc(160px + var(--kd-ct-cols) * 110px); }
+.kd-ctable__corner { width: 36%; }
+.kd-ctable__col, .kd-ctable__label, .kd-ctable__cell {
+  border: 2px solid var(--kd-ct-line, rgb(var(--color-scheme-card-text)));
+  background: var(--kd-ct-cell, rgb(var(--color-scheme-card)));
+}
+.kd-ctable__corner { border: 0; background: transparent; }
+.kd-ctable__col { padding: var(--space-4) var(--space-2); border-bottom: 0; text-align: center; vertical-align: middle; height: 88px; }
+.kd-ctable__col .kd-display-drawer { display: block; font-size: 18px; overflow-wrap: anywhere; hyphens: auto; }
+.kd-ctable__logo { display: block; width: auto; max-width: 100%; height: 48px; margin-inline: auto; object-fit: contain; }
+.kd-ctable__label { padding: var(--space-3); min-height: 64px; height: 64px; text-align: left; font-size: 13px; overflow-wrap: anywhere; hyphens: auto; }
+.kd-ctable__cell { padding: var(--space-2); text-align: center; vertical-align: middle; }
+.kd-ctable .kd-ctable__hl { background: var(--kd-ct-hl, rgb(var(--kd-ct-hl-scheme, var(--color-scheme-accent-1)))); color: var(--kd-ct-hl-fg, rgb(var(--kd-ct-hl-scheme-fg, var(--color-scheme-accent-1-contrast)))); }
+.kd-ctable__icon { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: var(--radius-pill); vertical-align: middle; }
+.kd-ctable__icon--ring { border: 2px solid currentColor; }
+.kd-ctable__icon .theme-icon { width: 70%; height: 70%; }
+.kd-ctable__icon .theme-icon path { stroke-width: calc(var(--icon-thickness, 1.5) * 1.6px); }
+.kd-ctable__text { display: block; margin-top: var(--space-1); font-size: 13px; line-height: 1.3; }
+.kd-ctable__text:first-child { margin-top: 0; }
+.kd-ctable__note { font-size: 13px; line-height: 1.4; color: var(--kd-ct-note, inherit); }
+.kd-ctable__note p { margin: 0; }
+@media (min-width: 768px) {
+  .kd-ctable__inner { padding-block: var(--space-13) var(--space-12); }
+  .kd-ctable__head { flex-direction: row; align-items: flex-end; gap: var(--space-11); }
+  .kd-ctable__head .kd-heading { flex: 1 1 0; }
+  .kd-ctable__intro { flex: 0 1 460px; }
+  .kd-ctable__col { padding: 22px var(--space-4); height: 120px; }
+  .kd-ctable__col .kd-display-drawer { font-size: 26px; }
+  .kd-ctable__logo { height: 76px; }
+  .kd-ctable__label { padding: 0 var(--space-6); height: 72px; font-size: 16px; }
+  .kd-ctable__icon { width: 38px; height: 38px; }
+  .kd-ctable__text { font-size: 15px; }
+}
+
+/* ── REVIEWS — sections/testimonials.liquid (product page mockup «Bewertungen») ──
+   Kicker + h2 beside a small cloud button; review cards: paper, shadow-card, ★ in red, quote in «», source as
+   label in ink-muted. Grid: 1 column, 2 from 768px, 3 from 992px, space-5 gap. --kd-rv-* when «Use the colours
+   below» is on, else the colour scheme (cards = scheme card). */
+section.kd-reviews { background-color: var(--kd-rv-bg, rgb(var(--color-scheme-background))); color: var(--kd-rv-text, rgb(var(--color-scheme-card-text))); }
+.kd-reviews__inner { display: flex; flex-direction: column; gap: var(--space-7); padding-block: var(--space-12); }
+.kd-reviews__head { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-5); }
+.kd-reviews .kd-heading__kicker { color: var(--kd-rv-kicker, rgb(var(--color-scheme-text))); }
+.kd-reviews .kd-heading__title { color: var(--kd-rv-heading, rgb(var(--color-scheme-text))); }
+.kd-reviews .kd-heading__title p { margin: 0; }
+.kd-reviews__btn { --kd-cloud: var(--kd-rv-btn, rgb(var(--color-scheme-accent-1))); color: var(--kd-rv-btn-label, rgb(var(--color-scheme-accent-1-contrast))); flex-shrink: 0; }
+.kd-reviews__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-5); margin: 0; padding: 0; list-style: none; }
+.kd-reviews__grid > li { display: flex; }
+.kd-review {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  margin: 0;
+  padding: 22px var(--space-6);
+  box-sizing: border-box;
+  background: var(--kd-rv-card, rgb(var(--color-scheme-card)));
+  color: var(--kd-rv-text, rgb(var(--color-scheme-card-text)));
+  box-shadow: var(--shadow-card);
+}
+.kd-reviews--flat .kd-review { background: transparent; box-shadow: none; padding: 0; color: var(--kd-rv-text, rgb(var(--color-scheme-body-text, var(--color-scheme-text)))); }
+.kd-reviews__slide { padding-bottom: var(--space-4); }
+.kd-reviews__slide .kd-review { height: 100%; }
+.kd-review__media { max-width: var(--kd-rv-img, 100px); }
+.kd-review__stars { margin: 0; letter-spacing: 2px; color: var(--kd-rv-stars, rgb(var(--color-scheme-accent-2))); }
+.kd-review__quote { margin: 0; font-size: 17px; line-height: 1.45; }
+.kd-review__source { margin: 0; color: var(--kd-rv-source, inherit); }
+@media (min-width: 768px) {
+  .kd-reviews__inner { padding-block: var(--space-13) var(--space-12); }
+  .kd-reviews__head { flex-direction: row; align-items: flex-end; justify-content: space-between; gap: var(--space-11); }
+  .kd-reviews__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 992px) {
+  .kd-reviews__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }

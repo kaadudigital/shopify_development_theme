@@ -1,5 +1,6 @@
 {%- comment -%}
-  Kaadu DS Ticker (look: DS band, Fagies, uppercase; colours from the colour scheme).
+  Kaadu DS Ticker (look: DS band, Fagies, uppercase; colours from the colour scheme, or from the section's colour
+  settings when «Use the colours below» is on).
   Several phrases: separate them with "|" in the text setting. Styles: "TICKER" in assets/base.bundle.css.
   All section settings apply: separator (DS ✶, shape or image) with size and rotation, repeat on/off,
   speed (120 = the DS 22-second loop), direction, link. Stops under prefers-reduced-motion.
@@ -77,6 +78,11 @@
     --kd-ticker-duration: {{ duration }}s;
     --kd-ticker-shape-size: {{ section.settings.shape_size | default: 0.6 }}em;
   }
+  {%- if section.settings.use_custom_colors %}
+  #{{ section.id }} { background: {{ section.settings.bg_color }}; }
+  #{{ section.id }} .kd-ticker { color: {{ section.settings.text_color }}; }
+  #{{ section.id }} .kd-ticker__star, #{{ section.id }} .kd-ticker__sep { color: {{ section.settings.separator_color }}; }
+  {%- endif %}
 {%- endstyle -%}
 
 <section
@@ -247,6 +253,31 @@
       "id": "color_scheme",
       "default": "scheme1",
       "label": "Colour scheme"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_custom_colors",
+      "label": "Use the colours below instead of the colour scheme",
+      "default": false,
+      "info": "Off: band, text and separator follow the colour scheme above."
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Band",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "separator_color",
+      "label": "Separator (✶ or shape)",
+      "default": "#AEFF64"
     },
     {
       "type": "checkbox",
