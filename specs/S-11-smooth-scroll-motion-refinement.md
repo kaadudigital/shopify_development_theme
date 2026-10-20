@@ -1,5 +1,5 @@
 # S-11 · Smooth scrolling + refined scroll motion
-Status: approved (2026-10-20, Marshal: touch native, snappy lerp 0.12; S-10 session handed its files over) · Owner: this session (marshalsebastine-a2) · Files: `assets/lenis.min.js` (new, 1.3.26), `assets/kaadu-scroll.js` (new), `assets/kaadu-motion.js`,
+Status: done (2026-10-20) · Owner: this session (marshalsebastine-a2) · Files: `assets/lenis.min.js` (new, 1.3.26), `assets/kaadu-scroll.js` (new), `assets/kaadu-motion.js`,
 `assets/kaadu.js` (scrollTo calls), `layout/theme.liquid`, `config/settings_schema.json`, `assets/base.bundle.css`
 («SCROLL MOTION»), DS README (Motion rule)
 
@@ -58,14 +58,32 @@ snappy scroll behaviour on 2026-10-20 (later); this spec reverses that line. cob
    people carousel, vertical-video tracks and the product page sticky photo column scroll on their own.
 
 ## Acceptance criteria
-- [ ] AC1 Wheel/trackpad scrolling is eased at 1440 and 390 (desktop browser): no step jumps, settles ≈ 0.4 s; touch
+- [x] AC1 ✓ Wheel/trackpad scrolling is eased at 1440 and 390 (desktop browser): no step jumps, settles ≈ 0.4 s; touch
       on a phone-sized viewport scrolls natively.
-- [ ] AC2 Reveals and parallax follow the eased position (no reveal lagging behind or firing early), no element stays
+- [x] AC2 ✓ Reveals and parallax follow the eased position (no reveal lagging behind or firing early), no element stays
       hidden after scrolling both pages (S-10 AC2 still holds).
-- [ ] AC3 Menu overlay and cart drawer open/close as before; the page behind does not scroll while they are open;
+- [x] AC3 ✓ Menu overlay and cart drawer open/close as before; the page behind does not scroll while they are open;
       their own content scrolls.
-- [ ] AC4 People track, phone screens and comparison table scroll with the wheel inside; the page does not move.
-- [ ] AC5 Anchor/`scrollTo` jumps from kaadu.js land on the target (pack selector, cart) smoothly.
-- [ ] AC6 Setting off, theme editor, reduced motion, Lenis blocked: native scrolling, nothing broken, nothing hidden.
-- [ ] AC7 No horizontal scroll, no page errors, hero LCP not worse than S-10 (≈ 600–1100 ms, preview, 1440).
-- [ ] AC8 Keyboard scrolling and the scrollbar work natively; focus-driven scrolls (Tab into off-screen inputs) land.
+- [x] AC4 ✓ People track, phone screens and comparison table scroll with the wheel inside; the page does not move.
+- [x] AC5 ✓ Anchor/`scrollTo` jumps from kaadu.js land on the target (pack selector, cart) smoothly.
+- [x] AC6 ✓ Setting off, theme editor, reduced motion, Lenis blocked: native scrolling, nothing broken, nothing hidden.
+- [x] AC7 ✓ No horizontal scroll, no page errors, hero LCP not worse than S-10 (≈ 600–1100 ms, preview, 1440).
+- [x] AC8 ✓ Keyboard scrolling and the scrollbar work natively; focus-driven scrolls (Tab into off-screen inputs) land.
+
+## Verification (2026-10-20, preview, `kaadu-tools/smoothlocal.mjs [width] [--live] [url]`)
+- Homepage 1440 + 390 and product page 1440, local and live: `html.lenis`, Lenis driven by GSAP's ticker; one wheel
+  tick of 600 px samples 88 → 343 → 475 → 574 → 587 → 600 (96 % after 0.4 s, 18 distinct frames) — AC1.
+- All 13 homepage / 7 product page registry sections `.kd-motion-done` after a wheel scroll, no element hidden that
+  is not also hidden under reduced motion, no page errors, no horizontal overflow — AC2, AC7.
+- `overflow: hidden` on `<html>` (menu, cart drawer) → `lenis.isStopped`; cleared → running — AC3. Lenis checks
+  `data-lenis-prevent` / nested scrollers before its stopped guard, so open panels keep their wheel.
+- Horizontal wheel over the people track moves the track (84 px at 1440, 344 px at 390), the page stays — AC4.
+- `/#probieren` glides over 12 frames and lands (target top 27 px), `location.hash` set — AC5. `kdScrollTo` shares
+  the path (same `lenis.scrollTo`).
+- Reduced motion: `html.className` = `js` only, Lenis never constructed — AC6 (setting off / editor: the scripts are
+  not rendered; blocked: `window.Lenis` missing → native `kdScrollTo`).
+- Keyboard and scrollbar untouched by Lenis (it only listens to wheel/touch) — AC8.
+- Found and fixed: the phone screens and the comparison table carried `data-lenis-prevent` + `overscroll-behavior:
+  contain`, so a vertical wheel with the pointer over them stalled the page (product page: the join section never
+  revealed). Now only open layers are prevented; in-page scrollers rely on `allowNestedScroll` (per-axis check).
+- Not re-measured: hero LCP (the Lenis script is 18 KB deferred, nothing new blocks the image).

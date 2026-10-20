@@ -43,9 +43,12 @@
   new MutationObserver(syncLock).observe(html, { attributes: true, attributeFilter: ['style'] });
   syncLock();
 
-  // Vertical inner scrollers that must take the wheel themselves even while Lenis is stopped (open layers), plus
-  // the phone screens of the vertical videos. Set here, not in the section files (several belong to other specs).
-  var PREVENT = '.menu-content, [role="dialog"], .kd-phone__screen, .kd-ctable__scroll';
+  // Open layers (menu overlay, drawers, modals) must take the wheel themselves even while Lenis is stopped. Only
+  // those: in-page scrollers (people track, phone screens, comparison table) are left to allowNestedScroll, which
+  // checks the gesture's own axis, so a vertical wheel over a horizontal scroller still moves the page. (A prevent
+  // attribute there plus its overscroll-behavior: contain stalled the page under the pointer.) Set here, not in
+  // the section files (several belong to other specs).
+  var PREVENT = '.menu-content, [role="dialog"]';
   function markPrevent(root) {
     Array.prototype.slice.call(root.querySelectorAll(PREVENT)).forEach(function (el) { el.setAttribute('data-lenis-prevent', ''); });
   }
