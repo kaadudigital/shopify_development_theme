@@ -720,7 +720,8 @@
         "button_color": "#aeff64",
         "button_label_color": "#ac0300",
         "link_custom_color": "#fffff5"
-      }
+      },
+      "name": "Vision"
     },
     "vertical_video_embeds_pdp": {
       "type": "vertical-video-embeds",

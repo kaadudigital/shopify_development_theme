@@ -57,7 +57,7 @@
         "p,h3 {color: black;}",
         "@media (min-width: 990px) {.custom-btn-wrapper, .body {margin-top: 28px; }}"
       ],
-      "name": "image with text custom",
+      "name": "Hero",
       "settings": {
         "image": "shopify://shop_images/Group_45.webp",
         "image_caption": "",
@@ -795,7 +795,8 @@
         "button_color": "#aeff64",
         "button_label_color": "#ac0300",
         "link_custom_color": "#fffff5"
-      }
+      },
+      "name": "Vision"
     },
     "kaadu_comparison_main": {
       "type": "kaadu-comparison",
@@ -1217,7 +1218,8 @@
         "button_color": "#aeff64",
         "button_label_color": "#ac0300",
         "link_custom_color": "#fffff5"
-      }
+      },
+      "name": "Gratis probieren (alt)"
     },
     "email_input_dMpqpt": {
       "type": "email-input",
