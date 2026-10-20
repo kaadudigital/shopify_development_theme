@@ -7611,7 +7611,8 @@ section.kd-iw-band { --media-border-radius: 0px; background-color: var(--kd-iw-b
    The text column stops at a readable width and the image + text pair is centred,
    so the space left and right of the row is equal. Shares come from the section:
    --kd-iw-media (1441–1799px, 24", default 40%) and --kd-iw-media-xl (≥1800px, 27",
-   default 46%; the row also drops the 1800px cap there). */
+   default 46%; the row also drops the 1800px cap there), capped at --kd-iw-media-max (setting, default 1120px) so
+   the image stops growing on 32" / 37" and ultrawide screens. */
 @media (min-width: 1441px) {
   .kd-iw__grid,
   .kd-iw--hero .kd-iw__grid {
@@ -7631,12 +7632,12 @@ section.kd-iw-band { --media-border-radius: 0px; background-color: var(--kd-iw-b
   .kd-iw .kd-wide { max-width: none; }
   .kd-iw__grid,
   .kd-iw--hero .kd-iw__grid {
-    grid-template-columns: minmax(0, var(--kd-iw-media-xl, 46%)) minmax(0, 760px);
+    grid-template-columns: minmax(0, min(var(--kd-iw-media-xl, 46%), var(--kd-iw-media-max, 1120px))) minmax(0, 760px);
     column-gap: var(--space-13);
   }
   .kd-iw--image-right .kd-iw__grid,
   .kd-iw--hero.kd-iw--image-right .kd-iw__grid {
-    grid-template-columns: minmax(0, 760px) minmax(0, var(--kd-iw-media-xl, 46%));
+    grid-template-columns: minmax(0, 760px) minmax(0, min(var(--kd-iw-media-xl, 46%), var(--kd-iw-media-max, 1120px)));
     column-gap: var(--space-13);
   }
 }

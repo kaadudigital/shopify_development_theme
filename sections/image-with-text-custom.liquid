@@ -9,6 +9,7 @@
   #{{ section.id }} {
     --kd-iw-media: {{ section.settings.image_width_large | default: 40 }}%;
     --kd-iw-media-xl: {{ section.settings.image_width_xl | default: 46 }}%;
+    --kd-iw-media-max: {{ section.settings.image_max_width | default: 1120 }}px;
     --kd-iw-link: rgb(var(--color-scheme-{{ section.settings.link_color | default: 'text' }}));
     {%- comment -%} Section colours only when "Use the colours below" is on; otherwise every --kd-iw-* colour is unset and
       the CSS falls back to the colour scheme (background, eyebrow, text, body text, accent 1 / contrast). {%- endcomment -%}
@@ -157,6 +158,17 @@
       "step": 1,
       "unit": "%",
       "default": 46
+    },
+    {
+      "type": "range",
+      "id": "image_max_width",
+      "label": "Max image width – very large screens",
+      "info": "Upper limit for the image from 1800px, so it stops growing on 32\" / 37\" and ultrawide screens (1120px ≈ the 27\" size at 2560px).",
+      "min": 800,
+      "max": 2000,
+      "step": 20,
+      "unit": "px",
+      "default": 1120
     },
     {
       "type": "select",
