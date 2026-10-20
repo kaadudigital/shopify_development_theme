@@ -8247,8 +8247,9 @@ section.kd-is-band { background-color: var(--kd-is-bg, rgb(var(--color-scheme-ba
    space-5 gap, space-9 from 1200; the photo column stays in view while the details scroll. Long description,
    badges (DS has no seal size: 104px is the mockup's, proposed) and the optional ✶ before each tab title. */
 .kd-pack__long { display: flex; flex-direction: column; gap: 14px; padding-top: var(--space-3); border-top: 1px solid currentColor; }
-.kd-pack__long > *, .kd-pack__long.rte p { margin: 0; }
-.kd-pack__seals { display: grid; grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: 14px; margin: 0; padding: 0; list-style: none; }
+/* Beats the theme's .rte paragraph spacing; the flex gap spaces the paragraphs. */
+.kd-pack .kd-pack__long.rte > * { margin: 0; }
+.kd-pack__seals { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: var(--space-2); margin: 0; padding: 0; list-style: none; }
 .kd-pack__seal {
   position: relative;
   display: flex;
