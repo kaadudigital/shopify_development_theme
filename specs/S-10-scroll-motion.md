@@ -1,5 +1,5 @@
 # S-10 · Scroll animations (cobfoods-style) — GSAP pilot
-Status: done (rollout) — per-section opt-out open · Owner: product-page session · Files: `assets/kaadu-motion.js`, `assets/gsap.min.js`,
+Status: done · Owner: product-page session · Files: `assets/kaadu-motion.js`, `assets/gsap.min.js`,
 `assets/ScrollTrigger.min.js`, `assets/SplitText.min.js`, `layout/theme.liquid`, `config/settings_schema.json`,
 `assets/base.bundle.css` («SCROLL MOTION»)
 
@@ -53,4 +53,15 @@ line, stickers and pills pop in, cards come in one by one, the ticker runs only 
 - Line masks clip only vertically (long words such as «GEFRIERGETROCKNET.» keep their last letter at 390px).
 - Verified: after scrolling both pages at 390 and 1440 no element is hidden or transparent that is not also hidden
   with reduced motion (13 homepage / 7 product page sections done), no page errors, no horizontal scroll.
-- Open: a per-section «Scroll animations» checkbox (needs schema edits in every section file, incl. the peer's).
+
+## Per-section switch (2026-10-20)
+- Every animated section gets «Scroll animations» (`scroll_motion`, default on) under an «Animation» header at the
+  end of its settings; off renders `data-kd-motion="off"` on the section root, kaadu-motion.js skips that wrapper
+  and the CSS pre-hide ignores it (`:not(:has([data-kd-motion="off"]))`).
+- This session: image-with-text-custom, custom-packaging-selector, comparison-table, testimonials, scrolling-text
+  (ac21faa). Peer session: kaadu-comparison, kaadu-cost-split, kaadu-trial-cta, email-input, custom-image-section,
+  kaadu-people-cards, vertical-video-embeds, custom-image-with-highlights, custom-video-with-text-overlay.
+- Verified: with the attribute on the pack selector, it shows at once (no split, no inline styles) while the other
+  sections still animate; without it nothing changes.
+- Parallax now starts from the element's own yPercent: free-canvas images placed with translate(-50%, -50%) keep their
+  position (found by the peer session; same top/left as with reduced motion at 1440).
