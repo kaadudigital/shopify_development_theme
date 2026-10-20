@@ -8274,7 +8274,7 @@ section.kd-is-band { background-color: var(--kd-is-bg, rgb(var(--color-scheme-ba
   .kd-pack--page .kd-pack__image { max-height: min(856px, calc(100vh - 2 * var(--space-5))); }
 }
 /* Tablet / small desktop: the 50/50 panel is too narrow for three pack tiles, so packs and rhythms keep the mobile
-   rows (price right, «Empfohlen» on the row's top edge). */
+   rows (price right, «Empfohlen» on the top edge of the row). */
 @media (min-width: 768px) and (max-width: 1199.98px) {
   .kd-pack--page .kd-pack__packs { grid-template-columns: minmax(0, 1fr); gap: var(--space-3); }
   .kd-pack--page .kd-pack__pack { flex-direction: row; align-items: center; justify-content: space-between; gap: var(--space-2); }
