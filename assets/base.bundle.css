@@ -7606,6 +7606,10 @@ section.kd-iw-band { --media-border-radius: 0px; background-color: var(--kd-iw-b
   .kd-iw--image-right .kd-iw__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 560px); }
   .kd-iw--hero .kd-iw__grid { grid-template-columns: minmax(0, 620px) minmax(0, 1fr); column-gap: var(--space-8); }
   .kd-iw--hero.kd-iw--image-right .kd-iw__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 620px); }
+  /* Not the hero: the text column is as wide as its text (the DS measure, 560px), so centring the pair leaves the
+     same space left and right instead of piling the spare width up beside the text. The hero's headline fills its
+     column, so it keeps 1fr. */
+  .kd-iw:not(.kd-iw--hero) .kd-iw__grid { grid-template-columns: minmax(0, 560px) minmax(0, 560px); justify-content: center; }
 }
 /* Large screens (cobfoods): media takes a share of the row and scales with it.
    The text column stops at a readable width and the image + text pair is centred,
@@ -7627,6 +7631,8 @@ section.kd-iw-band { --media-border-radius: 0px; background-color: var(--kd-iw-b
     column-gap: var(--space-12);
   }
   .kd-iw__text { max-width: 640px; }
+  .kd-iw:not(.kd-iw--hero) .kd-iw__grid { grid-template-columns: minmax(0, var(--kd-iw-media, 40%)) minmax(0, 640px); }
+  .kd-iw--image-right:not(.kd-iw--hero) .kd-iw__grid { grid-template-columns: minmax(0, 640px) minmax(0, var(--kd-iw-media, 40%)); }
 }
 @media (min-width: 1800px) {
   .kd-iw .kd-wide { max-width: none; }
@@ -7640,6 +7646,8 @@ section.kd-iw-band { --media-border-radius: 0px; background-color: var(--kd-iw-b
     grid-template-columns: minmax(0, 760px) minmax(0, min(var(--kd-iw-media-xl, 46%), var(--kd-iw-media-max, 1120px)));
     column-gap: var(--space-13);
   }
+  .kd-iw:not(.kd-iw--hero) .kd-iw__grid { grid-template-columns: minmax(0, min(var(--kd-iw-media-xl, 46%), var(--kd-iw-media-max, 1120px))) minmax(0, 640px); }
+  .kd-iw--image-right:not(.kd-iw--hero) .kd-iw__grid { grid-template-columns: minmax(0, 640px) minmax(0, min(var(--kd-iw-media-xl, 46%), var(--kd-iw-media-max, 1120px))); }
 }
 
 /* ── TICKER (DS Ticker) — sections/scrolling-text.liquid ──
