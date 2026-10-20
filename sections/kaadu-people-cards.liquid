@@ -60,10 +60,10 @@
   @media (min-width: 768px) {
     #{{ section.id }} { --kd-card-mask: url("{{ shape_url }}"); }
   }
-  {%- comment -%} All cards fit (n × 480px card + 20px gaps + 2 × 64px gutter): nothing to scroll, so no scroll hint. {%- endcomment -%}
+  {%- comment -%} All cards fit (n × 480px card + 20px gaps + 2 × 64px gutter): nothing to scroll, so no scroll hint. !important beats the inline visibility the scroll motion (S-10) sets. {%- endcomment -%}
   {%- assign fit_width = total | times: 500 | minus: 20 | plus: 128 -%}
   @media (min-width: {{ fit_width }}px) {
-    #{{ section.id }} .kd-people__hint { visibility: hidden; }
+    #{{ section.id }} .kd-people__hint { visibility: hidden !important; }
   }
 {%- endstyle -%}
 
