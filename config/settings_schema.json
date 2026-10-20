@@ -3293,6 +3293,13 @@
     "name": "t:settings_schema.animations.name",
     "settings": [
       {
+        "type": "checkbox",
+        "id": "kd_scroll_motion",
+        "label": "Scroll animations",
+        "default": true,
+        "info": "Kaadu reveal animations while scrolling (headings, text, stickers, cards, image parallax). Never in the theme editor or for visitors who prefer reduced motion."
+      },
+      {
         "type": "range",
         "id": "parallax_intensity",
         "min": 0,
