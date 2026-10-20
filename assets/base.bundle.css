@@ -8266,7 +8266,7 @@ section.kd-is-band { background-color: var(--kd-is-bg, rgb(var(--color-scheme-ba
 .kd-pack__details--stars .kd-pack__detail:nth-child(4n+2) summary::before { color: var(--pink); }
 .kd-pack__details--stars .kd-pack__detail:nth-child(4n+3) summary::before { color: var(--purple); }
 .kd-pack__details--stars .kd-pack__detail:nth-child(4n+4) summary::before { color: var(--red); }
-.kd-pack--scheme .kd-pack__details--stars summary::before { color: rgb(var(--color-scheme-accent-1)); }
+.kd-pack--scheme .kd-pack__details--stars .kd-pack__detail summary::before { color: rgb(var(--color-scheme-accent-1)); }
 @media (min-width: 768px) {
   .kd-pack--page .kd-pack__row { flex-direction: row; align-items: flex-start; justify-content: center; gap: var(--space-5); }
   .kd-pack--page .kd-pack__media { flex: 1 1 0; min-width: 0; position: sticky; top: var(--space-5); }
@@ -9187,6 +9187,8 @@ section.kd-ctable { background-color: var(--kd-ct-bg, rgb(var(--color-scheme-bac
 .kd-ctable .kd-ctable__hl { background: var(--kd-ct-hl, rgb(var(--kd-ct-hl-scheme, var(--color-scheme-accent-1)))); color: var(--kd-ct-hl-fg, rgb(var(--kd-ct-hl-scheme-fg, var(--color-scheme-accent-1-contrast)))); }
 .kd-ctable__icon { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: var(--radius-pill); vertical-align: middle; }
 .kd-ctable__icon--ring { border: 2px solid currentColor; }
+/* Icon style «transparent» (default): the icon takes the cell's ink (scheme text would vanish on the card). */
+.kd-ctable__icon.bg-transparent { color: inherit; }
 .kd-ctable__icon .theme-icon { width: 70%; height: 70%; }
 .kd-ctable__icon .theme-icon path { stroke-width: calc(var(--icon-thickness, 1.5) * 1.6px); }
 .kd-ctable__text { display: block; margin-top: var(--space-1); font-size: 13px; line-height: 1.3; }
