@@ -1,5 +1,5 @@
 # S-10 · Scroll animations (cobfoods-style) — GSAP pilot
-Status: in progress (pilot) · Owner: product-page session · Files: `assets/kaadu-motion.js`, `assets/gsap.min.js`,
+Status: done (rollout) — per-section opt-out open · Owner: product-page session · Files: `assets/kaadu-motion.js`, `assets/gsap.min.js`,
 `assets/ScrollTrigger.min.js`, `assets/SplitText.min.js`, `layout/theme.liquid`, `config/settings_schema.json`,
 `assets/base.bundle.css` («SCROLL MOTION»)
 
@@ -40,3 +40,17 @@ line, stickers and pills pop in, cards come in one by one, the ticker runs only 
 - AC5 hero LCP (1440, 6 runs): 628–1164 ms with motion vs 596–708 ms before and 560 ms with reduced motion. Within the
   preview's run-to-run noise apart from one outlier; the image is never hidden. ✓ (watch on production)
 - AC6 no horizontal scroll, no new page errors (the `play()` warnings come from the existing videos). ✓
+
+## Rollout (2026-10-20, Marshal: «go ahead and add it to all sections»)
+- Registry in `assets/kaadu-motion.js` covers every homepage and product page section: hero / vision (image with
+  text), video overlay, sticker heading / quote, people cards, pack selector, vertical videos, highlights,
+  comparison slider, trial CTA, cost split, join, comparison table, reviews. No section files edited.
+- Photos (image with text, quote, highlights) get the scrubbed ±4 % parallax; trial pieces and table rows fade only
+  (CSS transform animation / table rows); the ticker runs only while on screen.
+- Sections already on screen at load play at once and never hide their images (LCP); the rest are hidden by the
+  script before the visitor reaches them. CSS pre-hide covers the homepage hero, the product page buy box and the
+  people cards.
+- Line masks clip only vertically (long words such as «GEFRIERGETROCKNET.» keep their last letter at 390px).
+- Verified: after scrolling both pages at 390 and 1440 no element is hidden or transparent that is not also hidden
+  with reduced motion (13 homepage / 7 product page sections done), no page errors, no horizontal scroll.
+- Open: a per-section «Scroll animations» checkbox (needs schema edits in every section file, incl. the peer's).
