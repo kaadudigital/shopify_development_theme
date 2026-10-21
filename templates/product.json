@@ -174,6 +174,8 @@
           "type": "badge",
           "settings": {
             "text": "100 % Ananas",
+            "shape": "starburst",
+            "show_text": true,
             "shape_color": "#aeff64",
             "text_color": "#ac0300"
           }
@@ -182,6 +184,8 @@
           "type": "badge",
           "settings": {
             "text": "100 % Ananas",
+            "shape": "starburst",
+            "show_text": true,
             "shape_color": "#aeff64",
             "text_color": "#ac0300"
           }
@@ -190,6 +194,8 @@
           "type": "badge",
           "settings": {
             "text": "Ohne Zusätze",
+            "shape": "starburst",
+            "show_text": true,
             "shape_color": "#ffc6ff",
             "text_color": "#542a76"
           }
@@ -198,6 +204,8 @@
           "type": "badge",
           "settings": {
             "text": "Reif geerntet",
+            "shape": "starburst",
+            "show_text": true,
             "shape_color": "#ac0300",
             "text_color": "#fffff5"
           }
@@ -206,6 +214,8 @@
           "type": "badge",
           "settings": {
             "text": "Radically Fair",
+            "shape": "starburst",
+            "show_text": true,
             "shape_color": "#542a76",
             "text_color": "#aeff64"
           }
@@ -214,6 +224,8 @@
           "type": "badge",
           "settings": {
             "text": "Labor geprüft",
+            "shape": "starburst",
+            "show_text": true,
             "shape_color": "#fffff5",
             "text_color": "#ac0300"
           }
@@ -222,6 +234,8 @@
           "type": "badge",
           "settings": {
             "text": "Kein Schwefel",
+            "shape": "starburst",
+            "show_text": true,
             "shape_color": "#aeff64",
             "text_color": "#542a76"
           }
@@ -355,7 +369,8 @@
         "stepper_text": "#542a76",
         "cart_button_color": "#ac0300",
         "cart_button_color_mobile": "#ac0300",
-        "cart_button_label_color": "#fffff5"
+        "cart_button_label_color": "#fffff5",
+        "scroll_motion": true
       }
     },
     "scrolling_text_pdp": {
@@ -370,14 +385,15 @@
         "animate_shape_between_text": true,
         "animate_image_between_text": true,
         "link": "",
-        "speed": 120,
+        "speed": 30,
         "direction": "",
         "color_scheme": "scheme2",
         "use_custom_colors": true,
         "bg_color": "#ac0300",
         "text_color": "#fffff5",
         "separator_color": "#aeff64",
-        "use_gradient_background": false
+        "use_gradient_background": false,
+        "scroll_motion": true
       }
     },
     "comparison_table_pdp": {
@@ -492,7 +508,8 @@
         "highlight_color": "#aeff64",
         "highlight_text_color": "#542a76",
         "footnote_color": "#6b6b6b",
-        "use_gradient_background": false
+        "use_gradient_background": false,
+        "scroll_motion": true
       }
     },
     "testimonials_pdp": {
@@ -555,7 +572,8 @@
         "use_gradient_background": false,
         "arrow_background": "#fffff5",
         "arrow_icon_color": "#000000",
-        "arrow_shape": "default"
+        "arrow_shape": "default",
+        "scroll_motion": true
       }
     },
     "kaadu_comparison_pdp": {
@@ -671,12 +689,14 @@
     },
     "image_with_text_custom_vision_pdp": {
       "type": "image-with-text-custom",
+      "name": "Vision",
       "settings": {
         "image": "shopify://shop_images/Kaadu_Waitlist.png",
         "image_caption": "",
         "image_position": "left",
         "image_width_large": 40,
         "image_width_xl": 46,
+        "image_max_width": 1120,
         "crop": "",
         "image_shape": "default",
         "blob_type": 1,
@@ -719,9 +739,9 @@
         "text_color": "#fffff5",
         "button_color": "#aeff64",
         "button_label_color": "#ac0300",
-        "link_custom_color": "#fffff5"
-      },
-      "name": "Vision"
+        "link_custom_color": "#fffff5",
+        "scroll_motion": true
+      }
     },
     "vertical_video_embeds_pdp": {
       "type": "vertical-video-embeds",
