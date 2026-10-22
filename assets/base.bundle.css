@@ -9297,3 +9297,386 @@ html.kd-motion .shopify-section:not(.kd-motion-done):not(:has([data-kd-motion="o
    clickable) and its `.lenis-stopped { overflow: clip }` (the menu and the cart drawer lock the page themselves). */
 html.lenis, html.lenis body { height: auto; }
 .lenis [data-lenis-prevent] { overscroll-behavior: contain; }
+
+/* ────────────────────────────────────────────────────────────────
+   CART DRAWER — snippets/drawer-cart.liquid + cart-items.liquid + cart-footer.liquid, sections/cart.liquid
+   (DS CartDrawer: a 520px panel sliding in from the right over the scrim; full width below 768px; a scalloped
+   left edge). Copy and colours are theme settings (Cart › Kaadu cart drawer); snippets/kd-cart-vars.liquid turns
+   the colours into the --kd-drawer-* custom properties below, whose defaults are the mockup values.
+   ──────────────────────────────────────────────────────────────── */
+.kd-drawer {
+  --kd-drawer-bg: var(--purple);
+  --kd-drawer-text: var(--paper);
+  --kd-drawer-muted: var(--pink);
+  --kd-drawer-accent: var(--lime);
+  --kd-drawer-button: var(--red);
+  --kd-drawer-button-text: var(--paper);
+  /* The drawer's hairlines: its text colour at 30 % (mockup rgba(255, 255, 245, 0.3)) */
+  --kd-drawer-rule: color-mix(in srgb, var(--kd-drawer-text) 30%, transparent);
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background: var(--kd-drawer-bg);
+  color: var(--kd-drawer-text);
+  font-family: var(--font-sans);
+  box-shadow: var(--shadow-drawer);
+}
+/* Scalloped left edge: half-circles of the drawer colour, 76px apart, rolling slowly downwards (off under reduced motion). */
+.kd-drawer__edge {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -41px;
+  width: 42px;
+  background-image: radial-gradient(circle at 100% 50%, var(--kd-drawer-bg) 0 40px, transparent 40.5px);
+  background-size: 42px 76px;
+  background-repeat: repeat-y;
+  animation: kd-drawer-edge 6s linear infinite;
+  pointer-events: none;
+}
+@keyframes kd-drawer-edge { from { background-position: 0 0; } to { background-position: 0 152px; } }
+.kd-drawer__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-4);
+  flex-shrink: 0;
+  padding: var(--space-6) var(--space-7);
+  border-bottom: 1px solid var(--kd-drawer-rule);
+}
+.kd-drawer__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 26px;
+  line-height: 1;
+  text-transform: uppercase;
+  color: inherit;
+}
+.kd-drawer .kd-btn-round { position: relative; flex-shrink: 0; background: var(--kd-drawer-accent); color: var(--kd-drawer-bg); }
+.kd-drawer .kd-btn-round::before { content: ""; position: absolute; inset: -4px; } /* 48px tap target around the 40px button */
+
+/* Shipping strip: status + threshold note over the progress bar (paper track, accent fill, an optional sticker
+   riding on the fill, the starburst at the goal). --kd-progress is set by snippets/kd-cart-shipping.liquid. */
+.kd-drawer__ship {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  flex-shrink: 0;
+  padding: var(--space-5) var(--space-7);
+  border-bottom: 1px solid var(--kd-drawer-rule);
+}
+.kd-drawer__ship-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-3);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.kd-drawer__ship-note { color: var(--kd-drawer-muted); white-space: nowrap; }
+.kd-progress {
+  position: relative;
+  height: 10px;
+  margin: var(--space-5) var(--space-5) var(--space-5) 0;
+  border-radius: var(--radius-pill);
+  background: var(--kd-drawer-text);
+}
+.kd-progress__fill {
+  height: 100%;
+  width: var(--kd-progress, 0%);
+  border-radius: var(--radius-pill);
+  background: var(--kd-drawer-accent);
+  transition: width 0.4s ease;
+}
+.kd-progress__marker {
+  position: absolute;
+  top: 50%;
+  left: var(--kd-progress, 0%);
+  width: 50px;
+  height: auto;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(var(--shadow-card));
+  pointer-events: none;
+  transition: left 0.4s ease;
+}
+.kd-progress--full .kd-progress__marker { display: none; }
+.kd-progress__goal {
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  width: 54px;
+  height: 54px;
+  transform: translate(-50%, -50%) rotate(12deg);
+  fill: var(--kd-drawer-accent);
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* Items: the scrolling middle of the drawer */
+.kd-drawer__items { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
+.kd-drawer__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: var(--space-6) var(--space-7);
+}
+.kd-drawer__lines { display: flex; flex-direction: column; gap: 18px; margin: 0; padding: 0; list-style: none; }
+.kd-line { display: flex; gap: var(--space-4); align-items: center; transition: opacity 0.2s; }
+.kd-line--locked { opacity: 0.5; cursor: progress; }
+.kd-line__thumb { display: flex; align-items: center; justify-content: center; width: 96px; height: 96px; flex-shrink: 0; }
+.kd-line__thumb a { display: contents; }
+.kd-line__thumb img { display: block; width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(var(--shadow-product)); }
+.kd-line__main {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "title total" "meta total" "controls total";
+  column-gap: var(--space-3);
+  row-gap: var(--space-1);
+  align-items: start;
+}
+.kd-line__title { grid-area: title; margin: 0; font-size: 16px; font-weight: 600; line-height: 1.1; text-transform: uppercase; overflow-wrap: anywhere; }
+.kd-line__title a { color: inherit; text-decoration: none; }
+.kd-line__title a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.kd-line__meta { grid-area: meta; display: flex; flex-direction: column; gap: 2px; margin: 0; font-size: 13px; line-height: 1.4; color: var(--kd-drawer-muted); }
+.kd-line__meta p { margin: 0; }
+.kd-line__meta a { color: inherit; }
+.kd-line__total { grid-area: total; margin: 0; font-size: 18px; font-weight: 600; line-height: 1.1; text-transform: uppercase; text-align: right; white-space: nowrap; }
+.kd-line__total del { display: block; font-size: 13px; font-weight: 400; color: var(--kd-drawer-muted); }
+.kd-line__controls { grid-area: controls; display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-3); margin-top: var(--space-1); }
+.kd-line__remove {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--kd-drawer-muted);
+  text-decoration: none;
+}
+.kd-line__remove::before { content: "\2736\00a0"; }
+.kd-line__remove:hover { text-decoration: underline; text-underline-offset: 3px; }
+/* Errors inside the drawer (line errors, the discount code): red on a paper pill, since red on purple can't be read */
+.kd-drawer .kd-error {
+  display: inline-block;
+  margin: 0;
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  background: var(--paper);
+  color: var(--red);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+.kd-drawer .kd-error[hidden] { display: none; }
+.kd-line__error { grid-column: 1 / -1; }
+
+/* Quantity stepper (DS Stepper): a pink pill with − and + around the value; 36px buttons in the cart line,
+   --lg (48 × 58) on the product page. --outline, for the purple drawer: no fill, the cloud outline in the current
+   text colour (like .kd-btn--outline). The value is an <input type="number"> here (Alpine CartItemQuantity edits it)
+   or an <output> on static pages; both share the look. */
+.kd-stepper {
+  display: inline-flex;
+  align-items: center;
+  background: var(--pink);
+  color: var(--purple);
+  border-radius: var(--radius-pill);
+}
+.kd-stepper button {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1;
+  color: inherit;
+  cursor: pointer;
+}
+.kd-stepper button::before { content: ""; position: absolute; inset: -6px; } /* 48px tap target */
+.kd-stepper button[disabled] { opacity: 0.4; cursor: default; }
+.kd-stepper output,
+.kd-stepper__value {
+  width: 24px;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  color: inherit;
+  -moz-appearance: textfield;
+       appearance: textfield;
+}
+.kd-stepper__value::-webkit-outer-spin-button,
+.kd-stepper__value::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.kd-stepper--lg button { width: 48px; height: 58px; font-size: 22px; }
+.kd-stepper--outline { position: relative; z-index: 0; padding: 2px 10px; background: transparent; color: inherit; }
+.kd-stepper__cloud {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  pointer-events: none;
+}
+
+/* Abo upsell under the lines (settings; the subscription backend follows later) */
+.kd-drawer__abo { display: flex; align-items: center; gap: var(--space-4); padding: 6px 0; }
+.kd-drawer__abo-body { flex: 1 1 auto; display: flex; flex-direction: column; gap: var(--space-1); }
+.kd-drawer__abo-title { margin: 0; font-size: 16px; font-weight: 600; line-height: 1.1; text-transform: uppercase; color: var(--kd-drawer-accent); }
+.kd-drawer__abo-text { margin: 0; font-size: 13px; line-height: 1.4; }
+.kd-drawer__abo-link {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  min-height: 48px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--kd-drawer-accent);
+  text-decoration: none;
+}
+.kd-drawer__abo-link::before { content: "\2736\00a0"; }
+.kd-drawer__abo-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* Discount code (DS EmailForm proportions: 56px pill input beside a 56px cloud button, 12px apart) */
+.kd-drawer__code {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--kd-drawer-rule);
+}
+.kd-drawer__code-label { font-size: 13px; font-weight: 600; line-height: 1.2; letter-spacing: 0.06em; text-transform: uppercase; }
+.kd-drawer__code-row { display: flex; gap: var(--space-3); }
+.kd-drawer__code-row .kd-btn { flex-shrink: 0; }
+.kd-drawer__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 56px;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0 22px;
+  border: 1px solid var(--purple);
+  border-radius: var(--radius-pill);
+  background: var(--paper);
+  color: var(--purple);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  box-shadow: none;
+}
+.kd-drawer__input::placeholder { color: var(--ink-muted); }
+.kd-drawer__codes { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: 0; padding: 0; list-style: none; }
+.kd-drawer__code-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--paper);
+  color: var(--purple);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  box-shadow: var(--shadow-card);
+  cursor: pointer;
+}
+.kd-drawer__code-tag--invalid { background: var(--pink); color: var(--red); }
+.kd-drawer__code[data-busy] { opacity: 0.5; cursor: progress; }
+
+/* Foot: subtotal and shipping rows, the checkout cloud, the note */
+.kd-drawer__foot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  flex-shrink: 0;
+  padding: var(--space-5) var(--space-7) max(var(--space-7), env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--kd-drawer-rule);
+}
+.kd-drawer__foot:empty { display: none; }
+.kd-drawer__rows { display: flex; flex-direction: column; gap: var(--space-1); margin: 0; }
+.kd-drawer__row { display: flex; justify-content: space-between; gap: var(--space-3); margin: 0; font-size: 16px; line-height: 1.45; }
+.kd-drawer__row dt { margin: 0; font-weight: 400; }
+.kd-drawer__row dd { margin: 0; font-weight: 600; text-transform: uppercase; white-space: nowrap; }
+.kd-drawer__row--discount { color: var(--kd-drawer-accent); }
+.kd-drawer .kd-btn:not(.kd-btn--outline) { --kd-cloud: var(--kd-drawer-button); color: var(--kd-drawer-button-text); }
+.kd-drawer__checkout { margin-top: var(--space-2); }
+.kd-drawer__note { margin: 0; text-align: center; font-size: 13px; line-height: 1.4; color: var(--kd-drawer-muted); }
+.kd-drawer__errors:empty { display: none; }
+.kd-drawer__dynamic { margin-top: var(--space-2); }
+
+/* Empty cart */
+.kd-drawer__empty { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-5); padding: var(--space-6) var(--space-7); }
+.kd-drawer__empty p { margin: 0; font-size: 16px; line-height: 1.45; }
+
+/* The Shapes right-drawer shell (snippets/right-drawer.liquid) while it shows the cart: the DS scrim, a 520px
+   panel without border or clipping (the scalloped edge sits outside it). !important: the shell's Tailwind
+   utilities (bg-scheme-text/75, w-5/12, border-l-section, overflow-hidden) must give way. */
+.kd-right-drawer__scrim { background: var(--overlay-scrim) !important; }
+.kd-right-drawer__panel:has(> .kd-drawer:not([style*="display: none"])) {
+  width: 520px !important;
+  max-width: 100%;
+  border: 0 !important;
+  background: transparent !important;
+  overflow: visible !important;
+}
+
+/* The cart page (sections/cart.liquid): the same panel, static and centred on the section's ground */
+.kd-cart-page { padding-block: var(--space-9); }
+.kd-drawer--page { height: auto; max-width: 520px; margin-inline: auto; }
+.kd-drawer--page .kd-drawer__body { overflow: visible; }
+
+@media (max-width: 767.98px) {
+  .kd-drawer__head, .kd-drawer__ship, .kd-drawer__body, .kd-drawer__empty { padding-inline: var(--gutter-sm); }
+  .kd-drawer__foot { padding-inline: var(--gutter-sm); }
+  .kd-drawer__ship-row { flex-direction: column; align-items: flex-start; gap: 2px; }
+  .kd-drawer__ship-note { white-space: normal; }
+  .kd-line { align-items: flex-start; }
+  .kd-line__main { display: flex; flex-direction: column; }
+  .kd-line__total { text-align: left; margin-top: 2px; }
+  .kd-line__total del { display: inline; margin-left: 6px; }
+  .kd-drawer__abo { flex-direction: column; align-items: flex-start; gap: var(--space-2); }
+  .kd-drawer__abo-link { min-height: 44px; }
+  .kd-drawer--page { max-width: none; }
+  .kd-cart-page.kd-section { padding-inline: 0; }
+}
+@media (min-width: 768px) {
+  .kd-cart-page { padding-block: var(--space-11); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kd-drawer__edge { animation: none; }
+  .kd-progress__fill, .kd-progress__marker { transition: none; }
+}

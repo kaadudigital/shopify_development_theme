@@ -445,3 +445,89 @@ function kdScrollIntoView(el) {
   init(document);
   document.addEventListener('shopify:section:load', function (event) { init(event.target); });
 })();
+
+/* [data-kd-cart-open]: the header's cart sticker opens the cart drawer (Alpine store "modals", registered by the
+   stock ModalCart island) instead of leaving for /cart; the link's href stays the no-JS fallback. */
+(function () {
+  'use strict';
+  document.addEventListener('click', function (event) {
+    var trigger = event.target.closest('[data-kd-cart-open]');
+    if (!trigger || event.metaKey || event.ctrlKey || event.shiftKey || event.button) return;
+    var modals = window.Alpine && window.Alpine.store && window.Alpine.store('modals');
+    if (!modals || !modals.isRegistered || !modals.isRegistered('cart')) return;
+    event.preventDefault();
+    modals.open('cart');
+  });
+})();
+
+/* [data-kd-discount]: discount codes in the cart drawer. Submitting the form adds the code, a [data-kd-discount-remove]
+   tag drops one; both POST the whole code list to /cart/update.js (`discount`, comma-separated) with the cart
+   sections, then raise shapes:cart:update so the stock Shapes islands (CartItems, CartFooter, cart_count) morph
+   the new markup in. A code Shopify reports as not applicable is taken out again and the form shows its error. */
+(function () {
+  'use strict';
+  var SECTIONS = 'cart-items,cart-footer,cart-item-count,cart-live-region';
+  function codesOf(form) {
+    return (form.getAttribute('data-codes') || '').split(',').map(function (c) { return c.trim(); }).filter(Boolean);
+  }
+  function showError(form, message) {
+    var error = form.querySelector('[data-kd-discount-error]');
+    if (!error) return;
+    if (message) error.textContent = message;
+    error.hidden = !message;
+  }
+  function post(codes, sections) {
+    var body = { discount: codes.join(',') };
+    if (sections) { body.sections = SECTIONS; body.sections_url = window.location.pathname; }
+    var routes = (window.theme && window.theme.routes) || {};
+    return fetch(routes.cart_update_url || '/cart/update.js', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+      body: JSON.stringify(body)
+    }).then(function (response) { return response.json(); });
+  }
+  function apply(form, codes, added) {
+    if (form.hasAttribute('data-busy')) return;
+    form.setAttribute('data-busy', '');
+    showError(form, '');
+    post(codes, true).then(function (cart) {
+      if (added) {
+        var found = (cart.discount_codes || []).some(function (entry) {
+          return entry.applicable && String(entry.code).toUpperCase() === added.toUpperCase();
+        });
+        if (!found) {
+          showError(form, form.getAttribute('data-error') || 'Error');
+          form.removeAttribute('data-busy');
+          /* leave the cart as it was */
+          post(codes.filter(function (c) { return c.toUpperCase() !== added.toUpperCase(); }), false);
+          return;
+        }
+      }
+      window.dispatchEvent(new CustomEvent('shapes:cart:update', { detail: { response: cart } }));
+    }).catch(function () {
+      form.removeAttribute('data-busy');
+      showError(form, (window.theme && window.theme.strings && window.theme.strings.cartError) || form.getAttribute('data-error') || 'Error');
+    });
+  }
+  document.addEventListener('submit', function (event) {
+    var form = event.target.closest('[data-kd-discount]');
+    if (!form) return;
+    event.preventDefault();
+    var input = form.querySelector('input[name="discount"]');
+    var code = input ? input.value.trim() : '';
+    if (!code) { if (input) input.focus(); return; }
+    var codes = codesOf(form);
+    if (codes.some(function (c) { return c.toUpperCase() === code.toUpperCase(); })) { input.value = ''; return; }
+    apply(form, codes.concat(code), code);
+  });
+  document.addEventListener('click', function (event) {
+    var tag = event.target.closest('[data-kd-discount-remove]');
+    if (!tag) return;
+    var form = tag.closest('[data-kd-discount]');
+    if (!form) return;
+    event.preventDefault();
+    var remove = tag.getAttribute('data-kd-discount-remove').toUpperCase();
+    apply(form, codesOf(form).filter(function (c) { return c.toUpperCase() !== remove; }), null);
+  });
+})();

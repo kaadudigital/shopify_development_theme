@@ -104,6 +104,7 @@
     "social_style": "text",
     "cart_icon": "bag",
     "enable_free_shipping_progress_in_cart": true,
+    "free_shipping_threshold": "80",
     "favicon": "shopify://shop_images/Kaadu_faviconv2_limegreen_RGB.png",
     "use_custom_font": true,
     "type_heading_font_custom": "fagies",

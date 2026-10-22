@@ -299,7 +299,8 @@
       render 'popup'
     %}
 
-    {%- if settings.cart_type == 'modal' -%}
+    {%- comment -%} Not on the cart page: it renders the same cart snippets (one #cart form per page) {%- endcomment -%}
+    {%- if settings.cart_type == 'modal' and template != 'cart' -%}
       {% render 'drawer-cart' %}
     {%- endif -%}
 

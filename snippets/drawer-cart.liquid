@@ -1,3 +1,10 @@
+{%- comment -%}
+  Cart drawer (DS CartDrawer; mockup "Cart (Drawer)" / "Cart Mobile"). Rendered by layout/theme.liquid when the
+  cart type is "modal" and teleported into the Shapes right-drawer shell (snippets/right-drawer.liquid), which
+  supplies the scrim, the slide-in, focus trap and Escape. Alpine hooks (ModalCart, CartItems, CartFooter) are
+  the stock Shapes ones; the look is the Kaadu design system (assets/base.bundle.css, CART DRAWER block).
+  Copy and colours: Theme settings › Cart › Kaadu cart drawer.
+{%- endcomment -%}
 <data-island
   x-data="ModalCart({openOnAddToCart: {{ settings.open_modal_on_add_to_cart }}})"
   x-cloak
@@ -8,37 +15,31 @@
     <template data-should-teleport="#right-drawer-slot">
       <div
         x-show="$store.modals.rightDrawer.contents === 'cart'"
-        class="flex h-screen max-h-full flex-col overflow-hidden"
-        :data-modal-label="$store.modals.rightDrawer.contents === 'cart'? '{{ 'cart.general.title' | t }}' : false"
+        class="kd-drawer"
+        :data-modal-label="$store.modals.rightDrawer.contents === 'cart'? '{{ settings.kd_cart_title | default: 'Dein Warenkorb' | escape }}' : false"
         data-cart-drawer
       >
-        <div class="relative flex items-center justify-between px-section pb-2.5 pt-5">
-          <h2 class="font-heading text-base lg:text-xl" tabindex="-1">
-            {{ 'cart.general.title' | t }}
-            <span class="sr-only">
+        {%- render 'kd-cart-vars' -%}
+        <div class="kd-drawer__edge" aria-hidden="true"></div>
+        <div class="kd-drawer__head">
+          <h2 class="kd-drawer__title" tabindex="-1">
+            {{ settings.kd_cart_title | default: 'Dein Warenkorb' }}
+            <span class="kd-sr">
               -
               <span x-text="$store.cart_count.countWithText"></span>
             </span>
           </h2>
           <button
+            type="button"
+            class="kd-btn-round"
             @click.prevent="$store.modals.close('cart')"
-            class="top-0 block"
+            aria-label="{{ 'general.accessibility.close_modal' | t | escape }}"
           >
-            <span class="sr-only">
-              {{- 'general.accessibility.close_modal' | t -}}
-            </span>
-            <span class="inline-block h-5 w-5">{% render 'icon-close' %}</span>
+            <span aria-hidden="true">✕</span>
           </button>
         </div>
-        <div class="flex flex-auto flex-col overflow-hidden">
-          {% render 'cart-items' %}
-          <div class="relative  px-section pb-safe-bottom pt-5">
-            <div
-              class="pointer-events-none absolute left-0 right-0 top-0 h-16 w-full -translate-y-full bg-gradient-to-t from-scheme-background to-scheme-background-0"
-            ></div>
-            {% render 'cart-footer' %}
-          </div>
-        </div>
+        {% render 'cart-items' %}
+        {% render 'cart-footer' %}
       </div>
     </template>
   </div>

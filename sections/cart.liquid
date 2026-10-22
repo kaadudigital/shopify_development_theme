@@ -1,19 +1,21 @@
+{%- comment -%}
+  Cart page (/cart): the cart drawer panel (DS CartDrawer), static and centred on the section's ground, sharing
+  snippets/cart-items.liquid and cart-footer.liquid with the drawer. Copy and colours of the panel come from
+  Theme settings › Cart › Kaadu cart drawer; the ground from this section's colour scheme.
+{%- endcomment -%}
+{%- render 'kd-cart-vars' -%}
 <section
-  class="relative overflow-hidden bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %} overflow-hidden"
+  id="{{ section.id }}"
+  class="kd-section kd-cart-page bg-scheme-background text-scheme-text"
   data-color-scheme="{{ section.settings.color_scheme }}"
 >
-  <div class="section-content mx-auto max-w-5xl px-section py-section-vertical-spacing">
-    <div class="{% if section.settings.display_on_card %}text-scheme-text card{% endif %}">
-      <div class="{% if section.settings.display_on_card %}card__surface p-5 lg:p-10{% endif %}">
-        <h1 class="font-heading heading-feature  heading-style text-center {{ settings.heading_drop_shadow_style }}">
-          {{ 'cart.general.title' | t }}
-        </h1>
-        <div class="mt-5 lg:mt-10">
-          {% render 'cart-items' %}
-          {% render 'cart-footer' %}
-        </div>
-      </div>
+  <div class="kd-drawer kd-drawer--page">
+    <div class="kd-drawer__edge" aria-hidden="true"></div>
+    <div class="kd-drawer__head">
+      <h1 class="kd-drawer__title">{{ settings.kd_cart_title | default: 'Dein Warenkorb' }}</h1>
     </div>
+    {% render 'cart-items' %}
+    {% render 'cart-footer' %}
   </div>
 </section>
 
@@ -22,9 +24,14 @@
   "name": "t:sections.cart.name",
   "settings": [
     {
+      "type": "paragraph",
+      "content": "The panel's copy and colours are in Theme settings › Cart › Kaadu cart drawer."
+    },
+    {
       "type": "checkbox",
       "id": "display_on_card",
       "label": "t:common.settings.display_on_card.label",
+      "info": "Unused since the redesign: the cart is always the Kaadu panel.",
       "default": true
     },
     {
@@ -40,7 +47,8 @@
     {
       "type": "checkbox",
       "id": "use_gradient_background",
-      "label": "t:common.settings.use_gradient_background.label"
+      "label": "t:common.settings.use_gradient_background.label",
+      "info": "Unused since the redesign."
     }
   ]
 }
