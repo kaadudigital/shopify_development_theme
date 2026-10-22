@@ -9371,16 +9371,16 @@ html.lenis, html.lenis body { height: auto; }
 }
 .kd-drawer__ship-row {
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: var(--space-3);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
   font-size: 13px;
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
-.kd-drawer__ship-note { color: var(--kd-drawer-muted); white-space: nowrap; }
+.kd-drawer__ship-note { color: var(--kd-drawer-muted); }
 .kd-progress {
   position: relative;
   height: 10px;
@@ -9646,6 +9646,9 @@ html.lenis, html.lenis body { height: auto; }
    panel without border or clipping (the scalloped edge sits outside it). !important: the shell's Tailwind
    utilities (bg-scheme-text/75, w-5/12, border-l-section, overflow-hidden) must give way. */
 .kd-right-drawer__scrim { background: var(--overlay-scrim) !important; }
+/* The header wrapper (.adjust-menu-on-overlay) sits at z-index 100000 so it stays above the MENU overlay; the cart
+   drawer must cover the header too. !important: overrides the shell's z-50 utility. */
+#modals-rightDrawer { z-index: 100001 !important; }
 .kd-right-drawer__panel:has(> .kd-drawer:not([style*="display: none"])) {
   width: 520px !important;
   max-width: 100%;
@@ -9662,8 +9665,6 @@ html.lenis, html.lenis body { height: auto; }
 @media (max-width: 767.98px) {
   .kd-drawer__head, .kd-drawer__ship, .kd-drawer__body, .kd-drawer__empty { padding-inline: var(--gutter-sm); }
   .kd-drawer__foot { padding-inline: var(--gutter-sm); }
-  .kd-drawer__ship-row { flex-direction: column; align-items: flex-start; gap: 2px; }
-  .kd-drawer__ship-note { white-space: normal; }
   .kd-line { align-items: flex-start; }
   .kd-line__main { display: flex; flex-direction: column; }
   .kd-line__total { text-align: left; margin-top: 2px; }

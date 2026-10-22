@@ -11,7 +11,7 @@
   class="kd-drawer__items"
   on="idle"
 >
-  {%- if settings.enable_free_shipping_progress_in_cart -%}
+  {%- if settings.enable_free_shipping_progress_in_cart and cart.item_count > 0 -%}
     {%- render 'kd-cart-shipping' -%}
   {%- endif -%}
   {%- if cart != empty -%}
