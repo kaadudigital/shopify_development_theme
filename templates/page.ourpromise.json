@@ -12,23 +12,23 @@
     "hero": {
       "type": "custom-video-with-text-overlay",
       "settings": {
-        "layout": "hero",
+        "color_scheme": "scheme3",
         "crop": "vertical",
         "crop_desktop": "two-one",
-        "enable_overlay": true,
-        "overlay_style": "gradient",
-        "style": "full",
-        "place_content": "place-content-end-start",
-        "text_align": "text-left",
-        "heading_tag": "h1",
-        "title": "Unser Versprechen: 0 % Ausbeutung.",
-        "richtext": "<p>Ananas von Kleinbauern rund um Vazhakulam, gefriergetrocknet in Vadacode, im selben Distrikt. Hier steht, wem wir was zahlen und was noch offen ist.</p>",
         "cta_text": "",
-        "title_color": "#FFFFF5",
-        "title_shadow": false,
+        "enable_overlay": true,
+        "heading_tag": "h1",
+        "layout": "hero",
+        "overlay_style": "gradient",
+        "place_content": "place-content-end-start",
+        "richtext": "<p>Ananas von Kleinbauern rund um Vazhakulam, gefriergetrocknet in Vadacode, im selben Distrikt. Hier steht, wem wir was zahlen und was noch offen ist.</p>",
+        "scroll_motion": true,
+        "style": "full",
+        "text_align": "text-left",
         "text_color": "#FFFFF5",
-        "color_scheme": "scheme3",
-        "scroll_motion": true
+        "title": "Unser Versprechen: 0 % Ausbeutung.",
+        "title_color": "#FFFFF5",
+        "title_shadow": false
       }
     },
     "kreise": {
@@ -163,18 +163,18 @@
         "card-5"
       ],
       "settings": {
-        "kicker": "Kein Spendenanteil",
+        "action_button_label": "Zur Quittung ↓",
+        "action_heading": "Du bezahlst mehr als beim Discounter. Und siehst, wohin es geht.",
+        "action_note": "6er Pack · CHF 6.30 pro Beutel · Gratis Versand im Abo",
+        "action_pill": "Und du",
+        "action_text": "Kein gutes Gewissen zum Draufkleben. Ein Snack, bei dem die Rechnung stimmt.",
+        "color_scheme": "scheme1",
         "heading": "Wir brechen die Kette",
         "hint": "← wischen oder scrollen →",
         "hint_mobile": "← wischen →",
+        "kicker": "Kein Spendenanteil",
         "link_label": "Mehr dazu ↓",
-        "show_action_card": true,
-        "action_pill": "Und du",
-        "action_heading": "Du bezahlst mehr als beim Discounter. Und siehst, wohin es geht.",
-        "action_text": "Kein gutes Gewissen zum Draufkleben. Ein Snack, bei dem die Rechnung stimmt.",
-        "action_button_label": "Zur Quittung ↓",
-        "action_note": "6er Pack · CHF 6.30 pro Beutel · Gratis Versand im Abo",
-        "color_scheme": "scheme1"
+        "show_action_card": true
       }
     },
     "bauern": {
@@ -216,20 +216,20 @@
         "card-4"
       ],
       "settings": {
-        "image_position": "left",
-        "image_shadow": true,
-        "h2_title": "",
-        "title": "Farming darf kein Glücksspiel sein",
-        "heading_level": "h2",
-        "richtext": "<p>Kein Zwischenhandel, keine Marge zwischen Feld und Trockner. Der Deal in vier Stempeln:</p>",
-        "text_alignment": "text-left",
-        "mobile_text_alignment": "text-left",
-        "mobile_layout_order": true,
         "button2_label": "Radikal fair: so gehts",
         "button2_link_type": "url",
         "color_scheme": "scheme1",
-        "use_custom_colors": false,
-        "scroll_motion": true
+        "h2_title": "",
+        "heading_level": "h2",
+        "image_position": "left",
+        "image_shadow": true,
+        "mobile_layout_order": true,
+        "mobile_text_alignment": "text-left",
+        "richtext": "<p>Kein Zwischenhandel, keine Marge zwischen Feld und Trockner. Der Deal in vier Stempeln:</p>",
+        "scroll_motion": true,
+        "text_alignment": "text-left",
+        "title": "Farming darf kein Glücksspiel sein",
+        "use_custom_colors": false
       }
     }
   },
