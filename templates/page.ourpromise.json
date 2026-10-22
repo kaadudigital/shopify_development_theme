@@ -9,12 +9,234 @@
  */
 {
   "sections": {
-    "main": {
-      "type": "main-page-contact",
-      "settings": {}
+    "hero": {
+      "type": "custom-video-with-text-overlay",
+      "settings": {
+        "layout": "hero",
+        "crop": "vertical",
+        "crop_desktop": "two-one",
+        "enable_overlay": true,
+        "overlay_style": "gradient",
+        "style": "full",
+        "place_content": "place-content-end-start",
+        "text_align": "text-left",
+        "heading_tag": "h1",
+        "title": "Unser Versprechen: 0 % Ausbeutung.",
+        "richtext": "<p>Ananas von Kleinbauern rund um Vazhakulam, gefriergetrocknet in Vadacode, im selben Distrikt. Hier steht, wem wir was zahlen und was noch offen ist.</p>",
+        "cta_text": "",
+        "title_color": "#FFFFF5",
+        "title_shadow": false,
+        "text_color": "#FFFFF5",
+        "color_scheme": "scheme3",
+        "scroll_motion": true
+      }
+    },
+    "kreise": {
+      "type": "kaadu-impact-circles",
+      "blocks": {
+        "ring-1": {
+          "type": "ring",
+          "settings": {
+            "title": "Arbeiterinnen",
+            "text": "<p>Frauen aus der Region, fest angestellt in unserer Anlage in Vadacode.</p>",
+            "fact": "Lohn +50 % über der Region, Pension, Versicherung, Gewinnbeteiligung.",
+            "ring_color": "#FFC6FF",
+            "label_color": "#542A76",
+            "marker_x": 45,
+            "marker_y": 62
+          }
+        },
+        "ring-2": {
+          "type": "ring",
+          "settings": {
+            "title": "Kleinbäuerinnen",
+            "text": "<p>Direkt gekauft, ohne Zwischenhandel, auch die hässlichen Früchte.</p>",
+            "fact": "Voller Preis für jede Grösse + 5 INR über Markt.",
+            "ring_color": "#EEF72E",
+            "label_color": "#542A76",
+            "marker_x": 64,
+            "marker_y": 58
+          }
+        },
+        "ring-3": {
+          "type": "ring",
+          "settings": {
+            "title": "Erntehelferinnen",
+            "text": "<p>Doppelte Tageslöhne für die, die schneiden, nicht nur für die, denen das Feld gehört.</p>",
+            "fact": "Tageslohn [X] über dem ortsüblichen Satz.",
+            "ring_color": "#B7D9FF",
+            "label_color": "#542A76",
+            "marker_x": 21,
+            "marker_y": 39
+          }
+        },
+        "ring-4": {
+          "type": "ring",
+          "settings": {
+            "title": "Gemeinde",
+            "text": "<p>Verarbeitet, wo die Frucht wächst. Löhne, Steuern und Zulieferer bleiben im Dorf.</p>",
+            "fact": "Wertschöpfung im Distrikt der Ernte statt in Europa.",
+            "ring_color": "#542A76",
+            "label_color": "#FFFFF5",
+            "marker_x": 56,
+            "marker_y": 82
+          }
+        },
+        "ring-5": {
+          "type": "ring",
+          "settings": {
+            "title": "Natur",
+            "text": "<p>Ananasreste werden zu Pflanzenkohle statt zu Abfall.</p>",
+            "fact": "Biochar: rund 1'900 t CO₂ sollen im Boden bleiben.",
+            "ring_color": "#AEFF64",
+            "label_color": "#542A76",
+            "marker_x": 80,
+            "marker_y": 28
+          }
+        }
+      },
+      "block_order": [
+        "ring-1",
+        "ring-2",
+        "ring-3",
+        "ring-4",
+        "ring-5"
+      ],
+      "settings": {
+        "color_scheme": "scheme4"
+      }
+    },
+    "menschen": {
+      "type": "kaadu-people-cards",
+      "blocks": {
+        "card-1": {
+          "type": "card",
+          "settings": {
+            "stat": "A-Preis",
+            "title": "Kleinbauer*innen",
+            "text": "Voller Preis für jede Grösse, auch für die krummen Früchte.",
+            "tint": "tint-cocoa"
+          }
+        },
+        "card-2": {
+          "type": "card",
+          "settings": {
+            "stat": "[₹ X'XXX]",
+            "title": "Erntehelfer*innen",
+            "text": "Tageslohn deutlich über Marktstandard. Mit Vertrag.",
+            "tint": "tint-plum"
+          }
+        },
+        "card-3": {
+          "type": "card",
+          "settings": {
+            "stat": "+50 %",
+            "title": "Arbeiter*innen",
+            "text": "Lohn über dem regionalen Benchmark. Mit Mitsprache und Miteigentum.",
+            "tint": "tint-ochre"
+          }
+        },
+        "card-4": {
+          "type": "card",
+          "settings": {
+            "stat": "100 %",
+            "title": "Das Team als Besitzer",
+            "text": "Ziel: Die Anlage gehört den Mitarbeitenden.",
+            "tint": "tint-umber"
+          }
+        },
+        "card-5": {
+          "type": "card",
+          "settings": {
+            "stat": "1'900 t",
+            "title": "Natur + Community",
+            "text": "CO₂, die als Pflanzenkohle im Boden bleiben sollen.",
+            "tint": "tint-forest"
+          }
+        }
+      },
+      "block_order": [
+        "card-1",
+        "card-2",
+        "card-3",
+        "card-4",
+        "card-5"
+      ],
+      "settings": {
+        "kicker": "Kein Spendenanteil",
+        "heading": "Wir brechen die Kette",
+        "hint": "← wischen oder scrollen →",
+        "hint_mobile": "← wischen →",
+        "link_label": "Mehr dazu ↓",
+        "show_action_card": true,
+        "action_pill": "Und du",
+        "action_heading": "Du bezahlst mehr als beim Discounter. Und siehst, wohin es geht.",
+        "action_text": "Kein gutes Gewissen zum Draufkleben. Ein Snack, bei dem die Rechnung stimmt.",
+        "action_button_label": "Zur Quittung ↓",
+        "action_note": "6er Pack · CHF 6.30 pro Beutel · Gratis Versand im Abo",
+        "color_scheme": "scheme1"
+      }
+    },
+    "bauern": {
+      "type": "image-with-text-custom",
+      "blocks": {
+        "card-1": {
+          "type": "card",
+          "settings": {
+            "title": "Direktkauf",
+            "text": "<p>Das Geld geht an die Familie, nicht an drei Stationen dazwischen.</p>"
+          }
+        },
+        "card-2": {
+          "type": "card",
+          "settings": {
+            "title": "Über Markt",
+            "text": "<p>Preis über Markt, Schema öffentlich. [Schema verlinken]</p>"
+          }
+        },
+        "card-3": {
+          "type": "card",
+          "settings": {
+            "title": "A-Preis",
+            "text": "<p>Für jede Frucht, egal wie gross.</p>"
+          }
+        },
+        "card-4": {
+          "type": "card",
+          "settings": {
+            "title": "D-Grade",
+            "text": "<p>Kaufen wir auch. [Preis bestätigen]</p>"
+          }
+        }
+      },
+      "block_order": [
+        "card-1",
+        "card-2",
+        "card-3",
+        "card-4"
+      ],
+      "settings": {
+        "image_position": "left",
+        "image_shadow": true,
+        "h2_title": "",
+        "title": "Farming darf kein Glücksspiel sein",
+        "heading_level": "h2",
+        "richtext": "<p>Kein Zwischenhandel, keine Marge zwischen Feld und Trockner. Der Deal in vier Stempeln:</p>",
+        "text_alignment": "text-left",
+        "mobile_text_alignment": "text-left",
+        "mobile_layout_order": true,
+        "button2_label": "Radikal fair: so gehts",
+        "button2_link_type": "url",
+        "color_scheme": "scheme1",
+        "use_custom_colors": false,
+        "scroll_motion": true
+      }
     }
   },
   "order": [
-    "main"
+    "hero",
+    "kreise",
+    "menschen",
+    "bauern"
   ]
 }

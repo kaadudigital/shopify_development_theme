@@ -33,7 +33,15 @@
       assign container_class = container_class | append: ' lg:aspect-auto lg:h-screen lg:first-section:h-screen-less-header-group'
     when 'natural'
       assign container_class = container_class | append: ' lg:aspect-[1_/_var(--custom-aspect-h)] lg:h-auto'
+    when 'two-one'
+      assign container_class = container_class | append: ' kd-video__frame--two-one'
   endcase
+
+  # «Page hero» layout: bottom-left content in the DS hero type (display-hero h1, lead) over the card fade
+  assign is_hero = false
+  if section.settings.layout == 'hero'
+    assign is_hero = true
+  endif
 
   # Black bars baked into the video: crop video_trim % off its top and bottom
   assign trim = section.settings.video_trim | default: 0
@@ -118,7 +126,7 @@
 {%- endstyle -%}
 
 <section
-  class="kd-video{% unless section.settings.title_shadow %} kd-video--no-shadow{% endunless %} grid bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %} {% unless section.settings.style == 'inset' %}full-bleed-section{% endunless %}"
+  class="kd-video{% if is_hero %} kd-video--hero{% endif %}{% unless section.settings.title_shadow %} kd-video--no-shadow{% endunless %} grid bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %} {% unless section.settings.style == 'inset' %}full-bleed-section{% endunless %}"
   data-color-scheme="{{ section.settings.color_scheme }}"
   {% unless section.settings.scroll_motion %} data-kd-motion="off"{% endunless %}
 >
@@ -136,19 +144,19 @@
       {%- endif -%}
 
       <div
-        class="px-section py-section-vertical-spacing {{ content_class }} z-20 text-scheme-text {{ section.settings.place_content }} {{ section.settings.text_align }} {% if section.settings.style == 'inset' %}max-w-site mx-auto{% endif %}"
+        class="kd-video__layer px-section py-section-vertical-spacing {{ content_class }} z-20 text-scheme-text {{ section.settings.place_content }} {{ section.settings.text_align }} {% if section.settings.style == 'inset' %}max-w-site mx-auto{% endif %}"
       >
         {%- capture content -%}
           {% if section.settings.eyebrow != blank %}
-            <p class="kd-video__kicker kd-label-lg">{{ section.settings.eyebrow | escape }}</p>
+            <p class="kd-video__kicker {% if is_hero %}kd-strong{% else %}kd-label-lg{% endif %}">{{ section.settings.eyebrow | escape }}</p>
           {% endif %}
           {% if section.settings.title != blank %}
-            <{{ section.settings.heading_tag }} class="kd-video__title kd-display-h2">
+            <{{ section.settings.heading_tag }} class="kd-video__title {% if is_hero %}kd-display-hero{% else %}kd-display-h2{% endif %}">
               {{- section.settings.title -}}
             </{{ section.settings.heading_tag }}>
           {% endif %}
           {% if section.settings.richtext != blank %}
-            <div class="kd-video__text rte kd-body-lg">
+            <div class="kd-video__text rte {% if is_hero %}kd-lead{% else %}kd-body-lg{% endif %}">
               {{ section.settings.richtext }}
             </div>
           {% endif %}
@@ -315,6 +323,10 @@
         {
           "value": "full-screen",
           "label": "t:common.options.full_screen.label"
+        },
+        {
+          "value": "two-one",
+          "label": "2 : 1 (page hero)"
         }
       ],
       "default": "widescreen"
@@ -383,6 +395,23 @@
       "id": "display_on_card",
       "label": "t:common.settings.display_on_card.label",
       "default": false
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "default": "band",
+      "options": [
+        {
+          "value": "band",
+          "label": "Band (centred column)"
+        },
+        {
+          "value": "hero",
+          "label": "Page hero (bottom left, h1 + lead)"
+        }
+      ],
+      "info": "Page hero: the Promise mockup. Use it with heading tag h1, content placed bottom-left, left-aligned text, the 2 : 1 desktop crop and a gradient overlay."
     },
     {
       "type": "select",
@@ -524,14 +553,48 @@
       "type": "select",
       "id": "button_space_mobile",
       "label": "Space above the button – mobile",
-      "options": [{"value":"space-6","label":"24px"},{"value":"space-8","label":"40px"},{"value":"space-10","label":"56px"},{"value":"space-12","label":"80px"}],
+      "options": [
+        {
+          "value": "space-6",
+          "label": "24px"
+        },
+        {
+          "value": "space-8",
+          "label": "40px"
+        },
+        {
+          "value": "space-10",
+          "label": "56px"
+        },
+        {
+          "value": "space-12",
+          "label": "80px"
+        }
+      ],
       "default": "space-8"
     },
     {
       "type": "select",
       "id": "button_space_desktop",
       "label": "Space above the button – tablet and up",
-      "options": [{"value":"space-6","label":"24px"},{"value":"space-8","label":"40px"},{"value":"space-10","label":"56px"},{"value":"space-12","label":"80px"}],
+      "options": [
+        {
+          "value": "space-6",
+          "label": "24px"
+        },
+        {
+          "value": "space-8",
+          "label": "40px"
+        },
+        {
+          "value": "space-10",
+          "label": "56px"
+        },
+        {
+          "value": "space-12",
+          "label": "80px"
+        }
+      ],
       "default": "space-10",
       "info": "Space between the title (or intro text) and the button."
     },
@@ -668,8 +731,17 @@
       "id": "use_gradient_background",
       "label": "t:common.settings.use_gradient_background.label"
     },
-    {"type": "header", "content": "Animation"},
-    {"type": "checkbox", "id": "scroll_motion", "label": "Scroll animations", "default": true, "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations."}
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "checkbox",
+      "id": "scroll_motion",
+      "label": "Scroll animations",
+      "default": true,
+      "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations."
+    }
   ],
   "blocks": [
     {
@@ -1594,6 +1666,24 @@
   "presets": [
     {
       "name": "Custom Video Text Overlay"
+    },
+    {
+      "name": "Video page hero",
+      "settings": {
+        "layout": "hero",
+        "crop": "vertical",
+        "crop_desktop": "two-one",
+        "enable_overlay": true,
+        "overlay_style": "gradient",
+        "place_content": "place-content-end-start",
+        "text_align": "text-left",
+        "heading_tag": "h1",
+        "title": "Unser Versprechen: 0 % Ausbeutung.",
+        "title_color": "#FFFFF5",
+        "title_shadow": false,
+        "cta_text": "",
+        "color_scheme": "scheme3"
+      }
     }
   ],
   "disabled_on": {

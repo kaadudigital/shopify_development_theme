@@ -35,6 +35,7 @@
 >
   <div class="section-content relative z-10">
     {%- render 'image-with-text-custom',
+      blocks: section.blocks,
       image: section.settings.image,
       image_caption: section.settings.image_caption,
       image_position: section.settings.image_position,
@@ -1008,6 +1009,33 @@
     }
   ],
   "blocks": [
+    {
+      "type": "card",
+      "name": "Card",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Cards sit between the text and the buttons, two per row from 768px (Promise mockup: the four stamps). They take the colour scheme's card colours; the title takes the kicker colour."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Direktkauf"
+        },
+        {
+          "type": "text",
+          "id": "meta",
+          "label": "Small label (right)"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Das Geld geht an die Familie, nicht an drei Stationen dazwischen.</p>"
+        }
+      ]
+    },
     {
       "type": "background_pattern",
       "name": "t:common.blocks.background_pattern.name",

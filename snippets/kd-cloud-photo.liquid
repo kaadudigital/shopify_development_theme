@@ -1,0 +1,26 @@
+{%- comment -%}
+  Cloud-shaped photo: the brand's puffy cloud as a clip path around a photo, a 2px outline in the current text
+  colour and an optional numbered badge. Used by sections/kaadu-impact-circles.liquid for the ring markers (lg,
+  104 × 88) and the list rows (76 × 64). The shape (#kd-cloud-clip, #kd-cloud-illustration) is rendered once per
+  page by snippets/kd-cloud-defs.liquid. Styles: "CLOUD PHOTO" in assets/base.bundle.css.
+
+  Params:
+  - image  {Image}  optional — without it the cloud shows the placeholder text
+  - number {Number} optional — the badge
+  - label  {String} optional — placeholder text (e.g. "[Foto]")
+  - size   {String} optional — 'lg' for the 104 × 88 marker; blank = 76 × 64
+  - sizes  {String} optional — the img sizes attribute (default 104px)
+{%- endcomment -%}
+<div class="kd-cloud-photo{% if size == 'lg' %} kd-cloud-photo--lg{% endif %}">
+  <div class="kd-cloud-photo__clip">
+    {%- if image != blank -%}
+      {{ image | image_url: width: 320 | image_tag: alt: '', loading: 'lazy', widths: '160, 320', sizes: sizes | default: '104px', class: 'kd-cloud-photo__img' }}
+    {%- else -%}
+      <span class="kd-cloud-photo__placeholder kd-label-sm">{{ label | default: '[Foto]' }}</span>
+    {%- endif -%}
+  </div>
+  <svg class="kd-cloud-photo__outline" viewBox="39.2614 159.2549 1413.2533 1199.8099" preserveAspectRatio="none" aria-hidden="true" focusable="false"><use href="#kd-cloud-illustration"></use></svg>
+  {%- if number != blank -%}
+    <span class="kd-cloud-photo__badge" aria-hidden="true">{{ number }}</span>
+  {%- endif -%}
+</div>

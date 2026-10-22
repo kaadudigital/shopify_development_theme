@@ -8,6 +8,7 @@
     button 1 the link; with only one button, it is the cloud. Cloud colours follow the colour scheme.
   - Mobile extras: richtext_mobile (text below 768px), hide_image_mobile (.kd-iw--m-noimg),
     mobile_link_position 'under' (✶ link centred under the cloud, .kd-iw--m-link-under), image_shadow (.kd-iw--shadow).
+  - «card» blocks (title, small label, text) render as a grid of paper stamps between the text and the buttons.
   - Every text field accepts [br] / [BR] (line break) and [nbsp] / [NBSP] (non-breaking space).
   - Mobile: cloud button on top, then the note (left) and the ✶ text link (right) on one row.
   - Optional cloud-button artwork (button2_image / button2_image_mobile, widths, label colours):
@@ -154,6 +155,29 @@
         {%- else -%}
           <div class="kd-iw__text rte {{ text_class }}">{{ richtext | replace: '[BR]', '<br>' | replace: '[br]', '<br>' | replace: '[NBSP]', '&nbsp;' | replace: '[nbsp]', '&nbsp;' }}</div>
         {%- endif -%}
+      {%- endif -%}
+
+      {%- assign cards = blocks | where: 'type', 'card' -%}
+      {%- if cards.size > 0 -%}
+        <ul class="kd-iw__cards">
+          {%- for card in cards -%}
+            <li class="kd-iw__card" {{ card.shopify_attributes }}>
+              {%- if card.settings.title != blank or card.settings.meta != blank -%}
+                <div class="kd-iw__card-head">
+                  {%- if card.settings.title != blank -%}
+                    <h3 class="kd-iw__card-title kd-strong-lg">{{ card.settings.title | escape | replace: '[BR]', '<br>' | replace: '[br]', '<br>' | replace: '[NBSP]', '&nbsp;' | replace: '[nbsp]', '&nbsp;' }}</h3>
+                  {%- endif -%}
+                  {%- if card.settings.meta != blank -%}
+                    <span class="kd-iw__card-meta kd-label">{{ card.settings.meta | escape }}</span>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+              {%- if card.settings.text != blank -%}
+                <div class="kd-iw__card-text kd-body rte">{{ card.settings.text | replace: '[BR]', '<br>' | replace: '[br]', '<br>' | replace: '[NBSP]', '&nbsp;' | replace: '[nbsp]', '&nbsp;' }}</div>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
       {%- endif -%}
 
       {%- assign note_mobile = button_note_mobile | default: button_note -%}

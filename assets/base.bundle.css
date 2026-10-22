@@ -9681,3 +9681,148 @@ html.lenis, html.lenis body { height: auto; }
   .kd-drawer__edge { animation: none; }
   .kd-progress__fill, .kd-progress__marker { transition: none; }
 }
+
+/* ────────────────────────────────────────────────────────────────
+   CLOUD PHOTO — snippets/kd-cloud-photo.liquid
+   A photo cut into the brand cloud (#kd-cloud-clip), a 2px outline in the current text colour and a numbered badge.
+   76 × 64 in lists, --lg 104 × 88 as the ring marker (decoration sizes from the Promise mockup; proposed).
+   ──────────────────────────────────────────────────────────────── */
+.kd-cloud-photo { position: relative; width: 76px; height: 64px; flex-shrink: 0; }
+.kd-cloud-photo--lg { width: 104px; height: 88px; }
+.kd-cloud-photo__clip {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  clip-path: url(#kd-cloud-clip);
+  background: var(--pink);
+  color: var(--purple);
+  text-align: center;
+}
+.kd-cloud-photo__img { width: 100%; height: 100%; object-fit: cover; }
+.kd-cloud-photo__placeholder { font-size: 10px; } /* the DS 10px exception: a placeholder label inside a 64px shape */
+.kd-cloud-photo__outline {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  pointer-events: none;
+}
+.kd-cloud-photo__outline use { vector-effect: non-scaling-stroke; }
+.kd-cloud-photo__badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 23px;
+  height: 23px;
+  border: 2px solid var(--paper);
+  border-radius: var(--radius-pill);
+  background: var(--purple);
+  color: var(--paper);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+}
+.kd-cloud-photo--lg .kd-cloud-photo__badge { width: 32px; height: 32px; font-size: 18px; }
+
+/* ────────────────────────────────────────────────────────────────
+   IMPACT CIRCLES — sections/kaadu-impact-circles.liquid (Promise mockup «Wirkungskreis Vazhakulam»)
+   Heading row (kicker + Fagies h2 left, lead right), then the rings diagram (SVG, 700 viewBox, up to 620px) with
+   cloud photo markers beside a numbered list of rows divided by hairlines. Colours are section / block settings
+   (--kd-ic-*); the lists ink defaults to the mockup's near-black.
+   ──────────────────────────────────────────────────────────────── */
+.kd-ic { position: relative; z-index: 1; padding-block: var(--space-12) var(--space-13); }
+section.kd-ic-band { background-color: var(--kd-ic-bg, rgb(var(--color-scheme-background))); }
+.kd-ic__inner { display: flex; flex-direction: column; gap: var(--space-10); }
+.kd-ic__head { display: flex; flex-direction: column; gap: var(--space-5); }
+.kd-ic__kicker { color: var(--kd-ic-kicker, rgb(var(--color-scheme-eyebrow-text))); }
+.kd-ic__title { color: var(--kd-ic-heading, rgb(var(--color-scheme-text))); max-width: 700px; }
+.kd-ic__lead { max-width: 500px; color: var(--kd-ic-text, rgb(var(--color-scheme-body-text))); }
+.kd-ic__lead > :first-child { margin-top: 0; }
+.kd-ic__lead > :last-child { margin-bottom: 0; }
+.kd-ic__row { display: flex; flex-direction: column; gap: var(--space-9); align-items: center; }
+/* The diagram: the SVG fills a square up to 620px; markers are placed on it in % (block settings) */
+.kd-ic__diagram { position: relative; width: 100%; max-width: 620px; aspect-ratio: 1; flex-shrink: 0; color: var(--kd-ic-list-title, var(--purple)); }
+.kd-ic__svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.kd-ic__dash { fill: none; stroke: var(--kd-ic-outer, var(--purple)); stroke-width: 2; stroke-dasharray: 6 8; }
+.kd-ic__ring { stroke: var(--kd-ic-ring-stroke, var(--paper)); stroke-width: 3; }
+.kd-ic__center { fill: var(--kd-ic-center, var(--paper)); stroke: var(--kd-ic-center-stroke, var(--red)); stroke-width: 3; }
+.kd-ic__label { font-family: var(--font-sans); font-weight: 600; font-size: 14px; letter-spacing: 0.18em; text-transform: uppercase; } /* proposed: the mockup's ring labels (14px, 2.5px tracking) */
+.kd-ic__label--outer { letter-spacing: 0.21em; fill: var(--kd-ic-outer, var(--purple)); }
+.kd-ic__marker { position: absolute; left: var(--kd-ic-x, 50%); top: var(--kd-ic-y, 50%); transform: translate(-50%, -50%); }
+/* The list: rows divided by hairlines (the title colour at 25 %) */
+.kd-ic__list { display: flex; flex-direction: column; width: 100%; margin: 0; padding: 0; list-style: none; border-bottom: 1px solid var(--kd-ic-rule); }
+.kd-ic__row-list { --kd-ic-rule: color-mix(in srgb, var(--kd-ic-list-title, var(--purple)) 25%, transparent); }
+.kd-ic__item { display: flex; align-items: flex-start; gap: var(--space-5); padding: var(--space-5) 0; border-top: 1px solid var(--kd-ic-rule); color: var(--kd-ic-list-title, var(--purple)); }
+.kd-ic__item-body { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.kd-ic__item-title { margin: 0; color: var(--kd-ic-list-title, var(--purple)); }
+.kd-ic__item-text { margin: 0; color: var(--kd-ic-text, var(--ink)); }
+.kd-ic__item-text > :first-child { margin-top: 0; }
+.kd-ic__item-text > :last-child { margin-bottom: 0; }
+.kd-ic__fact { display: flex; align-items: center; gap: var(--space-2); margin: 0; font-size: 14px; font-weight: 600; line-height: 1.3; color: var(--kd-ic-fact, var(--red)); } /* proposed: 14px 600, the mockup's fact line */
+.kd-ic__dot { width: 16px; height: 16px; flex-shrink: 0; border-radius: var(--radius-pill); background: currentColor; }
+@media (max-width: 767.98px) {
+  .kd-ic { padding-block: var(--space-9) var(--space-11); }
+  .kd-ic__marker .kd-cloud-photo--lg { width: 76px; height: 64px; }
+  .kd-ic__marker .kd-cloud-photo--lg .kd-cloud-photo__badge { width: 23px; height: 23px; font-size: 13px; }
+}
+@media (min-width: 768px) {
+  .kd-ic__head { flex-direction: row; justify-content: space-between; align-items: flex-start; gap: var(--space-11); }
+  .kd-ic__lead { flex-shrink: 0; }
+}
+@media (min-width: 1200px) {
+  .kd-ic__row { flex-direction: row; align-items: center; gap: var(--space-11); }
+  .kd-ic__diagram { margin: 30px; } /* room for the markers that overhang the rings */
+  .kd-ic__list { flex: 1 1 auto; }
+}
+
+/* Image with text (Kaadu): «card» blocks — the stamp grid between the text and the buttons (Promise mockup
+   «Farming darf kein Glücksspiel sein»). Cards take the colour scheme's card colours; titles the kicker colour. */
+.kd-iw__cards {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}
+.kd-iw__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-6);
+  background: rgb(var(--color-scheme-card));
+  color: rgb(var(--color-scheme-card-text));
+  box-shadow: var(--shadow-card);
+}
+.kd-iw__card-head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3); }
+.kd-iw__card-title { margin: 0; color: var(--kd-iw-kicker, rgb(var(--color-scheme-eyebrow-text))); overflow-wrap: anywhere; }
+.kd-iw__card-meta { flex-shrink: 0; }
+.kd-iw__card-text > :first-child { margin-top: 0; }
+.kd-iw__card-text > :last-child { margin-bottom: 0; }
+@media (min-width: 768px) {
+  .kd-iw__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Video band «Page hero» layout (Promise mockup): 2 : 1 frame from 768px, content bottom-left in the DS hero
+   type (display-hero h1, lead), the DS card fade over the video. */
+.kd-video--hero .kd-video__content { max-width: 900px; gap: var(--space-5); } /* proposed: the mockup's 900px hero measure */
+.kd-video--hero .kd-video__overlay { background: linear-gradient(180deg, transparent 30%, var(--overlay-card) 100%); }
+.kd-video--hero .kd-video__layer { padding-bottom: var(--space-9); }
+@media (min-width: 768px) {
+  .kd-video__frame--two-one { --tw-aspect-w: 2; --tw-aspect-h: 1; }
+  .kd-video--hero .kd-video__layer { padding-bottom: var(--space-12); }
+}
