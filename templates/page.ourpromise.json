@@ -114,7 +114,7 @@
           "settings": {
             "stat": "A-Preis",
             "title": "Kleinbauer*innen",
-            "text": "Voller Preis für jede Grösse, auch für die krummen Früchte.",
+            "text": "<p>Voller Preis für jede Grösse, auch für die krummen Früchte.</p>",
             "tint": "tint-cocoa"
           }
         },
@@ -123,7 +123,7 @@
           "settings": {
             "stat": "[₹ X'XXX]",
             "title": "Erntehelfer*innen",
-            "text": "Tageslohn deutlich über Marktstandard. Mit Vertrag.",
+            "text": "<p>Tageslohn deutlich über Marktstandard. Mit Vertrag.</p>",
             "tint": "tint-plum"
           }
         },
@@ -132,7 +132,7 @@
           "settings": {
             "stat": "+50 %",
             "title": "Arbeiter*innen",
-            "text": "Lohn über dem regionalen Benchmark. Mit Mitsprache und Miteigentum.",
+            "text": "<p>Lohn über dem regionalen Benchmark. Mit Mitsprache und Miteigentum.</p>",
             "tint": "tint-ochre"
           }
         },
@@ -141,7 +141,7 @@
           "settings": {
             "stat": "100 %",
             "title": "Das Team als Besitzer",
-            "text": "Ziel: Die Anlage gehört den Mitarbeitenden.",
+            "text": "<p>Ziel: Die Anlage gehört den Mitarbeitenden.</p>",
             "tint": "tint-umber"
           }
         },
@@ -150,7 +150,7 @@
           "settings": {
             "stat": "1'900 t",
             "title": "Natur + Community",
-            "text": "CO₂, die als Pflanzenkohle im Boden bleiben sollen.",
+            "text": "<p>CO₂, die als Pflanzenkohle im Boden bleiben sollen.</p>",
             "tint": "tint-forest"
           }
         }
