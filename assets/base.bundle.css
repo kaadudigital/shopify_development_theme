@@ -8207,7 +8207,9 @@ section.kd-is-band { background-color: var(--kd-is-bg, rgb(var(--color-scheme-ba
   cursor: pointer;
 }
 .kd-pack__stepper output { width: 30px; text-align: center; font-size: 16px; font-weight: 600; }
-.kd-pack__cart { flex: 1 0 auto; --kd-cloud: var(--kd-pc-cart, var(--red)); color: var(--kd-pc-cart-label, var(--paper)); font-size: 16px; }
+/* The button grows with the column but never past the long cloud's own proportion (1200 × 180 at the 64px button
+   height), so the cloud is not stretched on 22" / 24" / 27" screens; the pair then sits at the column's left edge. */
+.kd-pack__cart { flex: 1 0 auto; max-width: calc(64px * 1200 / 180); --kd-cloud: var(--kd-pc-cart, var(--red)); color: var(--kd-pc-cart-label, var(--paper)); font-size: 16px; }
 .kd-pack__label--desktop { display: none; }
 .kd-pack__foot { margin: 0; font-size: 12px; font-weight: 600; line-height: 1.4; text-align: center; }
 
@@ -8234,7 +8236,7 @@ section.kd-is-band { background-color: var(--kd-is-bg, rgb(var(--color-scheme-ba
   .kd-pack__pack-meta { align-items: flex-start; text-align: left; }
   .kd-pack__pack .kd-option__price { font-size: 22px; }
   .kd-pack__plan-price { font-size: 16px; }
-  .kd-pack__buy { gap: 14px; }
+  .kd-pack__buy { gap: 14px; justify-content: flex-start; }
   .kd-pack__stepper button { width: 48px; height: 58px; font-size: 22px; }
   .kd-pack__stepper output { width: 40px; font-size: 18px; }
   .kd-pack__cart { font-size: 19px; }
