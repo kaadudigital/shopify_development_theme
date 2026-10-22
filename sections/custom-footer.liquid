@@ -198,14 +198,6 @@
                     </li>
                   {%- endif -%}
                 {%- endfor -%}
-              {%- else -%}
-                {%- comment -%} Legacy: no «Social link» blocks yet → the old Instagram / TikTok URL settings {%- endcomment -%}
-                {%- if section.settings.instagram_url != blank -%}
-                  <li><a href="{{ section.settings.instagram_url }}" target="_blank" rel="noopener"{% if as_icons %} aria-label="Instagram"{% endif %}>{% if as_icons %}{% render 'kd-social-icon', network: 'instagram', style: section.settings.social_icon_style %}{% else %}Instagram{% endif %}</a></li>
-                {%- endif -%}
-                {%- if section.settings.tiktok_url != blank -%}
-                  <li><a href="{{ section.settings.tiktok_url }}" target="_blank" rel="noopener"{% if as_icons %} aria-label="TikTok"{% endif %}>{% if as_icons %}{% render 'kd-social-icon', network: 'tiktok', style: section.settings.social_icon_style %}{% else %}TikTok{% endif %}</a></li>
-                {%- endif -%}
               {%- endif -%}
             </ul>
           {%- endif -%}
@@ -260,13 +252,27 @@
   "settings": [
     {
       "type": "header",
-      "content": "Email & Social"
+      "content": "Contact"
     },
     {
       "type": "text",
       "id": "email",
-      "label": "Email Address",
+      "label": "Email address",
       "default": "HELLO@KAADU.CH"
+    },
+    {
+      "type": "text",
+      "id": "company_note",
+      "label": "Company note",
+      "default": "Kaadu GmbH · Neuenkirch · Produziert von Amboo Foods, Vadacode, Kerala"
+    },
+    {
+      "type": "header",
+      "content": "Social links"
+    },
+    {
+      "type": "paragraph",
+      "content": "Add one «Social link» block per network."
     },
     {
       "type": "checkbox",
@@ -277,34 +283,45 @@
     {
       "type": "select",
       "id": "social_style",
-      "label": "Social links as",
-      "options": [
-        { "value": "text", "label": "Text" },
-        { "value": "icons", "label": "Icons" }
-      ],
+      "label": "Show as",
       "default": "text",
-      "info": "Add one «Social link» block per network (Sections → Custom Footer → Add block)."
+      "options": [
+        {
+          "value": "text",
+          "label": "Text"
+        },
+        {
+          "value": "icons",
+          "label": "Icons"
+        }
+      ]
     },
     {
       "type": "select",
       "id": "social_icon_style",
       "label": "Built-in icon style",
-      "options": [
-        { "value": "outline", "label": "Cloud outline" },
-        { "value": "star", "label": "Star" }
-      ],
+      "info": "Kaadu icons for Instagram and TikTok. Other networks use the icon uploaded in their block.",
       "default": "outline",
-      "info": "Kaadu icons for Instagram and TikTok. Other networks use the icon uploaded in their block."
+      "options": [
+        {
+          "value": "outline",
+          "label": "Cloud outline"
+        },
+        {
+          "value": "star",
+          "label": "Star"
+        }
+      ]
     },
     {
       "type": "range",
       "id": "social_icon_size",
       "label": "Icon size",
+      "default": 48,
       "min": 24,
       "max": 64,
       "step": 2,
-      "unit": "px",
-      "default": 48
+      "unit": "px"
     },
     {
       "type": "color",
@@ -319,64 +336,46 @@
       "info": "Built-in icons only. Leave empty for lime."
     },
     {
-      "type": "url",
-      "id": "instagram_url",
-      "label": "Instagram URL (old)",
-      "info": "Only used while there are no «Social link» blocks."
-    },
-    {
-      "type": "url",
-      "id": "tiktok_url",
-      "label": "TikTok URL (old)",
-      "info": "Only used while there are no «Social link» blocks."
-    },
-    {
-      "type": "text",
-      "id": "company_note",
-      "label": "Company note",
-      "default": "Kaadu GmbH · Neuenkirch · Produziert von Amboo Foods, Vadacode, Kerala"
-    },
-    {
       "type": "header",
-      "content": "Footer Links"
+      "content": "Legal links"
     },
     {
       "type": "checkbox",
       "id": "show_footer_links",
-      "label": "Show Footer Links",
+      "label": "Show legal links",
       "default": true
     },
     {
       "type": "text",
       "id": "link_1_text",
-      "label": "Link 1 Text",
+      "label": "Link 1 – text",
       "default": "Impressum"
     },
     {
       "type": "url",
       "id": "link_1_url",
-      "label": "Link 1 URL"
+      "label": "Link 1 – URL"
     },
     {
       "type": "text",
       "id": "link_2_text",
-      "label": "Link 2 Text",
+      "label": "Link 2 – text",
       "default": "Datenschutz"
     },
     {
       "type": "url",
       "id": "link_2_url",
-      "label": "Link 2 URL"
+      "label": "Link 2 – URL"
     },
     {
       "type": "header",
-      "content": "Color Settings"
+      "content": "Colours"
     },
     {
       "type": "color_scheme",
       "id": "color_scheme",
-      "default": "scheme1",
-      "label": "Color Scheme"
+      "label": "Colour scheme",
+      "default": "scheme1"
     }
   ],
       "blocks": [
@@ -388,12 +387,21 @@
           "type": "select",
           "id": "network",
           "label": "Network",
+          "default": "instagram",
           "options": [
-            { "value": "instagram", "label": "Instagram" },
-            { "value": "tiktok", "label": "TikTok" },
-            { "value": "other", "label": "Other" }
-          ],
-          "default": "instagram"
+            {
+              "value": "instagram",
+              "label": "Instagram"
+            },
+            {
+              "value": "tiktok",
+              "label": "TikTok"
+            },
+            {
+              "value": "other",
+              "label": "Other"
+            }
+          ]
         },
         {
           "type": "text",
@@ -401,7 +409,11 @@
           "label": "Name",
           "info": "Shown as text, and read out by screen readers for icons. Empty: the network's name."
         },
-        { "type": "url", "id": "url", "label": "Link" },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Link"
+        },
         {
           "type": "image_picker",
           "id": "icon",

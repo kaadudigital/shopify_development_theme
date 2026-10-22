@@ -266,91 +266,87 @@
   "settings": [
     {
       "type": "header",
-      "content": "t:common.settings.header_video"
+      "content": "Video"
     },
     {
-      "id": "video",
       "type": "video",
-      "label": "t:common.settings.video"
-    },
-    {
-      "type": "header",
-      "content": "t:sections.video_with_text_overlay.settings.header_aspect_ratio"
+      "id": "video",
+      "label": "Video"
     },
     {
       "type": "select",
       "id": "crop",
-      "label": "t:common.settings.aspect_ratio__mobile.label",
+      "label": "Aspect ratio – mobile",
+      "default": "vertical",
       "options": [
         {
           "value": "natural",
-          "label": "t:common.options.natural.label"
+          "label": "Natural"
         },
         {
           "value": "vertical",
-          "label": "t:common.options.vertical_9_16.label"
+          "label": "Vertical (9:16)"
         },
         {
           "value": "square",
-          "label": "t:common.options.square_1_1.label"
+          "label": "Square (1:1)"
         },
         {
           "value": "four-three",
-          "label": "t:common.options.standard_4_3.label"
+          "label": "Standard (4:3)"
         },
         {
           "value": "widescreen",
-          "label": "t:common.options.widescreen_16_9.label"
+          "label": "Widescreen (16:9)"
         },
         {
           "value": "full-screen",
-          "label": "t:common.options.full_screen.label"
+          "label": "Full screen"
         }
-      ],
-      "default": "vertical"
+      ]
     },
     {
       "type": "select",
       "id": "crop_desktop",
-      "label": "t:sections.video_with_text_overlay.settings.crop_desktop.label",
+      "label": "Aspect ratio – desktop",
+      "default": "widescreen",
       "options": [
         {
           "value": "natural",
-          "label": "t:common.options.natural.label"
+          "label": "Natural"
         },
         {
           "value": "four-three",
-          "label": "t:common.options.standard_4_3.label"
+          "label": "Standard (4:3)"
         },
         {
           "value": "widescreen",
-          "label": "t:common.options.widescreen_16_9.label"
+          "label": "Widescreen (16:9)"
         },
         {
           "value": "cinematic",
-          "label": "t:common.options.extra_wide_235_1.label"
+          "label": "Extra wide (2.35:1)"
         },
         {
           "value": "full-screen",
-          "label": "t:common.options.full_screen.label"
+          "label": "Full screen"
         },
         {
           "value": "two-one",
           "label": "2 : 1 (page hero)"
         }
-      ],
-      "default": "widescreen"
+      ]
     },
     {
       "type": "range",
       "id": "video_trim",
       "label": "Hide black bars in the video",
       "info": "Crops this much off the video's top and bottom, for videos with baked-in black bars.",
+      "default": 0,
       "min": 0,
       "max": 20,
       "step": 1,
-      "unit": "%",
-      "default": 0
+      "unit": "%"
     },
     {
       "type": "header",
@@ -359,14 +355,15 @@
     {
       "type": "checkbox",
       "id": "enable_overlay",
-      "label": "Enable video overlay",
-      "default": false,
-      "info": "Darkens the video so the text stays readable."
+      "label": "Video overlay",
+      "info": "Darkens the video so the text stays readable.",
+      "default": false
     },
     {
       "type": "select",
       "id": "overlay_style",
-      "label": "Overlay",
+      "label": "Overlay style",
+      "default": "gradient",
       "options": [
         {
           "value": "gradient",
@@ -376,136 +373,28 @@
           "value": "solid",
           "label": "Solid colour (below)"
         }
-      ],
-      "default": "gradient"
+      ]
     },
     {
       "type": "color",
       "id": "overlay_color",
-      "label": "Overlay color",
-      "default": "#000000",
-      "info": "Used when Overlay is \"Solid colour\"."
+      "label": "Overlay colour",
+      "info": "Used with the «Solid colour» style.",
+      "default": "#000000"
     },
     {
       "type": "range",
       "id": "overlay_opacity",
       "label": "Overlay opacity",
+      "default": 40,
       "min": 0,
       "max": 100,
       "step": 5,
-      "unit": "%",
-      "default": 40
+      "unit": "%"
     },
     {
       "type": "header",
-      "content": "t:common.settings.header_layout"
-    },
-    {
-      "type": "checkbox",
-      "id": "display_on_card",
-      "label": "t:common.settings.display_on_card.label",
-      "default": false
-    },
-    {
-      "type": "select",
-      "id": "layout",
-      "label": "Layout",
-      "default": "band",
-      "options": [
-        {
-          "value": "band",
-          "label": "Band (centred column)"
-        },
-        {
-          "value": "hero",
-          "label": "Page hero (bottom left, h1 + lead)"
-        }
-      ],
-      "info": "Page hero: the Promise mockup. Use it with heading tag h1, content placed bottom-left, left-aligned text, the 2 : 1 desktop crop and a gradient overlay."
-    },
-    {
-      "type": "select",
-      "id": "style",
-      "label": "t:common.settings.style.label",
-      "default": "full",
-      "options": [
-        {
-          "value": "inset",
-          "label": "t:common.options.inset.label"
-        },
-        {
-          "value": "full",
-          "label": "t:common.options.full_width.label"
-        }
-      ]
-    },
-    {
-      "type": "select",
-      "id": "place_content",
-      "label": "t:common.settings.place_content.label",
-      "options": [
-        {
-          "value": "place-content-start-start",
-          "label": "t:common.options.top_left.label"
-        },
-        {
-          "value": "place-content-start-center",
-          "label": "t:common.options.top_center.label"
-        },
-        {
-          "value": "place-content-start-end",
-          "label": "t:common.options.top_right.label"
-        },
-        {
-          "value": "place-content-center-start",
-          "label": "t:common.options.middle_left.label"
-        },
-        {
-          "value": "place-content-center-center",
-          "label": "t:common.options.middle_center.label"
-        },
-        {
-          "value": "place-content-center-end",
-          "label": "t:common.options.middle_right.label"
-        },
-        {
-          "value": "place-content-end-start",
-          "label": "t:common.options.bottom_left.label"
-        },
-        {
-          "value": "place-content-end-center",
-          "label": "t:common.options.bottom_center.label"
-        },
-        {
-          "value": "place-content-end-end",
-          "label": "t:common.options.bottom_right.label"
-        }
-      ],
-      "default": "place-content-center-center"
-    },
-    {
-      "type": "select",
-      "id": "text_align",
-      "label": "t:common.settings.text_align.label",
-      "options": [
-        {
-          "value": "text-left",
-          "label": "t:common.options.left.label"
-        },
-        {
-          "value": "text-center",
-          "label": "t:common.options.center.label"
-        },
-        {
-          "value": "text-right",
-          "label": "t:common.options.right.label"
-        }
-      ],
-      "default": "text-center"
-    },
-    {
-      "type": "header",
-      "content": "t:common.settings.header_content"
+      "content": "Content"
     },
     {
       "type": "text",
@@ -522,8 +411,9 @@
     {
       "type": "select",
       "id": "heading_tag",
-      "label": "Title style",
+      "label": "Title tag",
       "info": "Use H2 unless this is the first section on the page — a page has exactly one H1.",
+      "default": "h2",
       "options": [
         {
           "value": "h1",
@@ -533,8 +423,7 @@
           "value": "h2",
           "label": "H2 — Section Headline"
         }
-      ],
-      "default": "h2"
+      ]
     },
     {
       "type": "richtext",
@@ -543,26 +432,37 @@
       "info": "Rendered in the Body Default style."
     },
     {
-      "type": "url",
-      "id": "cta_url",
-      "label": "t:common.settings.cta_url.label"
+      "type": "header",
+      "content": "Button"
     },
     {
       "type": "text",
       "id": "cta_text",
-      "label": "t:common.settings.cta_text.label",
+      "label": "Button label",
       "default": "Shop Now"
     },
     {
       "type": "text",
       "id": "cta_text_mobile",
-      "label": "Button label (Mobile)",
+      "label": "Button label – mobile",
       "info": "Leave empty to reuse the desktop label."
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Button link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_play_icon",
+      "label": "Play icon in the button",
+      "default": true
     },
     {
       "type": "select",
       "id": "button_space_mobile",
       "label": "Space above the button – mobile",
+      "default": "space-8",
       "options": [
         {
           "value": "space-6",
@@ -580,13 +480,14 @@
           "value": "space-12",
           "label": "80px"
         }
-      ],
-      "default": "space-8"
+      ]
     },
     {
       "type": "select",
       "id": "button_space_desktop",
       "label": "Space above the button – tablet and up",
+      "info": "Space between the title (or intro text) and the button.",
+      "default": "space-10",
       "options": [
         {
           "value": "space-6",
@@ -604,9 +505,7 @@
           "value": "space-12",
           "label": "80px"
         }
-      ],
-      "default": "space-10",
-      "info": "Space between the title (or intro text) and the button."
+      ]
     },
     {
       "type": "header",
@@ -636,21 +535,21 @@
       "type": "range",
       "id": "button2_width_desktop",
       "label": "Artwork width (desktop)",
+      "default": 200,
       "min": 80,
       "max": 800,
       "step": 10,
-      "unit": "px",
-      "default": 200
+      "unit": "px"
     },
     {
       "type": "range",
       "id": "button2_width_mobile",
       "label": "Artwork width (mobile)",
+      "default": 150,
       "min": 80,
       "max": 800,
       "step": 10,
-      "unit": "px",
-      "default": 150
+      "unit": "px"
     },
     {
       "type": "color",
@@ -666,11 +565,129 @@
     },
     {
       "type": "header",
-      "content": "Text & button colours"
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "info": "Page hero: the Promise mockup. Use it with heading tag h1, content placed bottom-left, left-aligned text, the 2 : 1 desktop crop and a gradient overlay.",
+      "default": "band",
+      "options": [
+        {
+          "value": "band",
+          "label": "Band (centred column)"
+        },
+        {
+          "value": "hero",
+          "label": "Page hero (bottom left, h1 + lead)"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Width",
+      "default": "full",
+      "options": [
+        {
+          "value": "inset",
+          "label": "Inset"
+        },
+        {
+          "value": "full",
+          "label": "Full"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "place_content",
+      "label": "Content position",
+      "default": "place-content-center-center",
+      "options": [
+        {
+          "value": "place-content-start-start",
+          "label": "Top left"
+        },
+        {
+          "value": "place-content-start-center",
+          "label": "Top center"
+        },
+        {
+          "value": "place-content-start-end",
+          "label": "Top right"
+        },
+        {
+          "value": "place-content-center-start",
+          "label": "Middle left"
+        },
+        {
+          "value": "place-content-center-center",
+          "label": "Middle center"
+        },
+        {
+          "value": "place-content-center-end",
+          "label": "Middle right"
+        },
+        {
+          "value": "place-content-end-start",
+          "label": "Bottom left"
+        },
+        {
+          "value": "place-content-end-center",
+          "label": "Bottom center"
+        },
+        {
+          "value": "place-content-end-end",
+          "label": "Bottom right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Text alignment",
+      "default": "text-center",
+      "options": [
+        {
+          "value": "text-left",
+          "label": "Left"
+        },
+        {
+          "value": "text-center",
+          "label": "Center"
+        },
+        {
+          "value": "text-right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "display_on_card",
+      "label": "Content on a card",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Colours"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Colour scheme",
+      "default": "scheme1"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_gradient_background",
+      "label": "Gradient background"
     },
     {
       "type": "paragraph",
-      "content": "Defaults follow the landing-page mockup."
+      "content": "Text and button colours. Defaults follow the landing-page mockup."
     },
     {
       "type": "color",
@@ -721,27 +738,6 @@
       "default": "#FFFFF5"
     },
     {
-      "type": "checkbox",
-      "id": "show_play_icon",
-      "label": "Play icon in the button",
-      "default": true
-    },
-    {
-      "type": "header",
-      "content": "t:common.settings.header_color"
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "default": "scheme1",
-      "label": "t:common.settings.color_scheme.label"
-    },
-    {
-      "type": "checkbox",
-      "id": "use_gradient_background",
-      "label": "t:common.settings.use_gradient_background.label"
-    },
-    {
       "type": "header",
       "content": "Animation"
     },
@@ -749,8 +745,8 @@
       "type": "checkbox",
       "id": "scroll_motion",
       "label": "Scroll animations",
-      "default": true,
-      "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations."
+      "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations.",
+      "default": true
     }
   ],
   "blocks": [

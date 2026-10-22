@@ -189,7 +189,7 @@
     {
       "type": "richtext",
       "id": "text",
-      "label": "Lead (right)",
+      "label": "Lead text",
       "default": "<p>Kaadu steht in der Mitte, aber die Wirkung geht weit darüber hinaus: von den Frauen in der Anlage über die Bauern und Erntehelfer bis zur Gemeinde und zur Natur rund um Vazhakulam. Jeder Kreis profitiert, weil alles vor Ort bleibt.</p>"
     },
     {
@@ -219,12 +219,6 @@
       "default": "[Foto]"
     },
     {
-      "type": "text",
-      "id": "diagram_alt",
-      "label": "Diagram description (screen readers)",
-      "info": "Blank: the heading followed by the ring titles."
-    },
-    {
       "type": "header",
       "content": "Colours"
     },
@@ -235,13 +229,15 @@
     {
       "type": "color_scheme",
       "id": "color_scheme",
-      "default": "scheme4",
-      "label": "t:common.settings.color_scheme.label"
+      "label": "Colour scheme",
+      "info": "Applies when «Use the colours below» is off.",
+      "default": "scheme4"
     },
     {
       "type": "checkbox",
       "id": "use_custom_colors",
-      "label": "Use the colours below for ground, kicker and heading",
+      "label": "Use the colours below",
+      "info": "For ground, kicker and heading. The other colours below always apply.",
       "default": true
     },
     {
@@ -312,7 +308,18 @@
       "type": "checkbox",
       "id": "scroll_motion",
       "label": "Scroll animations",
+      "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations.",
       "default": true
+    },
+    {
+      "type": "header",
+      "content": "Screen readers"
+    },
+    {
+      "type": "text",
+      "id": "diagram_alt",
+      "label": "Diagram description",
+      "info": "Blank: the heading followed by the ring titles."
     }
   ],
   "blocks": [
@@ -370,21 +377,21 @@
           "type": "range",
           "id": "marker_x",
           "label": "Marker position: left",
+          "default": 45,
           "min": 0,
           "max": 100,
           "step": 1,
-          "unit": "%",
-          "default": 45
+          "unit": "%"
         },
         {
           "type": "range",
           "id": "marker_y",
           "label": "Marker position: top",
+          "default": 62,
           "min": 0,
           "max": 100,
           "step": 1,
-          "unit": "%",
-          "default": 62
+          "unit": "%"
         }
       ]
     },

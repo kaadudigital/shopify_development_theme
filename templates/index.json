@@ -361,9 +361,6 @@
             "stat": "2x LOHN",
             "title": "Arbeiter*innen",
             "text": "<p>Lohn +50%*, Pension, Versicherung, Gewinnbeteiligung — langfristig Mitbesitz.</p>",
-            "back_text": "<p>In unserem Betrieb arbeiten ausschliesslich Frauen aus einkommensschwachen Familien der Region.</p>",
-            "back_fact": "",
-            "back_note": "*Im Vergleich zu ähnlicher Arbeit in der Region Vazhakulam, Kerala.",
             "link": ""
           }
         },
@@ -374,9 +371,6 @@
             "stat": "+30–40 %",
             "title": "Kleinbauer*innen",
             "text": "<p>Preis +30–40%*, garantierte Abnahme, langfristige Partnerschaft.</p>",
-            "back_text": "<p>Unsere Kleinbauer*innen in Vazhakulam erhalten 30–40% über Marktpreis für ihre Ananas — garantiert, unabhängig von Weltmarktschwankungen.</p>",
-            "back_fact": "",
-            "back_note": "*Im Vergleich zu marktüblichen Ankaufspreisen in der Region Vazhakulam, Kerala.",
             "link": ""
           }
         },
@@ -387,9 +381,6 @@
             "stat": "",
             "title": "Erntehelfer*innen",
             "text": "<p>Fairer Tageslohn, Schutzausrüstung, Gemeinschaftsfonds.</p>",
-            "back_text": "<p>Erntehelfer*innen erhalten fairen Tageslohn, sichere Arbeitsbedingungen und Zugang zu unserem Gemeinschaftsfonds.</p>",
-            "back_fact": "",
-            "back_note": "*Im Vergleich zu vergleichbarer Erntearbeit in der Region Vazhakulam, Kerala.",
             "link": ""
           }
         },
@@ -401,9 +392,6 @@
             "stat": "",
             "title": "Natur × Community",
             "text": "<p>Reinvestition in Bildung, Infrastruktur und Naturschutz vor Ort.</p>",
-            "back_text": "<p>Ein Teil jedes Verkaufs fliesst zurück in die Gemeinde — in Bildung, Infrastruktur und den Schutz der lokalen Natur.</p>",
-            "back_fact": "",
-            "back_note": "*Teil des Kaadu Gewinnbeteiligungsmodells in Vazhakulam, Kerala.",
             "link": ""
           }
         }
@@ -422,8 +410,6 @@
         "autoplay": true,
         "autoplay_mobile": true,
         "autoplay_interval": 4,
-        "details_label": "Details ↻",
-        "back_label": "Zurück ↻",
         "link_label": "Mehr dazu ↓",
         "show_action_card": true,
         "action_pill": "Und du",
@@ -435,7 +421,6 @@
         "button_label": "Unser Versprechen",
         "button_link": "/pages/ethics",
         "card_shape_enabled": true,
-        "card_height_mobile": 420,
         "card_outline": true,
         "card_outline_color": "#1a1a1a",
         "card_outline_width": 3,
@@ -447,7 +432,6 @@
         "stat_color_mobile": "#aeff64",
         "stat_outline_color": "#fffff5",
         "card_text_color": "#fffff5",
-        "fact_color": "#aeff64",
         "card_button_color": "#fffff5",
         "cta_bg_color": "#ac0300",
         "cta_text_color": "#fffff5",

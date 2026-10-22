@@ -152,20 +152,24 @@
   "name": "Distribution Section",
   "settings": [
     {
+      "type": "header",
+      "content": "Content"
+    },
+    {
       "type": "text",
       "id": "title",
-      "label": "Title",
-      "default": "Tiefer eintauchen",
-      "info": "Rendered in H3 — Subheading style"
+      "label": "Heading",
+      "info": "Rendered in H3 — Subheading style",
+      "default": "Tiefer eintauchen"
     },
     {
       "type": "header",
-      "content": "Color"
+      "content": "Colours"
     },
     {
       "type": "color_scheme",
       "id": "color_scheme",
-      "label": "Color scheme",
+      "label": "Colour scheme",
       "default": "scheme1"
     }
   ],
@@ -194,18 +198,42 @@
         {
           "type": "select",
           "id": "background",
-          "label": "Background color",
+          "label": "Background",
+          "default": "lime",
           "options": [
-            { "value": "lime", "label": "Lime" },
-            { "value": "sky", "label": "Sky" },
-            { "value": "yellow", "label": "Yellow" },
-            { "value": "pink", "label": "Pink" },
-            { "value": "orange", "label": "Orange" },
-            { "value": "violet", "label": "Violet" },
-            { "value": "red", "label": "Red" },
-            { "value": "cream", "label": "Cream" }
-          ],
-          "default": "lime"
+            {
+              "value": "lime",
+              "label": "Lime"
+            },
+            {
+              "value": "sky",
+              "label": "Sky"
+            },
+            {
+              "value": "yellow",
+              "label": "Yellow"
+            },
+            {
+              "value": "pink",
+              "label": "Pink"
+            },
+            {
+              "value": "orange",
+              "label": "Orange"
+            },
+            {
+              "value": "violet",
+              "label": "Violet"
+            },
+            {
+              "value": "red",
+              "label": "Red"
+            },
+            {
+              "value": "cream",
+              "label": "Cream"
+            }
+          ]
         },
         {
           "type": "header",

@@ -474,13 +474,13 @@
     {
       "type": "text",
       "id": "button_text",
-      "label": "Submit button text",
+      "label": "Button label",
       "default": "20% SICHERN"
     },
     {
       "type": "text",
       "id": "dismiss_text",
-      "label": "Dismiss link text",
+      "label": "Dismiss link",
       "default": "Nein danke, ich zahl den vollen Preis."
     },
     {
@@ -500,38 +500,38 @@
     },
     {
       "type": "header",
-      "content": "Trigger settings"
+      "content": "Trigger"
     },
     {
       "type": "range",
       "id": "mobile_trigger_delay",
+      "label": "Delay before showing on touch devices",
+      "info": "Desktop uses cursor exit intent instead. Touch devices can't detect that, so the popup opens after this delay.",
+      "default": 25,
       "min": 5,
       "max": 60,
       "step": 5,
-      "unit": "s",
-      "label": "Delay before showing on touch devices",
-      "default": 25,
-      "info": "Desktop uses cursor exit intent instead. Touch devices can't detect that, so the popup opens after this delay."
+      "unit": "s"
     },
     {
       "type": "range",
       "id": "suppress_days",
+      "label": "Don't show again for (days)",
+      "info": "Applies after the popup is dismissed or the form is submitted.",
+      "default": 7,
       "min": 1,
       "max": 90,
       "step": 1,
-      "unit": "d",
-      "label": "Don't show again for (days)",
-      "default": 7,
-      "info": "Applies after the popup is dismissed or the form is submitted."
+      "unit": "d"
     },
     {
       "type": "header",
-      "content": "Color"
+      "content": "Colours"
     },
     {
       "type": "select",
       "id": "background_color",
-      "label": "Background color",
+      "label": "Background",
       "default": "bg-yellow",
       "options": [
         {

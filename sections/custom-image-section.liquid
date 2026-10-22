@@ -310,11 +310,11 @@
 
 {% schema %}
 {
-  "name": "Custom Sticker Heading",
+  "name": "Custom image with sticker heading",
   "settings": [
     {
       "type": "header",
-      "content": "Text"
+      "content": "Content"
     },
     {
       "type": "inline_richtext",
@@ -327,6 +327,7 @@
       "id": "heading_tag",
       "label": "Heading tag",
       "info": "Only one H1 per page (the hero). Use H2 elsewhere.",
+      "default": "h2",
       "options": [
         {
           "value": "h1",
@@ -340,14 +341,14 @@
           "value": "h3",
           "label": "H3"
         }
-      ],
-      "default": "h2"
+      ]
     },
     {
       "type": "select",
       "id": "heading_style",
       "label": "Heading style",
       "info": "Visual style applied to the heading text.",
+      "default": "h2",
       "options": [
         {
           "value": "h1",
@@ -365,15 +366,14 @@
           "value": "mega-heading",
           "label": "Mega heading (96/100)"
         }
-      ],
-      "default": "h2"
+      ]
     },
     {
       "type": "checkbox",
       "id": "header_display_on_card",
       "label": "Heading on a card",
-      "default": false,
-      "info": "The heading sits on a card in the colour scheme's card colours."
+      "info": "The heading sits on a card in the colour scheme's card colours.",
+      "default": false
     },
     {
       "type": "inline_richtext",
@@ -416,6 +416,7 @@
       "type": "select",
       "id": "button_style",
       "label": "Button style",
+      "default": "btn-secondary",
       "options": [
         {
           "value": "btn-primary",
@@ -425,8 +426,7 @@
           "value": "btn-secondary",
           "label": "Secondary (pill)"
         }
-      ],
-      "default": "btn-secondary"
+      ]
     },
     {
       "type": "header",
@@ -447,6 +447,7 @@
       "type": "select",
       "id": "row_image_position",
       "label": "Image side",
+      "default": "left",
       "options": [
         {
           "value": "left",
@@ -456,8 +457,7 @@
           "value": "right",
           "label": "Right"
         }
-      ],
-      "default": "left"
+      ]
     },
     {
       "type": "checkbox",
@@ -469,880 +469,76 @@
       "type": "range",
       "id": "image_width_mobile_vw",
       "label": "Image width – mobile",
+      "info": "Share of the screen width. Above 100 % the image runs past the screen edge (the section clips it).",
+      "default": 90,
       "min": 50,
       "max": 150,
       "step": 1,
-      "unit": "%",
-      "default": 90,
-      "info": "Share of the screen width. Above 100 % the image runs past the screen edge (the section clips it)."
+      "unit": "%"
     },
     {
       "type": "range",
       "id": "image_width_tablet",
       "label": "Image width – tablet (768–1199px)",
+      "default": 480,
       "min": 100,
       "max": 1000,
       "step": 10,
-      "unit": "px",
-      "default": 480
+      "unit": "px"
     },
     {
       "type": "range",
       "id": "image_width_desktop",
       "label": "Image width – desktop (1200–1440px)",
+      "default": 495,
       "min": 105,
       "max": 1200,
       "step": 15,
-      "unit": "px",
-      "default": 495
+      "unit": "px"
     },
     {
       "type": "range",
       "id": "image_width_24",
       "label": "Image width – 24\" screens (1441–1799px)",
+      "default": 480,
       "min": 200,
       "max": 1800,
       "step": 20,
-      "unit": "px",
-      "default": 480
+      "unit": "px"
     },
     {
       "type": "range",
       "id": "image_width_27",
       "label": "Image width – 27\" and larger (1800px+)",
+      "info": "Design system row and free canvas: the image never gets wider than the screen allows.",
+      "default": 480,
       "min": 200,
       "max": 1800,
       "step": 20,
-      "unit": "px",
-      "default": 480,
-      "info": "Design system row and free canvas: the image never gets wider than the screen allows."
+      "unit": "px"
     },
     {
       "type": "header",
-      "content": "Free canvas"
-    },
-    {
-      "type": "paragraph",
-      "content": "Each screen size below can switch from the row (image beside the text) to a free canvas: image and text placed by X / Y %, on a stage of the height you set. The button can also be placed anywhere."
-    },
-    {
-      "type": "checkbox",
-      "id": "canvas_image_front",
-      "label": "Image in front of the text (free canvas)",
-      "default": false
-    },
-    {
-      "type": "header",
-      "content": "Mobile (below 768px)"
-    },
-    {
-      "type": "range",
-      "id": "image_rotate_m",
-      "label": "Image rotation",
-      "min": -45,
-      "max": 45,
-      "step": 1,
-      "unit": "°",
-      "default": 0
-    },
-    {
-      "type": "checkbox",
-      "id": "canvas_m",
-      "label": "Free canvas",
-      "default": false,
-      "info": "Off = the design system row."
-    },
-    {
-      "type": "range",
-      "id": "canvas_height_m",
-      "label": "Free canvas: height",
-      "min": 300,
-      "max": 1200,
-      "step": 10,
-      "unit": "px",
-      "default": 720
-    },
-    {
-      "type": "range",
-      "id": "canvas_image_x_m",
-      "label": "Free canvas: image horizontal",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 50
-    },
-    {
-      "type": "range",
-      "id": "canvas_image_y_m",
-      "label": "Free canvas: image vertical",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 60
-    },
-    {
-      "type": "range",
-      "id": "canvas_text_x_m",
-      "label": "Free canvas: text horizontal",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 50
-    },
-    {
-      "type": "range",
-      "id": "canvas_text_y_m",
-      "label": "Free canvas: text vertical",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 16
-    },
-    {
-      "type": "select",
-      "id": "button_position_m",
-      "label": "Button position",
-      "default": "default",
-      "options": [
-        {
-          "value": "default",
-          "label": "With the text"
-        },
-        {
-          "value": "custom",
-          "label": "Custom"
-        }
-      ]
-    },
-    {
-      "type": "range",
-      "id": "button_x_m",
-      "label": "Custom button: horizontal",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 50
-    },
-    {
-      "type": "range",
-      "id": "button_y_m",
-      "label": "Custom button: vertical",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 92
-    },
-    {
-      "type": "header",
-      "content": "Tablet (768–1199px)"
-    },
-    {
-      "type": "range",
-      "id": "image_rotate_t",
-      "label": "Image rotation",
-      "min": -45,
-      "max": 45,
-      "step": 1,
-      "unit": "°",
-      "default": 0
-    },
-    {
-      "type": "checkbox",
-      "id": "canvas_t",
-      "label": "Free canvas",
-      "default": false,
-      "info": "Off = the design system row."
-    },
-    {
-      "type": "range",
-      "id": "canvas_height_t",
-      "label": "Free canvas: height",
-      "min": 300,
-      "max": 1200,
-      "step": 10,
-      "unit": "px",
-      "default": 560
-    },
-    {
-      "type": "range",
-      "id": "canvas_image_x_t",
-      "label": "Free canvas: image horizontal",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 28
-    },
-    {
-      "type": "range",
-      "id": "canvas_image_y_t",
-      "label": "Free canvas: image vertical",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 50
-    },
-    {
-      "type": "range",
-      "id": "canvas_text_x_t",
-      "label": "Free canvas: text horizontal",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 72
-    },
-    {
-      "type": "range",
-      "id": "canvas_text_y_t",
-      "label": "Free canvas: text vertical",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 45
-    },
-    {
-      "type": "select",
-      "id": "button_position_t",
-      "label": "Button position",
-      "default": "default",
-      "options": [
-        {
-          "value": "default",
-          "label": "With the text"
-        },
-        {
-          "value": "custom",
-          "label": "Custom"
-        }
-      ]
-    },
-    {
-      "type": "range",
-      "id": "button_x_t",
-      "label": "Custom button: horizontal",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 72
-    },
-    {
-      "type": "range",
-      "id": "button_y_t",
-      "label": "Custom button: vertical",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 85
-    },
-    {
-      "type": "header",
-      "content": "Desktop (1200–1440px)"
-    },
-    {
-      "type": "range",
-      "id": "image_rotate_d",
-      "label": "Image rotation",
-      "min": -45,
-      "max": 45,
-      "step": 1,
-      "unit": "°",
-      "default": 0
-    },
-    {
-      "type": "checkbox",
-      "id": "canvas_d",
-      "label": "Free canvas",
-      "default": false,
-      "info": "Off = the design system row."
-    },
-    {
-      "type": "range",
-      "id": "canvas_height_d",
-      "label": "Free canvas: height",
-      "min": 300,
-      "max": 1200,
-      "step": 10,
-      "unit": "px",
-      "default": 680
-    },
-    {
-      "type": "range",
-      "id": "canvas_image_x_d",
-      "label": "Free canvas: image horizontal",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 26
-    },
-    {
-      "type": "range",
-      "id": "canvas_image_y_d",
-      "label": "Free canvas: image vertical",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 50
-    },
-    {
-      "type": "range",
-      "id": "canvas_text_x_d",
-      "label": "Free canvas: text horizontal",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 68
-    },
-    {
-      "type": "range",
-      "id": "canvas_text_y_d",
-      "label": "Free canvas: text vertical",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 45
-    },
-    {
-      "type": "select",
-      "id": "button_position_d",
-      "label": "Button position",
-      "default": "default",
-      "options": [
-        {
-          "value": "default",
-          "label": "With the text"
-        },
-        {
-          "value": "custom",
-          "label": "Custom"
-        }
-      ]
-    },
-    {
-      "type": "range",
-      "id": "button_x_d",
-      "label": "Custom button: horizontal",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 68
-    },
-    {
-      "type": "range",
-      "id": "button_y_d",
-      "label": "Custom button: vertical",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 80
-    },
-    {
-      "type": "header",
-      "content": "24\" screens (1441–1799px)"
-    },
-    {
-      "type": "range",
-      "id": "image_rotate_l",
-      "label": "Image rotation",
-      "min": -45,
-      "max": 45,
-      "step": 1,
-      "unit": "°",
-      "default": 0
-    },
-    {
-      "type": "checkbox",
-      "id": "canvas_l",
-      "label": "Free canvas",
-      "default": false,
-      "info": "Off = the design system row."
-    },
-    {
-      "type": "range",
-      "id": "canvas_height_l",
-      "label": "Free canvas: height",
-      "min": 300,
-      "max": 1200,
-      "step": 10,
-      "unit": "px",
-      "default": 680
-    },
-    {
-      "type": "range",
-      "id": "canvas_image_x_l",
-      "label": "Free canvas: image horizontal",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 26
-    },
-    {
-      "type": "range",
-      "id": "canvas_image_y_l",
-      "label": "Free canvas: image vertical",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 50
-    },
-    {
-      "type": "range",
-      "id": "canvas_text_x_l",
-      "label": "Free canvas: text horizontal",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 68
-    },
-    {
-      "type": "range",
-      "id": "canvas_text_y_l",
-      "label": "Free canvas: text vertical",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 45
-    },
-    {
-      "type": "select",
-      "id": "button_position_l",
-      "label": "Button position",
-      "default": "default",
-      "options": [
-        {
-          "value": "default",
-          "label": "With the text"
-        },
-        {
-          "value": "custom",
-          "label": "Custom"
-        }
-      ]
-    },
-    {
-      "type": "range",
-      "id": "button_x_l",
-      "label": "Custom button: horizontal",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 68
-    },
-    {
-      "type": "range",
-      "id": "button_y_l",
-      "label": "Custom button: vertical",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 80
-    },
-    {
-      "type": "header",
-      "content": "27\" and larger (1800px+)"
-    },
-    {
-      "type": "range",
-      "id": "image_rotate_xl",
-      "label": "Image rotation",
-      "min": -45,
-      "max": 45,
-      "step": 1,
-      "unit": "°",
-      "default": 0
-    },
-    {
-      "type": "checkbox",
-      "id": "canvas_xl",
-      "label": "Free canvas",
-      "default": false,
-      "info": "Off = the design system row."
-    },
-    {
-      "type": "range",
-      "id": "canvas_height_xl",
-      "label": "Free canvas: height",
-      "min": 300,
-      "max": 1200,
-      "step": 10,
-      "unit": "px",
-      "default": 900
-    },
-    {
-      "type": "range",
-      "id": "canvas_image_x_xl",
-      "label": "Free canvas: image horizontal",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 28
-    },
-    {
-      "type": "range",
-      "id": "canvas_image_y_xl",
-      "label": "Free canvas: image vertical",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 50
-    },
-    {
-      "type": "range",
-      "id": "canvas_text_x_xl",
-      "label": "Free canvas: text horizontal",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 66
-    },
-    {
-      "type": "range",
-      "id": "canvas_text_y_xl",
-      "label": "Free canvas: text vertical",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 45
-    },
-    {
-      "type": "select",
-      "id": "button_position_xl",
-      "label": "Button position",
-      "default": "default",
-      "options": [
-        {
-          "value": "default",
-          "label": "With the text"
-        },
-        {
-          "value": "custom",
-          "label": "Custom"
-        }
-      ]
-    },
-    {
-      "type": "range",
-      "id": "button_x_xl",
-      "label": "Custom button: horizontal",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 66
-    },
-    {
-      "type": "range",
-      "id": "button_y_xl",
-      "label": "Custom button: vertical",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 80
-    },
-    {
-      "type": "header",
-      "content": "Heading sticker"
-    },
-    {
-      "type": "image_picker",
-      "id": "heading_sticker_image",
-      "label": "Sticker image"
-    },
-    {
-      "type": "range",
-      "id": "heading_sticker_width_desktop",
-      "label": "Sticker width (desktop)",
-      "min": 20,
-      "max": 400,
-      "step": 5,
-      "unit": "px",
-      "default": 120
-    },
-    {
-      "type": "range",
-      "id": "heading_sticker_width_mobile",
-      "label": "Sticker width (mobile)",
-      "min": 20,
-      "max": 300,
-      "step": 5,
-      "unit": "px",
-      "default": 80
-    },
-    {
-      "type": "range",
-      "id": "heading_sticker_rotate",
-      "label": "Sticker rotation",
-      "min": -180,
-      "max": 180,
-      "step": 5,
-      "unit": "deg",
-      "default": -10
-    },
-    {
-      "type": "checkbox",
-      "id": "heading_sticker_show_mobile",
-      "label": "Show on mobile",
-      "default": true
-    },
-    {
-      "type": "range",
-      "id": "heading_sticker_x_desktop",
-      "label": "Horizontal position (desktop)",
-      "min": -100,
-      "max": 200,
-      "step": 5,
-      "unit": "%",
-      "default": 100
-    },
-    {
-      "type": "range",
-      "id": "heading_sticker_y_desktop",
-      "label": "Vertical position (desktop)",
-      "min": -100,
-      "max": 200,
-      "step": 5,
-      "unit": "%",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "heading_sticker_x_mobile",
-      "label": "Horizontal position (mobile)",
-      "min": -100,
-      "max": 200,
-      "step": 5,
-      "unit": "%",
-      "default": 100
-    },
-    {
-      "type": "range",
-      "id": "heading_sticker_y_mobile",
-      "label": "Vertical position (mobile)",
-      "min": -100,
-      "max": 200,
-      "step": 5,
-      "unit": "%",
-      "default": 0
-    },
-    {
-      "type": "header",
-      "content": "Sub-heading sticker"
-    },
-    {
-      "type": "image_picker",
-      "id": "subheading_sticker_image",
-      "label": "Sticker image"
-    },
-    {
-      "type": "range",
-      "id": "subheading_sticker_width_desktop",
-      "label": "Sticker width (desktop)",
-      "min": 20,
-      "max": 400,
-      "step": 5,
-      "unit": "px",
-      "default": 120
-    },
-    {
-      "type": "range",
-      "id": "subheading_sticker_width_mobile",
-      "label": "Sticker width (mobile)",
-      "min": 20,
-      "max": 300,
-      "step": 5,
-      "unit": "px",
-      "default": 80
-    },
-    {
-      "type": "range",
-      "id": "subheading_sticker_rotate",
-      "label": "Sticker rotation",
-      "min": -180,
-      "max": 180,
-      "step": 5,
-      "unit": "deg",
-      "default": -10
-    },
-    {
-      "type": "checkbox",
-      "id": "subheading_sticker_show_mobile",
-      "label": "Show on mobile",
-      "default": true
-    },
-    {
-      "type": "range",
-      "id": "subheading_sticker_x_desktop",
-      "label": "Horizontal position (desktop)",
-      "min": -100,
-      "max": 200,
-      "step": 5,
-      "unit": "%",
-      "default": 100
-    },
-    {
-      "type": "range",
-      "id": "subheading_sticker_y_desktop",
-      "label": "Vertical position (desktop)",
-      "min": -100,
-      "max": 200,
-      "step": 5,
-      "unit": "%",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "subheading_sticker_x_mobile",
-      "label": "Horizontal position (mobile)",
-      "min": -100,
-      "max": 200,
-      "step": 5,
-      "unit": "%",
-      "default": 100
-    },
-    {
-      "type": "range",
-      "id": "subheading_sticker_y_mobile",
-      "label": "Vertical position (mobile)",
-      "min": -100,
-      "max": 200,
-      "step": 5,
-      "unit": "%",
-      "default": 0
-    },
-    {
-      "type": "header",
-      "content": "Sub-heading sticker 2"
-    },
-    {
-      "type": "image_picker",
-      "id": "subheading_sticker_2_image",
-      "label": "Sticker image"
-    },
-    {
-      "type": "range",
-      "id": "subheading_sticker_2_width_desktop",
-      "label": "Sticker width (desktop)",
-      "min": 20,
-      "max": 400,
-      "step": 5,
-      "unit": "px",
-      "default": 120
-    },
-    {
-      "type": "range",
-      "id": "subheading_sticker_2_width_mobile",
-      "label": "Sticker width (mobile)",
-      "min": 20,
-      "max": 300,
-      "step": 5,
-      "unit": "px",
-      "default": 80
-    },
-    {
-      "type": "range",
-      "id": "subheading_sticker_2_rotate",
-      "label": "Sticker rotation",
-      "min": -180,
-      "max": 180,
-      "step": 5,
-      "unit": "deg",
-      "default": 10
-    },
-    {
-      "type": "checkbox",
-      "id": "subheading_sticker_2_show_mobile",
-      "label": "Show on mobile",
-      "default": true
-    },
-    {
-      "type": "range",
-      "id": "subheading_sticker_2_x_desktop",
-      "label": "Horizontal position (desktop)",
-      "min": -100,
-      "max": 200,
-      "step": 5,
-      "unit": "%",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "subheading_sticker_2_y_desktop",
-      "label": "Vertical position (desktop)",
-      "min": -100,
-      "max": 200,
-      "step": 5,
-      "unit": "%",
-      "default": 100
-    },
-    {
-      "type": "range",
-      "id": "subheading_sticker_2_x_mobile",
-      "label": "Horizontal position (mobile)",
-      "min": -100,
-      "max": 200,
-      "step": 5,
-      "unit": "%",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "subheading_sticker_2_y_mobile",
-      "label": "Vertical position (mobile)",
-      "min": -100,
-      "max": 200,
-      "step": 5,
-      "unit": "%",
-      "default": 100
-    },
-    {
-      "type": "header",
-      "content": "Colour"
+      "content": "Colours"
     },
     {
       "type": "color_scheme",
       "id": "color_scheme",
-      "default": "scheme1",
-      "label": "Color scheme",
-      "info": "Applies when «Use the colours below instead of the colour scheme» is off."
-    },
-    {
-      "type": "checkbox",
-      "id": "use_custom_colors",
-      "label": "Use the colours below instead of the colour scheme",
-      "info": "Design-system row only. Off: background, heading, text, quote and name pill follow the colour scheme above.",
-      "default": false
+      "label": "Colour scheme",
+      "info": "Applies when «Use the colours below» is off.",
+      "default": "scheme1"
     },
     {
       "type": "checkbox",
       "id": "use_gradient_background",
-      "label": "Use gradient background"
+      "label": "Gradient background"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_custom_colors",
+      "label": "Use the colours below",
+      "info": "Design-system row only. Off: background, heading, text, quote and name pill follow the colour scheme.",
+      "default": false
     },
     {
       "type": "color",
@@ -1386,8 +582,831 @@
       "label": "Name pill background",
       "default": "#FFC6FF"
     },
-    {"type": "header", "content": "Animation"},
-    {"type": "checkbox", "id": "scroll_motion", "label": "Scroll animations", "default": true, "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations."}
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "checkbox",
+      "id": "scroll_motion",
+      "label": "Scroll animations",
+      "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations.",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Heading sticker"
+    },
+    {
+      "type": "image_picker",
+      "id": "heading_sticker_image",
+      "label": "Sticker image"
+    },
+    {
+      "type": "checkbox",
+      "id": "heading_sticker_show_mobile",
+      "label": "Show on mobile",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "heading_sticker_rotate",
+      "label": "Rotation",
+      "default": -10,
+      "min": -180,
+      "max": 180,
+      "step": 5,
+      "unit": "deg"
+    },
+    {
+      "type": "range",
+      "id": "heading_sticker_width_desktop",
+      "label": "Width – desktop",
+      "default": 120,
+      "min": 20,
+      "max": 400,
+      "step": 5,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "heading_sticker_x_desktop",
+      "label": "Horizontal position – desktop",
+      "default": 100,
+      "min": -100,
+      "max": 200,
+      "step": 5,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "heading_sticker_y_desktop",
+      "label": "Vertical position – desktop",
+      "default": 0,
+      "min": -100,
+      "max": 200,
+      "step": 5,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "heading_sticker_width_mobile",
+      "label": "Width – mobile",
+      "default": 80,
+      "min": 20,
+      "max": 300,
+      "step": 5,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "heading_sticker_x_mobile",
+      "label": "Horizontal position – mobile",
+      "default": 100,
+      "min": -100,
+      "max": 200,
+      "step": 5,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "heading_sticker_y_mobile",
+      "label": "Vertical position – mobile",
+      "default": 0,
+      "min": -100,
+      "max": 200,
+      "step": 5,
+      "unit": "%"
+    },
+    {
+      "type": "header",
+      "content": "Sub-heading sticker"
+    },
+    {
+      "type": "image_picker",
+      "id": "subheading_sticker_image",
+      "label": "Sticker image"
+    },
+    {
+      "type": "checkbox",
+      "id": "subheading_sticker_show_mobile",
+      "label": "Show on mobile",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "subheading_sticker_rotate",
+      "label": "Rotation",
+      "default": -10,
+      "min": -180,
+      "max": 180,
+      "step": 5,
+      "unit": "deg"
+    },
+    {
+      "type": "range",
+      "id": "subheading_sticker_width_desktop",
+      "label": "Width – desktop",
+      "default": 120,
+      "min": 20,
+      "max": 400,
+      "step": 5,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "subheading_sticker_x_desktop",
+      "label": "Horizontal position – desktop",
+      "default": 100,
+      "min": -100,
+      "max": 200,
+      "step": 5,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "subheading_sticker_y_desktop",
+      "label": "Vertical position – desktop",
+      "default": 0,
+      "min": -100,
+      "max": 200,
+      "step": 5,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "subheading_sticker_width_mobile",
+      "label": "Width – mobile",
+      "default": 80,
+      "min": 20,
+      "max": 300,
+      "step": 5,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "subheading_sticker_x_mobile",
+      "label": "Horizontal position – mobile",
+      "default": 100,
+      "min": -100,
+      "max": 200,
+      "step": 5,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "subheading_sticker_y_mobile",
+      "label": "Vertical position – mobile",
+      "default": 0,
+      "min": -100,
+      "max": 200,
+      "step": 5,
+      "unit": "%"
+    },
+    {
+      "type": "header",
+      "content": "Sub-heading sticker 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "subheading_sticker_2_image",
+      "label": "Sticker image"
+    },
+    {
+      "type": "checkbox",
+      "id": "subheading_sticker_2_show_mobile",
+      "label": "Show on mobile",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "subheading_sticker_2_rotate",
+      "label": "Rotation",
+      "default": 10,
+      "min": -180,
+      "max": 180,
+      "step": 5,
+      "unit": "deg"
+    },
+    {
+      "type": "range",
+      "id": "subheading_sticker_2_width_desktop",
+      "label": "Width – desktop",
+      "default": 120,
+      "min": 20,
+      "max": 400,
+      "step": 5,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "subheading_sticker_2_x_desktop",
+      "label": "Horizontal position – desktop",
+      "default": 0,
+      "min": -100,
+      "max": 200,
+      "step": 5,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "subheading_sticker_2_y_desktop",
+      "label": "Vertical position – desktop",
+      "default": 100,
+      "min": -100,
+      "max": 200,
+      "step": 5,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "subheading_sticker_2_width_mobile",
+      "label": "Width – mobile",
+      "default": 80,
+      "min": 20,
+      "max": 300,
+      "step": 5,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "subheading_sticker_2_x_mobile",
+      "label": "Horizontal position – mobile",
+      "default": 0,
+      "min": -100,
+      "max": 200,
+      "step": 5,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "subheading_sticker_2_y_mobile",
+      "label": "Vertical position – mobile",
+      "default": 100,
+      "min": -100,
+      "max": 200,
+      "step": 5,
+      "unit": "%"
+    },
+    {
+      "type": "header",
+      "content": "Free canvas"
+    },
+    {
+      "type": "paragraph",
+      "content": "Advanced. Each screen size below can switch from the row (image beside the text) to a free canvas: image, text and button placed by horizontal / vertical %, on a stage of the height you set."
+    },
+    {
+      "type": "checkbox",
+      "id": "canvas_image_front",
+      "label": "Image in front of the text",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Free canvas – mobile (below 768px)"
+    },
+    {
+      "type": "checkbox",
+      "id": "canvas_m",
+      "label": "Free canvas",
+      "info": "Off: the design-system row (image beside the text).",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "canvas_height_m",
+      "label": "Canvas height",
+      "default": 720,
+      "min": 300,
+      "max": 1200,
+      "step": 10,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "canvas_image_x_m",
+      "label": "Image – horizontal",
+      "default": 50,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "canvas_image_y_m",
+      "label": "Image – vertical",
+      "default": 60,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "canvas_text_x_m",
+      "label": "Text – horizontal",
+      "default": 50,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "canvas_text_y_m",
+      "label": "Text – vertical",
+      "default": 16,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_rotate_m",
+      "label": "Image rotation",
+      "info": "Row and free canvas.",
+      "default": 0,
+      "min": -45,
+      "max": 45,
+      "step": 1,
+      "unit": "°"
+    },
+    {
+      "type": "select",
+      "id": "button_position_m",
+      "label": "Button position",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "With the text"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "button_x_m",
+      "label": "Button – horizontal",
+      "info": "With «Custom» button position.",
+      "default": 50,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "button_y_m",
+      "label": "Button – vertical",
+      "default": 92,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "header",
+      "content": "Free canvas – tablet (768–1199px)"
+    },
+    {
+      "type": "checkbox",
+      "id": "canvas_t",
+      "label": "Free canvas",
+      "info": "Off: the design-system row (image beside the text).",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "canvas_height_t",
+      "label": "Canvas height",
+      "default": 560,
+      "min": 300,
+      "max": 1200,
+      "step": 10,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "canvas_image_x_t",
+      "label": "Image – horizontal",
+      "default": 28,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "canvas_image_y_t",
+      "label": "Image – vertical",
+      "default": 50,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "canvas_text_x_t",
+      "label": "Text – horizontal",
+      "default": 72,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "canvas_text_y_t",
+      "label": "Text – vertical",
+      "default": 45,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_rotate_t",
+      "label": "Image rotation",
+      "info": "Row and free canvas.",
+      "default": 0,
+      "min": -45,
+      "max": 45,
+      "step": 1,
+      "unit": "°"
+    },
+    {
+      "type": "select",
+      "id": "button_position_t",
+      "label": "Button position",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "With the text"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "button_x_t",
+      "label": "Button – horizontal",
+      "info": "With «Custom» button position.",
+      "default": 72,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "button_y_t",
+      "label": "Button – vertical",
+      "default": 85,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "header",
+      "content": "Free canvas – desktop (1200–1440px)"
+    },
+    {
+      "type": "checkbox",
+      "id": "canvas_d",
+      "label": "Free canvas",
+      "info": "Off: the design-system row (image beside the text).",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "canvas_height_d",
+      "label": "Canvas height",
+      "default": 680,
+      "min": 300,
+      "max": 1200,
+      "step": 10,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "canvas_image_x_d",
+      "label": "Image – horizontal",
+      "default": 26,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "canvas_image_y_d",
+      "label": "Image – vertical",
+      "default": 50,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "canvas_text_x_d",
+      "label": "Text – horizontal",
+      "default": 68,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "canvas_text_y_d",
+      "label": "Text – vertical",
+      "default": 45,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_rotate_d",
+      "label": "Image rotation",
+      "info": "Row and free canvas.",
+      "default": 0,
+      "min": -45,
+      "max": 45,
+      "step": 1,
+      "unit": "°"
+    },
+    {
+      "type": "select",
+      "id": "button_position_d",
+      "label": "Button position",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "With the text"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "button_x_d",
+      "label": "Button – horizontal",
+      "info": "With «Custom» button position.",
+      "default": 68,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "button_y_d",
+      "label": "Button – vertical",
+      "default": 80,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "header",
+      "content": "Free canvas – 24\" screens (1441–1799px)"
+    },
+    {
+      "type": "checkbox",
+      "id": "canvas_l",
+      "label": "Free canvas",
+      "info": "Off: the design-system row (image beside the text).",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "canvas_height_l",
+      "label": "Canvas height",
+      "default": 680,
+      "min": 300,
+      "max": 1200,
+      "step": 10,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "canvas_image_x_l",
+      "label": "Image – horizontal",
+      "default": 26,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "canvas_image_y_l",
+      "label": "Image – vertical",
+      "default": 50,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "canvas_text_x_l",
+      "label": "Text – horizontal",
+      "default": 68,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "canvas_text_y_l",
+      "label": "Text – vertical",
+      "default": 45,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_rotate_l",
+      "label": "Image rotation",
+      "info": "Row and free canvas.",
+      "default": 0,
+      "min": -45,
+      "max": 45,
+      "step": 1,
+      "unit": "°"
+    },
+    {
+      "type": "select",
+      "id": "button_position_l",
+      "label": "Button position",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "With the text"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "button_x_l",
+      "label": "Button – horizontal",
+      "info": "With «Custom» button position.",
+      "default": 68,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "button_y_l",
+      "label": "Button – vertical",
+      "default": 80,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "header",
+      "content": "Free canvas – 27\" and larger (1800px+)"
+    },
+    {
+      "type": "checkbox",
+      "id": "canvas_xl",
+      "label": "Free canvas",
+      "info": "Off: the design-system row (image beside the text).",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "canvas_height_xl",
+      "label": "Canvas height",
+      "default": 900,
+      "min": 300,
+      "max": 1200,
+      "step": 10,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "canvas_image_x_xl",
+      "label": "Image – horizontal",
+      "default": 28,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "canvas_image_y_xl",
+      "label": "Image – vertical",
+      "default": 50,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "canvas_text_x_xl",
+      "label": "Text – horizontal",
+      "default": 66,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "canvas_text_y_xl",
+      "label": "Text – vertical",
+      "default": 45,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_rotate_xl",
+      "label": "Image rotation",
+      "info": "Row and free canvas.",
+      "default": 0,
+      "min": -45,
+      "max": 45,
+      "step": 1,
+      "unit": "°"
+    },
+    {
+      "type": "select",
+      "id": "button_position_xl",
+      "label": "Button position",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "With the text"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "button_x_xl",
+      "label": "Button – horizontal",
+      "info": "With «Custom» button position.",
+      "default": 66,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "button_y_xl",
+      "label": "Button – vertical",
+      "default": 80,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    }
   ],
   "blocks": [
     {
@@ -3160,7 +3179,7 @@
   ],
   "presets": [
     {
-      "name": "Custom Sticker Heading"
+      "name": "Custom image with sticker heading"
     }
   ],
   "disabled_on": {

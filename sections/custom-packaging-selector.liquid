@@ -470,16 +470,8 @@
   "tag": "section",
   "settings": [
     {
-      "type": "text",
-      "id": "anchor_id",
-      "label": "Anchor",
-      "default": "produkt",
-      "info": "Buttons elsewhere on the page can jump here with /#produkt."
-    },
-    {
       "type": "header",
-      "content": "Product",
-      "info": "When a product and variant IDs are set, pack prices come from the variants; otherwise from the price fields below."
+      "content": "Product"
     },
     {
       "type": "product",
@@ -510,6 +502,25 @@
       "content": "Intro"
     },
     {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "info": "Empty = the product title.",
+      "default": "Ananas Crunchys"
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "100 % Frucht. 0 % Ausbeutung."
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Short description",
+      "default": "Nur Ananas, gefriergetrocknet. Ohne Zusätze, ohne Schwefel, ohne Zuckerzusatz."
+    },
+    {
       "type": "checkbox",
       "id": "show_reviews",
       "label": "Show stars and reviews link",
@@ -525,25 +536,6 @@
       "type": "url",
       "id": "reviews_link",
       "label": "Reviews link"
-    },
-    {
-      "type": "text",
-      "id": "title",
-      "label": "Title",
-      "default": "Ananas Crunchys",
-      "info": "Empty = the product title."
-    },
-    {
-      "type": "text",
-      "id": "tagline",
-      "label": "Tagline",
-      "default": "100 % Frucht. 0 % Ausbeutung."
-    },
-    {
-      "type": "textarea",
-      "id": "description",
-      "label": "Short description",
-      "default": "Nur Ananas, gefriergetrocknet. Ohne Zusätze, ohne Schwefel, ohne Zuckerzusatz."
     },
     {
       "type": "header",
@@ -590,10 +582,20 @@
       "content": "Purchase type"
     },
     {
-      "type": "text",
-      "id": "mode_group_label",
-      "label": "Group label (screen readers)",
-      "default": "Kaufart"
+      "type": "select",
+      "id": "default_mode",
+      "label": "Selected at start",
+      "default": "abo",
+      "options": [
+        {
+          "value": "abo",
+          "label": "Im Abo"
+        },
+        {
+          "value": "once",
+          "label": "Einmalig"
+        }
+      ]
     },
     {
       "type": "text",
@@ -620,51 +622,14 @@
       "default": "Bis 20 % sparen, keine Lieferkosten"
     },
     {
-      "type": "select",
-      "id": "default_mode",
-      "label": "Selected at start",
-      "default": "abo",
-      "options": [
-        {
-          "value": "abo",
-          "label": "Im Abo"
-        },
-        {
-          "value": "once",
-          "label": "Einmalig"
-        }
-      ]
-    },
-    {
       "type": "header",
-      "content": "Packs",
-      "info": "Up to three; a pack without a label is hidden."
+      "content": "Packs"
     },
     {
       "type": "text",
       "id": "options_label",
       "label": "Group label",
       "default": "Packungsgrösse"
-    },
-    {
-      "type": "text",
-      "id": "reference_price",
-      "label": "Reference price per bag (CHF)",
-      "default": "4.45",
-      "info": "'Spar %' on each pack compares its price per bag with this."
-    },
-    {
-      "type": "text",
-      "id": "free_shipping_badge",
-      "label": "Free-shipping badge",
-      "default": "Gratis Versand"
-    },
-    {
-      "type": "text",
-      "id": "sold_out_text",
-      "label": "Sold-out label",
-      "default": "Ausverkauft",
-      "info": "Shown on a pack whose linked variant is sold out (the pack is greyed out), and on the cart button when every pack is sold out."
     },
     {
       "type": "select",
@@ -687,6 +652,26 @@
       ]
     },
     {
+      "type": "text",
+      "id": "reference_price",
+      "label": "Reference price per bag (CHF)",
+      "info": "'Spar %' on each pack compares its price per bag with this.",
+      "default": "4.45"
+    },
+    {
+      "type": "text",
+      "id": "free_shipping_badge",
+      "label": "Free-shipping badge",
+      "default": "Gratis Versand"
+    },
+    {
+      "type": "text",
+      "id": "sold_out_text",
+      "label": "Sold-out label",
+      "info": "Shown on a pack whose linked variant is sold out (the pack is greyed out), and on the cart button when every pack is sold out.",
+      "default": "Ausverkauft"
+    },
+    {
       "type": "header",
       "content": "Pack 1"
     },
@@ -695,12 +680,6 @@
       "id": "option1_label",
       "label": "Label",
       "default": "3er Pack"
-    },
-    {
-      "type": "text",
-      "id": "option1_variant_id",
-      "label": "Variant ID",
-      "info": "Numeric ID of the product variant this pack adds to the cart."
     },
     {
       "type": "number",
@@ -712,8 +691,14 @@
       "type": "text",
       "id": "pack1_price",
       "label": "One-time price (CHF)",
-      "default": "13.35",
-      "info": "Used when no product variant is linked."
+      "info": "Used when no product variant is linked.",
+      "default": "13.35"
+    },
+    {
+      "type": "text",
+      "id": "option1_variant_id",
+      "label": "Variant ID",
+      "info": "Numeric ID of the product variant this pack adds to the cart."
     },
     {
       "type": "checkbox",
@@ -738,12 +723,6 @@
       "default": "6er Pack"
     },
     {
-      "type": "text",
-      "id": "option2_variant_id",
-      "label": "Variant ID",
-      "info": "Numeric ID of the product variant this pack adds to the cart."
-    },
-    {
       "type": "number",
       "id": "pack2_bags",
       "label": "Bags in the pack",
@@ -753,8 +732,14 @@
       "type": "text",
       "id": "pack2_price",
       "label": "One-time price (CHF)",
-      "default": "24.90",
-      "info": "Used when no product variant is linked."
+      "info": "Used when no product variant is linked.",
+      "default": "24.90"
+    },
+    {
+      "type": "text",
+      "id": "option2_variant_id",
+      "label": "Variant ID",
+      "info": "Numeric ID of the product variant this pack adds to the cart."
     },
     {
       "type": "checkbox",
@@ -779,12 +764,6 @@
       "default": "12er Pack"
     },
     {
-      "type": "text",
-      "id": "option3_variant_id",
-      "label": "Variant ID",
-      "info": "Numeric ID of the product variant this pack adds to the cart."
-    },
-    {
       "type": "number",
       "id": "pack3_bags",
       "label": "Bags in the pack",
@@ -794,8 +773,14 @@
       "type": "text",
       "id": "pack3_price",
       "label": "One-time price (CHF)",
-      "default": "39.90",
-      "info": "Used when no product variant is linked."
+      "info": "Used when no product variant is linked.",
+      "default": "39.90"
+    },
+    {
+      "type": "text",
+      "id": "option3_variant_id",
+      "label": "Variant ID",
+      "info": "Numeric ID of the product variant this pack adds to the cart."
     },
     {
       "type": "checkbox",
@@ -811,20 +796,13 @@
     },
     {
       "type": "header",
-      "content": "Delivery rhythm (Abo)",
-      "info": "Shown only when 'Im Abo' is selected."
+      "content": "Delivery rhythm (Abo)"
     },
     {
       "type": "text",
       "id": "frequency_label",
       "label": "Group label",
       "default": "Lieferrhythmus"
-    },
-    {
-      "type": "text",
-      "id": "recommended_badge",
-      "label": "Recommended badge",
-      "default": "Empfohlen"
     },
     {
       "type": "select",
@@ -847,6 +825,12 @@
       ]
     },
     {
+      "type": "text",
+      "id": "recommended_badge",
+      "label": "Recommended badge",
+      "default": "Empfohlen"
+    },
+    {
       "type": "header",
       "content": "Rhythm 1"
     },
@@ -866,11 +850,11 @@
       "type": "range",
       "id": "tier1_discount",
       "label": "Abo discount",
+      "default": 5,
       "min": 0,
       "max": 50,
       "step": 1,
-      "unit": "%",
-      "default": 5
+      "unit": "%"
     },
     {
       "type": "checkbox",
@@ -904,11 +888,11 @@
       "type": "range",
       "id": "tier2_discount",
       "label": "Abo discount",
+      "default": 15,
       "min": 0,
       "max": 50,
       "step": 1,
-      "unit": "%",
-      "default": 15
+      "unit": "%"
     },
     {
       "type": "checkbox",
@@ -942,11 +926,11 @@
       "type": "range",
       "id": "tier3_discount",
       "label": "Abo discount",
+      "default": 20,
       "min": 0,
       "max": 50,
       "step": 1,
-      "unit": "%",
-      "default": 20
+      "unit": "%"
     },
     {
       "type": "checkbox",
@@ -962,25 +946,7 @@
     },
     {
       "type": "header",
-      "content": "Quantity & cart button"
-    },
-    {
-      "type": "text",
-      "id": "qty_label",
-      "label": "Stepper label (screen readers)",
-      "default": "Menge"
-    },
-    {
-      "type": "text",
-      "id": "qty_less_label",
-      "label": "Minus button (screen readers)",
-      "default": "Weniger"
-    },
-    {
-      "type": "text",
-      "id": "qty_more_label",
-      "label": "Plus button (screen readers)",
-      "default": "Mehr"
+      "content": "Quantity and cart button"
     },
     {
       "type": "number",
@@ -992,8 +958,8 @@
       "type": "text",
       "id": "button_label",
       "label": "Button label",
-      "default": "In den Warenkorb",
-      "info": "The total is added after it."
+      "info": "The total is added after it.",
+      "default": "In den Warenkorb"
     },
     {
       "type": "text",
@@ -1003,8 +969,7 @@
     },
     {
       "type": "header",
-      "content": "Footnote",
-      "info": "Price per bag and the shipping note are added automatically in front."
+      "content": "Price line under the button"
     },
     {
       "type": "text",
@@ -1056,6 +1021,8 @@
       "type": "select",
       "id": "long_description_source",
       "label": "Long description",
+      "info": "Shown below the footnote, above the badges. «Product description» uses the product's description from the Shopify admin.",
+      "default": "none",
       "options": [
         {
           "value": "none",
@@ -1069,9 +1036,7 @@
           "value": "custom",
           "label": "Text below"
         }
-      ],
-      "default": "none",
-      "info": "Shown below the footnote, above the badges. «Product description» uses the product's description from the Shopify admin."
+      ]
     },
     {
       "type": "richtext",
@@ -1080,30 +1045,34 @@
     },
     {
       "type": "header",
-      "content": "Details (optional)",
-      "info": "Fold-out texts under the cart button; hidden when empty."
+      "content": "Details tabs"
+    },
+    {
+      "type": "paragraph",
+      "content": "A tab is hidden while its content is empty."
     },
     {
       "type": "text",
       "id": "ingredients_label",
-      "label": "Ingredients Label",
+      "label": "Ingredients – title",
       "default": "Zutaten"
     },
     {
       "type": "richtext",
       "id": "ingredients_content",
-      "label": "Ingredients Content"
+      "label": "Ingredients – content"
     },
     {
       "type": "text",
       "id": "nutrition_label",
-      "label": "Nutrition Facts Label",
+      "label": "Nutrition facts – title",
       "default": "Nährwerte"
     },
     {
       "type": "select",
       "id": "nutrition_content_type",
-      "label": "Nutrition Facts Content",
+      "label": "Nutrition facts – content type",
+      "default": "text",
       "options": [
         {
           "value": "text",
@@ -1113,67 +1082,69 @@
           "value": "image",
           "label": "Image / SVG"
         }
-      ],
-      "default": "text"
+      ]
     },
     {
       "type": "richtext",
       "id": "nutrition_content",
-      "label": "Nutrition Facts Text",
-      "info": "Used when Content is set to Text."
+      "label": "Nutrition facts – text",
+      "info": "Used when the content type is «Text»."
     },
     {
       "type": "image_picker",
       "id": "nutrition_image",
-      "label": "Nutrition Facts Image",
-      "info": "Used when Content is set to Image / SVG. Accepts JPG, PNG or SVG."
+      "label": "Nutrition facts – image",
+      "info": "Used when the content type is «Image / SVG». JPG, PNG or SVG."
     },
     {
       "type": "text",
       "id": "shipping_label",
-      "label": "Shipping Label",
+      "label": "Shipping – title",
       "default": "Versand"
     },
     {
       "type": "richtext",
       "id": "shipping_content",
-      "label": "Shipping Content"
+      "label": "Shipping – content"
     },
     {
       "type": "text",
       "id": "storage_label",
-      "label": "Storage tab: title",
+      "label": "Storage – title",
       "default": "Lagerung und Haltbarkeit"
     },
     {
       "type": "richtext",
       "id": "storage_content",
-      "label": "Storage tab: content",
-      "info": "Leave empty to hide the tab."
+      "label": "Storage – content"
     },
     {
       "type": "checkbox",
       "id": "details_stars",
-      "label": "Show a coloured ✶ before each tab title",
+      "label": "Coloured ✶ before each tab title",
       "default": false
     },
     {
       "type": "header",
-      "content": "Colours",
-      "info": "Defaults follow the landing-page mockup (desktop paper, mobile pink)."
+      "content": "Colours"
     },
     {
       "type": "color_scheme",
       "id": "color_scheme",
-      "label": "Color scheme",
+      "label": "Colour scheme",
+      "info": "Applies when «Use the colours below» is off.",
       "default": "scheme1"
     },
     {
       "type": "checkbox",
       "id": "use_custom_colors",
-      "label": "Use the colours below instead of the colour scheme",
-      "default": true,
-      "info": "On: every colour below (mockup values). Off: all colours come from the colour scheme — background and text, cards for the options and notice, accent 1 for the selected option and cart button, accent 2 for the notice button and Spar badges."
+      "label": "Use the colours below",
+      "info": "On: every colour below (mockup values). Off: all colours come from the colour scheme — background and text, cards for the options and notice, accent 1 for the selected option and cart button, accent 2 for the notice button and Spar badges.",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Colours – section"
     },
     {
       "type": "color",
@@ -1206,52 +1177,60 @@
       "default": "#AC0300"
     },
     {
+      "type": "header",
+      "content": "Colours – first-order notice"
+    },
+    {
       "type": "color",
       "id": "promo_bg",
-      "label": "Notice background – desktop",
+      "label": "Background – desktop",
       "default": "#B7D9FF"
     },
     {
       "type": "color",
       "id": "promo_bg_mobile",
-      "label": "Notice background – mobile",
+      "label": "Background – mobile",
       "default": "#AEFF64"
     },
     {
       "type": "color",
       "id": "promo_title_color",
-      "label": "Notice title – desktop",
+      "label": "Title – desktop",
       "default": "#542A76"
     },
     {
       "type": "color",
       "id": "promo_title_color_mobile",
-      "label": "Notice title – mobile",
+      "label": "Title – mobile",
       "default": "#AC0300"
     },
     {
       "type": "color",
       "id": "promo_text_color",
-      "label": "Notice text – desktop",
+      "label": "Text – desktop",
       "default": "#1A1A1A"
     },
     {
       "type": "color",
       "id": "promo_text_color_mobile",
-      "label": "Notice text – mobile",
+      "label": "Text – mobile",
       "default": "#542A76"
     },
     {
       "type": "color",
       "id": "promo_button_color",
-      "label": "Notice button",
+      "label": "Button",
       "default": "#AC0300"
     },
     {
       "type": "color",
       "id": "promo_button_label_color",
-      "label": "Notice button label",
+      "label": "Button label",
       "default": "#FFFFF5"
+    },
+    {
+      "type": "header",
+      "content": "Colours – options and badges"
     },
     {
       "type": "color",
@@ -1314,6 +1293,10 @@
       "default": "#1A1A1A"
     },
     {
+      "type": "header",
+      "content": "Colours – quantity and cart button"
+    },
+    {
       "type": "color",
       "id": "stepper_bg",
       "label": "Stepper",
@@ -1351,8 +1334,47 @@
       "type": "checkbox",
       "id": "scroll_motion",
       "label": "Scroll animations",
-      "default": true,
-      "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations."
+      "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations.",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Screen readers"
+    },
+    {
+      "type": "text",
+      "id": "mode_group_label",
+      "label": "Purchase type group",
+      "default": "Kaufart"
+    },
+    {
+      "type": "text",
+      "id": "qty_label",
+      "label": "Quantity stepper",
+      "default": "Menge"
+    },
+    {
+      "type": "text",
+      "id": "qty_less_label",
+      "label": "Minus button",
+      "default": "Weniger"
+    },
+    {
+      "type": "text",
+      "id": "qty_more_label",
+      "label": "Plus button",
+      "default": "Mehr"
+    },
+    {
+      "type": "header",
+      "content": "Advanced"
+    },
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anchor",
+      "info": "Buttons elsewhere on the page can jump here with /#produkt.",
+      "default": "produkt"
     }
   ],
   "presets": [
@@ -1376,6 +1398,7 @@
           "type": "select",
           "id": "shape",
           "label": "Shape",
+          "default": "starburst",
           "options": [
             {
               "value": "starburst",
@@ -1385,8 +1408,7 @@
               "value": "image",
               "label": "Image or SVG"
             }
-          ],
-          "default": "starburst"
+          ]
         },
         {
           "type": "image_picker",
@@ -1398,15 +1420,15 @@
           "type": "checkbox",
           "id": "show_text",
           "label": "Show the text on the image",
-          "default": true,
-          "info": "Off: only the image shows; the text becomes its alt text."
+          "info": "Off: only the image shows; the text becomes its alt text.",
+          "default": true
         },
         {
           "type": "color",
           "id": "shape_color",
           "label": "Shape colour",
-          "default": "#AEFF64",
-          "info": "Starburst only. Used when «Use the colours below» is on; otherwise the colour scheme's button colours."
+          "info": "Starburst only. Used when «Use the colours below» is on; otherwise the colour scheme's button colours.",
+          "default": "#AEFF64"
         },
         {
           "type": "color",

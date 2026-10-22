@@ -305,67 +305,110 @@
 
 {% schema %}
 {
-  "name": "t:sections.video.name",
+  "name": "Custom video",
   "settings": [
     {
-      "id": "title",
+      "type": "header",
+      "content": "Content"
+    },
+    {
       "type": "inline_richtext",
-      "label": "t:common.settings.title.label"
+      "id": "title",
+      "label": "Heading"
     },
     {
       "type": "header",
-      "content": "t:common.settings.header_layout"
+      "content": "Video"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video"
+    },
+    {
+      "type": "select",
+      "id": "mode",
+      "label": "Mode",
+      "info": "Autoplay will not play sound or show controls.",
+      "default": "preview",
+      "options": [
+        {
+          "value": "preview",
+          "label": "Preview"
+        },
+        {
+          "value": "autoplay",
+          "label": "Autoplay"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "playback",
+      "label": "Playback",
+      "info": "Does not apply if mode is set to autoplay.",
+      "default": "inline",
+      "options": [
+        {
+          "value": "inline",
+          "label": "Inline"
+        },
+        {
+          "value": "modal",
+          "label": "Modal"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Layout"
     },
     {
       "type": "select",
       "id": "style",
-      "label": "t:common.settings.style.label",
+      "label": "Width",
       "default": "full",
       "options": [
         {
           "value": "inset",
-          "label": "t:common.options.inset.label"
+          "label": "Inset"
         },
         {
           "value": "full",
-          "label": "t:common.options.full_width.label"
+          "label": "Full"
         }
       ]
     },
     {
       "type": "select",
       "id": "aspect_ratio",
-      "label": "t:sections.video.settings.aspect_ratio.label",
+      "label": "Aspect ratio",
       "default": "natural",
       "options": [
         {
           "value": "natural",
-          "label": "t:common.options.natural.label"
+          "label": "Natural"
         },
         {
           "value": "4:3",
-          "label": "t:sections.video.settings.aspect_ratio.options.standard_4_3.label"
+          "label": "Standard (4:3)"
         },
         {
           "value": "16:9",
-          "label": "t:sections.video.settings.aspect_ratio.options.widescreen_16_9.label"
+          "label": "Widescreen (16:9)"
         },
         {
           "value": "2.35:1",
-          "label": "t:sections.video.settings.aspect_ratio.options.extra-wide_235_1.label"
+          "label": "Extra-wide (2.35:1)"
         }
       ]
     },
     {
-      "type": "header",
-      "content": "Video Frame"
-    },
-    {
       "type": "select",
       "id": "video_frame_shape",
-      "label": "Frame Shape",
+      "label": "Frame shape",
+      "info": "Some shapes work best with the «Inset» width.",
       "default": "default",
-      "info": "Applies a shape mask to the video frame. Note: some shapes work best with the 'Inset' layout style.",
       "options": [
         {
           "value": "default",
@@ -431,77 +474,34 @@
     },
     {
       "type": "header",
-      "content": "t:common.settings.header_video"
-    },
-    {
-      "id": "video",
-      "type": "video",
-      "label": "t:sections.video.settings.video.label"
-    },
-    {
-      "type": "select",
-      "id": "mode",
-      "label": "Mode",
-      "options": [
-        {
-          "value": "preview",
-          "label": "t:sections.video.settings.mode.options.preview.label"
-        },
-        {
-          "value": "autoplay",
-          "label": "t:sections.video.settings.mode.options.autoplay.label"
-        }
-      ],
-      "default": "preview",
-      "info": "t:sections.video.settings.mode.info"
-    },
-    {
-      "type": "select",
-      "id": "playback",
-      "label": "t:sections.video.settings.playback.label",
-      "options": [
-        {
-          "value": "inline",
-          "label": "t:sections.video.settings.playback.options.inline.label"
-        },
-        {
-          "value": "modal",
-          "label": "t:sections.video.settings.playback.options.modal.label"
-        }
-      ],
-      "default": "inline",
-      "info": "t:sections.video.settings.playback.info"
-    },
-    {
-      "type": "header",
-      "content": "Play Button"
+      "content": "Play button"
     },
     {
       "type": "color",
       "id": "play_button_background_color",
-      "label": "Button Background Color",
+      "label": "Background",
       "default": "#FFFFFF"
     },
     {
       "type": "color",
       "id": "play_button_icon_color",
-      "label": "Button Icon Color",
+      "label": "Icon",
       "default": "#000000"
     },
     {
       "type": "header",
-      "content": "t:common.settings.header_color"
+      "content": "Colours"
     },
     {
       "type": "color_scheme",
       "id": "color_scheme",
-      "default": "scheme1",
-      "label": "t:common.settings.color_scheme.label"
+      "label": "Colour scheme",
+      "default": "scheme1"
     },
     {
       "type": "checkbox",
       "id": "use_gradient_background",
-      "label": "t:common.settings.use_gradient_background.label"
+      "label": "Gradient background"
     }
   ],
   "blocks": [
@@ -2205,7 +2205,7 @@
   ],
   "presets": [
     {
-      "name": "t:sections.video.name"
+      "name": "Custom video"
     }
   ],
   "disabled_on": {

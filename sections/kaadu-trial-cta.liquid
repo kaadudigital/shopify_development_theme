@@ -136,28 +136,28 @@
   "settings": [
     {
       "type": "header",
-      "content": "Heading"
+      "content": "Content"
     },
     {
       "type": "text",
       "id": "badge",
       "label": "Code badge",
-      "default": "Code[br][CODE]",
-      "info": "Use [br] for a line break. Empty: no badge."
+      "info": "Use [br] for a line break. Empty: no badge.",
+      "default": "Code[br][CODE]"
     },
     {
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "Ein Beutel [star][br]gratis [piece] nur[br]CHF 3 Versand",
-      "info": "[br] = line break, [star] = lime star, [piece] = pineapple piece."
+      "info": "[br] = line break, [star] = lime star, [piece] = pineapple piece.",
+      "default": "Ein Beutel [star][br]gratis [piece] nur[br]CHF 3 Versand"
     },
     {
       "type": "text",
       "id": "mobile_heading",
       "label": "Heading on mobile",
-      "default": "Ein Beutel [star][br]gratis [piece][br]nur CHF 3[br]Versand",
-      "info": "Below 768px. Empty: same as desktop."
+      "info": "Below 768px. Empty: same as desktop.",
+      "default": "Ein Beutel [star][br]gratis [piece][br]nur CHF 3[br]Versand"
     },
     {
       "type": "richtext",
@@ -197,15 +197,8 @@
       "type": "text",
       "id": "mobile_note",
       "label": "Note on mobile",
-      "default": "1 Beutel pro Haushalt · danach ab CHF 5.05 im Abo",
-      "info": "Below 768px. Empty: same as desktop."
-    },
-    {
-      "type": "text",
-      "id": "anchor_id",
-      "label": "Anchor",
-      "default": "probieren",
-      "info": "Links to /#probieren scroll here."
+      "info": "Below 768px. Empty: same as desktop.",
+      "default": "1 Beutel pro Haushalt · danach ab CHF 5.05 im Abo"
     },
     {
       "type": "header",
@@ -238,19 +231,19 @@
     },
     {
       "type": "header",
-      "content": "Colour"
+      "content": "Colours"
     },
     {
       "type": "color_scheme",
       "id": "color_scheme",
       "label": "Colour scheme",
-      "default": "scheme6",
-      "info": "Applies when «Use the colours below instead of the colour scheme» is off."
+      "info": "Applies when «Use the colours below» is off.",
+      "default": "scheme6"
     },
     {
       "type": "checkbox",
       "id": "use_custom_colors",
-      "label": "Use the colours below instead of the colour scheme",
+      "label": "Use the colours below",
       "info": "Off: background and text follow the colour scheme, the badge and star its accent 2, the button its accent 1.",
       "default": true
     },
@@ -314,8 +307,28 @@
       "label": "Button label",
       "default": "#AEFF64"
     },
-    {"type": "header", "content": "Animation"},
-    {"type": "checkbox", "id": "scroll_motion", "label": "Scroll animations", "default": true, "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations."}
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "checkbox",
+      "id": "scroll_motion",
+      "label": "Scroll animations",
+      "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations.",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Advanced"
+    },
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anchor",
+      "info": "Links to /#probieren scroll here.",
+      "default": "probieren"
+    }
   ],
   "presets": [
     {

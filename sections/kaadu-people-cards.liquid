@@ -42,7 +42,6 @@
     --kd-pc-stat-m: {{ section.settings.stat_color_mobile }};
     --kd-pc-stat-outline: {{ section.settings.stat_outline_color }};
     --kd-pc-text: {{ section.settings.card_text_color }};
-    --kd-pc-fact: {{ section.settings.fact_color }};
     --kd-pc-card-btn: {{ section.settings.card_button_color }};
     --kd-pc-cta-bg: {{ section.settings.cta_bg_color }};
     --kd-pc-cta-text: {{ section.settings.cta_text_color }};
@@ -221,15 +220,15 @@
       "type": "text",
       "id": "kicker",
       "label": "Kicker",
-      "default": "Kein Spendenanteil",
-      "info": "A claim, not a category (DS)."
+      "info": "A claim, not a category (DS).",
+      "default": "Kein Spendenanteil"
     },
     {
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "Wir brechen die Kette",
-      "info": "Use [br] for a line break."
+      "info": "Use [br] for a line break.",
+      "default": "Wir brechen die Kette"
     },
     {
       "type": "text",
@@ -241,13 +240,64 @@
       "type": "text",
       "id": "hint_mobile",
       "label": "Scroll hint – mobile",
-      "default": "← wischen →",
-      "info": "Below 768px. Empty = the scroll hint above."
+      "info": "Below 768px. Empty = the scroll hint above.",
+      "default": "← wischen →"
     },
     {
       "type": "header",
-      "content": "Auto-scroll",
-      "info": "Moves to the next card on its own and loops back at the end. Pauses while the visitor hovers, taps, focuses or scrolls the cards, stops for good once they scroll by hand, and stays off for people who turned off animations on their device. Does nothing when every card already fits on screen."
+      "content": "Cards"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Card link button",
+      "info": "Shown on cards that have a link.",
+      "default": "Mehr dazu ↓"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_shape_enabled",
+      "label": "Shaped frame",
+      "info": "Off = plain rectangular cards.",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_shape",
+      "label": "Frame shape (SVG)",
+      "info": "Upload an SVG with one filled shape. Empty = the Kaadu cloud frame."
+    },
+    {
+      "type": "image_picker",
+      "id": "card_shape_mobile",
+      "label": "Frame shape – mobile (SVG)",
+      "info": "Optional; below 768px. Empty = the shape above."
+    },
+    {
+      "type": "checkbox",
+      "id": "card_outline",
+      "label": "Outline",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "card_outline_color",
+      "label": "Outline colour",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "range",
+      "id": "card_outline_width",
+      "label": "Outline width",
+      "default": 3,
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Auto-scroll"
     },
     {
       "type": "checkbox",
@@ -265,36 +315,11 @@
       "type": "range",
       "id": "autoplay_interval",
       "label": "Time per card",
+      "default": 4,
       "min": 2,
       "max": 10,
       "step": 1,
-      "unit": "s",
-      "default": 4
-    },
-    {
-      "type": "header",
-      "content": "Card buttons"
-    },
-    {
-      "type": "text",
-      "id": "details_label",
-      "info": "Not used any more: cards have no back side (spec S-03).",
-      "label": "Flip button (front)",
-      "default": "Details ↻"
-    },
-    {
-      "type": "text",
-      "id": "back_label",
-      "info": "Not used any more.",
-      "label": "Flip button (back)",
-      "default": "Zurück ↻"
-    },
-    {
-      "type": "text",
-      "id": "link_label",
-      "label": "Link button",
-      "default": "Mehr dazu ↓",
-      "info": "Shown on cards that have a link instead of a back side."
+      "unit": "s"
     },
     {
       "type": "header",
@@ -304,8 +329,8 @@
       "type": "checkbox",
       "id": "show_action_card",
       "label": "Show action card",
-      "default": true,
-      "info": "The pill gets the card number automatically («06 / 6 · …»). A CTA card block, if added, overrides these fields."
+      "info": "The pill gets the card number automatically («06 / 6 · …»). A CTA card block, if added, overrides these fields.",
+      "default": true
     },
     {
       "type": "text",
@@ -360,72 +385,27 @@
     },
     {
       "type": "header",
-      "content": "Card frame",
-      "info": "The cards (and the CTA card) take the shape of an SVG: its filled area becomes the card, stretched to the card size."
+      "content": "Colours"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Colour scheme",
+      "info": "DS: the people section sits on sky.",
+      "default": "scheme-389c794f-4614-44af-93cb-cbbfec11d15a"
     },
     {
       "type": "checkbox",
-      "id": "card_shape_enabled",
-      "label": "Shaped frame",
-      "default": true,
-      "info": "Off = plain rectangular cards."
-    },
-    {
-      "type": "image_picker",
-      "id": "card_shape",
-      "label": "Frame shape (SVG)",
-      "info": "Upload an SVG with one filled shape. Empty = the Kaadu cloud frame."
-    },
-    {
-      "type": "image_picker",
-      "id": "card_shape_mobile",
-      "label": "Frame shape – mobile (SVG)",
-      "info": "Optional; below 768px. Empty = the shape above."
-    },
-    {
-      "type": "range",
-      "id": "card_height_mobile",
-      "label": "Card height – mobile (not used)",
-      "min": 360,
-      "max": 560,
-      "step": 10,
-      "unit": "px",
-      "default": 420,
-      "info": "Not used any more: every card is 4 : 5, as on desktop."
-    },
-    {
-      "type": "checkbox",
-      "id": "card_outline",
-      "label": "Outline",
-      "default": true
-    },
-    {
-      "type": "color",
-      "id": "card_outline_color",
-      "label": "Outline colour",
-      "default": "#1A1A1A"
-    },
-    {
-      "type": "range",
-      "id": "card_outline_width",
-      "label": "Outline width",
-      "min": 1,
-      "max": 10,
-      "step": 1,
-      "unit": "px",
-      "default": 3
-    },
-    {
-      "type": "header",
-      "content": "Text & button colours",
-      "info": "Defaults follow the landing-page mockup."
+      "id": "use_gradient_background",
+      "label": "Gradient background",
+      "default": false
     },
     {
       "type": "checkbox",
       "id": "heading_follows_scheme",
       "label": "Kicker and heading follow the colour scheme",
-      "default": false,
-      "info": "On = they take the colour scheme's text colour (e.g. white on purple) and the two colours below are ignored. Off = the colours below."
+      "info": "On: they take the colour scheme's text colour (e.g. white on purple) and the two colours below are ignored.",
+      "default": false
     },
     {
       "type": "color",
@@ -446,108 +426,106 @@
       "default": "#1A1A1A"
     },
     {
+      "type": "header",
+      "content": "Colours – cards"
+    },
+    {
       "type": "color",
       "id": "stat_color",
-      "label": "Card stat – desktop",
+      "label": "Stat – desktop",
       "default": "#AC0300"
     },
     {
       "type": "color",
       "id": "stat_color_mobile",
-      "label": "Card stat – mobile",
+      "label": "Stat – mobile",
       "default": "#AEFF64"
     },
     {
       "type": "color",
       "id": "stat_outline_color",
-      "label": "Card stat outline",
+      "label": "Stat outline",
       "default": "#FFFFF5"
     },
     {
       "type": "color",
       "id": "card_text_color",
-      "label": "Card text",
+      "label": "Text",
       "default": "#FFFFF5"
-    },
-    {
-      "type": "color",
-      "id": "fact_color",
-      "label": "Card fact (back)",
-      "default": "#AEFF64"
     },
     {
       "type": "color",
       "id": "card_button_color",
-      "label": "Card button (outline and label)",
+      "label": "Link button (outline and label)",
       "default": "#FFFFF5"
+    },
+    {
+      "type": "header",
+      "content": "Colours – action card"
     },
     {
       "type": "color",
       "id": "cta_bg_color",
-      "label": "CTA card background",
+      "label": "Background",
       "default": "#AC0300"
     },
     {
       "type": "color",
       "id": "cta_text_color",
-      "label": "CTA card text",
+      "label": "Text",
       "default": "#FFFFF5"
     },
     {
       "type": "color",
       "id": "cta_pill_color",
-      "label": "CTA card pill",
+      "label": "Pill",
       "default": "#AEFF64"
     },
     {
       "type": "color",
       "id": "cta_pill_text_color",
-      "label": "CTA card pill text",
+      "label": "Pill text",
       "default": "#AC0300"
     },
     {
       "type": "color",
       "id": "cta_button_color",
-      "label": "CTA card button",
+      "label": "Button",
       "default": "#AEFF64"
     },
     {
       "type": "color",
       "id": "cta_button_label_color",
-      "label": "CTA card button label",
+      "label": "Button label",
       "default": "#AC0300"
+    },
+    {
+      "type": "header",
+      "content": "Colours – button below the carousel"
     },
     {
       "type": "color",
       "id": "footer_button_color",
-      "label": "Button below the carousel",
+      "label": "Button",
       "default": "#542A76"
     },
     {
       "type": "color",
       "id": "footer_button_label_color",
-      "label": "Button below the carousel – label",
+      "label": "Button label",
       "default": "#FFFFF5"
     },
     {
       "type": "header",
-      "content": "Colour"
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "Colour scheme",
-      "default": "scheme-389c794f-4614-44af-93cb-cbbfec11d15a",
-      "info": "DS: the people section sits on sky."
+      "content": "Animation"
     },
     {
       "type": "checkbox",
-      "id": "use_gradient_background",
-      "label": "Use gradient background",
-      "default": false
-    },
-    {"type": "header", "content": "Animation"},
-    {"type": "checkbox", "id": "scroll_motion", "label": "Scroll animations", "default": true, "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations."}
+      "id": "scroll_motion",
+      "label": "Scroll animations",
+      "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations.",
+      "default": true
+    }
   ],
   "blocks": [
     {
@@ -564,6 +542,7 @@
           "type": "select",
           "id": "tint",
           "label": "Tint",
+          "default": "tint-cocoa",
           "options": [
             {
               "value": "tint-cocoa",
@@ -585,8 +564,7 @@
               "value": "tint-forest",
               "label": "Forest"
             }
-          ],
-          "default": "tint-cocoa"
+          ]
         },
         {
           "type": "text",
@@ -603,38 +581,14 @@
         {
           "type": "richtext",
           "id": "text",
-          "label": "Text (front)",
+          "label": "Text",
           "info": "One to two lines."
-        },
-        {
-          "type": "header",
-          "content": "Back side (not shown any more)"
-        },
-        {
-          "type": "richtext",
-          "id": "back_text",
-          "label": "Text (back)",
-          "info": "Shown when the visitor taps the flip button. Leave empty for a front-only card."
-        },
-        {
-          "type": "richtext",
-          "id": "back_fact",
-          "label": "Fact (back)"
-        },
-        {
-          "type": "text",
-          "id": "back_note",
-          "label": "Footnote (back)"
-        },
-        {
-          "type": "header",
-          "content": "Link instead of back side"
         },
         {
           "type": "url",
           "id": "link",
           "label": "Link",
-          "info": "If set, the card button links here (e.g. #bauern) instead of flipping."
+          "info": "If set, the card gets a link button (e.g. #bauern)."
         }
       ]
     },

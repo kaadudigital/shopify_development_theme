@@ -413,42 +413,46 @@
   "name": "Problem Section",
   "settings": [
     {
+      "type": "header",
+      "content": "Content"
+    },
+    {
       "type": "text",
       "id": "eyebrow_tag",
-      "label": "Eyebrow tag",
-      "default": "SNACK LIKE YOU GIVE A DAMN",
-      "info": "Small pill label above the heading. Color follows the section's color scheme accent."
+      "label": "Eyebrow",
+      "info": "Small pill label above the heading. Colour follows the colour scheme's accent.",
+      "default": "SNACK LIKE YOU GIVE A DAMN"
     },
     {
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "Wer profitiert[br]von Kaadu?",
-      "info": "Use [br] for a line break and [nbsp] for a non-breaking space."
+      "info": "Use [br] for a line break and [nbsp] for a non-breaking space.",
+      "default": "Wer profitiert[br]von Kaadu?"
     },
     {
       "type": "richtext",
       "id": "intro_text",
-      "label": "Intro text",
+      "label": "Intro",
       "default": "<p>Von der Ananasfarm bis in die Packung: Kaadu funktioniert nur, weil alle fair beteiligt sind — in Vazhakulam, Kerala.</p>"
     },
     {
       "type": "header",
-      "content": "Color"
+      "content": "Colours"
     },
     {
       "type": "color_scheme",
       "id": "color_scheme",
-      "label": "Color scheme",
-      "default": "scheme1",
-      "info": "Also styles the heading, panel eyebrow/heading, image shadow (text color), and tabs — active via accent, inactive via text."
+      "label": "Colour scheme",
+      "info": "Also styles the heading, panel eyebrow and heading, image shadow and tabs.",
+      "default": "scheme1"
     },
     {
       "type": "color_scheme",
       "id": "highlight_color_scheme",
-      "label": "Highlight box color scheme",
-      "default": "scheme5",
-      "info": "Background and text for the bold statement box in each panel."
+      "label": "Highlight box colour scheme",
+      "info": "Background and text for the bold statement box in each panel.",
+      "default": "scheme5"
     }
   ],
   "blocks": [
@@ -460,8 +464,8 @@
           "type": "text",
           "id": "label",
           "label": "Label",
-          "default": "Stakeholder",
-          "info": "Used as both the tab button text and the panel heading."
+          "info": "Used as both the tab button text and the panel heading.",
+          "default": "Stakeholder"
         },
         {
           "type": "text",
@@ -526,21 +530,21 @@
           "type": "range",
           "id": "sticker_width",
           "label": "Sticker width",
+          "default": 136,
           "min": 64,
           "max": 256,
           "step": 8,
-          "unit": "px",
-          "default": 136
+          "unit": "px"
         },
         {
           "type": "range",
           "id": "sticker_rotate",
           "label": "Sticker rotation",
+          "default": -10,
           "min": -20,
           "max": 20,
           "step": 2,
-          "unit": "deg",
-          "default": -10
+          "unit": "deg"
         }
       ]
     },

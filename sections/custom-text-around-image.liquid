@@ -193,34 +193,39 @@
   "settings": [
     {
       "type": "header",
-      "content": "Section Heading"
+      "content": "Content"
     },
     {
       "type": "inline_richtext",
       "id": "title",
       "label": "Heading",
-      "default": "Gefriergetrockneter Genuss",
-      "info": "Use [br] for a line break and [nbsp] for a non-breaking space."
+      "info": "Use [br] for a line break and [nbsp] for a non-breaking space.",
+      "default": "Gefriergetrockneter Genuss"
     },
     {
       "type": "select",
       "id": "heading_alignment",
-      "label": "Heading Alignment",
+      "label": "Heading alignment",
+      "default": "center",
       "options": [
-        { "value": "left", "label": "Left" },
-        { "value": "center", "label": "Centre" },
-        { "value": "right", "label": "Right" }
-      ],
-      "default": "center"
-    },
-    {
-      "type": "header",
-      "content": "Body Text"
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
     },
     {
       "type": "richtext",
       "id": "body_text",
-      "label": "Body Text"
+      "label": "Text"
     },
     {
       "type": "header",
@@ -238,59 +243,87 @@
     {
       "type": "text",
       "id": "button_label",
-      "label": "Button Label"
+      "label": "Button label"
     },
     {
       "type": "url",
       "id": "button_link",
-      "label": "Button URL"
+      "label": "Button link"
     },
     {
       "type": "header",
       "content": "Layout"
     },
     {
-      "type": "select",
-      "id": "bg_class",
-      "label": "Background",
-      "options": [
-        { "value": "bg-pink",   "label": "Pink" },
-        { "value": "bg-cream",  "label": "Cream" },
-        { "value": "bg-sky",    "label": "Sky Blue" },
-        { "value": "bg-violet", "label": "Violet" },
-        { "value": "bg-lime",   "label": "Lime" },
-        { "value": "bg-red",    "label": "Red" },
-        { "value": "bg-yellow", "label": "Yellow" },
-        { "value": "bg-orange", "label": "Orange" }
-      ],
-      "default": "bg-pink"
-    },
-    {
       "type": "range",
       "id": "padding_top",
-      "label": "Padding Top",
+      "label": "Space above",
+      "default": 64,
       "min": 0,
       "max": 128,
       "step": 4,
-      "unit": "px",
-      "default": 64
+      "unit": "px"
     },
     {
       "type": "range",
       "id": "padding_bottom",
-      "label": "Padding Bottom",
+      "label": "Space below",
+      "default": 64,
       "min": 0,
       "max": 128,
       "step": 4,
-      "unit": "px",
-      "default": 64
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Colours"
+    },
+    {
+      "type": "select",
+      "id": "bg_class",
+      "label": "Background",
+      "default": "bg-pink",
+      "options": [
+        {
+          "value": "bg-pink",
+          "label": "Pink"
+        },
+        {
+          "value": "bg-cream",
+          "label": "Cream"
+        },
+        {
+          "value": "bg-sky",
+          "label": "Sky Blue"
+        },
+        {
+          "value": "bg-violet",
+          "label": "Violet"
+        },
+        {
+          "value": "bg-lime",
+          "label": "Lime"
+        },
+        {
+          "value": "bg-red",
+          "label": "Red"
+        },
+        {
+          "value": "bg-yellow",
+          "label": "Yellow"
+        },
+        {
+          "value": "bg-orange",
+          "label": "Orange"
+        }
+      ]
     },
     {
       "type": "color_scheme",
       "id": "color_scheme",
-      "default": "scheme1",
-      "label": "Colour Scheme",
-      "info": "Controls background pattern and sticker colours."
+      "label": "Colour scheme",
+      "info": "For the background pattern and sticker blocks.",
+      "default": "scheme1"
     }
   ],
   "blocks": [
@@ -308,19 +341,28 @@
         {
           "type": "richtext",
           "id": "body_text",
-          "label": "Body Text",
+          "label": "Text",
           "default": "<p>Use this text to describe a feature or benefit.</p>"
         },
         {
           "type": "select",
           "id": "text_alignment",
-          "label": "Text Alignment",
+          "label": "Alignment",
+          "default": "left",
           "options": [
-            { "value": "left",   "label": "Left" },
-            { "value": "center", "label": "Centre" },
-            { "value": "right",  "label": "Right" }
-          ],
-          "default": "left"
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Centre"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ]
         }
       ]
     },

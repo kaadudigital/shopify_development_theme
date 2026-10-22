@@ -272,130 +272,7 @@
     },
     {
       "type": "header",
-      "content": "Slider"
-    },
-    {
-      "type": "range",
-      "id": "start_position",
-      "label": "Start position",
-      "min": 10,
-      "max": 90,
-      "step": 5,
-      "unit": "%",
-      "default": 55
-    },
-    {
-      "type": "text",
-      "id": "slider_label",
-      "label": "Slider label (screen readers)",
-      "default": "Vergleich verschieben"
-    },
-    {
-      "type": "header",
-      "content": "Handle"
-    },
-    {
-      "type": "select",
-      "id": "handle_shape",
-      "label": "Handle shape",
-      "options": [
-        { "value": "circle", "label": "Circle" },
-        { "value": "cloud", "label": "Cloud" },
-        { "value": "image", "label": "Custom image" }
-      ],
-      "default": "circle",
-      "info": "Circle and cloud take the «Handle and edge» colour. A custom image is shown as uploaded."
-    },
-    {
-      "type": "image_picker",
-      "id": "handle_image",
-      "label": "Custom handle image",
-      "info": "SVG or PNG, square works best. Used with «Custom image»."
-    },
-    {
-      "type": "select",
-      "id": "handle_arrow",
-      "label": "Arrow",
-      "options": [
-        { "value": "default", "label": "Double arrow" },
-        { "value": "image", "label": "Custom image" },
-        { "value": "none", "label": "None" }
-      ],
-      "default": "default",
-      "info": "The double arrow takes the «Handle arrow» colour."
-    },
-    {
-      "type": "image_picker",
-      "id": "handle_arrow_image",
-      "label": "Custom arrow image"
-    },
-    {
-      "type": "range",
-      "id": "handle_size_mobile",
-      "label": "Handle size – mobile",
-      "min": 40,
-      "max": 96,
-      "step": 2,
-      "unit": "px",
-      "default": 44
-    },
-    {
-      "type": "range",
-      "id": "handle_size",
-      "label": "Handle size – tablet and up",
-      "min": 40,
-      "max": 96,
-      "step": 2,
-      "unit": "px",
-      "default": 60
-    },
-    {
-      "type": "checkbox",
-      "id": "rock_enabled",
-      "label": "Rock the slider while nobody touches it",
-      "info": "The handle sways gently back and forth to show it can be moved. Stops while the visitor hovers, drags or focuses it; never runs with reduced motion.",
-      "default": true
-    },
-    {
-      "type": "range",
-      "id": "rock_distance",
-      "label": "Rock distance (each way)",
-      "min": 4,
-      "max": 40,
-      "step": 1,
-      "unit": "px",
-      "default": 12
-    },
-    {
-      "type": "range",
-      "id": "rock_speed",
-      "label": "One back-and-forth takes",
-      "min": 2,
-      "max": 12,
-      "step": 1,
-      "unit": "s",
-      "default": 6
-    },
-    {
-      "type": "range",
-      "id": "photo_shade",
-      "label": "Darken photos",
-      "info": "Helps the label and list stay readable on busy photos.",
-      "min": 0,
-      "max": 60,
-      "step": 5,
-      "unit": "%",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "rock_delay",
-      "label": "Start rocking after",
-      "min": 1,
-      "max": 10,
-      "step": 1,
-      "unit": "s",
-      "default": 2
+      "content": "Footnote"
     },
     {
       "type": "richtext",
@@ -410,38 +287,270 @@
     },
     {
       "type": "header",
-      "content": "Colour"
+      "content": "Slider"
+    },
+    {
+      "type": "range",
+      "id": "start_position",
+      "label": "Start position",
+      "default": 55,
+      "min": 10,
+      "max": 90,
+      "step": 5,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "photo_shade",
+      "label": "Darken photos",
+      "info": "Helps the label and list stay readable on busy photos.",
+      "default": 0,
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "unit": "%"
+    },
+    {
+      "type": "header",
+      "content": "Handle"
+    },
+    {
+      "type": "select",
+      "id": "handle_shape",
+      "label": "Handle shape",
+      "info": "Circle and cloud take the «Handle and edge» colour. A custom image is shown as uploaded.",
+      "default": "circle",
+      "options": [
+        {
+          "value": "circle",
+          "label": "Circle"
+        },
+        {
+          "value": "cloud",
+          "label": "Cloud"
+        },
+        {
+          "value": "image",
+          "label": "Custom image"
+        }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "handle_image",
+      "label": "Custom handle image",
+      "info": "SVG or PNG, square works best. Used with «Custom image»."
+    },
+    {
+      "type": "select",
+      "id": "handle_arrow",
+      "label": "Arrow",
+      "info": "The double arrow takes the «Handle arrow» colour.",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Double arrow"
+        },
+        {
+          "value": "image",
+          "label": "Custom image"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "handle_arrow_image",
+      "label": "Custom arrow image"
+    },
+    {
+      "type": "range",
+      "id": "handle_size_mobile",
+      "label": "Handle size – mobile",
+      "default": 44,
+      "min": 40,
+      "max": 96,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "handle_size",
+      "label": "Handle size – tablet and up",
+      "default": 60,
+      "min": 40,
+      "max": 96,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Idle motion"
+    },
+    {
+      "type": "checkbox",
+      "id": "rock_enabled",
+      "label": "Rock the handle while nobody touches it",
+      "info": "The handle sways gently back and forth to show it can be moved. Stops while the visitor hovers, drags or focuses it; never runs with reduced motion.",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "rock_delay",
+      "label": "Start rocking after",
+      "default": 2,
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "unit": "s"
+    },
+    {
+      "type": "range",
+      "id": "rock_distance",
+      "label": "Rock distance (each way)",
+      "default": 12,
+      "min": 4,
+      "max": 40,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "rock_speed",
+      "label": "One back-and-forth takes",
+      "default": 6,
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "unit": "s"
+    },
+    {
+      "type": "header",
+      "content": "Colours"
     },
     {
       "type": "color_scheme",
       "id": "color_scheme",
       "label": "Colour scheme",
-      "default": "scheme1",
-      "info": "Applies when «Use the colours below instead of the colour scheme» is off."
+      "info": "Applies when «Use the colours below» is off.",
+      "default": "scheme1"
     },
     {
       "type": "checkbox",
       "id": "use_custom_colors",
-      "label": "Use the colours below instead of the colour scheme",
+      "label": "Use the colours below",
       "info": "Off: background and text follow the colour scheme, the Kaadu side and handle take its accent 1, the other side and info cards its card colours.",
       "default": true
     },
-    { "type": "color", "id": "background_color", "label": "Background", "default": "#FFC6FF" },
-    { "type": "color", "id": "kicker_color", "label": "Kicker", "default": "#542A76" },
-    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#AC0300" },
-    { "type": "color", "id": "note_color", "label": "Footnote", "default": "#542A76" },
-    { "type": "color", "id": "kaadu_bg_color", "label": "Kaadu side background", "default": "#AEFF64" },
-    { "type": "color", "id": "kaadu_text_color", "label": "Kaadu side text", "default": "#542A76" },
-    { "type": "color", "id": "other_bg_color", "label": "Other side background", "default": "#9A9A94" },
-    { "type": "color", "id": "other_text_color", "label": "Other side text", "default": "#FFFFF5" },
-    { "type": "color", "id": "pill_bg_color", "label": "Other side label background", "default": "#3A3A3A" },
-    { "type": "color", "id": "pill_text_color", "label": "Other side label text", "default": "#FFFFF5" },
-    { "type": "color", "id": "handle_color", "label": "Handle and edge", "default": "#AEFF64" },
-    { "type": "color", "id": "handle_arrow_color", "label": "Handle arrow", "default": "#AC0300" },
-    { "type": "color", "id": "card_color", "label": "Info card background", "default": "#FFF9EE" },
-    { "type": "color", "id": "card_text_color", "label": "Info card text", "default": "#542A76" },
-    {"type": "header", "content": "Animation"},
-    {"type": "checkbox", "id": "scroll_motion", "label": "Scroll animations", "default": true, "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations."}
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#FFC6FF"
+    },
+    {
+      "type": "color",
+      "id": "kicker_color",
+      "label": "Kicker",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "note_color",
+      "label": "Footnote",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "kaadu_bg_color",
+      "label": "Kaadu side background",
+      "default": "#AEFF64"
+    },
+    {
+      "type": "color",
+      "id": "kaadu_text_color",
+      "label": "Kaadu side text",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "other_bg_color",
+      "label": "Other side background",
+      "default": "#9A9A94"
+    },
+    {
+      "type": "color",
+      "id": "other_text_color",
+      "label": "Other side text",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "pill_bg_color",
+      "label": "Other side label background",
+      "default": "#3A3A3A"
+    },
+    {
+      "type": "color",
+      "id": "pill_text_color",
+      "label": "Other side label text",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "handle_color",
+      "label": "Handle and edge",
+      "default": "#AEFF64"
+    },
+    {
+      "type": "color",
+      "id": "handle_arrow_color",
+      "label": "Handle arrow",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "card_color",
+      "label": "Info card background",
+      "default": "#FFF9EE"
+    },
+    {
+      "type": "color",
+      "id": "card_text_color",
+      "label": "Info card text",
+      "default": "#542A76"
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "checkbox",
+      "id": "scroll_motion",
+      "label": "Scroll animations",
+      "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations.",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Screen readers"
+    },
+    {
+      "type": "text",
+      "id": "slider_label",
+      "label": "Slider label",
+      "default": "Vergleich verschieben"
+    }
   ],
   "blocks": [
     {
@@ -488,12 +597,21 @@
           "type": "select",
           "id": "show_on",
           "label": "Show on",
+          "default": "mobile",
           "options": [
-            { "value": "mobile", "label": "Mobile only" },
-            { "value": "desktop", "label": "Desktop only" },
-            { "value": "all", "label": "All screens" }
-          ],
-          "default": "mobile"
+            {
+              "value": "mobile",
+              "label": "Mobile only"
+            },
+            {
+              "value": "desktop",
+              "label": "Desktop only"
+            },
+            {
+              "value": "all",
+              "label": "All screens"
+            }
+          ]
         }
       ]
     },

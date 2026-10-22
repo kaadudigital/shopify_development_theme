@@ -206,16 +206,8 @@
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "Wo landen deine[br]CHF 4.45?",
-      "info": "Use [br] for a line break."
-    },
-    {
-      "type": "select",
-      "id": "text_align",
-      "label": "Heading and text alignment",
-      "options": [{"value":"left","label":"Left"},{"value":"center","label":"Centred"},{"value":"right","label":"Right"}],
-      "default": "left",
-      "info": "Kicker, heading and intro, on every screen size."
+      "info": "Use [br] for a line break.",
+      "default": "Wo landen deine[br]CHF 4.45?"
     },
     {
       "type": "richtext",
@@ -234,6 +226,27 @@
       "id": "mobile_intro",
       "label": "Intro on mobile",
       "info": "Below 768px. Empty: same as desktop."
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Alignment",
+      "info": "Kicker, heading and intro, on every screen size.",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centred"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
     },
     {
       "type": "header",
@@ -259,7 +272,7 @@
     },
     {
       "type": "header",
-      "content": "Below the bar"
+      "content": "Footnote"
     },
     {
       "type": "richtext",
@@ -271,6 +284,10 @@
       "id": "mobile_footnote",
       "label": "Footnote on mobile",
       "info": "Below 768px. Empty: same as desktop."
+    },
+    {
+      "type": "header",
+      "content": "Button"
     },
     {
       "type": "text",
@@ -294,45 +311,142 @@
       "type": "select",
       "id": "button_align_mobile",
       "label": "Button position – mobile",
-      "options": [{"value":"left","label":"Left"},{"value":"center","label":"Centred"},{"value":"right","label":"Right"}],
+      "info": "Below 768px. Tablet and desktop keep the button at the right end of the footnote row.",
       "default": "left",
-      "info": "Below 768px. Tablet and desktop keep the button at the right end of the footnote row."
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centred"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
     },
     {
       "type": "header",
-      "content": "Colour"
+      "content": "Colours"
     },
     {
       "type": "color_scheme",
       "id": "color_scheme",
       "label": "Colour scheme",
-      "default": "scheme6",
-      "info": "Applies when «Use the colours below instead of the colour scheme» is off."
+      "info": "Applies when «Use the colours below» is off.",
+      "default": "scheme6"
     },
     {
       "type": "checkbox",
       "id": "use_custom_colors",
-      "label": "Use the colours below instead of the colour scheme",
+      "label": "Use the colours below",
       "info": "Off: background and text follow the colour scheme, bars its card colours, the pressed bar and button its accent 1, the detail box its accent 2.",
       "default": true
     },
-    { "type": "color", "id": "background_color", "label": "Background", "default": "#FFFFF5" },
-    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#AC0300" },
-    { "type": "color", "id": "text_color", "label": "Text", "default": "#1A1A1A" },
-    { "type": "color", "id": "bar_color", "label": "Bar", "default": "#FFF9EE" },
-    { "type": "color", "id": "bar_text_color", "label": "Bar text", "default": "#542A76" },
-    { "type": "color", "id": "fill_color", "label": "Bar fill (mobile)", "default": "#FFC6FF" },
-    { "type": "color", "id": "active_color", "label": "Pressed bar", "default": "#AC0300" },
-    { "type": "color", "id": "active_text_color", "label": "Pressed bar text", "default": "#FFFFF5" },
-    { "type": "color", "id": "detail_color", "label": "Detail box", "default": "#AEFF64" },
-    { "type": "color", "id": "detail_title_color", "label": "Detail title", "default": "#AC0300" },
-    { "type": "color", "id": "detail_text_color", "label": "Detail text", "default": "#1A1A1A" },
-    { "type": "color", "id": "photo_color", "label": "Photo background", "default": "#FFC6FF" },
-    { "type": "color", "id": "outline_color", "label": "Photo outline", "default": "#1A1A1A" },
-    { "type": "color", "id": "button_color", "label": "Button", "default": "#542A76" },
-    { "type": "color", "id": "button_label_color", "label": "Button label", "default": "#FFFFF5" },
-    {"type": "header", "content": "Animation"},
-    {"type": "checkbox", "id": "scroll_motion", "label": "Scroll animations", "default": true, "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations."}
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "bar_color",
+      "label": "Bar",
+      "default": "#FFF9EE"
+    },
+    {
+      "type": "color",
+      "id": "bar_text_color",
+      "label": "Bar text",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "fill_color",
+      "label": "Bar fill (mobile)",
+      "default": "#FFC6FF"
+    },
+    {
+      "type": "color",
+      "id": "active_color",
+      "label": "Pressed bar",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "active_text_color",
+      "label": "Pressed bar text",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "detail_color",
+      "label": "Detail box",
+      "default": "#AEFF64"
+    },
+    {
+      "type": "color",
+      "id": "detail_title_color",
+      "label": "Detail title",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "detail_text_color",
+      "label": "Detail text",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "photo_color",
+      "label": "Photo background",
+      "default": "#FFC6FF"
+    },
+    {
+      "type": "color",
+      "id": "outline_color",
+      "label": "Photo outline",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "button_label_color",
+      "label": "Button label",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "checkbox",
+      "id": "scroll_motion",
+      "label": "Scroll animations",
+      "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations.",
+      "default": true
+    }
   ],
   "blocks": [
     {
@@ -349,18 +463,18 @@
           "type": "text",
           "id": "amount",
           "label": "Amount",
-          "default": "CHF [X.XX]",
-          "info": "Format: CHF 1.20 (unknown values in square brackets). Sizes the bar: amount ÷ sum of all amounts."
+          "info": "Format: CHF 1.20 (unknown values in square brackets). Sizes the bar: amount ÷ sum of all amounts.",
+          "default": "CHF [X.XX]"
         },
         {
           "type": "range",
           "id": "weight",
           "label": "Bar width (until the amounts are known)",
+          "info": "Only used while any amount is still a placeholder. Once every amount is a number, each bar is sized by its amount as a share of the sum of all amounts.",
+          "default": 15,
           "min": 1,
           "max": 60,
-          "step": 1,
-          "default": 15,
-          "info": "Only used while any amount is still a placeholder. Once every amount is a number, each bar is sized by its amount as a share of the sum of all amounts."
+          "step": 1
         },
         {
           "type": "textarea",
