@@ -128,7 +128,6 @@
       "name": "Email Signup",
       "settings": {
         "background_color": "#ae0000",
-        "padding_top": 0,
         "padding_bottom": 144,
         "container_width": 1200,
         "heading": "",

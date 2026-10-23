@@ -1233,7 +1233,6 @@
         "button_image_mobile": "shopify://shop_images/right_arrow_in_spiky_cloud.svg",
         "button_text_mobile": "",
         "button_image_width_mobile": 64,
-        "padding_top": "none",
         "color_scheme": "scheme5",
         "use_custom_colors": true,
         "background_color": "#aeff64",
@@ -1246,7 +1245,9 @@
         "button_label_color": "#fffff5",
         "success_bg_color": "#542a76",
         "success_text_color": "#fffff5",
-        "error_color": "#ac0300"
+        "error_color": "#ac0300",
+        "spacing_top_desktop": 40,
+        "spacing_top_mobile": 24
       }
     }
   },
