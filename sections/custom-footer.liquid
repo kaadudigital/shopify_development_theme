@@ -3,130 +3,221 @@
 -%}
 
 {%- style -%}
-  #{{ section.id }} .footer-content {
+  /* DS Footer — purple band, paper text, three groups spread apart; centred stack on mobile. Social links: text or icons (S-07). */
+  #{{ section.id }} .kd-footer__band {
+    padding-block: var(--space-8);
+  }
+
+  #{{ section.id }} .kd-footer {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: var(--space-5);
+    text-align: center;
   }
 
-  #{{ section.id }} .footer-left {
+  #{{ section.id }} .kd-footer__group {
     display: flex;
-    flex-direction: column-reverse;
-    align-items: center;
-    gap: 1rem;
+    flex-direction: column;
+    gap: var(--space-2);
   }
 
-  #{{ section.id }} .footer-right {
+  #{{ section.id }} .kd-footer__mail {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.1;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+  }
+
+  #{{ section.id }} .kd-footer__social,
+  #{{ section.id }} .kd-footer__legal {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-2) var(--space-5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  #{{ section.id }} .kd-footer__social {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  /* Social links as icons (setting «Social links as»): --kd-social-icon = glyph / uploaded icon colour (blank: footer
+     text colour), --kd-social-accent = the lime outline / star of the built-in icons. 48px tap target. */
+  #{{ section.id }} {
+    --kd-social-size: {{ section.settings.social_icon_size | default: 48 }}px;
+    {%- if section.settings.social_icon_color != blank %}
+    --kd-social-icon: {{ section.settings.social_icon_color }};
+    {%- endif %}
+    {%- if section.settings.social_accent_color != blank %}
+    --kd-social-accent: {{ section.settings.social_accent_color }};
+    {%- endif %}
+  }
+  {%- for block in section.blocks -%}
+    {%- if block.type == 'social' and block.settings.icon != blank %}
+  #{{ section.id }} .kd-footer__social-link--{{ block.id }} { --kd-social-url: url({{ block.settings.icon | image_url: width: 192 }}); }
+    {%- endif -%}
+  {%- endfor %}
+  #{{ section.id }} .kd-footer__social--icons { gap: var(--space-2) var(--space-3); }
+  #{{ section.id }} .kd-footer__social--icons a {
+    display: inline-flex;
     align-items: center;
-    gap: 1.5rem;
+    justify-content: center;
+    min-width: 48px;
+    min-height: 48px;
+  }
+  #{{ section.id }} .kd-footer__social.kd-footer__social--icons a::before { content: none; } /* beats the ✶ of text links below */
+  #{{ section.id }} .kd-social-icon { display: block; width: var(--kd-social-size); height: var(--kd-social-size); }
+  #{{ section.id }} .kd-social-icon__glyph { fill: var(--kd-social-icon, currentColor); }
+  #{{ section.id }} .kd-social-icon__accent { fill: var(--kd-social-accent, var(--lime)); }
+  #{{ section.id }} .kd-social-icon__accent--line {
+    fill: none;
+    stroke: var(--kd-social-accent, var(--lime));
+    stroke-width: 19;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  /* Uploaded icon: drawn in the icon colour through its shape (mask), so any single-colour SVG / PNG works */
+  #{{ section.id }} .kd-footer__social-mask {
+    display: block;
+    width: var(--kd-social-size);
+    height: var(--kd-social-size);
+    background: var(--kd-social-icon, currentColor);
+    -webkit-mask: var(--kd-social-url) center / contain no-repeat;
+    mask: var(--kd-social-url) center / contain no-repeat;
+  }
+  #{{ section.id }} .kd-footer__social--icons a:hover { text-decoration: none; transform: translateY(-2px); }
+  @media (prefers-reduced-motion: reduce) {
+    #{{ section.id }} .kd-footer__social--icons a:hover { transform: none; }
   }
 
-  #{{ section.id }} .social-icon {
-    width: 24px;
-    height: 24px;
+  #{{ section.id }} .kd-footer__note {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.4;
   }
 
-  #{{ section.id }} .custom-svg-size {
-    width: 15px;
-    height: 15px;
+  #{{ section.id }} .kd-footer__legal {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
   }
 
-  @media (min-width: 990px) {
-    #{{ section.id }} .footer-content {
+  #{{ section.id }} .kd-footer a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  #{{ section.id }} .kd-footer__social a::before,
+  #{{ section.id }} .kd-footer__legal a::before {
+    content: "\2736\00a0";
+  }
+
+  #{{ section.id }} .kd-footer a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  @media (min-width: 768px) {
+    #{{ section.id }} .kd-footer {
       flex-direction: row;
+      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-    }
-    #{{ section.id }} .social-icon {
-      width: 32px;
-      height: 32px;
+      text-align: left;
     }
 
-    #{{ section.id }} .custom-svg-size {
-    width: 16px;
-    height: 16px;
-  }
-
-
-    #{{ section.id }} .footer-left {
-      flex-direction: row;
-      align-items: center;
-      gap: 1.5rem;
+    #{{ section.id }} .kd-footer__social,
+    #{{ section.id }} .kd-footer__legal {
+      justify-content: flex-start;
     }
+
+    #{{ section.id }} .kd-footer__band { padding-block: var(--space-9); }
+    #{{ section.id }} .kd-footer__mail { font-size: 22px; }
+    #{{ section.id }} .kd-footer__social { font-size: 14px; }
+    #{{ section.id }} .kd-footer__note { font-size: 14px; }
+    #{{ section.id }} .kd-footer__legal { font-size: 13px; }
   }
 {%- endstyle -%}
 
 <footer
   id="{{ section.id }}"
-  class="relative bg-scheme-background text-scheme-text {{ border_classes }}"
+  class="relative bg-scheme-background text-scheme-text"
   data-color-scheme="{{ section.settings.color_scheme }}"
   role="contentinfo"
 >
-  <div class="section-content px-section py-section-vertical-spacing">
-    <div class="mx-auto max-w-site">
-      
-      {%- comment -%} Desktop: Email and socials LEFT, Links RIGHT | Mobile: All centered vertically {%- endcomment -%}
-      <div class="footer-content">
-        
-        {%- comment -%} Left side: Email and Social Icons (horizontal on desktop) {%- endcomment -%}
-        <div class="footer-left">
+  <div class="kd-section kd-footer__band">
+    <div class="kd-footer kd-wide">
+      {%- if section.settings.email != blank or section.settings.show_social_icons -%}
+        <div class="kd-footer__group">
           {%- if section.settings.email != blank -%}
-            <div class="h4-subsection-heading break-word">
-              {{ section.settings.email }}
-            </div>
+            <p class="kd-footer__mail">{{ section.settings.email }}</p>
           {%- endif -%}
-          
-          {%- comment -%} Social Icons {%- endcomment -%}
           {%- if section.settings.show_social_icons -%}
-            <div class="flex items-center gap-4">
-              {%- if section.settings.instagram_url != blank -%}
-                <a href="{{ section.settings.instagram_url }}" target="_blank" rel="noopener" aria-label="Instagram" class="text-scheme-text hover:opacity-70 transition-opacity">
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                  </svg>
-                </a>
+            {%- liquid
+              assign social_blocks = section.blocks | where: 'type', 'social'
+              assign as_icons = false
+              if section.settings.social_style == 'icons'
+                assign as_icons = true
+              endif
+            -%}
+            <ul class="kd-footer__social{% if as_icons %} kd-footer__social--icons{% endif %}">
+              {%- if social_blocks.size > 0 -%}
+                {%- for block in social_blocks -%}
+                  {%- liquid
+                    assign net = block.settings.network
+                    assign name = block.settings.name
+                    if name == blank
+                      case net
+                        when 'instagram'
+                          assign name = 'Instagram'
+                        when 'tiktok'
+                          assign name = 'TikTok'
+                      endcase
+                    endif
+                  -%}
+                  {%- if block.settings.url != blank -%}
+                    <li {{ block.shopify_attributes }}>
+                      <a class="kd-footer__social-link--{{ block.id }}" href="{{ block.settings.url }}" target="_blank" rel="noopener"{% if as_icons %} aria-label="{{ name | escape }}"{% endif %}>
+                        {%- if as_icons and block.settings.icon != blank -%}
+                          <span class="kd-footer__social-mask" aria-hidden="true"></span>
+                        {%- elsif as_icons and net != 'other' -%}
+                          {%- render 'kd-social-icon', network: net, style: section.settings.social_icon_style -%}
+                        {%- else -%}
+                          {{- name | escape -}}
+                        {%- endif -%}
+                      </a>
+                    </li>
+                  {%- endif -%}
+                {%- endfor -%}
               {%- endif -%}
-              
-              {%- if section.settings.tiktok_url != blank -%}
-                <a href="{{ section.settings.tiktok_url }}" target="_blank" rel="noopener" aria-label="TikTok" class="text-scheme-text hover:opacity-70 transition-opacity">
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
-                  </svg>
-                </a>
-              {%- endif -%}
-            </div>
+            </ul>
           {%- endif -%}
         </div>
+      {%- endif -%}
 
-        {%- comment -%} Right side: Footer Links {%- endcomment -%}
-        {%- if section.settings.show_footer_links -%}
-          <div class="footer-right">
-            {%- if section.settings.link_1_text != blank and section.settings.link_1_url != blank -%}
-              <a href="{{ section.settings.link_1_url }}" class="flex items-center gap-2 hover:opacity-70 transition-opacity btn-text-arrow-label">
-                {% comment %} <span class="text-xl body">✱</span> {% endcomment %}
-                  <svg xmlns="http://www.w3.org/2000/svg" class="custom-svg-size" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M23,12c0,.74-5.41.76-5.6,1.45-.19.71,4.48,3.43,4.12,4.05-.36.63-5.06-2.06-5.57-1.55s2.18,5.21,1.55,5.57c-.62.36-3.34-4.31-4.05-4.12-.69.18-.71,5.6-1.45,5.6s-.76-5.41-1.45-5.6c-.71-.19-3.43,4.48-4.05,4.12-.63-.36,2.06-5.06,1.55-5.57s-5.21,2.18-5.57,1.55c-.36-.62,4.31-3.34,4.12-4.05-.18-.69-5.6-.71-5.6-1.45s5.41-.76,5.6-1.45c.19-.71-4.48-3.43-4.12-4.05.36-.63,5.06,2.06,5.57,1.55s-2.18-5.21-1.55-5.57c.62-.36,3.34,4.31,4.05,4.12.69-.18.71-5.6,1.45-5.6s.76,5.41,1.45,5.6c.71.19,3.43-4.48,4.05-4.12.63.36-2.06,5.06-1.55,5.57s5.21-2.18,5.57-1.55c.36.62-4.31,3.34-4.12,4.05.18.69,5.6.71,5.6,1.45h0Z"/>
-  </svg>
-                <span>{{ section.settings.link_1_text }}</span>
-              </a>
-            {%- endif -%}
-            
-            {%- if section.settings.link_2_text != blank and section.settings.link_2_url != blank -%}
-              <a href="{{ section.settings.link_2_url }}" class="flex items-center gap-2 hover:opacity-70 transition-opacity btn-text-arrow-label">
-                {% comment %} <span class="text-xl body">✱</span> {% endcomment %}
-                  <svg xmlns="http://www.w3.org/2000/svg" class="custom-svg-size" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M23,12c0,.74-5.41.76-5.6,1.45-.19.71,4.48,3.43,4.12,4.05-.36.63-5.06-2.06-5.57-1.55s2.18,5.21,1.55,5.57c-.62.36-3.34-4.31-4.05-4.12-.69.18-.71,5.6-1.45,5.6s-.76-5.41-1.45-5.6c-.71-.19-3.43,4.48-4.05,4.12-.63-.36,2.06-5.06,1.55-5.57s-5.21,2.18-5.57,1.55c-.36-.62,4.31-3.34,4.12-4.05-.18-.69-5.6-.71-5.6-1.45s5.41-.76,5.6-1.45c.19-.71-4.48-3.43-4.12-4.05.36-.63,5.06,2.06,5.57,1.55s-2.18-5.21-1.55-5.57c.62-.36,3.34,4.31,4.05,4.12.69-.18.71-5.6,1.45-5.6s.76,5.41,1.45,5.6c.71.19,3.43-4.48,4.05-4.12.63.36-2.06,5.06-1.55,5.57s5.21-2.18,5.57-1.55c.36.62-4.31,3.34-4.12,4.05.18.69,5.6.71,5.6,1.45h0Z"/>
-  </svg>
-                <span>{{ section.settings.link_2_text }}</span>
-              </a>
-            {%- endif -%}
-          </div>
-        {%- endif -%}
+      {%- if section.settings.company_note != blank -%}
+        <p class="kd-footer__note">{{ section.settings.company_note }}</p>
+      {%- endif -%}
 
-      </div>
-
+      {%- if section.settings.show_footer_links -%}
+        <ul class="kd-footer__legal">
+          {%- if section.settings.link_1_text != blank and section.settings.link_1_url != blank -%}
+            <li><a href="{{ section.settings.link_1_url }}">{{ section.settings.link_1_text }}</a></li>
+          {%- endif -%}
+          {%- if section.settings.link_2_text != blank and section.settings.link_2_url != blank -%}
+            <li><a href="{{ section.settings.link_2_url }}">{{ section.settings.link_2_text }}</a></li>
+          {%- endif -%}
+        </ul>
+      {%- endif -%}
     </div>
   </div>
 
@@ -161,74 +252,176 @@
   "settings": [
     {
       "type": "header",
-      "content": "Email & Social"
+      "content": "Contact"
     },
     {
       "type": "text",
       "id": "email",
-      "label": "Email Address",
+      "label": "Email address",
       "default": "HELLO@KAADU.CH"
+    },
+    {
+      "type": "text",
+      "id": "company_note",
+      "label": "Company note",
+      "default": "Kaadu GmbH · Neuenkirch · Produziert von Amboo Foods, Vadacode, Kerala"
+    },
+    {
+      "type": "header",
+      "content": "Social links"
+    },
+    {
+      "type": "paragraph",
+      "content": "Add one «Social link» block per network."
     },
     {
       "type": "checkbox",
       "id": "show_social_icons",
-      "label": "Show Social Icons",
+      "label": "Show social links",
       "default": true
     },
     {
-      "type": "url",
-      "id": "instagram_url",
-      "label": "Instagram URL"
+      "type": "select",
+      "id": "social_style",
+      "label": "Show as",
+      "default": "text",
+      "options": [
+        {
+          "value": "text",
+          "label": "Text"
+        },
+        {
+          "value": "icons",
+          "label": "Icons"
+        }
+      ]
     },
     {
-      "type": "url",
-      "id": "tiktok_url",
-      "label": "TikTok URL"
+      "type": "select",
+      "id": "social_icon_style",
+      "label": "Built-in icon style",
+      "info": "Kaadu icons for Instagram and TikTok. Other networks use the icon uploaded in their block.",
+      "default": "outline",
+      "options": [
+        {
+          "value": "outline",
+          "label": "Cloud outline"
+        },
+        {
+          "value": "star",
+          "label": "Star"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "social_icon_size",
+      "label": "Icon size",
+      "default": 48,
+      "min": 24,
+      "max": 64,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "social_icon_color",
+      "label": "Icon colour",
+      "info": "Leave empty to use the footer text colour. Also colours uploaded icons."
+    },
+    {
+      "type": "color",
+      "id": "social_accent_color",
+      "label": "Icon outline / star colour",
+      "info": "Built-in icons only. Leave empty for lime."
     },
     {
       "type": "header",
-      "content": "Footer Links"
+      "content": "Legal links"
     },
     {
       "type": "checkbox",
       "id": "show_footer_links",
-      "label": "Show Footer Links",
+      "label": "Show legal links",
       "default": true
     },
     {
       "type": "text",
       "id": "link_1_text",
-      "label": "Link 1 Text",
+      "label": "Link 1 – text",
       "default": "Impressum"
     },
     {
       "type": "url",
       "id": "link_1_url",
-      "label": "Link 1 URL"
+      "label": "Link 1 – URL"
     },
     {
       "type": "text",
       "id": "link_2_text",
-      "label": "Link 2 Text",
+      "label": "Link 2 – text",
       "default": "Datenschutz"
     },
     {
       "type": "url",
       "id": "link_2_url",
-      "label": "Link 2 URL"
+      "label": "Link 2 – URL"
     },
     {
       "type": "header",
-      "content": "Color Settings"
+      "content": "Colours"
     },
     {
       "type": "color_scheme",
       "id": "color_scheme",
-      "default": "scheme1",
-      "label": "Color Scheme"
+      "label": "Colour scheme",
+      "default": "scheme1"
     }
   ],
       "blocks": [
+    {
+      "type": "social",
+      "name": "Social link",
+      "settings": [
+        {
+          "type": "select",
+          "id": "network",
+          "label": "Network",
+          "default": "instagram",
+          "options": [
+            {
+              "value": "instagram",
+              "label": "Instagram"
+            },
+            {
+              "value": "tiktok",
+              "label": "TikTok"
+            },
+            {
+              "value": "other",
+              "label": "Other"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "info": "Shown as text, and read out by screen readers for icons. Empty: the network's name."
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Link"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon (optional)",
+          "info": "Replaces the built-in Kaadu icon; needed for «Other». SVG or PNG from Files, drawn in the icon colour (single colour)."
+        }
+      ]
+    },
     {
       "type": "background_pattern",
       "name": "t:common.blocks.background_pattern.name",
@@ -1470,6 +1663,26 @@
         },
         {
           "type": "range",
+          "id": "horizontal_position_sm",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "horizontal position mobile",
+          "default": 80
+        },
+        {
+          "type": "range",
+          "id": "vertical_position_sm",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "vertical position mobile",
+          "default": 80
+        },
+        {
+          "type": "range",
           "id": "rotate",
           "min": -90,
           "max": 90,
@@ -1654,6 +1867,16 @@
               "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
             },
             {
+              "value": "kd-scallop-patterned_1440x40",
+              "label": "Kaadu scallop",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "kd-scallop-mobile-patterned_416x30",
+              "label": "Kaadu scallop (mobile)",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
               "value": "circles-2.5-patterned_1200x54",
               "label": "t:common.blocks.shape_divider.settings.style.options.circles_2_5.label",
               "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
@@ -1814,6 +2037,16 @@
             {
               "value": "circles-2-patterned_1200x35",
               "label": "t:common.blocks.shape_divider.settings.style.options.circles_2.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "kd-scallop-patterned_1440x40",
+              "label": "Kaadu scallop",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "kd-scallop-mobile-patterned_416x30",
+              "label": "Kaadu scallop (mobile)",
               "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
             },
             {

@@ -1,0 +1,48 @@
+{%- comment -%}
+  Prefix icon for a packaging-selector benefit line.
+
+  Accepts:
+    style              - 'star' (built-in), 'custom' (svg_code / icon_image), or 'none'
+    svg_code           - raw inline SVG for this benefit
+    icon_image         - image for this benefit
+    fallback_svg_code  - section-wide raw inline SVG
+    fallback_icon_image- section-wide image
+    size               - rendered px size
+
+  Per-benefit values win over the section-wide ones, so a merchant can set one
+  icon for the list and still override a single line.
+{%- endcomment -%}
+
+{%- liquid
+  assign icon_style = style | default: 'star'
+  assign icon_size = size | default: 12
+
+  assign resolved_svg = svg_code
+  if resolved_svg == blank
+    assign resolved_svg = fallback_svg_code
+  endif
+
+  assign resolved_image = icon_image
+  if resolved_image == blank
+    assign resolved_image = fallback_icon_image
+  endif
+-%}
+
+{%- case icon_style -%}
+  {%- when 'none' -%}
+  {%- when 'custom' -%}
+    {%- if resolved_svg != blank -%}
+      <span class="pack-subscribe__benefit-icon pack-subscribe__benefit-icon--svg" aria-hidden="true">{{ resolved_svg }}</span>
+    {%- elsif resolved_image != blank -%}
+      <img
+        class="pack-subscribe__benefit-icon"
+        src="{{ resolved_image | image_url: width: 128 }}"
+        alt=""
+        width="{{ icon_size }}"
+        height="{{ icon_size }}"
+        loading="lazy"
+      >
+    {%- endif -%}
+  {%- else -%}
+    <svg class="pack-subscribe__benefit-icon" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 0L7.4 4.6L12 6L7.4 7.4L6 12L4.6 7.4L0 6L4.6 4.6Z" fill="currentColor"/></svg>
+{%- endcase -%}

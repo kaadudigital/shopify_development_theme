@@ -1,0 +1,2277 @@
+{%- comment -%}
+  Kaadu cost split ("Wo landen deine CHF 4.45?"), as in the landing-page mockup: heading + intro beside an
+  illustration, a bar of segments sized by their share of the total (flex-grow; desktop shows the amount, mobile a
+  list of rows with title, amount and a fill of the same share), and a lime detail box with the pressed segment's photo (stake
+  shape, circle on mobile), title and text (aria-live). Mobile has its own heading, intro and footnote; the button
+  is desktop-only unless switched on. Colours are section settings (--kd-split-*); with «Use the colours below»
+  off everything follows the colour scheme. Styles: "COST SPLIT" in assets/base.bundle.css; behaviour:
+  [data-kd-split] in assets/kaadu.js.
+{%- endcomment -%}
+{%- liquid
+  assign segments = section.blocks | where: 'type', 'segment'
+  # Share of each segment = its amount / the sum of all amounts. Amounts are read from the text ("CHF 1.20",
+  # "1,20", "CHF 1.–"); while any of them is not a number yet ("CHF [X.XX]"), the "Bar width" weights are used.
+  assign has_photo = false
+  assign amounts_ok = true
+  assign amount_total = 0.0
+  assign weight_total = 0.0
+  for seg in segments
+    assign weight_total = weight_total | plus: seg.settings.weight
+    assign amt = seg.settings.amount | upcase | remove: 'CHF' | remove: 'FR.' | remove: ' ' | remove: "'" | remove: '–' | remove: '-' | replace: ',', '.'
+    assign num = amt | times: 1.0
+    if amt == blank or amt contains '[' or num <= 0
+      assign amounts_ok = false
+    endif
+    assign amount_total = amount_total | plus: num
+    if seg.settings.image != blank
+      assign has_photo = true
+    endif
+  endfor
+  assign first = segments.first
+  assign heading_d = section.settings.heading | escape | replace: '[br]', '<br>'
+  assign heading_m = section.settings.mobile_heading | escape
+  if heading_m == blank
+    assign heading_m = section.settings.heading | escape | replace: '[br]', ' '
+  endif
+  assign intro_m = section.settings.mobile_intro | default: section.settings.intro
+  assign footnote_m = section.settings.mobile_footnote | default: section.settings.footnote
+  assign stake_id = 'kd-stake-' | append: section.id
+-%}
+
+{%- style -%}
+  #{{ section.id }} {
+    {%- comment -%} Only when "Use the colours below" is on; unset, the CSS falls back to the colour scheme. {%- endcomment -%}
+    {%- if section.settings.use_custom_colors -%}
+      {%- liquid
+        assign split_colors = 'bg:background_color,heading:heading_color,text:text_color,bar:bar_color,bar-text:bar_text_color,fill:fill_color,active:active_color,active-text:active_text_color,detail:detail_color,detail-title:detail_title_color,detail-text:detail_text_color,photo:photo_color,outline:outline_color,btn:button_color,btn-label:button_label_color' | split: ','
+      -%}
+      {%- for pair in split_colors -%}
+        {%- assign kv = pair | split: ':' -%}
+        {%- assign value = section.settings[kv[1]] -%}
+        {%- if value != blank %}
+    --kd-split-{{ kv[0] }}: {{ value }};
+        {%- endif -%}
+      {%- endfor %}
+    {%- endif %}
+  }
+{%- endstyle -%}
+
+<section
+  id="{{ section.id }}"
+  class="kd-split-section kd-split-section--text-{{ section.settings.text_align | default: 'left' }} kd-split-section--btn-m-{{ section.settings.button_align_mobile | default: 'left' }} relative overflow-hidden bg-scheme-background text-scheme-text"
+  data-color-scheme="{{ section.settings.color_scheme }}"
+  {% unless section.settings.scroll_motion %} data-kd-motion="off"{% endunless %}
+>
+  <div class="kd-section kd-split-section__inner">
+    <div class="kd-wide kd-split-section__top{% unless section.settings.show_image %} kd-split-section__top--no-image{% endunless %}">
+      <div class="kd-split-section__text">
+        <div class="kd-heading">
+          {%- if section.settings.kicker != blank -%}
+            <p class="kd-heading__kicker kd-label">{{ section.settings.kicker | escape }}</p>
+          {%- endif -%}
+          {%- if heading_d != blank or heading_m != blank -%}
+            <h2 class="kd-heading__title kd-display-h2">
+              {%- if heading_d != blank -%}<span class="kd-split-section__d">{{ heading_d }}</span>{%- endif -%}
+              {%- if heading_m != blank -%}<span class="kd-split-section__m">{{ heading_m }}</span>{%- endif -%}
+            </h2>
+          {%- endif -%}
+        </div>
+        {%- if section.settings.intro != blank or intro_m != blank -%}
+          <div class="kd-split-section__intro kd-body-lg">
+            {%- if section.settings.intro != blank -%}<div class="kd-split-section__d">{{ section.settings.intro }}</div>{%- endif -%}
+            {%- if intro_m != blank -%}<div class="kd-split-section__m">{{ intro_m }}</div>{%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+      {%- if section.settings.show_image -%}
+        {%- if section.settings.image != blank -%}
+          {{ section.settings.image | image_url: width: 1100 | image_tag: class: 'kd-split-section__art', loading: 'lazy', sizes: '(min-width: 1441px) 30vw, (min-width: 768px) 420px, 240px' }}
+        {%- else -%}
+          <img class="kd-split-section__art" src="{{ 'kaadu-cost-illustration.webp' | asset_url }}" alt="{{ section.settings.image_alt | escape }}" width="1100" height="985" loading="lazy">
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+
+    <div class="kd-wide kd-split" data-kd-split>
+      <div class="kd-split__bar" role="group" aria-label="{{ section.settings.heading | remove: '[br]' | escape }}">
+        {%- for seg in segments -%}
+          {%- liquid
+            if amounts_ok
+              assign amt = seg.settings.amount | upcase | remove: 'CHF' | remove: 'FR.' | remove: ' ' | remove: "'" | remove: '–' | remove: '-' | replace: ',', '.'
+              assign share = amt | times: 100.0 | divided_by: amount_total
+            else
+              assign share = seg.settings.weight | times: 100.0 | divided_by: weight_total
+            endif
+          -%}
+          <button
+            type="button"
+            class="kd-split__seg"
+            style="--kd-grow: {{ share | round: 3 }}; --kd-share: {{ share | round: 2 }}%;"
+            aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}"
+            aria-controls="kd-split-detail-{{ section.id }}"
+            data-index="{{ forloop.index0 }}"
+            data-title="{{ seg.settings.title | escape }}"
+            data-amount="{{ seg.settings.amount | escape }}"
+            data-text="{{ seg.settings.text | escape }}"
+            {{ seg.shopify_attributes }}
+          >
+            <span class="kd-split__fill" aria-hidden="true"></span>
+            <span class="kd-split__seg-title">{{ seg.settings.title | escape }}</span>
+            <span class="kd-split__seg-amount">{{ seg.settings.amount | escape }}</span>
+          </button>
+        {%- endfor -%}
+      </div>
+
+      {%- if first != blank -%}
+        <div class="kd-split__detail{% if has_photo %} kd-split__detail--photo{% endif %}" id="kd-split-detail-{{ section.id }}" aria-live="polite">
+          {%- if has_photo -%}
+            <div class="kd-split__photo" aria-hidden="true">
+              <svg class="kd-split__defs" width="0" height="0" focusable="false"><defs><clipPath id="{{ stake_id }}" clipPathUnits="objectBoundingBox"><path transform="scale(0.00070759 0.00083347) translate(-39.2614 -159.2549)" d="M1452.4857,917.6449c1.0778-48.5846-27.9164-92.3818-73.6171-120.5097,38.5133-26.3068,63.1427-64.7255,64.1026-107.9982,1.5536-70.0351-59.3786-130.1196-142.7725-147.655,14.5479-20.4067,23.0629-43.8495,23.6192-68.9279,1.8198-82.0337-82.0859-150.4288-187.4092-152.7652-4.2882-.0951-8.5437-.0683-12.7669.0554.0034-.1128.0112-.2255.0137-.3383,1.8198-82.0347-82.0868-150.4298-187.4091-152.7662-72.1424-1.6003-135.6136,28.2111-169.0347,73.5135-31.3792-46.7399-93.4661-79.3366-165.6085-80.9369-105.3223-2.3364-192.1793,62.2707-193.9991,144.3054-.1338,6.0327.2082,11.9893.9768,17.8539-26.7112-11.9658-57.443-19.1065-90.2551-19.8344-105.3232-2.3364-192.1793,62.2707-193.9991,144.3043-.9067,40.8711,19.4692,78.3536,53.1675,105.9707-78.5838,16.8154-136.7184,72.1527-138.2037,139.1061-1.121,50.5318,30.2935,95.8814,79.1982,123.8108-38.2672,26.2987-62.7186,64.5907-63.675,107.7025-1.6734,75.4368,69.1471,139.335,162.45,150.9427-11.6622,18.6887-18.4138,39.6383-18.907,61.8732-1.8198,82.0337,82.0859,150.4298,187.4082,152.7662,40.2771.8935,77.8454-8.0118,108.9984-23.9291,27.706,54.0559,94.715,93.0604,173.8034,94.8148,61.4882,1.364,116.6722-20.0951,152.3268-54.5114,29.341,15.4809,64.4381,24.86,102.3042,25.7,100.1031,2.2206,183.5161-56.0342,193.1009-132.2456,12.325,2.2372,25.1057,3.5533,38.2187,3.8442,105.3223,2.3364,192.1793-62.2707,193.9991-144.3043.0809-3.6478-.0157-7.2662-.2687-10.8556,60.8305-23.6191,102.9763-72.109,104.238-128.9859Z"></path></clipPath></defs></svg>
+              <div class="kd-split__photo-fill" style="--kd-stake: url(#{{ stake_id }});">
+                {%- for seg in segments -%}
+                  {%- if seg.settings.image != blank -%}
+                    <span class="kd-split__photo-item" data-kd-split-photo="{{ forloop.index0 }}"{% unless forloop.first %} hidden{% endunless %}>
+                      {{- seg.settings.image | image_url: width: 500 | image_tag: class: 'kd-split__photo-img', loading: 'lazy', sizes: '(min-width: 768px) 190px, 72px', alt: '' -}}
+                    </span>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+              <svg class="kd-split__outline" viewBox="39.2614 159.2549 1413.2533 1199.8099" preserveAspectRatio="none" focusable="false"><path d="M1452.4857,917.6449c1.0778-48.5846-27.9164-92.3818-73.6171-120.5097,38.5133-26.3068,63.1427-64.7255,64.1026-107.9982,1.5536-70.0351-59.3786-130.1196-142.7725-147.655,14.5479-20.4067,23.0629-43.8495,23.6192-68.9279,1.8198-82.0337-82.0859-150.4288-187.4092-152.7652-4.2882-.0951-8.5437-.0683-12.7669.0554.0034-.1128.0112-.2255.0137-.3383,1.8198-82.0347-82.0868-150.4298-187.4091-152.7662-72.1424-1.6003-135.6136,28.2111-169.0347,73.5135-31.3792-46.7399-93.4661-79.3366-165.6085-80.9369-105.3223-2.3364-192.1793,62.2707-193.9991,144.3054-.1338,6.0327.2082,11.9893.9768,17.8539-26.7112-11.9658-57.443-19.1065-90.2551-19.8344-105.3232-2.3364-192.1793,62.2707-193.9991,144.3043-.9067,40.8711,19.4692,78.3536,53.1675,105.9707-78.5838,16.8154-136.7184,72.1527-138.2037,139.1061-1.121,50.5318,30.2935,95.8814,79.1982,123.8108-38.2672,26.2987-62.7186,64.5907-63.675,107.7025-1.6734,75.4368,69.1471,139.335,162.45,150.9427-11.6622,18.6887-18.4138,39.6383-18.907,61.8732-1.8198,82.0337,82.0859,150.4298,187.4082,152.7662,40.2771.8935,77.8454-8.0118,108.9984-23.9291,27.706,54.0559,94.715,93.0604,173.8034,94.8148,61.4882,1.364,116.6722-20.0951,152.3268-54.5114,29.341,15.4809,64.4381,24.86,102.3042,25.7,100.1031,2.2206,183.5161-56.0342,193.1009-132.2456,12.325,2.2372,25.1057,3.5533,38.2187,3.8442,105.3223,2.3364,192.1793-62.2707,193.9991-144.3043.0809-3.6478-.0157-7.2662-.2687-10.8556,60.8305-23.6191,102.9763-72.109,104.238-128.9859Z" fill="none" vector-effect="non-scaling-stroke"></path></svg>
+            </div>
+          {%- endif -%}
+          <p class="kd-split__detail-title" data-kd-split-title>{{ first.settings.title | escape }}</p>
+          <p class="kd-split__detail-text kd-body-lg" data-kd-split-text>{{ first.settings.text | escape }}</p>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.footnote != blank or footnote_m != blank or section.settings.button_label != blank -%}
+      <div class="kd-wide kd-split-section__foot">
+        {%- if section.settings.footnote != blank or footnote_m != blank -%}
+          <div class="kd-split-section__note kd-body-sm">
+            {%- if section.settings.footnote != blank -%}<div class="kd-split-section__d">{{ section.settings.footnote }}</div>{%- endif -%}
+            {%- if footnote_m != blank -%}<div class="kd-split-section__m">{{ footnote_m }}</div>{%- endif -%}
+          </div>
+        {%- endif -%}
+        {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+          {%- liquid
+            assign btn_class = 'kd-split-section__button'
+            unless section.settings.show_button_mobile
+              assign btn_class = btn_class | append: ' kd-split-section__button--desktop'
+            endunless
+          -%}
+          {%- render 'kd-button', label: section.settings.button_label, url: section.settings.button_link, class: btn_class -%}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  {%- liquid
+    for block in section.blocks
+      case block.type
+        when 'background_shape'
+          render 'block-background-shape', block: block
+        when 'background_pattern'
+          render 'block-background-pattern', block: block, scheme: section.settings.color_scheme
+      endcase
+    endfor
+  -%}
+</section>
+
+{%- liquid
+  assign stickers = section.blocks | where: 'type', 'sticker'
+  assign shape_dividers = section.blocks | where: 'type', 'shape_divider'
+  for sticker in stickers
+    render 'block-sticker', block: sticker
+  endfor
+  for shape_divider in shape_dividers
+    render 'block-shape-divider', block: shape_divider
+  endfor
+-%}
+
+{% schema %}
+{
+  "name": "Kaadu cost split",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Kicker"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Use [br] for a line break.",
+      "default": "Wo landen deine[br]CHF 4.45?"
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Intro",
+      "default": "<p>Fair ist ein Wort. Das hier sind Zahlen. Klick auf einen Balken.</p>"
+    },
+    {
+      "type": "text",
+      "id": "mobile_heading",
+      "label": "Heading on mobile",
+      "info": "Below 768px. Empty: same as desktop, on one line ([br] ignored)."
+    },
+    {
+      "type": "richtext",
+      "id": "mobile_intro",
+      "label": "Intro on mobile",
+      "info": "Below 768px. Empty: same as desktop."
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Alignment",
+      "info": "Kicker, heading and intro, on every screen size.",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centred"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Illustration"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "label": "Show illustration",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Illustration",
+      "info": "Empty: the pineapple with the magnifying glass from the mockup."
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Illustration alt text",
+      "default": "Ananas-Figur mit Lupe prüft Rupien, Franken und Abrechnungen"
+    },
+    {
+      "type": "header",
+      "content": "Footnote"
+    },
+    {
+      "type": "richtext",
+      "id": "footnote",
+      "label": "Footnote"
+    },
+    {
+      "type": "richtext",
+      "id": "mobile_footnote",
+      "label": "Footnote on mobile",
+      "info": "Below 768px. Empty: same as desktop."
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Wohin jeder Franken geht"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link",
+      "info": "The button only shows when it has a link."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_button_mobile",
+      "label": "Show the button on mobile",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "button_align_mobile",
+      "label": "Button position – mobile",
+      "info": "Below 768px. Tablet and desktop keep the button at the right end of the footnote row.",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centred"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colours"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Colour scheme",
+      "info": "Applies when «Use the colours below» is off.",
+      "default": "scheme6"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_custom_colors",
+      "label": "Use the colours below",
+      "info": "Off: background and text follow the colour scheme, bars its card colours, the pressed bar and button its accent 1, the detail box its accent 2.",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "bar_color",
+      "label": "Bar",
+      "default": "#FFF9EE"
+    },
+    {
+      "type": "color",
+      "id": "bar_text_color",
+      "label": "Bar text",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "fill_color",
+      "label": "Bar fill (mobile)",
+      "default": "#FFC6FF"
+    },
+    {
+      "type": "color",
+      "id": "active_color",
+      "label": "Pressed bar",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "active_text_color",
+      "label": "Pressed bar text",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "detail_color",
+      "label": "Detail box",
+      "default": "#AEFF64"
+    },
+    {
+      "type": "color",
+      "id": "detail_title_color",
+      "label": "Detail title",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "detail_text_color",
+      "label": "Detail text",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "photo_color",
+      "label": "Photo background",
+      "default": "#FFC6FF"
+    },
+    {
+      "type": "color",
+      "id": "outline_color",
+      "label": "Photo outline",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "button_label_color",
+      "label": "Button label",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "checkbox",
+      "id": "scroll_motion",
+      "label": "Scroll animations",
+      "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations.",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "segment",
+      "name": "Segment",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Bauern"
+        },
+        {
+          "type": "text",
+          "id": "amount",
+          "label": "Amount",
+          "info": "Format: CHF 1.20 (unknown values in square brackets). Sizes the bar: amount ÷ sum of all amounts.",
+          "default": "CHF [X.XX]"
+        },
+        {
+          "type": "range",
+          "id": "weight",
+          "label": "Bar width (until the amounts are known)",
+          "info": "Only used while any amount is still a placeholder. Once every amount is a number, each bar is sized by its amount as a share of the sum of all amounts.",
+          "default": 15,
+          "min": 1,
+          "max": 60,
+          "step": 1
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Detail text"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo",
+          "info": "Shown in the detail box while this segment is pressed."
+        }
+      ]
+    },
+    {
+      "type": "background_pattern",
+      "name": "t:common.blocks.background_pattern.name",
+      "settings": [
+        {
+          "type": "select",
+          "id": "type",
+          "label": "t:common.blocks.background_pattern.settings.type.label",
+          "options": [
+            {
+              "value": "custom_stars",
+              "label": "custom stars",
+              "group": "custom patterns"
+            },
+            {
+              "value": "custom_clouds",
+              "label": "custom clouds",
+              "group": "custom patterns"
+            },
+            {
+              "value": "custom_crosscuts",
+              "label": "custom crosscuts",
+              "group": "custom patterns"
+            },
+            {
+              "value": "custom_rectangles",
+              "label": "custom rectangles",
+              "group": "custom patterns"
+            },
+            {
+              "value": "diagonal_lines",
+              "label": "t:common.options.diagonal_lines.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_lines"
+            },
+            {
+              "value": "grid",
+              "label": "t:common.options.grid_lines.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_lines"
+            },
+            {
+              "value": "grid_with_diagonal_lines",
+              "label": "t:common.options.grid_with_diagonal_lines.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_lines"
+            },
+            {
+              "value": "crosshatch",
+              "label": "t:common.options.crosshatch.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_lines"
+            },
+            {
+              "value": "zig_zag_lines",
+              "label": "t:common.options.zig_zag.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_lines"
+            },
+            {
+              "value": "waves_lines",
+              "label": "t:common.options.waves.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_lines"
+            },
+            {
+              "value": "dots",
+              "label": "t:common.options.dots.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_shapes"
+            },
+            {
+              "value": "triangle",
+              "label": "t:common.options.triangles.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_shapes"
+            },
+            {
+              "value": "polka_dot",
+              "label": "t:common.options.polka_dot.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_shapes"
+            },
+            {
+              "value": "polka_dot_triangles",
+              "label": "t:common.options.polka_dot_triangles.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_shapes"
+            },
+            {
+              "value": "plus",
+              "label": "t:common.options.plus.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_shapes"
+            },
+            {
+              "value": "cross",
+              "label": "t:common.options.cross.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_shapes"
+            },
+            {
+              "value": "squares",
+              "label": "t:common.options.squares.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_shapes"
+            },
+            {
+              "value": "vertical_stripes",
+              "label": "t:common.options.vertical_stripes.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_stripes"
+            },
+            {
+              "value": "horizontal_stripes",
+              "label": "t:common.blocks.background_pattern.settings.type.options.horizontal_stripes.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_stripes"
+            },
+            {
+              "value": "diagonal_stripes",
+              "label": "t:common.options.diagonal_stripes.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_stripes"
+            },
+            {
+              "value": "checkerboard",
+              "label": "t:common.options.checkerboard.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "corner_triangle",
+              "label": "t:common.options.corner_triangle.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "diamonds",
+              "label": "t:common.options.diamonds.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "scales",
+              "label": "t:common.options.scales.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "alternating_pinwheel",
+              "label": "t:common.options.alternating_pinwheel.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "windmill",
+              "label": "t:common.options.windmill.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "origami",
+              "label": "t:common.options.origami.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "argyle",
+              "label": "t:common.options.argyle.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "chevrons_1",
+              "label": "t:common.options.chevrons_1.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "chevrons_2",
+              "label": "t:common.options.chevrons_2.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "connected_circles",
+              "label": "t:common.options.connected_circles.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "alternating_triangles",
+              "label": "t:common.options.alternating_triangles.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "waves_geometric",
+              "label": "t:common.options.waves.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "hexagons_geometric",
+              "label": "t:common.options.hexagons.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "squiggle",
+              "label": "t:common.options.squiggle.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "zig_zag_geometric",
+              "label": "t:common.options.zig_zag.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "squiggles",
+              "label": "t:common.options.squiggles.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
+            },
+            {
+              "value": "sprinkles",
+              "label": "t:common.blocks.background_pattern.settings.type.options.sprinkles.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
+            },
+            {
+              "value": "8bit",
+              "label": "t:common.options.8bit.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
+            },
+            {
+              "value": "3d_cube",
+              "label": "t:common.blocks.background_pattern.settings.type.options.3d_cube.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
+            },
+            {
+              "value": "bubbles",
+              "label": "t:common.blocks.background_pattern.settings.type.options.bubbles.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
+            },
+            {
+              "value": "macaroni",
+              "label": "t:common.options.macaroni.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
+            },
+            {
+              "value": "leaves",
+              "label": "t:common.options.leaves.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
+            },
+            {
+              "value": "bricks",
+              "label": "t:common.options.bricks.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
+            },
+            {
+              "value": "herringbone_1",
+              "label": "t:common.options.herringbone_1.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
+            },
+            {
+              "value": "herringbone_2",
+              "label": "t:common.options.herringbone_2.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
+            },
+            {
+              "value": "interlocking_hexagons",
+              "label": "t:common.options.interlocking_hexagons.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
+            },
+            {
+              "value": "blobs",
+              "label": "t:common.options.blobs.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "color",
+          "label": "t:common.blocks.background_pattern.settings.color.label",
+          "default": "text",
+          "options": [
+            {
+              "value": "text",
+              "label": "t:common.options.text.label"
+            },
+            {
+              "value": "accent-1",
+              "label": "t:common.options.accent_1.label"
+            },
+            {
+              "value": "accent-2",
+              "label": "t:common.options.accent_2.label"
+            },
+            {
+              "value": "card",
+              "label": "t:common.options.card.label"
+            },
+            {
+              "value": "background",
+              "label": "t:common.options.background.label"
+            },
+            {
+              "value": "gradient",
+              "label": "t:common.options.gradient.label"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "size",
+          "min": 8,
+          "max": 600,
+          "unit": "px",
+          "label": "t:common.blocks.background_pattern.settings.size.label",
+          "step": 8,
+          "default": 24
+        },
+        {
+          "type": "range",
+          "id": "opacity",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "t:common.settings.opacity.label",
+          "default": 100
+        },
+        {
+          "type": "header",
+          "content": "t:common.settings.header_animation"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_parallax",
+          "label": "t:common.blocks.background_pattern.settings.enable_parallax.label",
+          "default": false,
+          "info": "t:common.blocks.background_pattern.settings.enable_parallax.info"
+        },
+        {
+          "type": "range",
+          "id": "parallax_speed",
+          "min": 1,
+          "max": 10,
+          "step": 1,
+          "label": "t:common.settings.parallax_speed.label",
+          "default": 3
+        }
+      ]
+    },
+    {
+      "type": "background_shape",
+      "name": "t:common.blocks.background_shape.name",
+      "settings": [
+        {
+          "type": "select",
+          "id": "shape",
+          "label": "t:common.blocks.background_shape.settings.shape.label",
+          "default": "square",
+          "options": [
+            {
+              "value": "website_shape_star",
+              "label": "custom star",
+              "group": "custom shapes"
+            },
+            {
+              "value": "website_shape_bun",
+              "label": "custom bun",
+              "group": "custom shapes"
+            },
+            {
+              "value": "website_shape_frame",
+              "label": "custom frame",
+              "group": "custom shapes"
+            },
+            {
+              "value": "website_shape_pancake",
+              "label": "custom pancake",
+              "group": "custom shapes"
+            },
+            {
+              "value": "website_shape_cloud",
+              "label": "custom cloud",
+              "group": "custom shapes"
+            },
+            {
+              "value": "square",
+              "label": "t:common.blocks.background_shape.settings.shape.options.square.label",
+              "group": "t:common.groups.basic"
+            },
+            {
+              "value": "circle",
+              "label": "t:common.blocks.background_shape.settings.shape.options.circle.label",
+              "group": "t:common.groups.basic"
+            },
+            {
+              "value": "oval",
+              "label": "t:common.blocks.background_shape.settings.shape.options.oval.label",
+              "group": "t:common.groups.basic"
+            },
+            {
+              "value": "triangle",
+              "label": "t:common.blocks.background_shape.settings.shape.options.triangle.label",
+              "group": "t:common.groups.basic"
+            },
+            {
+              "value": "pentagon",
+              "label": "t:common.options.pentagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "hexagon",
+              "label": "t:common.options.hexagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "heptagon",
+              "label": "t:common.options.heptagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "octagon",
+              "label": "t:common.options.octagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "nonagon",
+              "label": "t:common.options.nonagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "decagon",
+              "label": "t:common.options.decagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "rounded_pentagon",
+              "label": "t:common.options.rounded_pentagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "rounded_hexagon",
+              "label": "t:common.options.rounded_hexagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "rounded_heptagon",
+              "label": "t:common.options.rounded_heptagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "rounded_octagon",
+              "label": "t:common.options.rounded_octagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "rounded_nonagon",
+              "label": "t:common.options.rounded_nonagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "rounded_decagon",
+              "label": "t:common.options.rounded_decagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "star_1",
+              "label": "t:common.options.star_1.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "star_2",
+              "label": "t:common.options.star_2.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "star_3",
+              "label": "t:common.options.star_3.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "star_4",
+              "label": "t:common.options.star_4.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "star_5",
+              "label": "t:common.options.star_5.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "star_6",
+              "label": "t:common.options.star_6.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "abstract_star_1",
+              "label": "t:common.options.abstract_star_1.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "abstract_star_2",
+              "label": "t:common.options.abstract_star_2.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "abstract_star_3",
+              "label": "t:common.options.abstract_star_3.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "scalloped_circle_1",
+              "label": "t:common.options.scalloped_circle_1.label",
+              "group": "t:common.groups.scalloped_circles"
+            },
+            {
+              "value": "scalloped_circle_2",
+              "label": "t:common.options.scalloped_circle_2.label",
+              "group": "t:common.groups.scalloped_circles"
+            },
+            {
+              "value": "scalloped_circle_3",
+              "label": "t:common.options.scalloped_circle_3.label",
+              "group": "t:common.groups.scalloped_circles"
+            },
+            {
+              "value": "scalloped_circle_4",
+              "label": "t:common.options.scalloped_circle_4.label",
+              "group": "t:common.groups.scalloped_circles"
+            },
+            {
+              "value": "scalloped_circle_5",
+              "label": "t:common.options.scalloped_circle_5.label",
+              "group": "t:common.groups.scalloped_circles"
+            },
+            {
+              "value": "scalloped_circle_6",
+              "label": "t:common.options.scalloped_circle_6.label",
+              "group": "t:common.groups.scalloped_circles"
+            },
+            {
+              "value": "parallelogram",
+              "label": "t:common.options.parallelogram.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "squircle",
+              "label": "t:common.options.squircle.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "scalloped_square_1",
+              "label": "t:common.options.scalloped_square_1.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "scalloped_square_2",
+              "label": "t:common.options.scalloped_square_2.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "leaf",
+              "label": "t:common.options.leaf.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "clipped_square",
+              "label": "t:common.options.clipped.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "convex_square",
+              "label": "t:common.options.convex.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "twisted_square",
+              "label": "t:common.options.twisted.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "trapeze",
+              "label": "t:common.options.trapeze.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "pinched",
+              "label": "t:common.options.pinched.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "pixelated",
+              "label": "t:common.options.pixelated.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "overlapped",
+              "label": "t:common.options.overlapped.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "zig_zag",
+              "label": "t:common.options.zig_zag.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "zig_zag_tear",
+              "label": "t:common.options.zig_zag_tear.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "wave_tear",
+              "label": "t:common.options.wave_tear.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "flower",
+              "label": "t:common.options.flower.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "flower_bloom",
+              "label": "t:common.options.flower_bloom.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "concave",
+              "label": "t:common.options.concave.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "flag",
+              "label": "t:common.options.flag.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "abstract_oval",
+              "label": "t:common.options.abstract_oval.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "cross",
+              "label": "t:common.options.cross.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "quatrefoil",
+              "label": "t:common.options.quatrefoil.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "quadrant",
+              "label": "t:common.options.quadrant.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "wind",
+              "label": "t:common.options.wind.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "windmill",
+              "label": "t:common.options.windmill.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "heart",
+              "label": "t:common.options.heart.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "mirrored_pyramids",
+              "label": "t:common.options.mirrored_pyramids.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "plus",
+              "label": "t:common.options.plus.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "double_pill_1",
+              "label": "t:common.options.double_pill_1.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "double_pill_2",
+              "label": "t:common.options.double_pill_2.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "triple_pill_1",
+              "label": "t:common.options.triple_pill_1.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "triple_pill_2",
+              "label": "t:common.options.triple_pill_2.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "crown",
+              "label": "t:common.options.crown.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "stair",
+              "label": "t:common.options.stair.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "pancake_stack",
+              "label": "t:common.options.pancake_stack.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "asterisk",
+              "label": "t:common.options.asterisk.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "overlapping_squares",
+              "label": "t:common.options.overlapping_squares.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "brush_stroke",
+              "label": "t:common.options.brush_stroke.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "blob",
+              "label": "t:common.options.blob.label",
+              "group": "t:common.groups.variable"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "blob_type",
+          "min": 1,
+          "max": 10,
+          "step": 1,
+          "label": "t:common.blocks.background_shape.settings.blob_type.label",
+          "default": 1,
+          "info": "t:common.blocks.background_shape.settings.blob_type.info"
+        },
+        {
+          "type": "range",
+          "id": "size",
+          "min": 25,
+          "max": 300,
+          "step": 5,
+          "label": "t:common.blocks.background_shape.settings.size.label",
+          "default": 100
+        },
+        {
+          "type": "range",
+          "id": "opacity",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "t:common.settings.opacity.label",
+          "default": 100
+        },
+        {
+          "type": "range",
+          "id": "blur",
+          "min": 0,
+          "max": 500,
+          "step": 5,
+          "unit": "px",
+          "label": "t:common.blocks.background_shape.settings.blur.label",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "t:common.settings.header_position"
+        },
+        {
+          "type": "range",
+          "id": "horizontal_position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "t:common.blocks.background_shape.settings.horizontal_position.label",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "vertical_position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "t:common.blocks.background_shape.settings.vertical_position.label",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "rotate",
+          "min": -90,
+          "max": 90,
+          "step": 2,
+          "unit": "deg",
+          "label": "t:common.settings.rotate.label",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "t:common.settings.header_animation"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_parallax",
+          "label": "t:common.blocks.background_shape.settings.enable_parallax.label",
+          "default": false,
+          "info": "t:common.blocks.background_shape.settings.enable_parallax.info"
+        },
+        {
+          "type": "range",
+          "id": "parallax_speed",
+          "min": 1,
+          "max": 10,
+          "step": 1,
+          "label": "t:common.settings.parallax_speed.label",
+          "default": 3
+        },
+        {
+          "type": "header",
+          "content": "t:common.settings.header_color"
+        },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "default": "scheme1",
+          "label": "t:common.settings.color_scheme.label"
+        },
+        {
+          "type": "select",
+          "id": "color",
+          "label": "t:common.settings.background_color.label",
+          "default": "accent-1",
+          "options": [
+            {
+              "value": "text",
+              "label": "t:common.options.text.label"
+            },
+            {
+              "value": "accent-1",
+              "label": "t:common.options.accent_1.label"
+            },
+            {
+              "value": "accent-2",
+              "label": "t:common.options.accent_2.label"
+            },
+            {
+              "value": "card",
+              "label": "t:common.options.card.label"
+            },
+            {
+              "value": "background",
+              "label": "t:common.options.background.label"
+            },
+            {
+              "value": "gradient",
+              "label": "t:common.options.gradient.label"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "t:common.blocks.sticker.name",
+      "type": "sticker",
+      "settings": [
+        {
+          "type": "range",
+          "id": "width",
+          "min": 100,
+          "max": 300,
+          "step": 10,
+          "unit": "px",
+          "label": "t:common.blocks.sticker.settings.width.label",
+          "default": 150
+        },
+        {
+          "type": "checkbox",
+          "id": "half_width_on_mobile",
+          "label": "t:common.blocks.sticker.settings.half_width_on_mobile.label",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:common.blocks.sticker.settings.text.label",
+          "info": "t:common.blocks.sticker.settings.text.info",
+          "default": "Sticker"
+        },
+        {
+          "type": "select",
+          "id": "shape",
+          "label": "t:common.blocks.sticker.settings.shape.label",
+          "options": [
+            {
+              "value": "website_shape_star",
+              "label": "custom star",
+              "group": "custom shapes"
+            },
+            {
+              "value": "website_shape_bun",
+              "label": "custom bun",
+              "group": "custom shapes"
+            },
+            {
+              "value": "website_shape_frame",
+              "label": "custom frame",
+              "group": "custom shapes"
+            },
+            {
+              "value": "website_shape_pancake",
+              "label": "custom pancake",
+              "group": "custom shapes"
+            },
+            {
+              "value": "website_shape_cloud",
+              "label": "custom cloud",
+              "group": "custom shapes"
+            },
+            {
+              "value": "fit_to_text",
+              "label": "t:common.blocks.sticker.settings.shape.options.fit_to_text.label"
+            },
+            {
+              "value": "circle",
+              "label": "t:common.options.circle.label",
+              "group": "t:common.groups.basic"
+            },
+            {
+              "value": "pentagon",
+              "label": "t:common.options.pentagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "hexagon",
+              "label": "t:common.options.hexagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "heptagon",
+              "label": "t:common.options.heptagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "octagon",
+              "label": "t:common.options.octagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "nonagon",
+              "label": "t:common.options.nonagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "decagon",
+              "label": "t:common.options.decagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "rounded_pentagon",
+              "label": "t:common.options.rounded_pentagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "rounded_hexagon",
+              "label": "t:common.options.rounded_hexagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "rounded_heptagon",
+              "label": "t:common.options.rounded_heptagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "rounded_octagon",
+              "label": "t:common.options.rounded_octagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "rounded_nonagon",
+              "label": "t:common.options.rounded_nonagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "rounded_decagon",
+              "label": "t:common.options.rounded_decagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "star_1",
+              "label": "t:common.options.star_1.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "star_2",
+              "label": "t:common.options.star_2.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "star_3",
+              "label": "t:common.options.star_3.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "star_4",
+              "label": "t:common.options.star_4.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "star_5",
+              "label": "t:common.options.star_5.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "star_6",
+              "label": "t:common.options.star_6.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "scalloped_circle_1",
+              "label": "t:common.options.scalloped_circle_1.label",
+              "group": "t:common.groups.scalloped_circles"
+            },
+            {
+              "value": "scalloped_circle_2",
+              "label": "t:common.options.scalloped_circle_2.label",
+              "group": "t:common.groups.scalloped_circles"
+            },
+            {
+              "value": "scalloped_circle_3",
+              "label": "t:common.options.scalloped_circle_3.label",
+              "group": "t:common.groups.scalloped_circles"
+            },
+            {
+              "value": "scalloped_circle_4",
+              "label": "t:common.options.scalloped_circle_4.label",
+              "group": "t:common.groups.scalloped_circles"
+            },
+            {
+              "value": "scalloped_circle_5",
+              "label": "t:common.options.scalloped_circle_5.label",
+              "group": "t:common.groups.scalloped_circles"
+            },
+            {
+              "value": "scalloped_circle_6",
+              "label": "t:common.options.scalloped_circle_6.label",
+              "group": "t:common.groups.scalloped_circles"
+            },
+            {
+              "value": "parallelogram",
+              "label": "t:common.options.parallelogram.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "squircle",
+              "label": "t:common.options.squircle.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "scalloped_square_1",
+              "label": "t:common.options.scalloped_square_1.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "scalloped_square_2",
+              "label": "t:common.options.scalloped_square_2.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "leaf",
+              "label": "t:common.options.leaf.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "clipped_square",
+              "label": "t:common.options.clipped.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "convex_square",
+              "label": "t:common.options.convex.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "twisted_square",
+              "label": "t:common.options.twisted.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "trapeze",
+              "label": "t:common.options.trapeze.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "pinched",
+              "label": "t:common.options.pinched.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "pixelated",
+              "label": "t:common.options.pixelated.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "overlapped",
+              "label": "t:common.options.overlapped.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "ellipse",
+              "label": "t:common.options.ellipse.label",
+              "group": "t:common.groups.wide"
+            },
+            {
+              "value": "diamond_wide",
+              "label": "t:common.options.diamond.label",
+              "group": "t:common.groups.wide"
+            },
+            {
+              "value": "rounded_diamond_wide",
+              "label": "t:common.options.rounded_diamond.label",
+              "group": "t:common.groups.wide"
+            },
+            {
+              "value": "triangle_wide",
+              "label": "t:common.options.triangle.label",
+              "group": "t:common.groups.wide"
+            },
+            {
+              "value": "hexagon_wide",
+              "label": "t:common.options.hexagon.label",
+              "group": "t:common.groups.wide"
+            },
+            {
+              "value": "rounded_hexagon_wide",
+              "label": "t:common.options.rounded_hexagon.label",
+              "group": "t:common.groups.wide"
+            },
+            {
+              "value": "uneven_star_wide",
+              "label": "t:common.options.uneven_star.label",
+              "group": "t:common.groups.wide"
+            },
+            {
+              "value": "star_wide",
+              "label": "t:common.options.star.label",
+              "group": "t:common.groups.wide"
+            },
+            {
+              "value": "semicircle",
+              "label": "t:common.options.semicircle.label",
+              "group": "t:common.groups.wide"
+            },
+            {
+              "value": "eye",
+              "label": "t:common.options.eye.label",
+              "group": "t:common.groups.wide"
+            },
+            {
+              "value": "parallelogram_wide",
+              "label": "t:common.options.parallelogram.label",
+              "group": "t:common.groups.wide"
+            },
+            {
+              "value": "ribbon",
+              "label": "t:common.options.ribbon.label",
+              "group": "t:common.groups.wide"
+            },
+            {
+              "value": "ticket_stub",
+              "label": "t:common.options.ticket_stub.label",
+              "group": "t:common.groups.wide"
+            },
+            {
+              "value": "wave_ribbon",
+              "label": "t:common.options.wave_ribbon.label",
+              "group": "t:common.groups.wide"
+            },
+            {
+              "value": "zig_zag_ribbon",
+              "label": "t:common.options.zig_zag_ribbon.label",
+              "group": "t:common.groups.wide"
+            }
+          ],
+          "default": "star_1"
+        },
+        {
+          "type": "select",
+          "id": "sticker_font_size",
+          "label": "t:common.settings.sticker_font_size.label",
+          "options": [
+            {
+              "value": "1rem",
+              "label": "t:common.options.extra_small.label"
+            },
+            {
+              "value": "1.25rem",
+              "label": "t:common.options.small.label"
+            },
+            {
+              "value": "1.563rem",
+              "label": "t:common.options.medium.label"
+            },
+            {
+              "value": "1.953rem",
+              "label": "t:common.options.large.label"
+            },
+            {
+              "value": "2.441rem",
+              "label": "t:common.options.extra_large.label"
+            }
+          ],
+          "default": "1.563rem",
+          "info": "t:common.settings.sticker_font_size.info"
+        },
+        {
+          "type": "header",
+          "content": "t:common.settings.header_custom_image"
+        },
+        {
+          "type": "paragraph",
+          "content": "t:common.blocks.sticker.settings.paragraph_using_an_image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:common.settings.image.label"
+        },
+        {
+          "type": "header",
+          "content": "t:common.settings.header_position"
+        },
+        {
+          "type": "range",
+          "id": "horizontal_position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "t:common.blocks.sticker.settings.horizontal_position.label",
+          "default": 80
+        },
+        {
+          "type": "range",
+          "id": "vertical_position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "t:common.blocks.sticker.settings.vertical_position.label",
+          "default": 80
+        },
+        {
+          "type": "range",
+          "id": "horizontal_position_sm",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "horizontal position mobile",
+          "default": 80
+        },
+        {
+          "type": "range",
+          "id": "vertical_position_sm",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "vertical position mobile",
+          "default": 80
+        },
+        {
+          "type": "range",
+          "id": "rotate",
+          "min": -90,
+          "max": 90,
+          "step": 2,
+          "unit": "deg",
+          "label": "t:common.settings.rotate.label",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "t:common.settings.header_layout"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_sticker_on_mobile",
+          "label": "t:common.blocks.sticker.settings.show_sticker_on_mobile.label",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_sticker_on_desktop",
+          "label": "t:common.blocks.sticker.settings.show_sticker_on_desktop.label",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "t:common.settings.header_animation"
+        },
+        {
+          "type": "select",
+          "id": "rotation_animation",
+          "label": "t:common.blocks.sticker.settings.rotation_animation.label",
+          "options": [
+            {
+              "value": "none",
+              "label": "t:common.blocks.sticker.settings.rotation_animation.options.no_rotation.label"
+            },
+            {
+              "value": "constantly_rotate",
+              "label": "t:common.blocks.sticker.settings.rotation_animation.options.constantly_rotate.label"
+            },
+            {
+              "value": "rotate_when_scrolling",
+              "label": "t:common.blocks.sticker.settings.rotation_animation.options.rotate_only_when_page_is_scrolling.label"
+            }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_parallax",
+          "label": "t:common.blocks.sticker.settings.enable_parallax.label",
+          "default": false,
+          "info": "t:common.blocks.sticker.settings.enable_parallax.info"
+        },
+        {
+          "type": "range",
+          "id": "parallax_speed",
+          "min": 1,
+          "max": 10,
+          "step": 1,
+          "label": "t:common.settings.parallax_speed.label",
+          "default": 3
+        },
+        {
+          "type": "header",
+          "content": "t:common.settings.header_color"
+        },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "default": "scheme1",
+          "label": "t:common.settings.color_scheme.label"
+        },
+        {
+          "type": "select",
+          "id": "color",
+          "label": "t:common.settings.background_color.label",
+          "default": "bg-scheme-accent-1 text-scheme-accent-1-contrast",
+          "options": [
+            {
+              "value": "bg-scheme-text text-scheme-text-contrast",
+              "label": "t:common.options.text.label"
+            },
+            {
+              "value": "bg-scheme-accent-1 text-scheme-accent-1-contrast",
+              "label": "t:common.options.accent_1.label"
+            },
+            {
+              "value": "bg-scheme-accent-2 text-scheme-accent-2-contrast",
+              "label": "t:common.options.accent_2.label"
+            },
+            {
+              "value": "bg-scheme-card text-scheme-card-text",
+              "label": "t:common.options.card.label"
+            },
+            {
+              "value": "bg-scheme-background text-scheme-text",
+              "label": "t:common.options.background.label"
+            },
+            {
+              "value": "bg-scheme-gradient text-scheme-text",
+              "label": "t:common.options.gradient.label"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "t:common.blocks.shape_divider.name",
+      "type": "shape_divider",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "select",
+          "label": "t:common.blocks.shape_divider.settings.target_section.label",
+          "id": "target_section",
+          "default": "above",
+          "options": [
+            {
+              "value": "above",
+              "label": "t:common.blocks.shape_divider.settings.target_section.options.section_above.label"
+            },
+            {
+              "value": "below",
+              "label": "t:common.blocks.shape_divider.settings.target_section.options.section_below.label"
+            }
+          ],
+          "info": "t:common.blocks.shape_divider.settings.target_section.info"
+        },
+        {
+          "type": "color_scheme",
+          "id": "target_section_color_scheme",
+          "default": "scheme1",
+          "label": "t:common.blocks.shape_divider.settings.target_section_color_scheme.label",
+          "info": "t:common.blocks.shape_divider.settings.target_section_color_scheme.info"
+        },
+        {
+          "type": "select",
+          "label": "t:common.blocks.shape_divider.settings.style.label",
+          "id": "style",
+          "default": "waves-1-patterned_1200x20",
+          "options": [
+            {
+              "value": "waves-1-patterned_1200x20",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_1.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "waves-2-patterned_1200x43",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_2.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "waves-3-patterned_1200x84",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_3.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "zig-zag-1-patterned_1200x21",
+              "label": "t:common.blocks.shape_divider.settings.style.options.zig_zag_1.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "zig-zag-2-patterned_1200x37",
+              "label": "t:common.blocks.shape_divider.settings.style.options.zig_zag_2.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "zig-zag-3-patterned_1200x65",
+              "label": "t:common.blocks.shape_divider.settings.style.options.zig_zag_3.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "circles-1-patterned_1200x16",
+              "label": "t:common.blocks.shape_divider.settings.style.options.circles_1.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "circles-2-patterned_1200x35",
+              "label": "t:common.blocks.shape_divider.settings.style.options.circles_2.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "kd-scallop-patterned_1440x40",
+              "label": "Kaadu scallop",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "kd-scallop-mobile-patterned_416x30",
+              "label": "Kaadu scallop (mobile)",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "circles-2.5-patterned_1200x54",
+              "label": "t:common.blocks.shape_divider.settings.style.options.circles_2_5.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "circles-3-patterned_1200x67",
+              "label": "t:common.blocks.shape_divider.settings.style.options.circles_3.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "spikes-1-patterned_1200x132",
+              "label": "t:common.blocks.shape_divider.settings.style.options.spikes_1.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "spikes-2-patterned_1200x132",
+              "label": "t:common.blocks.shape_divider.settings.style.options.spikes_2.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "tilt-1-shape_1440x101",
+              "label": "t:common.blocks.shape_divider.settings.style.options.tilt_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "tilt-2-shape_1440x180",
+              "label": "t:common.blocks.shape_divider.settings.style.options.tilt_2.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "tilt-3-shape_1440x293",
+              "label": "t:common.blocks.shape_divider.settings.style.options.tilt_3.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "waves-1-shape_1440x261",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "waves-2-shape_1440x330",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_2.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "mountains-1-shape_1440x293",
+              "label": "t:common.blocks.shape_divider.settings.style.options.mountains_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "mountains-2-shape_1440x325",
+              "label": "t:common.blocks.shape_divider.settings.style.options.mountains_2.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "curve-shape_1440x149",
+              "label": "t:common.blocks.shape_divider.settings.style.options.curve.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "curve-inverse-shape_1440x149",
+              "label": "t:common.blocks.shape_divider.settings.style.options.curve_inverse.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "steps-1-shape_1400x105",
+              "label": "t:common.blocks.shape_divider.settings.style.options.steps_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "steps-2-shape_1400x105",
+              "label": "t:common.blocks.shape_divider.settings.style.options.steps_2.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "arrow-1-shape_1400x33",
+              "label": "t:common.blocks.shape_divider.settings.style.options.arrow_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "arrow-2-shape_1400x73",
+              "label": "t:common.blocks.shape_divider.settings.style.options.arrow_2.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "offset-ovals-shape_1400x155",
+              "label": "t:common.blocks.shape_divider.settings.style.options.offset_ovals.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "triangle-shape_1400x145",
+              "label": "t:common.blocks.shape_divider.settings.style.options.triangle.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "triangle-asymmetrical-shape_1400x145",
+              "label": "t:common.blocks.shape_divider.settings.style.options.triangle_asymmetrical.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "clouds-shape_1400x161",
+              "label": "t:common.blocks.shape_divider.settings.style.options.clouds.label",
+              "group": "t:common.settings.shape.label"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "t:common.blocks.shape_divider.settings.mobile_header.content"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_mobile_style",
+          "label": "t:common.blocks.shape_divider.settings.enable_mobile_style.label",
+          "info": "t:common.blocks.shape_divider.settings.enable_mobile_style.info"
+        },
+        {
+          "type": "select",
+          "label": "t:common.blocks.shape_divider.settings.style_mobile.label",
+          "id": "style_mobile",
+          "default": "waves-1-patterned_1200x20",
+          "options": [
+            {
+              "value": "waves-1-patterned_1200x20",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_1.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "waves-2-patterned_1200x43",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_2.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "waves-3-patterned_1200x84",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_3.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "zig-zag-1-patterned_1200x21",
+              "label": "t:common.blocks.shape_divider.settings.style.options.zig_zag_1.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "zig-zag-2-patterned_1200x37",
+              "label": "t:common.blocks.shape_divider.settings.style.options.zig_zag_2.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "zig-zag-3-patterned_1200x65",
+              "label": "t:common.blocks.shape_divider.settings.style.options.zig_zag_3.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "circles-1-patterned_1200x16",
+              "label": "t:common.blocks.shape_divider.settings.style.options.circles_1.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "circles-2-patterned_1200x35",
+              "label": "t:common.blocks.shape_divider.settings.style.options.circles_2.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "kd-scallop-patterned_1440x40",
+              "label": "Kaadu scallop",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "kd-scallop-mobile-patterned_416x30",
+              "label": "Kaadu scallop (mobile)",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "circles-2.5-patterned_1200x54",
+              "label": "t:common.blocks.shape_divider.settings.style.options.circles_2_5.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "circles-3-patterned_1200x67",
+              "label": "t:common.blocks.shape_divider.settings.style.options.circles_3.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "spikes-1-patterned_1200x132",
+              "label": "t:common.blocks.shape_divider.settings.style.options.spikes_1.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "spikes-2-patterned_1200x132",
+              "label": "t:common.blocks.shape_divider.settings.style.options.spikes_2.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "tilt-1-shape_1440x101",
+              "label": "t:common.blocks.shape_divider.settings.style.options.tilt_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "tilt-2-shape_1440x180",
+              "label": "t:common.blocks.shape_divider.settings.style.options.tilt_2.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "tilt-3-shape_1440x293",
+              "label": "t:common.blocks.shape_divider.settings.style.options.tilt_3.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "waves-1-shape_1440x261",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "waves-2-shape_1440x330",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_2.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "mountains-1-shape_1440x293",
+              "label": "t:common.blocks.shape_divider.settings.style.options.mountains_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "mountains-2-shape_1440x325",
+              "label": "t:common.blocks.shape_divider.settings.style.options.mountains_2.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "curve-shape_1440x149",
+              "label": "t:common.blocks.shape_divider.settings.style.options.curve.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "curve-inverse-shape_1440x149",
+              "label": "t:common.blocks.shape_divider.settings.style.options.curve_inverse.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "steps-1-shape_1400x105",
+              "label": "t:common.blocks.shape_divider.settings.style.options.steps_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "steps-2-shape_1400x105",
+              "label": "t:common.blocks.shape_divider.settings.style.options.steps_2.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "arrow-1-shape_1400x33",
+              "label": "t:common.blocks.shape_divider.settings.style.options.arrow_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "arrow-2-shape_1400x73",
+              "label": "t:common.blocks.shape_divider.settings.style.options.arrow_2.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "offset-ovals-shape_1400x155",
+              "label": "t:common.blocks.shape_divider.settings.style.options.offset_ovals.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "triangle-shape_1400x145",
+              "label": "t:common.blocks.shape_divider.settings.style.options.triangle.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "triangle-asymmetrical-shape_1400x145",
+              "label": "t:common.blocks.shape_divider.settings.style.options.triangle_asymmetrical.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "clouds-shape_1400x161",
+              "label": "t:common.blocks.shape_divider.settings.style.options.clouds.label",
+              "group": "t:common.settings.shape.label"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "flip_horizontal",
+          "label": "t:common.blocks.shape_divider.settings.flip_horizontal.label"
+        },
+        {
+          "type": "header",
+          "content": "t:common.settings.header_animation"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_animation",
+          "label": "t:common.blocks.shape_divider.settings.enable_animation.label",
+          "info": "t:common.blocks.shape_divider.settings.enable_animation.info"
+        },
+        {
+          "type": "select",
+          "id": "animation_direction",
+          "label": "t:common.blocks.shape_divider.settings.animation_direction.label",
+          "options": [
+            {
+              "value": "",
+              "label": "t:common.options.right_to_left.label"
+            },
+            {
+              "value": "reverse",
+              "label": "t:common.options.left_to_right.label"
+            }
+          ],
+          "default": ""
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kaadu cost split",
+      "blocks": [
+        {
+          "type": "segment"
+        },
+        {
+          "type": "segment"
+        },
+        {
+          "type": "segment"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

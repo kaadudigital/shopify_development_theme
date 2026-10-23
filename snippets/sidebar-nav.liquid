@@ -7,16 +7,10 @@
     x-show="$store.modals.leftDrawer.contents === 'nav'"
     class="sidebar-nav px-section py-5 {% if settings.enable_sidebar_nav_animation %} sidebar-nav--enable-transitions {% endif %}"
   >
-    <div class="relative flex items-center justify-between pb-5">
-      <h2 class="sr-only" class="" tabindex="-1">
+    <div class="relative pb-5">
+      <h2 class="sr-only" tabindex="-1">
         {{ section.settings.main_linklist.title }}
       </h2>
-      <button @click.prevent="$store.modals.close('nav')" class="top-0 block">
-        <span class="sr-only">
-          {{- 'general.accessibility.close_modal' | t -}}
-        </span>
-        <span class="inline-block h-5 w-5">{% render 'icon-close' %}</span>
-      </button>
     </div>
     <ul class="mt-5">
       {%- liquid

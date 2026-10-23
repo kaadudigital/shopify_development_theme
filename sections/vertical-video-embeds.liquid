@@ -1,43 +1,197 @@
 {%- comment -%}
-  This is a required section for the Shopify Theme Store.
-  It is available in the "Featured Collection" section in the theme editor.
-
-  Theme Store required settings
-  - Collection
-
-  Theme Store optional settings
-  - Heading: title of the featured collection section
+  Videos in a phone ("Ungeschnitten oder so"), as in the landing-page mockup: heading, intro, one phone frame
+  (assets/kaadu-phone-frame.webp, 740 × 1336, transparent screen) with the clips side by side inside its screen
+  (swipe, or the ← → buttons), a hint with the clip count, and a cloud button.
+  Clip source per block, first match wins: Shopify-hosted video → YouTube Short link → embed code → TikTok /
+  Instagram link (cover panel that opens the link in a new tab). Hosted videos play with sound on tap; a TikTok
+  or Instagram link on such a clip shows as «✶ Auf TikTok ansehen» under the phone.
+  Behaviour in assets/kaadu.js ([data-kd-phone]).
 {%- endcomment -%}
 {%- liquid
-  assign collection = section.settings.collection
-  if section.settings.image_shape != ''
-    assign image_shape = section.settings.image_shape
-  else
-    assign image_shape = settings.product_tile_media_shape
-  endif
+  assign clips = section.blocks | where: 'type', 'video_embed'
+  assign phone_w = section.settings.phone_width | default: 370
+  assign phone_w_m = section.settings.phone_width_mobile | default: 330
+  assign phone_cap = phone_w | times: 1.4 | round
 -%}
-<section
-  class="relative overflow-hidden bg-scheme-background  text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %} overflow-hidden"
-  data-color-scheme="{{ section.settings.color_scheme }}"
->
-  <div class="section-content relative z-10 py-section-vertical-spacing">
-    {% if section.settings.title != '' %}
-      <h2 class="inline-heading-rte font-heading heading-standard  heading-style break-words text-center {{ settings.heading_drop_shadow_style }}">
-        {{ section.settings.title }}
-      </h2>
-    {% endif %}
 
-    {% if section.settings.subheading != '' %}
-      <div class="inline-rte mx-auto mt-5 max-w-md text-center">
-        {{ section.settings.subheading }}
+
+{%- style -%}
+  #{{ section.id }} {
+    {%- comment -%} Section colours only when "Use the colours below" is on; otherwise every --kd-vid-* is unset and the
+      CSS falls back to the colour scheme (background, text, body text, accent 1 / accent 1 contrast). {%- endcomment -%}
+    {%- if section.settings.use_custom_colors -%}
+      {%- liquid
+        assign vid_colors = 'bg:background_color,heading:heading_color,text:text_color,hint:hint_color,clip-title:clip_title_color,btn:button_color,btn-label:button_label_color,arrow:arrow_icon_color' | split: ','
+      -%}
+      {%- for pair in vid_colors -%}
+        {%- assign kv = pair | split: ':' -%}
+        {%- assign value = section.settings[kv[1]] -%}
+        {%- if value != blank %}
+    --kd-vid-{{ kv[0] }}: {{ value }};
+        {%- endif -%}
+      {%- endfor %}
+    {%- endif %}
+    --kd-phone-w: {{ phone_w_m }}px;
+    --kd-phone-x: {{ section.settings.phone_position_mobile | default: 50 | divided_by: 100.0 }};
+  }
+  @media (min-width: 768px) {
+    #{{ section.id }} { --kd-phone-w: {{ phone_w }}px; --kd-phone-x: 0.5; }
+  }
+  {%- comment -%} Side by side on tablets (768–991): the phone takes at most 40 % of the screen, so the text column keeps room. {%- endcomment %}
+  @media (min-width: 768px) and (max-width: 991.98px) {
+    #{{ section.id }}.kd-videos--left, #{{ section.id }}.kd-videos--right { --kd-phone-w: min({{ phone_w }}px, 40vw); }
+  }
+  {%- comment -%} From 1200px the phone grows with the window like the other decorations (DS: share of the 1440 artboard, capped). {%- endcomment %}
+  @media (min-width: 1200px) {
+    #{{ section.id }} { --kd-phone-w: max({{ phone_w }}px, min(calc({{ phone_w }} * var(--kd-px)), {{ phone_cap }}px)); }
+  }
+{%- endstyle -%}
+
+<section
+  id="{{ section.id }}"
+  class="kd-videos kd-videos--{{ section.settings.slideshow_focus | default: 'center' }} kd-videos--d-{{ section.settings.swipe_direction | default: 'horizontal' }} kd-videos--m-{{ section.settings.swipe_direction_mobile | default: 'vertical' }} relative overflow-hidden bg-scheme-background text-scheme-text"
+  data-color-scheme="{{ section.settings.color_scheme }}"
+  {% unless section.settings.scroll_motion %} data-kd-motion="off"{% endunless %}
+>
+  <div class="section-content relative z-10 kd-videos__inner kd-section kd-wide">
+    {%- liquid
+      assign title_m = section.settings.title_mobile | default: section.settings.title
+      assign intro_m = section.settings.subheading_mobile | default: section.settings.subheading
+    -%}
+    {%- if section.settings.title != blank or title_m != blank or section.settings.subheading != blank or intro_m != blank -%}
+      <div class="kd-heading kd-heading--center kd-videos__heading">
+        {%- if section.settings.title != blank or title_m != blank -%}
+          <h2 class="kd-heading__title kd-display-h2 kd-videos__title">
+            {%- if title_m == section.settings.title -%}
+              {{ section.settings.title }}
+            {%- else -%}
+              <span class="kd-videos__d">{{ section.settings.title }}</span><span class="kd-videos__m">{{ title_m }}</span>
+            {%- endif -%}
+          </h2>
+        {%- endif -%}
+        {%- if section.settings.subheading != blank or intro_m != blank -%}
+          <p class="kd-videos__intro kd-body-lg">
+            {%- if intro_m == section.settings.subheading -%}
+              {{ section.settings.subheading }}
+            {%- else -%}
+              <span class="kd-videos__d">{{ section.settings.subheading }}</span><span class="kd-videos__m">{{ intro_m }}</span>
+            {%- endif -%}
+          </p>
+        {%- endif -%}
       </div>
     {%- endif -%}
 
-    {%- render 'vertical-video-embeds',
-      item: section,
-      collection: collection,
-      image_shape: image_shape
-    -%}
+    {%- if clips.size > 0 -%}
+      <div class="kd-videos__stage">
+        <div class="kd-videos__nav">
+          {%- if clips.size > 1 -%}
+            <button type="button" class="kd-videos__arrow" data-kd-phone-prev aria-label="Vorheriger Clip"><span class="kd-videos__glyph-h">←</span><span class="kd-videos__glyph-v">↑</span></button>
+          {%- endif -%}
+          {%- if section.settings.hint != blank or section.settings.hint_show_count -%}
+            <p class="kd-videos__hint kd-label">
+              {{- section.settings.hint | escape -}}
+              {%- if section.settings.hint_show_count -%}
+                {%- if section.settings.hint != blank %}&nbsp;· {% endif -%}
+                {{ clips.size }}&nbsp;{% if clips.size == 1 %}Clip{% else %}Clips{% endif %}
+              {%- endif -%}
+            </p>
+          {%- endif -%}
+          {%- if clips.size > 1 -%}
+            <button type="button" class="kd-videos__arrow" data-kd-phone-next aria-label="Nächster Clip"><span class="kd-videos__glyph-h">→</span><span class="kd-videos__glyph-v">↓</span></button>
+          {%- endif -%}
+        </div>
+        <div class="kd-videos__rig">
+        <div
+          class="kd-phone"
+          data-kd-phone
+          data-autoplay-desktop="{% if section.settings.autoscroll_mode == '0' or section.settings.autoscroll_mode == blank %}false{% else %}true{% endif %}"
+          data-autoplay-mobile="{% if section.settings.autoscroll_mode == '0' or section.settings.autoscroll_mode == blank or section.settings.autoscroll_mobile == false %}false{% else %}true{% endif %}"
+          data-autoplay-direction="1"
+          data-autoplay-interval="{{ section.settings.autoscroll_interval | default: 6 | times: 1000 }}"
+        >
+          <div class="kd-phone__screen" data-kd-phone-track tabindex="0" role="region" aria-roledescription="carousel" aria-label="{{ section.settings.title | strip_html | escape }}">
+            {%- for block in clips -%}
+              {%- liquid
+                assign link = block.settings.video_url | strip
+                assign kind = 'cover'
+                if block.settings.video != blank
+                  assign kind = 'video'
+                elsif link contains 'youtube.com/shorts/'
+                  assign kind = 'youtube'
+                elsif block.settings.video_embed_code != blank
+                  assign kind = 'embed'
+                endif
+                assign source_label = ''
+                if link contains 'tiktok.com'
+                  assign source_label = section.settings.tiktok_link_label
+                elsif link contains 'instagram.com'
+                  assign source_label = section.settings.instagram_link_label
+                endif
+              -%}
+              <div
+                class="kd-phone__clip kd-phone__clip--{{ kind }}"
+                style="--kd-clip-bg: {{ block.settings.placeholder_color | default: '#e9a2e6' }};"
+                role="group"
+                aria-roledescription="slide"
+                aria-label="{{ forloop.index }} / {{ clips.size }}{% if block.settings.title != blank %}: {{ block.settings.title | escape }}{% endif %}"
+                {% if kind == 'video' and source_label != blank %}data-source-url="{{ link }}" data-source-label="{{ source_label | escape }}"{% endif %}
+                {{ block.shopify_attributes }}
+              >
+                {%- case kind -%}
+                  {%- when 'video' -%}
+                    {{ block.settings.video | video_tag: class: 'kd-phone__media', image_size: '720x', playsinline: true, loop: true, preload: 'none' }}
+                    {%- if block.settings.poster != blank -%}
+                      {{ block.settings.poster | image_url: width: 720 | image_tag: class: 'kd-phone__media kd-phone__poster', alt: '', loading: 'lazy', sizes: '360px' }}
+                    {%- endif -%}
+                    <button type="button" class="kd-phone__play" data-kd-clip-play aria-label="Abspielen{% if block.settings.title != blank %}: {{ block.settings.title | escape }}{% endif %}">
+                      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 4l14 8-14 8z"/></svg>
+                    </button>
+                  {%- when 'youtube' -%}
+                    {%- assign video_id = link | split: '/shorts/' | last | split: '?' | first | split: '/' | first -%}
+                    <iframe
+                      class="kd-phone__media"
+                      src="https://www.youtube.com/embed/{{ video_id }}"
+                      title="{{ block.settings.title | default: 'YouTube' | escape }}"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowfullscreen
+                      loading="lazy"
+                    ></iframe>
+                  {%- when 'embed' -%}
+                    <div class="kd-phone__media kd-phone__embed">{{ block.settings.video_embed_code }}</div>
+                  {%- else -%}
+                    {%- if block.settings.poster != blank -%}
+                      {{ block.settings.poster | image_url: width: 720 | image_tag: class: 'kd-phone__media', alt: '', loading: 'lazy', sizes: '360px' }}
+                    {%- endif -%}
+                    {%- if link != blank -%}
+                      <a class="kd-phone__play" href="{{ link }}" target="_blank" rel="noopener" aria-label="{{ source_label | default: block.settings.title | default: link | escape }}">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 4l14 8-14 8z"/></svg>
+                      </a>
+                    {%- else -%}
+                      <span class="kd-phone__play" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" focusable="false"><path d="M7 4l14 8-14 8z"/></svg>
+                      </span>
+                    {%- endif -%}
+                {%- endcase -%}
+                {%- if block.settings.title != blank and kind != 'youtube' and kind != 'embed' -%}
+                  <p class="kd-phone__title">{{ block.settings.title | escape }}</p>
+                {%- endif -%}
+              </div>
+            {%- endfor -%}
+          </div>
+          <img class="kd-phone__frame" src="{{ 'kaadu-phone-frame.webp' | asset_url }}" alt="" width="740" height="1336" loading="lazy">
+          <span class="kd-phone__notch" aria-hidden="true"></span>
+        </div>
+        </div>
+
+        <a class="kd-link kd-videos__source" href="#" target="_blank" rel="noopener" data-kd-phone-source hidden></a>
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+      <div class="kd-videos__actions">
+        {%- render 'kd-button', label: section.settings.button_label, url: section.settings.button_link, class: 'kd-videos__button' -%}
+      </div>
+    {%- endif -%}
   </div>
 
   {%- liquid
@@ -68,56 +222,202 @@
   "name": "t:sections.vertical_video_embeds.name",
   "settings": [
     {
+      "type": "header",
+      "content": "Text"
+    },
+    {
       "type": "inline_richtext",
       "id": "title",
-      "label": "t:sections.featured_collection.settings.title.label",
-      "default": "t:sections.vertical_video_embeds.name"
+      "label": "Heading",
+      "default": "Ungeschnitten oder so"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title_mobile",
+      "label": "Heading on mobile",
+      "info": "Below 768px. Empty = same as desktop.",
+      "default": "Aus Kerala. Ungeschnitten."
     },
     {
       "id": "subheading",
       "type": "inline_richtext",
-      "label": "t:sections.featured_collection.settings.subheading.label",
-      "default": "Use this text to share information."
+      "label": "Intro",
+      "default": "Überzeug dich selbst von unserer Radikalen fairness, schamlose transparenz mit Menschen im Zentrum"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "subheading_mobile",
+      "label": "Intro on mobile",
+      "info": "Below 768px. Empty = same as desktop.",
+      "default": "Schau, warum sie Kaadu essen und wem das etwas bringt."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "info": "Cloud button below the videos, e.g. Zum Manifesto. Its colours follow the colour scheme."
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Phone"
+    },
+    {
+      "type": "range",
+      "id": "phone_width",
+      "label": "Phone width",
+      "min": 300,
+      "max": 480,
+      "step": 10,
+      "unit": "px",
+      "default": 370,
+      "info": "Tablet and desktop. From 1200px it grows with the window, up to 1.4 ×."
+    },
+    {
+      "type": "range",
+      "id": "phone_width_mobile",
+      "label": "Phone width on mobile",
+      "min": 260,
+      "max": 360,
+      "step": 10,
+      "unit": "px",
+      "default": 330
+    },
+    {
+      "type": "range",
+      "id": "phone_position_mobile",
+      "label": "Phone position on mobile",
+      "info": "Below 768px: 0 % = left edge, 50 % = centred, 100 % = right edge. From tablet up the layout setting places the phone.",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "select",
+      "id": "swipe_direction",
+      "label": "Swipe direction",
+      "options": [
+        {
+          "value": "horizontal",
+          "label": "Sideways ← →"
+        },
+        {
+          "value": "vertical",
+          "label": "Up and down ↑ ↓ (like Reels)"
+        }
+      ],
+      "default": "horizontal",
+      "info": "Tablet and desktop. Up and down also catches the mouse wheel while the pointer is over the phone."
+    },
+    {
+      "type": "select",
+      "id": "swipe_direction_mobile",
+      "label": "Swipe direction on mobile",
+      "options": [
+        {
+          "value": "horizontal",
+          "label": "Sideways ← →"
+        },
+        {
+          "value": "vertical",
+          "label": "Up and down ↑ ↓ (like Reels)"
+        }
+      ],
+      "default": "vertical",
+      "info": "After the last clip the page scrolls on as normal."
+    },
+    {
+      "type": "text",
+      "id": "hint",
+      "label": "Hint above the phone",
+      "default": "Wischen für den nächsten Clip"
+    },
+    {
+      "type": "checkbox",
+      "id": "hint_show_count",
+      "label": "Add the clip count to the hint",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "tiktok_link_label",
+      "label": "TikTok link text",
+      "default": "Auf TikTok ansehen",
+      "info": "Shown under the phone for a clip that has both an uploaded video and a TikTok link."
+    },
+    {
+      "type": "text",
+      "id": "instagram_link_label",
+      "label": "Instagram link text",
+      "default": "Auf Instagram ansehen"
+    },
+    {
+      "type": "header",
+      "content": "Layout and motion"
     },
     {
       "type": "select",
       "id": "slideshow_focus",
-      "label": "t:common.settings.slideshow_focus.label",
+      "label": "Layout from tablet (768px)",
       "options": [
         {
           "value": "center",
-          "label": "t:common.options.center.label"
+          "label": "Centred"
         },
         {
           "value": "left",
-          "label": "t:common.options.left.label"
+          "label": "Side by side: phone right"
+        },
+        {
+          "value": "right",
+          "label": "Side by side: phone left"
         }
       ],
-      "default": "center"
+      "default": "left",
+      "info": "Side by side: heading, intro and button in one column, the phone in the other (more compact). Centred: everything stacked, phone in the middle. Mobile is always stacked."
     },
     {
       "type": "select",
       "id": "autoscroll_mode",
-      "label": "t:common.settings.autoscroll_mode.label",
+      "label": "Auto-advance clips",
       "options": [
         {
           "value": "1",
-          "label": "t:common.options.right_to_left.label"
-        },
-        {
-          "value": "-1",
-          "label": "t:common.options.left_to_right.label"
+          "label": "On"
         },
         {
           "value": "0",
-          "label": "t:common.options.disabled.label"
+          "label": "Off"
         }
       ],
-      "default": "1"
+      "default": "0",
+      "info": "Moves to the next clip on its own while no clip is playing. Stops for good once the visitor swipes or uses the arrows; off for people who turned off animations."
+    },
+    {
+      "type": "checkbox",
+      "id": "autoscroll_mobile",
+      "label": "Auto-advance on mobile too",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoscroll_interval",
+      "label": "Time per clip",
+      "min": 3,
+      "max": 15,
+      "step": 1,
+      "unit": "s",
+      "default": 6
     },
     {
       "type": "header",
-      "content": "t:common.settings.header_color"
+      "content": "Colour"
     },
     {
       "type": "color_scheme",
@@ -127,26 +427,106 @@
     },
     {
       "type": "checkbox",
-      "id": "use_gradient_background",
-      "label": "t:common.settings.use_gradient_background.label"
-    }
+      "id": "use_custom_colors",
+      "label": "Use the colours below instead of the colour scheme",
+      "default": true,
+      "info": "On: background, heading, intro, hint, clip titles, button and arrows use the colours below (mockup values). Off: they all come from the colour scheme above."
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#AC0300",
+      "info": "Clear it to keep the scheme background while using the other colours below."
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Intro",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "hint_color",
+      "label": "Hint and links",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "clip_title_color",
+      "label": "Clip titles",
+      "default": "#FFFFF5",
+      "info": "Sits on the video with a soft shadow."
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button",
+      "default": "#FFC6FF"
+    },
+    {
+      "type": "color",
+      "id": "button_label_color",
+      "label": "Button label",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "arrow_icon_color",
+      "label": "Arrow colour",
+      "default": "#FFFFF5",
+      "info": "Keep at least 3:1 contrast against the section or arrow background."
+    },
+    {"type": "header", "content": "Animation"},
+    {"type": "checkbox", "id": "scroll_motion", "label": "Scroll animations", "default": true, "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations."}
   ],
   "blocks": [
     {
       "type": "video_embed",
-      "name": "t:sections.vertical_video_embeds.blocks.video_embed.name",
+      "name": "Clip",
       "settings": [
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video",
+          "info": "Upload the clip (9:16). Plays in the phone with sound when tapped."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "info": "Line at the bottom of the screen, e.g. Wie eine Ananas reif wird"
+        },
+        {
+          "type": "image_picker",
+          "id": "poster",
+          "label": "Cover image",
+          "info": "Optional. Shown before the video plays (default: the video's own preview frame) and as the cover for TikTok/Instagram links."
+        },
+        {
+          "type": "color",
+          "id": "placeholder_color",
+          "label": "Cover colour",
+          "default": "#E9A2E6",
+          "info": "Background while nothing is loaded."
+        },
         {
           "type": "text",
           "id": "video_url",
-          "label": "t:sections.vertical_video_embeds.blocks.video_embed.settings.video_url.label",
-          "info": "t:sections.vertical_video_embeds.blocks.video_embed.settings.video_url.info"
+          "label": "TikTok, Instagram or YouTube Short link",
+          "info": "Without an uploaded video: YouTube Shorts play in the phone; TikTok and Instagram show the cover and open the link. With an uploaded video: a TikTok/Instagram link appears under the phone."
         },
         {
           "type": "textarea",
           "id": "video_embed_code",
-          "label": "t:sections.vertical_video_embeds.blocks.video_embed.settings.video_embed_code.label",
-          "info": "t:sections.vertical_video_embeds.blocks.video_embed.settings.video_embed_code.info"
+          "label": "Embed code",
+          "info": "Used when there is no uploaded video and no YouTube Short link."
         }
       ]
     },
@@ -1321,6 +1701,26 @@
         },
         {
           "type": "range",
+          "id": "horizontal_position_sm",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "horizontal position mobile",
+          "default": 80
+        },
+        {
+          "type": "range",
+          "id": "vertical_position_sm",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "vertical position mobile",
+          "default": 80
+        },
+        {
+          "type": "range",
           "id": "rotate",
           "min": -90,
           "max": 90,
@@ -1505,6 +1905,16 @@
               "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
             },
             {
+              "value": "kd-scallop-patterned_1440x40",
+              "label": "Kaadu scallop",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "kd-scallop-mobile-patterned_416x30",
+              "label": "Kaadu scallop (mobile)",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
               "value": "circles-2.5-patterned_1200x54",
               "label": "t:common.blocks.shape_divider.settings.style.options.circles_2_5.label",
               "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
@@ -1668,6 +2078,16 @@
               "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
             },
             {
+              "value": "kd-scallop-patterned_1440x40",
+              "label": "Kaadu scallop",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "kd-scallop-mobile-patterned_416x30",
+              "label": "Kaadu scallop (mobile)",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
               "value": "circles-2.5-patterned_1200x54",
               "label": "t:common.blocks.shape_divider.settings.style.options.circles_2_5.label",
               "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
@@ -1813,22 +2233,22 @@
       "name": "t:sections.vertical_video_embeds.name",
       "blocks": [
         {
-          "type": "video_embed"
+          "type": "video_embed",
+          "settings": {
+            "placeholder_color": "#E9A2E6"
+          }
         },
         {
-          "type": "video_embed"
+          "type": "video_embed",
+          "settings": {
+            "placeholder_color": "#FF781E"
+          }
         },
         {
-          "type": "video_embed"
-        },
-        {
-          "type": "video_embed"
-        },
-        {
-          "type": "video_embed"
-        },
-        {
-          "type": "video_embed"
+          "type": "video_embed",
+          "settings": {
+            "placeholder_color": "#B7D9FF"
+          }
         }
       ]
     }

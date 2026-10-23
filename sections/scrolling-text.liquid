@@ -1,8 +1,109 @@
+{%- comment -%}
+  Kaadu DS Ticker (look: DS band, Fagies, uppercase; colours from the colour scheme, or from the section's colour
+  settings when «Use the colours below» is on).
+  Several phrases: separate them with "|" in the text setting. Styles: "TICKER" in assets/base.bundle.css.
+  All section settings apply: separator (DS ✶, shape or image) with size and rotation, repeat on/off,
+  speed (120 = the DS 22-second loop), direction, link. Stops under prefers-reduced-motion.
+  The group is rendered twice so translateX(0 → -50%) loops seamlessly.
+{%- endcomment -%}
+{%- liquid
+  assign phrases = section.settings.text | split: '|'
+  assign ticker_link = section.settings.link
+  assign sep = section.settings.shape_between_text | default: 'kd_star'
+  assign repeat_text = section.settings.repeat_text
+  assign speed = section.settings.speed | default: 120
+  if speed < 10
+    assign speed = 10
+  endif
+  assign duration = 2640.0 | divided_by: speed | round: 2
+
+  assign repeats = 6
+  unless repeat_text
+    assign repeats = 1
+  endunless
+-%}
+
+{%- capture separator -%}
+  {%- case sep -%}
+    {%- when 'none' -%}
+      <span class="kd-ticker__gap" aria-hidden="true"></span>
+    {%- when 'kd_star' -%}
+      <span class="kd-ticker__star">&#10038;</span>
+    {%- when 'image' -%}
+      {%- if section.settings.between_text_image != blank -%}
+        <span class="kd-ticker__sep">
+          {{- section.settings.between_text_image | image_url: width: 200 | image_tag: class: 'kd-ticker__shape kd-ticker__shape--img', widths: '100, 200, 300', alt: '', loading: 'lazy' -}}
+        </span>
+      {%- else -%}
+        <span class="kd-ticker__star">&#10038;</span>
+      {%- endif -%}
+    {%- else -%}
+      <span class="kd-ticker__sep">
+        <svg class="kd-ticker__shape kd-ticker__shape--svg{% if sep == 'triangle' %} kd-ticker__shape--triangle{% endif %}" viewBox="0 0 200 200" fill="none" aria-hidden="true" focusable="false">
+          {%- case sep -%}
+            {%- when 'circle' -%}
+              <circle cx="100" cy="100" r="95" fill="currentColor"/>
+            {%- when 'diamond' -%}
+              <path d="M100.5 2L198 99.5L100.5 197L3 99.5L100.5 2Z" fill="currentColor"/>
+            {%- when 'triangle' -%}
+              <path d="M100.5 16L198 184.875H3L100.5 16Z" fill="currentColor"/>
+            {%- when 'custom_star' -%}
+              <path transform="translate(0.39 0.39) scale(8)" d="M22.8696 12.4348C22.8696 13.1368 17.7375 13.1557 17.5573 13.8103C17.3771 14.4838 21.8071 17.064 21.4656 17.6522C21.1241 18.2498 16.6656 15.698 16.1818 16.1818C15.698 16.6656 18.2498 21.1241 17.6522 21.4656C17.064 21.8071 14.4838 17.3771 13.8103 17.5573C13.1557 17.7281 13.1368 22.8696 12.4348 22.8696C11.7328 22.8696 11.7138 17.7375 11.0593 17.5573C10.3858 17.3771 7.80553 21.8071 7.21739 21.4656C6.61976 21.1241 9.17154 16.6656 8.68775 16.1818C8.20395 15.698 3.74545 18.2498 3.40395 17.6522C3.06245 17.064 7.49249 14.4838 7.31225 13.8103C7.1415 13.1557 2 13.1368 2 12.4348C2 11.7328 7.13202 11.7138 7.31225 11.0593C7.49249 10.3858 3.06245 7.80553 3.40395 7.21739C3.74545 6.61976 8.20395 9.17154 8.68775 8.68775C9.17154 8.20395 6.61976 3.74545 7.21739 3.40395C7.80553 3.06245 10.3858 7.49249 11.0593 7.31225C11.7138 7.1415 11.7328 2 12.4348 2C13.1368 2 13.1557 7.13202 13.8103 7.31225C14.4838 7.49249 17.064 3.06245 17.6522 3.40395C18.2498 3.74545 15.698 8.20395 16.1818 8.68775C16.6656 9.17154 21.1241 6.61976 21.4656 7.21739C21.8071 7.80553 17.3771 10.3858 17.5573 11.0593C17.7281 11.7138 22.8696 11.7328 22.8696 12.4348Z" fill="currentColor"/>
+            {%- when 'star' -%}
+              <path d="M43.3846 187.385L100.308 12L157.231 187.385L8 78.9231H192.615" fill="currentColor"/>
+            {%- when '10_point_star' -%}
+              <path d="M100.5 3L114.058 58.7724L157.809 21.6208L135.996 74.7109L193.228 70.3708L144.375 100.5L193.228 130.629L135.996 126.289L157.809 179.379L114.058 142.228L100.5 198L86.9419 142.228L43.1909 179.379L65.0044 126.289L7.77197 130.629L56.625 100.5L7.77197 70.3708L65.0044 74.7109L43.1909 21.6208L86.9419 58.7724L100.5 3Z" fill="currentColor"/>
+            {%- when 'flower' -%}
+              <path d="M172.01 105.408C168.411 103.281 163.994 101.645 159.087 100.5C163.994 99.3549 168.411 97.719 172.01 95.5923C187.388 86.7584 192.623 67.1275 183.789 51.75C174.955 36.3725 155.324 31.1376 139.946 39.9715C136.347 42.0982 132.748 45.0428 129.313 48.6418C130.785 43.8977 131.603 39.1535 131.603 35.0638C131.603 17.396 117.207 3 99.5396 3C81.8718 3 67.4758 17.396 67.4758 35.0638C67.4758 39.1535 68.2938 43.8977 69.7661 48.6418C66.3307 45.0428 62.5681 41.9346 59.1327 39.9715C43.7552 31.1376 24.1243 36.3725 15.2904 51.75C6.45651 67.1275 11.6914 86.7584 27.0689 95.5923C30.6679 97.719 35.0849 99.3549 39.9926 100.5C35.0849 101.645 30.6679 103.281 27.0689 105.408C11.6914 114.242 6.45651 133.872 15.2904 149.25C24.1243 164.628 43.7552 169.862 59.1327 161.029C62.7317 158.902 66.3307 155.957 69.7661 152.358C68.2938 157.102 67.4758 161.846 67.4758 165.936C67.4758 183.604 81.8718 198 99.5396 198C117.207 198 131.603 183.604 131.603 165.936C131.603 161.846 130.785 157.102 129.313 152.358C132.748 155.957 136.511 159.065 139.946 161.029C155.324 169.862 174.955 164.628 183.789 149.25C192.459 133.872 187.224 114.242 172.01 105.408Z" fill="currentColor"/>
+          {%- endcase -%}
+        </svg>
+      </span>
+  {%- endcase -%}
+{%- endcapture -%}
+
+{%- capture ticker_group -%}
+  {%- for i in (1..repeats) -%}
+    {%- for phrase in phrases -%}
+      {%- assign phrase_clean = phrase | strip -%}
+      {%- if phrase_clean != blank -%}
+        <span class="kd-ticker__item">{{ phrase_clean | escape }}</span>
+        {%- if repeat_text -%}{{ separator }}{%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endfor -%}
+{%- endcapture -%}
+
+{%- style -%}
+  #{{ section.id }} {
+    --kd-ticker-duration: {{ duration }}s;
+    --kd-ticker-shape-size: {{ section.settings.shape_size | default: 0.6 }}em;
+  }
+  {%- if section.settings.use_custom_colors %}
+  #{{ section.id }} { background: {{ section.settings.bg_color }}; }
+  #{{ section.id }} .kd-ticker { color: {{ section.settings.text_color }}; }
+  #{{ section.id }} .kd-ticker__star, #{{ section.id }} .kd-ticker__sep { color: {{ section.settings.separator_color }}; }
+  {%- endif %}
+{%- endstyle -%}
+
 <section
-  class="bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %}"
-  data-color-scheme="{{ section.settings.color_scheme }}"
+  id="{{ section.id }}"
+  class="scrolling-text-section bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %}"
+  data-color-scheme="{{ section.settings.color_scheme }}"{% unless section.settings.scroll_motion %} data-kd-motion="off"{% endunless %}
 >
-  {%- render 'scrolling-text', class: 'py-2.5' %}
+  {%- if ticker_link != blank -%}
+    <a class="kd-ticker kd-ticker--link" href="{{ ticker_link }}" aria-label="{{ section.settings.text | replace: '|', ' · ' | escape }}">
+  {%- else -%}
+    <div class="kd-ticker">
+  {%- endif -%}
+      <div class="kd-ticker__track{% if section.settings.direction == 'reverse' %} kd-ticker__track--reverse{% endif %}{% if section.settings.animate_shape_between_text %} kd-ticker--spin-shapes{% endif %}{% if section.settings.animate_image_between_text %} kd-ticker--spin-images{% endif %}" aria-hidden="true">
+        <div class="kd-ticker__group{% unless repeat_text %} kd-ticker__group--single{% endunless %}">{{ ticker_group }}</div>
+        <div class="kd-ticker__group{% unless repeat_text %} kd-ticker__group--single{% endunless %}">{{ ticker_group }}</div>
+      </div>
+  {%- if ticker_link != blank -%}
+    </a>
+  {%- else -%}
+    </div>
+  {%- endif -%}
 </section>
 
 {% schema %}
@@ -10,27 +111,36 @@
   "name": "t:sections.scrolling_text.name",
   "settings": [
     {
-      "type": "paragraph",
-      "content": "t:common.settings.paragraph_if_a_user"
+      "type": "header",
+      "content": "Text"
     },
     {
       "type": "text",
       "id": "text",
-      "label": "t:common.settings.text.label",
-      "default": "Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store."
+      "label": "Text",
+      "default": "ITS NOT FAIR!",
+      "info": "Separate several phrases with |, e.g. It's not fair! | Radikal fair"
     },
     {
       "type": "checkbox",
       "id": "repeat_text",
       "default": true,
-      "label": "t:common.settings.repeat_text.label",
-      "info": "t:common.settings.repeat_text.info"
+      "label": "Repeat text",
+      "info": "Off: each phrase runs across the screen once, with no separators."
+    },
+    {
+      "type": "header",
+      "content": "Separator"
     },
     {
       "type": "select",
       "id": "shape_between_text",
-      "label": "t:common.settings.shape_between_text.label",
+      "label": "Separator",
       "options": [
+        {
+          "value": "kd_star",
+          "label": "✶ Design-system star"
+        },
         {
           "value": "none",
           "label": "t:common.options.none.label"
@@ -38,6 +148,14 @@
         {
           "value": "circle",
           "label": "t:common.options.circle.label"
+        },
+        {
+          "value": "custom_star",
+          "label": "custom star"
+        },
+        {
+          "value": "image",
+          "label": "Image"
         },
         {
           "value": "diamond",
@@ -60,59 +178,45 @@
           "label": "t:common.options.flower.label"
         }
       ],
-      "default": "10_point_star"
+      "default": "kd_star"
+    },
+    {
+      "type": "image_picker",
+      "id": "between_text_image",
+      "label": "Separator image",
+      "info": "Used when the separator is \"Image\"."
+    },
+    {
+      "type": "range",
+      "id": "shape_size",
+      "min": 0.2,
+      "max": 3,
+      "step": 0.1,
+      "unit": "em",
+      "label": "Shape / image size",
+      "default": 0.6,
+      "info": "Relative to the text size. Does not apply to the ✶ star."
     },
     {
       "type": "checkbox",
       "id": "animate_shape_between_text",
       "default": true,
-      "label": "t:common.settings.animate_shape_between_text.label"
+      "label": "Rotate shape"
+    },
+    {
+      "type": "checkbox",
+      "id": "animate_image_between_text",
+      "default": false,
+      "label": "Rotate image"
+    },
+    {
+      "type": "header",
+      "content": "Link & motion"
     },
     {
       "type": "url",
       "id": "link",
-      "label": "t:common.settings.link.label"
-    },
-    {
-      "type": "select",
-      "id": "font",
-      "label": "t:common.settings.font.label",
-      "options": [
-        {
-          "value": "font-heading heading-secondary",
-          "label": "t:common.options.heading.label"
-        },
-        {
-          "value": "body",
-          "label": "t:common.options.body.label"
-        }
-      ],
-      "default": "font-heading heading-secondary"
-    },
-    {
-      "type": "checkbox",
-      "id": "apply_effects",
-      "label": "t:common.settings.apply_effects.label",
-      "default": false,
-      "info": "t:common.settings.apply_effects.info"
-    },
-    {
-      "type": "range",
-      "id": "mobile_text_scale",
-      "min": -2,
-      "max": 7,
-      "step": 1,
-      "label": "t:common.settings.mobile_text_scale.label",
-      "default": 2
-    },
-    {
-      "type": "range",
-      "id": "desktop_text_scale",
-      "min": -2,
-      "max": 11,
-      "step": 1,
-      "label": "t:common.settings.desktop_text_scale.label",
-      "default": 4
+      "label": "Link"
     },
     {
       "type": "range",
@@ -120,13 +224,14 @@
       "min": 10,
       "max": 400,
       "step": 10,
-      "label": "t:common.settings.speed.label",
-      "default": 120
+      "label": "Speed",
+      "default": 120,
+      "info": "Higher is faster. 120 = the design-system pace (22 seconds per loop)."
     },
     {
       "type": "select",
       "id": "direction",
-      "label": "t:common.settings.direction.label",
+      "label": "Direction",
       "options": [
         {
           "value": "",
@@ -141,18 +246,54 @@
     },
     {
       "type": "header",
-      "content": "t:common.settings.header_color"
+      "content": "Colours"
     },
     {
       "type": "color_scheme",
       "id": "color_scheme",
       "default": "scheme1",
-      "label": "t:common.settings.color_scheme.label"
+      "label": "Colour scheme"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_custom_colors",
+      "label": "Use the colours below instead of the colour scheme",
+      "default": false,
+      "info": "Off: band, text and separator follow the colour scheme above."
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Band",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "separator_color",
+      "label": "Separator (✶ or shape)",
+      "default": "#AEFF64"
     },
     {
       "type": "checkbox",
       "id": "use_gradient_background",
-      "label": "t:common.settings.use_gradient_background.label"
+      "label": "Use gradient background"
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "checkbox",
+      "id": "scroll_motion",
+      "label": "Scroll animations",
+      "default": true,
+      "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations."
     }
   ],
   "presets": [

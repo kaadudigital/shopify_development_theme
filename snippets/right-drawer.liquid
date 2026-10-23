@@ -16,7 +16,7 @@
         x-transition:leave="transition ease-in duration-300"
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"
-        class="fixed inset-0 bg-scheme-text/75"
+        class="fixed inset-0 bg-scheme-text/75 kd-right-drawer__scrim"
       >
         <!-- Overlay -->
       </div>
@@ -33,7 +33,7 @@
         <div
           @click.stop
           x-trap.noscroll.inert="$store.modals.rightDrawer.open"
-          class="relative ml-auto h-full w-11/12 overflow-hidden border-l-section border-section-border bg-scheme-background text-scheme-text md:w-7/12 lg:w-5/12"
+          class="relative ml-auto h-full w-11/12 overflow-hidden border-l-section border-section-border bg-scheme-background text-scheme-text md:w-7/12 lg:w-5/12 kd-right-drawer__panel"
           id="right-drawer-slot"
           role="dialog"
           aria-modal="true"

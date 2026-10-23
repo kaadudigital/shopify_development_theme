@@ -1,0 +1,3210 @@
+{%- comment -%}
+  Kaadu product configurator (landing-page mockup, "PRODUKT"): product photo beside the intro (stars, title,
+  tagline), the first-order notice, the Einmalig / Im Abo choice, three pack options, the delivery rhythm (Abo only),
+  the stepper and the cart button with the running total. DS components: OptionButton (.kd-option), Notice,
+  Stepper, cloud button. Styles: "PACK CONFIGURATOR" in assets/base.bundle.css; behaviour: [data-kd-config] in
+  assets/kaadu.js.
+
+  Prices: each pack has a one-time price (its variant's price when a product + variant ID are set, else the
+  price setting) and a bag count. Abo prices = pack price minus the delivery rhythm's discount (packs can opt out).
+  "Spar %" per pack compares the price per bag with the reference price per bag. Totals round to 5 Rappen.
+  Subscriptions are frontend-only until selling plans exist: the plan ID setting is sent as selling_plan when set.
+  Sold-out packs (variant linked and not available in Shopify) are greyed out and can't be chosen; the configurator
+  starts on the first available pack, and when none is left the cart button shows the sold-out text, disabled.
+
+  On the product template (product page mockup, "Produktseite") the section is the buy box: it falls back to the
+  page's product, renders the title as the page's h1 plus the Product structured data, and lays out photo and panel
+  50/50 from 768px (.kd-pack--page). Long description, badge blocks and the storage accordion work on every page.
+{%- endcomment -%}
+{%- liquid
+  assign kd_product = all_products[section.settings.product]
+  assign on_product_page = false
+  if template.name == 'product'
+    assign on_product_page = true
+    if kd_product == blank
+      assign kd_product = product
+    endif
+  endif
+  assign packs = '1,2,3' | split: ','
+  assign default_pack = section.settings.default_pack | default: '2' | plus: 0
+  assign default_tier = section.settings.default_tier | default: '2' | plus: 0
+  assign default_mode = section.settings.default_mode | default: 'abo'
+  assign title = section.settings.title
+  if title == blank and kd_product != blank
+    assign title = kd_product.title
+  endif
+  assign image = section.settings.gallery_image_1
+  if image == blank and kd_product != blank
+    assign image = kd_product.featured_image
+  endif
+  assign image_mobile = section.settings.image_mobile | default: image
+  assign qty = section.settings.qty_default | default: 1
+  if qty < 1
+    assign qty = 1
+  endif
+-%}
+
+{%- comment -%} «Use the colours below» off: no section colours; .kd-pack--scheme maps every colour to the colour scheme. {%- endcomment -%}
+{%- if section.settings.use_custom_colors -%}
+{%- style -%}
+  #{{ section.id }} {
+    --kd-pc-bg: {{ section.settings.bg_color_mobile }};
+    --kd-pc-fg: {{ section.settings.text_color_mobile }};
+    --kd-pc-title: {{ section.settings.title_color }};
+    --kd-pc-notice-bg: {{ section.settings.promo_bg_mobile }};
+    --kd-pc-notice-title: {{ section.settings.promo_title_color_mobile }};
+    --kd-pc-notice-fg: {{ section.settings.promo_text_color_mobile }};
+    --kd-pc-notice-btn: {{ section.settings.promo_button_color }};
+    --kd-pc-notice-btn-label: {{ section.settings.promo_button_label_color }};
+    --kd-pc-opt-bg: {{ section.settings.option_bg }};
+    --kd-pc-opt-fg: {{ section.settings.option_text }};
+    --kd-pc-opt-on-bg: {{ section.settings.option_active_bg }};
+    --kd-pc-opt-on-fg: {{ section.settings.option_active_text }};
+    --kd-pc-badge-bg: {{ section.settings.badge_bg }};
+    --kd-pc-badge-fg: {{ section.settings.badge_text }};
+    --kd-pc-save-bg: {{ section.settings.plan_badge_bg }};
+    --kd-pc-save-fg: {{ section.settings.plan_badge_text }};
+    --kd-pc-save-on-bg: {{ section.settings.plan_badge_active_bg }};
+    --kd-pc-save-on-fg: {{ section.settings.plan_badge_active_text }};
+    --kd-pc-stepper: {{ section.settings.stepper_bg }};
+    --kd-pc-stepper-fg: {{ section.settings.stepper_text }};
+    --kd-pc-cart: {{ section.settings.cart_button_color_mobile }};
+    --kd-pc-cart-label: {{ section.settings.cart_button_label_color }};
+  }
+  {%- assign seals = section.blocks | where: 'type', 'badge' -%}
+  {%- for block in seals %}
+  #{{ section.id }} .kd-pack__seal--{{ block.id }} { --kd-seal-bg: {{ block.settings.shape_color }}; --kd-seal-fg: {{ block.settings.text_color }}; }
+  {%- endfor %}
+  @media (min-width: 768px) {
+    #{{ section.id }} {
+      --kd-pc-bg: {{ section.settings.bg_color }};
+      --kd-pc-fg: {{ section.settings.text_color }};
+      --kd-pc-notice-bg: {{ section.settings.promo_bg }};
+      --kd-pc-notice-title: {{ section.settings.promo_title_color }};
+      --kd-pc-notice-fg: {{ section.settings.promo_text_color }};
+      --kd-pc-cart: {{ section.settings.cart_button_color }};
+    }
+  }
+{%- endstyle -%}
+{%- endif -%}
+
+<section
+  id="{{ section.id }}"
+  class="kd-pack kd-section relative{% unless on_product_page %} overflow-hidden{% endunless %}{% unless section.settings.use_custom_colors %} kd-pack--scheme{% endunless %}{% if on_product_page %} kd-pack--page{% endif %}"
+  data-color-scheme="{{ section.settings.color_scheme }}"{% unless section.settings.scroll_motion %} data-kd-motion="off"{% endunless %}
+  data-kd-config
+>
+  {%- if section.settings.anchor_id != blank -%}
+    <span id="{{ section.settings.anchor_id | handleize }}" class="kd-anchor" aria-hidden="true"></span>
+  {%- endif -%}
+  <div class="kd-wide kd-pack__row relative z-10">
+    <div class="kd-pack__media">
+      {%- if image != blank -%}
+        <picture>
+          {%- if section.settings.image_mobile != blank -%}
+            <source media="(max-width: 767.98px)" srcset="{{ image_mobile | image_url: width: 800 }}">
+          {%- endif -%}
+          {{
+            image
+            | image_url: width: 1400
+            | image_tag:
+              class: 'kd-pack__image',
+              widths: '400, 600, 800, 1000, 1200, 1400',
+              sizes: '(min-width: 1441px) 640px, (min-width: 992px) 560px, 90vw',
+              loading: 'lazy',
+              alt: section.settings.image_alt
+          }}
+        </picture>
+      {%- endif -%}
+    </div>
+
+    <div class="kd-pack__panel">
+      {%- if section.settings.show_reviews and section.settings.reviews_text != blank -%}
+        <p class="kd-pack__reviews kd-label">
+          <span aria-hidden="true" class="kd-pack__stars">★★★★★</span>
+          {%- if section.settings.reviews_link != blank -%}
+            <a href="{{ section.settings.reviews_link }}">{{ section.settings.reviews_text | escape }}</a>
+          {%- else -%}
+            <span>{{ section.settings.reviews_text | escape }}</span>
+          {%- endif -%}
+        </p>
+      {%- endif -%}
+
+      {%- if title != blank -%}
+        {%- if on_product_page -%}
+          <h1 class="kd-pack__title kd-display-h2-tight">{{ title | escape }}</h1>
+        {%- else -%}
+          <h2 class="kd-pack__title kd-display-h2-tight">{{ title | escape }}</h2>
+        {%- endif -%}
+      {%- endif -%}
+
+      {%- if section.settings.tagline != blank or section.settings.description != blank -%}
+        <div class="kd-pack__intro">
+          {%- if section.settings.tagline != blank -%}
+            <p class="kd-pack__tagline">{{ section.settings.tagline | escape }}</p>
+          {%- endif -%}
+          {%- if section.settings.description != blank -%}
+            <p class="kd-pack__desc kd-body">{{ section.settings.description | escape }}</p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.show_promo and section.settings.promo_title != blank -%}
+        <div class="kd-notice kd-pack__notice">
+          <div class="kd-notice__body">
+            <p class="kd-notice__title">{{ section.settings.promo_title | escape }}</p>
+            {%- if section.settings.promo_text != blank -%}
+              <div class="kd-notice__text">{{ section.settings.promo_text }}</div>
+            {%- endif -%}
+          </div>
+          {%- if section.settings.promo_button_label != blank -%}
+            {%- liquid
+              assign promo_url = section.settings.promo_button_link
+              assign promo_code = section.settings.promo_code | strip
+              if promo_url == blank and promo_code != blank
+                assign promo_url = promo_code | url_encode | prepend: '/discount/' | append: '?redirect=/cart'
+              endif
+            -%}
+            {%- if promo_url != blank -%}
+              {%- render 'kd-button', label: section.settings.promo_button_label, url: promo_url, size: 'sm', class: 'kd-pack__notice-btn' -%}
+            {%- else -%}
+              {%- comment -%} No link or code yet: the button picks the smallest pack as a one-time trial and moves to the cart button. {%- endcomment -%}
+              {%- render 'kd-button', label: section.settings.promo_button_label, size: 'sm', class: 'kd-pack__notice-btn', attrs: 'data-kd-config-trial' -%}
+            {%- endif -%}
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <div class="kd-options kd-options--2" role="group" aria-label="{{ section.settings.mode_group_label | escape }}" data-kd-config-group="mode">
+        <button type="button" class="kd-option" data-value="once" aria-pressed="{% if default_mode == 'once' %}true{% else %}false{% endif %}">
+          <span class="kd-option__label">{{ section.settings.mode_once_label | escape }}</span>
+          {%- if section.settings.mode_once_sub != blank -%}<span class="kd-option__sub">{{ section.settings.mode_once_sub | escape }}</span>{%- endif -%}
+        </button>
+        <button type="button" class="kd-option" data-value="abo" aria-pressed="{% if default_mode == 'abo' %}true{% else %}false{% endif %}">
+          <span class="kd-option__label">{{ section.settings.mode_abo_label | escape }}</span>
+          {%- if section.settings.mode_abo_sub != blank -%}<span class="kd-option__sub">{{ section.settings.mode_abo_sub | escape }}</span>{%- endif -%}
+        </button>
+      </div>
+
+      {%- if section.settings.options_label != blank -%}
+        <p class="kd-group-label" id="{{ section.id }}-packs">{{ section.settings.options_label | escape }}</p>
+      {%- endif -%}
+      <div class="kd-options kd-options--3 kd-pack__packs" role="group" aria-labelledby="{{ section.id }}-packs" data-kd-config-group="pack">
+        {%- for i in packs -%}
+          {%- liquid
+            assign k_label = 'option' | append: i | append: '_label'
+            assign k_variant = 'option' | append: i | append: '_variant_id'
+            assign k_free = 'pack' | append: i | append: '_free_shipping'
+            assign label = section.settings[k_label]
+            assign variant_id = section.settings[k_variant] | strip
+            assign n = forloop.index
+            assign pack_available = true
+            if kd_product != blank and variant_id != blank
+              for v in kd_product.variants
+                assign vid = v.id | append: ''
+                if vid == variant_id and v.available == false
+                  assign pack_available = false
+                endif
+              endfor
+            endif
+          -%}
+          {%- if label != blank -%}
+            <button type="button" class="kd-option kd-pack__pack{% unless pack_available %} kd-pack__pack--soldout{% endunless %}" data-value="{{ n }}" aria-pressed="{% if n == default_pack %}true{% else %}false{% endif %}"{% unless pack_available %} disabled{% endunless %}>
+              {%- unless pack_available -%}
+                <span class="kd-badge kd-badge--soldout">{{ section.settings.sold_out_text | default: 'Ausverkauft' | escape }}</span>
+              {%- else -%}
+                {%- if section.settings[k_free] and section.settings.free_shipping_badge != blank -%}
+                  <span class="kd-badge">{{ section.settings.free_shipping_badge | escape }}</span>
+                {%- endif -%}
+              {%- endunless -%}
+              <span class="kd-pack__pack-main">
+                <span class="kd-option__label">{{ label | escape }}</span>
+                <span class="kd-option__price" data-price></span>
+              </span>
+              <span class="kd-pack__pack-meta">
+                <span class="kd-option__meta" data-meta></span>
+                <span class="kd-option__was" data-was hidden></span>
+              </span>
+            </button>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+      <div class="kd-pack__plans" data-kd-config-plans>
+        {%- if section.settings.frequency_label != blank -%}
+          <p class="kd-group-label" id="{{ section.id }}-plans">{{ section.settings.frequency_label | escape }}</p>
+        {%- endif -%}
+        <div class="kd-pack__plan-list" role="group" aria-labelledby="{{ section.id }}-plans" data-kd-config-group="plan">
+          {%- for i in packs -%}
+            {%- liquid
+              assign k_title = 'tier' | append: i | append: '_title'
+              assign k_sub = 'tier' | append: i | append: '_subtitle'
+              assign k_rec = 'tier' | append: i | append: '_recommended'
+              assign n = forloop.index
+            -%}
+            {%- if section.settings[k_title] != blank -%}
+              <button type="button" class="kd-option kd-option--row" data-value="{{ n }}" aria-pressed="{% if n == default_tier %}true{% else %}false{% endif %}">
+                <span class="kd-pack__plan-name">
+                  <span class="kd-radio" aria-hidden="true"></span>
+                  <span class="kd-pack__plan-text">
+                    <span class="kd-option__label">{{ section.settings[k_title] | escape }}</span>
+                    {%- if section.settings[k_sub] != blank -%}<span class="kd-option__sub">{{ section.settings[k_sub] | escape }}</span>{%- endif -%}
+                  </span>
+                </span>
+                <span class="kd-pack__plan-end">
+                  {%- if section.settings[k_rec] and section.settings.recommended_badge != blank -%}
+                    <span class="kd-pack__pill kd-pack__pill--rec">{{ section.settings.recommended_badge | escape }}</span>
+                  {%- endif -%}
+                  <span class="kd-pack__plan-price" data-price></span>
+                  <span class="kd-pack__pill kd-pack__pill--save" data-save></span>
+                </span>
+              </button>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+
+      <form action="/cart/add" method="post" class="kd-pack__buy" data-kd-config-form>
+        <input type="hidden" name="id" value="">
+        <input type="hidden" name="selling_plan" value="" disabled>
+        <div class="kd-pack__stepper" role="group" aria-label="{{ section.settings.qty_label | escape }}">
+          <svg class="kd-pack__stepper-cloud" aria-hidden="true" focusable="false"><use href="#kd-cloud"></use></svg>
+          <button type="button" data-step="-1" aria-label="{{ section.settings.qty_less_label | escape }}">−</button>
+          <output aria-live="polite">{{ qty }}</output>
+          <input type="hidden" name="quantity" value="{{ qty }}">
+          <button type="button" data-step="1" aria-label="{{ section.settings.qty_more_label | escape }}">+</button>
+        </div>
+        {%- capture cart_label -%}
+          <span class="kd-pack__label-buy"><span class="kd-pack__label--mobile">{{ section.settings.button_label_mobile | default: section.settings.button_label | escape }}</span><span class="kd-pack__label--desktop">{{ section.settings.button_label | escape }}</span>&nbsp;·&nbsp;<span data-total></span></span><span class="kd-pack__label-soldout" data-soldout-label hidden>{{ section.settings.sold_out_text | default: 'Ausverkauft' | escape }}</span>
+        {%- endcapture -%}
+        {%- render 'kd-button', label: cart_label, type: 'submit', size: 'lg', class: 'kd-pack__cart' -%}
+      </form>
+
+      <p class="kd-pack__foot" data-foot></p>
+
+      {%- liquid
+        assign long_text = blank
+        if section.settings.long_description_source == 'product' and kd_product != blank
+          assign long_text = kd_product.description
+        elsif section.settings.long_description_source == 'custom'
+          assign long_text = section.settings.long_description
+        endif
+      -%}
+      {%- if long_text != blank -%}
+        <div class="kd-pack__long kd-body rte">{{ long_text }}</div>
+      {%- endif -%}
+
+      {%- assign seals = section.blocks | where: 'type', 'badge' -%}
+      {%- if seals.size > 0 -%}
+        <ul class="kd-pack__seals" role="list">
+          {%- for block in seals -%}
+            {%- liquid
+              assign seal_image = blank
+              if block.settings.shape == 'image' and block.settings.image != blank
+                assign seal_image = block.settings.image
+              endif
+              assign seal_text = block.settings.text
+              if seal_image != blank and block.settings.show_text == false
+                assign seal_text = blank
+              endif
+            -%}
+            {%- if seal_text != blank or seal_image != blank -%}
+              <li class="kd-pack__seal kd-pack__seal--{{ block.id }}{% if seal_image != blank %} kd-pack__seal--image{% endif %}" {{ block.shopify_attributes }}>
+                {%- if seal_image != blank -%}
+                  {%- liquid
+                    assign seal_alt = ''
+                    if seal_text == blank
+                      assign seal_alt = block.settings.text | default: seal_image.alt
+                    endif
+                  -%}
+                  {{ seal_image | image_url: width: 312 | image_tag: class: 'kd-pack__seal-img', widths: '104, 208, 312', sizes: '104px', loading: 'lazy', alt: seal_alt }}
+                {%- else -%}
+                  <svg class="kd-pack__seal-shape" viewBox="0 0 200 200" aria-hidden="true" focusable="false"><path d="M100 0l13 27 24-17-3 30 30-4-17 24 27 13-27 13 17 24-30-4 3 30-24-17-13 27-13-27-24 17 3-30-30 4 17-24L0 100l27-13L10 63l30 4-3-30 24 17z"/></svg>
+                {%- endif -%}
+                {%- if seal_text != blank -%}
+                  <span class="kd-pack__seal-text">{{ seal_text | escape }}</span>
+                {%- endif -%}
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      {%- liquid
+        assign nutrition_has_content = false
+        if section.settings.nutrition_content_type == 'image'
+          if section.settings.nutrition_image != blank
+            assign nutrition_has_content = true
+          endif
+        elsif section.settings.nutrition_content != blank
+          assign nutrition_has_content = true
+        endif
+      -%}
+      {%- if section.settings.ingredients_content != blank or nutrition_has_content or section.settings.shipping_content != blank or section.settings.storage_content != blank -%}
+        <div class="kd-pack__details{% if section.settings.details_stars %} kd-pack__details--stars{% endif %}">
+          {%- if section.settings.ingredients_content != blank -%}
+            <details class="kd-pack__detail">
+              <summary class="kd-label-lg">{{ section.settings.ingredients_label | escape }}</summary>
+              <div class="kd-pack__detail-body kd-body rte">{{ section.settings.ingredients_content }}</div>
+            </details>
+          {%- endif -%}
+          {%- if nutrition_has_content -%}
+            <details class="kd-pack__detail">
+              <summary class="kd-label-lg">{{ section.settings.nutrition_label | escape }}</summary>
+              <div class="kd-pack__detail-body kd-body rte">
+                {%- if section.settings.nutrition_content_type == 'image' -%}
+                  {{ section.settings.nutrition_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: section.settings.nutrition_label }}
+                {%- else -%}
+                  {{ section.settings.nutrition_content }}
+                {%- endif -%}
+              </div>
+            </details>
+          {%- endif -%}
+          {%- if section.settings.shipping_content != blank -%}
+            <details class="kd-pack__detail">
+              <summary class="kd-label-lg">{{ section.settings.shipping_label | escape }}</summary>
+              <div class="kd-pack__detail-body kd-body rte">{{ section.settings.shipping_content }}</div>
+            </details>
+          {%- endif -%}
+          {%- if section.settings.storage_content != blank -%}
+            <details class="kd-pack__detail">
+              <summary class="kd-label-lg">{{ section.settings.storage_label | escape }}</summary>
+              <div class="kd-pack__detail-body kd-body rte">{{ section.settings.storage_content }}</div>
+            </details>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- if on_product_page and kd_product == product -%}
+    <script type="application/ld+json">
+      {{ product | structured_data }}
+    </script>
+  {%- endif -%}
+
+  {%- comment -%} Data for assets/kaadu.js: packs (bags, one-time price in CHF, variant, Abo discount on/off, free shipping) and plans. {%- endcomment -%}
+  <script type="application/json" data-kd-config-data>
+    {
+      "mode": {{ default_mode | json }},
+      "pack": {{ default_pack }},
+      "plan": {{ default_tier }},
+      "currency": {{ section.settings.currency_prefix | default: 'CHF' | json }},
+      "reference": {{ section.settings.reference_price | default: '4.45' | json }},
+      "perBag": {{ section.settings.per_bag_text | json }},
+      "save": {{ section.settings.save_text | json }},
+      "was": {{ section.settings.was_text | json }},
+      "shipFree": {{ section.settings.shipping_free_text | json }},
+      "shipPaid": {{ section.settings.shipping_paid_text | json }},
+      "footExtra": {{ section.settings.footnote_extra | json }},
+      "soldOut": {{ section.settings.sold_out_text | default: 'Ausverkauft' | json }},
+      "packs": [
+        {%- for i in packs -%}
+          {%- liquid
+            assign k_label = 'option' | append: i | append: '_label'
+            assign k_variant = 'option' | append: i | append: '_variant_id'
+            assign k_bags = 'pack' | append: i | append: '_bags'
+            assign k_price = 'pack' | append: i | append: '_price'
+            assign k_disc = 'pack' | append: i | append: '_abo_discount'
+            assign k_free = 'pack' | append: i | append: '_free_shipping'
+            assign variant_id = section.settings[k_variant] | strip
+            assign price = section.settings[k_price] | default: '0'
+            assign pack_available = true
+            if kd_product != blank and variant_id != blank
+              for v in kd_product.variants
+                assign vid = v.id | append: ''
+                if vid == variant_id
+                  assign price = v.price | divided_by: 100.0
+                  assign pack_available = v.available
+                endif
+              endfor
+            endif
+          -%}
+          {%- if section.settings[k_label] != blank -%}
+            {%- if pack_sep -%},{%- endif -%}{%- assign pack_sep = true -%}
+            { "n": {{ forloop.index }}, "bags": {{ section.settings[k_bags] | default: 1 }}, "price": {{ price | json }}, "variant": {{ variant_id | json }}, "aboDiscount": {{ section.settings[k_disc] | json }}, "freeShip": {{ section.settings[k_free] | json }}, "available": {{ pack_available | json }} }
+          {%- endif -%}
+        {%- endfor -%}
+      ],
+      "plans": [
+        {%- for i in packs -%}
+          {%- liquid
+            assign k_title = 'tier' | append: i | append: '_title'
+            assign k_disc = 'tier' | append: i | append: '_discount'
+            assign k_plan = 'tier' | append: i | append: '_selling_plan_id'
+          -%}
+          {%- if section.settings[k_title] != blank -%}
+            {%- if plan_sep -%},{%- endif -%}{%- assign plan_sep = true -%}
+            { "n": {{ forloop.index }}, "discount": {{ section.settings[k_disc] | default: 0 }}, "sellingPlan": {{ section.settings[k_plan] | strip | json }} }
+          {%- endif -%}
+        {%- endfor -%}
+      ]
+    }
+  </script>
+  {%- liquid
+    for block in section.blocks
+      case block.type
+        when 'background_shape'
+          render 'block-background-shape', block: block
+        when 'background_pattern'
+          render 'block-background-pattern', block: block, scheme: section.settings.color_scheme
+      endcase
+    endfor
+  -%}
+</section>
+
+{%- liquid
+  assign stickers = section.blocks | where: 'type', 'sticker'
+  assign shape_dividers = section.blocks | where: 'type', 'shape_divider'
+  for sticker in stickers
+    render 'block-sticker', block: sticker
+  endfor
+  for shape_divider in shape_dividers
+    render 'block-shape-divider', block: shape_divider
+  endfor
+-%}
+
+{% schema %}
+{
+  "name": "Custom Packaging Selector",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Product"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product",
+      "info": "When set, purchase options, prices, subscription tiers and gallery images are pulled live from this product's variants, selling plans and media — the fields below are used only as a fallback when no product is selected. On a product page, leave empty to use that page's product."
+    },
+    {
+      "type": "image_picker",
+      "id": "gallery_image_1",
+      "label": "Product photo",
+      "info": "Packshot, ideally on a transparent background. Empty = the product's main image."
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Product photo – mobile",
+      "info": "Optional; below 768px."
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Photo alt text",
+      "default": "Kaadu Ananas Crunchys, Beutel mit Ananasstücken"
+    },
+    {
+      "type": "header",
+      "content": "Intro"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "info": "Empty = the product title.",
+      "default": "Ananas Crunchys"
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "100 % Frucht. 0 % Ausbeutung."
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Short description",
+      "default": "Nur Ananas, gefriergetrocknet. Ohne Zusätze, ohne Schwefel, ohne Zuckerzusatz."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_reviews",
+      "label": "Show stars and reviews link",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "reviews_text",
+      "label": "Reviews text",
+      "default": "[Anzahl] Bewertungen"
+    },
+    {
+      "type": "url",
+      "id": "reviews_link",
+      "label": "Reviews link"
+    },
+    {
+      "type": "header",
+      "content": "First-order notice"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_promo",
+      "label": "Show the notice",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "promo_title",
+      "label": "Title",
+      "default": "Erste Bestellung: 1 Beutel gratis"
+    },
+    {
+      "type": "richtext",
+      "id": "promo_text",
+      "label": "Text",
+      "default": "<p>Du zahlst nur <strong>CHF 3.00 Versand.</strong> Danach CHF 4.45 pro Beutel. Code <strong>[CODE]</strong>.</p>"
+    },
+    {
+      "type": "text",
+      "id": "promo_button_label",
+      "label": "Button label",
+      "default": "Gratis probieren"
+    },
+    {
+      "type": "url",
+      "id": "promo_button_link",
+      "label": "Button link",
+      "info": "Optional. Without a link the button uses the discount code below; without either it selects the first pack as a one-time purchase and jumps to the cart button."
+    },
+    {
+      "type": "text",
+      "id": "promo_code",
+      "label": "Discount code",
+      "info": "Shopify discount code for the first order. The button then applies it and opens the cart (/discount/CODE?redirect=/cart). Also replace [CODE] in the text above."
+    },
+    {
+      "type": "header",
+      "content": "Purchase type"
+    },
+    {
+      "type": "select",
+      "id": "default_mode",
+      "label": "Selected at start",
+      "default": "abo",
+      "options": [
+        {
+          "value": "abo",
+          "label": "Im Abo"
+        },
+        {
+          "value": "once",
+          "label": "Einmalig"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "mode_once_label",
+      "label": "One-time",
+      "default": "Einmalig"
+    },
+    {
+      "type": "text",
+      "id": "mode_once_sub",
+      "label": "One-time – line 2",
+      "default": "Ohne Abo, ohne Bindung"
+    },
+    {
+      "type": "text",
+      "id": "mode_abo_label",
+      "label": "Subscription",
+      "default": "Im Abo"
+    },
+    {
+      "type": "text",
+      "id": "mode_abo_sub",
+      "label": "Subscription – line 2",
+      "default": "Bis 20 % sparen, keine Lieferkosten"
+    },
+    {
+      "type": "header",
+      "content": "Packs"
+    },
+    {
+      "type": "text",
+      "id": "options_label",
+      "label": "Group label",
+      "default": "Packungsgrösse"
+    },
+    {
+      "type": "select",
+      "id": "default_pack",
+      "label": "Selected at start",
+      "default": "2",
+      "options": [
+        {
+          "value": "1",
+          "label": "Pack 1"
+        },
+        {
+          "value": "2",
+          "label": "Pack 2"
+        },
+        {
+          "value": "3",
+          "label": "Pack 3"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "reference_price",
+      "label": "Reference price per bag (CHF)",
+      "info": "'Spar %' on each pack compares its price per bag with this.",
+      "default": "4.45"
+    },
+    {
+      "type": "text",
+      "id": "free_shipping_badge",
+      "label": "Free-shipping badge",
+      "default": "Gratis Versand"
+    },
+    {
+      "type": "text",
+      "id": "sold_out_text",
+      "label": "Sold-out label",
+      "info": "Shown on a pack whose linked variant is sold out (the pack is greyed out), and on the cart button when every pack is sold out.",
+      "default": "Ausverkauft"
+    },
+    {
+      "type": "header",
+      "content": "Pack 1"
+    },
+    {
+      "type": "text",
+      "id": "option1_label",
+      "label": "Label",
+      "default": "3er Pack"
+    },
+    {
+      "type": "number",
+      "id": "pack1_bags",
+      "label": "Bags in the pack",
+      "default": 3
+    },
+    {
+      "type": "text",
+      "id": "pack1_price",
+      "label": "One-time price (CHF)",
+      "info": "Used when no product variant is linked.",
+      "default": "13.35"
+    },
+    {
+      "type": "text",
+      "id": "option1_variant_id",
+      "label": "Variant ID",
+      "info": "Numeric ID of the product variant this pack adds to the cart."
+    },
+    {
+      "type": "checkbox",
+      "id": "pack1_abo_discount",
+      "label": "Abo discount applies",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "pack1_free_shipping",
+      "label": "Free shipping",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Pack 2"
+    },
+    {
+      "type": "text",
+      "id": "option2_label",
+      "label": "Label",
+      "default": "6er Pack"
+    },
+    {
+      "type": "number",
+      "id": "pack2_bags",
+      "label": "Bags in the pack",
+      "default": 6
+    },
+    {
+      "type": "text",
+      "id": "pack2_price",
+      "label": "One-time price (CHF)",
+      "info": "Used when no product variant is linked.",
+      "default": "24.90"
+    },
+    {
+      "type": "text",
+      "id": "option2_variant_id",
+      "label": "Variant ID",
+      "info": "Numeric ID of the product variant this pack adds to the cart."
+    },
+    {
+      "type": "checkbox",
+      "id": "pack2_abo_discount",
+      "label": "Abo discount applies",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pack2_free_shipping",
+      "label": "Free shipping",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Pack 3"
+    },
+    {
+      "type": "text",
+      "id": "option3_label",
+      "label": "Label",
+      "default": "12er Pack"
+    },
+    {
+      "type": "number",
+      "id": "pack3_bags",
+      "label": "Bags in the pack",
+      "default": 12
+    },
+    {
+      "type": "text",
+      "id": "pack3_price",
+      "label": "One-time price (CHF)",
+      "info": "Used when no product variant is linked.",
+      "default": "39.90"
+    },
+    {
+      "type": "text",
+      "id": "option3_variant_id",
+      "label": "Variant ID",
+      "info": "Numeric ID of the product variant this pack adds to the cart."
+    },
+    {
+      "type": "checkbox",
+      "id": "pack3_abo_discount",
+      "label": "Abo discount applies",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pack3_free_shipping",
+      "label": "Free shipping",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Delivery rhythm (Abo)"
+    },
+    {
+      "type": "text",
+      "id": "frequency_label",
+      "label": "Group label",
+      "default": "Lieferrhythmus"
+    },
+    {
+      "type": "select",
+      "id": "default_tier",
+      "label": "Selected at start",
+      "default": "2",
+      "options": [
+        {
+          "value": "1",
+          "label": "Rhythm 1"
+        },
+        {
+          "value": "2",
+          "label": "Rhythm 2"
+        },
+        {
+          "value": "3",
+          "label": "Rhythm 3"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "recommended_badge",
+      "label": "Recommended badge",
+      "default": "Empfohlen"
+    },
+    {
+      "type": "header",
+      "content": "Rhythm 1"
+    },
+    {
+      "type": "text",
+      "id": "tier1_title",
+      "label": "Title",
+      "default": "Alle 8 Wochen"
+    },
+    {
+      "type": "text",
+      "id": "tier1_subtitle",
+      "label": "Line 2",
+      "default": "Unter 1 Beutel pro Woche"
+    },
+    {
+      "type": "range",
+      "id": "tier1_discount",
+      "label": "Abo discount",
+      "default": 5,
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "checkbox",
+      "id": "tier1_recommended",
+      "label": "Recommended",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "tier1_selling_plan_id",
+      "label": "Selling plan ID",
+      "info": "Sent with the cart when Abo is chosen. Empty until subscriptions are set up."
+    },
+    {
+      "type": "header",
+      "content": "Rhythm 2"
+    },
+    {
+      "type": "text",
+      "id": "tier2_title",
+      "label": "Title",
+      "default": "Alle 4 Wochen"
+    },
+    {
+      "type": "text",
+      "id": "tier2_subtitle",
+      "label": "Line 2",
+      "default": "1 bis 2 Beutel pro Woche"
+    },
+    {
+      "type": "range",
+      "id": "tier2_discount",
+      "label": "Abo discount",
+      "default": 15,
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "checkbox",
+      "id": "tier2_recommended",
+      "label": "Recommended",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "tier2_selling_plan_id",
+      "label": "Selling plan ID",
+      "info": "Sent with the cart when Abo is chosen. Empty until subscriptions are set up."
+    },
+    {
+      "type": "header",
+      "content": "Rhythm 3"
+    },
+    {
+      "type": "text",
+      "id": "tier3_title",
+      "label": "Title",
+      "default": "Alle 2 Wochen"
+    },
+    {
+      "type": "text",
+      "id": "tier3_subtitle",
+      "label": "Line 2",
+      "default": "3 Beutel pro Woche"
+    },
+    {
+      "type": "range",
+      "id": "tier3_discount",
+      "label": "Abo discount",
+      "default": 20,
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "checkbox",
+      "id": "tier3_recommended",
+      "label": "Recommended",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "tier3_selling_plan_id",
+      "label": "Selling plan ID",
+      "info": "Sent with the cart when Abo is chosen. Empty until subscriptions are set up."
+    },
+    {
+      "type": "header",
+      "content": "Quantity and cart button"
+    },
+    {
+      "type": "number",
+      "id": "qty_default",
+      "label": "Quantity at start",
+      "default": 1
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "info": "The total is added after it.",
+      "default": "In den Warenkorb"
+    },
+    {
+      "type": "text",
+      "id": "button_label_mobile",
+      "label": "Button label – mobile",
+      "default": "Warenkorb"
+    },
+    {
+      "type": "header",
+      "content": "Price line under the button"
+    },
+    {
+      "type": "text",
+      "id": "currency_prefix",
+      "label": "Currency",
+      "default": "CHF"
+    },
+    {
+      "type": "text",
+      "id": "per_bag_text",
+      "label": "'per bag'",
+      "default": "pro Beutel"
+    },
+    {
+      "type": "text",
+      "id": "save_text",
+      "label": "'save'",
+      "default": "Spar"
+    },
+    {
+      "type": "text",
+      "id": "was_text",
+      "label": "'instead of'",
+      "default": "statt"
+    },
+    {
+      "type": "text",
+      "id": "shipping_free_text",
+      "label": "Free shipping",
+      "default": "Gratis Versand"
+    },
+    {
+      "type": "text",
+      "id": "shipping_paid_text",
+      "label": "Paid shipping",
+      "default": "Versand CHF [X]"
+    },
+    {
+      "type": "text",
+      "id": "footnote_extra",
+      "label": "More",
+      "default": "Lieferung in [X] Werktagen · Abo jederzeit pausieren oder kündigen"
+    },
+    {
+      "type": "header",
+      "content": "Long description"
+    },
+    {
+      "type": "select",
+      "id": "long_description_source",
+      "label": "Long description",
+      "info": "Shown below the footnote, above the badges. «Product description» uses the product's description from the Shopify admin.",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "product",
+          "label": "Product description"
+        },
+        {
+          "value": "custom",
+          "label": "Text below"
+        }
+      ]
+    },
+    {
+      "type": "richtext",
+      "id": "long_description",
+      "label": "Long description text"
+    },
+    {
+      "type": "header",
+      "content": "Details tabs"
+    },
+    {
+      "type": "paragraph",
+      "content": "A tab is hidden while its content is empty."
+    },
+    {
+      "type": "text",
+      "id": "ingredients_label",
+      "label": "Ingredients – title",
+      "default": "Zutaten"
+    },
+    {
+      "type": "richtext",
+      "id": "ingredients_content",
+      "label": "Ingredients – content"
+    },
+    {
+      "type": "text",
+      "id": "nutrition_label",
+      "label": "Nutrition facts – title",
+      "default": "Nährwerte"
+    },
+    {
+      "type": "select",
+      "id": "nutrition_content_type",
+      "label": "Nutrition facts – content type",
+      "default": "text",
+      "options": [
+        {
+          "value": "text",
+          "label": "Text"
+        },
+        {
+          "value": "image",
+          "label": "Image / SVG"
+        }
+      ]
+    },
+    {
+      "type": "richtext",
+      "id": "nutrition_content",
+      "label": "Nutrition facts – text",
+      "info": "Used when the content type is «Text»."
+    },
+    {
+      "type": "image_picker",
+      "id": "nutrition_image",
+      "label": "Nutrition facts – image",
+      "info": "Used when the content type is «Image / SVG». JPG, PNG or SVG."
+    },
+    {
+      "type": "text",
+      "id": "shipping_label",
+      "label": "Shipping – title",
+      "default": "Versand"
+    },
+    {
+      "type": "richtext",
+      "id": "shipping_content",
+      "label": "Shipping – content"
+    },
+    {
+      "type": "text",
+      "id": "storage_label",
+      "label": "Storage – title",
+      "default": "Lagerung und Haltbarkeit"
+    },
+    {
+      "type": "richtext",
+      "id": "storage_content",
+      "label": "Storage – content"
+    },
+    {
+      "type": "checkbox",
+      "id": "details_stars",
+      "label": "Coloured ✶ before each tab title",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Colours"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Colour scheme",
+      "info": "Applies when «Use the colours below» is off.",
+      "default": "scheme1"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_custom_colors",
+      "label": "Use the colours below",
+      "info": "On: every colour below (mockup values). Off: all colours come from the colour scheme — background and text, cards for the options and notice, accent 1 for the selected option and cart button, accent 2 for the notice button and Spar badges.",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Colours – section"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background – desktop",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "bg_color_mobile",
+      "label": "Background – mobile",
+      "default": "#FFC6FF"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text – desktop",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "text_color_mobile",
+      "label": "Text – mobile",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title",
+      "default": "#AC0300"
+    },
+    {
+      "type": "header",
+      "content": "Colours – first-order notice"
+    },
+    {
+      "type": "color",
+      "id": "promo_bg",
+      "label": "Background – desktop",
+      "default": "#B7D9FF"
+    },
+    {
+      "type": "color",
+      "id": "promo_bg_mobile",
+      "label": "Background – mobile",
+      "default": "#AEFF64"
+    },
+    {
+      "type": "color",
+      "id": "promo_title_color",
+      "label": "Title – desktop",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "promo_title_color_mobile",
+      "label": "Title – mobile",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "promo_text_color",
+      "label": "Text – desktop",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "promo_text_color_mobile",
+      "label": "Text – mobile",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "promo_button_color",
+      "label": "Button",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "promo_button_label_color",
+      "label": "Button label",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "header",
+      "content": "Colours – options and badges"
+    },
+    {
+      "type": "color",
+      "id": "option_bg",
+      "label": "Option",
+      "default": "#FFC6FF"
+    },
+    {
+      "type": "color",
+      "id": "option_text",
+      "label": "Option text",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "option_active_bg",
+      "label": "Selected option",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "option_active_text",
+      "label": "Selected option text",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "badge_bg",
+      "label": "Badges (Gratis Versand, Empfohlen)",
+      "default": "#AEFF64"
+    },
+    {
+      "type": "color",
+      "id": "badge_text",
+      "label": "Badge text",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "plan_badge_bg",
+      "label": "Spar badge",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "plan_badge_text",
+      "label": "Spar badge text",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "plan_badge_active_bg",
+      "label": "Spar badge – selected rhythm",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "plan_badge_active_text",
+      "label": "Spar badge text – selected rhythm",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "header",
+      "content": "Colours – quantity and cart button"
+    },
+    {
+      "type": "color",
+      "id": "stepper_bg",
+      "label": "Stepper",
+      "default": "#FFC6FF"
+    },
+    {
+      "type": "color",
+      "id": "stepper_text",
+      "label": "Stepper signs",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "cart_button_color",
+      "label": "Cart button – desktop",
+      "default": "#542A76"
+    },
+    {
+      "type": "color",
+      "id": "cart_button_color_mobile",
+      "label": "Cart button – mobile",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "cart_button_label_color",
+      "label": "Cart button label",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "checkbox",
+      "id": "scroll_motion",
+      "label": "Scroll animations",
+      "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations.",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Screen readers"
+    },
+    {
+      "type": "text",
+      "id": "mode_group_label",
+      "label": "Purchase type group",
+      "default": "Kaufart"
+    },
+    {
+      "type": "text",
+      "id": "qty_label",
+      "label": "Quantity stepper",
+      "default": "Menge"
+    },
+    {
+      "type": "text",
+      "id": "qty_less_label",
+      "label": "Minus button",
+      "default": "Weniger"
+    },
+    {
+      "type": "text",
+      "id": "qty_more_label",
+      "label": "Plus button",
+      "default": "Mehr"
+    },
+    {
+      "type": "header",
+      "content": "Advanced"
+    },
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anchor",
+      "info": "Buttons elsewhere on the page can jump here with /#produkt.",
+      "default": "produkt"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Packaging Selector"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "badge",
+      "name": "Badge",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "100 % Ananas"
+        },
+        {
+          "type": "select",
+          "id": "shape",
+          "label": "Shape",
+          "default": "starburst",
+          "options": [
+            {
+              "value": "starburst",
+              "label": "Starburst"
+            },
+            {
+              "value": "image",
+              "label": "Image or SVG"
+            }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image or SVG",
+          "info": "Replaces the starburst when «Shape» is «Image or SVG». Upload PNG, WebP or SVG files under Content → Files. Shown at 104px."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_text",
+          "label": "Show the text on the image",
+          "info": "Off: only the image shows; the text becomes its alt text.",
+          "default": true
+        },
+        {
+          "type": "color",
+          "id": "shape_color",
+          "label": "Shape colour",
+          "info": "Starburst only. Used when «Use the colours below» is on; otherwise the colour scheme's button colours.",
+          "default": "#AEFF64"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text colour",
+          "default": "#AC0300"
+        }
+      ]
+    },
+    {
+      "type": "background_pattern",
+      "name": "t:common.blocks.background_pattern.name",
+      "settings": [
+        {
+          "type": "select",
+          "id": "type",
+          "label": "t:common.blocks.background_pattern.settings.type.label",
+          "options": [
+            {
+              "value": "custom_stars",
+              "label": "custom stars",
+              "group": "custom patterns"
+            },
+            {
+              "value": "custom_clouds",
+              "label": "custom clouds",
+              "group": "custom patterns"
+            },
+            {
+              "value": "custom_crosscuts",
+              "label": "custom crosscuts",
+              "group": "custom patterns"
+            },
+            {
+              "value": "custom_rectangles",
+              "label": "custom rectangles",
+              "group": "custom patterns"
+            },
+            {
+              "value": "diagonal_lines",
+              "label": "t:common.options.diagonal_lines.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_lines"
+            },
+            {
+              "value": "grid",
+              "label": "t:common.options.grid_lines.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_lines"
+            },
+            {
+              "value": "grid_with_diagonal_lines",
+              "label": "t:common.options.grid_with_diagonal_lines.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_lines"
+            },
+            {
+              "value": "crosshatch",
+              "label": "t:common.options.crosshatch.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_lines"
+            },
+            {
+              "value": "zig_zag_lines",
+              "label": "t:common.options.zig_zag.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_lines"
+            },
+            {
+              "value": "waves_lines",
+              "label": "t:common.options.waves.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_lines"
+            },
+            {
+              "value": "dots",
+              "label": "t:common.options.dots.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_shapes"
+            },
+            {
+              "value": "triangle",
+              "label": "t:common.options.triangles.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_shapes"
+            },
+            {
+              "value": "polka_dot",
+              "label": "t:common.options.polka_dot.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_shapes"
+            },
+            {
+              "value": "polka_dot_triangles",
+              "label": "t:common.options.polka_dot_triangles.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_shapes"
+            },
+            {
+              "value": "plus",
+              "label": "t:common.options.plus.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_shapes"
+            },
+            {
+              "value": "cross",
+              "label": "t:common.options.cross.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_shapes"
+            },
+            {
+              "value": "squares",
+              "label": "t:common.options.squares.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_shapes"
+            },
+            {
+              "value": "vertical_stripes",
+              "label": "t:common.options.vertical_stripes.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_stripes"
+            },
+            {
+              "value": "horizontal_stripes",
+              "label": "t:common.blocks.background_pattern.settings.type.options.horizontal_stripes.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_stripes"
+            },
+            {
+              "value": "diagonal_stripes",
+              "label": "t:common.options.diagonal_stripes.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_stripes"
+            },
+            {
+              "value": "checkerboard",
+              "label": "t:common.options.checkerboard.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "corner_triangle",
+              "label": "t:common.options.corner_triangle.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "diamonds",
+              "label": "t:common.options.diamonds.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "scales",
+              "label": "t:common.options.scales.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "alternating_pinwheel",
+              "label": "t:common.options.alternating_pinwheel.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "windmill",
+              "label": "t:common.options.windmill.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "origami",
+              "label": "t:common.options.origami.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "argyle",
+              "label": "t:common.options.argyle.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "chevrons_1",
+              "label": "t:common.options.chevrons_1.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "chevrons_2",
+              "label": "t:common.options.chevrons_2.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "connected_circles",
+              "label": "t:common.options.connected_circles.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "alternating_triangles",
+              "label": "t:common.options.alternating_triangles.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "waves_geometric",
+              "label": "t:common.options.waves.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "hexagons_geometric",
+              "label": "t:common.options.hexagons.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "squiggle",
+              "label": "t:common.options.squiggle.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "zig_zag_geometric",
+              "label": "t:common.options.zig_zag.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_geometric"
+            },
+            {
+              "value": "squiggles",
+              "label": "t:common.options.squiggles.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
+            },
+            {
+              "value": "sprinkles",
+              "label": "t:common.blocks.background_pattern.settings.type.options.sprinkles.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
+            },
+            {
+              "value": "8bit",
+              "label": "t:common.options.8bit.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
+            },
+            {
+              "value": "3d_cube",
+              "label": "t:common.blocks.background_pattern.settings.type.options.3d_cube.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
+            },
+            {
+              "value": "bubbles",
+              "label": "t:common.blocks.background_pattern.settings.type.options.bubbles.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
+            },
+            {
+              "value": "macaroni",
+              "label": "t:common.options.macaroni.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
+            },
+            {
+              "value": "leaves",
+              "label": "t:common.options.leaves.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
+            },
+            {
+              "value": "bricks",
+              "label": "t:common.options.bricks.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
+            },
+            {
+              "value": "herringbone_1",
+              "label": "t:common.options.herringbone_1.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
+            },
+            {
+              "value": "herringbone_2",
+              "label": "t:common.options.herringbone_2.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
+            },
+            {
+              "value": "interlocking_hexagons",
+              "label": "t:common.options.interlocking_hexagons.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
+            },
+            {
+              "value": "blobs",
+              "label": "t:common.options.blobs.label",
+              "group": "t:common.blocks.background_pattern.settings.type.options.group_miscellaneous"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "color",
+          "label": "t:common.blocks.background_pattern.settings.color.label",
+          "default": "text",
+          "options": [
+            {
+              "value": "text",
+              "label": "t:common.options.text.label"
+            },
+            {
+              "value": "accent-1",
+              "label": "t:common.options.accent_1.label"
+            },
+            {
+              "value": "accent-2",
+              "label": "t:common.options.accent_2.label"
+            },
+            {
+              "value": "card",
+              "label": "t:common.options.card.label"
+            },
+            {
+              "value": "background",
+              "label": "t:common.options.background.label"
+            },
+            {
+              "value": "gradient",
+              "label": "t:common.options.gradient.label"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "size",
+          "min": 8,
+          "max": 600,
+          "unit": "px",
+          "label": "t:common.blocks.background_pattern.settings.size.label",
+          "step": 8,
+          "default": 24
+        },
+        {
+          "type": "range",
+          "id": "opacity",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "t:common.settings.opacity.label",
+          "default": 100
+        },
+        {
+          "type": "header",
+          "content": "t:common.settings.header_animation"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_parallax",
+          "label": "t:common.blocks.background_pattern.settings.enable_parallax.label",
+          "default": false,
+          "info": "t:common.blocks.background_pattern.settings.enable_parallax.info"
+        },
+        {
+          "type": "range",
+          "id": "parallax_speed",
+          "min": 1,
+          "max": 10,
+          "step": 1,
+          "label": "t:common.settings.parallax_speed.label",
+          "default": 3
+        }
+      ]
+    },
+    {
+      "type": "background_shape",
+      "name": "t:common.blocks.background_shape.name",
+      "settings": [
+        {
+          "type": "select",
+          "id": "shape",
+          "label": "t:common.blocks.background_shape.settings.shape.label",
+          "default": "square",
+          "options": [
+            {
+              "value": "website_shape_star",
+              "label": "custom star",
+              "group": "custom shapes"
+            },
+            {
+              "value": "website_shape_bun",
+              "label": "custom bun",
+              "group": "custom shapes"
+            },
+            {
+              "value": "website_shape_frame",
+              "label": "custom frame",
+              "group": "custom shapes"
+            },
+            {
+              "value": "website_shape_pancake",
+              "label": "custom pancake",
+              "group": "custom shapes"
+            },
+            {
+              "value": "website_shape_cloud",
+              "label": "custom cloud",
+              "group": "custom shapes"
+            },
+            {
+              "value": "square",
+              "label": "t:common.blocks.background_shape.settings.shape.options.square.label",
+              "group": "t:common.groups.basic"
+            },
+            {
+              "value": "circle",
+              "label": "t:common.blocks.background_shape.settings.shape.options.circle.label",
+              "group": "t:common.groups.basic"
+            },
+            {
+              "value": "oval",
+              "label": "t:common.blocks.background_shape.settings.shape.options.oval.label",
+              "group": "t:common.groups.basic"
+            },
+            {
+              "value": "triangle",
+              "label": "t:common.blocks.background_shape.settings.shape.options.triangle.label",
+              "group": "t:common.groups.basic"
+            },
+            {
+              "value": "pentagon",
+              "label": "t:common.options.pentagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "hexagon",
+              "label": "t:common.options.hexagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "heptagon",
+              "label": "t:common.options.heptagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "octagon",
+              "label": "t:common.options.octagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "nonagon",
+              "label": "t:common.options.nonagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "decagon",
+              "label": "t:common.options.decagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "rounded_pentagon",
+              "label": "t:common.options.rounded_pentagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "rounded_hexagon",
+              "label": "t:common.options.rounded_hexagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "rounded_heptagon",
+              "label": "t:common.options.rounded_heptagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "rounded_octagon",
+              "label": "t:common.options.rounded_octagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "rounded_nonagon",
+              "label": "t:common.options.rounded_nonagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "rounded_decagon",
+              "label": "t:common.options.rounded_decagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "star_1",
+              "label": "t:common.options.star_1.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "star_2",
+              "label": "t:common.options.star_2.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "star_3",
+              "label": "t:common.options.star_3.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "star_4",
+              "label": "t:common.options.star_4.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "star_5",
+              "label": "t:common.options.star_5.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "star_6",
+              "label": "t:common.options.star_6.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "abstract_star_1",
+              "label": "t:common.options.abstract_star_1.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "abstract_star_2",
+              "label": "t:common.options.abstract_star_2.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "abstract_star_3",
+              "label": "t:common.options.abstract_star_3.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "scalloped_circle_1",
+              "label": "t:common.options.scalloped_circle_1.label",
+              "group": "t:common.groups.scalloped_circles"
+            },
+            {
+              "value": "scalloped_circle_2",
+              "label": "t:common.options.scalloped_circle_2.label",
+              "group": "t:common.groups.scalloped_circles"
+            },
+            {
+              "value": "scalloped_circle_3",
+              "label": "t:common.options.scalloped_circle_3.label",
+              "group": "t:common.groups.scalloped_circles"
+            },
+            {
+              "value": "scalloped_circle_4",
+              "label": "t:common.options.scalloped_circle_4.label",
+              "group": "t:common.groups.scalloped_circles"
+            },
+            {
+              "value": "scalloped_circle_5",
+              "label": "t:common.options.scalloped_circle_5.label",
+              "group": "t:common.groups.scalloped_circles"
+            },
+            {
+              "value": "scalloped_circle_6",
+              "label": "t:common.options.scalloped_circle_6.label",
+              "group": "t:common.groups.scalloped_circles"
+            },
+            {
+              "value": "parallelogram",
+              "label": "t:common.options.parallelogram.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "squircle",
+              "label": "t:common.options.squircle.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "scalloped_square_1",
+              "label": "t:common.options.scalloped_square_1.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "scalloped_square_2",
+              "label": "t:common.options.scalloped_square_2.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "leaf",
+              "label": "t:common.options.leaf.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "clipped_square",
+              "label": "t:common.options.clipped.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "convex_square",
+              "label": "t:common.options.convex.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "twisted_square",
+              "label": "t:common.options.twisted.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "trapeze",
+              "label": "t:common.options.trapeze.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "pinched",
+              "label": "t:common.options.pinched.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "pixelated",
+              "label": "t:common.options.pixelated.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "overlapped",
+              "label": "t:common.options.overlapped.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "zig_zag",
+              "label": "t:common.options.zig_zag.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "zig_zag_tear",
+              "label": "t:common.options.zig_zag_tear.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "wave_tear",
+              "label": "t:common.options.wave_tear.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "flower",
+              "label": "t:common.options.flower.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "flower_bloom",
+              "label": "t:common.options.flower_bloom.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "concave",
+              "label": "t:common.options.concave.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "flag",
+              "label": "t:common.options.flag.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "abstract_oval",
+              "label": "t:common.options.abstract_oval.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "cross",
+              "label": "t:common.options.cross.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "quatrefoil",
+              "label": "t:common.options.quatrefoil.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "quadrant",
+              "label": "t:common.options.quadrant.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "wind",
+              "label": "t:common.options.wind.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "windmill",
+              "label": "t:common.options.windmill.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "heart",
+              "label": "t:common.options.heart.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "mirrored_pyramids",
+              "label": "t:common.options.mirrored_pyramids.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "plus",
+              "label": "t:common.options.plus.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "double_pill_1",
+              "label": "t:common.options.double_pill_1.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "double_pill_2",
+              "label": "t:common.options.double_pill_2.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "triple_pill_1",
+              "label": "t:common.options.triple_pill_1.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "triple_pill_2",
+              "label": "t:common.options.triple_pill_2.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "crown",
+              "label": "t:common.options.crown.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "stair",
+              "label": "t:common.options.stair.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "pancake_stack",
+              "label": "t:common.options.pancake_stack.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "asterisk",
+              "label": "t:common.options.asterisk.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "overlapping_squares",
+              "label": "t:common.options.overlapping_squares.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "brush_stroke",
+              "label": "t:common.options.brush_stroke.label",
+              "group": "t:common.groups.miscellaneous"
+            },
+            {
+              "value": "blob",
+              "label": "t:common.options.blob.label",
+              "group": "t:common.groups.variable"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "blob_type",
+          "min": 1,
+          "max": 10,
+          "step": 1,
+          "label": "t:common.blocks.background_shape.settings.blob_type.label",
+          "default": 1,
+          "info": "t:common.blocks.background_shape.settings.blob_type.info"
+        },
+        {
+          "type": "range",
+          "id": "size",
+          "min": 25,
+          "max": 300,
+          "step": 5,
+          "label": "t:common.blocks.background_shape.settings.size.label",
+          "default": 100
+        },
+        {
+          "type": "range",
+          "id": "opacity",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "t:common.settings.opacity.label",
+          "default": 100
+        },
+        {
+          "type": "range",
+          "id": "blur",
+          "min": 0,
+          "max": 500,
+          "step": 5,
+          "unit": "px",
+          "label": "t:common.blocks.background_shape.settings.blur.label",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "t:common.settings.header_position"
+        },
+        {
+          "type": "range",
+          "id": "horizontal_position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "t:common.blocks.background_shape.settings.horizontal_position.label",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "vertical_position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "t:common.blocks.background_shape.settings.vertical_position.label",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "rotate",
+          "min": -90,
+          "max": 90,
+          "step": 2,
+          "unit": "deg",
+          "label": "t:common.settings.rotate.label",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "t:common.settings.header_animation"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_parallax",
+          "label": "t:common.blocks.background_shape.settings.enable_parallax.label",
+          "default": false,
+          "info": "t:common.blocks.background_shape.settings.enable_parallax.info"
+        },
+        {
+          "type": "range",
+          "id": "parallax_speed",
+          "min": 1,
+          "max": 10,
+          "step": 1,
+          "label": "t:common.settings.parallax_speed.label",
+          "default": 3
+        },
+        {
+          "type": "header",
+          "content": "t:common.settings.header_color"
+        },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "default": "scheme1",
+          "label": "t:common.settings.color_scheme.label"
+        },
+        {
+          "type": "select",
+          "id": "color",
+          "label": "t:common.settings.background_color.label",
+          "default": "accent-1",
+          "options": [
+            {
+              "value": "text",
+              "label": "t:common.options.text.label"
+            },
+            {
+              "value": "accent-1",
+              "label": "t:common.options.accent_1.label"
+            },
+            {
+              "value": "accent-2",
+              "label": "t:common.options.accent_2.label"
+            },
+            {
+              "value": "card",
+              "label": "t:common.options.card.label"
+            },
+            {
+              "value": "background",
+              "label": "t:common.options.background.label"
+            },
+            {
+              "value": "gradient",
+              "label": "t:common.options.gradient.label"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "t:common.blocks.sticker.name",
+      "type": "sticker",
+      "settings": [
+        {
+          "type": "range",
+          "id": "width",
+          "min": 100,
+          "max": 300,
+          "step": 10,
+          "unit": "px",
+          "label": "t:common.blocks.sticker.settings.width.label",
+          "default": 150
+        },
+        {
+          "type": "checkbox",
+          "id": "half_width_on_mobile",
+          "label": "t:common.blocks.sticker.settings.half_width_on_mobile.label",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:common.blocks.sticker.settings.text.label",
+          "info": "t:common.blocks.sticker.settings.text.info",
+          "default": "Sticker"
+        },
+        {
+          "type": "select",
+          "id": "shape",
+          "label": "t:common.blocks.sticker.settings.shape.label",
+          "options": [
+            {
+              "value": "website_shape_star",
+              "label": "custom star",
+              "group": "custom shapes"
+            },
+            {
+              "value": "website_shape_bun",
+              "label": "custom bun",
+              "group": "custom shapes"
+            },
+            {
+              "value": "website_shape_frame",
+              "label": "custom frame",
+              "group": "custom shapes"
+            },
+            {
+              "value": "website_shape_pancake",
+              "label": "custom pancake",
+              "group": "custom shapes"
+            },
+            {
+              "value": "website_shape_cloud",
+              "label": "custom cloud",
+              "group": "custom shapes"
+            },
+            {
+              "value": "fit_to_text",
+              "label": "t:common.blocks.sticker.settings.shape.options.fit_to_text.label"
+            },
+            {
+              "value": "circle",
+              "label": "t:common.options.circle.label",
+              "group": "t:common.groups.basic"
+            },
+            {
+              "value": "pentagon",
+              "label": "t:common.options.pentagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "hexagon",
+              "label": "t:common.options.hexagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "heptagon",
+              "label": "t:common.options.heptagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "octagon",
+              "label": "t:common.options.octagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "nonagon",
+              "label": "t:common.options.nonagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "decagon",
+              "label": "t:common.options.decagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "rounded_pentagon",
+              "label": "t:common.options.rounded_pentagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "rounded_hexagon",
+              "label": "t:common.options.rounded_hexagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "rounded_heptagon",
+              "label": "t:common.options.rounded_heptagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "rounded_octagon",
+              "label": "t:common.options.rounded_octagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "rounded_nonagon",
+              "label": "t:common.options.rounded_nonagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "rounded_decagon",
+              "label": "t:common.options.rounded_decagon.label",
+              "group": "t:common.groups.polygons"
+            },
+            {
+              "value": "star_1",
+              "label": "t:common.options.star_1.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "star_2",
+              "label": "t:common.options.star_2.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "star_3",
+              "label": "t:common.options.star_3.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "star_4",
+              "label": "t:common.options.star_4.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "star_5",
+              "label": "t:common.options.star_5.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "star_6",
+              "label": "t:common.options.star_6.label",
+              "group": "t:common.groups.stars"
+            },
+            {
+              "value": "scalloped_circle_1",
+              "label": "t:common.options.scalloped_circle_1.label",
+              "group": "t:common.groups.scalloped_circles"
+            },
+            {
+              "value": "scalloped_circle_2",
+              "label": "t:common.options.scalloped_circle_2.label",
+              "group": "t:common.groups.scalloped_circles"
+            },
+            {
+              "value": "scalloped_circle_3",
+              "label": "t:common.options.scalloped_circle_3.label",
+              "group": "t:common.groups.scalloped_circles"
+            },
+            {
+              "value": "scalloped_circle_4",
+              "label": "t:common.options.scalloped_circle_4.label",
+              "group": "t:common.groups.scalloped_circles"
+            },
+            {
+              "value": "scalloped_circle_5",
+              "label": "t:common.options.scalloped_circle_5.label",
+              "group": "t:common.groups.scalloped_circles"
+            },
+            {
+              "value": "scalloped_circle_6",
+              "label": "t:common.options.scalloped_circle_6.label",
+              "group": "t:common.groups.scalloped_circles"
+            },
+            {
+              "value": "parallelogram",
+              "label": "t:common.options.parallelogram.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "squircle",
+              "label": "t:common.options.squircle.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "scalloped_square_1",
+              "label": "t:common.options.scalloped_square_1.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "scalloped_square_2",
+              "label": "t:common.options.scalloped_square_2.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "leaf",
+              "label": "t:common.options.leaf.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "clipped_square",
+              "label": "t:common.options.clipped.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "convex_square",
+              "label": "t:common.options.convex.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "twisted_square",
+              "label": "t:common.options.twisted.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "trapeze",
+              "label": "t:common.options.trapeze.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "pinched",
+              "label": "t:common.options.pinched.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "pixelated",
+              "label": "t:common.options.pixelated.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "overlapped",
+              "label": "t:common.options.overlapped.label",
+              "group": "t:common.groups.square"
+            },
+            {
+              "value": "ellipse",
+              "label": "t:common.options.ellipse.label",
+              "group": "t:common.groups.wide"
+            },
+            {
+              "value": "diamond_wide",
+              "label": "t:common.options.diamond.label",
+              "group": "t:common.groups.wide"
+            },
+            {
+              "value": "rounded_diamond_wide",
+              "label": "t:common.options.rounded_diamond.label",
+              "group": "t:common.groups.wide"
+            },
+            {
+              "value": "triangle_wide",
+              "label": "t:common.options.triangle.label",
+              "group": "t:common.groups.wide"
+            },
+            {
+              "value": "hexagon_wide",
+              "label": "t:common.options.hexagon.label",
+              "group": "t:common.groups.wide"
+            },
+            {
+              "value": "rounded_hexagon_wide",
+              "label": "t:common.options.rounded_hexagon.label",
+              "group": "t:common.groups.wide"
+            },
+            {
+              "value": "uneven_star_wide",
+              "label": "t:common.options.uneven_star.label",
+              "group": "t:common.groups.wide"
+            },
+            {
+              "value": "star_wide",
+              "label": "t:common.options.star.label",
+              "group": "t:common.groups.wide"
+            },
+            {
+              "value": "semicircle",
+              "label": "t:common.options.semicircle.label",
+              "group": "t:common.groups.wide"
+            },
+            {
+              "value": "eye",
+              "label": "t:common.options.eye.label",
+              "group": "t:common.groups.wide"
+            },
+            {
+              "value": "parallelogram_wide",
+              "label": "t:common.options.parallelogram.label",
+              "group": "t:common.groups.wide"
+            },
+            {
+              "value": "ribbon",
+              "label": "t:common.options.ribbon.label",
+              "group": "t:common.groups.wide"
+            },
+            {
+              "value": "ticket_stub",
+              "label": "t:common.options.ticket_stub.label",
+              "group": "t:common.groups.wide"
+            },
+            {
+              "value": "wave_ribbon",
+              "label": "t:common.options.wave_ribbon.label",
+              "group": "t:common.groups.wide"
+            },
+            {
+              "value": "zig_zag_ribbon",
+              "label": "t:common.options.zig_zag_ribbon.label",
+              "group": "t:common.groups.wide"
+            }
+          ],
+          "default": "star_1"
+        },
+        {
+          "type": "select",
+          "id": "sticker_font_size",
+          "label": "t:common.settings.sticker_font_size.label",
+          "options": [
+            {
+              "value": "1rem",
+              "label": "t:common.options.extra_small.label"
+            },
+            {
+              "value": "1.25rem",
+              "label": "t:common.options.small.label"
+            },
+            {
+              "value": "1.563rem",
+              "label": "t:common.options.medium.label"
+            },
+            {
+              "value": "1.953rem",
+              "label": "t:common.options.large.label"
+            },
+            {
+              "value": "2.441rem",
+              "label": "t:common.options.extra_large.label"
+            }
+          ],
+          "default": "1.563rem",
+          "info": "t:common.settings.sticker_font_size.info"
+        },
+        {
+          "type": "header",
+          "content": "t:common.settings.header_custom_image"
+        },
+        {
+          "type": "paragraph",
+          "content": "t:common.blocks.sticker.settings.paragraph_using_an_image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:common.settings.image.label"
+        },
+        {
+          "type": "header",
+          "content": "t:common.settings.header_position"
+        },
+        {
+          "type": "range",
+          "id": "horizontal_position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "t:common.blocks.sticker.settings.horizontal_position.label",
+          "default": 80
+        },
+        {
+          "type": "range",
+          "id": "vertical_position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "t:common.blocks.sticker.settings.vertical_position.label",
+          "default": 80
+        },
+        {
+          "type": "range",
+          "id": "horizontal_position_sm",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "horizontal position mobile",
+          "default": 80
+        },
+        {
+          "type": "range",
+          "id": "vertical_position_sm",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "vertical position mobile",
+          "default": 80
+        },
+        {
+          "type": "range",
+          "id": "rotate",
+          "min": -90,
+          "max": 90,
+          "step": 2,
+          "unit": "deg",
+          "label": "t:common.settings.rotate.label",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "t:common.settings.header_layout"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_sticker_on_mobile",
+          "label": "t:common.blocks.sticker.settings.show_sticker_on_mobile.label",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_sticker_on_desktop",
+          "label": "t:common.blocks.sticker.settings.show_sticker_on_desktop.label",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "t:common.settings.header_animation"
+        },
+        {
+          "type": "select",
+          "id": "rotation_animation",
+          "label": "t:common.blocks.sticker.settings.rotation_animation.label",
+          "options": [
+            {
+              "value": "none",
+              "label": "t:common.blocks.sticker.settings.rotation_animation.options.no_rotation.label"
+            },
+            {
+              "value": "constantly_rotate",
+              "label": "t:common.blocks.sticker.settings.rotation_animation.options.constantly_rotate.label"
+            },
+            {
+              "value": "rotate_when_scrolling",
+              "label": "t:common.blocks.sticker.settings.rotation_animation.options.rotate_only_when_page_is_scrolling.label"
+            }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_parallax",
+          "label": "t:common.blocks.sticker.settings.enable_parallax.label",
+          "default": false,
+          "info": "t:common.blocks.sticker.settings.enable_parallax.info"
+        },
+        {
+          "type": "range",
+          "id": "parallax_speed",
+          "min": 1,
+          "max": 10,
+          "step": 1,
+          "label": "t:common.settings.parallax_speed.label",
+          "default": 3
+        },
+        {
+          "type": "header",
+          "content": "t:common.settings.header_color"
+        },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "default": "scheme1",
+          "label": "t:common.settings.color_scheme.label"
+        },
+        {
+          "type": "select",
+          "id": "color",
+          "label": "t:common.settings.background_color.label",
+          "default": "bg-scheme-accent-1 text-scheme-accent-1-contrast",
+          "options": [
+            {
+              "value": "bg-scheme-text text-scheme-text-contrast",
+              "label": "t:common.options.text.label"
+            },
+            {
+              "value": "bg-scheme-accent-1 text-scheme-accent-1-contrast",
+              "label": "t:common.options.accent_1.label"
+            },
+            {
+              "value": "bg-scheme-accent-2 text-scheme-accent-2-contrast",
+              "label": "t:common.options.accent_2.label"
+            },
+            {
+              "value": "bg-scheme-card text-scheme-card-text",
+              "label": "t:common.options.card.label"
+            },
+            {
+              "value": "bg-scheme-background text-scheme-text",
+              "label": "t:common.options.background.label"
+            },
+            {
+              "value": "bg-scheme-gradient text-scheme-text",
+              "label": "t:common.options.gradient.label"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "t:common.blocks.shape_divider.name",
+      "type": "shape_divider",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "select",
+          "label": "t:common.blocks.shape_divider.settings.target_section.label",
+          "id": "target_section",
+          "default": "above",
+          "options": [
+            {
+              "value": "above",
+              "label": "t:common.blocks.shape_divider.settings.target_section.options.section_above.label"
+            },
+            {
+              "value": "below",
+              "label": "t:common.blocks.shape_divider.settings.target_section.options.section_below.label"
+            }
+          ],
+          "info": "t:common.blocks.shape_divider.settings.target_section.info"
+        },
+        {
+          "type": "color_scheme",
+          "id": "target_section_color_scheme",
+          "default": "scheme1",
+          "label": "t:common.blocks.shape_divider.settings.target_section_color_scheme.label",
+          "info": "t:common.blocks.shape_divider.settings.target_section_color_scheme.info"
+        },
+        {
+          "type": "select",
+          "label": "t:common.blocks.shape_divider.settings.style.label",
+          "id": "style",
+          "default": "waves-1-patterned_1200x20",
+          "options": [
+            {
+              "value": "waves-1-patterned_1200x20",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_1.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "waves-2-patterned_1200x43",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_2.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "waves-3-patterned_1200x84",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_3.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "zig-zag-1-patterned_1200x21",
+              "label": "t:common.blocks.shape_divider.settings.style.options.zig_zag_1.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "zig-zag-2-patterned_1200x37",
+              "label": "t:common.blocks.shape_divider.settings.style.options.zig_zag_2.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "zig-zag-3-patterned_1200x65",
+              "label": "t:common.blocks.shape_divider.settings.style.options.zig_zag_3.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "circles-1-patterned_1200x16",
+              "label": "t:common.blocks.shape_divider.settings.style.options.circles_1.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "circles-2-patterned_1200x35",
+              "label": "t:common.blocks.shape_divider.settings.style.options.circles_2.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "kd-scallop-patterned_1440x40",
+              "label": "Kaadu scallop",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "kd-scallop-mobile-patterned_416x30",
+              "label": "Kaadu scallop (mobile)",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "circles-2.5-patterned_1200x54",
+              "label": "t:common.blocks.shape_divider.settings.style.options.circles_2_5.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "circles-3-patterned_1200x67",
+              "label": "t:common.blocks.shape_divider.settings.style.options.circles_3.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "spikes-1-patterned_1200x132",
+              "label": "t:common.blocks.shape_divider.settings.style.options.spikes_1.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "spikes-2-patterned_1200x132",
+              "label": "t:common.blocks.shape_divider.settings.style.options.spikes_2.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "tilt-1-shape_1440x101",
+              "label": "t:common.blocks.shape_divider.settings.style.options.tilt_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "tilt-2-shape_1440x180",
+              "label": "t:common.blocks.shape_divider.settings.style.options.tilt_2.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "tilt-3-shape_1440x293",
+              "label": "t:common.blocks.shape_divider.settings.style.options.tilt_3.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "waves-1-shape_1440x261",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "waves-2-shape_1440x330",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_2.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "mountains-1-shape_1440x293",
+              "label": "t:common.blocks.shape_divider.settings.style.options.mountains_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "mountains-2-shape_1440x325",
+              "label": "t:common.blocks.shape_divider.settings.style.options.mountains_2.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "curve-shape_1440x149",
+              "label": "t:common.blocks.shape_divider.settings.style.options.curve.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "curve-inverse-shape_1440x149",
+              "label": "t:common.blocks.shape_divider.settings.style.options.curve_inverse.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "steps-1-shape_1400x105",
+              "label": "t:common.blocks.shape_divider.settings.style.options.steps_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "steps-2-shape_1400x105",
+              "label": "t:common.blocks.shape_divider.settings.style.options.steps_2.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "arrow-1-shape_1400x33",
+              "label": "t:common.blocks.shape_divider.settings.style.options.arrow_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "arrow-2-shape_1400x73",
+              "label": "t:common.blocks.shape_divider.settings.style.options.arrow_2.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "offset-ovals-shape_1400x155",
+              "label": "t:common.blocks.shape_divider.settings.style.options.offset_ovals.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "triangle-shape_1400x145",
+              "label": "t:common.blocks.shape_divider.settings.style.options.triangle.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "triangle-asymmetrical-shape_1400x145",
+              "label": "t:common.blocks.shape_divider.settings.style.options.triangle_asymmetrical.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "clouds-shape_1400x161",
+              "label": "t:common.blocks.shape_divider.settings.style.options.clouds.label",
+              "group": "t:common.settings.shape.label"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "t:common.blocks.shape_divider.settings.mobile_header.content"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_mobile_style",
+          "label": "t:common.blocks.shape_divider.settings.enable_mobile_style.label",
+          "info": "t:common.blocks.shape_divider.settings.enable_mobile_style.info"
+        },
+        {
+          "type": "select",
+          "label": "t:common.blocks.shape_divider.settings.style_mobile.label",
+          "id": "style_mobile",
+          "default": "waves-1-patterned_1200x20",
+          "options": [
+            {
+              "value": "waves-1-patterned_1200x20",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_1.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "waves-2-patterned_1200x43",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_2.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "waves-3-patterned_1200x84",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_3.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "zig-zag-1-patterned_1200x21",
+              "label": "t:common.blocks.shape_divider.settings.style.options.zig_zag_1.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "zig-zag-2-patterned_1200x37",
+              "label": "t:common.blocks.shape_divider.settings.style.options.zig_zag_2.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "zig-zag-3-patterned_1200x65",
+              "label": "t:common.blocks.shape_divider.settings.style.options.zig_zag_3.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "circles-1-patterned_1200x16",
+              "label": "t:common.blocks.shape_divider.settings.style.options.circles_1.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "circles-2-patterned_1200x35",
+              "label": "t:common.blocks.shape_divider.settings.style.options.circles_2.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "kd-scallop-patterned_1440x40",
+              "label": "Kaadu scallop",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "kd-scallop-mobile-patterned_416x30",
+              "label": "Kaadu scallop (mobile)",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "circles-2.5-patterned_1200x54",
+              "label": "t:common.blocks.shape_divider.settings.style.options.circles_2_5.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "circles-3-patterned_1200x67",
+              "label": "t:common.blocks.shape_divider.settings.style.options.circles_3.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "spikes-1-patterned_1200x132",
+              "label": "t:common.blocks.shape_divider.settings.style.options.spikes_1.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "spikes-2-patterned_1200x132",
+              "label": "t:common.blocks.shape_divider.settings.style.options.spikes_2.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "tilt-1-shape_1440x101",
+              "label": "t:common.blocks.shape_divider.settings.style.options.tilt_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "tilt-2-shape_1440x180",
+              "label": "t:common.blocks.shape_divider.settings.style.options.tilt_2.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "tilt-3-shape_1440x293",
+              "label": "t:common.blocks.shape_divider.settings.style.options.tilt_3.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "waves-1-shape_1440x261",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "waves-2-shape_1440x330",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_2.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "mountains-1-shape_1440x293",
+              "label": "t:common.blocks.shape_divider.settings.style.options.mountains_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "mountains-2-shape_1440x325",
+              "label": "t:common.blocks.shape_divider.settings.style.options.mountains_2.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "curve-shape_1440x149",
+              "label": "t:common.blocks.shape_divider.settings.style.options.curve.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "curve-inverse-shape_1440x149",
+              "label": "t:common.blocks.shape_divider.settings.style.options.curve_inverse.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "steps-1-shape_1400x105",
+              "label": "t:common.blocks.shape_divider.settings.style.options.steps_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "steps-2-shape_1400x105",
+              "label": "t:common.blocks.shape_divider.settings.style.options.steps_2.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "arrow-1-shape_1400x33",
+              "label": "t:common.blocks.shape_divider.settings.style.options.arrow_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "arrow-2-shape_1400x73",
+              "label": "t:common.blocks.shape_divider.settings.style.options.arrow_2.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "offset-ovals-shape_1400x155",
+              "label": "t:common.blocks.shape_divider.settings.style.options.offset_ovals.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "triangle-shape_1400x145",
+              "label": "t:common.blocks.shape_divider.settings.style.options.triangle.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "triangle-asymmetrical-shape_1400x145",
+              "label": "t:common.blocks.shape_divider.settings.style.options.triangle_asymmetrical.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "clouds-shape_1400x161",
+              "label": "t:common.blocks.shape_divider.settings.style.options.clouds.label",
+              "group": "t:common.settings.shape.label"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "flip_horizontal",
+          "label": "t:common.blocks.shape_divider.settings.flip_horizontal.label"
+        },
+        {
+          "type": "header",
+          "content": "t:common.settings.header_animation"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_animation",
+          "label": "t:common.blocks.shape_divider.settings.enable_animation.label",
+          "info": "t:common.blocks.shape_divider.settings.enable_animation.info"
+        },
+        {
+          "type": "select",
+          "id": "animation_direction",
+          "label": "t:common.blocks.shape_divider.settings.animation_direction.label",
+          "options": [
+            {
+              "value": "",
+              "label": "t:common.options.right_to_left.label"
+            },
+            {
+              "value": "reverse",
+              "label": "t:common.options.left_to_right.label"
+            }
+          ],
+          "default": ""
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

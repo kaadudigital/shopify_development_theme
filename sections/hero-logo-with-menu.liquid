@@ -23,60 +23,162 @@
       assign menu_count = menu_count | plus: 1
     endif
   endfor
+
+  assign account_url = section.settings.account_link | default: routes.account_url
+  assign shop_url = section.settings.shop_link | default: routes.all_products_collection_url
+  assign accent_color = section.settings.menu_accent_color | default: '#ACFF64'
+  assign cart_content = section.settings.cart_content | default: 'count'
+  assign cart_has_icon = false
+  if section.settings.cart_icon_svg != blank or section.settings.cart_icon != blank
+    assign cart_has_icon = true
+  endif
+  if cart_has_icon == false
+    assign cart_content = 'count'
+  endif
 -%}
 
 {%- style -%}
       /* ========================================
-         BUTTON STYLES
+         HEADER BAR (DS Header) — purple band, logo left,
+         lime MENU cloud overlapping it, red shop cloud, starburst cart.
+         Cloud buttons use .kd-btn (assets/base.bundle.css).
          ======================================== */
-      .custom-menu-button,
-      .custom-shop-button,
-      .custom-cart-button {
-        background-size: contain;
-        background-position: center;
-        background-repeat: no-repeat;
-        border: none;
-        cursor: pointer;
-        transition: transform 0.3s ease;
+      #{{ section.id }} .custom-menu-button {
+        transform: rotate(-6deg);
+      }
+
+      /* Nudge of the MENU cloud per device (settings "MENU button position") */
+      #{{ section.id }} .header-left {
+        top: {{ section.settings.menu_button_offset_y_mobile | default: 0 }}px;
+        left: {{ section.settings.menu_button_offset_x_mobile | default: 0 }}px;
+      }
+
+      @media (min-width: 768px) {
+        #{{ section.id }} .header-left {
+          top: {{ section.settings.menu_button_offset_y_tablet | default: 0 }}px;
+          left: {{ section.settings.menu_button_offset_x_tablet | default: 0 }}px;
+        }
+      }
+
+      @media (min-width: 1200px) {
+        #{{ section.id }} .header-left {
+          top: {{ section.settings.menu_button_offset | default: 0 }}px;
+          left: {{ section.settings.menu_button_offset_x | default: 0 }}px;
+        }
+      }
+
+      #{{ section.id }} .custom-menu-button:hover {
+        transform: rotate(-2deg);
+      }
+
+      #{{ section.id }} .custom-menu-button-text {
+        font-family: var(--font-display);
+        font-weight: 400;
+      }
+
+      /* CART — lime starburst sticker (DS: the cart icon is a starburst sticker) */
+      #{{ section.id }} .kd-cart-sticker {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        --kd-cart-size: {{ section.settings.cart_size_mobile | default: 56 }}px;
+        width: var(--kd-cart-size);
+        height: var(--kd-cart-size);
+        color: {{ section.settings.cart_text_color | default: '#ac0300' }};
+        text-decoration: none;
+        transform: rotate(-6deg);
+      }
+
+      #{{ section.id }} .kd-cart-sticker:hover {
+        transform: rotate(6deg);
+      }
+
+      #{{ section.id }} .kd-cart-sticker__shape {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        fill: {{ section.settings.cart_shape_color | default: '#ACFF64' }};
+        filter: drop-shadow(var(--kd-btn-shadow, var(--shadow-card)));
+      }
+
+      /* The DS card shadow (12 % black) disappears on the dark header ground; the header's buttons use the stronger
+         --shadow-card-dark (proposed token). */
+      #{{ section.id }} { --kd-btn-shadow: var(--shadow-card-dark); }
+
+      #{{ section.id }} .kd-cart-sticker__label {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: var(--font-sans);
+        font-weight: 600;
+        font-size: max(10px, calc(var(--kd-cart-size) * 0.16));
+        line-height: 1;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      /* Count and badge scale with the sticker size */
+      #{{ section.id }} .kd-cart-sticker__count {
+        font-size: calc(var(--kd-cart-size) * 0.35);
+      }
+
+      /* Custom icon inside the sticker; inline SVG code follows the text colour via currentColor */
+      #{{ section.id }} .kd-cart-sticker__icon {
         position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
+        width: {{ section.settings.cart_icon_size | default: 50 }}%;
+        height: {{ section.settings.cart_icon_size | default: 50 }}%;
       }
 
-      .custom-menu-button {
-        background-image: url('{{ section.settings.menu_button_image | img_url: 'master' }}');
-        transform: rotate(-3.94deg);
+      #{{ section.id }} .kd-cart-sticker__icon svg,
+      #{{ section.id }} .kd-cart-sticker__icon img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
       }
 
-      .custom-menu-button:hover {
-        transform: rotate(1.2deg);
+      /* Small count badge on the sticker's edge (icon + count mode); hidden while the cart is empty */
+      #{{ section.id }} .kd-cart-sticker__badge {
+        position: absolute;
+        top: 4%;
+        right: 4%;
+        min-width: max(18px, calc(var(--kd-cart-size) * 0.32));
+        height: max(18px, calc(var(--kd-cart-size) * 0.32));
+        padding: 0 5px;
+        border-radius: 999px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: {{ section.settings.cart_text_color | default: '#ac0300' }};
+        color: {{ section.settings.cart_shape_color | default: '#ACFF64' }};
+        font-family: var(--font-sans);
+        font-weight: 600;
+        font-size: max(11px, calc(var(--kd-cart-size) * 0.15));
+        line-height: 1;
+        transform: rotate(6deg);
       }
 
-      .custom-shop-button {
-        background-image: url('{{ section.settings.shop_button_image | img_url: 'master' }}');
-        transform: rotate(6.14deg);
+      #{{ section.id }} .kd-cart-sticker__badge[data-count='0'] {
+        display: none;
       }
 
-      .custom-shop-button:hover,
-      .custom-cart-button:hover {
-        transform: rotate(1deg);
+      @media (min-width: 768px) {
+        #{{ section.id }} .kd-cart-sticker {
+          --kd-cart-size: {{ section.settings.cart_size_tablet | default: 56 }}px;
+        }
       }
 
-      .custom-cart-button {
-        background-image: url('{{ section.settings.cart_icon_image | img_url: 'master' }}');
-        transform: rotate(-9.53deg);
-        padding: var(--space-6);
-      }
-
-      .custom-menu-button-text,
-      .custom-shop-button-text {
-        color: var(--color-red);
-        font-family: var(--font-display);
-        font-size: 24px;
-        line-height: 32px;
-        font-weight: 400;
-        padding: var(--space-4) var(--space-6);
+      @media (min-width: 1200px) {
+        #{{ section.id }} .kd-cart-sticker {
+          --kd-cart-size: {{ section.settings.cart_size_desktop | default: 88 }}px;
+        }
       }
 
       /* Menu button text container for animation */
@@ -85,7 +187,8 @@
       overflow: hidden;
       height: 1.2em;
       display: block;
-      min-width: 80px;
+      min-width: 64px;
+      text-align: center;
     }
 
     .menu-text-wrapper .menu-text,
@@ -125,332 +228,845 @@
     }
 
       /* ========================================
-         HAMBURGER MENU
-         ======================================== */
-      .hamburger-menu {
-        display: none;
-        flex-direction: column;
-        justify-content: space-around;
-        width: 30px;
-        height: 24px;
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        padding: 0;
-        z-index: 10;
-        position: relative;
-      }
-
-      .hamburger-menu .line {
-        width: 100%;
-        height: 3px;
-        background-color: rgb(var(--color-scheme-text));
-        transition: all 0.3s ease;
-        border-radius: 2px;
-        position: absolute;
-        left: 0;
-      }
-
-      .hamburger-menu .line:nth-child(1) {
-        top: 0;
-      }
-
-      .hamburger-menu .line:nth-child(2) {
-        top: 50%;
-        transform: translateY(-50%);
-      }
-
-      .hamburger-menu .line:nth-child(3) {
-        bottom: 0;
-      }
-
-      /* Hamburger to X animation */
-      .hamburger-menu.active .line:nth-child(1) {
-        top: 50%;
-        transform: translateY(-50%) rotate(45deg);
-      }
-
-      .hamburger-menu.active .line:nth-child(2) {
-        opacity: 0;
-      }
-
-      .hamburger-menu.active .line:nth-child(3) {
-        bottom: 50%;
-        transform: translateY(50%) rotate(-45deg);
-      }
-
-      /* ========================================
-         HEADER LAYOUT
+         HEADER LAYOUT — logo left, pills cluster
          ======================================== */
       .adjust-menu-on-overlay {
         position: relative;
         z-index: 100000;
       }
 
-      .header-content-wrapper {
-        display: grid;
-        grid-template-columns: 1fr auto 1fr;
-        align-items: center;
-        gap: var(--space-4);
+      #{{ section.id }} .header-content-wrapper {
+        display: flex;
+        align-items: flex-start;
+        gap: var(--space-3);
       }
 
+      /* Logo: full colour, never recoloured; 72px tall on mobile, 110px on tablet, 160px from 1200px */
+      #{{ section.id }} .responsive-logo-container {
+        min-width: 0;
+        flex-shrink: 1;
+        transition: opacity 0.3s ease-out;
+      }
+
+      #{{ section.id }} .responsive-logo-container img {
+        display: block;
+        width: auto;
+        max-width: 100%;
+        height: 72px;
+      }
+
+      /* MENU cloud overlaps the logo's right edge */
       #{{ section.id }} .header-left {
-        grid-column: 1;
-        justify-self: start;
+        position: relative;
+        z-index: 2;
+        margin-left: calc(-1 * var(--space-6));
+        flex-shrink: 0;
       }
 
-      #{{ section.id }} .header-right {
-        grid-column: 3;
-        justify-self: end;
+      /* Shop cloud + cart sit level with the logo baseline */
+      #{{ section.id }} .header-actions {
         display: flex;
         align-items: center;
         gap: var(--space-4);
+        flex-shrink: 0;
       }
 
-      .responsive-logo-container {
-        grid-column: 2;
-        justify-self: center;
+      @media (min-width: 768px) {
+        #{{ section.id }} .responsive-logo-container img {
+          height: 110px;
+        }
+
+        #{{ section.id }} .header-left,
+        #{{ section.id }} .header-actions {
+          margin-top: var(--space-6);
+        }
       }
 
-      #{{ section.id }} .header-button-wrapper,
-      #{{ section.id }} .header-cart-icon {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: transform 0.2s ease;
+      @media (min-width: 1200px) {
+        #{{ section.id }} .responsive-logo-container img {
+          height: 160px;
+        }
+
+        #{{ section.id }} .header-left {
+          margin-top: var(--space-9);
+          margin-left: calc(-1 * var(--space-9));
+        }
+
+        #{{ section.id }} .header-actions {
+          margin-top: var(--space-9);
+        }
+      }
+
+      #{{ section.id }} .header-spacer {
+        flex: 1 1 0;
+        min-width: var(--space-2);
+      }
+
+      /* While the menu is open the shop button steps aside; the header logo,
+         CLOSE pill and cart stay exactly where they were with the menu closed.
+         visibility:hidden also removes the shop pill from tab order. */
+      #{{ section.id }} .custom-shop-button {
+        transition: opacity 0.3s ease-out, visibility 0s 0.3s, transform 0.3s ease;
+      }
+
+      #{{ section.id }}.menu-open .custom-shop-button {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      /* The overlay's own wordmark only keeps its space (the header logo shows
+         through above it), so the left column layout doesn't move. */
+      @media (min-width: 769px) {
+        #{{ section.id }} .menu-logo {
+          visibility: hidden;
+        }
       }
 
       /* ========================================
          MENU OVERLAY
+
+         Full-viewport panel that slides down from the top, with an animated
+         scalloped edge along the bottom. The header bar stays above it (CLOSE
+         pill + cart remain usable); its height is reserved as *padding-top*
+         via --menu-header-offset, kept in sync by the section script.
          ======================================== */
       #{{ section.id }} .menu-overlay {
+        --menu-header-offset: 0px;
+        --menu-cloud-height: 96px;
         position: fixed;
         top: 0;
         left: 0;
         width: 100vw;
         height: 100vh;
+        height: 100dvh;
         background-color: rgb(var(--color-scheme-background));
+        color: rgb(var(--color-scheme-text));
         z-index: 9999;
         visibility: hidden;
         overflow: hidden;
-        clip-path: circle(0% at var(--menu-x, 10%) var(--menu-y, 10%));
-        transition: clip-path 0.8s cubic-bezier(0.76, 0, 0.24, 1), visibility 0s 0.8s;
+        overscroll-behavior: contain;
+        transform: translateY(-102%);
+        transition: transform 0.7s cubic-bezier(0.76, 0, 0.24, 1), visibility 0s 0.7s;
       }
 
       #{{ section.id }} .menu-overlay.active {
-        clip-path: circle(150% at var(--menu-x, 10%) var(--menu-y, 10%));
+        transform: translateY(0);
         visibility: visible;
-        transition: clip-path 0.8s cubic-bezier(0.76, 0, 0.24, 1), visibility 0s 0s;
+        transition: transform 0.7s cubic-bezier(0.76, 0, 0.24, 1), visibility 0s 0s;
       }
 
       #{{ section.id }} .menu-content {
-        position: relative;
+        position: absolute;
+        inset: 0;
         z-index: 5;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: var(--space-8);
+        box-sizing: border-box;
+        padding-top: calc(var(--menu-header-offset) + var(--space-4));
+        /* Reserve only the VISIBLE strip height (full height + negative
+           offset), not the part hanging below the viewport. */
+        padding-bottom: calc(var(--menu-cloud-height) + var(--menu-cloud-offset, 0px) + var(--space-6));
+        padding-inline: var(--space-4);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        touch-action: pan-y;
         color: rgb(var(--color-scheme-text));
       }
 
-      #{{ section.id }} .menu-content nav ul {
+      /* Mobile: gap between the header logo and the first menu row
+         (setting "Mobile: space below the logo") */
+      @media (max-width: 768px) {
+        #{{ section.id }} .menu-content {
+          padding-top: calc(var(--menu-header-offset) + {{ section.settings.menu_top_space_mobile | default: 40 }}px);
+        }
+      }
+
+      /* Desktop content is height-scaled to always fit, so lock scrolling;
+         mobile keeps overflow-y auto as a safety net for short viewports. */
+      @media (min-width: 769px) {
+        #{{ section.id }} .menu-content {
+          padding-inline: var(--gutter);
+          overflow-y: hidden;
+        }
+      }
+
+      /* Full width like the header bar (no 1200px cap), so on 24"+ screens the
+         wordmark stays at the left edge, lined up with the header logo. */
+      #{{ section.id }} .menu-layout {
+        width: 100%;
+        margin-inline: auto;
+        min-height: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: var(--legacy-space-8);
+      }
+
+      /* Mobile order: utility rows → links → tagline/email/social */
+      #{{ section.id }} .menu-nav {
+        order: 1;
+      }
+
+      #{{ section.id }} .menu-side {
+        order: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--legacy-space-8);
+      }
+
+      @media (min-width: 769px) {
+        #{{ section.id }} .menu-layout {
+          display: grid;
+          grid-template-columns: minmax(240px, 5fr) 7fr;
+          gap: var(--space-6);
+          align-items: stretch;
+        }
+
+        /* Explicit row 1 for both: the mobile `order` values would otherwise
+           push the left column into an auto-placed second row. */
+        #{{ section.id }} .menu-side {
+          grid-column: 1;
+          grid-row: 1;
+          order: 0;
+          justify-content: space-between;
+        }
+
+        #{{ section.id }} .menu-nav {
+          grid-column: 2;
+          grid-row: 1;
+          order: 0;
+        }
+      }
+
+      /* --- Left column: giant wordmark → tagline + sticker → email/socials --- */
+      #{{ section.id }} .menu-logo {
+        display: none;
+      }
+
+      @media (min-width: 769px) {
+        /* Pull the wordmark up into the header zone so the CLOSE pill sits on
+           its upper edge instead of floating alone (--menu-header-offset is
+           the header bar height, synced by the section script). */
+        #{{ section.id }} .menu-logo {
+          display: block;
+          width: clamp(420px, 46vw, 640px);
+          max-width: 100%;
+          margin-left: -40px;
+          margin-top: calc(-1 * var(--menu-header-offset) + var(--space-6));
+          transform: rotate(-3deg);
+        }
+
+        #{{ section.id }} .menu-logo img {
+          width: 100%;
+          height: auto;
+        }
+      }
+
+      /* Desktop: the CLOSE pill sits at a fixed spot (right of the header logo),
+         so the wordmark gets a fixed height too (the 24" look, ~220px). Tall
+         27"+ screens no longer grow it, short laptops still scale it by height. */
+      @media (min-width: 1200px) {
+        #{{ section.id }} .menu-logo {
+          width: auto;
+        }
+
+        /* Floor of 175px: shorter windows (13" laptops) no longer shrink the
+           wordmark away from the CLOSE pill. */
+        #{{ section.id }} .menu-logo img {
+          width: auto;
+          max-width: 100%;
+          height: max(175px, min(220px, 22dvh));
+          max-height: none;
+        }
+      }
+
+      /* Tablet: the gutter is only 32px, so drop the -40px pull and keep the
+         wordmark inside the margin (desktop keeps the pull: 64px gutter). */
+      @media (min-width: 769px) and (max-width: 1199px) {
+        #{{ section.id }} .menu-logo {
+          margin-left: 0;
+        }
+      }
+
+      /* Tagline artwork — desktop only */
+      #{{ section.id }} .menu-tagline {
+        display: none;
+      }
+
+      @media (min-width: 769px) {
+        #{{ section.id }} .menu-tagline {
+          display: flex;
+          align-items: center;
+          gap: var(--space-6);
+        }
+
+        #{{ section.id }} .menu-tagline-image {
+          width: clamp(240px, 26vw, 420px);
+          max-width: 100%;
+          height: auto;
+        }
+
+        #{{ section.id }} .menu-tagline-sticker {
+          width: 120px;
+          height: auto;
+          object-fit: contain;
+          transform: rotate(8deg);
+        }
+      }
+
+      /* Short desktop screens (13" laptops): scale the overlay art by
+         viewport height so the left column never scrolls — scrolling slid
+         the wordmark out from under the CLOSE pill. Taller screens keep the
+         original sizes. */
+      @media (min-width: 769px) and (max-height: 1023px) {
+        #{{ section.id }} .menu-side {
+          gap: var(--space-6);
+        }
+
+        #{{ section.id }} .menu-logo img {
+          width: auto;
+          max-width: 100%;
+          max-height: 22dvh;
+        }
+
+        @media (min-width: 1200px) {
+          #{{ section.id }} .menu-logo img {
+            max-height: none;
+          }
+        }
+
+        #{{ section.id }} .menu-tagline-image {
+          width: auto;
+          max-width: min(26vw, 420px);
+          max-height: 24dvh;
+        }
+
+        #{{ section.id }} .menu-tagline-sticker {
+          width: auto;
+          max-height: 12dvh;
+        }
+
+        #{{ section.id }} .menu-account {
+          margin-bottom: var(--space-6);
+        }
+
+        #{{ section.id }} .menu-content nav ul.menu-links li a {
+          font-size: clamp(2.25rem, min(6vw, 8.5vh), 6rem);
+        }
+      }
+
+      /* Very short windows (13" laptops with browser chrome, ≤ 800px tall):
+         lift the links and shrink the side art so CONTACT and the social icons
+         stay above the cloud strip. */
+      @media (min-width: 769px) and (max-height: 800px) {
+        #{{ section.id }} .menu-nav {
+          margin-top: calc(-1 * var(--space-8));
+        }
+
+        #{{ section.id }} .menu-account {
+          margin-bottom: var(--space-4);
+        }
+
+        #{{ section.id }} .menu-content nav ul.menu-links li a {
+          font-size: clamp(2.25rem, min(6vw, 7.5vh), 6rem);
+        }
+
+        #{{ section.id }} .menu-side {
+          gap: var(--space-4);
+        }
+
+        #{{ section.id }} .menu-tagline-image {
+          max-height: 17dvh;
+        }
+
+        #{{ section.id }} .menu-tagline-sticker {
+          max-height: 9dvh;
+        }
+      }
+
+      #{{ section.id }} .menu-side-bottom {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-4);
+      }
+
+      #{{ section.id }} .menu-email {
+        color: rgb(var(--color-scheme-text));
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      #{{ section.id }} .menu-email:hover,
+      #{{ section.id }} .menu-email:focus-visible {
+        opacity: 0.7;
+      }
+
+      #{{ section.id }} .menu-social {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        gap: var(--space-2);
+      }
+
+      #{{ section.id }} .menu-social a,
+      #{{ section.id }} .menu-social .menu-social-drop {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 48px;
+        min-height: 48px;
+        color: rgb(var(--color-scheme-text));
+      }
+
+      #{{ section.id }} .menu-social a:hover,
+      #{{ section.id }} .menu-social a:focus-visible {
+        opacity: 0.7;
+      }
+
+      #{{ section.id }} .menu-social-icon {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+      }
+
+      #{{ section.id }} .menu-social-icon svg {
+        width: 100%;
+        height: 100%;
+        fill: currentColor;
+      }
+
+      /* --- Utility rows (mobile only): Search / Account --- */
+      #{{ section.id }} .menu-utility {
+        list-style: none;
+        margin: 0 0 var(--space-6);
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-2);
+      }
+
+      #{{ section.id }} .menu-utility a {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-3);
+        min-height: 48px;
+        color: rgb(var(--color-scheme-text));
+        text-decoration: none;
+      }
+
+      #{{ section.id }} .menu-utility a:hover,
+      #{{ section.id }} .menu-utility a:focus-visible {
+        opacity: 0.7;
+      }
+
+      #{{ section.id }} .menu-utility .theme-icon {
+        width: 24px;
+        height: 24px;
+        flex-shrink: 0;
+      }
+
+      #{{ section.id }} .menu-utility .theme-icon path {
+        stroke: currentColor;
+      }
+
+      @media (min-width: 769px) {
+        #{{ section.id }} .menu-utility {
+          display: none;
+        }
+      }
+
+      /* --- "My account" link above the nav (desktop only) --- */
+      #{{ section.id }} .menu-account {
+        display: none;
+        color: rgb(var(--color-scheme-text));
+        text-decoration: none;
+        margin-bottom: var(--legacy-space-8);
+      }
+
+      #{{ section.id }} .menu-account:hover,
+      #{{ section.id }} .menu-account:focus-visible {
+        text-decoration: underline;
+        text-underline-offset: 4px;
+      }
+
+      @media (min-width: 769px) {
+        #{{ section.id }} .menu-account {
+          display: inline-block;
+        }
+      }
+
+      /* --- Main links: big, left-aligned, staggered reveal --- */
+      #{{ section.id }} .menu-content nav ul.menu-links {
         list-style: none;
         padding: 0;
         margin: 0;
-        text-align: center;
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: clamp(var(--space-1), 1vh, var(--space-3));
       }
 
-      #{{ section.id }} .menu-content nav ul li {
-        margin: var(--space-6) 0;
+      #{{ section.id }} .menu-content nav ul.menu-links li {
+        margin: 0;
+        max-width: 100%;
+        overflow: hidden;
       }
-    /* Menu items - closing animation (top to bottom) */
-    #{{ section.id }} .menu-content nav ul li a {
-      display: block;
+
+      /* "Hide on desktop" per-item setting */
+      @media (min-width: 768px) {
+        #{{ section.id }} .menu-content nav ul.menu-links li.hide-on-desktop {
+          display: none;
+        }
+      }
+
+    /* Menu items - closing animation (top to bottom). */
+    #{{ section.id }} .menu-content nav ul.menu-links li a {
+      display: inline-block;
+      position: relative;
       text-decoration: none;
       color: rgb(var(--color-scheme-text));
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 9vw, 4rem);
+      line-height: 1.08;
+      padding: 0 var(--space-1);
       transform: translateY(100%) translateZ(0);
       opacity: 0;
       transition: transform 0.65s cubic-bezier(0.215, 0.61, 0.355, 1) 0ms,
-                  opacity 0.65s cubic-bezier(0.215, 0.61, 0.355, 1) 0ms;
-      font-family: var(--font-display);
+                  opacity 0.65s cubic-bezier(0.215, 0.61, 0.355, 1) 0ms,
+                  color 0.25s ease-out;
     }
 
+    @media (min-width: 769px) {
+      #{{ section.id }} .menu-content nav ul.menu-links li a {
+        font-size: clamp(3rem, min(6.5vw, 11vh), 6rem);
+      }
+    }
 
     /* Opening animation (bottom to top) */
-    #{{ section.id }} .menu-overlay.active .menu-content nav ul li a {
+    #{{ section.id }} .menu-overlay.active .menu-content nav ul.menu-links li a {
       transform: translateY(0) translateZ(0);
       opacity: 1;
     }
 
-    /* Opening delays - bottom to top */
+    /* Opening delays - top to bottom */
     {% for i in (1..10) %}
-      #{{ section.id }} .menu-overlay.active .menu-content nav ul li:nth-child({{ i }}) a {
-        transition-delay: calc(({{ menu_count }} - {{ i }}) * 0.11s + 0.3s);
+      #{{ section.id }} .menu-overlay.active .menu-content nav ul.menu-links li:nth-child({{ i }}) a {
+        transition-delay: calc({{ i | minus: 1 }} * 0.09s + 0.35s);
       }
     {% endfor %}
 
-    /* Closing delays - top to bottom (reverse) */
+    /* Closing delays - bottom to top (reverse) */
     {% for i in (1..10) %}
-      #{{ section.id }} .menu-content nav ul li:nth-child({{ i }}) a {
-        transition-delay: calc({{ i | minus: 1 }} * 0.08s);
+      #{{ section.id }} .menu-content nav ul.menu-links li:nth-child({{ i }}) a {
+        transition-delay: calc(({{ menu_count }} - {{ i }}) * 0.06s);
       }
     {% endfor %}
 
-      #{{ section.id }} .menu-content a:hover {
-        opacity: 0.7;
-        transform: translateY(0) translateZ(0) scale(1.05);
-        transition: transform 0.3s ease, opacity 0.3s ease;
-      }
-
-      /* Close button */
-      #{{ section.id }} .menu-close-button {
+      /* ========================================
+         DECORATIVE ELEMENTS inside the overlay
+         Sticker and sky clouds pop in (scale 0 → 1) once the panel is open.
+         ======================================== */
+      #{{ section.id }} .menu-sticker {
         position: absolute;
-        top: var(--space-8);
-        right: var(--space-8);
-        background: none;
-        border: none;
+        z-index: 6;
+        width: clamp(56px, 7vw, 110px);
+        pointer-events: none;
+        transform: scale(0) rotate(9deg);
+        transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.6s;
+      }
+
+      #{{ section.id }} .menu-overlay.active .menu-sticker {
+        transform: scale(1) rotate(9deg);
+      }
+
+      #{{ section.id }} .menu-sticker img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+      }
+
+      #{{ section.id }} .menu-sticker--2 {
+        right: 7%;
+        bottom: calc(var(--menu-cloud-height) + var(--menu-cloud-offset, 0px) - 20px);
+      }
+
+      /* Flowers: outer div follows the cursor (parallax via --kd-par-*, set by
+         the section script), inner div pops in, the SVG spins continuously. */
+      #{{ section.id }} .menu-cloud {
+        position: absolute;
+        z-index: 1;
+        width: clamp(80px, 9vw, 140px);
+        color: var(--color-sky);
+        pointer-events: none;
+        transform: translate3d(var(--kd-par-x, 0px), var(--kd-par-y, 0px), 0);
+        transition: transform 0.35s ease-out;
+      }
+
+      #{{ section.id }} .menu-cloud-pop {
+        transform: scale(0);
+        transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.6s;
+      }
+
+      #{{ section.id }} .menu-overlay.active .menu-cloud-pop {
+        transform: scale(1);
+      }
+
+      #{{ section.id }} .menu-cloud svg {
+        display: block;
+        width: 100%;
+        height: auto;
+        fill: currentColor;
+        animation: kd-spin 26s linear infinite;
+      }
+
+      @keyframes kd-spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      #{{ section.id }} .menu-cloud--1 {
+        left: 46%;
+        top: 60px;
+      }
+
+      #{{ section.id }} .menu-cloud--2 {
+        right: -30px;
+        bottom: 260px;
+      }
+
+      #{{ section.id }} .menu-cloud--2 svg {
+        animation-duration: 34s;
+        animation-direction: reverse;
+      }
+
+      #{{ section.id }} .menu-cloud--3 {
+        left: 4%;
+        bottom: 220px;
+        width: clamp(64px, 6vw, 96px);
+      }
+
+      #{{ section.id }} .menu-cloud--3 svg {
+        animation-duration: 40s;
+      }
+
+      #{{ section.id }} .menu-cloud--4 {
+        right: 16%;
+        top: 18%;
+        width: clamp(56px, 5vw, 84px);
+      }
+
+      #{{ section.id }} .menu-cloud--4 svg {
+        animation-duration: 30s;
+        animation-direction: reverse;
+      }
+
+      @media (max-width: 767px) {
+        #{{ section.id }} .menu-cloud--1,
+        #{{ section.id }} .menu-cloud--4 {
+          display: none;
+        }
+
+        #{{ section.id }} .menu-cloud--2 {
+          right: -26px;
+          top: 26%;
+          bottom: auto;
+        }
+
+        #{{ section.id }} .menu-cloud--3 {
+          left: -20px;
+          bottom: 34%;
+        }
+      }
+
+      /* ========================================
+         SCALLOP FOOTER
+         Big solid semicircle bumps along the bottom, scrolling slowly left →
+         right. Two copies of the tiling SVG sit in a 200%-wide scroller; the
+         translateY open-transition stays on .cloud-footer itself.
+         ======================================== */
+      #{{ section.id }} .cloud-footer {
+        position: absolute;
+        left: 0;
+        right: 0;
+        /* Negative offset drops the strip below the viewport edge (clipped by
+           the overlay) without flattening the bump proportions. */
+        bottom: var(--menu-cloud-offset, 0px);
+        z-index: 1;
+        height: var(--menu-cloud-height);
+        overflow: hidden;
+        pointer-events: none;
         color: rgb(var(--color-scheme-text));
-        cursor: pointer;
-        z-index: 10;
-        width: var(--space-12);
-        height: var(--space-12);
+        transform: translateY(100%);
+        transition: transform 0.7s cubic-bezier(0.215, 0.61, 0.355, 1) 0.15s;
+      }
+
+      #{{ section.id }} .menu-overlay.active .cloud-footer {
+        transform: translateY(0);
+      }
+
+      /* Five tiling copies at a FIXED width on desktop (1400px ⇒ 7 bumps of a
+         constant 200px each, independent of viewport width). Five copies keep
+         even ultrawide screens covered at every animation phase; the loop
+         shifts exactly one copy (--kd-scallop-shift). */
+      #{{ section.id }} .cloud-scroller {
+        --kd-scallop-shift: -1400px;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: max-content;
         display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: transform 0.3s ease, opacity 0.3s ease;
-        opacity: 0;
+        animation: kd-scroll 20s linear infinite;
       }
 
-      #{{ section.id }} .menu-overlay.active .menu-close-button {
-        opacity: 1;
-        transition-delay: 0.5s;
+      #{{ section.id }} .cloud-scroller svg {
+        display: block;
+        width: 1400px;
+        height: 100%;
+        flex-shrink: 0;
       }
 
-      #{{ section.id }} .menu-close-button:hover {
-        transform: rotate(90deg);
+      @keyframes kd-scroll {
+        from {
+          transform: translateX(var(--kd-scallop-shift));
+        }
+        to {
+          transform: translateX(0);
+        }
       }
 
+      /* Mobile: each copy spans 2× the viewport width, so the bumps stay wide
+         instead of squeezing into pointy arcs. */
+      @media (max-width: 767px) {
+        #{{ section.id }} .cloud-scroller {
+          --kd-scallop-shift: -200vw;
+          animation-duration: 12s;
+        }
+
+        #{{ section.id }} .cloud-scroller svg {
+          width: 200vw;
+        }
+      }
+
+      /* DS Header padding: 16px top, gutter sides, 8px bottom */
       #{{ section.id }} .section-content-custom-padding {
-        padding: var(--space-6) var(--space-4);
+        padding: var(--space-3) var(--gutter) var(--space-2);
       }
 
       @media (min-width: 768px) {
         #{{ section.id }} .section-content-custom-padding {
-          padding: var(--space-12) var(--space-6);
+          padding: var(--space-4) var(--gutter) var(--space-2);
         }
       }
 
-      /* Hide menu buttons toggle — grid keeps logo centered automatically */
+      /* Hide menu buttons toggle — logo-only header */
       #{{ section.id }}.hide-menu-buttons .header-left,
-      #{{ section.id }}.hide-menu-buttons .header-right {
+      #{{ section.id }}.hide-menu-buttons .header-actions {
         display: none !important;
       }
   /* Dim all items when any item is hovered */
-  #{{ section.id }} .menu-overlay.active .menu-content nav ul:hover li a {
-    opacity: 0.3;
+  #{{ section.id }} .menu-overlay.active .menu-content nav ul.menu-links:hover li a {
+    opacity: 0.35;
     transition-delay: 0s;
   }
 
-  /* Keep hovered item at full opacity */
-  #{{ section.id }} .menu-overlay.active .menu-content nav ul li a:hover {
+  /* Keep hovered item at full opacity with a subtle scale — no tilt, no
+     colour change. */
+  #{{ section.id }} .menu-overlay.active .menu-content nav ul.menu-links li a:hover,
+  #{{ section.id }} .menu-overlay.active .menu-content nav ul.menu-links li a:focus-visible {
     opacity: 1 !important;
-    transform: translateY(0) translateZ(0) scale(1);
+    transform: translateY(0) translateZ(0) scale(1.04);
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
   }
 
-  /* Underline animation */
-  #{{ section.id }} .menu-overlay.active .menu-content nav ul li a {
-    position: relative;
-    display: inline-block;
+  #{{ section.id }} .menu-content nav ul.menu-links li a:focus-visible,
+  #{{ section.id }} .menu-account:focus-visible,
+  #{{ section.id }} .menu-email:focus-visible,
+  #{{ section.id }} .menu-utility a:focus-visible,
+  #{{ section.id }} .menu-social a:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: var(--space-2);
   }
 
-  #{{ section.id }} .menu-overlay.active .menu-content nav ul li a::after {
+  /* Underline sweep (also marks the current page) */
+  #{{ section.id }} .menu-overlay .menu-content nav ul.menu-links li a::after {
     content: '';
     position: absolute;
-    bottom: 6px;
+    bottom: 0.08em;
     left: 0;
     width: 0;
-    height: 3px;
+    height: 4px;
+    border-radius: 2px;
     background-color: currentColor;
-    transition: width 0.6s cubic-bezier(0.215, 0.61, 0.355, 1) 0ms;
+    transition: width 0.45s cubic-bezier(0.215, 0.61, 0.355, 1) 0ms;
   }
 
-  #{{ section.id }} .menu-overlay.active .menu-content nav ul li a:hover::after {
+  #{{ section.id }} .menu-overlay.active .menu-content nav ul.menu-links li a:hover::after,
+  #{{ section.id }} .menu-overlay.active .menu-content nav ul.menu-links li a:focus-visible::after,
+  #{{ section.id }} .menu-overlay.active .menu-content nav ul.menu-links li a[aria-current='page']::after {
     width: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #{{ section.id }} .menu-overlay,
+    #{{ section.id }} .menu-overlay .cloud-footer,
+    #{{ section.id }} .menu-content nav ul.menu-links li a,
+    #{{ section.id }} .menu-sticker,
+    #{{ section.id }} .menu-cloud,
+    #{{ section.id }} .menu-cloud-pop {
+      transition-duration: 0.01ms !important;
+      transition-delay: 0ms !important;
+    }
+
+    #{{ section.id }} .cloud-scroller,
+    #{{ section.id }} .menu-cloud svg {
+      animation: none;
+    }
+
+    #{{ section.id }} .menu-overlay.active .menu-content nav ul.menu-links li a:hover {
+      transform: none;
+    }
   }
       /* ========================================
          RESPONSIVE STYLES
          ======================================== */
 
-      /* Mobile (max-width: 767px) */
+      /* Mobile (max-width: 767px) — MENU cloud 44px, shop cloud hidden, cart 56px */
       @media (max-width: 767px) {
-        #{{ section.id }} .responsive-logo-container {
-          max-width: {{ section.settings.logo_width_mobile }}% !important;
-        }
-
-
-        #{{ section.id }} .header-right {
+        #{{ section.id }} .header-content-wrapper {
           gap: var(--space-2);
+        }
+
+        #{{ section.id }} .custom-menu-button {
+          height: 44px;
+          padding: 0 var(--space-5);
+          font-size: 15px;
+        }
+
+        .menu-text-wrapper {
+          min-width: 44px;
+        }
+
+        #{{ section.id }} .custom-shop-button {
           display: none;
-        }
-
-        #{{ section.id }} .menu-content nav ul li {
-          margin: var(--space-4) 0;
-        }
-
-        /* Show hamburger, hide custom menu button */
-        .custom-menu-button,
-        .menu-close-button,
-        .custom-menu-button-text {
-          display: none !important;
-        }
-
-        .hamburger-menu {
-          display: flex !important;
         }
       }
 
       /* Tablet (768px - 1023px) */
       @media (min-width: 768px) and (max-width: 1023px) {
-        #{{ section.id }} .responsive-logo-container {
-          max-width: {{ section.settings.logo_width_tablet }}% !important;
-        }
-
-        #{{ section.id }} .header-cart-icon {
-          width: var(--space-12);
-          height: var(--space-12);
+        #{{ section.id }} .menu-overlay {
+          --menu-cloud-height: 130px;
         }
       }
 
-      /* Desktop (1024px - 1439px) */
-      @media (min-width: 1024px) and (max-width: 1439px) {
-        #{{ section.id }} .responsive-logo-container {
-          max-width: {{ section.settings.logo_width_desktop }}px !important;
-        }
-
-        #{{ section.id }} .header-button-wrapper {
-          width: 100px;
-          height: 70px;
-        }
-
-        #{{ section.id }} .header-cart-icon {
-          width: var(--space-16);
-          height: var(--space-16);
-        }
-      }
-
-      /* Large Desktop (1440px - 1999px) */
-      @media (min-width: 1440px) and (max-width: 1999px) {
-        #{{ section.id }} .responsive-logo-container {
-          max-width: {{ section.settings.logo_width_desktop_large }}px !important;
-        }
-      }
-
-      /* XL Desktop (2000px+) */
-      @media (min-width: 2000px) {
-        #{{ section.id }} .responsive-logo-container {
-          max-width: {{ section.settings.logo_width_desktop_xlarge }}px !important;
+      /* Desktop (1024px+) */
+      @media (min-width: 1024px) {
+        #{{ section.id }} .menu-overlay {
+          --menu-cloud-height: 170px;
+          --menu-cloud-offset: -70px;
         }
       }
 
@@ -485,39 +1101,8 @@
       {% endif %}
     >
       <div class="section-content px-section {% unless section.settings.disable_vertical_spacing %}section-content-custom-padding{% endunless %} {% if enable_overlay %}absolute top-0 left-0 right-0 pointer-events-none z-20{% endif %}">
-        <div class="mx-auto max-w-site header-content-wrapper">
-          {%- comment -%} Left Section - Menu Button / Hamburger {%- endcomment -%}
-          <div class="header-left">
-            <div class="header-button-wrapper" id="menuButton-{{ section.id }}">
-              {%- comment -%} Hamburger Menu (Mobile/Tablet) {%- endcomment -%}
-              <button class="hamburger-menu" aria-label="Open menu">
-                <span class="line"></span>
-                <span class="line"></span>
-                <span class="line"></span>
-              </button>
-
-              {%- comment -%} Custom Menu Button (Desktop) {%- endcomment -%}
-              {%- if section.settings.menu_button_image != blank -%}
-                <button class="custom-menu-button">
-                  <span class="custom-menu-button-text">
-                    <span class="menu-text-wrapper">
-                      <span class="menu-text">MENU</span>
-                      <span class="close-text">CLOSE</span>
-                    </span>
-                  </span>
-                </button>
-              {%- else -%}
-                <div
-                  class="custom-menu-button-text"
-                  style="background-color: #8bc34a; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #c62828; width: 100%; height: 100%;"
-                >
-                  MENU
-                </div>
-              {%- endif -%}
-            </div>
-          </div>
-
-          {%- comment -%} Center Section - Logo {%- endcomment -%}
+        <div class="header-content-wrapper">
+          {%- comment -%} Logo — left {%- endcomment -%}
           {%- if logo != blank -%}
             <div class="responsive-logo-container">
               {{
@@ -533,89 +1118,256 @@
             </div>
           {%- endif -%}
 
-          {%- comment -%} Right Section - Shop Button and Cart {%- endcomment -%}
-          <div class="header-right">
-            {%- comment -%} Shop Button {%- endcomment -%}
-            {%- if section.settings.shop_button_image != blank -%}
-              <div class="header-button-wrapper">
-                <button class="custom-shop-button">
-                  <span class="custom-shop-button-text">SHOP</span>
-                </button>
-              </div>
-            {%- else -%}
-              <div
-                class="header-button-wrapper"
-                style="background-color: #90caf9; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #c62828;"
-              >
-                SHOP
-              </div>
-            {%- endif -%}
+          {%- comment -%} MENU / CLOSE pill — overlaps the logo {%- endcomment -%}
+          <div class="header-left" id="menuButton-{{ section.id }}">
+            <button
+              class="kd-btn kd-btn--lime kd-btn--lg custom-menu-button"
+              type="button"
+              aria-expanded="false"
+              aria-controls="menuOverlay-{{ section.id }}"
+            >
+              <svg class="kd-btn__cloud" aria-hidden="true" focusable="false"><use href="#kd-cloud"></use></svg>
+              <span class="kd-btn__label custom-menu-button-text">
+                <span class="menu-text-wrapper">
+                  <span class="menu-text">MENU</span>
+                  <span class="close-text">CLOSE</span>
+                </span>
+              </span>
+            </button>
+          </div>
 
-            {%- comment -%} Cart Icon {%- endcomment -%}
-            {%- if section.settings.cart_icon_image != blank -%}
-              <button class="custom-cart-button">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="#c62828">
-                  <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
-                </svg>
-              </button>
-            {%- else -%}
-              <div
-                class="header-cart-icon"
-                style="background-color: #c62828; display: flex; align-items: center; justify-content: center;"
-              >
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
-                  <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
-                </svg>
-              </div>
-            {%- endif -%}
+          <div class="header-spacer" aria-hidden="true"></div>
+
+          <div class="header-actions">
+            {%- comment -%} Shop cloud (hidden on mobile) {%- endcomment -%}
+            <a class="kd-btn kd-btn--red kd-btn--lg custom-shop-button" href="{{ shop_url }}">
+              <svg class="kd-btn__cloud" aria-hidden="true" focusable="false"><use href="#kd-cloud"></use></svg>
+              <span class="kd-btn__label">{{ section.settings.shop_label | default: 'Shop Now' }}</span>
+            </a>
+
+            {%- comment -%} Cart — lime starburst sticker with the item count {%- endcomment -%}
+            <a
+              class="kd-cart-sticker custom-cart-button"
+              href="{{ routes.cart_url }}"
+              aria-label="{{ 'layout.cart.title' | t | escape }} ({{ cart.item_count }})"
+              {%- if settings.cart_type == 'modal' and template != 'cart' %} data-kd-cart-open{% endif %}
+            >
+              <svg class="kd-cart-sticker__shape" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+                <path d="M121.033 20.5772C123.249 18.916 125.172 18.1531 126.789 18.6378V18.6387C128.497 19.1526 129.736 20.8799 130.701 23.4962C131.657 26.0883 132.286 29.3918 132.883 32.8096C133.476 36.2063 134.037 39.7156 134.861 42.6446C135.652 45.4549 136.721 47.8752 138.421 49.1241L138.588 49.2413C140.421 50.4758 143.171 50.6034 146.193 50.294C149.242 49.9818 152.719 49.2044 156.094 48.4922C159.489 47.7758 162.779 47.1256 165.519 47.0352C168.202 46.9467 170.186 47.4025 171.277 48.6641L171.381 48.7891C172.458 50.1562 172.457 52.2368 171.714 54.8946C170.977 57.526 169.562 60.5523 168.052 63.6651C166.55 66.7587 164.956 69.936 163.91 72.8116C162.905 75.5732 162.353 78.1873 162.983 80.2364L163.049 80.4327C163.763 82.4657 165.876 84.1881 168.461 85.7432C171.07 87.3133 174.301 88.7914 177.406 90.2745C180.53 91.7669 183.526 93.2642 185.741 94.8897C187.975 96.5293 189.273 98.198 189.273 100C189.273 101.802 187.975 103.472 185.741 105.112C183.526 106.739 180.53 108.237 177.406 109.731C174.302 111.214 171.071 112.692 168.462 114.262C165.958 115.768 163.895 117.43 163.119 119.378L163.049 119.567C162.319 121.645 162.873 124.338 163.91 127.189C164.956 130.064 166.55 133.241 168.052 136.335C169.562 139.448 170.978 142.474 171.714 145.106C172.411 147.597 172.455 149.582 171.57 150.946L171.381 151.211C170.314 152.568 168.289 153.056 165.519 152.965C162.779 152.875 159.489 152.224 156.094 151.508C152.719 150.796 149.242 150.018 146.193 149.706C143.265 149.406 140.593 149.517 138.762 150.647L138.588 150.759C136.791 151.969 135.679 154.454 134.863 157.356C134.04 160.284 133.48 163.794 132.888 167.19C132.291 170.608 131.662 173.912 130.706 176.504C129.771 179.038 128.578 180.738 126.949 181.31L126.79 181.361C125.172 181.847 123.25 181.083 121.033 179.422C118.841 177.779 116.509 175.372 114.117 172.856C111.74 170.355 109.307 167.75 106.95 165.774C104.613 163.816 102.243 162.38 99.9871 162.38C97.7313 162.38 95.3608 163.815 93.0233 165.774C90.6665 167.75 88.2334 170.355 85.8563 172.856C83.4647 175.372 81.132 177.779 78.9402 179.422C76.7234 181.083 74.801 181.847 73.1834 181.361H73.1844C71.4765 180.848 70.237 179.12 69.2723 176.504C68.3165 173.912 67.6875 170.608 67.0906 167.19C66.4974 163.794 65.9365 160.285 65.1121 157.356C64.3211 154.545 63.2522 152.125 61.5526 150.876L61.3856 150.759C59.5519 149.524 56.8019 149.397 53.7801 149.706C50.7315 150.018 47.2544 150.796 43.8797 151.508C40.4843 152.224 37.1947 152.875 34.4539 152.965C31.771 153.053 29.7873 152.598 28.6961 151.336L28.5926 151.211C27.5157 149.844 27.5161 147.763 28.2596 145.106C28.9958 142.474 30.4112 139.448 31.9217 136.335C33.4229 133.241 35.0169 130.064 36.0633 127.189C37.0682 124.427 37.6204 121.813 36.9901 119.764L36.9246 119.567C36.2102 117.534 34.0972 115.812 31.5125 114.257C28.9029 112.687 25.6718 111.209 22.5672 109.726C19.4429 108.233 16.4468 106.736 14.2322 105.11C11.9986 103.471 10.7 101.802 10.7 100C10.7 98.198 11.9986 96.5283 14.2322 94.8878C16.4467 93.2613 19.443 91.7628 22.5672 90.2696C25.6718 88.7857 28.903 87.3068 31.5125 85.7374C34.0163 84.2315 36.0784 82.5699 36.8543 80.6221L36.9246 80.4327C37.6547 78.3556 37.1005 75.6621 36.0633 72.8116C35.017 69.936 33.4229 66.7587 31.9217 63.6651C30.4112 60.5523 28.9958 57.526 28.2596 54.8946C27.5625 52.4029 27.5185 50.4185 28.4031 49.0538L28.5926 48.7891C29.6593 47.4326 31.6841 46.9439 34.4539 47.0352C37.1948 47.1256 40.4843 47.7758 43.8797 48.4922C47.2544 49.2044 50.7315 49.9818 53.7801 50.294C56.7078 50.5938 59.3805 50.4834 61.2117 49.3536L61.3856 49.2413C63.1827 48.031 64.2947 45.5448 65.1102 42.6436C65.9334 39.7148 66.4934 36.2061 67.0858 32.8096C67.6818 29.3917 68.311 26.0882 69.2674 23.4962C70.2026 20.9617 71.3955 19.2614 73.0252 18.6905L73.1834 18.6387C74.801 18.1535 76.7234 18.9156 78.9402 20.5772C81.1321 22.22 83.4646 24.6284 85.8563 27.1446C88.2334 29.6454 90.6665 32.2506 93.0233 34.2256C95.3608 36.1846 97.7313 37.6202 99.9871 37.6202C102.243 37.62 104.613 36.1845 106.95 34.2256C109.307 32.2506 111.74 29.6454 114.117 27.1446C116.509 24.6284 118.841 22.22 121.033 20.5772Z"/>
+              </svg>
+              {%- if cart_content == 'count' -%}
+                <span class="kd-cart-sticker__label" aria-hidden="true">
+                  <span class="kd-cart-sticker__count" data-cart-count>{{ cart.item_count }}</span>
+                </span>
+              {%- else -%}
+                <span class="kd-cart-sticker__icon" aria-hidden="true">
+                  {%- if section.settings.cart_icon_svg != blank -%}
+                    {{ section.settings.cart_icon_svg }}
+                  {%- else -%}
+                    {{ section.settings.cart_icon | image_url: width: 200 | image_tag: alt: '', loading: 'eager' }}
+                  {%- endif -%}
+                </span>
+                {%- if cart_content == 'icon_count' -%}
+                  <span class="kd-cart-sticker__badge" data-count="{{ cart.item_count }}" aria-hidden="true">{{ cart.item_count }}</span>
+                {%- endif -%}
+              {%- endif -%}
+            </a>
           </div>
         </div>
       </div>
     </div>
 
-    {%- comment -%} Menu Overlay - Fullscreen {%- endcomment -%}
-    <div class="menu-overlay" id="menuOverlay-{{ section.id }}">
-      <button class="menu-close-button" id="menuClose-{{ section.id }}" aria-label="Close menu">
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
-
+    {%- comment -%} Menu Overlay - full-viewport panel, slides down from top {%- endcomment -%}
+    <div
+      class="menu-overlay bg-scheme-background text-scheme-text"
+      id="menuOverlay-{{ section.id }}"
+      data-color-scheme="{{ section.settings.overlay_color_scheme }}"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Menu"
+    >
       <div id="menuContent-{{ section.id }}" class="menu-content">
-        <nav>
-          <ul>
-            {%- comment -%} Loop through menu items from settings {%- endcomment -%}
-            {%- for i in (1..10) -%}
-              {%- assign label_key = 'menu_item_' | append: i | append: '_label' -%}
-              {%- assign link_key = 'menu_item_' | append: i | append: '_link' -%}
-              {%- assign hide_desktop_key = 'menu_item_' | append: i | append: '_hide_on_desktop' -%}
+        <div class="menu-layout">
+          {%- comment -%} Left column: giant wordmark, tagline + sticker, email + socials {%- endcomment -%}
+          <div class="menu-side">
+            {%- if logo != blank -%}
+              <div class="menu-logo">
+                {{
+                  logo
+                  | image_url: width: 1300
+                  | image_tag: width: logo.width, alt: logo.alt, loading: 'lazy'
+                }}
+              </div>
+            {%- endif -%}
 
-              {%- assign label = section.settings[label_key] -%}
-              {%- assign link = section.settings[link_key] -%}
-              {%- assign hide_on_desktop = section.settings[hide_desktop_key] -%}
+            {%- if section.settings.overlay_tagline_image != blank or section.settings.overlay_sticker_1 != blank -%}
+              <div class="menu-tagline">
+                {%- if section.settings.overlay_tagline_image != blank -%}
+                  {{
+                    section.settings.overlay_tagline_image
+                    | image_url: width: 900
+                    | image_tag: class: 'menu-tagline-image', alt: section.settings.overlay_tagline_image.alt, loading: 'lazy'
+                  }}
+                {%- endif -%}
+                {%- if section.settings.overlay_sticker_1 != blank -%}
+                  {{ section.settings.overlay_sticker_1 | image_url: width: 300 | image_tag: class: 'menu-tagline-sticker', alt: '', loading: 'lazy' }}
+                {%- endif -%}
+              </div>
+            {%- endif -%}
 
-              {%- if label != blank -%}
-                <li class="menu-item-{{ i }}{% if hide_on_desktop %} hide-on-desktop{% endif %}">
-                  <a class="h1" href="{{ link }}">{{ label }}</a>
-                </li>
+            <div class="menu-side-bottom">
+              {%- if section.settings.contact_email != blank -%}
+                <a class="menu-email btn-label" href="mailto:{{ section.settings.contact_email | escape }}">
+                  {{- section.settings.contact_email -}}
+                </a>
               {%- endif -%}
-            {%- endfor -%}
-          </ul>
-        </nav>
+
+              {%- liquid
+                assign social_tiktok = section.settings.social_tiktok_link | default: settings.social_tiktok_link
+                assign social_facebook = section.settings.social_facebook_link | default: settings.social_facebook_link
+                assign social_instagram = section.settings.social_instagram_link | default: settings.social_instagram_link
+              -%}
+              {%- comment -%}
+                Networks without a configured URL render as decorative icons
+                (no link) so the row is always present; paste the profile URLs
+                in the section settings (or Theme settings → Social) to make
+                them clickable.
+              {%- endcomment -%}
+              <ul class="menu-social">
+                <li>
+                  {%- if social_tiktok != blank -%}
+                    <a href="{{ social_tiktok }}" target="_blank" rel="noopener">
+                      <span class="menu-social-icon" aria-hidden="true">{% render 'icon-tiktok' %}</span>
+                      <span class="visually-hidden">TikTok</span>
+                    </a>
+                  {%- else -%}
+                    <span class="menu-social-drop" aria-hidden="true">
+                      <span class="menu-social-icon">{% render 'icon-tiktok' %}</span>
+                    </span>
+                  {%- endif -%}
+                </li>
+                <li>
+                  {%- if social_facebook != blank -%}
+                    <a href="{{ social_facebook }}" target="_blank" rel="noopener">
+                      <span class="menu-social-icon" aria-hidden="true">{% render 'icon-facebook' %}</span>
+                      <span class="visually-hidden">Facebook</span>
+                    </a>
+                  {%- else -%}
+                    <span class="menu-social-drop" aria-hidden="true">
+                      <span class="menu-social-icon">{% render 'icon-facebook' %}</span>
+                    </span>
+                  {%- endif -%}
+                </li>
+                <li>
+                  {%- if social_instagram != blank -%}
+                    <a href="{{ social_instagram }}" target="_blank" rel="noopener">
+                      <span class="menu-social-icon" aria-hidden="true">{% render 'icon-instagram' %}</span>
+                      <span class="visually-hidden">Instagram</span>
+                    </a>
+                  {%- else -%}
+                    <span class="menu-social-drop" aria-hidden="true">
+                      <span class="menu-social-icon">{% render 'icon-instagram' %}</span>
+                    </span>
+                  {%- endif -%}
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {%- comment -%} Right column: account link + big nav links {%- endcomment -%}
+          <nav class="menu-nav" aria-label="Main menu">
+            {%- if section.settings.show_utility_links -%}
+              <ul class="menu-utility">
+                <li>
+                  <a class="btn-label" href="{{ routes.search_url }}">
+                    {%- render 'icon-search' -%}
+                    <span>{{ 'general.search.submit' | t }}</span>
+                  </a>
+                </li>
+                <li>
+                  <a class="btn-label" href="{{ account_url }}">
+                    {%- render 'icon-account' -%}
+                    <span>{{ section.settings.utility_account_label | default: 'Account' }}</span>
+                  </a>
+                </li>
+              </ul>
+            {%- endif -%}
+
+            {%- if section.settings.account_label != blank -%}
+              <a class="menu-account h3" href="{{ account_url }}">
+                {{- section.settings.account_label -}}
+              </a>
+            {%- endif -%}
+
+            <ul class="menu-links">
+              {%- comment -%} Loop through menu items from settings {%- endcomment -%}
+              {%- for i in (1..10) -%}
+                {%- assign label_key = 'menu_item_' | append: i | append: '_label' -%}
+                {%- assign link_key = 'menu_item_' | append: i | append: '_link' -%}
+                {%- assign hide_desktop_key = 'menu_item_' | append: i | append: '_hide_on_desktop' -%}
+
+                {%- assign label = section.settings[label_key] -%}
+                {%- assign link = section.settings[link_key] -%}
+                {%- assign hide_on_desktop = section.settings[hide_desktop_key] -%}
+
+                {%- if label != blank -%}
+                  <li class="menu-item-{{ i }}{% if hide_on_desktop %} hide-on-desktop{% endif %}">
+                    <a
+                      class="h1"
+                      href="{{ link }}"
+                      {% if link != blank and link == request.path %}aria-current="page"{% endif %}
+                    >
+                      {{- label -}}
+                    </a>
+                  </li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          </nav>
+        </div>
       </div>
 
-      {%- comment -%} Bottom Animated Cloud {%- endcomment -%}
-      <div class="cloud-footer">
-        <svg
-          width="100%"
-          height="240"
-          viewBox="0 0 2400 240"
-          preserveAspectRatio="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path d="M 0,240 L 0,120 A 60,60 0 0,1 120,120 A 60,60 0 0,1 240,120 A 60,60 0 0,1 360,120 A 60,60 0 0,1 480,120 A 60,60 0 0,1 600,120 A 60,60 0 0,1 720,120 A 60,60 0 0,1 840,120 A 60,60 0 0,1 960,120 A 60,60 0 0,1 1080,120 A 60,60 0 0,1 1200,120 A 60,60 0 0,1 1320,120 A 60,60 0 0,1 1440,120 A 60,60 0 0,1 1560,120 A 60,60 0 0,1 1680,120 A 60,60 0 0,1 1800,120 A 60,60 0 0,1 1920,120 A 60,60 0 0,1 2040,120 A 60,60 0 0,1 2160,120 A 60,60 0 0,1 2280,120 A 60,60 0 0,1 2400,120 L 2400,240 Z" fill="#542A76"/>
+      {%- comment -%} Sky flower accents — 6 petals + centre, spinning, cursor-follow {%- endcomment -%}
+      {%- capture flower_svg -%}
+        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" focusable="false">
+          <circle cx="90" cy="60" r="21"/>
+          <circle cx="75" cy="86" r="21"/>
+          <circle cx="45" cy="86" r="21"/>
+          <circle cx="30" cy="60" r="21"/>
+          <circle cx="45" cy="34" r="21"/>
+          <circle cx="75" cy="34" r="21"/>
+          <circle cx="60" cy="60" r="26"/>
         </svg>
+      {%- endcapture -%}
+      <div class="menu-cloud menu-cloud--1" data-depth="70" aria-hidden="true">
+        <div class="menu-cloud-pop">{{ flower_svg }}</div>
+      </div>
+      <div class="menu-cloud menu-cloud--2" data-depth="100" aria-hidden="true">
+        <div class="menu-cloud-pop">{{ flower_svg }}</div>
+      </div>
+      <div class="menu-cloud menu-cloud--3" data-depth="50" aria-hidden="true">
+        <div class="menu-cloud-pop">{{ flower_svg }}</div>
+      </div>
+      <div class="menu-cloud menu-cloud--4" data-depth="85" aria-hidden="true">
+        <div class="menu-cloud-pop">{{ flower_svg }}</div>
+      </div>
+
+      {%- comment -%} Floating sticker {%- endcomment -%}
+      {%- if section.settings.overlay_sticker_2 != blank -%}
+        <div class="menu-sticker menu-sticker--2" aria-hidden="true">
+          {{ section.settings.overlay_sticker_2 | image_url: width: 300 | image_tag: alt: '', loading: 'lazy' }}
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} Bottom Scallop Edge — two tiling copies scroll left → right {%- endcomment -%}
+      <div class="cloud-footer" aria-hidden="true">
+        <div class="cloud-scroller">
+          {%- for i in (1..5) -%}
+            <svg viewBox="0 0 2800 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+              <path d="M 0,300 L 0,150 A 200,150 0 0 1 400,150 A 200,150 0 0 1 800,150 A 200,150 0 0 1 1200,150 A 200,150 0 0 1 1600,150 A 200,150 0 0 1 2000,150 A 200,150 0 0 1 2400,150 A 200,150 0 0 1 2800,150 L 2800,300 Z" fill="currentColor"/>
+            </svg>
+          {%- endfor -%}
+        </div>
       </div>
     </div>
   </section>
@@ -647,63 +1399,112 @@
 <script>
   (function () {
     const sectionId = '{{ section.id }}';
+    const section = document.getElementById(sectionId);
     const menuButton = document.getElementById('menuButton-' + sectionId);
     const menuOverlay = document.getElementById('menuOverlay-' + sectionId);
-    const menuClose = document.getElementById('menuClose-' + sectionId);
-    const hamburger = menuButton.querySelector('.hamburger-menu');
     const customMenuButton = menuButton.querySelector('.custom-menu-button');
-    const menubarsection = document.getElementById(sectionId);
-    const menuContent = document.getElementById('menuContent-' + sectionId);
 
-    menuContent.style.marginTop = menubarsection.offsetHeight + 'px';
+    // The header bar sits above the overlay, so the links must sit in the
+    // space *below* it. Expose that height as padding (not margin) via a custom
+    // property, and keep it current as the header reflows.
+    // The overlay is fixed at the viewport top, so use where the bar *ends* on
+    // screen (includes the announcement bar above it), not just its height.
+    function syncHeaderOffset() {
+      const bar = document.getElementById('menubar-' + sectionId) || section;
+      const bottom = Math.max(bar.getBoundingClientRect().bottom, bar.offsetHeight);
+      menuOverlay.style.setProperty('--menu-header-offset', Math.round(bottom) + 'px');
+    }
+
+    syncHeaderOffset();
+    window.addEventListener('resize', syncHeaderOffset);
+    window.addEventListener('load', syncHeaderOffset);
+
+    if (typeof ResizeObserver !== 'undefined') {
+      new ResizeObserver(syncHeaderOffset).observe(section);
+    }
+
     let originalOverflow;
 
     function openMenu() {
-      const buttonRect = menuButton.getBoundingClientRect();
-      const centerX = ((buttonRect.left + buttonRect.right) / 2 / window.innerWidth) * 100;
-      const centerY = ((buttonRect.top + buttonRect.bottom) / 2 / window.innerHeight) * 100;
-
-      menuOverlay.style.setProperty('--menu-x', centerX + '%');
-      menuOverlay.style.setProperty('--menu-y', centerY + '%');
+      syncHeaderOffset();
 
       originalOverflow = document.body.style.overflow;
       menuOverlay.classList.add('active');
+      section.classList.add('menu-open');
       document.body.style.overflow = 'hidden';
-
-      // Add active class to hamburger or custom button
-      if (hamburger && window.getComputedStyle(hamburger).display !== 'none') {
-        hamburger.classList.add('active');
-      }
-      if (customMenuButton && window.getComputedStyle(customMenuButton).display !== 'none') {
-        customMenuButton.classList.add('active');
-      }
+      document.documentElement.style.overflow = 'hidden';
+      customMenuButton.setAttribute('aria-expanded', 'true');
+      customMenuButton.classList.add('active');
     }
 
     function closeMenu() {
       menuOverlay.classList.remove('active');
+      section.classList.remove('menu-open');
       document.body.style.overflow = originalOverflow || '';
-
-      // Remove active class from hamburger and custom button
-      if (hamburger) {
-        hamburger.classList.remove('active');
-      }
-      if (customMenuButton) {
-        customMenuButton.classList.remove('active');
-      }
+      document.documentElement.style.overflow = '';
+      customMenuButton.setAttribute('aria-expanded', 'false');
+      customMenuButton.classList.remove('active');
     }
+
+    // Flowers drift toward the cursor while the menu is open. Each flower's
+    // data-depth sets how far it travels; skipped under reduced motion.
+    const clouds = menuOverlay.querySelectorAll('.menu-cloud');
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let parallaxRaf = null;
+    let cursorX = 0;
+    let cursorY = 0;
+
+    document.addEventListener('mousemove', function (e) {
+      if (motionQuery.matches || !menuOverlay.classList.contains('active')) return;
+
+      cursorX = e.clientX / window.innerWidth - 0.5;
+      cursorY = e.clientY / window.innerHeight - 0.5;
+
+      if (parallaxRaf) return;
+      parallaxRaf = requestAnimationFrame(function () {
+        parallaxRaf = null;
+        clouds.forEach(function (cloud) {
+          const depth = parseFloat(cloud.getAttribute('data-depth')) || 24;
+          cloud.style.setProperty('--kd-par-x', cursorX * depth + 'px');
+          cloud.style.setProperty('--kd-par-y', cursorY * depth + 'px');
+        });
+      });
+    });
 
     if (menuButton && menuOverlay) {
       menuButton.addEventListener('click', function () {
         menuOverlay.classList.contains('active') ? closeMenu() : openMenu();
       });
 
-      if (menuClose) {
-        menuClose.addEventListener('click', closeMenu);
-      }
-
       document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && menuOverlay.classList.contains('active')) {
+        if (!menuOverlay.classList.contains('active')) return;
+
+        if (e.key === 'Escape') {
           closeMenu();
+          return;
+        }
+
+        // Keep Tab focus inside the open menu (overlay links + the visible
+        // toggle button and header cart).
+        if (e.key === 'Tab') {
+          const focusables = Array.prototype.slice
+            .call(section.querySelectorAll('.menu-overlay a[href], .menu-overlay button, .custom-menu-button, .custom-cart-button'))
+            .filter(function (el) {
+              return el.offsetParent !== null;
+            });
+
+          if (focusables.length === 0) return;
+
+          const first = focusables[0];
+          const last = focusables[focusables.length - 1];
+
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
         }
       });
     }
@@ -773,34 +1574,7 @@
     },
     {
       "type": "header",
-      "content": "Menu Button"
-    },
-    {
-      "type": "image_picker",
-      "id": "menu_button_image",
-      "label": "Menu Button Image"
-    },
-    {
-      "type": "header",
-      "content": "Shop Button"
-    },
-    {
-      "type": "image_picker",
-      "id": "shop_button_image",
-      "label": "Shop Button Image"
-    },
-    {
-      "type": "header",
-      "content": "Cart Icon"
-    },
-    {
-      "type": "image_picker",
-      "id": "cart_icon_image",
-      "label": "Cart Icon Image"
-    },
-    {
-      "type": "header",
-      "content": "Menu Items"
+      "content": "Header Buttons"
     },
     {
       "type": "checkbox",
@@ -808,6 +1582,276 @@
       "label": "Hide all menu buttons (desktop and mobile)",
       "info": "Hides the menu, shop, and cart buttons on both desktop and mobile. Use when you want a logo-only header.",
       "default": false
+    },
+    {
+      "type": "paragraph",
+      "content": "MENU button position. Up/down: negative moves it up. Left/right: negative moves it left. Mobile is below 768px, tablet 768–1199px, desktop 1200px and up."
+    },
+    {
+      "type": "range",
+      "id": "menu_button_offset_y_mobile",
+      "label": "Mobile: up / down",
+      "min": -50,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "menu_button_offset_x_mobile",
+      "label": "Mobile: left / right",
+      "min": -50,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "menu_button_offset_y_tablet",
+      "label": "Tablet: up / down",
+      "min": -50,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": -18
+    },
+    {
+      "type": "range",
+      "id": "menu_button_offset_x_tablet",
+      "label": "Tablet: left / right",
+      "min": -50,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "menu_button_offset",
+      "label": "Desktop: up / down",
+      "min": -50,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": -18
+    },
+    {
+      "type": "range",
+      "id": "menu_button_offset_x",
+      "label": "Desktop: left / right",
+      "min": -50,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "text",
+      "id": "shop_label",
+      "label": "Shop button label",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "shop_link",
+      "label": "Shop button link",
+      "info": "Defaults to the all-products collection."
+    },
+    {
+      "type": "header",
+      "content": "Cart Button"
+    },
+    {
+      "type": "range",
+      "id": "cart_size_mobile",
+      "label": "Sticker size – mobile",
+      "min": 40,
+      "max": 140,
+      "step": 2,
+      "unit": "px",
+      "default": 56,
+      "info": "Mobile: below 768px. Count, label and badge scale with the sticker."
+    },
+    {
+      "type": "range",
+      "id": "cart_size_tablet",
+      "label": "Sticker size – tablet",
+      "min": 40,
+      "max": 140,
+      "step": 2,
+      "unit": "px",
+      "default": 56,
+      "info": "Tablet: 768–1199px."
+    },
+    {
+      "type": "range",
+      "id": "cart_size_desktop",
+      "label": "Sticker size – desktop",
+      "min": 40,
+      "max": 140,
+      "step": 2,
+      "unit": "px",
+      "default": 88,
+      "info": "Desktop: 1200px and wider."
+    },
+    {
+      "type": "color",
+      "id": "cart_shape_color",
+      "label": "Sticker colour",
+      "default": "#ACFF64"
+    },
+    {
+      "type": "color",
+      "id": "cart_text_color",
+      "label": "Icon / count colour",
+      "info": "Also the colour of inline SVG icons that use currentColor.",
+      "default": "#ac0300"
+    },
+    {
+      "type": "select",
+      "id": "cart_content",
+      "label": "Inside the sticker",
+      "options": [
+        {
+          "value": "count",
+          "label": "Item count"
+        },
+        {
+          "value": "icon",
+          "label": "Icon"
+        },
+        {
+          "value": "icon_count",
+          "label": "Icon + count badge"
+        }
+      ],
+      "default": "count",
+      "info": "Icon options need an icon below; without one the count is shown."
+    },
+    {
+      "type": "html",
+      "id": "cart_icon_svg",
+      "label": "Icon SVG code",
+      "info": "Paste <svg>…</svg>. Use fill=\"currentColor\" or stroke=\"currentColor\" so it takes the icon colour above."
+    },
+    {
+      "type": "image_picker",
+      "id": "cart_icon",
+      "label": "Icon image",
+      "info": "Used when no SVG code is set. Keeps its own colours."
+    },
+    {
+      "type": "range",
+      "id": "cart_icon_size",
+      "label": "Icon size",
+      "min": 30,
+      "max": 80,
+      "step": 2,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Menu Overlay"
+    },
+    {
+      "type": "color_scheme",
+      "id": "overlay_color_scheme",
+      "label": "Overlay color scheme",
+      "info": "Background and text colours of the open menu.",
+      "default": "scheme1"
+    },
+    {
+      "type": "range",
+      "id": "menu_top_space_mobile",
+      "label": "Mobile: space below the logo",
+      "info": "Gap between the header logo and the menu links when the menu is open (below 769px).",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "color",
+      "id": "menu_accent_color",
+      "label": "Accent color",
+      "info": "Fill of the MENU/CLOSE pill.",
+      "default": "#ACFF64"
+    },
+    {
+      "type": "url",
+      "id": "social_tiktok_link",
+      "label": "TikTok link",
+      "info": "Falls back to Theme settings → Social if blank."
+    },
+    {
+      "type": "url",
+      "id": "social_facebook_link",
+      "label": "Facebook link",
+      "info": "Falls back to Theme settings → Social if blank."
+    },
+    {
+      "type": "url",
+      "id": "social_instagram_link",
+      "label": "Instagram link",
+      "info": "Falls back to Theme settings → Social if blank."
+    },
+    {
+      "type": "image_picker",
+      "id": "overlay_tagline_image",
+      "label": "Tagline image",
+      "info": "Shown under the wordmark in the open menu. Desktop only — hidden on mobile."
+    },
+    {
+      "type": "image_picker",
+      "id": "overlay_sticker_1",
+      "label": "Tagline sticker",
+      "info": "Shown beside the tagline (e.g. the Radically Fair sticker)."
+    },
+    {
+      "type": "image_picker",
+      "id": "overlay_sticker_2",
+      "label": "Floating sticker",
+      "info": "Decorative sticker floating near the bottom-right of the open menu."
+    },
+    {
+      "type": "text",
+      "id": "account_label",
+      "label": "Account link label (desktop)",
+      "info": "Small link shown above the menu links on desktop. Leave blank to hide.",
+      "default": "My Account"
+    },
+    {
+      "type": "url",
+      "id": "account_link",
+      "label": "Account link",
+      "info": "Defaults to the customer account page."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_utility_links",
+      "label": "Show Search and Account rows (mobile)",
+      "info": "Off since the redesign: the menu shows only the main links.",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "utility_account_label",
+      "label": "Mobile account row label",
+      "default": "Account & Subscriptions"
+    },
+    {
+      "type": "text",
+      "id": "contact_email",
+      "label": "Contact email",
+      "info": "Shown as a mailto link in the open menu. Leave blank to hide."
+    },
+    {
+      "type": "header",
+      "content": "Menu Items"
     },
     {
       "type": "text",
@@ -1027,7 +2071,10 @@
     }
   ],
   "enabled_on": {
-    "groups": ["header", "footer"]
+    "groups": [
+      "header",
+      "footer"
+    ]
   }
 }
 {% endschema %}

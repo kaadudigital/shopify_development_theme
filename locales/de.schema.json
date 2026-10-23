@@ -2032,7 +2032,17 @@
       "name": "Farben",
       "settings": {
         "text": {
-          "label": "Text"
+          "label": "Text",
+          "info": "Überschriften und alle Textelemente, die nicht durch Fliesstext, Eyebrow oder Caption unten abgedeckt sind"
+        },
+        "body_text": {
+          "label": "Fliesstext"
+        },
+        "eyebrow_text": {
+          "label": "Eyebrow-Text"
+        },
+        "caption_text": {
+          "label": "Caption-Text"
         },
         "text_contrast": {
           "label": "Textkontrast"

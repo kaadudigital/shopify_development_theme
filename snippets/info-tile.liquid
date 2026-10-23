@@ -1,7 +1,28 @@
 {%- liquid
-  assign crop = crop | default: settings.product_tiles_aspect_ratio
-  assign shape = shape | default: settings.product_tile_media_shape
-  
+  # Info tiles no longer inherit the theme-wide product-tile crop and media
+  # shape. Those globals (a 1:1 box and a wave_tear silhouette) forced every
+  # tile image to be cropped to fill, which is not what an info tile wants —
+  # its image is usually a logo or icon that must be shown whole. Blank now
+  # means "natural, unshaped"; a merchant can still pick a ratio or shape
+  # explicitly per section or per tile. This snippet is only rendered by
+  # sections/custom-feature-infotile.liquid, so nothing else is affected.
+  assign crop = crop | default: 'natural'
+  assign shape = shape | default: 'default'
+
+  # How the image sits in its box once a fixed ratio or a shape is chosen.
+  # 'contain' letterboxes so the whole image stays visible; 'cover' fills and
+  # therefore crops. Previously both paths were hardcoded to cover
+  # (object-cover / preserveAspectRatio="slice"), so choosing any shape at all
+  # cropped the image with no way to turn it off.
+  assign fit = fit | default: 'contain'
+  if fit == 'cover'
+    assign object_fit_class = 'object-cover'
+    assign svg_fit = 'xMidYMid slice'
+  else
+    assign object_fit_class = 'object-contain'
+    assign svg_fit = 'xMidYMid meet'
+  endif
+
   if block and block != blank and shape_override != blank
     assign shape = shape_override
   endif
@@ -23,11 +44,32 @@
   else
     assign rotate = -5
   endif
+
+  if block and block != blank
+    assign borderless = block.settings.borderless
+    assign square_corners = block.settings.square_corners
+    assign enable_shadow = block.settings.enable_shadow
+  else
+    assign borderless = true
+    assign square_corners = true
+    assign enable_shadow = false
+  endif
+
+  assign card_modifier_class = ''
+  if borderless
+    assign card_modifier_class = card_modifier_class | append: ' info-tile--borderless'
+  endif
+  if square_corners
+    assign card_modifier_class = card_modifier_class | append: ' info-tile--square'
+  endif
+  unless enable_shadow
+    assign card_modifier_class = card_modifier_class | append: ' info-tile--no-shadow'
+  endunless
 -%}
 
 {%- if block and block != blank -%}
   {%- comment -%} Actual tile with content {%- endcomment -%}
-  <div class="info-tile relative {{ class }} {% if display_on_card %}text-scheme-text card{% endif %}">
+  <div class="info-tile relative {{ class }} {% if display_on_card %}text-scheme-text card{{ card_modifier_class }}{% endif %}">
     <div class="info-tile__container {% if display_on_card %}bg-scheme-card card__surface {% if tiles_per_row_mobile == '2' %}p-2.5 lg:p-5{% else %}p-5{% endif %} h-full{% endif %}">
       
       {%- comment -%} Tile Image {%- endcomment -%}
@@ -39,15 +81,29 @@
           
           <div class="relative {% unless display_on_card %}{% if settings.media_shadow_direction contains 'top' %}pt-media-shadow{% else %}pb-media-shadow{% endif %}{% endunless %}">
             {%- if shape == 'default' -%}
-              <div class="media-wrapper {{ crop }}">
+              {%- if crop == 'natural' -%}
+                {%- comment -%}
+                  No aspect box and no object-cover: the image keeps its own
+                  proportions and is never cropped.
+                {%- endcomment -%}
                 {{- block.settings.image | image_url: width: 1200 | image_tag:
                   loading: loading,
                   sizes: sizes,
                   widths: '300, 400, 500, 600, 800, 1000, 1200',
-                  class: 'object-cover w-full h-full',
+                  class: 'w-full h-auto',
                   preload: preload
                 -}}
-              </div>
+              {%- else -%}
+                <div class="media-wrapper {{ crop }}">
+                  {{- block.settings.image | image_url: width: 1200 | image_tag:
+                    loading: loading,
+                    sizes: sizes,
+                    widths: '300, 400, 500, 600, 800, 1000, 1200',
+                    class: object_fit_class | append: ' w-full h-full',
+                    preload: preload
+                  -}}
+                </div>
+              {%- endif -%}
             {%- else -%}
               <div class="media-wrapper {% if crop == 'natural' %}relative{% else %}{{ crop }}{% endif %}">
                 {%- liquid
@@ -73,7 +129,7 @@
                     href="{{ block.settings.image | image_url: width: 1200 }}"
                     width="100%"
                     height="100%"
-                    preserveAspectRatio="xMidYMid slice"
+                    preserveAspectRatio="{{ svg_fit }}"
                     clip-path="url(#clip-{{ shape_id }})"
                     loading="{{ loading }}"
                   />
@@ -89,17 +145,17 @@
       {%- endif -%}
 
       {%- comment -%} Tile Content {%- endcomment -%}
-      <div class="info-tile__content mt-5 break-words {{ settings.product_tile_text_align }}">
+      <div class="info-tile__content break-words {{ settings.product_tile_text_align }}">
         {%- if block.settings.link != blank -%}
           <a href="{{ block.settings.link }}" class="block">
         {%- endif -%}
-        
+
         {%- if block.settings.heading != blank -%}
-          <h3 class="font-heading text-lg">{{ block.settings.heading }}</h3>
+          <h3 class="info-tile__heading h3">{{ block.settings.heading }}</h3>
         {%- endif -%}
-        
+
         {%- if block.settings.description != blank -%}
-          <div class="mt-2.5 text-scheme-text">
+          <div class="info-tile__description body text-scheme-text">
             {{ block.settings.description }}
           </div>
         {%- endif -%}
@@ -113,7 +169,7 @@
 
 {%- else -%}
   {%- comment -%} Placeholder tile when no blocks added {%- endcomment -%}
-  <div class="info-tile {{ class }} {% if display_on_card %}text-scheme-text card{% endif %}">
+  <div class="info-tile {{ class }} {% if display_on_card %}text-scheme-text card{{ card_modifier_class }}{% endif %}">
     <div class="{% if display_on_card %}bg-scheme-card card__surface p-5 h-full{% endif %}">
       <div class="relative {% unless display_on_card %}{% if settings.media_shadow_direction contains 'top' %}pt-media-shadow{% else %}pb-media-shadow{% endif %}{% endunless %}">
         {%- if shape == 'default' -%}
@@ -138,9 +194,9 @@
         {%- endif -%}
       </div>
       
-      <div class="info-tile__content mt-5 text-center">
-        <h3 class="font-heading text-lg">{{ 'Tile Heading' }}</h3>
-        <div class="mt-2.5 text-scheme-text opacity-60">
+      <div class="info-tile__content text-center">
+        <h3 class="info-tile__heading h3">{{ 'Tile Heading' }}</h3>
+        <div class="info-tile__description body text-scheme-text opacity-60">
           Add a tile block to get started
         </div>
       </div>

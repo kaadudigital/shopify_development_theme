@@ -1,0 +1,102 @@
+{%- comment -%}
+  Free-shipping threshold for the cart drawer (DS CartDrawer: the shipping strip with the progress bar).
+
+  Threshold: the market metafield `switch.free_shipping_threshold` (Shapes: "80" or "CH:80, DE:100") when set,
+  else Theme settings › Cart › "Free shipping threshold". Subscription lines count as free shipping (mockup).
+  Shipping rules are not configured in Shopify yet: the shipping amount below the threshold is the placeholder
+  text in Theme settings › Cart › Kaadu cart drawer.
+
+  Params:
+  - mode  {String} optional — 'strip' (default): the shipping strip markup + the --kd-progress style;
+                              'value': only the text for the "Versand" row (free / placeholder cost).
+{%- endcomment -%}
+{%- liquid
+  for threshold_rule in localization.market.metafields.switch.free_shipping_threshold.value
+    unless threshold_rule contains ':'
+      assign market_threshold = threshold_rule | strip
+    else
+      assign country_code = threshold_rule | split: ':' | first | strip
+      if localization.country.iso_code == country_code
+        assign country_threshold = threshold_rule | split: ':' | last | strip
+        break
+      endif
+    endunless
+  endfor
+
+  unless country_threshold == blank and market_threshold == blank
+    assign threshold = country_threshold | default: market_threshold | times: 100
+  else
+    assign threshold = settings.free_shipping_threshold | times: 100
+  endunless
+
+  assign subtotal = cart.items_subtotal_price
+  assign has_subscription = false
+  for item in cart.items
+    if item.selling_plan_allocation
+      assign has_subscription = true
+      break
+    endif
+  endfor
+
+  assign reached = false
+  if has_subscription
+    assign reached = true
+  elsif threshold != blank and threshold > 0 and subtotal >= threshold
+    assign reached = true
+  endif
+
+  if reached
+    assign percentage = 100
+  elsif threshold != blank and threshold > 0
+    assign percentage = subtotal | times: 100.0 | divided_by: threshold | round
+  else
+    assign percentage = 0
+  endif
+  if percentage > 100
+    assign percentage = 100
+  endif
+
+  assign threshold_money = threshold | money
+  assign remaining_money = threshold | minus: subtotal | money
+-%}
+{%- if mode == 'value' -%}
+  {%- if reached -%}
+    {{- 0 | money -}}
+  {%- else -%}
+    {{- settings.kd_cart_shipping_cost | default: 'CHF [X]' -}}
+  {%- endif -%}
+{%- elsif threshold != blank and threshold > 0 -%}
+  {%- liquid
+    if reached
+      assign status = settings.kd_cart_ship_reached | default: 'Gratis Versand erreicht'
+    else
+      assign status = settings.kd_cart_ship_remaining | default: 'Noch [amount] bis Gratisversand' | replace: '[amount]', remaining_money
+    endif
+    assign note = settings.kd_cart_ship_from | default: 'Gratis Versand ab [amount]' | replace: '[amount]', threshold_money
+  -%}
+  <div class="kd-drawer__ship">
+    <div class="kd-drawer__ship-row">
+      <span>{{ status }}</span>
+      {%- if note != blank -%}<span class="kd-drawer__ship-note">{{ note }}</span>{%- endif -%}
+    </div>
+    <div
+      class="kd-progress{% if reached %} kd-progress--full{% endif %}"
+      role="progressbar"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow="{{ percentage }}"
+      aria-label="{{ status | strip_html | escape }}"
+    >
+      <div class="kd-progress__fill"></div>
+      {%- if settings.kd_cart_progress_marker != blank -%}
+        {{ settings.kd_cart_progress_marker | image_url: width: 200 | image_tag: class: 'kd-progress__marker', alt: '', loading: 'lazy', widths: '100, 200' }}
+      {%- endif -%}
+      {%- if settings.kd_cart_progress_goal -%}
+        <svg class="kd-progress__goal" aria-hidden="true" focusable="false"><use href="#kd-starburst"></use></svg>
+      {%- endif -%}
+    </div>
+  </div>
+  {%- style -%}
+    .kd-progress { --kd-progress: {{ percentage }}%; }
+  {%- endstyle -%}
+{%- endif -%}

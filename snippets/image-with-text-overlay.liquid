@@ -77,7 +77,7 @@
     <a href="{{ cta_url }}" class="absolute inset-0 z-20"></a>
   {%- endif -%}
 
-  <div class="{% if crop contains 'slideshow' %}lg:h-full{% endif %} {% if style == 'inset' %}max-w-site px-5 lg:px-10 mx-auto{% endif %}">
+  <div class="{% if crop contains 'slideshow' %}lg:h-full{% endif %} {% if style == 'inset' %}max-w-site px-section mx-auto{% endif %}">
     <div class="{{ crop }} {% if style == 'inset' %} media media--css-only h-full w-full{% endif %}">
       {% if image != blank %}
         {% capture image_tag_output %}{{

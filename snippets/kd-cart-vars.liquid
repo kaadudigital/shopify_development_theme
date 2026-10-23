@@ -1,0 +1,16 @@
+{%- comment -%}
+  Cart drawer colours (Theme settings › Cart › Kaadu cart drawer) as the --kd-drawer-* custom properties that
+  assets/base.bundle.css (CART DRAWER block) reads. Rendered once by snippets/drawer-cart.liquid and by
+  sections/cart.liquid. Defaults are the mockup values: purple ground, paper text, pink meta, lime accent,
+  red buttons with paper labels.
+{%- endcomment -%}
+{%- style -%}
+  .kd-drawer {
+    --kd-drawer-bg: {{ settings.kd_cart_bg }};
+    --kd-drawer-text: {{ settings.kd_cart_text }};
+    --kd-drawer-muted: {{ settings.kd_cart_muted }};
+    --kd-drawer-accent: {{ settings.kd_cart_accent }};
+    --kd-drawer-button: {{ settings.kd_cart_button }};
+    --kd-drawer-button-text: {{ settings.kd_cart_button_text }};
+  }
+{%- endstyle -%}

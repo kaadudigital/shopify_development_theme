@@ -18,6 +18,25 @@
             "type": "color",
             "id": "text",
             "label": "t:settings_schema.colors.settings.text.label",
+            "default": "#162317",
+            "info": "t:settings_schema.colors.settings.text.info"
+          },
+          {
+            "type": "color",
+            "id": "body_text",
+            "label": "t:settings_schema.colors.settings.body_text.label",
+            "default": "#162317"
+          },
+          {
+            "type": "color",
+            "id": "eyebrow_text",
+            "label": "t:settings_schema.colors.settings.eyebrow_text.label",
+            "default": "#162317"
+          },
+          {
+            "type": "color",
+            "id": "caption_text",
+            "label": "t:settings_schema.colors.settings.caption_text.label",
             "default": "#162317"
           },
           {
@@ -3274,6 +3293,20 @@
     "name": "t:settings_schema.animations.name",
     "settings": [
       {
+        "type": "checkbox",
+        "id": "kd_scroll_motion",
+        "label": "Scroll animations",
+        "default": true,
+        "info": "Kaadu reveal animations while scrolling (headings, text, stickers, cards, image parallax). Never in the theme editor or for visitors who prefer reduced motion."
+      },
+      {
+        "type": "checkbox",
+        "id": "kd_smooth_scroll",
+        "label": "Smooth scrolling",
+        "default": true,
+        "info": "Eases mouse-wheel and trackpad scrolling (Lenis); touch, keyboard and the scrollbar stay native. Never in the theme editor or for visitors who prefer reduced motion."
+      },
+      {
         "type": "range",
         "id": "parallax_intensity",
         "min": 0,
@@ -3641,6 +3674,249 @@
             "label": "t:common.options.gradient.label"
           }
         ]
+      },
+      {
+        "type": "header",
+        "content": "Kaadu cart drawer"
+      },
+      {
+        "type": "paragraph",
+        "content": "Copy and colours of the cart drawer and the cart page (design system CartDrawer; mockup \"Cart (Drawer)\"). Type copy in normal case. [amount] is replaced by the money amount."
+      },
+      {
+        "type": "text",
+        "id": "kd_cart_title",
+        "label": "Title",
+        "default": "Dein Warenkorb"
+      },
+      {
+        "type": "text",
+        "id": "kd_cart_once_label",
+        "label": "Meta for one-time lines",
+        "default": "Einmalig",
+        "info": "Subscription lines show their selling plan name instead."
+      },
+      {
+        "type": "text",
+        "id": "kd_cart_qty_less",
+        "label": "Stepper − label",
+        "default": "Weniger"
+      },
+      {
+        "type": "text",
+        "id": "kd_cart_qty_more",
+        "label": "Stepper + label",
+        "default": "Mehr"
+      },
+      {
+        "type": "header",
+        "content": "Shipping strip"
+      },
+      {
+        "type": "paragraph",
+        "content": "Shown when \"Free shipping progress\" above is on. The threshold is \"Free shipping threshold\" above (or the market metafield). Subscription lines count as free shipping. Shipping rules are not set up in Shopify yet: the cost below the threshold is a placeholder."
+      },
+      {
+        "type": "text",
+        "id": "kd_cart_ship_remaining",
+        "label": "Below the threshold",
+        "default": "Noch [amount] bis Gratisversand"
+      },
+      {
+        "type": "text",
+        "id": "kd_cart_ship_reached",
+        "label": "Threshold reached",
+        "default": "Gratis Versand erreicht"
+      },
+      {
+        "type": "text",
+        "id": "kd_cart_ship_from",
+        "label": "Threshold note",
+        "default": "Gratis Versand ab [amount]"
+      },
+      {
+        "type": "text",
+        "id": "kd_cart_shipping_label",
+        "label": "Shipping row label",
+        "default": "Versand"
+      },
+      {
+        "type": "text",
+        "id": "kd_cart_shipping_cost",
+        "label": "Shipping cost below the threshold (placeholder)",
+        "default": "CHF [X]"
+      },
+      {
+        "type": "image_picker",
+        "id": "kd_cart_progress_marker",
+        "label": "Progress marker",
+        "info": "A sticker riding on the bar (mockup). Hidden once the threshold is reached."
+      },
+      {
+        "type": "checkbox",
+        "id": "kd_cart_progress_goal",
+        "label": "Starburst at the goal",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Abo upsell"
+      },
+      {
+        "type": "paragraph",
+        "content": "Shown under the lines while a one-time line is in the cart. Subscriptions are not set up in Shopify yet; the link goes to the line's product page unless set."
+      },
+      {
+        "type": "checkbox",
+        "id": "kd_cart_abo_enable",
+        "label": "Show the Abo upsell",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "kd_cart_abo_title",
+        "label": "Title",
+        "default": "Im Abo bis zu [X] sparen"
+      },
+      {
+        "type": "text",
+        "id": "kd_cart_abo_text",
+        "label": "Text",
+        "default": "Gratis Versand. Jederzeit pausieren oder kündigen."
+      },
+      {
+        "type": "text",
+        "id": "kd_cart_abo_link_label",
+        "label": "Link label",
+        "default": "Aufs Abo upgraden"
+      },
+      {
+        "type": "url",
+        "id": "kd_cart_abo_link",
+        "label": "Link"
+      },
+      {
+        "type": "header",
+        "content": "Discount code"
+      },
+      {
+        "type": "checkbox",
+        "id": "kd_cart_code_enable",
+        "label": "Show the discount code field",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "kd_cart_code_label",
+        "label": "Label",
+        "default": "Gutschein- oder Rabattcode"
+      },
+      {
+        "type": "text",
+        "id": "kd_cart_code_placeholder",
+        "label": "Placeholder",
+        "default": "Code eingeben"
+      },
+      {
+        "type": "text",
+        "id": "kd_cart_code_button",
+        "label": "Button",
+        "default": "Einlösen"
+      },
+      {
+        "type": "text",
+        "id": "kd_cart_code_error",
+        "label": "Invalid code message",
+        "default": "Dieser Code ist nicht gültig."
+      },
+      {
+        "type": "text",
+        "id": "kd_cart_code_remove",
+        "label": "Remove code label (screen readers)",
+        "default": "Code entfernen"
+      },
+      {
+        "type": "header",
+        "content": "Checkout"
+      },
+      {
+        "type": "text",
+        "id": "kd_cart_checkout_label",
+        "label": "Checkout button",
+        "default": "Zur Kasse",
+        "info": "The total is appended: «Zur Kasse · CHF 12.90»."
+      },
+      {
+        "type": "text",
+        "id": "kd_cart_note",
+        "label": "Note under the button",
+        "default": "Abo jederzeit pausieren oder kündigen · Sichere Zahlung · Twint, Karte, PayPal"
+      },
+      {
+        "type": "header",
+        "content": "Empty cart"
+      },
+      {
+        "type": "text",
+        "id": "kd_cart_empty_text",
+        "label": "Text",
+        "default": "Dein Warenkorb ist leer."
+      },
+      {
+        "type": "text",
+        "id": "kd_cart_empty_button_label",
+        "label": "Button",
+        "default": "Zum Shop"
+      },
+      {
+        "type": "url",
+        "id": "kd_cart_empty_button_link",
+        "label": "Button link",
+        "info": "Blank: the all-products collection."
+      },
+      {
+        "type": "header",
+        "content": "Colours"
+      },
+      {
+        "type": "paragraph",
+        "content": "Mockup values by default: purple ground, paper text, pink meta, lime accent, red buttons."
+      },
+      {
+        "type": "color",
+        "id": "kd_cart_bg",
+        "label": "Ground",
+        "default": "#542a76"
+      },
+      {
+        "type": "color",
+        "id": "kd_cart_text",
+        "label": "Text",
+        "default": "#fffff5"
+      },
+      {
+        "type": "color",
+        "id": "kd_cart_muted",
+        "label": "Meta text (line meta, note, remove)",
+        "default": "#ffc6ff"
+      },
+      {
+        "type": "color",
+        "id": "kd_cart_accent",
+        "label": "Accent (close button, progress fill, Abo title)",
+        "default": "#aeff64"
+      },
+      {
+        "type": "color",
+        "id": "kd_cart_button",
+        "label": "Buttons",
+        "default": "#ac0300"
+      },
+      {
+        "type": "color",
+        "id": "kd_cart_button_text",
+        "label": "Button label",
+        "default": "#fffff5"
       }
     ]
   },

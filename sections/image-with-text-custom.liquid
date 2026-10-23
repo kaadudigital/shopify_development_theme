@@ -5,19 +5,43 @@
     assign preload = true
   endif
 -%}
+{%- style -%}
+  #{{ section.id }} {
+    --kd-iw-media: {{ section.settings.image_width_large | default: 40 }}%;
+    --kd-iw-media-xl: {{ section.settings.image_width_xl | default: 46 }}%;
+    --kd-iw-media-max: {{ section.settings.image_max_width | default: 1120 }}px;
+    --kd-iw-link: rgb(var(--color-scheme-{{ section.settings.link_color | default: 'text' }}));
+    {%- comment -%} Section colours only when "Use the colours below" is on; otherwise every --kd-iw-* colour is unset and
+      the CSS falls back to the colour scheme (background, eyebrow, text, body text, accent 1 / contrast). {%- endcomment -%}
+    {%- if section.settings.use_custom_colors -%}
+      {%- liquid
+        assign iw_colors = 'bg:background_color,kicker:kicker_color,heading:heading_color,text:text_color,btn:button_color,btn-label:button_label_color,link:link_custom_color' | split: ','
+      -%}
+      {%- for pair in iw_colors -%}
+        {%- assign kv = pair | split: ':' -%}
+        {%- assign value = section.settings[kv[1]] -%}
+        {%- if value != blank %}
+    --kd-iw-{{ kv[0] }}: {{ value }};
+        {%- endif -%}
+      {%- endfor %}
+    {%- endif %}
+  }
+{%- endstyle -%}
+
 <section
-  class="bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %} relative overflow-hidden"
-  data-color-scheme="{{ section.settings.color_scheme }}"
+  id="{{ section.id }}"
+  class="kd-iw-band bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %} relative overflow-hidden"
+  data-color-scheme="{{ section.settings.color_scheme }}"{% unless section.settings.scroll_motion %} data-kd-motion="off"{% endunless %}
 >
-  <div class="section-content relative z-10 py-section-vertical-spacing">
+  <div class="section-content relative z-10">
     {%- render 'image-with-text-custom',
-      display_on_card: section.settings.display_on_card,
+      blocks: section.blocks,
       image: section.settings.image,
+      image_caption: section.settings.image_caption,
       image_position: section.settings.image_position,
       text_alignment: section.settings.text_alignment,
       mobile_text_alignment: section.settings.mobile_text_alignment,
       mobile_layout_order: section.settings.mobile_layout_order,
-      image_size: section.settings.image_size,
       image_shape: section.settings.image_shape,
       section_id: section.id,
       blob_type: section.settings.blob_type,
@@ -26,6 +50,10 @@
       title: section.settings.title,
       h2_title: section.settings.h2_title,
       richtext: section.settings.richtext,
+      richtext_mobile: section.settings.richtext_mobile,
+      hide_image_mobile: section.settings.hide_image_mobile,
+      image_shadow: section.settings.image_shadow,
+      mobile_link_position: section.settings.mobile_link_position,
       button_link: section.settings.button_link,
       button2_link: section.settings.button2_link,
       button_link_type: section.settings.button_link_type,
@@ -33,15 +61,21 @@
       focus_element2_id: section.settings.focus_element2_id,
       focus_element_id: section.settings.focus_element_id,
       button_label: section.settings.button_label,
+      button_label_mobile: section.settings.button_label_mobile,
       button2_label: section.settings.button2_label,
+      button2_label_mobile: section.settings.button2_label_mobile,
+      button_note: section.settings.button_note,
+      button_note_mobile: section.settings.button_note_mobile,
       button2_image: section.settings.button2_image,
       button2_image_mobile: section.settings.button2_image_mobile,
+      button2_width_desktop: section.settings.button2_width_desktop,
+      button2_width_mobile: section.settings.button2_width_mobile,
       button_text_color_desktop: section.settings.button_text_color_desktop,
       button_text_color_mobile: section.settings.button_text_color_mobile,
-      heading_size: section.settings.heading_size,
       container_id: section.id,
       disable_media_style: section.settings.disable_media_style,
-      preload: preload
+      preload: preload,
+      heading_level: section.settings.heading_level
     -%}
   </div>
 
@@ -70,26 +104,77 @@
 
 {% schema %}
 {
-  "name": "image with text custom",
+  "name": "Image with text (Kaadu)",
   "settings": [
     {
-      "type": "checkbox",
-      "id": "display_on_card",
-      "label": "t:common.settings.display_on_card.label"
-    },
-    {
       "type": "header",
-      "content": "t:common.settings.header_image"
+      "content": "Image"
     },
     {
       "type": "image_picker",
       "id": "image",
-      "label": "t:common.settings.image.label"
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "image_caption",
+      "label": "Caption",
+      "info": "Optional, shown below the image."
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position",
+      "default": "right",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "info": "Tablet and desktop. On mobile the image sits above the text."
+    },
+    {
+      "type": "range",
+      "id": "image_width_large",
+      "label": "Image width – 24\" screens",
+      "info": "Share of the row the image takes at 1441–1799px. Image and text are centred with equal space left and right. Below 1441px the design-system sizes apply.",
+      "min": 30,
+      "max": 60,
+      "step": 1,
+      "unit": "%",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "image_width_xl",
+      "label": "Image width – 27\" and larger",
+      "info": "Share of the row the image takes from 1800px.",
+      "min": 30,
+      "max": 65,
+      "step": 1,
+      "unit": "%",
+      "default": 46
+    },
+    {
+      "type": "range",
+      "id": "image_max_width",
+      "label": "Max image width – very large screens",
+      "info": "Upper limit for the image from 1800px, so it stops growing on 32\" / 37\" and ultrawide screens (1120px ≈ the 27\" size at 2560px).",
+      "min": 800,
+      "max": 2000,
+      "step": 20,
+      "unit": "px",
+      "default": 1120
     },
     {
       "type": "select",
       "id": "crop",
-      "label": "t:common.settings.crop.label",
+      "label": "Crop",
       "options": [
         {
           "value": "",
@@ -113,7 +198,7 @@
     {
       "type": "select",
       "id": "image_shape",
-      "label": "t:common.settings.image_shape.label",
+      "label": "Shape",
       "options": [
         {
           "value": "website_shape_star",
@@ -505,8 +590,7 @@
           "label": "t:common.options.blob.label",
           "group": "t:common.groups.variable"
         }
-      ],
-      "info": "t:common.settings.image_shape.info"
+      ]
     },
     {
       "type": "range",
@@ -514,9 +598,9 @@
       "min": 1,
       "max": 20,
       "step": 1,
-      "label": "t:common.settings.blob_type.label",
+      "label": "Blob variant",
       "default": 1,
-      "info": "t:common.settings.blob_type.info"
+      "info": "Only for blob shapes."
     },
     {
       "type": "range",
@@ -525,110 +609,99 @@
       "max": 90,
       "step": 2,
       "unit": "deg",
-      "label": "t:common.settings.rotate.label",
+      "label": "Rotation",
       "default": 0
-    },
-    {
-      "type": "select",
-      "id": "image_position",
-      "label": "t:common.settings.image_position_on_desktop.label",
-      "default": "right",
-      "options": [
-        {
-          "value": "right",
-          "label": "t:common.options.right.label"
-        },
-        {
-          "value": "left",
-          "label": "t:common.options.left.label"
-        }
-      ]
-    },
-    {
-      "type": "select",
-      "id": "image_size",
-      "label": "t:common.settings.image_size.label",
-      "default": "half",
-      "options": [
-        {
-          "value": "third",
-          "label": "t:common.options.one_third.label"
-        },
-        {
-          "value": "half",
-          "label": "t:common.options.one_half.label"
-        },
-        {
-          "value": "three_fifths",
-          "label": "t:common.options.three_fifths.label"
-        },
-        {
-          "value": "two_thirds",
-          "label": "t:common.options.two_thirds.label"
-        }
-      ]
     },
     {
       "type": "checkbox",
       "id": "disable_media_style",
-      "label": "t:common.settings.disable_media_style.label",
-      "default": false,
-      "info": "t:common.settings.disable_media_style.info"
+      "label": "Plain image (no shape styling)",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "image_shadow",
+      "label": "Shadow under the image",
+      "info": "Design-system card shadow around the image (and the empty placeholder).",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_image_mobile",
+      "label": "Hide image on mobile",
+      "info": "Below 768px only the text and buttons show.",
+      "default": false
     },
     {
       "type": "header",
-      "content": "t:common.settings.header_content"
-    },
-    {
-      "type": "text",
-      "id": "title",
-      "label": "t:sections.image_with_text.settings.title.label",
-      "info": "Use [br] for a line break, [nbsp] for an extra space.",
-      "default": "Image with text"
+      "content": "Text"
     },
     {
       "type": "inline_richtext",
       "id": "h2_title",
-      "label": "sub heading",
-      "default": "Image with text sub heading"
+      "label": "Kicker",
+      "default": "Image with text sub heading",
+      "info": "Small line above the heading."
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Image with text",
+      "info": "In all text fields of this section: [br] for a line break, [nbsp] for a non-breaking space."
     },
     {
       "type": "select",
-      "id": "heading_size",
-      "label": "t:sections.image_with_text.settings.heading_size.label",
+      "id": "heading_level",
+      "label": "Heading level",
       "options": [
         {
-          "value": "heading-standard",
-          "label": "t:common.options.standard.label"
+          "value": "auto",
+          "label": "Auto (H1 when first on the page)"
         },
         {
-          "value": "heading-feature",
-          "label": "t:common.options.feature.label"
+          "value": "h1",
+          "label": "H1 — page hero"
+        },
+        {
+          "value": "h2",
+          "label": "H2 — section"
         }
       ],
-      "default": "heading-feature"
+      "default": "auto",
+      "info": "One H1 per page. H1 also uses the larger hero sizes."
     },
     {
       "type": "richtext",
       "id": "richtext",
-      "label": "t:common.settings.richtext.label"
+      "label": "Text"
+    },
+    {
+      "type": "richtext",
+      "id": "richtext_mobile",
+      "label": "Text (mobile)",
+      "info": "Below 768px. Leave empty to use the text above."
+    },
+    {
+      "type": "header",
+      "content": "Layout"
     },
     {
       "type": "select",
       "id": "text_alignment",
-      "label": "Desktop text alignment",
+      "label": "Text alignment (desktop)",
       "options": [
         {
           "value": "text-left",
-          "label": "t:common.options.left.label"
+          "label": "Left"
         },
         {
           "value": "text-center",
-          "label": "t:common.options.center.label"
+          "label": "Center"
         },
         {
           "value": "text-right",
-          "label": "t:common.options.right.label"
+          "label": "Right"
         }
       ],
       "default": "text-left"
@@ -636,19 +709,19 @@
     {
       "type": "select",
       "id": "mobile_text_alignment",
-      "label": "Mobile text alignment",
+      "label": "Text alignment (mobile)",
       "options": [
         {
           "value": "text-left",
-          "label": "t:common.options.left.label"
+          "label": "Left"
         },
         {
           "value": "text-center",
-          "label": "t:common.options.center.label"
+          "label": "Center"
         },
         {
           "value": "text-right",
-          "label": "t:common.options.right.label"
+          "label": "Right"
         }
       ],
       "default": "text-center"
@@ -656,60 +729,40 @@
     {
       "type": "checkbox",
       "id": "mobile_layout_order",
-      "label": "Mobile layout: Heading → Image → Text → Button",
-      "info": "When enabled, on mobile the heading will appear first, then image, then text, then button. When disabled, uses default mobile layout.",
+      "label": "Mobile: heading above the image",
       "default": true
     },
     {
       "type": "header",
-      "content": "t:common.settings.header_link"
+      "content": "Main button"
     },
     {
-      "type": "select",
-      "id": "button_link_type",
-      "label": "Button Link Type",
-      "options": [
-        {
-          "value": "url",
-          "label": "URL"
-        },
-        {
-          "value": "focus_element",
-          "label": "Focus Element by ID"
-        }
-      ],
-      "default": "url"
-    },
-    {
-      "type": "url",
-      "id": "button_link",
-      "label": "t:common.settings.button_link.label"
+      "type": "paragraph",
+      "content": "The cloud button. If only the text link below is filled in, the link becomes the cloud button instead."
     },
     {
       "type": "text",
-      "id": "focus_element_id",
-      "label": "Element ID to Focus",
-      "info": "Enter the ID of the element to focus (without the # symbol). Only used when 'Focus Element by ID' is selected above.",
-      "placeholder": "my-element-id"
+      "id": "button2_label",
+      "label": "Label"
     },
     {
       "type": "text",
-      "id": "button_label",
-      "label": "t:common.settings.button_label.label",
-      "default": "Shop Now"
+      "id": "button2_label_mobile",
+      "label": "Label (mobile)",
+      "info": "Leave empty to use the label above."
     },
     {
       "type": "select",
       "id": "button2_link_type",
-      "label": "Second Button Link Type",
+      "label": "Action",
       "options": [
         {
           "value": "url",
-          "label": "URL"
+          "label": "Link to a page"
         },
         {
           "value": "focus_element",
-          "label": "Focus Element by ID"
+          "label": "Scroll to an element on this page"
         }
       ],
       "default": "url"
@@ -717,70 +770,272 @@
     {
       "type": "url",
       "id": "button2_link",
-      "label": "second Button's link"
+      "label": "Link"
     },
     {
       "type": "text",
       "id": "focus_element2_id",
-      "label": "Second Button's Element ID to Focus",
-      "info": "Enter the ID of the element to focus (without the # symbol). Only used when 'Focus Element by ID' is selected above.",
-      "placeholder": "my-element-id"
+      "label": "Element ID to scroll to",
+      "placeholder": "my-element-id",
+      "info": "Without #. Used when the action is \"Scroll to an element\"."
     },
     {
-      "type": "text",
-      "id": "button2_label",
-      "label": "Second Button's label",
-      "default": "Second Button"
+      "type": "inline_richtext",
+      "id": "button_note",
+      "label": "Note under the button",
+      "info": "Small text below the buttons, e.g. Code [CODE] · 1 Beutel pro Haushalt"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "button_note_mobile",
+      "label": "Note under the button (mobile)",
+      "info": "Below 768px. Leave empty to use the note above."
     },
     {
       "type": "image_picker",
       "id": "button2_image",
-      "label": "Second Button Image (Desktop)"
+      "label": "Artwork (desktop)",
+      "info": "Optional. Replaces the cloud with your own image."
     },
     {
       "type": "image_picker",
       "id": "button2_image_mobile",
-      "label": "Second Button Image (Mobile)"
+      "label": "Artwork (mobile)",
+      "info": "Used below 768px. Leave empty to use the desktop artwork."
+    },
+    {
+      "type": "range",
+      "id": "button2_width_desktop",
+      "label": "Artwork width (desktop)",
+      "min": 80,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "default": 200
+    },
+    {
+      "type": "range",
+      "id": "button2_width_mobile",
+      "label": "Artwork width (mobile)",
+      "min": 80,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "default": 150
     },
     {
       "type": "color",
       "id": "button_text_color_desktop",
-      "label": "Button Text Color (Desktop)",
+      "label": "Label colour on artwork (desktop)",
       "default": "#ffffff"
     },
     {
       "type": "color",
       "id": "button_text_color_mobile",
-      "label": "Button Text Color (Mobile)",
+      "label": "Label colour on artwork (mobile)",
       "default": "#ffffff"
     },
     {
-      "type": "range",
-      "id": "button2_padding_topbottom",
-      "label": "Second Button top/bottom padding",
-      "min": 0,
-      "max": 80,
-      "step": 2,
-      "unit": "px",
-      "default": 20
+      "type": "header",
+      "content": "Text link"
+    },
+    {
+      "type": "paragraph",
+      "content": "Shown as a ✶ link next to the main button."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Label"
+    },
+    {
+      "type": "text",
+      "id": "button_label_mobile",
+      "label": "Label (mobile)",
+      "info": "Leave empty to use the label above."
+    },
+    {
+      "type": "select",
+      "id": "button_link_type",
+      "label": "Action",
+      "options": [
+        {
+          "value": "url",
+          "label": "Link to a page"
+        },
+        {
+          "value": "focus_element",
+          "label": "Scroll to an element on this page"
+        }
+      ],
+      "default": "url"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link"
+    },
+    {
+      "type": "text",
+      "id": "focus_element_id",
+      "label": "Element ID to scroll to",
+      "placeholder": "my-element-id",
+      "info": "Without #. Used when the action is \"Scroll to an element\"."
+    },
+    {
+      "type": "select",
+      "id": "mobile_link_position",
+      "label": "Text link position (mobile)",
+      "default": "beside",
+      "options": [
+        {
+          "value": "beside",
+          "label": "Right, beside the note"
+        },
+        {
+          "value": "under",
+          "label": "Centred under the button"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "link_color",
+      "label": "Link colour",
+      "info": "From the section's colour scheme. With «Use the colours below» on, the link colour below wins.",
+      "options": [
+        {
+          "value": "text",
+          "label": "Heading text"
+        },
+        {
+          "value": "body-text",
+          "label": "Body text"
+        },
+        {
+          "value": "eyebrow-text",
+          "label": "Kicker"
+        },
+        {
+          "value": "caption-text",
+          "label": "Caption"
+        },
+        {
+          "value": "accent-1",
+          "label": "Accent 1"
+        },
+        {
+          "value": "accent-2",
+          "label": "Accent 2"
+        }
+      ],
+      "default": "text"
     },
     {
       "type": "header",
-      "content": "t:common.settings.header_color"
+      "content": "Colours"
     },
     {
       "type": "color_scheme",
       "id": "color_scheme",
       "default": "scheme1",
-      "label": "t:common.settings.color_scheme.label"
+      "label": "Colour scheme",
+      "info": "Applies when «Use the colours below instead of the colour scheme» is off."
+    },
+    {
+      "type": "checkbox",
+      "id": "use_custom_colors",
+      "label": "Use the colours below instead of the colour scheme",
+      "info": "Off: background, text and buttons all follow the colour scheme above.",
+      "default": false
     },
     {
       "type": "checkbox",
       "id": "use_gradient_background",
-      "label": "t:common.settings.use_gradient_background.label"
+      "label": "Use gradient background"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "kicker_color",
+      "label": "Kicker",
+      "default": "#AEFF64"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button",
+      "default": "#AEFF64"
+    },
+    {
+      "type": "color",
+      "id": "button_label_color",
+      "label": "Button label",
+      "default": "#AC0300"
+    },
+    {
+      "type": "color",
+      "id": "link_custom_color",
+      "label": "Text link",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "checkbox",
+      "id": "scroll_motion",
+      "label": "Scroll animations",
+      "default": true,
+      "info": "Reveal animations while scrolling. The theme-wide switch is in Theme settings → Animations."
     }
   ],
   "blocks": [
+    {
+      "type": "card",
+      "name": "Card",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Cards sit between the text and the buttons, two per row from 768px (Promise mockup: the four stamps). They take the colour scheme's card colours; the title takes the kicker colour."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Direktkauf"
+        },
+        {
+          "type": "text",
+          "id": "meta",
+          "label": "Small label (right)"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Das Geld geht an die Familie, nicht an drei Stationen dazwischen.</p>"
+        }
+      ]
+    },
     {
       "type": "background_pattern",
       "name": "t:common.blocks.background_pattern.name",
@@ -2022,6 +2277,26 @@
         },
         {
           "type": "range",
+          "id": "horizontal_position_sm",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "horizontal position mobile",
+          "default": 80
+        },
+        {
+          "type": "range",
+          "id": "vertical_position_sm",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "vertical position mobile",
+          "default": 80
+        },
+        {
+          "type": "range",
           "id": "rotate",
           "min": -90,
           "max": 90,
@@ -2206,6 +2481,16 @@
               "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
             },
             {
+              "value": "kd-scallop-patterned_1440x40",
+              "label": "Kaadu scallop",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "kd-scallop-mobile-patterned_416x30",
+              "label": "Kaadu scallop (mobile)",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
               "value": "circles-2.5-patterned_1200x54",
               "label": "t:common.blocks.shape_divider.settings.style.options.circles_2_5.label",
               "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
@@ -2369,6 +2654,16 @@
               "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
             },
             {
+              "value": "kd-scallop-patterned_1440x40",
+              "label": "Kaadu scallop",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "kd-scallop-mobile-patterned_416x30",
+              "label": "Kaadu scallop (mobile)",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
               "value": "circles-2.5-patterned_1200x54",
               "label": "t:common.blocks.shape_divider.settings.style.options.circles_2_5.label",
               "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
@@ -2511,11 +2806,15 @@
   ],
   "presets": [
     {
-      "name": "image with text custom"
+      "name": "Image with text (Kaadu)"
     }
   ],
   "disabled_on": {
-    "groups": ["header", "footer", "aside"]
+    "groups": [
+      "header",
+      "footer",
+      "aside"
+    ]
   }
 }
 {% endschema %}

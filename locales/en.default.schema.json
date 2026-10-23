@@ -2045,7 +2045,17 @@
       "name": "Colors",
       "settings": {
         "text": {
-          "label": "Text"
+          "label": "Text",
+          "info": "Headings and any other text elements not covered by Body, Eyebrow, or Caption text below"
+        },
+        "body_text": {
+          "label": "Body text"
+        },
+        "eyebrow_text": {
+          "label": "Eyebrow text"
+        },
+        "caption_text": {
+          "label": "Caption text"
         },
         "text_contrast": {
           "label": "Text contrast"
@@ -3339,6 +3349,14 @@
         },
         "sidebar_show_social_icons": {
           "label": "Show social icons"
+        },
+        "header_mobile_menu_icon": "Mobile menu icon",
+        "menu_icon_background_image": {
+          "label": "Background image",
+          "info": "Optional image or SVG shown behind the mobile menu icon bars."
+        },
+        "menu_icon_stripe_color": {
+          "label": "Icon stripe color"
         },
         "nested_nav_style": {
           "label": "Nested navigation style on desktop",

@@ -1,17 +1,28 @@
+{%- render 'kaadu-carousel-arrows',
+  section_id: section.id,
+  shape: section.settings.arrow_shape,
+  bg: section.settings.arrow_background,
+  icon: section.settings.arrow_icon_color
+-%}
+
 {%- comment -%}
   Featured Custom Info Tiles Section
   Displays custom information tiles with image, heading, and description
 {%- endcomment -%}
 
 {%- liquid
+  # Blank means "no shape", not "inherit the theme-wide product tile shape".
+  # The global is wave_tear, which clipped every info-tile image; see the
+  # note at the top of snippets/info-tile.liquid.
   if section.settings.image_shape != ''
     assign image_shape = section.settings.image_shape
   else
-    assign image_shape = settings.product_tile_media_shape
+    assign image_shape = 'default'
   endif
 
   assign mobile_grid_cols = section.settings.tiles_per_row_mobile
-  assign layout = section.settings.layout
+  assign layout_mobile = section.settings.layout_mobile
+  assign layout_desktop = section.settings.layout_desktop
 
   case section.settings.tiles_per_row_desktop
     when 2
@@ -31,39 +42,70 @@
       assign mobile_slide_width = 'w-full'
   endcase
 
-  assign tiles_count = section.blocks.size
+  assign tiles = section.blocks | where: 'type', 'info_tile'
+  assign tiles_count = tiles.size
 
+  # A carousel needs more than one slide to make sense.
   if tiles_count == 1
-    assign layout = 'grid'
+    assign layout_mobile = 'grid'
+    assign layout_desktop = 'grid'
+  endif
+
+  # Splide is mounted whenever either breakpoint wants a carousel. Its
+  # "destroy" option (declarative, mediaQuery-driven — see the
+  # slideshow-options JSON below) unmounts/remounts it exactly at the
+  # 990px breakpoint already used for sizing elsewhere in this file, so
+  # the two layout settings can be configured independently without any
+  # hand-rolled resize/JS branching.
+  assign use_splide = false
+  if layout_mobile == 'carousel' or layout_desktop == 'carousel'
+    assign use_splide = true
+  endif
+
+  assign splide_destroy_mobile = true
+  if layout_mobile == 'carousel'
+    assign splide_destroy_mobile = false
+  endif
+
+  assign splide_destroy_desktop = true
+  if layout_desktop == 'carousel'
+    assign splide_destroy_desktop = false
   endif
 
   assign eager_loading_limit = mobile_grid_cols | plus: 0 | default: 1
 
-  if layout == 'grid'
+  if layout_desktop == 'grid'
     if section.settings.display_on_card
       assign desktop_sizes = 'calc((100vw / ' | append: section.settings.tiles_per_row_desktop | append: ') - 2.5rem)'
+    else
+      assign desktop_sizes = 'calc(100vw / ' | append: section.settings.tiles_per_row_desktop | append: ')'
+    endif
+  else
+    if section.settings.display_on_card
+      assign desktop_sizes = 'calc(' | append: section.settings.desktop_slide_width | append: 'vw - 2.5rem)'
+    else
+      assign desktop_sizes = section.settings.desktop_slide_width | append: 'vw'
+    endif
+  endif
 
+  if layout_mobile == 'grid'
+    if section.settings.display_on_card
       if section.settings.tiles_per_row_mobile == '2'
         assign mobile_sizes = 'calc((100vw / ' | append: section.settings.tiles_per_row_mobile | append: ') - 1.25rem)'
       else
         assign mobile_sizes = 'calc((100vw / ' | append: section.settings.tiles_per_row_mobile | append: ') - 2.5rem)'
       endif
     else
-      assign desktop_sizes = 'calc(100vw / ' | append: section.settings.tiles_per_row_desktop | append: ')'
       assign mobile_sizes = 'calc(100vw / ' | append: section.settings.tiles_per_row_mobile | append: ')'
     endif
   else
     if section.settings.display_on_card
-      assign desktop_sizes = 'calc(' | append: section.settings.desktop_slide_width | append: 'vw - 2.5rem)'
-
       if mobile_slide_width == 'w-3/5'
         assign mobile_sizes = 'calc(60vw - 2.5rem)'
       else
         assign mobile_sizes = 'calc(100vw - 2.5rem)'
       endif
     else
-      assign desktop_sizes = section.settings.desktop_slide_width | append: 'vw'
-
       if mobile_slide_width == 'w-3/5'
         assign mobile_sizes = '60vw'
       else
@@ -74,10 +116,7 @@
 
   assign sizes = '(min-width: 990px) ' | append: desktop_sizes | append: ', ' | append: mobile_sizes
 
-  assign will_transform = false
-  if layout == 'carousel'
-    assign will_transform = true
-  endif
+  assign will_transform = use_splide
 -%}
 
 {%- comment -%} Generate shape definitions for all tiles {%- endcomment -%}
@@ -101,35 +140,55 @@
   class="relative overflow-hidden bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %}"
   data-color-scheme="{{ section.settings.color_scheme }}"
 >
-  <div class="section-content relative z-10 py-section-vertical-spacing {% unless layout == 'carousel' %}px-section w-full max-w-site mx-auto{% endunless %}">
-    {% if section.settings.title != '' %}
-      <h2 class="inline-heading-rte font-heading heading-standard heading-style h1 break-words text-center {{ settings.heading_drop_shadow_style }}">
-        {{ section.settings.title }}
-      </h2>
-    {% endif %}
+  <div class="section-content relative z-10 py-section-vertical-spacing">
+    {%- if section.settings.eyebrow != blank or section.settings.title != '' or section.settings.subheading != '' -%}
+      <div class="info-tiles__header w-full max-w-site mx-auto px-section">
+        {%- if section.settings.eyebrow != blank -%}
+          <h3 class="info-tiles__eyebrow h3 break-words text-center">
+            {{ section.settings.eyebrow | escape }}
+          </h3>
+        {%- endif -%}
 
-    {% if section.settings.subheading != '' %}
-      <div class="rte mx-auto mt-5 max-w-md text-center h2">
-        {{ section.settings.subheading }}
+        {%- if section.settings.title != '' -%}
+          <h2 class="info-tiles__heading inline-heading-rte h1 heading-style break-words text-center {{ settings.heading_drop_shadow_style }}">
+            {{ section.settings.title }}
+          </h2>
+        {%- endif -%}
+
+        {%- if section.settings.subheading != '' -%}
+          <div class="info-tiles__subheading rte body mx-auto max-w-md text-center">
+            {{ section.settings.subheading }}
+          </div>
+        {%- endif -%}
       </div>
     {%- endif -%}
 
     <div
-      {% if layout == 'carousel' %}
+      {% if use_splide %}
         id="slideshow-{{ section.id }}"
       {% endif %}
-      class="{% if section.settings.title != '' %}section-content-top-margin{% endif %} {% if layout == 'carousel' %}splide{% endif %}"
+      class="{% if section.settings.eyebrow != blank or section.settings.title != '' or section.settings.subheading != '' %}info-tiles__content{% endif %} {% if use_splide %}splide{% endif %}
+        {% if layout_mobile == 'grid' %}px-section w-full max-w-site mx-auto{% endif %}
+        {% if layout_desktop == 'grid' %}lg:px-section lg:w-full lg:max-w-site lg:mx-auto{% else %}lg:px-0 lg:w-full lg:max-w-none lg:mx-0{% endif %}"
     >
-      <div class="{% if layout == 'carousel' %}splide__track overflow-visible {% if settings.product_tiles_scatter %}splide__track--scattered{% endif %} {% if section.settings.display_on_card %}{% if settings.card_shadow_direction contains 'top' %}with-top-card-shadow{% else %}with-bottom-card-shadow{% endif %}{% endif %}{% endif %}">
-        <ul class="{% if layout == 'carousel' %}splide__list{% endif %} {% if layout == 'grid' %}grid gap-theme {% if mobile_grid_cols == '2' %}grid-cols-2{% else %}grid-cols-1{% endif %} {{ desktop_grid_cols }}{% endif %}">
-          {%- for block in section.blocks -%}
+      <div class="{% if use_splide %}splide__track overflow-visible {% if settings.product_tiles_scatter %}splide__track--scattered{% endif %} {% if section.settings.display_on_card %}{% if settings.card_shadow_direction contains 'top' %}with-top-card-shadow{% else %}with-bottom-card-shadow{% endif %}{% endif %}{% endif %}">
+        <ul class="
+          {% if use_splide %}splide__list{% endif %}
+          {% if layout_mobile == 'grid' or layout_desktop == 'grid' %}gap-theme{% endif %}
+          {% if layout_mobile == 'grid' %}grid {% if mobile_grid_cols == '2' %}grid-cols-2{% else %}grid-cols-1{% endif %}{% endif %}
+          {% if layout_desktop == 'grid' %}{{ desktop_grid_cols }}{% if layout_mobile != 'grid' %} lg:grid{% endif %}{% endif %}
+        ">
+          {%- for block in tiles -%}
             <li
-              class="{% if layout == 'carousel' %}splide__slide {{ mobile_slide_width }}{% endif %}"
+              class="
+                {% if use_splide %}splide__slide{% if layout_mobile == 'carousel' %} {{ mobile_slide_width }}{% endif %}{% endif %}
+                {% if layout_desktop == 'grid' %}lg:w-auto{% endif %}
+              "
               {{ block.shopify_attributes }}
             >
               {%- liquid
                 if settings.product_tiles_scatter
-                  if layout == 'carousel'
+                  if use_splide
                     capture class
                       cycle '-mt-4 ', 'mt-4 '
                     endcapture
@@ -170,11 +229,6 @@
                 else
                   assign loading = 'lazy'
                 endif
-                if forloop.index <= eager_loading_limit
-                  assign loading = 'eager'
-                else
-                  assign loading = 'lazy'
-                endif
 
                 if forloop.first
                   assign preload = true
@@ -185,6 +239,7 @@
 
               {%- render 'info-tile',
                 block: block,
+                fit: section.settings.image_fit,
                 crop: section.settings.tiles_aspect_ratio,
                 shape: image_shape,
                 shape_override: block.settings.image_shape_override,
@@ -204,10 +259,13 @@
           {%- else -%}
             {%- comment -%} Placeholder when no blocks added {%- endcomment -%}
             {% for i in (1..3) %}
-              <li class="{% if layout == 'carousel' %}splide__slide {{ mobile_slide_width }}{% endif %}">
+              <li class="
+                {% if use_splide %}splide__slide{% if layout_mobile == 'carousel' %} {{ mobile_slide_width }}{% endif %}{% endif %}
+                {% if layout_desktop == 'grid' %}lg:w-auto{% endif %}
+              ">
                 {%- liquid
                   if settings.product_tiles_scatter
-                    if layout == 'carousel'
+                    if use_splide
                       capture class
                         cycle '-translate-y-4 ', 'translate-y-4 '
                       endcapture
@@ -240,6 +298,7 @@
                 -%}
                 {%- render 'info-tile',
                   block: blank,
+                  fit: section.settings.image_fit,
                   crop: section.settings.tiles_aspect_ratio,
                   shape: image_shape,
                   shape_id: shape_id,
@@ -255,13 +314,17 @@
         </ul>
       </div>
 
-      {%- if layout == 'carousel' -%}
-        <div class="splide__arrows mt-5 flex items-center justify-center px-section">
+      {%- if use_splide -%}
+        <div class="splide__arrows mt-5 items-center justify-center px-section
+          {% if layout_mobile == 'grid' %}hidden{% else %}flex{% endif %}
+          {% if layout_desktop == 'grid' %}lg:hidden{% else %}lg:flex{% endif %}
+        ">
           {%- render 'splide-navigation' %}
         </div>
         <script class="slideshow-options" type="application/json">
           {
             "mediaQuery": "min",
+            "destroy": {{ splide_destroy_mobile }},
             "arrows": true,
             "pagination": false,
             "rewind": true,
@@ -270,8 +333,8 @@
             "focus": {{ section.settings.slideshow_focus | json }},
             "type": "loop",
             "autoScroll": {
-              "autoStart": {% if section.settings.autoscroll_mode == '0' or section.settings.autoscroll_mode == blank %}false{% else %}true{% endif %},
-              "speed": {% if section.settings.autoscroll_mode == blank %}0{% else %}{{ section.settings.autoscroll_mode | plus: 0 | json }}{% endif %}
+              "autoStart": {{ section.settings.autoscroll_enabled | json }},
+              "speed": {% if section.settings.autoscroll_enabled %}{{ section.settings.autoscroll_direction | plus: 0 | json }}{% else %}0{% endif %}
             },
             "padding": {
               "left": "1.25rem",
@@ -279,6 +342,7 @@
             },
             "breakpoints": {
               "990": {
+                "destroy": {{ splide_destroy_desktop }},
                 "gap": "2.5rem",
                 "padding": {
                   "left": "2.5rem",
@@ -289,15 +353,68 @@
           }
         </script>
         <style>
-          @media (min-width: 990px) {
-            #slideshow-{{ section.id }} .splide__slide {
-              width: {{ section.settings.desktop_slide_width }}%;
+          {%- if layout_desktop == 'carousel' -%}
+            @media (min-width: 990px) {
+              #slideshow-{{ section.id }} .splide__slide {
+                width: {{ section.settings.desktop_slide_width }}%;
+              }
             }
-          }
+          {%- endif -%}
+
+          /* !important overrides Splide's own bundled CSS (.splide__list /
+             .splide__slide in base.bundle.css), which otherwise wins the
+             cascade over the plain lg:grid / lg:w-auto utility classes on
+             these same elements regardless of source order once Splide's
+             "is-initialized" state classes are involved. */
+          {%- if layout_mobile == 'grid' -%}
+            @media (max-width: 989px) {
+              #slideshow-{{ section.id }} .splide__list {
+                display: grid !important;
+                grid-template-columns: repeat({% if mobile_grid_cols == '2' %}2{% else %}1{% endif %}, minmax(0, 1fr));
+              }
+              #slideshow-{{ section.id }} .splide__slide {
+                width: auto !important;
+              }
+            }
+          {%- endif -%}
+          {%- if layout_desktop == 'grid' -%}
+            @media (min-width: 990px) {
+              #slideshow-{{ section.id }} .splide__list {
+                display: grid !important;
+                grid-template-columns: repeat({{ section.settings.tiles_per_row_desktop }}, minmax(0, 1fr));
+              }
+              #slideshow-{{ section.id }} .splide__slide {
+                width: auto !important;
+              }
+            }
+          {%- endif -%}
         </style>
       {%- endif -%}
     </div>
   </div>
+
+  <style>
+    /* Vertical rhythm per Kaadu Typography & Spacing Docs — mobile first,
+       desktop overrides at 769px. All values from the --space-* scale. */
+    .info-tiles__eyebrow {
+      margin: 0 0 var(--space-4); /* overline → headline: 16px */
+    }
+    .info-tiles__heading {
+      margin: 0;
+    }
+    .info-tiles__subheading {
+      margin-top: var(--space-4); /* headline → subheading: 16px */
+    }
+    .info-tiles__content {
+      margin-top: var(--space-6); /* header → tiles: 24px mobile */
+    }
+
+    @media (min-width: 769px) {
+      .info-tiles__content {
+        margin-top: var(--legacy-space-12); /* header → tiles: 48px desktop */
+      }
+    }
+  </style>
 
   {%- liquid
     for block in section.blocks
@@ -327,27 +444,51 @@
   "name": "Custom Info Tiles",
   "settings": [
     {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "info": "Short overline above the heading (H3 — Subheading style)"
+    },
+    {
       "type": "inline_richtext",
       "id": "title",
       "label": "Heading",
       "default": "Custom Info Tiles"
     },
     {
-      "id": "subheading",
       "type": "text",
+      "id": "subheading",
       "label": "Subheading",
       "default": "Share information using custom tiles"
     },
     {
-      "type": "checkbox",
-      "id": "display_on_card",
-      "label": "Display tiles on card background",
-      "default": true
+      "type": "header",
+      "content": "Layout"
     },
     {
       "type": "select",
-      "id": "layout",
-      "label": "Layout",
+      "id": "layout_mobile",
+      "label": "Layout (mobile)",
+      "default": "carousel",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "carousel",
+          "label": "Carousel"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "layout_desktop",
+      "label": "Layout (desktop)",
       "default": "grid",
       "options": [
         {
@@ -361,12 +502,18 @@
       ]
     },
     {
+      "type": "checkbox",
+      "id": "display_on_card",
+      "label": "Tiles on a card background",
+      "default": true
+    },
+    {
       "type": "header",
-      "content": "Grid Settings"
+      "content": "Grid"
     },
     {
       "type": "paragraph",
-      "content": "These settings only apply when layout is set to Grid"
+      "content": "Only for screen sizes where the layout is «Grid»."
     },
     {
       "type": "select",
@@ -387,24 +534,25 @@
     {
       "type": "range",
       "id": "tiles_per_row_desktop",
+      "label": "Tiles per row (desktop)",
+      "default": 3,
       "min": 2,
       "max": 5,
-      "step": 1,
-      "label": "Tiles per row (desktop)",
-      "default": 3
+      "step": 1
     },
     {
       "type": "header",
-      "content": "Carousel Settings"
+      "content": "Carousel"
     },
     {
       "type": "paragraph",
-      "content": "These settings only apply when layout is set to Carousel"
+      "content": "Only for screen sizes where the layout is «Carousel»."
     },
     {
       "type": "select",
       "id": "slideshow_focus",
       "label": "Slide focus",
+      "default": "center",
       "options": [
         {
           "value": "center",
@@ -414,13 +562,13 @@
           "value": "left",
           "label": "Left"
         }
-      ],
-      "default": "center"
+      ]
     },
     {
       "type": "select",
       "id": "mobile_slide_width",
       "label": "Mobile slide width",
+      "default": "three_fifths",
       "options": [
         {
           "value": "three_fifths",
@@ -430,23 +578,30 @@
           "value": "full_width",
           "label": "Full width"
         }
-      ],
-      "default": "three_fifths"
+      ]
     },
     {
       "type": "range",
       "id": "desktop_slide_width",
+      "label": "Desktop slide width",
+      "default": 40,
       "min": 20,
       "max": 60,
       "step": 5,
-      "unit": "%",
-      "label": "Desktop slide width",
-      "default": 40
+      "unit": "%"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoscroll_enabled",
+      "label": "Auto-scroll",
+      "info": "Automatically scrolls the carousel on whichever breakpoints use the Carousel layout. Visitors can still swipe/drag to scroll manually.",
+      "default": false
     },
     {
       "type": "select",
-      "id": "autoscroll_mode",
-      "label": "Auto-scroll",
+      "id": "autoscroll_direction",
+      "label": "Auto-scroll direction",
+      "default": "1",
       "options": [
         {
           "value": "1",
@@ -455,26 +610,436 @@
         {
           "value": "-1",
           "label": "Left to right"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "arrow_background",
+      "label": "Arrow background",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "arrow_icon_color",
+      "label": "Arrow icon colour",
+      "info": "Keep at least 3:1 contrast against the arrow background.",
+      "default": "#000000"
+    },
+    {
+      "type": "select",
+      "id": "arrow_shape",
+      "label": "Arrow shape",
+      "info": "Silhouette behind the carousel arrows.",
+      "default": "default",
+      "options": [
+        {
+          "value": "website_shape_star",
+          "label": "custom star",
+          "group": "custom shapes"
         },
         {
-          "value": "0",
-          "label": "Disabled"
+          "value": "website_shape_bun",
+          "label": "custom bun",
+          "group": "custom shapes"
+        },
+        {
+          "value": "website_shape_frame",
+          "label": "custom frame",
+          "group": "custom shapes"
+        },
+        {
+          "value": "website_shape_pancake",
+          "label": "custom pancake",
+          "group": "custom shapes"
+        },
+        {
+          "value": "website_shape_cloud",
+          "label": "custom cloud",
+          "group": "custom shapes"
+        },
+        {
+          "value": "default",
+          "label": "Default"
+        },
+        {
+          "value": "diamond",
+          "label": "Diamond",
+          "group": "Basic"
+        },
+        {
+          "value": "triangle_1",
+          "label": "Triangle 1",
+          "group": "Basic"
+        },
+        {
+          "value": "triangle_2",
+          "label": "Triangle 2",
+          "group": "Basic"
+        },
+        {
+          "value": "pentagon",
+          "label": "Pentagon",
+          "group": "Polygons"
+        },
+        {
+          "value": "hexagon",
+          "label": "Hexagon",
+          "group": "Polygons"
+        },
+        {
+          "value": "heptagon",
+          "label": "Heptagon",
+          "group": "Polygons"
+        },
+        {
+          "value": "octagon",
+          "label": "Octagon",
+          "group": "Polygons"
+        },
+        {
+          "value": "nonagon",
+          "label": "Nonagon",
+          "group": "Polygons"
+        },
+        {
+          "value": "decagon",
+          "label": "Decagon",
+          "group": "Polygons"
+        },
+        {
+          "value": "rounded_pentagon",
+          "label": "Rounded pentagon",
+          "group": "Polygons"
+        },
+        {
+          "value": "rounded_hexagon",
+          "label": "Rounded hexagon",
+          "group": "Polygons"
+        },
+        {
+          "value": "rounded_heptagon",
+          "label": "Rounded heptagon",
+          "group": "Polygons"
+        },
+        {
+          "value": "rounded_octagon",
+          "label": "Rounded octagon",
+          "group": "Polygons"
+        },
+        {
+          "value": "rounded_nonagon",
+          "label": "Rounded nonagon",
+          "group": "Polygons"
+        },
+        {
+          "value": "rounded_decagon",
+          "label": "Rounded decagon",
+          "group": "Polygons"
+        },
+        {
+          "value": "star_1",
+          "label": "Star 1",
+          "group": "Stars"
+        },
+        {
+          "value": "star_2",
+          "label": "Star 2",
+          "group": "Stars"
+        },
+        {
+          "value": "star_3",
+          "label": "Star 3",
+          "group": "Stars"
+        },
+        {
+          "value": "star_4",
+          "label": "Star 4",
+          "group": "Stars"
+        },
+        {
+          "value": "star_5",
+          "label": "Star 5",
+          "group": "Stars"
+        },
+        {
+          "value": "star_6",
+          "label": "Star 6",
+          "group": "Stars"
+        },
+        {
+          "value": "abstract_star_1",
+          "label": "Abstract star 1",
+          "group": "Stars"
+        },
+        {
+          "value": "abstract_star_2",
+          "label": "Abstract star 2",
+          "group": "Stars"
+        },
+        {
+          "value": "abstract_star_3",
+          "label": "Abstract star 3",
+          "group": "Stars"
+        },
+        {
+          "value": "scalloped_circle_1",
+          "label": "Scalloped circle 1",
+          "group": "Scalloped circles"
+        },
+        {
+          "value": "scalloped_circle_2",
+          "label": "Scalloped circle 2",
+          "group": "Scalloped circles"
+        },
+        {
+          "value": "scalloped_circle_3",
+          "label": "Scalloped circle 3",
+          "group": "Scalloped circles"
+        },
+        {
+          "value": "scalloped_circle_4",
+          "label": "Scalloped circle 4",
+          "group": "Scalloped circles"
+        },
+        {
+          "value": "scalloped_circle_5",
+          "label": "Scalloped circle 5",
+          "group": "Scalloped circles"
+        },
+        {
+          "value": "scalloped_circle_6",
+          "label": "Scalloped circle 6",
+          "group": "Scalloped circles"
+        },
+        {
+          "value": "parallelogram",
+          "label": "Parallelogram",
+          "group": "Square"
+        },
+        {
+          "value": "squircle",
+          "label": "Squircle",
+          "group": "Square"
+        },
+        {
+          "value": "scalloped_square_1",
+          "label": "Scalloped 1",
+          "group": "Square"
+        },
+        {
+          "value": "scalloped_square_2",
+          "label": "Scalloped 2",
+          "group": "Square"
+        },
+        {
+          "value": "leaf",
+          "label": "Leaf",
+          "group": "Square"
+        },
+        {
+          "value": "clipped_square",
+          "label": "Clipped",
+          "group": "Square"
+        },
+        {
+          "value": "convex_square",
+          "label": "Convex",
+          "group": "Square"
+        },
+        {
+          "value": "twisted_square",
+          "label": "Twisted",
+          "group": "Square"
+        },
+        {
+          "value": "trapeze",
+          "label": "Trapeze",
+          "group": "Square"
+        },
+        {
+          "value": "pinched",
+          "label": "Pinched",
+          "group": "Square"
+        },
+        {
+          "value": "pixelated",
+          "label": "Pixelated",
+          "group": "Square"
+        },
+        {
+          "value": "overlapped",
+          "label": "Overlapped",
+          "group": "Square"
+        },
+        {
+          "value": "zig_zag",
+          "label": "Zig zag",
+          "group": "Miscellaneous"
+        },
+        {
+          "value": "zig_zag_tear",
+          "label": "Zig zag tear",
+          "group": "Miscellaneous"
+        },
+        {
+          "value": "wave_tear",
+          "label": "Wave tear",
+          "group": "Miscellaneous"
+        },
+        {
+          "value": "flower",
+          "label": "Flower",
+          "group": "Miscellaneous"
+        },
+        {
+          "value": "flower_bloom",
+          "label": "Flower bloom",
+          "group": "Miscellaneous"
+        },
+        {
+          "value": "concave",
+          "label": "Concave",
+          "group": "Miscellaneous"
+        },
+        {
+          "value": "flag",
+          "label": "Flag",
+          "group": "Miscellaneous"
+        },
+        {
+          "value": "abstract_oval",
+          "label": "Abstract oval",
+          "group": "Miscellaneous"
+        },
+        {
+          "value": "cross",
+          "label": "Cross",
+          "group": "Miscellaneous"
+        },
+        {
+          "value": "quatrefoil",
+          "label": "Quatrefoil",
+          "group": "Miscellaneous"
+        },
+        {
+          "value": "quadrant",
+          "label": "Quadrant",
+          "group": "Miscellaneous"
+        },
+        {
+          "value": "wind",
+          "label": "Wind",
+          "group": "Miscellaneous"
+        },
+        {
+          "value": "windmill",
+          "label": "Windmill",
+          "group": "Miscellaneous"
+        },
+        {
+          "value": "heart",
+          "label": "Heart",
+          "group": "Miscellaneous"
+        },
+        {
+          "value": "mirrored_pyramids",
+          "label": "Mirrored pyramids",
+          "group": "Miscellaneous"
+        },
+        {
+          "value": "plus",
+          "label": "Plus",
+          "group": "Miscellaneous"
+        },
+        {
+          "value": "double_pill_1",
+          "label": "Double pill 1",
+          "group": "Miscellaneous"
+        },
+        {
+          "value": "double_pill_2",
+          "label": "Double pill 2",
+          "group": "Miscellaneous"
+        },
+        {
+          "value": "triple_pill_1",
+          "label": "Triple pill 1",
+          "group": "Miscellaneous"
+        },
+        {
+          "value": "triple_pill_2",
+          "label": "Triple pill 2",
+          "group": "Miscellaneous"
+        },
+        {
+          "value": "crown",
+          "label": "Crown",
+          "group": "Miscellaneous"
+        },
+        {
+          "value": "stair",
+          "label": "Stair",
+          "group": "Miscellaneous"
+        },
+        {
+          "value": "pancake_stack",
+          "label": "Pancake stack",
+          "group": "Miscellaneous"
+        },
+        {
+          "value": "asterisk",
+          "label": "Asterisk",
+          "group": "Miscellaneous"
+        },
+        {
+          "value": "overlapping_squares",
+          "label": "Overlapping squares",
+          "group": "Miscellaneous"
+        },
+        {
+          "value": "brush_stroke",
+          "label": "Brush stroke",
+          "group": "Miscellaneous"
+        },
+        {
+          "value": "blob",
+          "label": "Blob",
+          "group": "Variable"
         }
-      ],
-      "default": "0"
+      ]
     },
     {
       "type": "header",
-      "content": "Tile Image Settings"
+      "content": "Tile images"
+    },
+    {
+      "type": "select",
+      "id": "image_fit",
+      "label": "Image fit",
+      "info": "Applies when an aspect ratio or an image shape is chosen. Contain shows the whole image; Fill crops it to the edges.",
+      "default": "contain",
+      "options": [
+        {
+          "value": "contain",
+          "label": "Contain — show the whole image"
+        },
+        {
+          "value": "cover",
+          "label": "Fill — crop to the edges"
+        }
+      ]
     },
     {
       "type": "select",
       "id": "tiles_aspect_ratio",
       "label": "Image aspect ratio",
+      "info": "Natural shows the whole image. The fixed ratios crop it to fill.",
+      "default": "",
       "options": [
         {
           "value": "",
-          "label": "Same as theme settings"
+          "label": "Natural — no crop (default)"
         },
         {
           "value": "natural",
@@ -492,17 +1057,18 @@
           "value": "aspect-w-3 aspect-h-4",
           "label": "Portrait (3:4)"
         }
-      ],
-      "default": ""
+      ]
     },
     {
       "type": "select",
       "id": "image_shape",
       "label": "Image shape",
+      "info": "Choose a shape to clip the tile images",
+      "default": "",
       "options": [
         {
           "value": "",
-          "label": "Same as theme settings"
+          "label": "None — no shape (default)"
         },
         {
           "value": "default",
@@ -528,24 +1094,22 @@
           "value": "blob",
           "label": "Blob (random)"
         }
-      ],
-      "default": "",
-      "info": "Choose a shape to clip the tile images"
+      ]
     },
     {
       "type": "header",
-      "content": "Color"
+      "content": "Colours"
     },
     {
       "type": "color_scheme",
       "id": "color_scheme",
-      "default": "scheme1",
-      "label": "Color scheme"
+      "label": "Colour scheme",
+      "default": "scheme1"
     },
     {
       "type": "checkbox",
       "id": "use_gradient_background",
-      "label": "Use gradient background"
+      "label": "Gradient background"
     }
   ],
   "blocks": [
@@ -577,9 +1141,36 @@
           "info": "Make the entire tile clickable"
         },
         {
+          "type": "header",
+          "content": "Tile style"
+        },
+        {
+          "type": "checkbox",
+          "id": "borderless",
+          "label": "Borderless",
+          "info": "Removes the tile's border",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "square_corners",
+          "label": "Square corners (no radius)",
+          "info": "Removes the tile's corner rounding",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_shadow",
+          "label": "Shadow",
+          "info": "Adds a drop shadow behind the tile",
+          "default": false
+        },
+        {
           "type": "select",
           "id": "image_shape_override",
-          "label": "Image shape (override)",
+          "label": "Image shape",
+          "info": "Overrides the section's image shape for this tile only.",
+          "default": "default",
           "options": [
             {
               "value": "website_shape_star",
@@ -608,37 +1199,520 @@
             },
             {
               "value": "default",
-              "label": "t:common.options.default.label",
-              "group": "t:common.groups.fit_to_image"
+              "label": "Default",
+              "group": "Fit to image"
             },
             {
               "value": "default_ellipse",
-              "label": "t:common.options.ellipse.label",
-              "group": "t:common.groups.fit_to_image"
+              "label": "Ellipse",
+              "group": "Fit to image"
             },
             {
               "value": "default_pill",
-              "label": "t:common.options.pill.label",
-              "group": "t:common.groups.fit_to_image"
+              "label": "Pill",
+              "group": "Fit to image"
             },
             {
               "value": "default_archway",
-              "label": "t:common.options.archway.label",
-              "group": "t:common.groups.fit_to_image"
+              "label": "Archway",
+              "group": "Fit to image"
             },
             {
               "value": "diamond",
-              "label": "t:common.options.diamond.label",
-              "group": "t:common.groups.basic"
+              "label": "Diamond",
+              "group": "Basic"
             },
             {
               "value": "triangle_1",
-              "label": "t:common.options.triangle_1.label",
-              "group": "t:common.groups.basic"
+              "label": "Triangle 1",
+              "group": "Basic"
             },
             {
               "value": "triangle_2",
-              "label": "t:common.options.triangle_2.label",
+              "label": "Triangle 2",
+              "group": "Basic"
+            },
+            {
+              "value": "pentagon",
+              "label": "Pentagon",
+              "group": "Polygons"
+            },
+            {
+              "value": "hexagon",
+              "label": "Hexagon",
+              "group": "Polygons"
+            },
+            {
+              "value": "heptagon",
+              "label": "Heptagon",
+              "group": "Polygons"
+            },
+            {
+              "value": "octagon",
+              "label": "Octagon",
+              "group": "Polygons"
+            },
+            {
+              "value": "nonagon",
+              "label": "Nonagon",
+              "group": "Polygons"
+            },
+            {
+              "value": "decagon",
+              "label": "Decagon",
+              "group": "Polygons"
+            },
+            {
+              "value": "rounded_pentagon",
+              "label": "Rounded pentagon",
+              "group": "Polygons"
+            },
+            {
+              "value": "rounded_hexagon",
+              "label": "Rounded hexagon",
+              "group": "Polygons"
+            },
+            {
+              "value": "rounded_heptagon",
+              "label": "Rounded heptagon",
+              "group": "Polygons"
+            },
+            {
+              "value": "rounded_octagon",
+              "label": "Rounded octagon",
+              "group": "Polygons"
+            },
+            {
+              "value": "rounded_nonagon",
+              "label": "Rounded nonagon",
+              "group": "Polygons"
+            },
+            {
+              "value": "rounded_decagon",
+              "label": "Rounded decagon",
+              "group": "Polygons"
+            },
+            {
+              "value": "star_1",
+              "label": "Star 1",
+              "group": "Stars"
+            },
+            {
+              "value": "star_2",
+              "label": "Star 2",
+              "group": "Stars"
+            },
+            {
+              "value": "star_3",
+              "label": "Star 3",
+              "group": "Stars"
+            },
+            {
+              "value": "star_4",
+              "label": "Star 4",
+              "group": "Stars"
+            },
+            {
+              "value": "star_5",
+              "label": "Star 5",
+              "group": "Stars"
+            },
+            {
+              "value": "star_6",
+              "label": "Star 6",
+              "group": "Stars"
+            },
+            {
+              "value": "abstract_star_1",
+              "label": "Abstract star 1",
+              "group": "Stars"
+            },
+            {
+              "value": "abstract_star_2",
+              "label": "Abstract star 2",
+              "group": "Stars"
+            },
+            {
+              "value": "abstract_star_3",
+              "label": "Abstract star 3",
+              "group": "Stars"
+            },
+            {
+              "value": "scalloped_circle_1",
+              "label": "Scalloped circle 1",
+              "group": "Scalloped circles"
+            },
+            {
+              "value": "scalloped_circle_2",
+              "label": "Scalloped circle 2",
+              "group": "Scalloped circles"
+            },
+            {
+              "value": "scalloped_circle_3",
+              "label": "Scalloped circle 3",
+              "group": "Scalloped circles"
+            },
+            {
+              "value": "scalloped_circle_4",
+              "label": "Scalloped circle 4",
+              "group": "Scalloped circles"
+            },
+            {
+              "value": "scalloped_circle_5",
+              "label": "Scalloped circle 5",
+              "group": "Scalloped circles"
+            },
+            {
+              "value": "scalloped_circle_6",
+              "label": "Scalloped circle 6",
+              "group": "Scalloped circles"
+            },
+            {
+              "value": "parallelogram",
+              "label": "Parallelogram",
+              "group": "Square"
+            },
+            {
+              "value": "squircle",
+              "label": "Squircle",
+              "group": "Square"
+            },
+            {
+              "value": "scalloped_square_1",
+              "label": "Scalloped 1",
+              "group": "Square"
+            },
+            {
+              "value": "scalloped_square_2",
+              "label": "Scalloped 2",
+              "group": "Square"
+            },
+            {
+              "value": "leaf",
+              "label": "Leaf",
+              "group": "Square"
+            },
+            {
+              "value": "clipped_square",
+              "label": "Clipped",
+              "group": "Square"
+            },
+            {
+              "value": "convex_square",
+              "label": "Convex",
+              "group": "Square"
+            },
+            {
+              "value": "twisted_square",
+              "label": "Twisted",
+              "group": "Square"
+            },
+            {
+              "value": "trapeze",
+              "label": "Trapeze",
+              "group": "Square"
+            },
+            {
+              "value": "pinched",
+              "label": "Pinched",
+              "group": "Square"
+            },
+            {
+              "value": "pixelated",
+              "label": "Pixelated",
+              "group": "Square"
+            },
+            {
+              "value": "overlapped",
+              "label": "Overlapped",
+              "group": "Square"
+            },
+            {
+              "value": "zig_zag",
+              "label": "Zig zag",
+              "group": "Miscellaneous"
+            },
+            {
+              "value": "zig_zag_tear",
+              "label": "Zig zag tear",
+              "group": "Miscellaneous"
+            },
+            {
+              "value": "wave_tear",
+              "label": "Wave tear",
+              "group": "Miscellaneous"
+            },
+            {
+              "value": "flower",
+              "label": "Flower",
+              "group": "Miscellaneous"
+            },
+            {
+              "value": "flower_bloom",
+              "label": "Flower bloom",
+              "group": "Miscellaneous"
+            },
+            {
+              "value": "concave",
+              "label": "Concave",
+              "group": "Miscellaneous"
+            },
+            {
+              "value": "flag",
+              "label": "Flag",
+              "group": "Miscellaneous"
+            },
+            {
+              "value": "abstract_oval",
+              "label": "Abstract oval",
+              "group": "Miscellaneous"
+            },
+            {
+              "value": "cross",
+              "label": "Cross",
+              "group": "Miscellaneous"
+            },
+            {
+              "value": "quatrefoil",
+              "label": "Quatrefoil",
+              "group": "Miscellaneous"
+            },
+            {
+              "value": "quadrant",
+              "label": "Quadrant",
+              "group": "Miscellaneous"
+            },
+            {
+              "value": "wind",
+              "label": "Wind",
+              "group": "Miscellaneous"
+            },
+            {
+              "value": "windmill",
+              "label": "Windmill",
+              "group": "Miscellaneous"
+            },
+            {
+              "value": "heart",
+              "label": "Heart",
+              "group": "Miscellaneous"
+            },
+            {
+              "value": "mirrored_pyramids",
+              "label": "Mirrored pyramids",
+              "group": "Miscellaneous"
+            },
+            {
+              "value": "plus",
+              "label": "Plus",
+              "group": "Miscellaneous"
+            },
+            {
+              "value": "double_pill_1",
+              "label": "Double pill 1",
+              "group": "Miscellaneous"
+            },
+            {
+              "value": "double_pill_2",
+              "label": "Double pill 2",
+              "group": "Miscellaneous"
+            },
+            {
+              "value": "triple_pill_1",
+              "label": "Triple pill 1",
+              "group": "Miscellaneous"
+            },
+            {
+              "value": "triple_pill_2",
+              "label": "Triple pill 2",
+              "group": "Miscellaneous"
+            },
+            {
+              "value": "crown",
+              "label": "Crown",
+              "group": "Miscellaneous"
+            },
+            {
+              "value": "stair",
+              "label": "Stair",
+              "group": "Miscellaneous"
+            },
+            {
+              "value": "pancake_stack",
+              "label": "Pancake stack",
+              "group": "Miscellaneous"
+            },
+            {
+              "value": "asterisk",
+              "label": "Asterisk",
+              "group": "Miscellaneous"
+            },
+            {
+              "value": "overlapping_squares",
+              "label": "Overlapping squares",
+              "group": "Miscellaneous"
+            },
+            {
+              "value": "brush_stroke",
+              "label": "Brush stroke",
+              "group": "Miscellaneous"
+            },
+            {
+              "value": "blob",
+              "label": "Blob",
+              "group": "Variable"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "background_pattern",
+      "name": "Background Pattern",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "type",
+          "label": "Pattern type",
+          "options": [
+            {
+              "value": "dots",
+              "label": "Dots"
+            },
+            {
+              "value": "grid",
+              "label": "Grid lines"
+            },
+            {
+              "value": "diagonal_lines",
+              "label": "Diagonal lines"
+            }
+          ],
+          "default": "dots"
+        },
+        {
+          "type": "range",
+          "id": "opacity",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "label": "Opacity",
+          "default": 10
+        }
+      ]
+    },
+    {
+      "type": "background_shape",
+      "name": "Background Shape",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "select",
+          "id": "shape",
+          "label": "Shape",
+          "options": [
+            {
+              "value": "circle",
+              "label": "Circle"
+            },
+            {
+              "value": "square",
+              "label": "Square"
+            },
+            {
+              "value": "blob",
+              "label": "Blob"
+            }
+          ],
+          "default": "circle"
+        },
+        {
+          "type": "range",
+          "id": "size",
+          "min": 50,
+          "max": 300,
+          "step": 10,
+          "label": "Size",
+          "default": 150
+        },
+        {
+          "type": "range",
+          "id": "opacity",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "label": "Opacity",
+          "default": 20
+        }
+      ]
+    },
+    {
+      "name": "t:common.blocks.sticker.name",
+      "type": "sticker",
+      "settings": [
+        {
+          "type": "range",
+          "id": "width",
+          "min": 100,
+          "max": 300,
+          "step": 10,
+          "unit": "px",
+          "label": "t:common.blocks.sticker.settings.width.label",
+          "default": 150
+        },
+        {
+          "type": "checkbox",
+          "id": "half_width_on_mobile",
+          "label": "t:common.blocks.sticker.settings.half_width_on_mobile.label",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:common.blocks.sticker.settings.text.label",
+          "info": "t:common.blocks.sticker.settings.text.info",
+          "default": "Sticker"
+        },
+        {
+          "type": "select",
+          "id": "shape",
+          "label": "t:common.blocks.sticker.settings.shape.label",
+          "options": [
+            {
+              "value": "website_shape_star",
+              "label": "custom star",
+              "group": "custom shapes"
+            },
+            {
+              "value": "website_shape_bun",
+              "label": "custom bun",
+              "group": "custom shapes"
+            },
+            {
+              "value": "website_shape_frame",
+              "label": "custom frame",
+              "group": "custom shapes"
+            },
+            {
+              "value": "website_shape_pancake",
+              "label": "custom pancake",
+              "group": "custom shapes"
+            },
+            {
+              "value": "website_shape_cloud",
+              "label": "custom cloud",
+              "group": "custom shapes"
+            },
+            {
+              "value": "fit_to_text",
+              "label": "t:common.blocks.sticker.settings.shape.options.fit_to_text.label"
+            },
+            {
+              "value": "circle",
+              "label": "t:common.options.circle.label",
               "group": "t:common.groups.basic"
             },
             {
@@ -732,21 +1806,6 @@
               "group": "t:common.groups.stars"
             },
             {
-              "value": "abstract_star_1",
-              "label": "t:common.options.abstract_star_1.label",
-              "group": "t:common.groups.stars"
-            },
-            {
-              "value": "abstract_star_2",
-              "label": "t:common.options.abstract_star_2.label",
-              "group": "t:common.groups.stars"
-            },
-            {
-              "value": "abstract_star_3",
-              "label": "t:common.options.abstract_star_3.label",
-              "group": "t:common.groups.stars"
-            },
-            {
               "value": "scalloped_circle_1",
               "label": "t:common.options.scalloped_circle_1.label",
               "group": "t:common.groups.scalloped_circles"
@@ -837,226 +1896,674 @@
               "group": "t:common.groups.square"
             },
             {
-              "value": "zig_zag",
-              "label": "t:common.options.zig_zag.label",
-              "group": "t:common.groups.miscellaneous"
+              "value": "ellipse",
+              "label": "t:common.options.ellipse.label",
+              "group": "t:common.groups.wide"
             },
             {
-              "value": "zig_zag_tear",
-              "label": "t:common.options.zig_zag_tear.label",
-              "group": "t:common.groups.miscellaneous"
+              "value": "diamond_wide",
+              "label": "t:common.options.diamond.label",
+              "group": "t:common.groups.wide"
             },
             {
-              "value": "wave_tear",
-              "label": "t:common.options.wave_tear.label",
-              "group": "t:common.groups.miscellaneous"
+              "value": "rounded_diamond_wide",
+              "label": "t:common.options.rounded_diamond.label",
+              "group": "t:common.groups.wide"
             },
             {
-              "value": "flower",
-              "label": "t:common.options.flower.label",
-              "group": "t:common.groups.miscellaneous"
+              "value": "triangle_wide",
+              "label": "t:common.options.triangle.label",
+              "group": "t:common.groups.wide"
             },
             {
-              "value": "flower_bloom",
-              "label": "t:common.options.flower_bloom.label",
-              "group": "t:common.groups.miscellaneous"
+              "value": "hexagon_wide",
+              "label": "t:common.options.hexagon.label",
+              "group": "t:common.groups.wide"
             },
             {
-              "value": "concave",
-              "label": "t:common.options.concave.label",
-              "group": "t:common.groups.miscellaneous"
+              "value": "rounded_hexagon_wide",
+              "label": "t:common.options.rounded_hexagon.label",
+              "group": "t:common.groups.wide"
             },
             {
-              "value": "flag",
-              "label": "t:common.options.flag.label",
-              "group": "t:common.groups.miscellaneous"
+              "value": "uneven_star_wide",
+              "label": "t:common.options.uneven_star.label",
+              "group": "t:common.groups.wide"
             },
             {
-              "value": "abstract_oval",
-              "label": "t:common.options.abstract_oval.label",
-              "group": "t:common.groups.miscellaneous"
+              "value": "star_wide",
+              "label": "t:common.options.star.label",
+              "group": "t:common.groups.wide"
             },
             {
-              "value": "cross",
-              "label": "t:common.options.cross.label",
-              "group": "t:common.groups.miscellaneous"
+              "value": "semicircle",
+              "label": "t:common.options.semicircle.label",
+              "group": "t:common.groups.wide"
             },
             {
-              "value": "quatrefoil",
-              "label": "t:common.options.quatrefoil.label",
-              "group": "t:common.groups.miscellaneous"
+              "value": "eye",
+              "label": "t:common.options.eye.label",
+              "group": "t:common.groups.wide"
             },
             {
-              "value": "quadrant",
-              "label": "t:common.options.quadrant.label",
-              "group": "t:common.groups.miscellaneous"
+              "value": "parallelogram_wide",
+              "label": "t:common.options.parallelogram.label",
+              "group": "t:common.groups.wide"
             },
             {
-              "value": "wind",
-              "label": "t:common.options.wind.label",
-              "group": "t:common.groups.miscellaneous"
+              "value": "ribbon",
+              "label": "t:common.options.ribbon.label",
+              "group": "t:common.groups.wide"
             },
             {
-              "value": "windmill",
-              "label": "t:common.options.windmill.label",
-              "group": "t:common.groups.miscellaneous"
+              "value": "ticket_stub",
+              "label": "t:common.options.ticket_stub.label",
+              "group": "t:common.groups.wide"
             },
             {
-              "value": "heart",
-              "label": "t:common.options.heart.label",
-              "group": "t:common.groups.miscellaneous"
+              "value": "wave_ribbon",
+              "label": "t:common.options.wave_ribbon.label",
+              "group": "t:common.groups.wide"
             },
             {
-              "value": "mirrored_pyramids",
-              "label": "t:common.options.mirrored_pyramids.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "plus",
-              "label": "t:common.options.plus.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "double_pill_1",
-              "label": "t:common.options.double_pill_1.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "double_pill_2",
-              "label": "t:common.options.double_pill_2.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "triple_pill_1",
-              "label": "t:common.options.triple_pill_1.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "triple_pill_2",
-              "label": "t:common.options.triple_pill_2.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "crown",
-              "label": "t:common.options.crown.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "stair",
-              "label": "t:common.options.stair.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "pancake_stack",
-              "label": "t:common.options.pancake_stack.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "asterisk",
-              "label": "t:common.options.asterisk.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "overlapping_squares",
-              "label": "t:common.options.overlapping_squares.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "brush_stroke",
-              "label": "t:common.options.brush_stroke.label",
-              "group": "t:common.groups.miscellaneous"
-            },
-            {
-              "value": "blob",
-              "label": "t:common.options.blob.label",
-              "group": "t:common.groups.variable"
+              "value": "zig_zag_ribbon",
+              "label": "t:common.options.zig_zag_ribbon.label",
+              "group": "t:common.groups.wide"
             }
           ],
-          "default": "default",
-          "info": "Override the section's default image shape for this tile only"
+          "default": "star_1"
+        },
+        {
+          "type": "select",
+          "id": "sticker_font_size",
+          "label": "t:common.settings.sticker_font_size.label",
+          "options": [
+            {
+              "value": "1rem",
+              "label": "t:common.options.extra_small.label"
+            },
+            {
+              "value": "1.25rem",
+              "label": "t:common.options.small.label"
+            },
+            {
+              "value": "1.563rem",
+              "label": "t:common.options.medium.label"
+            },
+            {
+              "value": "1.953rem",
+              "label": "t:common.options.large.label"
+            },
+            {
+              "value": "2.441rem",
+              "label": "t:common.options.extra_large.label"
+            }
+          ],
+          "default": "1.563rem",
+          "info": "t:common.settings.sticker_font_size.info"
+        },
+        {
+          "type": "header",
+          "content": "t:common.settings.header_custom_image"
+        },
+        {
+          "type": "paragraph",
+          "content": "t:common.blocks.sticker.settings.paragraph_using_an_image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:common.settings.image.label"
+        },
+        {
+          "type": "header",
+          "content": "t:common.settings.header_position"
+        },
+        {
+          "type": "range",
+          "id": "horizontal_position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "t:common.blocks.sticker.settings.horizontal_position.label",
+          "default": 80
+        },
+        {
+          "type": "range",
+          "id": "vertical_position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "t:common.blocks.sticker.settings.vertical_position.label",
+          "default": 80
+        },
+        {
+          "type": "range",
+          "id": "horizontal_position_sm",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "horizontal position mobile",
+          "default": 80
+        },
+        {
+          "type": "range",
+          "id": "vertical_position_sm",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "vertical position mobile",
+          "default": 80
+        },
+        {
+          "type": "range",
+          "id": "rotate",
+          "min": -90,
+          "max": 90,
+          "step": 2,
+          "unit": "deg",
+          "label": "t:common.settings.rotate.label",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "t:common.settings.header_layout"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_sticker_on_mobile",
+          "label": "t:common.blocks.sticker.settings.show_sticker_on_mobile.label",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_sticker_on_desktop",
+          "label": "t:common.blocks.sticker.settings.show_sticker_on_desktop.label",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "t:common.settings.header_animation"
+        },
+        {
+          "type": "select",
+          "id": "rotation_animation",
+          "label": "t:common.blocks.sticker.settings.rotation_animation.label",
+          "options": [
+            {
+              "value": "none",
+              "label": "t:common.blocks.sticker.settings.rotation_animation.options.no_rotation.label"
+            },
+            {
+              "value": "constantly_rotate",
+              "label": "t:common.blocks.sticker.settings.rotation_animation.options.constantly_rotate.label"
+            },
+            {
+              "value": "rotate_when_scrolling",
+              "label": "t:common.blocks.sticker.settings.rotation_animation.options.rotate_only_when_page_is_scrolling.label"
+            }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_parallax",
+          "label": "t:common.blocks.sticker.settings.enable_parallax.label",
+          "default": false,
+          "info": "t:common.blocks.sticker.settings.enable_parallax.info"
+        },
+        {
+          "type": "range",
+          "id": "parallax_speed",
+          "min": 1,
+          "max": 10,
+          "step": 1,
+          "label": "t:common.settings.parallax_speed.label",
+          "default": 3
+        },
+        {
+          "type": "header",
+          "content": "t:common.settings.header_color"
+        },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "default": "scheme1",
+          "label": "t:common.settings.color_scheme.label"
+        },
+        {
+          "type": "select",
+          "id": "color",
+          "label": "t:common.settings.background_color.label",
+          "default": "bg-scheme-accent-1 text-scheme-accent-1-contrast",
+          "options": [
+            {
+              "value": "bg-scheme-text text-scheme-text-contrast",
+              "label": "t:common.options.text.label"
+            },
+            {
+              "value": "bg-scheme-accent-1 text-scheme-accent-1-contrast",
+              "label": "t:common.options.accent_1.label"
+            },
+            {
+              "value": "bg-scheme-accent-2 text-scheme-accent-2-contrast",
+              "label": "t:common.options.accent_2.label"
+            },
+            {
+              "value": "bg-scheme-card text-scheme-card-text",
+              "label": "t:common.options.card.label"
+            },
+            {
+              "value": "bg-scheme-background text-scheme-text",
+              "label": "t:common.options.background.label"
+            },
+            {
+              "value": "bg-scheme-gradient text-scheme-text",
+              "label": "t:common.options.gradient.label"
+            }
+          ]
         }
       ]
     },
     {
-      "type": "background_pattern",
-      "name": "Background Pattern",
-      "limit": 1,
+      "name": "t:common.blocks.shape_divider.name",
+      "type": "shape_divider",
+      "limit": 2,
       "settings": [
         {
           "type": "select",
-          "id": "type",
-          "label": "Pattern type",
+          "label": "t:common.blocks.shape_divider.settings.target_section.label",
+          "id": "target_section",
+          "default": "above",
           "options": [
             {
-              "value": "dots",
-              "label": "Dots"
+              "value": "above",
+              "label": "t:common.blocks.shape_divider.settings.target_section.options.section_above.label"
             },
             {
-              "value": "grid",
-              "label": "Grid lines"
-            },
-            {
-              "value": "diagonal_lines",
-              "label": "Diagonal lines"
+              "value": "below",
+              "label": "t:common.blocks.shape_divider.settings.target_section.options.section_below.label"
             }
           ],
-          "default": "dots"
+          "info": "t:common.blocks.shape_divider.settings.target_section.info"
         },
         {
-          "type": "range",
-          "id": "opacity",
-          "min": 0,
-          "max": 100,
-          "step": 5,
-          "unit": "%",
-          "label": "Opacity",
-          "default": 10
-        }
-      ]
-    },
-    {
-      "type": "background_shape",
-      "name": "Background Shape",
-      "limit": 3,
-      "settings": [
+          "type": "color_scheme",
+          "id": "target_section_color_scheme",
+          "default": "scheme1",
+          "label": "t:common.blocks.shape_divider.settings.target_section_color_scheme.label",
+          "info": "t:common.blocks.shape_divider.settings.target_section_color_scheme.info"
+        },
         {
           "type": "select",
-          "id": "shape",
-          "label": "Shape",
+          "label": "t:common.blocks.shape_divider.settings.style.label",
+          "id": "style",
+          "default": "waves-1-patterned_1200x20",
           "options": [
             {
-              "value": "circle",
-              "label": "Circle"
+              "value": "waves-1-patterned_1200x20",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_1.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
             },
             {
-              "value": "square",
-              "label": "Square"
+              "value": "waves-2-patterned_1200x43",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_2.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
             },
             {
-              "value": "blob",
-              "label": "Blob"
+              "value": "waves-3-patterned_1200x84",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_3.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "zig-zag-1-patterned_1200x21",
+              "label": "t:common.blocks.shape_divider.settings.style.options.zig_zag_1.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "zig-zag-2-patterned_1200x37",
+              "label": "t:common.blocks.shape_divider.settings.style.options.zig_zag_2.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "zig-zag-3-patterned_1200x65",
+              "label": "t:common.blocks.shape_divider.settings.style.options.zig_zag_3.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "circles-1-patterned_1200x16",
+              "label": "t:common.blocks.shape_divider.settings.style.options.circles_1.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "circles-2-patterned_1200x35",
+              "label": "t:common.blocks.shape_divider.settings.style.options.circles_2.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "kd-scallop-patterned_1440x40",
+              "label": "Kaadu scallop",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "kd-scallop-mobile-patterned_416x30",
+              "label": "Kaadu scallop (mobile)",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "circles-2.5-patterned_1200x54",
+              "label": "t:common.blocks.shape_divider.settings.style.options.circles_2_5.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "circles-3-patterned_1200x67",
+              "label": "t:common.blocks.shape_divider.settings.style.options.circles_3.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "spikes-1-patterned_1200x132",
+              "label": "t:common.blocks.shape_divider.settings.style.options.spikes_1.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "spikes-2-patterned_1200x132",
+              "label": "t:common.blocks.shape_divider.settings.style.options.spikes_2.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "tilt-1-shape_1440x101",
+              "label": "t:common.blocks.shape_divider.settings.style.options.tilt_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "tilt-2-shape_1440x180",
+              "label": "t:common.blocks.shape_divider.settings.style.options.tilt_2.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "tilt-3-shape_1440x293",
+              "label": "t:common.blocks.shape_divider.settings.style.options.tilt_3.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "waves-1-shape_1440x261",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "waves-2-shape_1440x330",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_2.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "mountains-1-shape_1440x293",
+              "label": "t:common.blocks.shape_divider.settings.style.options.mountains_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "mountains-2-shape_1440x325",
+              "label": "t:common.blocks.shape_divider.settings.style.options.mountains_2.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "curve-shape_1440x149",
+              "label": "t:common.blocks.shape_divider.settings.style.options.curve.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "curve-inverse-shape_1440x149",
+              "label": "t:common.blocks.shape_divider.settings.style.options.curve_inverse.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "steps-1-shape_1400x105",
+              "label": "t:common.blocks.shape_divider.settings.style.options.steps_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "steps-2-shape_1400x105",
+              "label": "t:common.blocks.shape_divider.settings.style.options.steps_2.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "arrow-1-shape_1400x33",
+              "label": "t:common.blocks.shape_divider.settings.style.options.arrow_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "arrow-2-shape_1400x73",
+              "label": "t:common.blocks.shape_divider.settings.style.options.arrow_2.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "offset-ovals-shape_1400x155",
+              "label": "t:common.blocks.shape_divider.settings.style.options.offset_ovals.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "triangle-shape_1400x145",
+              "label": "t:common.blocks.shape_divider.settings.style.options.triangle.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "triangle-asymmetrical-shape_1400x145",
+              "label": "t:common.blocks.shape_divider.settings.style.options.triangle_asymmetrical.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "clouds-shape_1400x161",
+              "label": "t:common.blocks.shape_divider.settings.style.options.clouds.label",
+              "group": "t:common.settings.shape.label"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "t:common.blocks.shape_divider.settings.mobile_header.content"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_mobile_style",
+          "label": "t:common.blocks.shape_divider.settings.enable_mobile_style.label",
+          "info": "t:common.blocks.shape_divider.settings.enable_mobile_style.info"
+        },
+        {
+          "type": "select",
+          "label": "t:common.blocks.shape_divider.settings.style_mobile.label",
+          "id": "style_mobile",
+          "default": "waves-1-patterned_1200x20",
+          "options": [
+            {
+              "value": "waves-1-patterned_1200x20",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_1.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "waves-2-patterned_1200x43",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_2.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "waves-3-patterned_1200x84",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_3.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "zig-zag-1-patterned_1200x21",
+              "label": "t:common.blocks.shape_divider.settings.style.options.zig_zag_1.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "zig-zag-2-patterned_1200x37",
+              "label": "t:common.blocks.shape_divider.settings.style.options.zig_zag_2.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "zig-zag-3-patterned_1200x65",
+              "label": "t:common.blocks.shape_divider.settings.style.options.zig_zag_3.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "circles-1-patterned_1200x16",
+              "label": "t:common.blocks.shape_divider.settings.style.options.circles_1.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "circles-2-patterned_1200x35",
+              "label": "t:common.blocks.shape_divider.settings.style.options.circles_2.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "kd-scallop-patterned_1440x40",
+              "label": "Kaadu scallop",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "kd-scallop-mobile-patterned_416x30",
+              "label": "Kaadu scallop (mobile)",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "circles-2.5-patterned_1200x54",
+              "label": "t:common.blocks.shape_divider.settings.style.options.circles_2_5.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "circles-3-patterned_1200x67",
+              "label": "t:common.blocks.shape_divider.settings.style.options.circles_3.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "spikes-1-patterned_1200x132",
+              "label": "t:common.blocks.shape_divider.settings.style.options.spikes_1.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "spikes-2-patterned_1200x132",
+              "label": "t:common.blocks.shape_divider.settings.style.options.spikes_2.label",
+              "group": "t:common.blocks.shape_divider.settings.style.group_patterned"
+            },
+            {
+              "value": "tilt-1-shape_1440x101",
+              "label": "t:common.blocks.shape_divider.settings.style.options.tilt_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "tilt-2-shape_1440x180",
+              "label": "t:common.blocks.shape_divider.settings.style.options.tilt_2.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "tilt-3-shape_1440x293",
+              "label": "t:common.blocks.shape_divider.settings.style.options.tilt_3.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "waves-1-shape_1440x261",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "waves-2-shape_1440x330",
+              "label": "t:common.blocks.shape_divider.settings.style.options.waves_2.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "mountains-1-shape_1440x293",
+              "label": "t:common.blocks.shape_divider.settings.style.options.mountains_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "mountains-2-shape_1440x325",
+              "label": "t:common.blocks.shape_divider.settings.style.options.mountains_2.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "curve-shape_1440x149",
+              "label": "t:common.blocks.shape_divider.settings.style.options.curve.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "curve-inverse-shape_1440x149",
+              "label": "t:common.blocks.shape_divider.settings.style.options.curve_inverse.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "steps-1-shape_1400x105",
+              "label": "t:common.blocks.shape_divider.settings.style.options.steps_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "steps-2-shape_1400x105",
+              "label": "t:common.blocks.shape_divider.settings.style.options.steps_2.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "arrow-1-shape_1400x33",
+              "label": "t:common.blocks.shape_divider.settings.style.options.arrow_1.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "arrow-2-shape_1400x73",
+              "label": "t:common.blocks.shape_divider.settings.style.options.arrow_2.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "offset-ovals-shape_1400x155",
+              "label": "t:common.blocks.shape_divider.settings.style.options.offset_ovals.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "triangle-shape_1400x145",
+              "label": "t:common.blocks.shape_divider.settings.style.options.triangle.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "triangle-asymmetrical-shape_1400x145",
+              "label": "t:common.blocks.shape_divider.settings.style.options.triangle_asymmetrical.label",
+              "group": "t:common.settings.shape.label"
+            },
+            {
+              "value": "clouds-shape_1400x161",
+              "label": "t:common.blocks.shape_divider.settings.style.options.clouds.label",
+              "group": "t:common.settings.shape.label"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "flip_horizontal",
+          "label": "t:common.blocks.shape_divider.settings.flip_horizontal.label"
+        },
+        {
+          "type": "header",
+          "content": "t:common.settings.header_animation"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_animation",
+          "label": "t:common.blocks.shape_divider.settings.enable_animation.label",
+          "info": "t:common.blocks.shape_divider.settings.enable_animation.info"
+        },
+        {
+          "type": "select",
+          "id": "animation_direction",
+          "label": "t:common.blocks.shape_divider.settings.animation_direction.label",
+          "options": [
+            {
+              "value": "",
+              "label": "t:common.options.right_to_left.label"
+            },
+            {
+              "value": "reverse",
+              "label": "t:common.options.left_to_right.label"
             }
           ],
-          "default": "circle"
-        },
-        {
-          "type": "range",
-          "id": "size",
-          "min": 50,
-          "max": 300,
-          "step": 10,
-          "label": "Size",
-          "default": 150
-        },
-        {
-          "type": "range",
-          "id": "opacity",
-          "min": 0,
-          "max": 100,
-          "step": 5,
-          "unit": "%",
-          "label": "Opacity",
-          "default": 20
+          "default": ""
         }
       ]
     }

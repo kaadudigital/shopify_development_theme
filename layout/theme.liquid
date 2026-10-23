@@ -7,6 +7,7 @@
     <meta name="theme-color" content="#542A76">
     <link rel="canonical" href="{{ canonical_url }}">
     <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+    {%- comment -%} Waitlist mode: every path except the waitlist pages, policies and Shopify's challenge pages goes to /pages/waitlist (kept from the live theme). {%- endcomment -%}
     {%- liquid
       assign clean_path = request.path | downcase | append: '/'
       assign is_allowed_path = false
@@ -114,6 +115,19 @@
         document.documentElement.className.replace('no-js', 'js');
     </script>
 
+    {%- comment -%} Scroll motion (S-10): html.kd-motion pre-hides reveal targets until assets/kaadu-motion.js runs;
+      dropped again after 3 s if it never starts, and never set under reduced motion or in the theme editor. {%- endcomment -%}
+    {%- if settings.kd_scroll_motion and request.design_mode == false -%}
+      <script>
+        if (!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
+          document.documentElement.classList.add('kd-motion');
+          setTimeout(function () {
+            if (!window.kdMotionStarted) document.documentElement.classList.remove('kd-motion');
+          }, 3000);
+        }
+      </script>
+    {%- endif -%}
+
     <script>
       function debounce(fn, wait) {
         let t;
@@ -125,6 +139,18 @@
     </script>
 
     <script src="{{ 'utils.js' | asset_url }}" defer></script>
+    <script src="{{ 'kaadu.js' | asset_url }}" defer></script>
+    {%- comment -%} Smooth scrolling (S-11): Lenis before GSAP, so assets/kaadu-motion.js can drive it. {%- endcomment -%}
+    {%- if settings.kd_smooth_scroll and request.design_mode == false -%}
+      <script src="{{ 'lenis.min.js' | asset_url }}" defer></script>
+      <script src="{{ 'kaadu-scroll.js' | asset_url }}" defer></script>
+    {%- endif -%}
+    {%- if settings.kd_scroll_motion and request.design_mode == false -%}
+      <script src="{{ 'gsap.min.js' | asset_url }}" defer></script>
+      <script src="{{ 'ScrollTrigger.min.js' | asset_url }}" defer></script>
+      <script src="{{ 'SplitText.min.js' | asset_url }}" defer></script>
+      <script src="{{ 'kaadu-motion.js' | asset_url }}" defer></script>
+    {%- endif -%}
 
     {% if request.design_mode %}
       <script src="{{ 'shapes-animations.js' | asset_url }}" defer></script>
@@ -148,7 +174,8 @@
 
     <style>
       :root {
-        --max-site-width: 1820px;
+        /* No site max-width (Kaadu DS, cobfoods-style large screens): bands run full width, only the gutter limits content. 100vw keeps min() in product-template valid. */
+        --max-site-width: 100vw;
       }
     </style>
 
@@ -249,6 +276,7 @@
   </head>
 
   <body data-color-scheme="scheme3" style="background-color: rgb(84, 42, 118);">
+    {%- render 'kd-cloud-defs' -%}
     {%- if settings.show_on_sale_badge -%}
       {%- render 'static-sticker-defs',
         shape: settings.on_sale_badge_shape,
@@ -302,7 +330,8 @@
       render 'popup'
     %}
 
-    {%- if settings.cart_type == 'modal' -%}
+    {%- comment -%} Not on the cart page: it renders the same cart snippets (one #cart form per page) {%- endcomment -%}
+    {%- if settings.cart_type == 'modal' and template != 'cart' -%}
       {% render 'drawer-cart' %}
     {%- endif -%}
 
