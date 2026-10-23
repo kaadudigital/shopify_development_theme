@@ -1234,7 +1234,6 @@
         "button_text_mobile": "",
         "button_image_width_mobile": 64,
         "padding_top": "none",
-        "bg_class": "bg-lime",
         "color_scheme": "scheme5",
         "use_custom_colors": true,
         "background_color": "#aeff64",
