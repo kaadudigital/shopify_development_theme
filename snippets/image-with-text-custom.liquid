@@ -3,7 +3,8 @@
   Kaadu DS image + text row (hero, vision, final CTA). Styles: "IMAGE WITH TEXT" in assets/base.bundle.css.
 
   - First section on the page (preload = true) is the hero: <h1> in .kd-display-hero, lead in .kd-lead,
-    kicker in .kd-strong. Anywhere else: <h2> in .kd-display-h2, .kd-body-lg, red .kd-label kicker.
+    kicker in .kd-strong-lg (24px — proposed: the DS gives the hero kicker no size; 24px matches the lead).
+    Anywhere else: <h2> in .kd-display-h2, .kd-body-lg, red .kd-label kicker.
   - One cloud button + one ✶ text link (DS hero). When both buttons are set, button 2 is the cloud and
     button 1 the link; with only one button, it is the cloud. Cloud colours follow the colour scheme.
   - Mobile extras: richtext_mobile (text below 768px), hide_image_mobile (.kd-iw--m-noimg),
@@ -34,7 +35,7 @@
   if is_hero
     assign heading_tag = 'h1'
     assign heading_class = 'kd-display-hero'
-    assign kicker_class = 'kd-strong'
+    assign kicker_class = 'kd-strong-lg'
     assign text_class = 'kd-lead'
   else
     assign heading_tag = 'h2'
