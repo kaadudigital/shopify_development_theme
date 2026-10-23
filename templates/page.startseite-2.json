@@ -344,7 +344,7 @@
       "name": "Email Signup",
       "settings": {
         "background_color": "#acff64",
-        "padding_top": 12,
+        "padding_top": "small",
         "heading": "",
         "heading_color": "#ffffff",
         "placeholder_text": "E-mail",
@@ -361,42 +361,42 @@
         "richtext_g9kaXP": {
           "type": "richtext",
           "settings": {
-            "heading": "<p>VOLLES AROMA – WEIL REIF GEERNTET</p>",
+            "heading": "VOLLES AROMA – WEIL REIF GEERNTET",
             "text_alignment": "left"
           }
         },
         "richtext_WcXd7w": {
           "type": "richtext",
           "settings": {
-            "heading": "<p>KNUSPRIG, LUFTIG, LEICHT</p>",
+            "heading": "KNUSPRIG, LUFTIG, LEICHT",
             "text_alignment": "right"
           }
         },
         "richtext_XaMzGn": {
           "type": "richtext",
           "settings": {
-            "heading": "<p>100 % FRUCHT – OHNE ZUSÄTZE</p>",
+            "heading": "100 % FRUCHT – OHNE ZUSÄTZE",
             "text_alignment": "left"
           }
         },
         "richtext_w3ajYx": {
           "type": "richtext",
           "settings": {
-            "heading": "<p>SCHONENDE TROCKNUNG</p><p> = MEHR NÄHRSTOFFE</p>",
+            "heading": "SCHONENDE TROCKNUNG  = MEHR NÄHRSTOFFE",
             "text_alignment": "right"
           }
         },
         "richtext_z6Rwha": {
           "type": "richtext",
           "settings": {
-            "heading": "<p>SCHONENDE TROCKNUNG</p>",
+            "heading": "SCHONENDE TROCKNUNG",
             "text_alignment": "left"
           }
         },
         "richtext_kwdVQ4": {
           "type": "richtext",
           "settings": {
-            "heading": "<p>UNPROFITABLE FRÜCHTE GERETTET</p>",
+            "heading": "UNPROFITABLE FRÜCHTE GERETTET",
             "text_alignment": "right"
           }
         }
