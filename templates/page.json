@@ -104,11 +104,9 @@
         "heading_color": "#ffffff",
         "placeholder_text": "Email",
         "input_text_color": "#333333",
-        "button_image": "shopify://shop_images/Vector.png",
         "button_text": "Beitreten",
         "button_text_color": "#ae0000",
         "subtitle": "",
-        "button_image_mobile": "shopify://shop_images/right_arrow_in_spiky_cloud.svg",
         "button_image_width_mobile": 64
       }
     }

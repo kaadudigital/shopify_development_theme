@@ -125,7 +125,6 @@
         "input_padding": 16,
         "input_font_size": 16,
         "use_image_button": true,
-        "button_image": "shopify://shop_images/Vector.png",
         "image_fit": "contain",
         "button_width": 160,
         "button_height": 90,
@@ -149,7 +148,6 @@
         "subtitle": "",
         "subtitle_color": "#ffffff",
         "subtitle_size": 14,
-        "button_image_mobile": "shopify://shop_images/right_arrow_in_spiky_cloud.svg",
         "button_image_width_mobile": 64
       }
     }
