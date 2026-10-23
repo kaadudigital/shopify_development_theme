@@ -49,6 +49,18 @@
     --kd-join-img-w-m: {{ s.image_width_mobile | default: 200 }}px;
     --kd-join-img-w: {{ s.image_width | default: 200 }}px;
   }
+  {%- comment -%} Height per screen size (settings, 0 = automatic): a minimum height on the inner band, content centred. {%- endcomment -%}
+  #section-{{ section.id }} .kd-join__inner {
+    box-sizing: border-box;
+    justify-content: center;
+    min-height: {{ s.height_mobile | default: 0 }}px;
+  }
+  @media (min-width: 768px) {
+    #section-{{ section.id }} .kd-join__inner { min-height: {{ s.height_tablet | default: 0 }}px; }
+  }
+  @media (min-width: 1200px) {
+    #section-{{ section.id }} .kd-join__inner { min-height: {{ s.height_desktop | default: 0 }}px; }
+  }
   {%- if s.button_image != blank or s.button_image_mobile != blank %}
   #section-{{ section.id }} .kd-btn--art {
     --kd-art-w: {{ s.button_image_width | default: 200 }}px;
@@ -407,6 +419,39 @@
         }
       ],
       "default": "default"
+    },
+    {
+      "type": "range",
+      "id": "height_mobile",
+      "label": "Height – mobile (below 768px)",
+      "info": "Minimum height in px; 0 = automatic. Content stays vertically centred and the section never gets shorter than its content.",
+      "min": 0,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "height_tablet",
+      "label": "Height – tablet (768–1199px)",
+      "info": "0 = automatic.",
+      "min": 0,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "height_desktop",
+      "label": "Height – desktop (1200px and up)",
+      "info": "0 = automatic.",
+      "min": 0,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "default": 0
     },
     {
       "type": "header",

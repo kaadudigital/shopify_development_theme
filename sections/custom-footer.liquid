@@ -6,6 +6,18 @@
   /* DS Footer — purple band, paper text, three groups spread apart; centred stack on mobile. Social links: text or icons (S-07). */
   #{{ section.id }} .kd-footer__band {
     padding-block: var(--space-8);
+    /* Height per screen size (settings, 0 = automatic): a minimum height, content centred */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: {{ section.settings.height_mobile | default: 0 }}px;
+  }
+  @media (min-width: 768px) {
+    #{{ section.id }} .kd-footer__band { min-height: {{ section.settings.height_tablet | default: 0 }}px; }
+  }
+  @media (min-width: 1200px) {
+    #{{ section.id }} .kd-footer__band { min-height: {{ section.settings.height_desktop | default: 0 }}px; }
   }
 
   #{{ section.id }} .kd-footer {
@@ -366,6 +378,43 @@
       "type": "url",
       "id": "link_2_url",
       "label": "Link 2 – URL"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "height_mobile",
+      "label": "Height – mobile (below 768px)",
+      "info": "Minimum height in px; 0 = automatic. Content stays vertically centred and the section never gets shorter than its content.",
+      "min": 0,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "height_tablet",
+      "label": "Height – tablet (768–1199px)",
+      "info": "0 = automatic.",
+      "min": 0,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "height_desktop",
+      "label": "Height – desktop (1200px and up)",
+      "info": "0 = automatic.",
+      "min": 0,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "default": 0
     },
     {
       "type": "header",
