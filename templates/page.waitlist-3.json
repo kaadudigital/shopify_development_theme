@@ -60,34 +60,77 @@
       "name": "image with text custom",
       "settings": {
         "image": "shopify://shop_images/Wailtlist_new_image.webp",
+        "image_caption": "",
+        "image_position": "right",
+        "image_width_large": 40,
+        "image_width_xl": 46,
+        "image_max_width": 1120,
         "crop": "",
         "image_shape": "default",
         "blob_type": 1,
         "rotate_image": 0,
-        "image_position": "right",
         "disable_media_style": false,
-        "title": "CRUNCH IN[nbsp] [br]PROGRESS..",
+        "image_shadow": false,
+        "hide_image_mobile": false,
         "h2_title": "100% Frucht, 0% Ausbeutung.",
+        "title": "CRUNCH IN[nbsp] [br]PROGRESS..",
+        "heading_level": "auto",
         "richtext": "<p>Gefriergetrocknete Früchte;  fair produziert, in der Ursprungsgemeinde verarbeitet, radikal transparent.</p>",
+        "richtext_mobile": "",
         "text_alignment": "text-center",
         "mobile_text_alignment": "text-center",
         "mobile_layout_order": true,
-        "button_link_type": "focus_element",
-        "button_link": "",
-        "focus_element_id": "Email",
-        "button_label": "WAITLIST BEITRETEN",
+        "button2_label": "Second Button",
+        "button2_label_mobile": "",
         "button2_link_type": "url",
         "button2_link": "",
         "focus_element2_id": "",
-        "button2_label": "Second Button",
+        "button_note": "",
+        "button_note_mobile": "",
+        "button2_width_desktop": 200,
+        "button2_width_mobile": 150,
         "button_text_color_desktop": "#ffffff",
         "button_text_color_mobile": "#ffffff",
+        "button_label": "WAITLIST BEITRETEN",
+        "button_label_mobile": "",
+        "button_link_type": "focus_element",
+        "button_link": "",
+        "focus_element_id": "Email",
+        "mobile_link_position": "beside",
+        "link_color": "text",
         "color_scheme": "",
-        "use_gradient_background": false
+        "use_custom_colors": false,
+        "use_gradient_background": false,
+        "background_color": "#ac0300",
+        "kicker_color": "#aeff64",
+        "heading_color": "#fffff5",
+        "text_color": "#fffff5",
+        "button_color": "#aeff64",
+        "button_label_color": "#ac0300",
+        "link_custom_color": "#fffff5",
+        "scroll_motion": true
       }
     },
     "rich_text_custom_73EGTA": {
       "type": "rich-text-custom",
+      "blocks": {
+        "shape_divider_GfErjb": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "below",
+            "target_section_color_scheme": "scheme3",
+            "style": "curve-inverse-shape_1440x149",
+            "enable_mobile_style": false,
+            "style_mobile": "curve-inverse-shape_1440x149",
+            "flip_horizontal": false,
+            "enable_animation": false,
+            "animation_direction": ""
+          }
+        }
+      },
+      "block_order": [
+        "shape_divider_GfErjb"
+      ],
       "custom_css": [
         ".section-content {padding-bottom: 2rem;}"
       ],
@@ -95,7 +138,7 @@
       "settings": {
         "h2_title": "PIONIERE PROFITIEREN",
         "title": "waitlist[br]beitreten",
-        "rich_text": "<p>Tritt der Waitlist bei und erhalte 50 % <br/>auf deine erste Bestellung nach dem Launch!</p>",
+        "rich_text": "<p>Tritt der Waitlist bei und erhalte 50 %&nbsp;<br/>auf deine erste Bestellung nach dem Launch!</p>",
         "display_on_card": false,
         "content_width_desktop": "lg:w-2/3",
         "button_link": "",
@@ -106,36 +149,47 @@
     },
     "email_input_bUKmWP": {
       "type": "email-input",
-      "blocks": {
-        "shape_divider_T4zwY7": {
-          "type": "shape_divider",
-          "settings": {
-            "target_section": "below",
-            "target_section_color_scheme": "scheme3",
-            "style": "curve-inverse-shape_1440x149",
-            "flip_horizontal": false,
-            "enable_animation": false,
-            "animation_direction": ""
-          }
-        }
-      },
-      "block_order": [
-        "shape_divider_T4zwY7"
-      ],
       "custom_css": [],
       "name": "Email Signup",
       "settings": {
-        "background_color": "#ae0000",
-        "padding_top": "none",
+        "kicker": "",
         "heading": "",
-        "heading_color": "#ffffff",
+        "hide_image_mobile": false,
+        "image_width_mobile": 200,
+        "image_width": 200,
+        "text": "",
+        "text_mobile": "",
+        "subtitle": "",
         "placeholder_text": "E-Mail",
-        "input_text_color": "#333333",
+        "input_square": false,
+        "after_signup": "page",
+        "success_text": "Du bist dabei. Dein 20 %-Code kommt per Mail.",
+        "success_text_mobile": "",
+        "success_page": "",
+        "error_text": "Das ist keine E-Mail-Adresse. Nochmal.",
         "button_image": "shopify://shop_images/Vector.png",
         "button_text": "BEITRETEN",
         "button_text_color": "#ae0000",
-        "subtitle": "",
-        "button_image_mobile": "shopify://shop_images/right_arrow_in_spiky_cloud.svg"
+        "button_image_width": 200,
+        "button_image_mobile": "shopify://shop_images/right_arrow_in_spiky_cloud.svg",
+        "button_text_mobile": "",
+        "button_image_width_mobile": 160,
+        "padding_top": "none",
+        "bg_class": "bg-violet",
+        "color_scheme": "",
+        "use_custom_colors": false,
+        "background_color": "#ae0000",
+        "kicker_color": "#1a1a1a",
+        "heading_color": "#ffffff",
+        "text_color": "#1a1a1a",
+        "input_bg_color": "#fffff5",
+        "input_text_color": "#333333",
+        "button_color": "#ac0300",
+        "button_label_color": "#fffff5",
+        "success_bg_color": "#542a76",
+        "success_text_color": "#fffff5",
+        "error_color": "#ac0300",
+        "scroll_motion": true
       }
     }
   },
