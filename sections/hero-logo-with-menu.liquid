@@ -962,10 +962,22 @@
         }
       }
 
-      /* Hide menu buttons toggle — logo-only header */
+      /* Hide menu buttons toggle — logo-only header, logo centred */
       #{{ section.id }}.hide-menu-buttons .header-left,
       #{{ section.id }}.hide-menu-buttons .header-actions {
         display: none !important;
+      }
+
+      #{{ section.id }}.hide-menu-buttons .header-content-wrapper {
+        justify-content: center;
+      }
+
+      #{{ section.id }}.hide-menu-buttons .responsive-logo-container {
+        text-align: center;
+      }
+
+      #{{ section.id }}.hide-menu-buttons .responsive-logo-container img {
+        margin-inline: auto;
       }
   /* Dim all items when any item is hovered */
   #{{ section.id }} .menu-overlay.active .menu-content nav ul.menu-links:hover li a {
