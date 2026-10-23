@@ -6,7 +6,8 @@
     <div class="mx-auto max-w-site {{ section.settings.content_width_desktop }} {% if section.settings.display_on_card %}card{% endif %}">
       <div class="{% if section.settings.display_on_card %}card__surface p-5 lg:p-8{% endif %} relative z-shape-divider mx-auto text-center">
         {%- if section.settings.h2_title != blank -%}
-          <h3 class="image-with-text__eyebrow h3">{{ section.settings.h2_title | escape }}</h3>
+          {%- comment -%} Kicker — DS hero kicker (kd-strong-lg), a paragraph so the H1 stays the first heading {%- endcomment -%}
+          <p class="image-with-text__eyebrow kd-strong-lg">{{ section.settings.h2_title | escape }}</p>
         {%- endif -%}
         {% if section.settings.title != '' %}
           <h1 class="inline-heading-rte font-subheading {{ section.settings.heading_size }} heading-style {{ settings.heading_drop_shadow_style }} break-words h1">
@@ -14,7 +15,7 @@
           </h1>
         {% endif %}
 
-        <div class="rte {% if section.settings.title != '' %}mt-4 lg:mt-6{% endif %} mx-auto body">
+        <div class="rte {% if section.settings.title != '' %}mt-4 lg:mt-6{% endif %} mx-auto kd-lead">
           {{ section.settings.rich_text }}
         </div>
 
