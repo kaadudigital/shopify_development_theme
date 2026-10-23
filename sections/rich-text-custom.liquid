@@ -6,9 +6,9 @@
     <div class="mx-auto max-w-site {{ section.settings.content_width_desktop }} {% if section.settings.display_on_card %}card{% endif %}">
       <div class="{% if section.settings.display_on_card %}card__surface p-4 lg:p-8{% endif %} relative z-shape-divider mx-auto text-center">
         
-        {%- comment -%} Eyebrow (small heading above the main H2) {%- endcomment -%}
+        {%- comment -%} Eyebrow — DS kicker (kd-strong), a paragraph so the H2 stays the first heading {%- endcomment -%}
         {%- if section.settings.h2_title != blank -%}
-          <h3 class="image-with-text__eyebrow h3">{{ section.settings.h2_title | escape }}</h3>
+          <p class="image-with-text__eyebrow kd-strong">{{ section.settings.h2_title | escape }}</p>
         {%- endif -%}
 
         {%- comment -%} Main Heading — design-system H2 (refer to Figma node 878:82) {%- endcomment -%}
@@ -18,7 +18,7 @@
           </h2>
         {%- endif -%}
 
-        <div class="{% if section.settings.title != blank or section.settings.h2_title != blank %}mt-6{% endif %} rte mx-auto body">
+        <div class="{% if section.settings.title != blank or section.settings.h2_title != blank %}mt-6{% endif %} rte mx-auto kd-lead">
           {{ section.settings.rich_text }}
         </div>
 
@@ -75,7 +75,7 @@
       "type": "text",
       "id": "h2_title",
       "label": "Eyebrow (small heading above main heading)",
-      "info": "Optional. Shown as a smaller H3 above the main heading."
+      "info": "Optional. Shown as a kicker above the main heading."
     },
     {
       "type": "inline_richtext",
