@@ -167,7 +167,8 @@
         "text_shadow_color": "#000000",
         "subtitle": "",
         "subtitle_color": "#ffffff",
-        "subtitle_size": 14
+        "subtitle_size": 14,
+        "button_image_mobile": "shopify://shop_images/right_arrow_in_spiky_cloud.svg"
       }
     }
   },
