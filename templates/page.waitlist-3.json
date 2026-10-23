@@ -172,7 +172,6 @@
         "button_image_width": 200,
         "button_text_mobile": "",
         "button_image_width_mobile": 64,
-        "padding_top": "none",
         "color_scheme": "",
         "use_custom_colors": false,
         "background_color": "#ae0000",
@@ -186,7 +185,11 @@
         "success_bg_color": "#542a76",
         "success_text_color": "#fffff5",
         "error_color": "#ac0300",
-        "scroll_motion": true
+        "scroll_motion": true,
+        "spacing_top_desktop": 40,
+        "spacing_top_mobile": 24,
+        "spacing_bottom_desktop": 40,
+        "spacing_bottom_mobile": 24
       }
     }
   },

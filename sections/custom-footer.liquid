@@ -4,20 +4,16 @@
 
 {%- style -%}
   /* DS Footer — purple band, paper text, three groups spread apart; centred stack on mobile. Social links: text or icons (S-07). */
+  /* Top / bottom spacing from the settings (mobile below 768px, desktop from 768px) */
   #{{ section.id }} .kd-footer__band {
-    padding-block: var(--space-8);
-    /* Height per screen size (settings, 0 = automatic): a minimum height, content centred */
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-height: {{ section.settings.height_mobile | default: 0 }}px;
+    padding-top: {{ section.settings.spacing_top_mobile | default: 40 }}px;
+    padding-bottom: {{ section.settings.spacing_bottom_mobile | default: 40 }}px;
   }
   @media (min-width: 768px) {
-    #{{ section.id }} .kd-footer__band { min-height: {{ section.settings.height_tablet | default: 0 }}px; }
-  }
-  @media (min-width: 1200px) {
-    #{{ section.id }} .kd-footer__band { min-height: {{ section.settings.height_desktop | default: 0 }}px; }
+    #{{ section.id }} .kd-footer__band {
+      padding-top: {{ section.settings.spacing_top_desktop | default: 48 }}px;
+      padding-bottom: {{ section.settings.spacing_bottom_desktop | default: 48 }}px;
+    }
   }
 
   #{{ section.id }} .kd-footer {
@@ -152,7 +148,6 @@
       justify-content: flex-start;
     }
 
-    #{{ section.id }} .kd-footer__band { padding-block: var(--space-9); }
     #{{ section.id }} .kd-footer__mail { font-size: 22px; }
     #{{ section.id }} .kd-footer__social { font-size: 14px; }
     #{{ section.id }} .kd-footer__note { font-size: 14px; }
@@ -385,36 +380,43 @@
     },
     {
       "type": "range",
-      "id": "height_mobile",
-      "label": "Height – mobile (below 768px)",
-      "info": "Minimum height in px; 0 = automatic. Content stays vertically centred and the section never gets shorter than its content.",
+      "id": "spacing_top_desktop",
+      "label": "Top spacing – desktop (768px and up)",
       "min": 0,
-      "max": 1000,
-      "step": 10,
+      "max": 120,
+      "step": 4,
       "unit": "px",
-      "default": 0
+      "default": 48
     },
     {
       "type": "range",
-      "id": "height_tablet",
-      "label": "Height – tablet (768–1199px)",
-      "info": "0 = automatic.",
+      "id": "spacing_top_mobile",
+      "label": "Top spacing – mobile (below 768px)",
       "min": 0,
-      "max": 1000,
-      "step": 10,
+      "max": 120,
+      "step": 4,
       "unit": "px",
-      "default": 0
+      "default": 40
     },
     {
       "type": "range",
-      "id": "height_desktop",
-      "label": "Height – desktop (1200px and up)",
-      "info": "0 = automatic.",
+      "id": "spacing_bottom_desktop",
+      "label": "Bottom spacing – desktop (768px and up)",
       "min": 0,
-      "max": 1000,
-      "step": 10,
+      "max": 120,
+      "step": 4,
       "unit": "px",
-      "default": 0
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "spacing_bottom_mobile",
+      "label": "Bottom spacing – mobile (below 768px)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40
     },
     {
       "type": "header",

@@ -104,7 +104,6 @@
       "name": "Email Signup",
       "settings": {
         "background_color": "#ae0000",
-        "padding_top": "none",
         "heading": "",
         "heading_color": "#ffffff",
         "placeholder_text": "E-Mail",
@@ -112,7 +111,9 @@
         "button_text": "Beitreten",
         "button_text_color": "#ae0000",
         "subtitle": "",
-        "button_image_width_mobile": 64
+        "button_image_width_mobile": 64,
+        "spacing_top_desktop": 40,
+        "spacing_top_mobile": 24
       }
     }
   },

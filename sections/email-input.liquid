@@ -8,9 +8,6 @@
   assign s = section.settings
   assign after = s.after_signup | default: 'page'
   assign join_classes = 'kd-join email-signup-section bg-scheme-background text-scheme-text'
-  if s.padding_top == 'none'
-    assign join_classes = join_classes | append: ' kd-join--tight-top'
-  endif
   if s.input_square
     assign join_classes = join_classes | append: ' kd-join--square'
   endif
@@ -48,17 +45,16 @@
     --kd-join-img-w-m: {{ s.image_width_mobile | default: 200 }}px;
     --kd-join-img-w: {{ s.image_width | default: 200 }}px;
   }
-  {%- comment -%} Height per screen size (settings, 0 = automatic): a minimum height on the inner band, content centred. {%- endcomment -%}
+  {%- comment -%} Top / bottom spacing from the settings (mobile below 768px, desktop from 768px). {%- endcomment -%}
   #section-{{ section.id }} .kd-join__inner {
-    box-sizing: border-box;
-    justify-content: center;
-    min-height: {{ s.height_mobile | default: 0 }}px;
+    padding-top: {{ s.spacing_top_mobile | default: 48 }}px;
+    padding-bottom: {{ s.spacing_bottom_mobile | default: 48 }}px;
   }
   @media (min-width: 768px) {
-    #section-{{ section.id }} .kd-join__inner { min-height: {{ s.height_tablet | default: 0 }}px; }
-  }
-  @media (min-width: 1200px) {
-    #section-{{ section.id }} .kd-join__inner { min-height: {{ s.height_desktop | default: 0 }}px; }
+    #section-{{ section.id }} .kd-join__inner {
+      padding-top: {{ s.spacing_top_desktop | default: 80 }}px;
+      padding-bottom: {{ s.spacing_bottom_desktop | default: 80 }}px;
+    }
   }
   {%- if s.button_image != blank or s.button_image_mobile != blank %}
   #section-{{ section.id }} .kd-btn--art {
@@ -400,57 +396,44 @@
       "content": "Layout"
     },
     {
-      "type": "select",
-      "id": "padding_top",
-      "label": "Top spacing",
-      "options": [
-        {
-          "value": "none",
-          "label": "Very small"
-        },
-        {
-          "value": "small",
-          "label": "Small"
-        },
-        {
-          "value": "default",
-          "label": "Default (Recommended)"
-        }
-      ],
-      "default": "default"
+      "type": "range",
+      "id": "spacing_top_desktop",
+      "label": "Top spacing – desktop (768px and up)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 80
     },
     {
       "type": "range",
-      "id": "height_mobile",
-      "label": "Height – mobile (below 768px)",
-      "info": "Minimum height in px; 0 = automatic. Content stays vertically centred and the section never gets shorter than its content.",
+      "id": "spacing_top_mobile",
+      "label": "Top spacing – mobile (below 768px)",
       "min": 0,
-      "max": 1000,
-      "step": 10,
+      "max": 120,
+      "step": 4,
       "unit": "px",
-      "default": 0
+      "default": 48
     },
     {
       "type": "range",
-      "id": "height_tablet",
-      "label": "Height – tablet (768–1199px)",
-      "info": "0 = automatic.",
+      "id": "spacing_bottom_desktop",
+      "label": "Bottom spacing – desktop (768px and up)",
       "min": 0,
-      "max": 1000,
-      "step": 10,
+      "max": 120,
+      "step": 4,
       "unit": "px",
-      "default": 0
+      "default": 80
     },
     {
       "type": "range",
-      "id": "height_desktop",
-      "label": "Height – desktop (1200px and up)",
-      "info": "0 = automatic.",
+      "id": "spacing_bottom_mobile",
+      "label": "Bottom spacing – mobile (below 768px)",
       "min": 0,
-      "max": 1000,
-      "step": 10,
+      "max": 120,
+      "step": 4,
       "unit": "px",
-      "default": 0
+      "default": 48
     },
     {
       "type": "header",

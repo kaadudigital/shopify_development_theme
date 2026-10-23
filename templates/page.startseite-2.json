@@ -344,7 +344,6 @@
       "name": "Email Signup",
       "settings": {
         "background_color": "#acff64",
-        "padding_top": "small",
         "heading": "",
         "heading_color": "#ffffff",
         "placeholder_text": "E-mail",

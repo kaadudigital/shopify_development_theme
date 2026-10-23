@@ -83,7 +83,9 @@
         "link_1_url": "https://www.kaadu.ch/policies/legal-notice",
         "link_2_text": "Datenschutz",
         "link_2_url": "shopify://policies/privacy-policy",
-        "color_scheme": "scheme3"
+        "color_scheme": "scheme3",
+        "spacing_top_desktop": 24,
+        "spacing_top_mobile": 20
       }
     }
   },
