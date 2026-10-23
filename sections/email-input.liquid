@@ -3,7 +3,6 @@
   beside a cloud button (or the button artwork, if set). Colours: «Use the colours below» (mockup: lime ground, ink kicker
   and text, red heading and cloud), else the colour scheme. Styles: "JOIN" in assets/base.bundle.css.
   After signing up: an inline success pill (Shopify customer form, ?customer_posted=true) or a redirect to a page.
-  Not used: bg_class (the colour scheme / colour settings replace it).
 {%- endcomment -%}
 {%- liquid
   assign s = section.settings
@@ -455,46 +454,13 @@
     },
     {
       "type": "header",
-      "content": "t:common.settings.header_color"
-    },
-    {
-      "type": "select",
-      "id": "bg_class",
-      "label": "Background color",
-      "options": [
-        {
-          "value": "bg-violet",
-          "label": "Radical Violet (recommended for newsletter)"
-        },
-        {
-          "value": "bg-red",
-          "label": "Brand Red"
-        },
-        {
-          "value": "bg-cream",
-          "label": "Off-White Cream"
-        },
-        {
-          "value": "bg-pink",
-          "label": "Light Pink"
-        },
-        {
-          "value": "bg-sky",
-          "label": "Sky Blue"
-        },
-        {
-          "value": "bg-lime",
-          "label": "Lime Green"
-        }
-      ],
-      "default": "bg-violet",
-      "info": "Not used: the colour scheme or «Use the colours below» set the background."
+      "content": "Colours"
     },
     {
       "type": "color_scheme",
       "id": "color_scheme",
       "default": "scheme3",
-      "label": "t:common.settings.color_scheme.label",
+      "label": "Colour scheme",
       "info": "Applies when «Use the colours below instead of the colour scheme» is off. DS: the join section sits on lime."
     },
     {
