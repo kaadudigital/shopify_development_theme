@@ -12,13 +12,15 @@
     "main": {
       "type": "main-page",
       "disabled": true,
+      "custom_css": [
+        "#MainContent { background-color: red;}"
+      ],
       "settings": {
         "max_width": "medium",
         "display_on_card": true,
         "color_scheme": "scheme3",
         "use_gradient_background": false
-      },
-      "custom_css": ["#MainContent { background-color: red;}"]
+      }
     },
     "image_with_text_custom_NCAqEp": {
       "type": "image-with-text-custom",
@@ -142,7 +144,6 @@
         "button_padding_x": 20,
         "button_padding_y": 16,
         "button_font_size": 16,
-        "button_font_weight": "600",
         "text_shadow_x": 0,
         "text_shadow_y": 0,
         "text_shadow_blur": 0,

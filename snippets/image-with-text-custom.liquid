@@ -54,21 +54,6 @@
     assign preload = false
   endunless
 
-  assign shape_button_source_mobile = button2_image_mobile | default: button2_image
-  assign shape_button_source_desktop = button2_image
-
-  # Resolve mobile button labels — fall back to the desktop label when blank
-  if button_label_mobile != blank
-    assign button_label_mobile_display = button_label_mobile
-  else
-    assign button_label_mobile_display = button_label
-  endif
-  if button2_label_mobile != blank
-    assign button2_label_mobile_display = button2_label_mobile
-  else
-    assign button2_label_mobile_display = button2_label
-  endif
-
   # Handle text alignment for mobile vs desktop
   if mobile_text_alignment != blank
     assign mobile_text_class = mobile_text_alignment
@@ -101,7 +86,7 @@
         {%- comment -%} Mobile Layout when mobile_layout_order is enabled {%- endcomment -%}
         {%- if mobile_layout_order -%}
           {%- comment -%} Mobile: Heading first {%- endcomment -%}
-          <div class="w-full col-span-1 lg:hidden {{ mobile_heading_order }}">
+          <div class="mx-auto col-span-1 lg:hidden {{ mobile_heading_order }}">
             {%- if h2_title != blank -%}
               <h3 class="image-with-text__eyebrow h3 {{ combined_text_alignment }}">{{ h2_title | escape }}</h3>
             {%- endif -%}
@@ -140,16 +125,13 @@
                 disable_media_style: disable_media_style
               -%}
             {%- endif -%}
-            {%- if image_caption != blank -%}
-              <p class="kaadu-iw-image-caption caption">{{ image_caption | escape }}</p>
-            {%- endif -%}
           </div>
 
           {%- comment -%} Text content column {%- endcomment -%}
-          <div class="kaadu-iw-text-wrap flex items-center {{ text_width_desktop }} {% if image_size == 'half'%}min-width-on-lg-screen{% endif %}">
+          <div class="flex items-center {{ text_width_desktop }} {% if image_size == 'half'%}min-width-on-lg-screen{% endif %}">
             <div class="w-full center-flex-column-custom">
               {%- comment -%} Desktop: Heading shown here {%- endcomment -%}
-              <div class="w-full hidden lg:block">
+              <div class="mx-auto hidden lg:block">
                 {%- if h2_title != blank -%}
                   <h3 class="image-with-text__eyebrow h3 {{ combined_text_alignment }}">{{ h2_title | escape }}</h3>
                 {%- endif -%}
@@ -163,29 +145,29 @@
 
               {%- comment -%} Mobile: Text content {%- endcomment -%}
               {% comment %} <div class="rte mt-5 max-w-2xl {{ combined_text_alignment }} {{ mobile_text_order }} {% if text_alignment contains 'center' %}lg:mx-auto{% elsif text_alignment contains 'right' %}lg:ml-auto{% endif %} {% if mobile_text_alignment contains 'center' %}mx-auto lg:mx-0{% elsif mobile_text_alignment contains 'right' %}ml-auto lg:ml-0{% endif %}"> {% endcomment %}
-              <div class="rte w-full {{ mobile_text_order }} {{ combined_text_alignment }} lg:mt-6 mt-4 body">
+              <div class="rte    max-w-2xl {{ mobile_text_order }} {{ combined_text_alignment }} lg:mt-6 mt-4 body">
                 {{ richtext }}
               </div>
               <div class="mt-6 lg:mt-8 flex items-center custom-image-with-text-button-wrapper {{ mobile_button_order }} {{ combined_text_alignment }}">
                 {%- if button2_link_type == 'url' and button2_link != blank and button2_label != '' -%}
-                  <div class="custom-shape-button-wrap">
+                  <div>
                     <a href="{{ button2_link }}">
                       <button class="custom-shape-button">
                         <span class="custom-shape-button-text">
-                          <span class="kaadu-iw-label--mobile">{{ button2_label_mobile_display }}</span><span class="kaadu-iw-label--desktop">{{ button2_label }}</span>
+                          {{ button2_label }}
                         </span>
                       </button>
                     </a>
                   </div>
                 {%- endif -%}
                 {%- if button2_link_type == 'focus_element' and focus_element2_id != blank -%}
-                  <div class="custom-btn-wrapper custom-shape-button-wrap">
+                  <div class="custom-btn-wrapper">
                     <button
                       onclick="console.log('Focus Element ID: {{ focus_element2_id }}'); document.getElementById('{{focus_element2_id}}')?.focus()"
                       class="inline-block custom-btn custom-shape-button"
                     >
                       <span class="custom-shape-button-text">
-                        <span class="kaadu-iw-label--mobile">{{ button2_label_mobile_display }}</span><span class="kaadu-iw-label--desktop">{{ button2_label }}</span>
+                        {{ button2_label }}
                       </span>
                     </button>
                   </div>
@@ -193,7 +175,7 @@
                 {%- if button_link_type == 'url' and button_link != blank and button_label != '' -%}
                   <div>
                     <a href="{{ button_link }}" class="inline-block custom-btn">
-                      <span class="push-btn__surface btn-secondary"><span class="kaadu-iw-label--mobile">{{ button_label_mobile_display }}</span><span class="kaadu-iw-label--desktop">{{ button_label }}</span></span>
+                      <span class="push-btn__surface btn-secondary">{{ button_label }}</span>
                     </a>
                   </div>
                 {%- endif -%}
@@ -203,7 +185,7 @@
                       onclick="console.log('Focus Element ID: {{ focus_element_id }}'); document.getElementById('{{focus_element_id}}')?.focus()"
                       class="inline-block custom-btn"
                     >
-                      <span class="push-btn__surface btn-secondary btn-label"><span class="kaadu-iw-label--mobile">{{ button_label_mobile_display }}</span><span class="kaadu-iw-label--desktop">{{ button_label }}</span></span>
+                      <span class="push-btn__surface btn-secondary btn-label">{{ button_label }}</span>
                     </button>
                   </div>
                 {%- endif -%}
@@ -240,12 +222,9 @@
                 disable_media_style: disable_media_style
               -%}
             {%- endif -%}
-            {%- if image_caption != blank -%}
-              <p class="kaadu-iw-image-caption caption">{{ image_caption | escape }}</p>
-            {%- endif -%}
           </div>
 
-          <div class="kaadu-iw-text-wrap flex items-center {{ text_width_desktop }} {% if image_size == 'half'%}min-width-on-lg-screen{% endif %} ">
+          <div class="flex items-center {{ text_width_desktop }} {% if image_size == 'half'%}min-width-on-lg-screen{% endif %} ">
             <div class="mx-auto w-full center-flex-column-custom">
               {%- if h2_title != blank -%}
                 <h3 class="image-with-text__eyebrow h3 {{ combined_text_alignment }}">{{ h2_title | escape }}</h3>
@@ -257,30 +236,30 @@
               {% endif %}
 
               {% comment %} <div class="rte mt-5 max-w-2xl {{ combined_text_alignment }} {% if text_alignment contains 'center' %}lg:mx-auto{% elsif text_alignment contains 'right' %}lg:ml-auto{% endif %} {% if mobile_text_alignment contains 'center' %}mx-auto lg:mx-0{% elsif mobile_text_alignment contains 'right' %}ml-auto lg:ml-0{% endif %}"> {% endcomment %}
-              <div class="rte w-full {{ combined_text_alignment }} lg:mt-6 mt-4 body ">
+              <div class="rte   max-w-2xl {{ combined_text_alignment }} lg:mt-6 mt-4 body ">
                 {{ richtext }}
               </div>
 
               <div class="mt-6 lg:mt-8 flex items-center custom-image-with-text-button-wrapper {{ combined_text_alignment }}">
                  {%- if button2_link_type == 'url' and button2_link != blank and button2_label != '' -%}
-                  <div class="custom-shape-button-wrap">
+                  <div>
                     <a href="{{ button2_link }}">
                       <button class="custom-shape-button">
                         <span class="custom-shape-button-text">
-                          <span class="kaadu-iw-label--mobile">{{ button2_label_mobile_display }}</span><span class="kaadu-iw-label--desktop">{{ button2_label }}</span>
+                          {{ button2_label }}
                         </span>
                       </button>
                     </a>
                   </div>
                 {%- endif -%}
                 {%- if button2_link_type == 'focus_element' and focus_element2_id != blank -%}
-                  <div class="custom-btn-wrapper custom-shape-button-wrap">
+                  <div class="custom-btn-wrapper">
                     <button
                       onclick="console.log('Focus Element ID: {{ focus_element2_id }}'); document.getElementById('{{focus_element2_id}}')?.focus()"
                       class="inline-block custom-btn custom-shape-button"
                     >
                       <span class="custom-shape-button-text">
-                        <span class="kaadu-iw-label--mobile">{{ button2_label_mobile_display }}</span><span class="kaadu-iw-label--desktop">{{ button2_label }}</span>
+                        {{ button2_label }}
                       </span>
                     </button>
                   </div>
@@ -288,7 +267,7 @@
                 {%- if button_link_type == 'url' and button_link != blank and button_label != '' -%}
                   <div>
                     <a href="{{ button_link }}" class="inline-block custom-btn">
-                      <span class="push-btn__surface btn-secondary"><span class="kaadu-iw-label--mobile">{{ button_label_mobile_display }}</span><span class="kaadu-iw-label--desktop">{{ button_label }}</span></span>
+                      <span class="push-btn__surface btn-secondary">{{ button_label }}</span>
                     </a>
                   </div>
                 {%- endif -%}
@@ -298,7 +277,7 @@
                       onclick="console.log('Focus Element ID: {{ focus_element_id }}'); document.getElementById('{{focus_element_id}}')?.focus()"
                       class="inline-block custom-btn"
                     >
-                      <span class="push-btn__surface btn-secondary btn-label"><span class="kaadu-iw-label--mobile">{{ button_label_mobile_display }}</span><span class="kaadu-iw-label--desktop">{{ button_label }}</span></span>
+                      <span class="push-btn__surface btn-secondary btn-label">{{ button_label }}</span>
                     </button>
                   </div>
                 {%- endif -%}
@@ -315,10 +294,6 @@
       max-width: 600px;
       max-height: 660px;
     }
-    .kaadu-iw-image-caption {
-      margin-top: var(--space-2);
-      text-align: center;
-    }
     @media (max-width: 768px) {
       .kaadu-iw-image-wrap {
         max-width: 100%;
@@ -326,62 +301,13 @@
       }
     }
 
-    /* Text column mirrors the image side's cap so it can't sprawl across
-       the full grid cell on wide viewports. Overridden in image_size=='half'
-       below, where both columns intentionally split the row equally. */
-    .kaadu-iw-text-wrap {
-      max-width: 600px;
-    }
-    @media (max-width: 768px) {
-      .kaadu-iw-text-wrap {
-        max-width: 100%;
-      }
-    }
-
     .custom-image-with-text-button-wrapper {
       flex-direction: row;
       gap: var(--space-4);
     }
-    @media (max-width: 490px) {
+    @media (max-width: 768px) {
       .custom-image-with-text-button-wrapper {
         flex-direction: column;
-      }
-      /* Each button wrapper (plain <div> or .custom-btn-wrapper) fills the row */
-      .custom-image-with-text-button-wrapper > * {
-        width: 100%;
-      }
-      /* Shape button's own wrapper centers it horizontally regardless of
-         the configured width, since the button no longer fills the row. */
-      .custom-image-with-text-button-wrapper .custom-shape-button-wrap {
-        display: flex;
-        justify-content: center;
-      }
-      /* Primary "blob" shape button: sized via the mobile width setting,
-         height follows the source image's real aspect ratio so it's never
-         stretched or squashed on resize. */
-      .custom-image-with-text-button-wrapper .custom-shape-button {
-        width: {{ button2_width_mobile | default: 150 }}px;
-        max-width: 100%;
-        {%- if shape_button_source_mobile != blank -%}
-        aspect-ratio: {{ shape_button_source_mobile.aspect_ratio }};
-        {%- endif -%}
-        background-size: contain;
-      }
-      .custom-image-with-text-button-wrapper .custom-shape-button-text {
-        padding-top: 0;
-        padding-bottom: 0;
-      }
-      /* Secondary pill (.custom-btn wrapping .push-btn__surface) fills the row.
-         The :not() guard avoids hitting the focus-element variant that doubles
-         as .custom-shape-button. */
-      .custom-image-with-text-button-wrapper .custom-btn:not(.custom-shape-button) {
-        display: block;
-        width: 100%;
-      }
-      .custom-image-with-text-button-wrapper .custom-btn:not(.custom-shape-button) .push-btn__surface {
-        display: block;
-        width: 100%;
-        text-align: center;
       }
     }
 
@@ -389,9 +315,7 @@
     .center-flex-column-custom {
       display: flex;
       flex-direction: column;
-      /* No align-items: center — children stretch to column width so that
-         text-align on h3/h1/body lines up at the same x position. */
-      align-items: stretch;
+      align-items: center;
     }
     .custom-shape-button {
           background-size: contain;
@@ -404,16 +328,12 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          width: {{ button2_width_desktop | default: 200 }}px;
-          {%- if shape_button_source_desktop != blank -%}
-          aspect-ratio: {{ shape_button_source_desktop.aspect_ratio }};
-          {%- endif -%}
           {%- if button2_image != blank -%}
           background-image: url('{{ button2_image | image_url: width: 800 }}');
           {%- endif -%}
     }
     {%- if button2_image_mobile != blank -%}
-    @media (max-width: 490px) {
+    @media (max-width: 768px) {
       .custom-shape-button {
         background-image: url('{{ button2_image_mobile | image_url: width: 600 }}');
       }
@@ -427,28 +347,12 @@
           line-height: 24px;
           text-transform: uppercase;
           letter-spacing: 0.02em;
-          padding: 0 var(--space-6);
+          padding: {{ section.settings.button2_padding_topbottom }}px var(--space-6);
         }
-    @media (max-width: 490px) {
+    @media (max-width: 768px) {
       .custom-shape-button-text {
         color: {{ button_text_color_mobile | default: '#AE0000' }};
-        font-family: var(--font-body);
-        font-weight: 600;
-        font-size: 16px;
-        line-height: 24px;
-        letter-spacing: 0;
-        text-align: center;
-        vertical-align: middle;
       }
-    }
-
-    /* Label-content swap shares the 490px breakpoint with the button
-       styling/layout rules above so all three flip together. */
-    .kaadu-iw-label--mobile { display: none; }
-    .kaadu-iw-label--desktop { display: inline; }
-    @media (max-width: 490px) {
-      .kaadu-iw-label--mobile { display: inline; }
-      .kaadu-iw-label--desktop { display: none; }
     }
 
     @media (min-width: 1024px) {

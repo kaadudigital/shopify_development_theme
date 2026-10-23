@@ -140,7 +140,6 @@
         "button_padding_x": 30,
         "button_padding_y": 18,
         "button_font_size": 16,
-        "button_font_weight": "600",
         "text_shadow_x": 0,
         "text_shadow_y": 0,
         "text_shadow_blur": 0,

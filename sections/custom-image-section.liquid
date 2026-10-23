@@ -12,24 +12,13 @@
     min-height: {{ section.settings.section_height_desktop }}px;
   }
 
-  /* Positioning container capped at the design-system width (1200px).
-     The image and cards anchor their % coordinates to this box instead
-     of the viewport, so the layout stops spreading on wide displays
-     while the section background stays full-bleed. */
-  .section-{{ section.id }} .kaadu-is__container {
-    position: relative;
-    max-width: var(--container-max);
-    margin-inline: auto;
-    min-height: inherit;
-  }
-
   .section-{{ section.id }} .hero-bg-image {
     position: absolute;
     left: {{ section.settings.image_x_desktop }}%;
     top: {{ section.settings.image_y_desktop }}%;
     width: {{ section.settings.image_width_desktop }}px;
     height: auto;
-    z-index: 5;
+    z-index: 1;
     transform: translate(-50%, -50%);
   }
 
@@ -38,56 +27,8 @@
     left: {{ section.settings.header_x_desktop }}%;
     top: {{ section.settings.header_y_desktop }}%;
     transform: translate(-50%, -50%);
-    z-index: 2;
+    z-index: 3;
     max-width: 90%;
-  }
-
-  .section-{{ section.id }} .hero-heading-wrap {
-    position: relative;
-    display: inline-block;
-  }
-
-  .section-{{ section.id }} .hero-heading-sticker {
-    position: absolute;
-    left: {{ section.settings.heading_sticker_x_desktop }}%;
-    top: {{ section.settings.heading_sticker_y_desktop }}%;
-    width: {{ section.settings.heading_sticker_width_desktop }}px;
-    height: auto;
-    transform: translate(-50%, -50%) rotate({{ section.settings.heading_sticker_rotate }}deg);
-    pointer-events: none;
-    z-index: 4;
-  }
-
-  .section-{{ section.id }} .hero-subheading-card {
-    position: absolute;
-    left: {{ section.settings.subheading_x_desktop }}%;
-    top: {{ section.settings.subheading_y_desktop }}%;
-    transform: translate(-50%, -50%);
-    z-index: 2;
-    max-width: 90%;
-  }
-
-  .section-{{ section.id }} .hero-subheading-wrap {
-    position: relative;
-    display: inline-block;
-  }
-
-  .section-{{ section.id }} .hero-subheading-sticker {
-    position: absolute;
-    left: {{ section.settings.subheading_sticker_x_desktop }}%;
-    top: {{ section.settings.subheading_sticker_y_desktop }}%;
-    width: {{ section.settings.subheading_sticker_width_desktop }}px;
-    height: auto;
-    transform: translate(-50%, -50%) rotate({{ section.settings.subheading_sticker_rotate }}deg);
-    pointer-events: none;
-    z-index: 4;
-  }
-
-  .section-{{ section.id }} .hero-subheading-sticker--2 {
-    left: {{ section.settings.subheading_sticker_2_x_desktop }}%;
-    top: {{ section.settings.subheading_sticker_2_y_desktop }}%;
-    width: {{ section.settings.subheading_sticker_2_width_desktop }}px;
-    transform: translate(-50%, -50%) rotate({{ section.settings.subheading_sticker_2_rotate }}deg);
   }
 
   .section-{{ section.id }} .hero-body-card {
@@ -107,8 +48,8 @@
     .section-{{ section.id }} .hero-bg-image {
       left: {{ section.settings.image_x_mobile }}%;
       top: {{ section.settings.image_y_mobile }}%;
-      width: {{ section.settings.image_width_mobile }}px;
-      max-width: none;
+      width: calc({{ section.settings.image_width_desktop }}px * {{ section.settings.image_scale_mobile | divided_by: 100.0 }});
+      max-width: 100%;
     }
 
     .section-{{ section.id }} .hero-header-card {
@@ -116,57 +57,9 @@
       top: {{ section.settings.header_y_mobile }}%;
     }
 
-    .section-{{ section.id }} .hero-heading-sticker {
-      left: {{ section.settings.heading_sticker_x_mobile }}%;
-      top: {{ section.settings.heading_sticker_y_mobile }}%;
-      width: {{ section.settings.heading_sticker_width_mobile }}px;
-    }
-
-    .section-{{ section.id }} .hero-subheading-sticker {
-      left: {{ section.settings.subheading_sticker_x_mobile }}%;
-      top: {{ section.settings.subheading_sticker_y_mobile }}%;
-      width: {{ section.settings.subheading_sticker_width_mobile }}px;
-    }
-
-    .section-{{ section.id }} .hero-subheading-sticker--2 {
-      left: {{ section.settings.subheading_sticker_2_x_mobile }}%;
-      top: {{ section.settings.subheading_sticker_2_y_mobile }}%;
-      width: {{ section.settings.subheading_sticker_2_width_mobile }}px;
-    }
-
-    {%- unless section.settings.heading_sticker_show_mobile %}
-    .section-{{ section.id }} .hero-heading-sticker {
-      display: none;
-    }
-    {% endunless -%}
-
-    {%- unless section.settings.subheading_sticker_show_mobile %}
-    .section-{{ section.id }} .hero-subheading-sticker:not(.hero-subheading-sticker--2) {
-      display: none;
-    }
-    {% endunless -%}
-
-    {%- unless section.settings.subheading_sticker_2_show_mobile %}
-    .section-{{ section.id }} .hero-subheading-sticker--2 {
-      display: none;
-    }
-    {% endunless -%}
-
     .section-{{ section.id }} .hero-body-card {
       left: {{ section.settings.body_x_mobile }}%;
       top: {{ section.settings.body_y_mobile }}%;
-    }
-
-    .section-{{ section.id }} .hero-subheading-card {
-      left: {{ section.settings.subheading_x_mobile }}%;
-      top: {{ section.settings.subheading_y_mobile }}%;
-    }
-  }
-
-  @media (max-width: 490px) {
-    .section-{{ section.id }} .hero-header-card,
-    .section-{{ section.id }} .hero-subheading-card {
-      width: 90%;
     }
   }
 {% endstyle %}
@@ -175,108 +68,42 @@
   class="section-{{ section.id }} bg-scheme-background text-scheme-text {% if section.settings.use_gradient_background %}bg-scheme-gradient{% endif %} relative overflow-hidden"
   data-color-scheme="{{ section.settings.color_scheme }}"
 >
-  <div class="kaadu-is__container">
-  {%- if section.settings.background_image != blank or section.settings.background_image_mobile != blank -%}
-    {%- assign desktop_image = section.settings.background_image -%}
-    {%- assign mobile_image = section.settings.background_image_mobile | default: desktop_image -%}
-    {%- if desktop_image == blank -%}
-      {%- assign desktop_image = mobile_image -%}
-    {%- endif -%}
-    <picture>
-      {%- if mobile_image != blank -%}
-        <source
-          media="(max-width: 768px)"
-          srcset="{{ mobile_image | image_url: width: 800, format: 'webp' }}"
-          type="image/webp"
-        >
-        <source
-          media="(max-width: 768px)"
-          srcset="{{ mobile_image | image_url: width: 800 }}"
-        >
-      {%- endif -%}
-      <source
-        srcset="{{ desktop_image | image_url: width: section.settings.image_width_desktop, format: 'webp' }}"
-        type="image/webp"
-      >
-      <img
-        class="hero-bg-image"
-        src="{{ desktop_image | image_url: width: section.settings.image_width_desktop }}"
-        alt="{{ desktop_image.alt | escape }}"
-        width="{{ desktop_image.width }}"
-        height="{{ desktop_image.height }}"
-        {% if preload %}
-          loading="eager" fetchpriority="high"
-        {% else %}
-          loading="lazy"
-        {% endif %}
-      >
-    </picture>
+  {%- if section.settings.background_image != blank -%}
+    <img
+      class="hero-bg-image"
+      src="{{ section.settings.background_image | image_url: width: section.settings.image_width_desktop }}"
+      alt="{{ section.settings.background_image.alt | escape }}"
+      width="{{ section.settings.image_width_desktop }}"
+      height="auto"
+      {% if preload %}
+        loading="eager" fetchpriority="high"
+      {% else %}
+        loading="lazy"
+      {% endif %}
+    >
   {%- endif -%}
 
   {%- if section.settings.heading != blank -%}
     <div class="hero-header-card {% if section.settings.header_display_on_card %}bg-scheme-card text-scheme-card-text rounded p-4{% endif %} {{ section.settings.text_alignment_header }}">
-      <div class="hero-heading-wrap">
-        <{{ section.settings.heading_tag }} class="{{ section.settings.heading_style }}">
-          {{ section.settings.heading | replace: '[br]', '<br>' | replace: '[nbsp]', '&nbsp;' }}
-        </{{ section.settings.heading_tag }}>
-        {%- if section.settings.heading_sticker_image != blank -%}
-          <img
-            class="hero-heading-sticker"
-            src="{{ section.settings.heading_sticker_image | image_url: width: 600 }}"
-            alt="{{ section.settings.heading_sticker_image.alt | escape }}"
-            width="{{ section.settings.heading_sticker_image.width }}"
-            height="{{ section.settings.heading_sticker_image.height }}"
-            loading="lazy"
-          >
-        {%- endif -%}
-      </div>
-    </div>
-  {%- endif -%}
-
-  {%- if section.settings.subheading != blank -%}
-    <div class="hero-subheading-card {% if section.settings.subheading_display_on_card %}bg-scheme-card text-scheme-card-text rounded p-4{% endif %} {{ section.settings.text_alignment_header }}">
-      <div class="hero-subheading-wrap">
-        <p class="h4-subsection-heading">
-          {{ section.settings.subheading | replace: '[br]', '<br>' | replace: '[nbsp]', '&nbsp;' }}
-        </p>
-        {%- if section.settings.subheading_sticker_image != blank -%}
-          <img
-            class="hero-subheading-sticker"
-            src="{{ section.settings.subheading_sticker_image | image_url: width: 600 }}"
-            alt="{{ section.settings.subheading_sticker_image.alt | escape }}"
-            width="{{ section.settings.subheading_sticker_image.width }}"
-            height="{{ section.settings.subheading_sticker_image.height }}"
-            loading="lazy"
-          >
-        {%- endif -%}
-        {%- if section.settings.subheading_sticker_2_image != blank -%}
-          <img
-            class="hero-subheading-sticker hero-subheading-sticker--2"
-            src="{{ section.settings.subheading_sticker_2_image | image_url: width: 600 }}"
-            alt="{{ section.settings.subheading_sticker_2_image.alt | escape }}"
-            width="{{ section.settings.subheading_sticker_2_image.width }}"
-            height="{{ section.settings.subheading_sticker_2_image.height }}"
-            loading="lazy"
-          >
-        {%- endif -%}
-      </div>
+      <{{ section.settings.heading_tag }} class="{{ section.settings.heading_size }} font-heading  ">
+        {{ section.settings.heading }}
+      </{{ section.settings.heading_tag }}>
     </div>
   {%- endif -%}
 
   {%- if section.settings.body_text != blank or section.settings.button_label != blank -%}
     <div class="hero-body-card {% if section.settings.body_display_on_card %}bg-scheme-card text-scheme-card-text rounded p-4{% endif %} {{ section.settings.text_alignment }}">
       {%- if section.settings.body_text != blank -%}
-        <div class="rte body-large">{{ section.settings.body_text }}</div>
+        <div class="rte h2 ">{{ section.settings.body_text }}</div>
       {%- endif -%}
 
       {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
-        <a href="{{ section.settings.button_link }}" class="{{ section.settings.button_style }} mt-4">
+        <a href="{{ section.settings.button_link }}" class="btn mt-4 inline-block">
           {{ section.settings.button_label }}
         </a>
       {%- endif -%}
     </div>
   {%- endif -%}
-  </div>
 
   {%- liquid
     for block in section.blocks
@@ -336,13 +163,7 @@
     {
       "type": "image_picker",
       "id": "background_image",
-      "label": "Image (desktop)"
-    },
-    {
-      "type": "image_picker",
-      "id": "background_image_mobile",
-      "label": "Image (mobile)",
-      "info": "Optional — falls back to the desktop image when blank."
+      "label": "Image"
     },
     {
       "type": "range",
@@ -356,13 +177,14 @@
     },
     {
       "type": "range",
-      "id": "image_width_mobile",
-      "label": "Image width (mobile)",
-      "min": 80,
-      "max": 800,
-      "step": 10,
-      "unit": "px",
-      "default": 300
+      "id": "image_scale_mobile",
+      "label": "Image scale (mobile)",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 60,
+      "info": "Scales down the desktop width by this percentage on mobile"
     },
     {
       "type": "header",
@@ -426,7 +248,6 @@
       "type": "select",
       "id": "heading_tag",
       "label": "Heading tag",
-      "info": "Only one H1 per page (the hero). Use H2 elsewhere.",
       "options": [
         { "value": "h1", "label": "H1" },
         { "value": "h2", "label": "H2" },
@@ -436,23 +257,13 @@
     },
     {
       "type": "select",
-      "id": "heading_style",
-      "label": "Heading style",
-      "info": "Visual style applied to the heading text.",
+      "id": "heading_size",
+      "label": "Heading size",
       "options": [
-        { "value": "h1", "label": "H1 (64/72)" },
-        { "value": "h2", "label": "H2 (48/56)" },
-        { "value": "h3", "label": "H3 (24/32)" },
-        { "value": "mega-heading", "label": "Mega heading (96/100)" }
+        { "value": "heading-standard", "label": "Standard" },
+        { "value": "heading-feature", "label": "Feature" }
       ],
-      "default": "h2"
-    },
-    {
-      "type": "inline_richtext",
-      "id": "subheading",
-      "label": "Sub-heading",
-      "info": "Rendered in the H4 — Sub-Section Heading style (32/40 desktop, 24/28 mobile).",
-      "default": "Your sub-heading here"
+      "default": "heading-feature"
     },
     {
       "type": "select",
@@ -469,13 +280,6 @@
       "type": "checkbox",
       "id": "header_display_on_card",
       "label": "Display on card",
-      "default": false
-    },
-    {
-      "type": "checkbox",
-      "id": "subheading_display_on_card",
-      "label": "Display sub-heading on card",
-      "info": "Wraps the sub-heading in its own card, independent of the setting above.",
       "default": false
     },
     {
@@ -525,336 +329,6 @@
       "step": 1,
       "unit": "%",
       "default": 35
-    },
-    {
-      "type": "header",
-      "content": "Sub-heading Card Position — Desktop"
-    },
-    {
-      "type": "range",
-      "id": "subheading_x_desktop",
-      "label": "Horizontal position",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 65
-    },
-    {
-      "type": "range",
-      "id": "subheading_y_desktop",
-      "label": "Vertical position",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 55
-    },
-    {
-      "type": "header",
-      "content": "Sub-heading Card Position — Mobile"
-    },
-    {
-      "type": "range",
-      "id": "subheading_x_mobile",
-      "label": "Horizontal position",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 55
-    },
-    {
-      "type": "range",
-      "id": "subheading_y_mobile",
-      "label": "Vertical position",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 50
-    },
-    {
-      "type": "header",
-      "content": "Heading Sticker",
-      "info": "Optional sticker positioned relative to the heading element."
-    },
-    {
-      "type": "image_picker",
-      "id": "heading_sticker_image",
-      "label": "Sticker image"
-    },
-    {
-      "type": "range",
-      "id": "heading_sticker_width_desktop",
-      "label": "Sticker width (desktop)",
-      "min": 20,
-      "max": 400,
-      "step": 5,
-      "unit": "px",
-      "default": 120
-    },
-    {
-      "type": "range",
-      "id": "heading_sticker_width_mobile",
-      "label": "Sticker width (mobile)",
-      "min": 20,
-      "max": 300,
-      "step": 5,
-      "unit": "px",
-      "default": 80
-    },
-    {
-      "type": "range",
-      "id": "heading_sticker_rotate",
-      "label": "Sticker rotation",
-      "min": -180,
-      "max": 180,
-      "step": 5,
-      "unit": "deg",
-      "default": -10
-    },
-    {
-      "type": "checkbox",
-      "id": "heading_sticker_show_mobile",
-      "label": "Show on mobile",
-      "default": true
-    },
-    {
-      "type": "header",
-      "content": "Heading Sticker Position — Desktop"
-    },
-    {
-      "type": "range",
-      "id": "heading_sticker_x_desktop",
-      "label": "Horizontal position",
-      "min": -100,
-      "max": 200,
-      "step": 5,
-      "unit": "%",
-      "default": 100
-    },
-    {
-      "type": "range",
-      "id": "heading_sticker_y_desktop",
-      "label": "Vertical position",
-      "min": -100,
-      "max": 200,
-      "step": 5,
-      "unit": "%",
-      "default": 0
-    },
-    {
-      "type": "header",
-      "content": "Heading Sticker Position — Mobile"
-    },
-    {
-      "type": "range",
-      "id": "heading_sticker_x_mobile",
-      "label": "Horizontal position",
-      "min": -100,
-      "max": 200,
-      "step": 5,
-      "unit": "%",
-      "default": 100
-    },
-    {
-      "type": "range",
-      "id": "heading_sticker_y_mobile",
-      "label": "Vertical position",
-      "min": -100,
-      "max": 200,
-      "step": 5,
-      "unit": "%",
-      "default": 0
-    },
-    {
-      "type": "header",
-      "content": "Sub-heading Sticker",
-      "info": "Optional sticker positioned relative to the sub-heading element."
-    },
-    {
-      "type": "image_picker",
-      "id": "subheading_sticker_image",
-      "label": "Sticker image"
-    },
-    {
-      "type": "range",
-      "id": "subheading_sticker_width_desktop",
-      "label": "Sticker width (desktop)",
-      "min": 20,
-      "max": 400,
-      "step": 5,
-      "unit": "px",
-      "default": 120
-    },
-    {
-      "type": "range",
-      "id": "subheading_sticker_width_mobile",
-      "label": "Sticker width (mobile)",
-      "min": 20,
-      "max": 300,
-      "step": 5,
-      "unit": "px",
-      "default": 80
-    },
-    {
-      "type": "range",
-      "id": "subheading_sticker_rotate",
-      "label": "Sticker rotation",
-      "min": -180,
-      "max": 180,
-      "step": 5,
-      "unit": "deg",
-      "default": -10
-    },
-    {
-      "type": "checkbox",
-      "id": "subheading_sticker_show_mobile",
-      "label": "Show on mobile",
-      "default": true
-    },
-    {
-      "type": "header",
-      "content": "Sub-heading Sticker Position — Desktop"
-    },
-    {
-      "type": "range",
-      "id": "subheading_sticker_x_desktop",
-      "label": "Horizontal position",
-      "min": -100,
-      "max": 200,
-      "step": 5,
-      "unit": "%",
-      "default": 100
-    },
-    {
-      "type": "range",
-      "id": "subheading_sticker_y_desktop",
-      "label": "Vertical position",
-      "min": -100,
-      "max": 200,
-      "step": 5,
-      "unit": "%",
-      "default": 0
-    },
-    {
-      "type": "header",
-      "content": "Sub-heading Sticker Position — Mobile"
-    },
-    {
-      "type": "range",
-      "id": "subheading_sticker_x_mobile",
-      "label": "Horizontal position",
-      "min": -100,
-      "max": 200,
-      "step": 5,
-      "unit": "%",
-      "default": 100
-    },
-    {
-      "type": "range",
-      "id": "subheading_sticker_y_mobile",
-      "label": "Vertical position",
-      "min": -100,
-      "max": 200,
-      "step": 5,
-      "unit": "%",
-      "default": 0
-    },
-    {
-      "type": "header",
-      "content": "Sub-heading Sticker 2",
-      "info": "Optional second sticker positioned relative to the sub-heading element."
-    },
-    {
-      "type": "image_picker",
-      "id": "subheading_sticker_2_image",
-      "label": "Sticker image"
-    },
-    {
-      "type": "range",
-      "id": "subheading_sticker_2_width_desktop",
-      "label": "Sticker width (desktop)",
-      "min": 20,
-      "max": 400,
-      "step": 5,
-      "unit": "px",
-      "default": 120
-    },
-    {
-      "type": "range",
-      "id": "subheading_sticker_2_width_mobile",
-      "label": "Sticker width (mobile)",
-      "min": 20,
-      "max": 300,
-      "step": 5,
-      "unit": "px",
-      "default": 80
-    },
-    {
-      "type": "range",
-      "id": "subheading_sticker_2_rotate",
-      "label": "Sticker rotation",
-      "min": -180,
-      "max": 180,
-      "step": 5,
-      "unit": "deg",
-      "default": 10
-    },
-    {
-      "type": "checkbox",
-      "id": "subheading_sticker_2_show_mobile",
-      "label": "Show on mobile",
-      "default": true
-    },
-    {
-      "type": "header",
-      "content": "Sub-heading Sticker 2 Position — Desktop"
-    },
-    {
-      "type": "range",
-      "id": "subheading_sticker_2_x_desktop",
-      "label": "Horizontal position",
-      "min": -100,
-      "max": 200,
-      "step": 5,
-      "unit": "%",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "subheading_sticker_2_y_desktop",
-      "label": "Vertical position",
-      "min": -100,
-      "max": 200,
-      "step": 5,
-      "unit": "%",
-      "default": 100
-    },
-    {
-      "type": "header",
-      "content": "Sub-heading Sticker 2 Position — Mobile"
-    },
-    {
-      "type": "range",
-      "id": "subheading_sticker_2_x_mobile",
-      "label": "Horizontal position",
-      "min": -100,
-      "max": 200,
-      "step": 5,
-      "unit": "%",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "subheading_sticker_2_y_mobile",
-      "label": "Vertical position",
-      "min": -100,
-      "max": 200,
-      "step": 5,
-      "unit": "%",
-      "default": 100
     },
     {
       "type": "header",
@@ -944,16 +418,6 @@
       "id": "button_label",
       "label": "Button label",
       "default": "Shop Now"
-    },
-    {
-      "type": "select",
-      "id": "button_style",
-      "label": "Button style",
-      "options": [
-        { "value": "btn-primary", "label": "Primary (blob CTA)" },
-        { "value": "btn-secondary", "label": "Secondary (pill)" }
-      ],
-      "default": "btn-secondary"
     },
     {
       "type": "header",

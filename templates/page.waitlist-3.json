@@ -60,7 +60,7 @@
       "name": "image with text custom",
       "settings": {
         "display_on_card": false,
-        "image": "shopify://shop_images/Group_18_1.webp",
+        "image": "shopify://shop_images/Wailtlist_new_image.webp",
         "crop": "",
         "image_shape": "default",
         "blob_type": 1,
@@ -138,7 +138,7 @@
         "heading": "",
         "heading_color": "#ffffff",
         "heading_size": 32,
-        "placeholder_text": "Email",
+        "placeholder_text": "E-Mail",
         "input_background": "#ffffff",
         "input_text_color": "#333333",
         "placeholder_color": "#999999",

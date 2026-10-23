@@ -167,7 +167,7 @@
       }
     },
     "image_with_highlights_fF4JxP": {
-      "type": "custom-image-with-highlights",
+      "type": "image-with-highlights",
       "blocks": {
         "shape_divider_RQXK6i": {
           "type": "shape_divider",

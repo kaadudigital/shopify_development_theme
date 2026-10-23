@@ -25,19 +25,12 @@
     assign content_class = 'grow-0 shrink-0'
   endif
 
-  if text_class != blank
-    assign text_size_class = text_class
-  elsif section.settings.mobile_text_scale and section.settings.desktop_text_scale
+  if section.settings.mobile_text_scale and section.settings.desktop_text_scale
     capture text_size_class
       render 'type-scale-classes', mobile_text_scale: section.settings.mobile_text_scale, desktop_text_scale: section.settings.desktop_text_scale
     endcapture
   else
     assign text_size_class = 'text-sm'
-  endif
-
-  assign image_shape_class = 'scrolling-text__shape-svg'
-  if section.settings.animate_image_between_text
-    assign image_shape_class = image_shape_class | append: ' rotate-anim'
   endif
 %}
 
@@ -45,13 +38,9 @@
   <div class="flex shrink-0 grow-0 items-center {{ font }}">
     {%- if repeat_text -%}
       <span class="{{ text_size_class }} {% if font contains 'heading' and section.settings.apply_effects %}heading-effects{% endif %}">{{ text }}</span>
-      {%- if shape_between_text == 'image' and section.settings.between_text_image -%}
+      {%- if shape_between_text != 'none' -%}
         <span class="flex-shrink-0 px-2 text-current">
-          {{- section.settings.between_text_image | image_url: width: 200 | image_tag: class: image_shape_class, widths: '100, 200, 300', alt: '', loading: 'lazy' -}}
-        </span>
-      {%- elsif shape_between_text != 'none' and shape_between_text != 'image' -%}
-        <span class="flex-shrink-0 px-2 text-current">
-          <svg class="scrolling-text__shape-svg h-4 w-4 {% if section.settings.animate_shape_between_text %}rotate-anim{% endif %}{% if shape_between_text == 'triangle' %} origin-[50%_66.66%]{% endif %}" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg class="h-4 w-4 {% if section.settings.animate_shape_between_text %}rotate-anim{% endif %}{% if shape_between_text == 'triangle' %} origin-[50%_66.66%]{% endif %}" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
             {%- case shape_between_text -%}
               {%- when 'circle' -%}
                 <circle cx="100" cy="100" r="95" fill="currentColor"/>
@@ -59,8 +48,6 @@
                 <path d="M100.5 2L198 99.5L100.5 197L3 99.5L100.5 2Z" fill="currentColor"/>
               {%- when 'triangle' -%}
                 <path d="M100.5 16L198 184.875H3L100.5 16Z" fill="currentColor"/>
-              {%- when 'custom_star' -%}
-                <path transform="translate(0.39 0.39) scale(8)" d="M22.8696 12.4348C22.8696 13.1368 17.7375 13.1557 17.5573 13.8103C17.3771 14.4838 21.8071 17.064 21.4656 17.6522C21.1241 18.2498 16.6656 15.698 16.1818 16.1818C15.698 16.6656 18.2498 21.1241 17.6522 21.4656C17.064 21.8071 14.4838 17.3771 13.8103 17.5573C13.1557 17.7281 13.1368 22.8696 12.4348 22.8696C11.7328 22.8696 11.7138 17.7375 11.0593 17.5573C10.3858 17.3771 7.80553 21.8071 7.21739 21.4656C6.61976 21.1241 9.17154 16.6656 8.68775 16.1818C8.20395 15.698 3.74545 18.2498 3.40395 17.6522C3.06245 17.064 7.49249 14.4838 7.31225 13.8103C7.1415 13.1557 2 13.1368 2 12.4348C2 11.7328 7.13202 11.7138 7.31225 11.0593C7.49249 10.3858 3.06245 7.80553 3.40395 7.21739C3.74545 6.61976 8.20395 9.17154 8.68775 8.68775C9.17154 8.20395 6.61976 3.74545 7.21739 3.40395C7.80553 3.06245 10.3858 7.49249 11.0593 7.31225C11.7138 7.1415 11.7328 2 12.4348 2C13.1368 2 13.1557 7.13202 13.8103 7.31225C14.4838 7.49249 17.064 3.06245 17.6522 3.40395C18.2498 3.74545 15.698 8.20395 16.1818 8.68775C16.6656 9.17154 21.1241 6.61976 21.4656 7.21739C21.8071 7.80553 17.3771 10.3858 17.5573 11.0593C17.7281 11.7138 22.8696 11.7328 22.8696 12.4348Z" fill="currentColor"/>
               {%- when 'star' -%}
                 <path d="M43.3846 187.385L100.308 12L157.231 187.385L8 78.9231H192.615" fill="currentColor"/>
               {%- when '10_point_star' -%}
@@ -134,7 +121,7 @@
 </div>
 
 <style>
-  {% if section.settings.animate_shape_between_text or section.settings.animate_image_between_text %}
+  {% if section.settings.animate_shape_between_text %}
   @media (prefers-reduced-motion: no-preference) {
     #scrolling-text-{{ section.id }} .rotate-anim {
       animation-iteration-count: infinite;

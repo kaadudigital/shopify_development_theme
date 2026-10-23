@@ -13,7 +13,6 @@
     {%- render 'custom-image-heading-text',
       display_on_card: section.settings.display_on_card,
       image: section.settings.image,
-      image_caption: section.settings.image_caption,
       image_position: section.settings.image_position,
       text_alignment: section.settings.text_alignment,
       text_alignment_mobile: section.settings.text_alignment_mobile,
@@ -23,16 +22,14 @@
       blob_type: section.settings.blob_type,
       crop: section.settings.crop,
       rotate_image: section.settings.rotate_image,
-      eyebrow: section.settings.eyebrow,
       title: section.settings.title,
-      heading_level: section.settings.heading_level,
-      heading_alignment: section.settings.heading_alignment,
-      heading_alignment_mobile: section.settings.heading_alignment_mobile,
       subheading: section.settings.subheading,
       conclusion_heading: section.settings.conclusion_heading,
+      richtext_main: section.settings.richtext_main,
       richtext: section.settings.richtext,
       button_link: section.settings.button_link,
       button_label: section.settings.button_label,
+      heading_size: section.settings.heading_size,
       container_id: section.id,
       disable_media_style: section.settings.disable_media_style,
       preload: preload
@@ -79,12 +76,6 @@
       "type": "image_picker",
       "id": "image",
       "label": "t:common.settings.image.label"
-    },
-    {
-      "type": "text",
-      "id": "image_caption",
-      "label": "Image caption",
-      "info": "Optional. Displayed below the image in Small / Caption style."
     },
     {
       "type": "select",
@@ -580,74 +571,10 @@
       "content": "t:common.settings.header_content"
     },
     {
-      "type": "text",
-      "id": "eyebrow",
-      "label": "Eyebrow",
-      "info": "Short overline above the heading (H3 — Subheading style)"
-    },
-    {
       "type": "inline_richtext",
       "id": "title",
       "label": "t:sections.image_with_text.settings.title.label",
       "default": "Image with text"
-    },
-    {
-      "type": "select",
-      "id": "heading_level",
-      "label": "Heading style",
-      "options": [
-        {
-          "value": "h1",
-          "label": "H1 — Display Headline"
-        },
-        {
-          "value": "h2",
-          "label": "H2 — Section Headline"
-        }
-      ],
-      "default": "h2",
-      "info": "Use H1 only once per page (hero section)"
-    },
-    {
-      "type": "select",
-      "id": "heading_alignment",
-      "label": "Heading alignment",
-      "info": "Applies to the eyebrow and heading only",
-      "options": [
-        {
-          "value": "text-left",
-          "label": "t:common.options.left.label"
-        },
-        {
-          "value": "text-center",
-          "label": "t:common.options.center.label"
-        },
-        {
-          "value": "text-right",
-          "label": "t:common.options.right.label"
-        }
-      ],
-      "default": "text-center"
-    },
-    {
-      "type": "select",
-      "id": "heading_alignment_mobile",
-      "label": "Heading alignment for mobile",
-      "options": [
-        {
-          "value": "text-left",
-          "label": "t:common.options.left.label"
-        },
-        {
-          "value": "text-center",
-          "label": "t:common.options.center.label"
-        },
-        {
-          "value": "text-right",
-          "label": "t:common.options.right.label"
-        }
-      ],
-      "default": "text-center"
     },
     {
       "type": "richtext",
@@ -658,6 +585,27 @@
       "type": "richtext",
       "id": "conclusion_heading",
       "label": "conclusion sub heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "t:sections.image_with_text.settings.heading_size.label",
+      "options": [
+        {
+          "value": "heading-standard",
+          "label": "t:common.options.standard.label"
+        },
+        {
+          "value": "heading-feature",
+          "label": "t:common.options.feature.label"
+        }
+      ],
+      "default": "heading-feature"
+    },
+    {
+      "type": "richtext",
+      "id": "richtext_main",
+      "label": "richtext heading"
     },
     {
       "type": "richtext",
@@ -1973,26 +1921,6 @@
           "step": 1,
           "unit": "%",
           "label": "t:common.blocks.sticker.settings.vertical_position.label",
-          "default": 80
-        },
-        {
-          "type": "range",
-          "id": "horizontal_position_sm",
-          "min": 0,
-          "max": 100,
-          "step": 1,
-          "unit": "%",
-          "label": "horizontal position mobile",
-          "default": 80
-        },
-        {
-          "type": "range",
-          "id": "vertical_position_sm",
-          "min": 0,
-          "max": 100,
-          "step": 1,
-          "unit": "%",
-          "label": "vertical position mobile",
           "default": 80
         },
         {
