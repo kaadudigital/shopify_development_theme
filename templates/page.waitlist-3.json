@@ -166,7 +166,8 @@
         "subtitle": "",
         "subtitle_color": "#ffffff",
         "subtitle_size": 14,
-        "button_image_width_mobile": 64
+        "button_image_width_mobile": 64,
+        "scroll_motion": false
       }
     }
   },
