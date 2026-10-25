@@ -108,7 +108,7 @@
         "button_color": "#aeff64",
         "button_label_color": "#ac0300",
         "link_custom_color": "#fffff5",
-        "scroll_motion": true
+        "scroll_motion": false
       }
     },
     "rich_text_custom_73EGTA": {
@@ -185,7 +185,7 @@
         "success_bg_color": "#542a76",
         "success_text_color": "#fffff5",
         "error_color": "#ac0300",
-        "scroll_motion": true,
+        "scroll_motion": false,
         "spacing_top_desktop": 40,
         "spacing_top_mobile": 24,
         "spacing_bottom_desktop": 40,
