@@ -54,6 +54,22 @@
     "custom_footer_tiyDdY": {
       "type": "custom-footer",
       "blocks": {
+        "social_instagram": {
+          "type": "social",
+          "settings": {
+            "network": "instagram",
+            "name": "",
+            "url": "https://www.instagram.com/eatkaadu"
+          }
+        },
+        "social_tiktok": {
+          "type": "social",
+          "settings": {
+            "network": "tiktok",
+            "name": "",
+            "url": "https://www.tiktok.com/@eatkaadu"
+          }
+        },
         "shape_divider_aPNFjV": {
           "type": "shape_divider",
           "settings": {
@@ -69,6 +85,8 @@
         }
       },
       "block_order": [
+        "social_instagram",
+        "social_tiktok",
         "shape_divider_aPNFjV"
       ],
       "custom_css": [
@@ -78,6 +96,11 @@
       "settings": {
         "email": "HELLO@KAADU.CH",
         "show_social_icons": true,
+        "social_style": "icons",
+        "social_icon_style": "outline",
+        "social_icon_size": 48,
+        "social_icon_color": "#FFFFF5",
+        "social_accent_color": "",
         "show_footer_links": true,
         "link_1_text": "Impressum",
         "link_1_url": "https://www.kaadu.ch/policies/legal-notice",
