@@ -379,7 +379,7 @@
         "card_1": {
           "type": "card",
           "settings": {
-            "image": "shopify://shop_images/ren08219-1-2.webp",
+            "image": "shopify://shop_images/DSC04234.jpg",
             "tint": "tint-cocoa",
             "stat": "+50% LOHN",
             "title": "Arbeiter*innen",
@@ -390,6 +390,7 @@
         "card_2": {
           "type": "card",
           "settings": {
+            "image": "shopify://shop_images/ren08195.webp",
             "tint": "tint-plum",
             "stat": "+30–40 %",
             "title": "Kleinbauer*innen",
@@ -400,6 +401,7 @@
         "card_3": {
           "type": "card",
           "settings": {
+            "image": "shopify://shop_images/ren07232-1.webp",
             "tint": "tint-ochre",
             "stat": "2x Lohn",
             "title": "Erntehelfer*innen",
@@ -410,9 +412,9 @@
         "card_4": {
           "type": "card",
           "settings": {
-            "image": "shopify://shop_images/ren08236-1-3.webp",
+            "image": "shopify://shop_images/ren07698-2.webp",
             "tint": "tint-forest",
-            "stat": "",
+            "stat": "500t",
             "title": "Natur × Community",
             "text": "<p>Reinvestition in Bildung, Infrastruktur und Naturschutz vor Ort.</p>",
             "link": ""
