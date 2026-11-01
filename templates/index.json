@@ -363,6 +363,19 @@
     "kaadu_people_cards_wP7k2m": {
       "type": "kaadu-people-cards",
       "blocks": {
+        "shape_divider_wppfCQ": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "below",
+            "target_section_color_scheme": "scheme3",
+            "style": "circles-2.5-patterned_1200x54",
+            "enable_mobile_style": false,
+            "style_mobile": "circles-2.5-patterned_1200x54",
+            "flip_horizontal": false,
+            "enable_animation": false,
+            "animation_direction": ""
+          }
+        },
         "card_1": {
           "type": "card",
           "settings": {
@@ -407,6 +420,7 @@
         }
       },
       "block_order": [
+        "shape_divider_wppfCQ",
         "card_1",
         "card_2",
         "card_3",
@@ -584,6 +598,32 @@
     "vertical_video_embeds_kJLBxQ": {
       "type": "vertical-video-embeds",
       "blocks": {
+        "shape_divider_GFMNP4": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "below",
+            "target_section_color_scheme": "scheme1",
+            "style": "circles-2.5-patterned_1200x54",
+            "enable_mobile_style": false,
+            "style_mobile": "circles-3-patterned_1200x67",
+            "flip_horizontal": false,
+            "enable_animation": false,
+            "animation_direction": ""
+          }
+        },
+        "shape_divider_azA3Fx": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "above",
+            "target_section_color_scheme": "scheme3",
+            "style": "circles-2.5-patterned_1200x54",
+            "enable_mobile_style": false,
+            "style_mobile": "waves-1-patterned_1200x20",
+            "flip_horizontal": false,
+            "enable_animation": false,
+            "animation_direction": ""
+          }
+        },
         "video_embed_iLrwYH": {
           "type": "video_embed",
           "settings": {
@@ -613,6 +653,8 @@
         }
       },
       "block_order": [
+        "shape_divider_GFMNP4",
+        "shape_divider_azA3Fx",
         "video_embed_iLrwYH",
         "video_embed_Tqj7Ed",
         "video_embed_6GaFRt"
@@ -749,6 +791,38 @@
     },
     "image_with_text_custom_vision": {
       "type": "image-with-text-custom",
+      "blocks": {
+        "shape_divider_ytRjUQ": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "below",
+            "target_section_color_scheme": "scheme1",
+            "style": "circles-2.5-patterned_1200x54",
+            "enable_mobile_style": false,
+            "style_mobile": "waves-1-patterned_1200x20",
+            "flip_horizontal": false,
+            "enable_animation": false,
+            "animation_direction": ""
+          }
+        },
+        "shape_divider_z6rNhb": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "above",
+            "target_section_color_scheme": "scheme1",
+            "style": "circles-2.5-patterned_1200x54",
+            "enable_mobile_style": false,
+            "style_mobile": "waves-1-patterned_1200x20",
+            "flip_horizontal": false,
+            "enable_animation": false,
+            "animation_direction": ""
+          }
+        }
+      },
+      "block_order": [
+        "shape_divider_ytRjUQ",
+        "shape_divider_z6rNhb"
+      ],
       "name": "Vision",
       "settings": {
         "image": "shopify://shop_images/Kaadu_Waitlist.png",
@@ -806,6 +880,19 @@
     "kaadu_comparison_main": {
       "type": "kaadu-comparison",
       "blocks": {
+        "shape_divider_PyAmrw": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "below",
+            "target_section_color_scheme": "scheme4",
+            "style": "circles-2.5-patterned_1200x54",
+            "enable_mobile_style": false,
+            "style_mobile": "waves-1-patterned_1200x20",
+            "flip_horizontal": false,
+            "enable_animation": false,
+            "animation_direction": ""
+          }
+        },
         "row_1": {
           "type": "row",
           "settings": {
@@ -864,6 +951,7 @@
         }
       },
       "block_order": [
+        "shape_divider_PyAmrw",
         "row_1",
         "row_2",
         "row_3",
@@ -881,7 +969,7 @@
         "kaadu_logo": "shopify://shop_images/Kaadu_wordmark_red_RGB.svg",
         "kaadu_image": "shopify://shop_images/14.png",
         "other_label": "Der Rest",
-        "other_image": "shopify://shop_images/15.png",
+        "other_image": "shopify://shop_images/15_e0fd1f9d-1c77-4291-8ab6-89d94e9b15df.png",
         "footnote": "<p>«Der Rest» steht für das, was im Regal daneben liegt. Kein Hersteller wird genannt, jede Kaadu-Zeile ist belegbar. [Belege verlinken]</p>",
         "mobile_footnote": "<p>«Der Rest» steht für das, was im Regal daneben liegt. Kein Hersteller wird genannt. [Belege verlinken]</p>",
         "start_position": 55,
@@ -948,6 +1036,19 @@
     "kaadu_cost_split_main": {
       "type": "kaadu-cost-split",
       "blocks": {
+        "shape_divider_GggMKm": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "below",
+            "target_section_color_scheme": "scheme-389c794f-4614-44af-93cb-cbbfec11d15a",
+            "style": "waves-1-patterned_1200x20",
+            "enable_mobile_style": false,
+            "style_mobile": "waves-1-patterned_1200x20",
+            "flip_horizontal": false,
+            "enable_animation": false,
+            "animation_direction": ""
+          }
+        },
         "segment_1": {
           "type": "segment",
           "settings": {
@@ -1005,6 +1106,7 @@
         }
       },
       "block_order": [
+        "shape_divider_GggMKm",
         "segment_1",
         "segment_2",
         "segment_3",
@@ -1051,6 +1153,32 @@
     "custom_image_section_Mafcmn": {
       "type": "custom-image-section",
       "blocks": {
+        "shape_divider_ibiiWy": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "below",
+            "target_section_color_scheme": "scheme5",
+            "style": "circles-2.5-patterned_1200x54",
+            "enable_mobile_style": false,
+            "style_mobile": "waves-1-patterned_1200x20",
+            "flip_horizontal": false,
+            "enable_animation": false,
+            "animation_direction": ""
+          }
+        },
+        "shape_divider_qHMbpB": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "above",
+            "target_section_color_scheme": "scheme-389c794f-4614-44af-93cb-cbbfec11d15a",
+            "style": "circles-2.5-patterned_1200x54",
+            "enable_mobile_style": false,
+            "style_mobile": "waves-1-patterned_1200x20",
+            "flip_horizontal": false,
+            "enable_animation": false,
+            "animation_direction": ""
+          }
+        },
         "background_pattern_NKpgdA": {
           "type": "background_pattern",
           "settings": {
@@ -1064,6 +1192,8 @@
         }
       },
       "block_order": [
+        "shape_divider_ibiiWy",
+        "shape_divider_qHMbpB",
         "background_pattern_NKpgdA"
       ],
       "name": "Custom Sticker Heading",
@@ -1176,64 +1306,24 @@
         "button_y_xl": 80
       }
     },
-    "image_with_text_custom_probier": {
-      "type": "image-with-text-custom",
-      "disabled": true,
-      "name": "Gratis probieren (alt)",
-      "settings": {
-        "image_caption": "",
-        "image_position": "right",
-        "image_width_large": 40,
-        "image_width_xl": 46,
-        "image_max_width": 1120,
-        "crop": "",
-        "image_shape": "default",
-        "blob_type": 1,
-        "rotate_image": 0,
-        "disable_media_style": false,
-        "image_shadow": false,
-        "hide_image_mobile": false,
-        "h2_title": "Probierpaket",
-        "title": "Ein Beutel. Gratis. Nur CHF 3 Versand.",
-        "heading_level": "h2",
-        "richtext": "<p>Probier zuerst, entscheide dann. Gib den Code [CODE] im Shop ein, der Beutel kostet nichts, du zahlst CHF 3 Versand. Schmeckt es dir nicht, war es das. Schmeckt es, weisst du jetzt, was du kaufst.</p>",
-        "richtext_mobile": "",
-        "text_alignment": "text-left",
-        "mobile_text_alignment": "text-left",
-        "mobile_layout_order": false,
-        "button2_label": "Gratis probieren",
-        "button2_label_mobile": "",
-        "button2_link_type": "url",
-        "button2_link": "shopify://products/bananen-crunchys",
-        "focus_element2_id": "",
-        "button_note": "Code [CODE] · 1 Beutel pro Haushalt · Danach ab CHF 5.05 pro Beutel im Abo",
-        "button_note_mobile": "",
-        "button2_width_desktop": 200,
-        "button2_width_mobile": 150,
-        "button_text_color_desktop": "#ffffff",
-        "button_text_color_mobile": "#ffffff",
-        "button_label": "",
-        "button_label_mobile": "",
-        "button_link_type": "url",
-        "button_link": "",
-        "focus_element_id": "",
-        "mobile_link_position": "beside",
-        "link_color": "text",
-        "color_scheme": "scheme3",
-        "use_custom_colors": false,
-        "use_gradient_background": false,
-        "background_color": "#ac0300",
-        "kicker_color": "#aeff64",
-        "heading_color": "#fffff5",
-        "text_color": "#fffff5",
-        "button_color": "#aeff64",
-        "button_label_color": "#ac0300",
-        "link_custom_color": "#fffff5",
-        "scroll_motion": true
-      }
-    },
     "email_input_dMpqpt": {
       "type": "email-input",
+      "blocks": {
+        "shape_divider_LVzUm9": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "below",
+            "target_section_color_scheme": "scheme3",
+            "style": "curve-shape_1440x149",
+            "flip_horizontal": false,
+            "enable_animation": false,
+            "animation_direction": ""
+          }
+        }
+      },
+      "block_order": [
+        "shape_divider_LVzUm9"
+      ],
       "custom_css": [],
       "name": "Email Signup",
       "settings": {
@@ -1296,7 +1386,6 @@
     "kaadu_trial_cta",
     "kaadu_cost_split_main",
     "custom_image_section_Mafcmn",
-    "image_with_text_custom_probier",
     "email_input_dMpqpt"
   ]
 }
