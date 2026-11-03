@@ -349,18 +349,24 @@ function kdScrollIntoView(el) {
     var smooth = function () { return reduce.matches ? 'auto' : 'smooth'; };
 
     function pad() { return parseFloat(getComputedStyle(track).scrollPaddingLeft) || 0; }
-    function index() {
-      var x = track.scrollLeft + pad(), best = 0, dist = Infinity;
-      slides.forEach(function (slide, i) {
-        var d = Math.abs(slide.offsetLeft - x);
-        if (d < dist) { dist = d; best = i; }
+    function maxScroll() { return Math.max(0, track.scrollWidth - track.clientWidth); }
+    // Where the row actually lands for slide i: its start, clamped to the end of the scroll range (the last cards can
+    // never scroll to the start when the overflow is less than a screenful; the browser stops at the end instead).
+    function target(i) { return Math.min(maxScroll(), Math.max(0, slides[i].offsetLeft - pad())); }
+    // The entry nearest the current scroll position; on a tie the later one (several cards share the end position).
+    function nearest(positions) {
+      var x = track.scrollLeft, best = 0, dist = Infinity;
+      positions.forEach(function (v, k) {
+        var d = Math.abs(v - x);
+        if (d <= dist + 0.5) { dist = d; best = k; }
       });
       return best;
     }
+    function index() { return nearest(slides.map(function (slide, i) { return target(i); })); }
     function go(i) {
       var n = slides.length;
       i = ((i % n) + n) % n;
-      track.scrollTo({ left: slides[i].offsetLeft - pad(), behavior: smooth() });
+      track.scrollTo({ left: target(i), behavior: smooth() });
     }
     // Dots stand for screenfuls of cards, not single cards; arrows and dots go once every card fits (resize-aware).
     var perView = 1, pages = slides.length;
@@ -381,13 +387,18 @@ function kdScrollIntoView(el) {
       current = -1;
       update();
     }
+    function pageStart(k) { return target(Math.min(slides.length - 1, k * perView)); }
+    function page() {
+      var starts = [];
+      for (var k = 0; k < pages; k++) starts.push(pageStart(k));
+      return nearest(starts);
+    }
     function update() {
-      var i = index();
-      if (i === current) return;
-      current = i;
-      var page = Math.min(pages - 1, Math.round(i / perView));
+      var p = page();
+      if (p === current) return;
+      current = p;
       dots.forEach(function (dot, k) {
-        if (k === page) dot.setAttribute('aria-current', 'true');
+        if (k === p) dot.setAttribute('aria-current', 'true');
         else dot.removeAttribute('aria-current');
       });
     }
@@ -482,7 +493,10 @@ function kdScrollIntoView(el) {
     if (prev) prev.addEventListener('click', function () { stopped = true; go(index() - 1); });
     if (next) next.addEventListener('click', function () { stopped = true; go(index() + 1); });
     dots.forEach(function (dot) {
-      dot.addEventListener('click', function () { stopped = true; go((parseInt(dot.getAttribute('data-kd-ugc-dot'), 10) || 0) * perView); });
+      dot.addEventListener('click', function () {
+        stopped = true;
+        track.scrollTo({ left: pageStart(parseInt(dot.getAttribute('data-kd-ugc-dot'), 10) || 0), behavior: smooth() });
+      });
     });
     var relayout = null;
     window.addEventListener('resize', function () { clearTimeout(relayout); relayout = setTimeout(layout, 150); });
