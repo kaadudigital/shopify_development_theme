@@ -8530,23 +8530,33 @@ span.kd-videos__play { cursor: default; }
   .kd-videos--arrows-sides .kd-videos__nav { left: var(--space-2); right: var(--space-2); }
 }
 
-/* Dots (48px tap targets around 10px pills) and the hint */
+/* Dots: one per screenful of cards (assets/kaadu.js hides the rest), 48px tap targets around a 12px mark that grows to
+   22px in the active colour with a small pop; in the arrows' Kaadu shape (--kd-vid-arrow-clip) or round. Arrows and dots
+   are hidden once every card fits on the screen (.kd-videos__stage--fits, set by the script). */
 .kd-videos__foot { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); padding-inline: var(--gutter); }
 .kd-videos--arrows-below .kd-videos__foot { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: var(--space-3) var(--space-5); }
 .kd-videos--arrows-below .kd-videos__hint { flex-basis: 100%; }
 .kd-videos__dots { display: flex; flex-wrap: wrap; justify-content: center; }
-.kd-videos__dot { position: relative; width: 48px; height: 48px; padding: 0; border: 0; background: transparent; cursor: pointer; }
-.kd-videos__dot::before {
-  content: "";
-  position: absolute;
-  inset: 19px;
+.kd-videos__dot { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; padding: 0; border: 0; background: transparent; cursor: pointer; }
+.kd-videos__dot[hidden] { display: none; }
+.kd-videos__dot-mark {
+  display: block;
+  width: 12px;
+  height: 12px;
   border-radius: var(--radius-pill);
   background: var(--kd-vid-dot, rgb(var(--color-scheme-text)));
-  opacity: 0.35;
-  transition: opacity 0.2s, inset 0.2s;
+  opacity: 0.4;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s, background-color 0.2s;
 }
-.kd-videos__dot[aria-current="true"]::before { inset: 17px; opacity: 1; }
+.kd-videos--dots-shape .kd-videos__dot-mark { border-radius: 0; -webkit-clip-path: var(--kd-vid-arrow-clip, none); clip-path: var(--kd-vid-arrow-clip, none); }
+.kd-videos__dot:hover .kd-videos__dot-mark { opacity: 0.7; }
+.kd-videos__dot[aria-current="true"] .kd-videos__dot-mark {
+  background: var(--kd-vid-dot-active, var(--kd-vid-arrow-bg, rgb(var(--color-scheme-accent-1))));
+  opacity: 1;
+  transform: scale(1.85);
+}
 .kd-videos__dot:focus-visible { outline: 4px solid var(--red); outline-offset: -8px; border-radius: var(--radius-pill); }
+.kd-videos__stage--fits .kd-videos__nav, .kd-videos__stage--fits .kd-videos__dots { display: none; }
 .kd-videos__hint { margin: 0; color: var(--kd-vid-hint, rgb(var(--color-scheme-text))); text-wrap: balance; }
 .kd-videos__actions { display: flex; justify-content: center; }
 .kd-videos__button { --kd-cloud: var(--kd-vid-btn, rgb(var(--color-scheme-accent-1))); color: var(--kd-vid-btn-label, rgb(var(--color-scheme-accent-1-contrast))); }
@@ -8558,7 +8568,7 @@ span.kd-videos__play { cursor: default; }
   .kd-videos__play-icon, .kd-videos__pause-icon { width: 72px; height: 72px; padding: 20px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .kd-videos__preview, .kd-videos__progress, .kd-videos__dot::before { transition: none; }
+  .kd-videos__preview, .kd-videos__progress, .kd-videos__dot-mark { transition: none; }
 }
 
 /* ── STATS AROUND AN IMAGE ("Perfekt in jeder Weise") — sections/custom-image-with-highlights.liquid ──

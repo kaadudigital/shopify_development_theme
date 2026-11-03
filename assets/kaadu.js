@@ -362,12 +362,32 @@ function kdScrollIntoView(el) {
       i = ((i % n) + n) % n;
       track.scrollTo({ left: slides[i].offsetLeft - pad(), behavior: smooth() });
     }
+    // Dots stand for screenfuls of cards, not single cards; arrows and dots go once every card fits (resize-aware).
+    var perView = 1, pages = slides.length;
+    function layout() {
+      var fits = track.scrollWidth <= track.clientWidth + 1;
+      stage.classList.toggle('kd-videos__stage--fits', fits);
+      var w = slides[0] ? slides[0].getBoundingClientRect().width : 0;
+      var gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+      perView = Math.max(1, Math.floor((track.clientWidth - 2 * pad() + gap) / Math.max(1, w + gap)));
+      pages = Math.max(1, Math.ceil(slides.length / perView));
+      dots.forEach(function (dot, k) {
+        dot.hidden = k >= pages;
+        if (k < pages) {
+          var from = k * perView + 1, to = Math.min(slides.length, (k + 1) * perView);
+          dot.setAttribute('aria-label', (from === to ? 'Clip ' + from : 'Clips ' + from + '–' + to) + ' von ' + slides.length);
+        }
+      });
+      current = -1;
+      update();
+    }
     function update() {
       var i = index();
       if (i === current) return;
       current = i;
+      var page = Math.min(pages - 1, Math.round(i / perView));
       dots.forEach(function (dot, k) {
-        if (k === i) dot.setAttribute('aria-current', 'true');
+        if (k === page) dot.setAttribute('aria-current', 'true');
         else dot.removeAttribute('aria-current');
       });
     }
@@ -462,8 +482,11 @@ function kdScrollIntoView(el) {
     if (prev) prev.addEventListener('click', function () { stopped = true; go(index() - 1); });
     if (next) next.addEventListener('click', function () { stopped = true; go(index() + 1); });
     dots.forEach(function (dot) {
-      dot.addEventListener('click', function () { stopped = true; go(parseInt(dot.getAttribute('data-kd-ugc-dot'), 10) || 0); });
+      dot.addEventListener('click', function () { stopped = true; go((parseInt(dot.getAttribute('data-kd-ugc-dot'), 10) || 0) * perView); });
     });
+    var relayout = null;
+    window.addEventListener('resize', function () { clearTimeout(relayout); relayout = setTimeout(layout, 150); });
+    window.addEventListener('load', layout);
     track.addEventListener('keydown', function (event) {
       if (event.target !== track) return;
       var k = ['ArrowLeft', 'ArrowRight'].indexOf(event.key);
@@ -505,7 +528,7 @@ function kdScrollIntoView(el) {
     } else {
       visible = true;
     }
-    update();
+    layout();
   }
   function init(root) { root.querySelectorAll('[data-kd-ugc]').forEach(setup); }
   init(document);

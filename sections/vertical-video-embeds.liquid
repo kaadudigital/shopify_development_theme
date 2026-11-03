@@ -30,7 +30,7 @@
       CSS falls back to the colour scheme (background, text, body text, accent 1 / accent 1 contrast). {%- endcomment -%}
     {%- if section.settings.use_custom_colors -%}
       {%- liquid
-        assign vid_colors = 'bg:background_color,kicker:kicker_color,heading:heading_color,text:text_color,hint:hint_color,clip-title:clip_title_color,btn:button_color,btn-label:button_label_color,arrow:arrow_icon_color,arrow-bg:arrow_background,dot:dot_color,play:play_icon_color,play-bg:play_background,progress-color:progress_color' | split: ','
+        assign vid_colors = 'bg:background_color,kicker:kicker_color,heading:heading_color,text:text_color,hint:hint_color,clip-title:clip_title_color,btn:button_color,btn-label:button_label_color,arrow:arrow_icon_color,arrow-bg:arrow_background,dot:dot_color,dot-active:dot_active_color,play:play_icon_color,play-bg:play_background,progress-color:progress_color' | split: ','
       -%}
       {%- for pair in vid_colors -%}
         {%- assign kv = pair | split: ':' -%}
@@ -60,7 +60,7 @@
 
 <section
   id="{{ section.id }}"
-  class="kd-videos kd-videos--arrows-{{ section.settings.arrow_position | default: 'sides' }}{% unless section.settings.arrows_mobile %} kd-videos--no-m-arrows{% endunless %} relative overflow-hidden bg-scheme-background text-scheme-text"
+  class="kd-videos kd-videos--arrows-{{ section.settings.arrow_position | default: 'sides' }} kd-videos--dots-{{ section.settings.dot_shape | default: 'shape' }}{% unless section.settings.arrows_mobile %} kd-videos--no-m-arrows{% endunless %} relative overflow-hidden bg-scheme-background text-scheme-text"
   data-color-scheme="{{ section.settings.color_scheme }}"
   {% unless section.settings.scroll_motion %} data-kd-motion="off"{% endunless %}
 >
@@ -214,7 +214,7 @@
             {%- if show_dots -%}
               <div class="kd-videos__dots" data-kd-ugc-dots>
                 {%- for block in clips -%}
-                  <button type="button" class="kd-videos__dot" data-kd-ugc-dot="{{ forloop.index0 }}" aria-label="Clip {{ forloop.index }} von {{ clips.size }}"{% if forloop.first %} aria-current="true"{% endif %}></button>
+                  <button type="button" class="kd-videos__dot" data-kd-ugc-dot="{{ forloop.index0 }}" aria-label="Clip {{ forloop.index }} von {{ clips.size }}"{% if forloop.first %} aria-current="true"{% endif %}><span class="kd-videos__dot-mark" aria-hidden="true"></span></button>
                 {%- endfor -%}
               </div>
             {%- endif -%}
@@ -367,7 +367,24 @@
       "type": "checkbox",
       "id": "show_dots",
       "label": "Show dots",
-      "default": true
+      "default": true,
+      "info": "One dot per screenful of cards; the active one is bigger. Arrows and dots disappear when every card fits on the screen."
+    },
+    {
+      "type": "select",
+      "id": "dot_shape",
+      "label": "Dot shape",
+      "default": "shape",
+      "options": [
+        {
+          "value": "shape",
+          "label": "Same shape as the arrows"
+        },
+        {
+          "value": "round",
+          "label": "Round"
+        }
+      ]
     },
     {
       "type": "text",
@@ -601,6 +618,12 @@
       "id": "dot_color",
       "label": "Dots",
       "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "dot_active_color",
+      "label": "Active dot",
+      "default": "#FFC6FF"
     },
     {
       "type": "color",
