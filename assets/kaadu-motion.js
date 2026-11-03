@@ -163,7 +163,8 @@
     var cards = list(scope, entry.cards);
     if (cards.length) {
       var moving = entry.cardsInViewOnly ? cards.filter(inViewX) : cards;
-      gsap.set(cards.filter(function (c) { return moving.indexOf(c) === -1; }), { autoAlpha: 1 });   // off-screen carousel cards just show
+      var resting = cards.filter(function (c) { return moving.indexOf(c) === -1; });
+      if (resting.length) gsap.set(resting, { autoAlpha: 1 });   // off-screen carousel cards just show (an empty target would log a GSAP warning)
       revealed = revealed.concat(cards);
       tl.fromTo(moving, { y: 32, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.8, stagger: 0.07 }, 0.2);
     }

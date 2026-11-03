@@ -8198,6 +8198,10 @@ section.kd-is-band { background-color: var(--kd-is-bg, rgb(var(--color-scheme-ba
 /* The cart button keeps its full label plus the cloud's 40px padding (never squeezed). When stepper and button
    don't fit side by side, the row wraps in reverse: button on top at full width, stepper centred below. */
 .kd-pack__buy { display: flex; flex-wrap: wrap-reverse; align-items: center; justify-content: center; gap: var(--space-4) 10px; margin: 0; }
+/* Shopify's answer when an add is refused (set by assets/kaadu.js): red on a paper pill (DS), never red on a coloured ground */
+.kd-pack__error { display: inline-block; max-width: 100%; padding: var(--space-2) var(--space-4); border-radius: var(--radius-pill); background: var(--paper); box-shadow: var(--shadow-card); }
+.kd-pack__error[hidden] { display: none; }
+.kd-pack.is-adding .kd-pack__cart { opacity: 0.7; }
 .kd-pack__stepper { position: relative; z-index: 0; display: inline-flex; align-items: center; flex-shrink: 0; color: var(--kd-pc-stepper-fg, var(--purple)); }
 .kd-pack__stepper-cloud { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; fill: var(--kd-pc-stepper, var(--pink)); }
 .kd-pack__stepper button {

@@ -306,13 +306,61 @@ function kdScrollIntoView(el) {
       }
     });
     if (form) {
+      // Add to cart through the theme's AJAX route (like the stock product form): Shopify's answer shows in the
+      // error pill when the add is refused (sold out, selling plan required, not published …) and the cart drawer
+      // opens on success. Without fetch / the theme bridge the form posts natively as before.
+      var errorEl = root.querySelector('[data-kd-config-error]');
+      var submitBtn = form.querySelector('button[type="submit"]');
+      function showError(message) {
+        if (!errorEl) return;
+        errorEl.textContent = message;
+        errorEl.hidden = !message;
+      }
       form.addEventListener('submit', function (event) {
         // No variant linked yet (frontend first): don't send an empty cart request.
         if (!available(pack(state.pack))) { event.preventDefault(); return; }
         if (!form.querySelector('input[name="id"]').value) {
           event.preventDefault();
+          showError('Für dieses Pack ist noch keine Variante hinterlegt.');
           if (window.console) console.warn('[Kaadu] Pack configurator: no variant ID set for this pack.');
+          return;
         }
+        var bridge = window.theme && window.theme.routes && window.theme.routes.cart_add_url;
+        if (!window.fetch || !window.FormData || !bridge) return;
+        event.preventDefault();
+        showError('');
+        var body = new FormData(form);
+        var modal = window.theme.settings && window.theme.settings.cartType === 'modal';
+        if (modal) {
+          body.append('sections', 'cart-items,cart-footer,cart-item-count');
+          body.append('sections_url', window.location.pathname);
+        }
+        if (submitBtn) submitBtn.disabled = true;
+        root.classList.add('is-adding');
+        fetch(window.theme.routes.cart_add_url, {
+          method: 'POST',
+          body: body,
+          credentials: 'same-origin',
+          headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/javascript' }
+        })
+          .then(function (res) { return res.json(); })
+          .then(function (data) {
+            if (data.status) {
+              showError(data.description || data.message || (window.theme.strings && window.theme.strings.cartError) || 'Fehler');
+              if (window.console) console.warn('[Kaadu] Pack configurator: cart add refused', data);
+              return;
+            }
+            if (modal) {
+              document.body.dispatchEvent(new CustomEvent('shapes:cart:afteradditem', { bubbles: true, detail: { response: data, sourceId: form.id || 'kd-pack' } }));
+            } else {
+              window.location.href = (window.theme.routes.cart_url || '/cart');
+            }
+          })
+          .catch(function () { showError((window.theme.strings && window.theme.strings.cartError) || 'Fehler'); })
+          .then(function () {
+            root.classList.remove('is-adding');
+            if (submitBtn) submitBtn.disabled = !available(pack(state.pack));
+          });
       });
     }
     render();
