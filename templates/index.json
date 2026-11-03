@@ -110,6 +110,9 @@
         "button_color": "#aeff64",
         "button_label_color": "#ac0300",
         "link_custom_color": "#fffff5",
+        "card_color": "#fffff5",
+        "card_text_color": "#000000",
+        "card_link_color": "",
         "scroll_motion": true
       }
     },
@@ -384,7 +387,9 @@
             "stat": "+50% LOHN",
             "title": "Arbeiter*innen",
             "text": "<p>Lohn +50%*, Pension, Versicherung, Gewinnbeteiligung — langfristig Mitbesitz.</p>",
-            "link": ""
+            "link": "",
+            "text_link_label": "",
+            "text_link": ""
           }
         },
         "card_2": {
@@ -395,7 +400,9 @@
             "stat": "+30–40 %",
             "title": "Kleinbauer*innen",
             "text": "<p>Preis +30–40%*, garantierte Abnahme, langfristige Partnerschaft.</p>",
-            "link": ""
+            "link": "",
+            "text_link_label": "",
+            "text_link": ""
           }
         },
         "card_3": {
@@ -406,7 +413,9 @@
             "stat": "2x Lohn",
             "title": "Erntehelfer*innen",
             "text": "<p>Fairer Tageslohn, Schutzausrüstung, Gemeinschaftsfonds.</p>",
-            "link": ""
+            "link": "",
+            "text_link_label": "",
+            "text_link": ""
           }
         },
         "card_4": {
@@ -417,7 +426,9 @@
             "stat": "500t",
             "title": "Natur × Community",
             "text": "<p>Reinvestition in Bildung, Infrastruktur und Naturschutz vor Ort.</p>",
-            "link": ""
+            "link": "",
+            "text_link_label": "",
+            "text_link": ""
           }
         }
       },
@@ -460,6 +471,7 @@
         "stat_color_mobile": "#aeff64",
         "stat_outline_color": "#fffff5",
         "card_text_color": "#fffff5",
+        "card_link_color": "",
         "card_button_color": "#fffff5",
         "cta_bg_color": "#ac0300",
         "cta_text_color": "#fffff5",
@@ -600,6 +612,24 @@
     "vertical_video_embeds_kJLBxQ": {
       "type": "vertical-video-embeds",
       "blocks": {
+        "video_embed_dNAR9a": {
+          "type": "video_embed",
+          "settings": {
+            "title": "",
+            "placeholder_color": "#e9a2e6",
+            "video_url": "",
+            "video_embed_code": ""
+          }
+        },
+        "video_embed_etbrd3": {
+          "type": "video_embed",
+          "settings": {
+            "title": "",
+            "placeholder_color": "#e9a2e6",
+            "video_url": "",
+            "video_embed_code": ""
+          }
+        },
         "shape_divider_GFMNP4": {
           "type": "shape_divider",
           "settings": {
@@ -655,6 +685,8 @@
         }
       },
       "block_order": [
+        "video_embed_dNAR9a",
+        "video_embed_etbrd3",
         "shape_divider_GFMNP4",
         "shape_divider_azA3Fx",
         "video_embed_iLrwYH",
@@ -663,28 +695,34 @@
       ],
       "name": "t:sections.vertical_video_embeds.name",
       "settings": {
+        "kicker": "",
         "title": "Ungeschnitten oder so",
         "title_mobile": "Aus Kerala. Ungeschnitten.",
         "subheading": "Überzeug dich selbst von unserer Radikalen fairness, schamlose transparenz mit Menschen im Zentrum",
         "subheading_mobile": "Schau, warum sie Kaadu essen und wem das etwas bringt.",
         "button_label": "Zum Manifesto",
         "button_link": "/pages/manifesto",
-        "phone_width": 370,
-        "phone_width_mobile": 330,
-        "phone_position_mobile": 20,
-        "swipe_direction": "horizontal",
-        "swipe_direction_mobile": "vertical",
+        "card_width": 300,
+        "card_width_mobile": 240,
+        "preview_mode": "hover",
+        "show_dots": true,
+        "dot_shape": "shape",
         "hint": "Wischen für den nächsten Clip",
         "hint_show_count": true,
         "tiktok_link_label": "Auf TikTok ansehen",
         "instagram_link_label": "Auf Instagram ansehen",
-        "slideshow_focus": "left",
+        "arrow_position": "sides",
+        "arrow_shape": "website_shape_star",
+        "arrow_size": 56,
+        "arrow_size_mobile": 44,
+        "arrows_mobile": true,
         "autoscroll_mode": "1",
         "autoscroll_mobile": true,
         "autoscroll_interval": 6,
         "color_scheme": "scheme3",
         "use_custom_colors": true,
         "background_color": "#ac0300",
+        "kicker_color": "#aeff64",
         "heading_color": "#fffff5",
         "text_color": "#fffff5",
         "hint_color": "#fffff5",
@@ -692,7 +730,19 @@
         "button_color": "#ffc6ff",
         "button_label_color": "#ac0300",
         "arrow_background": "#ffc6ff",
-        "arrow_icon_color": "#ac0300"
+        "arrow_icon_color": "#ac0300",
+        "dot_color": "#fffff5",
+        "dot_active_color": "#ffc6ff",
+        "play_background": "#1a1a1a",
+        "play_icon_color": "#fffff5",
+        "progress_color": "#aeff64",
+        "scroll_motion": true,
+        "phone_width": 370,
+        "phone_width_mobile": 330,
+        "phone_position_mobile": 20,
+        "swipe_direction": "horizontal",
+        "swipe_direction_mobile": "vertical",
+        "slideshow_focus": "left"
       }
     },
     "image_with_highlights_mU9j66": {
@@ -795,6 +845,26 @@
     "image_with_text_custom_vision": {
       "type": "image-with-text-custom",
       "blocks": {
+        "vision_card_1": {
+          "type": "card",
+          "settings": {
+            "title": "Fairness für Kleinbauern",
+            "meta": "",
+            "text": "<p>Preis über Markt, garantierte Abnahme, langfristige Partnerschaft. Schema öffentlich.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "vision_card_2": {
+          "type": "card",
+          "settings": {
+            "title": "Starke Jobs für lokale Frauen",
+            "meta": "",
+            "text": "<p>Verarbeitet im Dorf. Lohn +50 %, Pension, Versicherung – und am Ende gehört die Anlage den Frauen, die darin arbeiten.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
         "shape_divider_ytRjUQ": {
           "type": "shape_divider",
           "settings": {
@@ -819,26 +889,6 @@
             "flip_horizontal": false,
             "enable_animation": false,
             "animation_direction": ""
-          }
-        },
-        "vision_card_1": {
-          "type": "card",
-          "settings": {
-            "title": "Fairness für Kleinbauern",
-            "meta": "",
-            "text": "<p>Preis über Markt, garantierte Abnahme, langfristige Partnerschaft. Schema öffentlich.</p>",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "vision_card_2": {
-          "type": "card",
-          "settings": {
-            "title": "Starke Jobs für lokale Frauen",
-            "meta": "",
-            "text": "<p>Verarbeitet im Dorf. Lohn +50 %, Pension, Versicherung – und am Ende gehört die Anlage den Frauen, die darin arbeiten.</p>",
-            "link_label": "",
-            "link": ""
           }
         }
       },
@@ -901,6 +951,7 @@
         "link_custom_color": "#fffff5",
         "card_color": "#542a76",
         "card_text_color": "#fffff5",
+        "card_link_color": "",
         "scroll_motion": true
       }
     },
