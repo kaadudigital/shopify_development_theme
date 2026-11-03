@@ -624,16 +624,40 @@
         opacity: 0.7;
       }
 
+      /* Social icons: the Kaadu designer icons (snippets/kd-social-icon.liquid) for TikTok and Instagram, the stock
+         glyph for Facebook. Size and colours come from the «Social icons» settings (--menu-social-*). */
+      #{{ section.id }} {
+        --menu-social-size: {{ section.settings.menu_social_icon_size | default: 40 }}px;
+        {%- if section.settings.menu_social_icon_color != blank %}
+        --menu-social-icon: {{ section.settings.menu_social_icon_color }};
+        {%- endif %}
+        {%- if section.settings.menu_social_accent_color != blank %}
+        --menu-social-accent: {{ section.settings.menu_social_accent_color }};
+        {%- endif %}
+      }
+
       #{{ section.id }} .menu-social-icon {
         display: inline-block;
-        width: 24px;
-        height: 24px;
+        width: var(--menu-social-size, 40px);
+        height: var(--menu-social-size, 40px);
+        color: var(--menu-social-icon, currentColor);
       }
 
       #{{ section.id }} .menu-social-icon svg {
+        display: block;
         width: 100%;
         height: 100%;
         fill: currentColor;
+      }
+
+      #{{ section.id }} .menu-social-icon .kd-social-icon__glyph { fill: var(--menu-social-icon, currentColor); }
+      #{{ section.id }} .menu-social-icon .kd-social-icon__accent { fill: var(--menu-social-accent, var(--lime)); }
+      #{{ section.id }} .menu-social-icon .kd-social-icon__accent--line {
+        fill: none;
+        stroke: var(--menu-social-accent, var(--lime));
+        stroke-width: 19;
+        stroke-linecap: round;
+        stroke-linejoin: round;
       }
 
       /* --- Utility rows (mobile only): Search / Account --- */
@@ -1243,6 +1267,7 @@
                 assign social_tiktok = section.settings.social_tiktok_link | default: settings.social_tiktok_link
                 assign social_facebook = section.settings.social_facebook_link | default: settings.social_facebook_link
                 assign social_instagram = section.settings.social_instagram_link | default: settings.social_instagram_link
+                assign menu_social_style = section.settings.menu_social_icon_style | default: 'outline'
               -%}
               {%- comment -%}
                 Networks without a configured URL render as decorative icons
@@ -1254,12 +1279,12 @@
                 <li>
                   {%- if social_tiktok != blank -%}
                     <a href="{{ social_tiktok }}" target="_blank" rel="noopener">
-                      <span class="menu-social-icon" aria-hidden="true">{% render 'icon-tiktok' %}</span>
+                      <span class="menu-social-icon" aria-hidden="true">{% render 'kd-social-icon', network: 'tiktok', style: menu_social_style %}</span>
                       <span class="visually-hidden">TikTok</span>
                     </a>
                   {%- else -%}
                     <span class="menu-social-drop" aria-hidden="true">
-                      <span class="menu-social-icon">{% render 'icon-tiktok' %}</span>
+                      <span class="menu-social-icon">{% render 'kd-social-icon', network: 'tiktok', style: menu_social_style %}</span>
                     </span>
                   {%- endif -%}
                 </li>
@@ -1278,12 +1303,12 @@
                 <li>
                   {%- if social_instagram != blank -%}
                     <a href="{{ social_instagram }}" target="_blank" rel="noopener">
-                      <span class="menu-social-icon" aria-hidden="true">{% render 'icon-instagram' %}</span>
+                      <span class="menu-social-icon" aria-hidden="true">{% render 'kd-social-icon', network: 'instagram', style: menu_social_style %}</span>
                       <span class="visually-hidden">Instagram</span>
                     </a>
                   {%- else -%}
                     <span class="menu-social-drop" aria-hidden="true">
-                      <span class="menu-social-icon">{% render 'icon-instagram' %}</span>
+                      <span class="menu-social-icon">{% render 'kd-social-icon', network: 'instagram', style: menu_social_style %}</span>
                     </span>
                   {%- endif -%}
                 </li>
@@ -1902,6 +1927,52 @@
       "id": "social_instagram_link",
       "label": "Instagram link",
       "info": "Falls back to Theme settings → Social if blank."
+    },
+    {
+      "type": "header",
+      "content": "Social icons"
+    },
+    {
+      "type": "paragraph",
+      "content": "TikTok and Instagram use the Kaadu designer icons; Facebook keeps the plain glyph."
+    },
+    {
+      "type": "select",
+      "id": "menu_social_icon_style",
+      "label": "Icon style",
+      "default": "outline",
+      "options": [
+        {
+          "value": "outline",
+          "label": "Cloud outline"
+        },
+        {
+          "value": "star",
+          "label": "Star"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "menu_social_icon_size",
+      "label": "Icon size",
+      "min": 32,
+      "max": 72,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "color",
+      "id": "menu_social_icon_color",
+      "label": "Icon colour",
+      "info": "Leave empty to use the overlay text colour."
+    },
+    {
+      "type": "color",
+      "id": "menu_social_accent_color",
+      "label": "Icon outline / star colour",
+      "info": "Leave empty for lime."
     },
     {
       "type": "image_picker",
