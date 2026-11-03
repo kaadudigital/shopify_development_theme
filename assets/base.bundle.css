@@ -8579,9 +8579,9 @@ section.kd-iwh {
 .kd-iwh__intro p { margin: 0; }
 .kd-iwh__intro p + p { margin-top: var(--space-3); }
 
-/* Picture: square, no radius, card shadow; the empty placeholder is paper instead of grey */
+/* Picture: square, no radius, no shadow (the theme's drop shadow is off too); the empty placeholder is paper instead of grey */
 .kd-iwh__media { width: 100%; max-width: var(--image-max-width); }
-.kd-iwh .media--css-only:not(.media--disable-styles) { --media-drop-shadow-display: none; box-shadow: var(--shadow-card); }
+.kd-iwh .media--css-only:not(.media--disable-styles) { --media-drop-shadow-display: none; box-shadow: none; }
 .kd-iwh .media__styled-element--placeholder-svg {
   display: block;
   height: auto;
