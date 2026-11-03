@@ -3917,6 +3917,75 @@
         "id": "kd_cart_button_text",
         "label": "Button label",
         "default": "#fffff5"
+      },
+      {
+        "type": "header",
+        "content": "Size and close button"
+      },
+      {
+        "type": "range",
+        "id": "kd_cart_width",
+        "label": "Drawer width",
+        "info": "Share of the screen from 768px; below 768px the drawer is full width.",
+        "min": 30,
+        "max": 100,
+        "step": 5,
+        "unit": "%",
+        "default": 50
+      },
+      {
+        "type": "select",
+        "id": "kd_cart_close_shape",
+        "label": "Close button shape",
+        "default": "website_shape_star",
+        "options": [
+          {
+            "value": "website_shape_star",
+            "label": "Kaadu star"
+          },
+          {
+            "value": "website_shape_bun",
+            "label": "Kaadu bun"
+          },
+          {
+            "value": "website_shape_frame",
+            "label": "Kaadu frame"
+          },
+          {
+            "value": "website_shape_pancake",
+            "label": "Kaadu pancake"
+          },
+          {
+            "value": "website_shape_cloud",
+            "label": "Kaadu cloud"
+          },
+          {
+            "value": "round",
+            "label": "Round"
+          }
+        ]
+      },
+      {
+        "type": "range",
+        "id": "kd_cart_close_size",
+        "label": "Close button size",
+        "min": 40,
+        "max": 72,
+        "step": 4,
+        "unit": "px",
+        "default": 48
+      },
+      {
+        "type": "color",
+        "id": "kd_cart_close_bg",
+        "label": "Close button",
+        "info": "Empty = the accent colour above."
+      },
+      {
+        "type": "color",
+        "id": "kd_cart_close_color",
+        "label": "Close button ✕",
+        "info": "Empty = the ground colour above."
       }
     ]
   },

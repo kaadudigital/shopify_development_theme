@@ -12,5 +12,14 @@
     --kd-drawer-accent: {{ settings.kd_cart_accent }};
     --kd-drawer-button: {{ settings.kd_cart_button }};
     --kd-drawer-button-text: {{ settings.kd_cart_button_text }};
+    --kd-drawer-close-size: {{ settings.kd_cart_close_size | default: 48 }}px;
+    {%- if settings.kd_cart_close_bg != blank %}
+    --kd-drawer-close-bg: {{ settings.kd_cart_close_bg }};
+    {%- endif %}
+    {%- if settings.kd_cart_close_color != blank %}
+    --kd-drawer-close-color: {{ settings.kd_cart_close_color }};
+    {%- endif %}
   }
+  /* Drawer width from 768px (Theme settings › Cart › «Drawer width»); below 768px the drawer is full width. */
+  :root { --kd-drawer-w: {{ settings.kd_cart_width | default: 50 }}%; }
 {%- endstyle -%}

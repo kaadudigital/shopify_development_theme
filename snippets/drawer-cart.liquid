@@ -1,5 +1,6 @@
 {%- comment -%}
-  Cart drawer (DS CartDrawer; mockup "Cart (Drawer)" / "Cart Mobile"). Rendered by layout/theme.liquid when the
+  Cart drawer (DS CartDrawer; mockup "Cart (Drawer)" / "Cart Mobile"; 50 % of the screen from 768px, full width
+  below — Theme settings › Cart › «Drawer width»). Rendered by layout/theme.liquid when the
   cart type is "modal" and teleported into the Shapes right-drawer shell (snippets/right-drawer.liquid), which
   supplies the scrim, the slide-in, focus trap and Escape. Alpine hooks (ModalCart, CartItems, CartFooter) are
   the stock Shapes ones; the look is the Kaadu design system (assets/base.bundle.css, CART DRAWER block).
@@ -20,6 +21,15 @@
         data-cart-drawer
       >
         {%- render 'kd-cart-vars' -%}
+        {%- liquid
+          assign close_shape = settings.kd_cart_close_shape | default: 'website_shape_star'
+          if close_shape == 'round'
+            assign close_shape = ''
+          endif
+        -%}
+        {%- if close_shape != blank -%}
+          {%- render 'shape-defs', shape: close_shape, shape_id: 'kd-cart-close' -%}
+        {%- endif -%}
         <div class="kd-drawer__edge" aria-hidden="true"></div>
         <div class="kd-drawer__head">
           <h2 class="kd-drawer__title" tabindex="-1">
@@ -29,13 +39,18 @@
               <span x-text="$store.cart_count.countWithText"></span>
             </span>
           </h2>
+          {%- comment -%} Close button: a Kaadu shape (Theme settings › Cart › Close button) clipped on an inner span, so the
+            focus ring around the <button> stays whole; «Round» keeps the DS round button. {%- endcomment -%}
           <button
             type="button"
-            class="kd-btn-round"
+            class="kd-btn-round kd-drawer__close{% if close_shape != blank %} kd-drawer__close--shaped{% endif %}"
             @click.prevent="$store.modals.close('cart')"
             aria-label="{{ 'general.accessibility.close_modal' | t | escape }}"
           >
-            <span aria-hidden="true">✕</span>
+            {%- if close_shape != blank -%}
+              <span class="kd-drawer__close-bg" aria-hidden="true"></span>
+            {%- endif -%}
+            <span class="kd-drawer__close-glyph" aria-hidden="true">✕</span>
           </button>
         </div>
         {% render 'cart-items' %}

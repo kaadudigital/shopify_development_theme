@@ -9364,6 +9364,24 @@ html.lenis, html.lenis body { height: auto; }
 /* Shipping strip: status + threshold note over the progress bar (paper track, accent fill, an optional sticker
    riding on the fill, the starburst at the goal). --kd-progress is set by snippets/kd-cart-shipping.liquid. */
 .kd-drawer__ship {
+/* Close button (Theme settings › Cart › Close button): size and colours from snippets/kd-cart-vars.liquid; a Kaadu shape
+   (snippets/shape-defs.liquid, #clip-kd-cart-close) is clipped on the inner span so the button's focus ring stays whole. */
+.kd-drawer .kd-drawer__close {
+  width: var(--kd-drawer-close-size, 40px);
+  height: var(--kd-drawer-close-size, 40px);
+  background: var(--kd-drawer-close-bg, var(--kd-drawer-accent));
+  color: var(--kd-drawer-close-color, var(--kd-drawer-bg));
+  font-size: calc(var(--kd-drawer-close-size, 40px) * 0.42);
+}
+.kd-drawer .kd-drawer__close--shaped { background: transparent; border-radius: 0; }
+.kd-drawer__close-bg {
+  position: absolute;
+  inset: 0;
+  background: var(--kd-drawer-close-bg, var(--kd-drawer-accent));
+  -webkit-clip-path: url(#clip-kd-cart-close);
+  clip-path: url(#clip-kd-cart-close);
+}
+.kd-drawer__close-glyph { position: relative; }
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
@@ -9644,9 +9662,11 @@ html.lenis, html.lenis body { height: auto; }
 .kd-drawer__empty { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-5); padding: var(--space-6) var(--space-7); }
 .kd-drawer__empty p { margin: 0; font-size: 16px; line-height: 1.45; }
 
-/* The Shapes right-drawer shell (snippets/right-drawer.liquid) while it shows the cart: the DS scrim, a 520px
-   panel without border or clipping (the scalloped edge sits outside it). !important: the shell's Tailwind
-   utilities (bg-scheme-text/75, w-5/12, border-l-section, overflow-hidden) must give way. */
+/* The Shapes right-drawer shell (snippets/right-drawer.liquid) while it shows the cart: the DS scrim, a panel that
+   takes --kd-drawer-w of the screen from 768px (Theme settings › Cart › «Drawer width», 50 % by default; the DS's
+   fixed 520px was replaced) and the full width below, without border or clipping (the scalloped edge sits outside
+   it). !important: the shell's Tailwind utilities (bg-scheme-text/75, w-5/12, border-l-section, overflow-hidden)
+   must give way. */
 .kd-right-drawer__scrim { background: var(--overlay-scrim) !important; }
 /* The header wrapper (.adjust-menu-on-overlay) sits at z-index 100000 so it stays above the MENU overlay; the cart
    drawer must cover the header too. !important: overrides the shell's z-50 utility. */
@@ -9662,6 +9682,9 @@ html.lenis, html.lenis body { height: auto; }
 /* The cart page (sections/cart.liquid): the same panel, static and centred on the section's ground */
 .kd-cart-page { padding-block: var(--space-9); }
 .kd-drawer--page { height: auto; max-width: 520px; margin-inline: auto; }
+@media (min-width: 768px) {
+  .kd-right-drawer__panel:has(> .kd-drawer:not([style*="display: none"])) { width: var(--kd-drawer-w, 50%) !important; }
+}
 .kd-drawer--page .kd-drawer__body { overflow: visible; }
 
 @media (max-width: 767.98px) {
