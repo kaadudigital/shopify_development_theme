@@ -148,7 +148,7 @@
       >
         {%- capture content -%}
           {% if section.settings.eyebrow != blank %}
-            <p class="kd-video__kicker {% if is_hero %}kd-strong{% else %}kd-label-lg{% endif %}">{{ section.settings.eyebrow | escape }}</p>
+            <p class="kd-video__kicker kd-label">{{ section.settings.eyebrow | escape }}</p>
           {% endif %}
           {% if section.settings.title != blank %}
             <{{ section.settings.heading_tag }} class="kd-video__title {% if is_hero %}kd-display-hero{% else %}kd-display-h2{% endif %}">

@@ -25,6 +25,9 @@
         {%- endif -%}
       {%- endfor %}
     {%- endif %}
+    {%- if section.settings.card_link_color != blank %}
+    --kd-iw-card-link: {{ section.settings.card_link_color }};
+    {%- endif %}
   }
 {%- endstyle -%}
 
@@ -1008,6 +1011,12 @@
       "id": "card_text_color",
       "label": "Card text",
       "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "card_link_color",
+      "label": "Card text link",
+      "info": "The ✶ link on the card blocks. Applies with or without «Use the colours below»; empty = the card text colour."
     },
     {
       "type": "header",

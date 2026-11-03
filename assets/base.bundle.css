@@ -6988,6 +6988,11 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
 .kd-label         { font-weight: 600; font-size: 13px; line-height: 1.2; letter-spacing: 0.06em; }
 .kd-label-lg      { font-weight: 600; font-size: 16px; line-height: 1.2; letter-spacing: 0.04em; }
 .kd-label-sm      { font-weight: 600; font-size: 12px; line-height: 1.2; letter-spacing: 0.06em; }
+/* Kickers (eyebrows) above headings are uniform: the DS label (13px) below 1200px, label-lg (16px, 0.04em) from
+   1200px — proposed: the DS gives the kicker one size, which reads too small on desktop. */
+@media (min-width: 1200px) {
+  :is(.kd-heading__kicker, .kd-iw__kicker, .kd-iwh__eyebrow, .kd-video__kicker).kd-label { font-size: 16px; letter-spacing: 0.04em; }
+}
 .kd-announcement  { font-weight: 600; font-size: 14px; line-height: 1;   letter-spacing: 0.04em; }
 .kd-price         { font-weight: 600; font-size: 22px; line-height: 1.1; }
 
@@ -7956,7 +7961,7 @@ section.kd-is-band { background-color: var(--kd-is-bg, rgb(var(--color-scheme-ba
 .kd-card__fact { color: var(--lime); }
 .kd-card__fact > * { margin: 0; }
 .kd-card__actions { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3) var(--space-4); padding: 0 var(--space-5) var(--space-5); }
-.kd-card__link { color: inherit; } /* optional secondary ✶ text link (block setting), beside or instead of the outline cloud */
+.kd-card__link { color: var(--kd-pc-card-link, inherit); } /* optional secondary ✶ text link (block setting), beside or instead of the outline cloud */
 
 .kd-card--cta {
   justify-content: space-between;
@@ -9839,7 +9844,7 @@ section.kd-ic-band { background-color: var(--kd-ic-bg, rgb(var(--color-scheme-ba
 }
 .kd-iw__card-head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3); }
 /* Optional secondary action: the DS ✶ text link (underline on hover), pushed to the card's bottom edge */
-.kd-iw__card-link { align-self: flex-start; margin-top: auto; padding-top: var(--space-2); color: inherit; }
+.kd-iw__card-link { align-self: flex-start; margin-top: auto; padding-top: var(--space-2); color: var(--kd-iw-card-link, inherit); }
 .kd-iw__card-title { margin: 0; color: var(--kd-iw-kicker, rgb(var(--color-scheme-eyebrow-text))); overflow-wrap: anywhere; }
 .kd-iw__card-meta { flex-shrink: 0; }
 .kd-iw__card-text > :first-child { margin-top: 0; }

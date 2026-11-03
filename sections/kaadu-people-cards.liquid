@@ -43,6 +43,9 @@
     --kd-pc-stat-outline: {{ section.settings.stat_outline_color }};
     --kd-pc-text: {{ section.settings.card_text_color }};
     --kd-pc-card-btn: {{ section.settings.card_button_color }};
+    {%- if section.settings.card_link_color != blank %}
+    --kd-pc-card-link: {{ section.settings.card_link_color }};
+    {%- endif %}
     --kd-pc-cta-bg: {{ section.settings.cta_bg_color }};
     --kd-pc-cta-text: {{ section.settings.cta_text_color }};
     --kd-pc-cta-pill: {{ section.settings.cta_pill_color }};
@@ -461,6 +464,12 @@
       "id": "card_text_color",
       "label": "Text",
       "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "card_link_color",
+      "label": "Text link",
+      "info": "The ✶ link of a card (block setting). Empty = the card text colour."
     },
     {
       "type": "color",
