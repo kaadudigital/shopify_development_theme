@@ -181,6 +181,15 @@
                 {%- for block in social_blocks -%}
                   {%- liquid
                     assign net = block.settings.network
+                    assign url = block.settings.url
+                    if url == blank
+                      case net
+                        when 'instagram'
+                          assign url = settings.social_instagram_link
+                        when 'tiktok'
+                          assign url = settings.social_tiktok_link
+                      endcase
+                    endif
                     assign name = block.settings.name
                     if name == blank
                       case net
@@ -191,9 +200,9 @@
                       endcase
                     endif
                   -%}
-                  {%- if block.settings.url != blank -%}
+                  {%- if url != blank -%}
                     <li {{ block.shopify_attributes }}>
-                      <a class="kd-footer__social-link--{{ block.id }}" href="{{ block.settings.url }}" target="_blank" rel="noopener"{% if as_icons %} aria-label="{{ name | escape }}"{% endif %}>
+                      <a class="kd-footer__social-link--{{ block.id }}" href="{{ url }}" target="_blank" rel="noopener"{% if as_icons %} aria-label="{{ name | escape }}"{% endif %}>
                         {%- if as_icons and block.settings.icon != blank -%}
                           <span class="kd-footer__social-mask" aria-hidden="true"></span>
                         {%- elsif as_icons and net != 'other' -%}

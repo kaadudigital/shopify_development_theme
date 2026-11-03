@@ -1266,49 +1266,37 @@
                 assign menu_social_style = section.settings.menu_social_icon_style | default: 'outline'
               -%}
               {%- comment -%}
-                Networks without a configured URL render as decorative icons
-                (no link) so the row is always present; paste the profile URLs
-                in the section settings (or Theme settings → Social) to make
-                them clickable.
+                The URLs are Theme settings → Social — the same source the footer's social blocks fall back to — unless
+                the section's own link fields override them. A network without a URL (e.g. no Facebook) is not shown.
               {%- endcomment -%}
-              <ul class="menu-social">
-                <li>
-                  {%- if social_tiktok != blank -%}
-                    <a href="{{ social_tiktok }}" target="_blank" rel="noopener">
-                      <span class="menu-social-icon" aria-hidden="true">{% render 'kd-social-icon', network: 'tiktok', style: menu_social_style %}</span>
-                      <span class="visually-hidden">TikTok</span>
-                    </a>
-                  {%- else -%}
-                    <span class="menu-social-drop" aria-hidden="true">
-                      <span class="menu-social-icon">{% render 'kd-social-icon', network: 'tiktok', style: menu_social_style %}</span>
-                    </span>
-                  {%- endif -%}
-                </li>
-                <li>
-                  {%- if social_facebook != blank -%}
-                    <a href="{{ social_facebook }}" target="_blank" rel="noopener">
-                      <span class="menu-social-icon" aria-hidden="true">{% render 'icon-facebook' %}</span>
-                      <span class="visually-hidden">Facebook</span>
-                    </a>
-                  {%- else -%}
-                    <span class="menu-social-drop" aria-hidden="true">
-                      <span class="menu-social-icon">{% render 'icon-facebook' %}</span>
-                    </span>
-                  {%- endif -%}
-                </li>
-                <li>
+              {%- if social_tiktok != blank or social_facebook != blank or social_instagram != blank -%}
+                <ul class="menu-social">
                   {%- if social_instagram != blank -%}
-                    <a href="{{ social_instagram }}" target="_blank" rel="noopener">
-                      <span class="menu-social-icon" aria-hidden="true">{% render 'kd-social-icon', network: 'instagram', style: menu_social_style %}</span>
-                      <span class="visually-hidden">Instagram</span>
-                    </a>
-                  {%- else -%}
-                    <span class="menu-social-drop" aria-hidden="true">
-                      <span class="menu-social-icon">{% render 'kd-social-icon', network: 'instagram', style: menu_social_style %}</span>
-                    </span>
+                    <li>
+                      <a href="{{ social_instagram }}" target="_blank" rel="noopener">
+                        <span class="menu-social-icon" aria-hidden="true">{% render 'kd-social-icon', network: 'instagram', style: menu_social_style %}</span>
+                        <span class="visually-hidden">Instagram</span>
+                      </a>
+                    </li>
                   {%- endif -%}
-                </li>
-              </ul>
+                  {%- if social_tiktok != blank -%}
+                    <li>
+                      <a href="{{ social_tiktok }}" target="_blank" rel="noopener">
+                        <span class="menu-social-icon" aria-hidden="true">{% render 'kd-social-icon', network: 'tiktok', style: menu_social_style %}</span>
+                        <span class="visually-hidden">TikTok</span>
+                      </a>
+                    </li>
+                  {%- endif -%}
+                  {%- if social_facebook != blank -%}
+                    <li>
+                      <a href="{{ social_facebook }}" target="_blank" rel="noopener">
+                        <span class="menu-social-icon" aria-hidden="true">{% render 'icon-facebook' %}</span>
+                        <span class="visually-hidden">Facebook</span>
+                      </a>
+                    </li>
+                  {%- endif -%}
+                </ul>
+              {%- endif -%}
             </div>
           </div>
 
@@ -1823,19 +1811,19 @@
       "type": "url",
       "id": "social_tiktok_link",
       "label": "TikTok link",
-      "info": "Falls back to Theme settings → Social if blank."
+      "info": "Empty = Theme settings → Social, the same links as the footer. Networks without a link are not shown."
     },
     {
       "type": "url",
       "id": "social_facebook_link",
       "label": "Facebook link",
-      "info": "Falls back to Theme settings → Social if blank."
+      "info": "Empty = Theme settings → Social, the same links as the footer. Networks without a link are not shown."
     },
     {
       "type": "url",
       "id": "social_instagram_link",
       "label": "Instagram link",
-      "info": "Falls back to Theme settings → Social if blank."
+      "info": "Empty = Theme settings → Social, the same links as the footer. Networks without a link are not shown."
     },
     {
       "type": "header",
