@@ -7955,7 +7955,8 @@ section.kd-is-band { background-color: var(--kd-is-bg, rgb(var(--color-scheme-ba
 .kd-card__text > * { margin: 0; }
 .kd-card__fact { color: var(--lime); }
 .kd-card__fact > * { margin: 0; }
-.kd-card__actions { position: relative; padding: 0 var(--space-5) var(--space-5); }
+.kd-card__actions { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3) var(--space-4); padding: 0 var(--space-5) var(--space-5); }
+.kd-card__link { color: inherit; } /* optional secondary ✶ text link (block setting), beside or instead of the outline cloud */
 
 .kd-card--cta {
   justify-content: space-between;
@@ -9827,3 +9828,5 @@ section.kd-ic-band { background-color: var(--kd-ic-bg, rgb(var(--color-scheme-ba
   .kd-video__frame--two-one { --tw-aspect-w: 2; --tw-aspect-h: 1; }
   .kd-video--hero .kd-video__layer { padding-bottom: var(--space-12); }
 }
+/* Optional secondary action: the DS ✶ text link (underline on hover), pushed to the card's bottom edge */
+.kd-iw__card-link { align-self: flex-start; margin-top: auto; padding-top: var(--space-2); color: inherit; }

@@ -9,7 +9,8 @@
     button 1 the link; with only one button, it is the cloud. Cloud colours follow the colour scheme.
   - Mobile extras: richtext_mobile (text below 768px), hide_image_mobile (.kd-iw--m-noimg),
     mobile_link_position 'under' (✶ link centred under the cloud, .kd-iw--m-link-under), image_shadow (.kd-iw--shadow).
-  - «card» blocks (title, small label, text) render as a grid of paper stamps between the text and the buttons.
+  - «card» blocks (title, small label, text, optional ✶ text link) render as a grid of stamps between the text and
+    the buttons. Card colours: the colour scheme's card colours, or the section's own (use_custom_colors).
   - Every text field accepts [br] / [BR] (line break) and [nbsp] / [NBSP] (non-breaking space).
   - Mobile: cloud button on top, then the note (left) and the ✶ text link (right) on one row.
   - Optional cloud-button artwork (button2_image / button2_image_mobile, widths, label colours):
@@ -175,6 +176,9 @@
               {%- endif -%}
               {%- if card.settings.text != blank -%}
                 <div class="kd-iw__card-text kd-body rte">{{ card.settings.text | replace: '[BR]', '<br>' | replace: '[br]', '<br>' | replace: '[NBSP]', '&nbsp;' | replace: '[nbsp]', '&nbsp;' }}</div>
+              {%- endif -%}
+              {%- if card.settings.link_label != blank and card.settings.link != blank -%}
+                <a class="kd-link kd-iw__card-link kd-body-sm" href="{{ card.settings.link }}">{{ card.settings.link_label | escape | replace: '[BR]', '<br>' | replace: '[br]', '<br>' | replace: '[NBSP]', '&nbsp;' | replace: '[nbsp]', '&nbsp;' }}</a>
               {%- endif -%}
             </li>
           {%- endfor -%}

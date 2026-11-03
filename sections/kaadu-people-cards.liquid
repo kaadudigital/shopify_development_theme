@@ -134,9 +134,18 @@
               {%- endif -%}
             </div>
 
-            {%- if block.settings.link != blank -%}
+            {%- assign has_text_link = false -%}
+            {%- if block.settings.text_link_label != blank and block.settings.text_link != blank -%}
+              {%- assign has_text_link = true -%}
+            {%- endif -%}
+            {%- if block.settings.link != blank or has_text_link -%}
               <div class="kd-card__actions">
-                {%- render 'kd-button', label: section.settings.link_label, url: block.settings.link, variant: 'outline' -%}
+                {%- if block.settings.link != blank -%}
+                  {%- render 'kd-button', label: section.settings.link_label, url: block.settings.link, variant: 'outline' -%}
+                {%- endif -%}
+                {%- if has_text_link -%}
+                  <a class="kd-link kd-card__link kd-body-sm" href="{{ block.settings.text_link }}">{{ block.settings.text_link_label | escape }}</a>
+                {%- endif -%}
               </div>
             {%- endif -%}
           </article>
@@ -589,6 +598,21 @@
           "id": "link",
           "label": "Link",
           "info": "If set, the card gets a link button (e.g. #bauern)."
+        },
+        {
+          "type": "header",
+          "content": "Text link"
+        },
+        {
+          "type": "text",
+          "id": "text_link_label",
+          "label": "Label",
+          "info": "Optional secondary action: a ✶ text link at the bottom of the card (underlined on hover). Type it in normal case."
+        },
+        {
+          "type": "url",
+          "id": "text_link",
+          "label": "Link"
         }
       ]
     },

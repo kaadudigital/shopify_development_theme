@@ -819,9 +819,31 @@
             "enable_animation": false,
             "animation_direction": ""
           }
+        },
+        "vision_card_1": {
+          "type": "card",
+          "settings": {
+            "title": "Fairness für Kleinbauern",
+            "meta": "",
+            "text": "<p>Preis über Markt, garantierte Abnahme, langfristige Partnerschaft. Schema öffentlich.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "vision_card_2": {
+          "type": "card",
+          "settings": {
+            "title": "Starke Jobs für lokale Frauen",
+            "meta": "",
+            "text": "<p>Verarbeitet im Dorf. Lohn +50 %, Pension, Versicherung – und am Ende gehört die Anlage den Frauen, die darin arbeiten.</p>",
+            "link_label": "",
+            "link": ""
+          }
         }
       },
       "block_order": [
+        "vision_card_1",
+        "vision_card_2",
         "shape_divider_ytRjUQ",
         "shape_divider_z6rNhb"
       ],
@@ -876,6 +898,8 @@
         "button_color": "#aeff64",
         "button_label_color": "#ac0300",
         "link_custom_color": "#fffff5",
+        "card_color": "#542a76",
+        "card_text_color": "#fffff5",
         "scroll_motion": true
       }
     },

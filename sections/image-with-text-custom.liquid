@@ -15,7 +15,7 @@
       the CSS falls back to the colour scheme (background, eyebrow, text, body text, accent 1 / contrast). {%- endcomment -%}
     {%- if section.settings.use_custom_colors -%}
       {%- liquid
-        assign iw_colors = 'bg:background_color,kicker:kicker_color,heading:heading_color,text:text_color,btn:button_color,btn-label:button_label_color,link:link_custom_color' | split: ','
+        assign iw_colors = 'bg:background_color,kicker:kicker_color,heading:heading_color,text:text_color,btn:button_color,btn-label:button_label_color,link:link_custom_color,card:card_color,card-text:card_text_color' | split: ','
       -%}
       {%- for pair in iw_colors -%}
         {%- assign kv = pair | split: ':' -%}
@@ -997,6 +997,19 @@
       "default": "#FFFFF5"
     },
     {
+      "type": "color",
+      "id": "card_color",
+      "label": "Card",
+      "info": "Background of the card blocks.",
+      "default": "#FFFFF5"
+    },
+    {
+      "type": "color",
+      "id": "card_text_color",
+      "label": "Card text",
+      "default": "#000000"
+    },
+    {
       "type": "header",
       "content": "Animation"
     },
@@ -1015,7 +1028,7 @@
       "settings": [
         {
           "type": "paragraph",
-          "content": "Cards sit between the text and the buttons, two per row from 768px (Promise mockup: the four stamps). They take the colour scheme's card colours; the title takes the kicker colour."
+          "content": "Cards sit below the text and above the buttons, two per row from 768px (Promise mockup: the four stamps). They take the colour scheme's card colours (or the section's Card colours with «Use the colours below»); the title takes the kicker colour."
         },
         {
           "type": "text",
@@ -1033,6 +1046,21 @@
           "id": "text",
           "label": "Text",
           "default": "<p>Das Geld geht an die Familie, nicht an drei Stationen dazwischen.</p>"
+        },
+        {
+          "type": "header",
+          "content": "Text link"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Label",
+          "info": "Optional secondary action: a ✶ text link under the card text (underlined on hover). Type it in normal case."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
         }
       ]
     },
