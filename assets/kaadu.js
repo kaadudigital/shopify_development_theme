@@ -322,68 +322,137 @@ function kdScrollIntoView(el) {
   document.addEventListener('shopify:section:load', function (event) { init(event.target); });
 })();
 
-/* [data-kd-phone]: clips in the phone frame (sections/vertical-video-embeds.liquid). The screen is a scroll-snap
-   track, one clip per screen (sideways, or up and down per screen size). Arrows step through and loop; leaving a clip pauses its video. A hosted video
-   plays with sound on tap and pauses on a second tap. The «✶ Auf TikTok ansehen» link follows the clip on screen.
-   Auto-advance (data-autoplay-desktop / -mobile, -direction 1 or -1, -interval in ms) runs only while nothing plays
-   and the phone is on screen; it stops for good once the visitor swipes, scrolls or uses the arrows, and never
-   runs with prefers-reduced-motion. */
+/* [data-kd-ugc]: the video-card slider (sections/vertical-video-embeds.liquid), modelled on the cobfoods.com UGC
+   row. The track is a scroll-snap row of 9 : 16 cards; ← →, the dots and the arrow keys step through it and loop.
+   A card's muted preview clip plays on hover (data-preview="hover"; in view on touch screens) or while the card is
+   on screen ("inview"), never under prefers-reduced-motion. The play button plays the full clip with sound — one
+   card at a time; a second tap pauses, the bar along the bottom shows progress, leaving the screen pauses it.
+   Auto-advance (data-autoplay-desktop / -mobile, -interval in ms) runs only while nothing plays and the row is on
+   screen; it stops for good once the visitor swipes, scrolls or uses the controls. */
 (function () {
   'use strict';
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   var mobile = window.matchMedia('(max-width: 767.98px)');
-  function setup(phone) {
-    if (phone.kdPhone) return;
-    phone.kdPhone = true;
-    var track = phone.querySelector('[data-kd-phone-track]');
-    var stage = phone.closest('.kd-videos__stage') || phone.parentElement;
-    var prev = stage.querySelector('[data-kd-phone-prev]');
-    var next = stage.querySelector('[data-kd-phone-next]');
-    var source = stage.querySelector('[data-kd-phone-source]');
-    var clips = Array.prototype.slice.call(track.children);
-    var current = -1, auto = false, stopped = false, visible = false;
+  var hoverable = window.matchMedia('(hover: hover) and (pointer: fine)');
+  function setup(stage) {
+    if (stage.kdUgc) return;
+    stage.kdUgc = true;
+    var track = stage.querySelector('[data-kd-ugc-track]');
+    if (!track) return;
+    var slides = Array.prototype.slice.call(track.children);
+    var prev = stage.querySelector('[data-kd-ugc-prev]');
+    var next = stage.querySelector('[data-kd-ugc-next]');
+    var dots = Array.prototype.slice.call(stage.querySelectorAll('[data-kd-ugc-dot]'));
+    var previewMode = stage.getAttribute('data-preview') || 'hover';
+    var inviewPreview = previewMode === 'inview' || (previewMode === 'hover' && !hoverable.matches);
+    var current = -1, auto = false, stopped = false, visible = false, playingCard = null;
     var smooth = function () { return reduce.matches ? 'auto' : 'smooth'; };
 
-    // Sideways or up-and-down, whichever the CSS set for this screen size (.kd-videos--m-/--d-vertical).
-    function vertical() { return getComputedStyle(track).flexDirection === 'column'; }
+    function pad() { return parseFloat(getComputedStyle(track).scrollPaddingLeft) || 0; }
     function index() {
-      return vertical()
-        ? Math.round(track.scrollTop / Math.max(1, track.clientHeight))
-        : Math.round(track.scrollLeft / Math.max(1, track.clientWidth));
+      var x = track.scrollLeft + pad(), best = 0, dist = Infinity;
+      slides.forEach(function (slide, i) {
+        var d = Math.abs(slide.offsetLeft - x);
+        if (d < dist) { dist = d; best = i; }
+      });
+      return best;
     }
     function go(i) {
-      var n = clips.length;
+      var n = slides.length;
       i = ((i % n) + n) % n;
-      if (vertical()) track.scrollTo({ top: i * track.clientHeight, behavior: smooth() });
-      else track.scrollTo({ left: i * track.clientWidth, behavior: smooth() });
-    }
-    function stop(video) {
-      if (!video) return;
-      video.pause();
-      video.closest('.kd-phone__clip').classList.remove('is-playing');
+      track.scrollTo({ left: slides[i].offsetLeft - pad(), behavior: smooth() });
     }
     function update() {
       var i = index();
       if (i === current) return;
       current = i;
-      clips.forEach(function (clip, k) {
-        if (k !== i) stop(clip.querySelector('video'));
-        clip.setAttribute('aria-hidden', k === i ? 'false' : 'true');
-        clip.querySelectorAll('a, button, iframe').forEach(function (el) { el.tabIndex = k === i ? 0 : -1; });
+      dots.forEach(function (dot, k) {
+        if (k === i) dot.setAttribute('aria-current', 'true');
+        else dot.removeAttribute('aria-current');
       });
-      if (source) {
-        var url = clips[i] && clips[i].getAttribute('data-source-url');
-        source.hidden = !url;
-        if (url) {
-          source.href = url;
-          source.textContent = clips[i].getAttribute('data-source-label');
-        }
-      }
-    }
-    function playing() {
-      return clips.some(function (clip) { return clip.classList.contains('is-playing'); });
     }
 
+    // Playback
+    function previewOf(card) { return card.querySelector('.kd-videos__preview'); }
+    function videoOf(card) { return card.querySelector('.kd-videos__video'); }
+    function pressed(card, on) {
+      var button = card.querySelector('[data-kd-ugc-play]');
+      if (button) button.setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+    function startPreview(card, byHover) {
+      var preview = previewOf(card);
+      if (!preview || card.classList.contains('is-playing') || card.classList.contains('is-paused')) return;
+      if (reduce.matches && !byHover) return;
+      preview.muted = true;
+      var p = preview.play();
+      if (p && p.catch) p.catch(function () {});
+      card.classList.add('is-previewing');
+    }
+    function stopPreview(card) {
+      var preview = previewOf(card);
+      if (!preview) return;
+      preview.pause();
+      card.classList.remove('is-previewing');
+    }
+    function pauseMain(card) {
+      var video = videoOf(card);
+      if (!video || !card.classList.contains('is-playing')) return;
+      video.pause();
+      card.classList.remove('is-playing');
+      card.classList.add('is-paused');
+      pressed(card, false);
+    }
+    function resetMain(card) {
+      var video = videoOf(card);
+      if (!video) return;
+      video.pause();
+      try { video.currentTime = 0; } catch (e) { /* not loaded yet */ }
+      card.classList.remove('is-playing', 'is-paused');
+      card.style.removeProperty('--kd-vid-progress');
+      pressed(card, false);
+      if (playingCard === card) playingCard = null;
+    }
+    function playMain(card) {
+      var video = videoOf(card);
+      if (!video) return;
+      if (playingCard && playingCard !== card) resetMain(playingCard);
+      stopPreview(card);
+      video.muted = false;
+      video.controls = false;
+      card.classList.add('is-playing');
+      card.classList.remove('is-paused');
+      pressed(card, true);
+      playingCard = card;
+      var p = video.play();
+      if (p && p.catch) p.catch(function () { resetMain(card); });
+    }
+    function playing() { return !!playingCard && playingCard.classList.contains('is-playing'); }
+
+    slides.forEach(function (slide) {
+      var card = slide.querySelector('[data-kd-ugc-card]');
+      if (!card) return;
+      var video = videoOf(card);
+      if (video) {
+        video.addEventListener('timeupdate', function () {
+          if (video.duration) card.style.setProperty('--kd-vid-progress', (video.currentTime / video.duration * 100).toFixed(2) + '%');
+        });
+        video.addEventListener('ended', function () { resetMain(card); });
+      }
+      var button = card.querySelector('[data-kd-ugc-play]');
+      if (button) {
+        button.addEventListener('click', function () {
+          stopped = true;
+          if (card.classList.contains('is-playing')) pauseMain(card);
+          else playMain(card);
+        });
+      }
+      if (previewMode === 'hover' && previewOf(card)) {
+        card.addEventListener('pointerenter', function (event) { if (event.pointerType === 'mouse') startPreview(card, true); });
+        card.addEventListener('pointerleave', function (event) { if (event.pointerType === 'mouse') stopPreview(card); });
+      }
+    });
+
+    // Row navigation
     var settle = null;
     track.addEventListener('scroll', function () {
       if (!auto) stopped = true;
@@ -392,56 +461,53 @@ function kdScrollIntoView(el) {
     }, { passive: true });
     if (prev) prev.addEventListener('click', function () { stopped = true; go(index() - 1); });
     if (next) next.addEventListener('click', function () { stopped = true; go(index() + 1); });
+    dots.forEach(function (dot) {
+      dot.addEventListener('click', function () { stopped = true; go(parseInt(dot.getAttribute('data-kd-ugc-dot'), 10) || 0); });
+    });
     track.addEventListener('keydown', function (event) {
       if (event.target !== track) return;
-      var keys = vertical() ? ['ArrowUp', 'ArrowDown'] : ['ArrowLeft', 'ArrowRight'];
-      var k = keys.indexOf(event.key);
+      var k = ['ArrowLeft', 'ArrowRight'].indexOf(event.key);
       if (k > -1) {
         event.preventDefault();
         stopped = true;
         go(index() + (k ? 1 : -1));
       }
     });
-    track.addEventListener('click', function (event) {
-      var clip = event.target.closest('.kd-phone__clip--video');
-      if (!clip || !(event.target.closest('[data-kd-clip-play]') || event.target.tagName === 'VIDEO')) return;
-      var video = clip.querySelector('video');
-      if (!video) return;
-      stopped = true;
-      if (clip.classList.contains('is-playing')) {
-        stop(video);
-      } else {
-        video.muted = false;
-        video.controls = false;
-        clip.classList.add('is-playing');
-        var p = video.play();
-        if (p && p.catch) p.catch(function () { clip.classList.remove('is-playing'); });
-      }
-    });
 
     // Auto-advance
-    var interval = Math.max(3000, parseInt(phone.getAttribute('data-autoplay-interval'), 10) || 6000);
-    var direction = parseInt(phone.getAttribute('data-autoplay-direction'), 10) < 0 ? -1 : 1;
+    var interval = Math.max(3000, parseInt(stage.getAttribute('data-autoplay-interval'), 10) || 6000);
     function enabled() {
-      if (stopped || reduce.matches || document.hidden || !visible || playing() || clips.length < 2) return false;
-      return phone.getAttribute(mobile.matches ? 'data-autoplay-mobile' : 'data-autoplay-desktop') === 'true';
+      if (stopped || reduce.matches || document.hidden || !visible || playing() || slides.length < 2) return false;
+      return stage.getAttribute(mobile.matches ? 'data-autoplay-mobile' : 'data-autoplay-desktop') === 'true';
     }
     setInterval(function () {
       if (!enabled()) return;
       auto = true;
-      go(index() + direction);
+      go(index() + 1);
     }, interval);
+
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(function (entries) {
         visible = entries[0].isIntersecting;
-        if (!visible) clips.forEach(function (clip) { stop(clip.querySelector('video')); });
-      }, { threshold: 0.5 }).observe(phone);
+      }, { threshold: 0.5 }).observe(stage);
+      var watcher = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          var card = entry.target.querySelector('[data-kd-ugc-card]');
+          if (!card) return;
+          if (previewMode !== 'off' && inviewPreview) {
+            if (entry.intersectionRatio >= 0.6) startPreview(card, false);
+            else stopPreview(card);
+          }
+          if (entry.intersectionRatio < 0.3) pauseMain(card);
+        });
+      }, { threshold: [0, 0.3, 0.6] });
+      slides.forEach(function (slide) { watcher.observe(slide); });
     } else {
       visible = true;
     }
     update();
   }
-  function init(root) { root.querySelectorAll('[data-kd-phone]').forEach(setup); }
+  function init(root) { root.querySelectorAll('[data-kd-ugc]').forEach(setup); }
   init(document);
   document.addEventListener('shopify:section:load', function (event) { init(event.target); });
 })();

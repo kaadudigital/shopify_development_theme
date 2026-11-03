@@ -8332,94 +8332,69 @@ section.kd-is-band { background-color: var(--kd-is-bg, rgb(var(--color-scheme-ba
 }
 
 /* ── VIDEOS — sections/vertical-video-embeds.liquid ──
-   Mockup: heading, intro, one phone frame with the clips swiping inside its screen, ← hint · n Clips →, cloud
-   button. Colours are section settings (mockup: paper on red, pink cloud with red label). DS spacing: 48 / 80px
-   section padding, 40px between blocks, 12px phone → hint. The phone is --kd-phone-w wide (section CSS; scales
-   with --kd-px from 1200px); screen and notch are placed in shares of the 370 × 668 frame. */
+   Video cards in a row, modelled on the cobfoods.com UGC slider: heading, intro, 9 : 16 cards that scroll sideways
+   (snap; ← → shape buttons over the sides or under the row; dots), «✶ Auf TikTok ansehen» under a card, cloud
+   button. A card: cover, muted preview clip on hover (in view on touch screens), play button, the full clip with
+   sound and a progress bar along the bottom. Colours are section settings (--kd-vid-*; unset = the colour scheme).
+   Card width --kd-vid-card-w and arrow size --kd-vid-arrow-size come from the section CSS (cards scale with --kd-px
+   from 1200px); --kd-vid-gap is the 20px card gap of the reference. DS spacing: 48 / 80px section padding, 40px
+   between blocks, 20px row → dots. */
 section.kd-videos { background-color: var(--kd-vid-bg, rgb(var(--color-scheme-background))); }
 .kd-videos__inner {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  grid-template-areas: "head" "stage" "cta";
-  justify-items: center;
-  row-gap: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-8);
   padding-block: var(--space-9);
   text-align: center;
 }
-.kd-videos__heading { grid-area: head; }
+.kd-videos__head { display: flex; justify-content: center; }
+.kd-videos__heading { max-width: 900px; } /* proposed: the hero measure of the mockups for a centred intro */
+.kd-videos__kicker { color: var(--kd-vid-kicker, rgb(var(--color-scheme-eyebrow-text))); }
 .kd-videos .kd-heading__title { color: var(--kd-vid-heading, rgb(var(--color-scheme-text))); }
-.kd-videos__intro { margin: 0 auto; color: var(--kd-vid-text, rgb(var(--color-scheme-body-text, var(--color-scheme-text)))); }
+.kd-videos__intro { margin: 0; color: var(--kd-vid-text, rgb(var(--color-scheme-body-text, var(--color-scheme-text)))); }
 .kd-videos__d { display: none; }
-/* Stage = hint (above the phone), phone row, then the source link, always centred. In the row the phone sits between two spacers whose
-   grow factors split the free space by --kd-phone-x (0 left … 0.5 centre … 1 right); the hint doesn't move. */
-.kd-videos__stage { grid-area: stage; justify-self: stretch; display: flex; flex-direction: column; align-items: center; gap: var(--space-3); }
-.kd-videos__rig { display: flex; align-self: stretch; }
-.kd-videos__rig::before { content: ""; flex: var(--kd-phone-x, 0.5) 1 0; }
-.kd-videos__rig::after  { content: ""; flex: calc(1 - var(--kd-phone-x, 0.5)) 1 0; }
-.kd-videos__actions { grid-area: cta; display: flex; justify-content: center; }
-.kd-videos__button { --kd-cloud: var(--kd-vid-btn, rgb(var(--color-scheme-accent-1))); color: var(--kd-vid-btn-label, rgb(var(--color-scheme-accent-1-contrast))); }
 
-.kd-phone {
+/* Stage = the row (with the arrows over it), then dots and hint */
+.kd-videos__stage { display: flex; flex-direction: column; gap: var(--space-5); }
+.kd-videos__viewport { position: relative; }
+.kd-videos__track {
   position: relative;
-  width: var(--kd-phone-w, 330px);
-  aspect-ratio: 370 / 668;
-  flex-shrink: 0;
-}
-.kd-phone__frame {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-.kd-phone__notch {
-  position: absolute;
-  z-index: 3;
-  top: 6.57%;
-  left: 57.18%;
-  width: 20.27%;
-  height: 3.6%;
-  border-radius: 999px;
-  background: #111;
-  transform: translateX(-50%);
-  pointer-events: none;
-}
-.kd-phone__screen {
-  position: absolute;
-  z-index: 1;
-  left: 23.43%;
-  top: 4.78%;
-  width: 67.49%;
-  height: 67.17%;
-  /* Whole pixels: a fractional height leaves the snapped last clip 1px short of the end, and the browser then keeps
-     an up-swipe inside the phone instead of scrolling the page on (Reels mode). 1.2127 = 668 / 370 × 67.17 %. */
-  height: round(down, calc(var(--kd-phone-w, 330px) * 1.2127), 1px);
   display: flex;
+  gap: var(--kd-vid-gap, var(--space-5));
   overflow-x: auto;
   overflow-y: hidden;
-  border-radius: calc(var(--kd-phone-w, 330px) * 0.081);
-  background: #111;
   scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--gutter);
+  padding: 10px var(--gutter) 16px; /* room for the card shadow */
   scrollbar-width: none;
   overscroll-behavior-x: contain;
   -webkit-overflow-scrolling: touch;
 }
-.kd-phone__screen::-webkit-scrollbar { display: none; }
-.kd-phone__screen:focus-visible { outline: 4px solid var(--red); outline-offset: 3px; }
-.kd-phone__clip {
-  position: relative;
-  flex: 0 0 100%;
-  height: 100%;
-  overflow: hidden;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-  background: var(--kd-clip-bg, var(--pink));
+.kd-videos__track::-webkit-scrollbar { display: none; }
+.kd-videos__track:focus-visible { outline: 4px solid var(--red); outline-offset: -4px; }
+.kd-videos__slide {
   display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  gap: var(--space-3);
+  width: var(--kd-vid-card-w, 240px);
+  scroll-snap-align: start;
 }
-.kd-phone__media {
+/* Every card fits (large screens): the row centres — the auto margins collapse to 0 as soon as the row overflows. */
+.kd-videos__slide:first-child { margin-inline-start: auto; }
+.kd-videos__slide:last-child { margin-inline-end: auto; }
+.kd-videos__card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  overflow: hidden;
+  background: var(--kd-clip-bg, var(--pink));
+  color: var(--paper);
+  box-shadow: var(--shadow-card);
+}
+.kd-videos__cover, .kd-videos__preview, .kd-videos__video, .kd-videos__media {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -8427,27 +8402,59 @@ section.kd-videos { background-color: var(--kd-vid-bg, rgb(var(--color-scheme-ba
   border: 0;
   object-fit: cover;
 }
-.kd-phone__embed > * { width: 100% !important; height: 100% !important; min-width: 0 !important; max-width: none !important; margin: 0 !important; border: 0 !important; }
-.kd-phone__play {
-  position: relative;
-  z-index: 1;
+.kd-videos__preview { z-index: 1; opacity: 0; transition: opacity 0.3s ease-out; pointer-events: none; }
+.kd-videos__card.is-previewing .kd-videos__preview { opacity: 1; }
+.kd-videos__video { z-index: 2; opacity: 0; }
+.kd-videos__card:is(.is-playing, .is-paused) .kd-videos__video { opacity: 1; }
+.kd-videos__card:is(.is-playing, .is-paused) .kd-videos__preview { display: none; }
+.kd-videos__embed > * { width: 100% !important; height: 100% !important; min-width: 0 !important; max-width: none !important; margin: 0 !important; border: 0 !important; } /* third-party embed markup must fill the card */
+/* Play button: covers the whole card (tap anywhere); the glyph sits in a dark square like the reference's; hidden
+   while playing — a tap then pauses, and hover / focus shows the pause glyph. */
+.kd-videos__play {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 64px;
-  height: 64px;
+  width: 100%;
+  height: 100%;
   padding: 0;
   border: 0;
-  background: rgba(0, 0, 0, 0.55);
-  color: var(--paper);
+  background: transparent;
+  color: var(--kd-vid-play, var(--paper));
   cursor: pointer;
 }
-.kd-phone__play svg { width: 32px; height: 32px; fill: currentColor; }
-.kd-phone__play:focus-visible { outline: 4px solid var(--red); outline-offset: 3px; }
-span.kd-phone__play { cursor: default; }
-.kd-phone__title {
+span.kd-videos__play { cursor: default; }
+.kd-videos__play-icon, .kd-videos__pause-icon {
+  box-sizing: border-box;
+  width: 64px;
+  height: 64px;
+  padding: 18px;
+  background: color-mix(in srgb, var(--kd-vid-play-bg, var(--ink)) 70%, transparent);
+  fill: currentColor;
+}
+.kd-videos__pause-icon { display: none; }
+.kd-videos__card.is-playing .kd-videos__play-icon { display: none; }
+.kd-videos__card.is-playing .kd-videos__play:is(:hover, :focus-visible) .kd-videos__pause-icon { display: block; }
+.kd-videos__play:focus-visible { outline: 4px solid var(--red); outline-offset: -4px; }
+.kd-videos__progress {
   position: absolute;
-  z-index: 1;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 4;
+  height: 4px;
+  background: color-mix(in srgb, var(--paper) 30%, transparent);
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+.kd-videos__card:is(.is-playing, .is-paused) .kd-videos__progress { opacity: 1; }
+.kd-videos__progress-fill { display: block; width: var(--kd-vid-progress, 0%); height: 100%; background: var(--kd-vid-progress-color, var(--lime)); }
+.kd-videos__clip-title {
+  position: absolute;
+  z-index: 2;
   left: 14px;
   right: 14px;
   bottom: 18px;
@@ -8457,99 +8464,96 @@ span.kd-phone__play { cursor: default; }
   font-size: 15px;
   line-height: 20px;
   text-align: center;
+  text-transform: uppercase;
   color: var(--kd-vid-clip-title, var(--paper));
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
   pointer-events: none;
 }
-.kd-phone__clip.is-playing .kd-phone__play,
-.kd-phone__clip.is-playing .kd-phone__poster,
-.kd-phone__clip.is-playing .kd-phone__title { display: none; }
+.kd-videos__card:is(.is-playing, .is-paused) .kd-videos__clip-title { display: none; }
+.kd-videos__source { color: var(--kd-vid-hint, rgb(var(--color-scheme-text))); }
 
-.kd-videos__nav { display: flex; align-items: center; justify-content: center; gap: var(--space-2); color: var(--kd-vid-hint, rgb(var(--color-scheme-text))); }
-.kd-videos__hint { margin: 0; text-transform: uppercase; color: inherit; text-wrap: balance; }
+/* ← → buttons: a Kaadu shape (snippets/shape-defs.liquid, --kd-vid-arrow-clip) clipped on the inner span so the focus
+   ring stays whole; «Round» keeps the pill. The typed glyphs are Banter 600. */
+.kd-videos__nav { display: flex; justify-content: center; gap: var(--space-3); }
 .kd-videos__arrow {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 32px;
-  height: 44px;
+  flex-shrink: 0;
+  width: var(--kd-vid-arrow-size, 48px);
+  height: var(--kd-vid-arrow-size, 48px);
   padding: 0;
   border: 0;
-  background: none;
-  color: var(--kd-vid-arrow, inherit);
+  border-radius: var(--radius-pill);
+  background: var(--kd-vid-arrow-bg, rgb(var(--color-scheme-accent-1)));
+  color: var(--kd-vid-arrow, rgb(var(--color-scheme-accent-1-contrast)));
   font-family: var(--font-sans);
   font-weight: 600;
-  font-size: 16px;
+  font-size: calc(var(--kd-vid-arrow-size, 48px) * 0.4);
   line-height: 1;
   cursor: pointer;
+  filter: drop-shadow(var(--shadow-card));
 }
+.kd-videos__arrow::before { content: ""; position: absolute; inset: min(0px, calc((var(--kd-vid-arrow-size, 48px) - 48px) / 2)); } /* 48px tap target around a smaller button */
+.kd-videos__arrow--shaped { border-radius: 0; background: transparent; }
+.kd-videos__arrow-bg {
+  position: absolute;
+  inset: 0;
+  background: var(--kd-vid-arrow-bg, rgb(var(--color-scheme-accent-1)));
+  -webkit-clip-path: var(--kd-vid-arrow-clip);
+  clip-path: var(--kd-vid-arrow-clip);
+}
+.kd-videos__arrow-glyph { position: relative; }
 .kd-videos__arrow:focus-visible { outline: 4px solid var(--red); outline-offset: 3px; }
-.kd-videos__source { color: var(--kd-vid-hint, rgb(var(--color-scheme-text))); font-weight: 600; font-size: 14px; }
-.kd-videos__glyph-v { display: none; }
-/* Mobile: the phone row runs edge to edge (no gutter), so «Phone position on mobile» has the whole screen width;
-   the hint stays inside the gutter. */
+.kd-videos__arrow:active .kd-videos__arrow-glyph { transform: translateY(1px); } /* DS: a 1px press, nothing more */
+/* «Over the row»: the buttons float at the row's vertical centre inside the gutter and never block the cards */
+.kd-videos--arrows-sides .kd-videos__nav {
+  position: absolute;
+  top: 50%;
+  left: var(--gutter);
+  right: var(--gutter);
+  z-index: 5;
+  height: 0;
+  justify-content: space-between;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+.kd-videos--arrows-sides .kd-videos__arrow { transform: translateY(-50%); pointer-events: auto; }
 @media (max-width: 767.98px) {
-  .kd-videos__rig { margin-inline: calc(-1 * var(--gutter)); }
+  .kd-videos--no-m-arrows .kd-videos__nav { display: none; }
+  .kd-videos--arrows-sides .kd-videos__nav { left: var(--space-2); right: var(--space-2); }
 }
-/* Up-and-down swiping (Reels): the clips stack in a column and snap vertically; at either end the scroll chains
-   to the page. Mobile and desktop are switched separately. */
-@media (max-width: 767.98px) {
-  .kd-videos--m-vertical .kd-phone__screen { flex-direction: column; overflow-x: hidden; overflow-y: auto; scroll-snap-type: y mandatory; overscroll-behavior: auto; }
-  .kd-videos--m-vertical .kd-videos__glyph-h { display: none; }
-  .kd-videos--m-vertical .kd-videos__glyph-v { display: inline; }
+
+/* Dots (48px tap targets around 10px pills) and the hint */
+.kd-videos__foot { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); padding-inline: var(--gutter); }
+.kd-videos--arrows-below .kd-videos__foot { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: var(--space-3) var(--space-5); }
+.kd-videos--arrows-below .kd-videos__hint { flex-basis: 100%; }
+.kd-videos__dots { display: flex; flex-wrap: wrap; justify-content: center; }
+.kd-videos__dot { position: relative; width: 48px; height: 48px; padding: 0; border: 0; background: transparent; cursor: pointer; }
+.kd-videos__dot::before {
+  content: "";
+  position: absolute;
+  inset: 19px;
+  border-radius: var(--radius-pill);
+  background: var(--kd-vid-dot, rgb(var(--color-scheme-text)));
+  opacity: 0.35;
+  transition: opacity 0.2s, inset 0.2s;
 }
-@media (min-width: 768px) {
-  .kd-videos--d-vertical .kd-phone__screen { flex-direction: column; overflow-x: hidden; overflow-y: auto; scroll-snap-type: y mandatory; overscroll-behavior: auto; }
-  .kd-videos--d-vertical .kd-videos__glyph-h { display: none; }
-  .kd-videos--d-vertical .kd-videos__glyph-v { display: inline; }
-}
-.kd-videos__source[hidden] { display: none; }
+.kd-videos__dot[aria-current="true"]::before { inset: 17px; opacity: 1; }
+.kd-videos__dot:focus-visible { outline: 4px solid var(--red); outline-offset: -8px; border-radius: var(--radius-pill); }
+.kd-videos__hint { margin: 0; color: var(--kd-vid-hint, rgb(var(--color-scheme-text))); text-wrap: balance; }
+.kd-videos__actions { display: flex; justify-content: center; }
+.kd-videos__button { --kd-cloud: var(--kd-vid-btn, rgb(var(--color-scheme-accent-1))); color: var(--kd-vid-btn-label, rgb(var(--color-scheme-accent-1-contrast))); }
 
 @media (min-width: 768px) {
   .kd-videos__inner { padding-block: var(--space-12); }
   .kd-videos__d { display: inline; }
   .kd-videos__m { display: none; }
-  .kd-phone__play { width: 80px; height: 80px; }
-  .kd-phone__play svg { width: 40px; height: 40px; }
+  .kd-videos__play-icon, .kd-videos__pause-icon { width: 72px; height: 72px; padding: 20px; }
 }
-/* Side by side from 768px (setting «Layout from tablet»): heading, intro and button in one column, the phone (with
-   the hint above it) in the other. --left = text left / phone right, --right = phone left / text right. */
-@media (min-width: 768px) {
-  .kd-videos--left .kd-videos__inner,
-  .kd-videos--right .kd-videos__inner {
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-rows: 1fr auto 1fr;
-    grid-template-areas: ". stage" "head stage" "cta stage";
-    column-gap: var(--space-8);
-    row-gap: 0;
-    justify-items: start;
-    text-align: left;
-  }
-  .kd-videos--right .kd-videos__inner {
-    grid-template-columns: auto minmax(0, 1fr);
-    grid-template-areas: "stage ." "stage head" "stage cta";
-  }
-  :is(.kd-videos--left, .kd-videos--right) .kd-videos__heading { align-items: flex-start; text-align: left; margin-bottom: var(--space-8); }
-  :is(.kd-videos--left, .kd-videos--right) .kd-videos__intro { margin: 0; }
-  :is(.kd-videos--left, .kd-videos--right) .kd-videos__actions { align-self: start; }
-  :is(.kd-videos--left, .kd-videos--right) .kd-videos__rig::before,
-  :is(.kd-videos--left, .kd-videos--right) .kd-videos__rig::after { display: none; }
-}
-/* Tablets (768–991): the text column is narrow (the phone is capped at 40 % of the screen in the section CSS), so a
-   long word in the heading («Ungeschnitten») may hyphenate instead of running under the phone. */
-@media (min-width: 768px) and (max-width: 991.98px) {
-  :is(.kd-videos--left, .kd-videos--right) .kd-videos__title { hyphens: auto; overflow-wrap: break-word; }
-}
-@media (min-width: 992px) {
-  :is(.kd-videos--left, .kd-videos--right) .kd-videos__inner { column-gap: var(--space-10); }
-}
-@media (min-width: 1200px) {
-  :is(.kd-videos--left, .kd-videos--right) .kd-videos__inner { column-gap: var(--space-13); }
-}
-/* 21" and 24" screens (1200–1911): side margins like on 27" screens (~120px), so text and phone don't sit on the
-   screen edge; from 1912 the 1800px .kd-wide cap plus the gutter gives at least that margin. */
-@media (min-width: 1200px) and (max-width: 1911.98px) {
-  :is(.kd-videos--left, .kd-videos--right) .kd-videos__inner { max-width: none; padding-inline: calc(var(--space-12) + var(--space-8)); }
+@media (prefers-reduced-motion: reduce) {
+  .kd-videos__preview, .kd-videos__progress, .kd-videos__dot::before { transition: none; }
 }
 
 /* ── STATS AROUND AN IMAGE ("Perfekt in jeder Weise") — sections/custom-image-with-highlights.liquid ──
@@ -9360,10 +9364,6 @@ html.lenis, html.lenis body { height: auto; }
 }
 .kd-drawer .kd-btn-round { position: relative; flex-shrink: 0; background: var(--kd-drawer-accent); color: var(--kd-drawer-bg); }
 .kd-drawer .kd-btn-round::before { content: ""; position: absolute; inset: -4px; } /* 48px tap target around the 40px button */
-
-/* Shipping strip: status + threshold note over the progress bar (paper track, accent fill, an optional sticker
-   riding on the fill, the starburst at the goal). --kd-progress is set by snippets/kd-cart-shipping.liquid. */
-.kd-drawer__ship {
 /* Close button (Theme settings › Cart › Close button): size and colours from snippets/kd-cart-vars.liquid; a Kaadu shape
    (snippets/shape-defs.liquid, #clip-kd-cart-close) is clipped on the inner span so the button's focus ring stays whole. */
 .kd-drawer .kd-drawer__close {
@@ -9382,6 +9382,10 @@ html.lenis, html.lenis body { height: auto; }
   clip-path: url(#clip-kd-cart-close);
 }
 .kd-drawer__close-glyph { position: relative; }
+
+/* Shipping strip: status + threshold note over the progress bar (paper track, accent fill, an optional sticker
+   riding on the fill, the starburst at the goal). --kd-progress is set by snippets/kd-cart-shipping.liquid. */
+.kd-drawer__ship {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
@@ -9672,19 +9676,19 @@ html.lenis, html.lenis body { height: auto; }
    drawer must cover the header too. !important: overrides the shell's z-50 utility. */
 #modals-rightDrawer { z-index: 100001 !important; }
 .kd-right-drawer__panel:has(> .kd-drawer:not([style*="display: none"])) {
-  width: 520px !important;
+  width: 100% !important;
   max-width: 100%;
   border: 0 !important;
   background: transparent !important;
   overflow: visible !important;
 }
+@media (min-width: 768px) {
+  .kd-right-drawer__panel:has(> .kd-drawer:not([style*="display: none"])) { width: var(--kd-drawer-w, 50%) !important; }
+}
 
 /* The cart page (sections/cart.liquid): the same panel, static and centred on the section's ground */
 .kd-cart-page { padding-block: var(--space-9); }
 .kd-drawer--page { height: auto; max-width: 520px; margin-inline: auto; }
-@media (min-width: 768px) {
-  .kd-right-drawer__panel:has(> .kd-drawer:not([style*="display: none"])) { width: var(--kd-drawer-w, 50%) !important; }
-}
 .kd-drawer--page .kd-drawer__body { overflow: visible; }
 
 @media (max-width: 767.98px) {
@@ -9829,11 +9833,13 @@ section.kd-ic-band { background-color: var(--kd-ic-bg, rgb(var(--color-scheme-ba
   flex-direction: column;
   gap: var(--space-2);
   padding: var(--space-6);
-  background: rgb(var(--color-scheme-card));
-  color: rgb(var(--color-scheme-card-text));
+  background: var(--kd-iw-card, rgb(var(--color-scheme-card)));
+  color: var(--kd-iw-card-text, rgb(var(--color-scheme-card-text)));
   box-shadow: var(--shadow-card);
 }
 .kd-iw__card-head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3); }
+/* Optional secondary action: the DS ✶ text link (underline on hover), pushed to the card's bottom edge */
+.kd-iw__card-link { align-self: flex-start; margin-top: auto; padding-top: var(--space-2); color: inherit; }
 .kd-iw__card-title { margin: 0; color: var(--kd-iw-kicker, rgb(var(--color-scheme-eyebrow-text))); overflow-wrap: anywhere; }
 .kd-iw__card-meta { flex-shrink: 0; }
 .kd-iw__card-text > :first-child { margin-top: 0; }
@@ -9851,5 +9857,3 @@ section.kd-ic-band { background-color: var(--kd-ic-bg, rgb(var(--color-scheme-ba
   .kd-video__frame--two-one { --tw-aspect-w: 2; --tw-aspect-h: 1; }
   .kd-video--hero .kd-video__layer { padding-bottom: var(--space-12); }
 }
-/* Optional secondary action: the DS ✶ text link (underline on hover), pushed to the card's bottom edge */
-.kd-iw__card-link { align-self: flex-start; margin-top: auto; padding-top: var(--space-2); color: inherit; }

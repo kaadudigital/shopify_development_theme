@@ -691,7 +691,8 @@
         "clip_title_color": "#fffff5",
         "button_color": "#ffc6ff",
         "button_label_color": "#ac0300",
-        "arrow_icon_color": "#fffff5"
+        "arrow_background": "#ffc6ff",
+        "arrow_icon_color": "#ac0300"
       }
     },
     "image_with_highlights_mU9j66": {
