@@ -792,13 +792,14 @@
         bottom: calc(var(--menu-cloud-height) + var(--menu-cloud-offset, 0px) - 20px);
       }
 
-      /* Flowers: outer div follows the cursor (parallax via --kd-par-*, set by
-         the section script), inner div pops in, the SVG spins continuously. */
+      /* Background shapes («Background shape» settings; Kaadu star by default): outer div follows the cursor
+         (parallax via --kd-par-*, set by the section script), inner div pops in, the SVG spins continuously. */
+      #{{ section.id }} { --menu-shape-color: {{ section.settings.overlay_shape_color | default: '#b7d9ff' }}; }
       #{{ section.id }} .menu-cloud {
         position: absolute;
         z-index: 1;
         width: clamp(80px, 9vw, 140px);
-        color: var(--color-sky);
+        color: var(--menu-shape-color, var(--sky));
         pointer-events: none;
         transform: translate3d(var(--kd-par-x, 0px), var(--kd-par-y, 0px), 0);
         transition: transform 0.35s ease-out;
@@ -826,6 +827,9 @@
           transform: rotate(360deg);
         }
       }
+      {%- unless section.settings.overlay_shape_spin %}
+      #{{ section.id }} .menu-cloud svg { animation: none; }
+      {%- endunless %}
 
       #{{ section.id }} .menu-cloud--1 {
         left: 46%;
@@ -1340,18 +1344,35 @@
         </div>
       </div>
 
-      {%- comment -%} Sky flower accents — 6 petals + centre, spinning, cursor-follow {%- endcomment -%}
+      {%- comment -%} Background shape accents (spinning, cursor-follow): a Kaadu shape from snippets/shape-defs.liquid
+        (its #outline-… path on the 200 × 200 box), the previous six-petal flower, or custom SVG code. {%- endcomment -%}
+      {%- liquid
+        assign overlay_shape = section.settings.overlay_shape | default: 'website_shape_star'
+        assign overlay_shape_id = section.id | append: '-menu-shape'
+        if overlay_shape == 'custom' and section.settings.overlay_shape_svg == blank
+          assign overlay_shape = 'website_shape_star'
+        endif
+      -%}
       {%- capture flower_svg -%}
-        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" focusable="false">
-          <circle cx="90" cy="60" r="21"/>
-          <circle cx="75" cy="86" r="21"/>
-          <circle cx="45" cy="86" r="21"/>
-          <circle cx="30" cy="60" r="21"/>
-          <circle cx="45" cy="34" r="21"/>
-          <circle cx="75" cy="34" r="21"/>
-          <circle cx="60" cy="60" r="26"/>
-        </svg>
+        {%- if overlay_shape == 'flower' -%}
+          <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" focusable="false">
+            <circle cx="90" cy="60" r="21"/>
+            <circle cx="75" cy="86" r="21"/>
+            <circle cx="45" cy="86" r="21"/>
+            <circle cx="30" cy="60" r="21"/>
+            <circle cx="45" cy="34" r="21"/>
+            <circle cx="75" cy="34" r="21"/>
+            <circle cx="60" cy="60" r="26"/>
+          </svg>
+        {%- elsif overlay_shape == 'custom' -%}
+          {{ section.settings.overlay_shape_svg }}
+        {%- else -%}
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" focusable="false"><use href="#outline-{{ overlay_shape_id }}"></use></svg>
+        {%- endif -%}
       {%- endcapture -%}
+      {%- unless overlay_shape == 'flower' or overlay_shape == 'custom' -%}
+        {%- render 'shape-defs', shape: overlay_shape, shape_id: overlay_shape_id -%}
+      {%- endunless -%}
       <div class="menu-cloud menu-cloud--1" data-depth="70" aria-hidden="true">
         <div class="menu-cloud-pop">{{ flower_svg }}</div>
       </div>
@@ -1793,6 +1814,76 @@
       "label": "Accent color",
       "info": "Fill of the MENU/CLOSE pill.",
       "default": "#ACFF64"
+    },
+    {
+      "type": "header",
+      "content": "Background shape"
+    },
+    {
+      "type": "paragraph",
+      "content": "Four spinning shapes float behind the open menu and drift with the cursor."
+    },
+    {
+      "type": "select",
+      "id": "overlay_shape",
+      "label": "Shape",
+      "default": "website_shape_star",
+      "options": [
+        {
+          "value": "website_shape_star",
+          "label": "Kaadu star",
+          "group": "Kaadu shapes"
+        },
+        {
+          "value": "website_shape_bun",
+          "label": "Kaadu bun",
+          "group": "Kaadu shapes"
+        },
+        {
+          "value": "website_shape_frame",
+          "label": "Kaadu frame",
+          "group": "Kaadu shapes"
+        },
+        {
+          "value": "website_shape_pancake",
+          "label": "Kaadu pancake",
+          "group": "Kaadu shapes"
+        },
+        {
+          "value": "website_shape_cloud",
+          "label": "Kaadu cloud",
+          "group": "Kaadu shapes"
+        },
+        {
+          "value": "flower",
+          "label": "Flower (six petals)",
+          "group": "Other"
+        },
+        {
+          "value": "custom",
+          "label": "Custom SVG code (below)",
+          "group": "Other"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "id": "overlay_shape_svg",
+      "label": "Custom shape SVG code",
+      "info": "Used with «Custom SVG code». Paste <svg>…</svg> with a viewBox; use fill=\"currentColor\" so it takes the shape colour. Without code the Kaadu star shows."
+    },
+    {
+      "type": "color",
+      "id": "overlay_shape_color",
+      "label": "Shape colour",
+      "default": "#B7D9FF"
+    },
+    {
+      "type": "checkbox",
+      "id": "overlay_shape_spin",
+      "label": "Spin the shapes",
+      "default": true,
+      "info": "Off, or when the visitor has reduced motion on, the shapes stay still."
     },
     {
       "type": "url",
