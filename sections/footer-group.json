@@ -95,20 +95,23 @@
       "name": "Custom Footer",
       "settings": {
         "email": "HELLO@KAADU.CH",
+        "company_note": "Kaadu GmbH · Neuenkirch · Schweiz",
         "show_social_icons": true,
         "social_style": "icons",
         "social_icon_style": "outline",
         "social_icon_size": 48,
-        "social_icon_color": "#FFFFF5",
+        "social_icon_color": "#fffff5",
         "social_accent_color": "",
         "show_footer_links": true,
         "link_1_text": "Impressum",
         "link_1_url": "https://www.kaadu.ch/policies/legal-notice",
         "link_2_text": "Datenschutz",
         "link_2_url": "shopify://policies/privacy-policy",
-        "color_scheme": "scheme3",
         "spacing_top_desktop": 24,
-        "spacing_top_mobile": 20
+        "spacing_top_mobile": 20,
+        "spacing_bottom_desktop": 48,
+        "spacing_bottom_mobile": 40,
+        "color_scheme": "scheme3"
       }
     }
   },
