@@ -6991,7 +6991,7 @@ html.no-js .no-js\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
 /* Kickers (eyebrows) above headings are uniform: the DS label (13px) below 1200px, label-lg (16px, 0.04em) from
    1200px — proposed: the DS gives the kicker one size, which reads too small on desktop. */
 @media (min-width: 1200px) {
-  :is(.kd-heading__kicker, .kd-iw__kicker, .kd-iwh__eyebrow, .kd-video__kicker).kd-label { font-size: 16px; letter-spacing: 0.04em; }
+  :is(.kd-heading__kicker, .kd-iw__kicker, .kd-iwh__eyebrow, .kd-video__kicker, .image-with-text__eyebrow, .kaadu-rtwi__eyebrow).kd-label { font-size: 16px; letter-spacing: 0.04em; }
 }
 .kd-announcement  { font-weight: 600; font-size: 14px; line-height: 1;   letter-spacing: 0.04em; }
 .kd-price         { font-weight: 600; font-size: 22px; line-height: 1.1; }
