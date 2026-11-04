@@ -165,9 +165,6 @@
     <div class="kd-footer kd-wide">
       {%- if section.settings.email != blank or section.settings.show_social_icons -%}
         <div class="kd-footer__group">
-          {%- if section.settings.email != blank -%}
-            <p class="kd-footer__mail">{{ section.settings.email }}</p>
-          {%- endif -%}
           {%- if section.settings.show_social_icons -%}
             {%- liquid
               assign social_blocks = section.blocks | where: 'type', 'social'
@@ -216,6 +213,10 @@
                 {%- endfor -%}
               {%- endif -%}
             </ul>
+          {%- endif -%}
+          {%- comment -%} E-mail under the social icons {%- endcomment -%}
+          {%- if section.settings.email != blank -%}
+            <p class="kd-footer__mail">{{ section.settings.email }}</p>
           {%- endif -%}
         </div>
       {%- endif -%}
