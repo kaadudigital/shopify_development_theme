@@ -12,23 +12,45 @@
     "hero": {
       "type": "custom-video-with-text-overlay",
       "settings": {
-        "color_scheme": "scheme3",
+        "video": "shopify://files/videos/Kaadu for instagram.mp4",
         "crop": "vertical",
         "crop_desktop": "two-one",
-        "cta_text": "",
+        "video_trim": 0,
         "enable_overlay": true,
-        "heading_tag": "h1",
-        "layout": "hero",
         "overlay_style": "gradient",
-        "place_content": "place-content-end-start",
-        "richtext": "<p>Ananas von Kleinbauern rund um Vazhakulam, gefriergetrocknet in Vadacode, im selben Distrikt. Hier steht, wem wir was zahlen und was noch offen ist.</p>",
-        "scroll_motion": true,
-        "style": "full",
-        "text_align": "text-left",
-        "text_color": "#FFFFF5",
+        "overlay_color": "#000000",
+        "overlay_opacity": 40,
+        "eyebrow": "",
         "title": "Unser Versprechen: 0 % Ausbeutung.",
-        "title_color": "#FFFFF5",
-        "title_shadow": false
+        "heading_tag": "h1",
+        "richtext": "<p>Ananas von Kleinbauern rund um Vazhakulam, gefriergetrocknet in Vadacode, im selben Distrikt. Hier steht, wem wir was zahlen und was noch offen ist.</p>",
+        "cta_text": "",
+        "cta_text_mobile": "",
+        "cta_url": "",
+        "show_play_icon": true,
+        "button_space_mobile": "space-8",
+        "button_space_desktop": "space-10",
+        "use_button_art": false,
+        "button2_width_desktop": 200,
+        "button2_width_mobile": 150,
+        "button_text_color_desktop": "#ae0000",
+        "button_text_color_mobile": "#ae0000",
+        "layout": "hero",
+        "style": "full",
+        "place_content": "place-content-end-start",
+        "text_align": "text-left",
+        "display_on_card": false,
+        "color_scheme": "scheme3",
+        "use_gradient_background": false,
+        "kicker_color": "#fffff5",
+        "title_color": "#fffff5",
+        "title_shadow": false,
+        "title_shadow_color": "#fffff5",
+        "title_shadow_color_mobile": "#aeff64",
+        "text_color": "#fffff5",
+        "button_color": "#542a76",
+        "button_label_color": "#fffff5",
+        "scroll_motion": true
       }
     },
     "kreise": {
@@ -37,11 +59,13 @@
         "ring-1": {
           "type": "ring",
           "settings": {
+            "image": "shopify://shop_images/DSC04234.jpg",
             "title": "Arbeiterinnen",
+            "label": "",
             "text": "<p>Frauen aus der Region, fest angestellt in unserer Anlage in Vadacode.</p>",
             "fact": "Lohn +50 % über der Region, Pension, Versicherung, Gewinnbeteiligung.",
-            "ring_color": "#FFC6FF",
-            "label_color": "#542A76",
+            "ring_color": "#ffc6ff",
+            "label_color": "#542a76",
             "marker_x": 45,
             "marker_y": 62
           }
@@ -49,11 +73,13 @@
         "ring-2": {
           "type": "ring",
           "settings": {
+            "image": "shopify://shop_images/ren08195.webp",
             "title": "Kleinbäuerinnen",
+            "label": "",
             "text": "<p>Direkt gekauft, ohne Zwischenhandel, auch die hässlichen Früchte.</p>",
             "fact": "Voller Preis für jede Grösse + 5 INR über Markt.",
-            "ring_color": "#EEF72E",
-            "label_color": "#542A76",
+            "ring_color": "#eef72e",
+            "label_color": "#542a76",
             "marker_x": 64,
             "marker_y": 58
           }
@@ -61,11 +87,13 @@
         "ring-3": {
           "type": "ring",
           "settings": {
+            "image": "shopify://shop_images/ren07232-1.webp",
             "title": "Erntehelferinnen",
+            "label": "",
             "text": "<p>Doppelte Tageslöhne für die, die schneiden, nicht nur für die, denen das Feld gehört.</p>",
             "fact": "Tageslohn [X] über dem ortsüblichen Satz.",
-            "ring_color": "#B7D9FF",
-            "label_color": "#542A76",
+            "ring_color": "#b7d9ff",
+            "label_color": "#542a76",
             "marker_x": 21,
             "marker_y": 39
           }
@@ -73,11 +101,13 @@
         "ring-4": {
           "type": "ring",
           "settings": {
+            "image": "shopify://shop_images/dsc04330-2.webp",
             "title": "Gemeinde",
+            "label": "",
             "text": "<p>Verarbeitet, wo die Frucht wächst. Löhne, Steuern und Zulieferer bleiben im Dorf.</p>",
             "fact": "Wertschöpfung im Distrikt der Ernte statt in Europa.",
-            "ring_color": "#542A76",
-            "label_color": "#FFFFF5",
+            "ring_color": "#542a76",
+            "label_color": "#fffff5",
             "marker_x": 56,
             "marker_y": 82
           }
@@ -85,11 +115,13 @@
         "ring-5": {
           "type": "ring",
           "settings": {
+            "image": "shopify://shop_images/ren08242-3.webp",
             "title": "Natur",
+            "label": "",
             "text": "<p>Ananasreste werden zu Pflanzenkohle statt zu Abfall.</p>",
             "fact": "Biochar: rund 1'900 t CO₂ sollen im Boden bleiben.",
-            "ring_color": "#AEFF64",
-            "label_color": "#542A76",
+            "ring_color": "#aeff64",
+            "label_color": "#542a76",
             "marker_x": 80,
             "marker_y": 28
           }
@@ -103,7 +135,26 @@
         "ring-5"
       ],
       "settings": {
-        "color_scheme": "scheme4"
+        "kicker": "Wirkungskreis Vazhakulam",
+        "heading": "Ein Beutel wirkt für eine ganze Region.",
+        "text": "<p>Kaadu steht in der Mitte, aber die Wirkung geht weit darüber hinaus: von den Frauen in der Anlage über die Bauern und Erntehelfer bis zur Gemeinde und zur Natur rund um Vazhakulam. Jeder Kreis profitiert, weil alles vor Ort bleibt.</p>",
+        "center_image": "shopify://shop_images/Kaadu_favicon_purple_RGB.png",
+        "outer_label": "Wirkungskreis · Vazhakulam",
+        "photo_placeholder": "[Foto]",
+        "color_scheme": "scheme4",
+        "use_custom_colors": true,
+        "background_color": "#fffff5",
+        "kicker_color": "#ac0300",
+        "heading_color": "#ac0300",
+        "text_color": "#1a1a1a",
+        "list_title_color": "#542a76",
+        "fact_color": "#ac0300",
+        "outer_color": "#542a76",
+        "ring_stroke_color": "#fffff5",
+        "center_color": "#fffff5",
+        "center_stroke_color": "#ac0300",
+        "scroll_motion": true,
+        "diagram_alt": ""
       }
     },
     "menschen": {
@@ -112,46 +163,61 @@
         "card-1": {
           "type": "card",
           "settings": {
+            "tint": "tint-cocoa",
             "stat": "A-Preis",
             "title": "Kleinbauer*innen",
             "text": "<p>Voller Preis für jede Grösse, auch für die krummen Früchte.</p>",
-            "tint": "tint-cocoa"
+            "link": "",
+            "text_link_label": "",
+            "text_link": ""
           }
         },
         "card-2": {
           "type": "card",
           "settings": {
+            "tint": "tint-plum",
             "stat": "[₹ X'XXX]",
             "title": "Erntehelfer*innen",
             "text": "<p>Tageslohn deutlich über Marktstandard. Mit Vertrag.</p>",
-            "tint": "tint-plum"
+            "link": "",
+            "text_link_label": "",
+            "text_link": ""
           }
         },
         "card-3": {
           "type": "card",
           "settings": {
+            "tint": "tint-ochre",
             "stat": "+50 %",
             "title": "Arbeiter*innen",
             "text": "<p>Lohn über dem regionalen Benchmark. Mit Mitsprache und Miteigentum.</p>",
-            "tint": "tint-ochre"
+            "link": "",
+            "text_link_label": "",
+            "text_link": ""
           }
         },
         "card-4": {
           "type": "card",
           "settings": {
+            "tint": "tint-umber",
             "stat": "100 %",
             "title": "Das Team als Besitzer",
             "text": "<p>Ziel: Die Anlage gehört den Mitarbeitenden.</p>",
-            "tint": "tint-umber"
+            "link": "",
+            "text_link_label": "",
+            "text_link": ""
           }
         },
         "card-5": {
           "type": "card",
           "settings": {
+            "tint": "tint-forest",
             "stat": "1'900 t",
             "title": "Natur + Community",
             "text": "<p>CO₂, die als Pflanzenkohle im Boden bleiben sollen.</p>",
-            "tint": "tint-forest"
+            "link": "",
+            "text_link_label": "",
+            "text_link": ""
           }
         }
       },
@@ -163,18 +229,48 @@
         "card-5"
       ],
       "settings": {
-        "action_button_label": "Zur Quittung ↓",
-        "action_heading": "Du bezahlst mehr als beim Discounter. Und siehst, wohin es geht.",
-        "action_note": "6er Pack · CHF 6.30 pro Beutel · Gratis Versand im Abo",
-        "action_pill": "Und du",
-        "action_text": "Kein gutes Gewissen zum Draufkleben. Ein Snack, bei dem die Rechnung stimmt.",
-        "color_scheme": "scheme1",
+        "kicker": "Kein Spendenanteil",
         "heading": "Wir brechen die Kette",
         "hint": "← wischen oder scrollen →",
         "hint_mobile": "← wischen →",
-        "kicker": "Kein Spendenanteil",
         "link_label": "Mehr dazu ↓",
-        "show_action_card": true
+        "card_shape_enabled": true,
+        "card_outline": true,
+        "card_outline_color": "#1a1a1a",
+        "card_outline_width": 3,
+        "autoplay": false,
+        "autoplay_mobile": false,
+        "autoplay_interval": 4,
+        "show_action_card": true,
+        "action_pill": "Und du",
+        "action_heading": "Du bezahlst mehr als beim Discounter. Und siehst, wohin es geht.",
+        "action_text": "Kein gutes Gewissen zum Draufkleben. Ein Snack, bei dem die Rechnung stimmt.",
+        "action_button_label": "Zur Quittung ↓",
+        "action_button_link": "",
+        "action_note": "6er Pack · CHF 6.30 pro Beutel · Gratis Versand im Abo",
+        "button_label": "Unser Versprechen",
+        "button_link": "",
+        "color_scheme": "scheme1",
+        "use_gradient_background": false,
+        "heading_follows_scheme": false,
+        "kicker_color": "#ac0300",
+        "heading_color": "#ac0300",
+        "hint_color": "#1a1a1a",
+        "stat_color": "#ac0300",
+        "stat_color_mobile": "#aeff64",
+        "stat_outline_color": "#fffff5",
+        "card_text_color": "#fffff5",
+        "card_link_color": "",
+        "card_button_color": "#fffff5",
+        "cta_bg_color": "#ac0300",
+        "cta_text_color": "#fffff5",
+        "cta_pill_color": "#aeff64",
+        "cta_pill_text_color": "#ac0300",
+        "cta_button_color": "#aeff64",
+        "cta_button_label_color": "#ac0300",
+        "footer_button_color": "#542a76",
+        "footer_button_label_color": "#fffff5",
+        "scroll_motion": true
       }
     },
     "bauern": {
@@ -184,28 +280,40 @@
           "type": "card",
           "settings": {
             "title": "Direktkauf",
-            "text": "<p>Das Geld geht an die Familie, nicht an drei Stationen dazwischen.</p>"
+            "meta": "",
+            "text": "<p>Das Geld geht an die Familie, nicht an drei Stationen dazwischen.</p>",
+            "link_label": "",
+            "link": ""
           }
         },
         "card-2": {
           "type": "card",
           "settings": {
             "title": "Über Markt",
-            "text": "<p>Preis über Markt, Schema öffentlich. [Schema verlinken]</p>"
+            "meta": "",
+            "text": "<p>Preis über Markt, Schema öffentlich. [Schema verlinken]</p>",
+            "link_label": "",
+            "link": ""
           }
         },
         "card-3": {
           "type": "card",
           "settings": {
             "title": "A-Preis",
-            "text": "<p>Für jede Frucht, egal wie gross.</p>"
+            "meta": "",
+            "text": "<p>Für jede Frucht, egal wie gross.</p>",
+            "link_label": "",
+            "link": ""
           }
         },
         "card-4": {
           "type": "card",
           "settings": {
             "title": "D-Grade",
-            "text": "<p>Kaufen wir auch. [Preis bestätigen]</p>"
+            "meta": "",
+            "text": "<p>Kaufen wir auch. [Preis bestätigen]</p>",
+            "link_label": "",
+            "link": ""
           }
         }
       },
@@ -216,20 +324,58 @@
         "card-4"
       ],
       "settings": {
-        "button2_label": "Radikal fair: so gehts",
-        "button2_link_type": "url",
-        "color_scheme": "scheme1",
-        "h2_title": "",
-        "heading_level": "h2",
+        "image_caption": "",
         "image_position": "left",
+        "image_width_large": 40,
+        "image_width_xl": 46,
+        "image_max_width": 1120,
+        "crop": "",
+        "image_shape": "website_shape_star",
+        "blob_type": 1,
+        "rotate_image": 0,
+        "disable_media_style": false,
         "image_shadow": true,
-        "mobile_layout_order": true,
-        "mobile_text_alignment": "text-left",
-        "richtext": "<p>Kein Zwischenhandel, keine Marge zwischen Feld und Trockner. Der Deal in vier Stempeln:</p>",
-        "scroll_motion": true,
-        "text_alignment": "text-left",
+        "hide_image_mobile": false,
+        "h2_title": "",
         "title": "Farming darf kein Glücksspiel sein",
-        "use_custom_colors": false
+        "heading_level": "h2",
+        "richtext": "<p>Kein Zwischenhandel, keine Marge zwischen Feld und Trockner. Der Deal in vier Stempeln:</p>",
+        "richtext_mobile": "",
+        "text_alignment": "text-left",
+        "mobile_text_alignment": "text-left",
+        "mobile_layout_order": true,
+        "button2_label": "Radikal fair: so gehts",
+        "button2_label_mobile": "",
+        "button2_link_type": "url",
+        "button2_link": "",
+        "focus_element2_id": "",
+        "button_note": "",
+        "button_note_mobile": "",
+        "button2_width_desktop": 200,
+        "button2_width_mobile": 150,
+        "button_text_color_desktop": "#ffffff",
+        "button_text_color_mobile": "#ffffff",
+        "button_label": "",
+        "button_label_mobile": "",
+        "button_link_type": "url",
+        "button_link": "",
+        "focus_element_id": "",
+        "mobile_link_position": "beside",
+        "link_color": "text",
+        "color_scheme": "scheme1",
+        "use_custom_colors": false,
+        "use_gradient_background": false,
+        "background_color": "#ac0300",
+        "kicker_color": "#aeff64",
+        "heading_color": "#fffff5",
+        "text_color": "#fffff5",
+        "button_color": "#aeff64",
+        "button_label_color": "#ac0300",
+        "link_custom_color": "#fffff5",
+        "card_color": "#fffff5",
+        "card_text_color": "#000000",
+        "card_link_color": "",
+        "scroll_motion": true
       }
     }
   },
