@@ -99,7 +99,7 @@
         "show_social_icons": true,
         "social_style": "icons",
         "social_icon_style": "outline",
-        "social_icon_size": 48,
+        "social_icon_size": 64,
         "social_icon_color": "#fffff5",
         "social_accent_color": "",
         "show_footer_links": true,
