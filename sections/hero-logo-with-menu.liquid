@@ -627,7 +627,7 @@
       /* Social icons: the Kaadu designer icons (snippets/kd-social-icon.liquid) for TikTok and Instagram, the stock
          glyph for Facebook. Size and colours come from the «Social icons» settings (--menu-social-*). */
       #{{ section.id }} {
-        --menu-social-size: {{ section.settings.menu_social_icon_size | default: 40 }}px;
+        --menu-social-size: {{ section.settings.menu_social_icon_size | default: 56 }}px;
         {%- if section.settings.menu_social_icon_color != blank %}
         --menu-social-icon: {{ section.settings.menu_social_icon_color }};
         {%- endif %}
@@ -638,8 +638,8 @@
 
       #{{ section.id }} .menu-social-icon {
         display: inline-block;
-        width: var(--menu-social-size, 40px);
-        height: var(--menu-social-size, 40px);
+        width: var(--menu-social-size, 56px);
+        height: var(--menu-social-size, 56px);
         color: var(--menu-social-icon, currentColor);
       }
 
@@ -1945,10 +1945,10 @@
       "id": "menu_social_icon_size",
       "label": "Icon size",
       "min": 32,
-      "max": 72,
+      "max": 96,
       "step": 4,
       "unit": "px",
-      "default": 40
+      "default": 56
     },
     {
       "type": "color",
