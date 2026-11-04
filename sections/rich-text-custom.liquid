@@ -8,7 +8,7 @@
         
         {%- comment -%} Eyebrow — DS kicker (kd-strong), a paragraph so the H2 stays the first heading {%- endcomment -%}
         {%- if section.settings.h2_title != blank -%}
-          <p class="image-with-text__eyebrow kd-strong">{{ section.settings.h2_title | escape }}</p>
+          <p class="image-with-text__eyebrow kd-label">{{ section.settings.h2_title | escape }}</p>
         {%- endif -%}
 
         {%- comment -%} Main Heading — design-system H2 (refer to Figma node 878:82) {%- endcomment -%}

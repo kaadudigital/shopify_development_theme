@@ -7,7 +7,7 @@
       <div class="{% if section.settings.display_on_card %}card__surface p-5 lg:p-8{% endif %} relative z-shape-divider mx-auto text-center">
         {%- if section.settings.h2_title != blank -%}
           {%- comment -%} Kicker — DS hero kicker (kd-strong-lg), a paragraph so the H1 stays the first heading {%- endcomment -%}
-          <p class="image-with-text__eyebrow kd-strong-lg">{{ section.settings.h2_title | escape }}</p>
+          <p class="image-with-text__eyebrow kd-label">{{ section.settings.h2_title | escape }}</p>
         {%- endif -%}
         {% if section.settings.title != '' %}
           <h1 class="inline-heading-rte font-subheading {{ section.settings.heading_size }} heading-style {{ settings.heading_drop_shadow_style }} break-words h1">
