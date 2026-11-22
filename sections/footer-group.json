@@ -54,6 +54,19 @@
     "custom_footer_tiyDdY": {
       "type": "custom-footer",
       "blocks": {
+        "shape_divider_aPNFjV": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "above",
+            "target_section_color_scheme": "scheme5",
+            "style": "curve-shape_1440x149",
+            "enable_mobile_style": false,
+            "style_mobile": "waves-1-patterned_1200x20",
+            "flip_horizontal": false,
+            "enable_animation": false,
+            "animation_direction": ""
+          }
+        },
         "social_instagram": {
           "type": "social",
           "settings": {
@@ -69,25 +82,12 @@
             "name": "",
             "url": "https://www.tiktok.com/@eatkaadu"
           }
-        },
-        "shape_divider_aPNFjV": {
-          "type": "shape_divider",
-          "settings": {
-            "target_section": "above",
-            "target_section_color_scheme": "scheme3",
-            "style": "waves-1-patterned_1200x20",
-            "enable_mobile_style": false,
-            "style_mobile": "waves-1-patterned_1200x20",
-            "flip_horizontal": false,
-            "enable_animation": false,
-            "animation_direction": ""
-          }
         }
       },
       "block_order": [
+        "shape_divider_aPNFjV",
         "social_instagram",
-        "social_tiktok",
-        "shape_divider_aPNFjV"
+        "social_tiktok"
       ],
       "custom_css": [
         "@media (max-width: 480px) {.h4-subsection-heading {font-size: 16px; line-height: 24px; } .btn-text-arrow-label {font-size: 12px; line-height: 24px; font-weight: 400; }}"
@@ -95,18 +95,22 @@
       "name": "Custom Footer",
       "settings": {
         "email": "HELLO@KAADU.CH",
+        "company_note": "Kaadu GmbH · Neuenkirch · Produziert von Amboo Foods, Vadacode, Kerala",
         "show_social_icons": true,
         "social_style": "icons",
         "social_icon_style": "outline",
         "social_icon_size": 64,
-        "social_icon_color": "#FFFFF5",
+        "social_icon_color": "#fffff5",
         "social_accent_color": "",
-        "company_note": "Kaadu GmbH · Neuenkirch · Produziert von Amboo Foods, Vadacode, Kerala",
         "show_footer_links": true,
         "link_1_text": "Impressum",
         "link_1_url": "https://www.kaadu.ch/policies/legal-notice",
         "link_2_text": "Datenschutz",
         "link_2_url": "shopify://policies/privacy-policy",
+        "spacing_top_desktop": 48,
+        "spacing_top_mobile": 40,
+        "spacing_bottom_desktop": 48,
+        "spacing_bottom_mobile": 40,
         "color_scheme": "scheme3"
       }
     }

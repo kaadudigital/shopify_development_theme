@@ -371,7 +371,7 @@
           "type": "shape_divider",
           "settings": {
             "target_section": "below",
-            "target_section_color_scheme": "scheme3",
+            "target_section_color_scheme": "scheme1",
             "style": "circles-2.5-patterned_1200x54",
             "enable_mobile_style": false,
             "style_mobile": "circles-2.5-patterned_1200x54",
@@ -572,7 +572,7 @@
         "storage_label": "Lagerung und Haltbarkeit",
         "storage_content": "",
         "details_stars": false,
-        "color_scheme": "scheme3",
+        "color_scheme": "scheme-f3c790b8-ce18-4811-87cf-e53b730fe742",
         "use_custom_colors": false,
         "bg_color": "#fffff5",
         "bg_color_mobile": "#ffc6ff",
@@ -591,7 +591,7 @@
         "option_text": "#542a76",
         "option_active_bg": "#542a76",
         "option_active_text": "#fffff5",
-        "badge_bg": "#FFFFF5",
+        "badge_bg": "#fffff5",
         "badge_text": "#542a76",
         "plan_badge_bg": "#ac0300",
         "plan_badge_text": "#fffff5",
@@ -648,7 +648,7 @@
           "type": "shape_divider",
           "settings": {
             "target_section": "above",
-            "target_section_color_scheme": "scheme3",
+            "target_section_color_scheme": "scheme1",
             "style": "circles-2.5-patterned_1200x54",
             "enable_mobile_style": false,
             "style_mobile": "waves-1-patterned_1200x20",
@@ -852,8 +852,8 @@
             "title": "Fairness für Kleinbauern",
             "meta": "",
             "text": "<p>Preis über Markt, garantierte Abnahme, langfristige Partnerschaft. Schema öffentlich.</p>",
-            "link_label": "",
-            "link": ""
+            "link_label": "Test",
+            "link": "shopify://pages/startseite"
           }
         },
         "vision_card_2": {
@@ -950,9 +950,9 @@
         "button_color": "#aeff64",
         "button_label_color": "#ac0300",
         "link_custom_color": "#fffff5",
-        "card_color": "#542a76",
-        "card_text_color": "#fffff5",
-        "card_link_color": "",
+        "card_color": "#FFFFF5",
+        "card_text_color": "#000000",
+        "card_link_color": "#B20000",
         "scroll_motion": true
       }
     },
@@ -1084,6 +1084,24 @@
     },
     "kaadu_trial_cta": {
       "type": "kaadu-trial-cta",
+      "blocks": {
+        "shape_divider_7qcwpJ": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "below",
+            "target_section_color_scheme": "scheme-389c794f-4614-44af-93cb-cbbfec11d15a",
+            "style": "circles-2.5-patterned_1200x54",
+            "enable_mobile_style": false,
+            "style_mobile": "waves-1-patterned_1200x20",
+            "flip_horizontal": false,
+            "enable_animation": false,
+            "animation_direction": ""
+          }
+        }
+      },
+      "block_order": [
+        "shape_divider_7qcwpJ"
+      ],
       "settings": {
         "badge": "Code[br][CODE]",
         "heading": "Ein Beutel [star][br]gratis [piece] nur[br]CHF 3 Versand",
@@ -1387,24 +1405,6 @@
     },
     "email_input_dMpqpt": {
       "type": "email-input",
-      "blocks": {
-        "shape_divider_LVzUm9": {
-          "type": "shape_divider",
-          "settings": {
-            "target_section": "below",
-            "target_section_color_scheme": "scheme3",
-            "style": "curve-shape_1440x149",
-            "enable_mobile_style": false,
-            "style_mobile": "waves-1-patterned_1200x20",
-            "flip_horizontal": false,
-            "enable_animation": false,
-            "animation_direction": ""
-          }
-        }
-      },
-      "block_order": [
-        "shape_divider_LVzUm9"
-      ],
       "custom_css": [],
       "name": "Email Signup",
       "settings": {
