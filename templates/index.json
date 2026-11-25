@@ -194,7 +194,7 @@
         "overlay_color": "#ffffff",
         "overlay_opacity": 0,
         "eyebrow": "",
-        "title": "AUSBEUTUNG IST TIEF VERANKERT",
+        "title": "&nbsp;Wir spielen nicht mit.",
         "heading_tag": "h2",
         "richtext": "",
         "cta_text": "VIDEO ANSEHEN",
@@ -950,9 +950,9 @@
         "button_color": "#aeff64",
         "button_label_color": "#ac0300",
         "link_custom_color": "#fffff5",
-        "card_color": "#FFFFF5",
+        "card_color": "#fffff5",
         "card_text_color": "#000000",
-        "card_link_color": "#B20000",
+        "card_link_color": "#b20000",
         "scroll_motion": true
       }
     },
