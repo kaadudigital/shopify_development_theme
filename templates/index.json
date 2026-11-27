@@ -866,19 +866,6 @@
             "link": ""
           }
         },
-        "shape_divider_ytRjUQ": {
-          "type": "shape_divider",
-          "settings": {
-            "target_section": "below",
-            "target_section_color_scheme": "scheme1",
-            "style": "circles-2.5-patterned_1200x54",
-            "enable_mobile_style": false,
-            "style_mobile": "waves-1-patterned_1200x20",
-            "flip_horizontal": false,
-            "enable_animation": false,
-            "animation_direction": ""
-          }
-        },
         "shape_divider_z6rNhb": {
           "type": "shape_divider",
           "settings": {
@@ -891,13 +878,26 @@
             "enable_animation": false,
             "animation_direction": ""
           }
+        },
+        "shape_divider_ytRjUQ": {
+          "type": "shape_divider",
+          "settings": {
+            "target_section": "below",
+            "target_section_color_scheme": "scheme4",
+            "style": "circles-2.5-patterned_1200x54",
+            "enable_mobile_style": false,
+            "style_mobile": "waves-1-patterned_1200x20",
+            "flip_horizontal": false,
+            "enable_animation": false,
+            "animation_direction": ""
+          }
         }
       },
       "block_order": [
         "vision_card_1",
         "vision_card_2",
-        "shape_divider_ytRjUQ",
-        "shape_divider_z6rNhb"
+        "shape_divider_z6rNhb",
+        "shape_divider_ytRjUQ"
       ],
       "name": "Vision",
       "settings": {
@@ -954,132 +954,6 @@
         "card_text_color": "#000000",
         "card_link_color": "#b20000",
         "scroll_motion": true
-      }
-    },
-    "kaadu_comparison_main": {
-      "type": "kaadu-comparison",
-      "blocks": {
-        "shape_divider_PyAmrw": {
-          "type": "shape_divider",
-          "settings": {
-            "target_section": "below",
-            "target_section_color_scheme": "scheme4",
-            "style": "circles-2.5-patterned_1200x54",
-            "enable_mobile_style": false,
-            "style_mobile": "waves-1-patterned_1200x20",
-            "flip_horizontal": false,
-            "enable_animation": false,
-            "animation_direction": ""
-          }
-        },
-        "row_1": {
-          "type": "row",
-          "settings": {
-            "kaadu_text": "Reif geerntet",
-            "other_text": "Grün gepflückt",
-            "show_on_mobile": true
-          }
-        },
-        "row_2": {
-          "type": "row",
-          "settings": {
-            "kaadu_text": "Ananas. Punkt.",
-            "other_text": "Zucker, Schwefel, Aromen",
-            "show_on_mobile": true
-          }
-        },
-        "row_3": {
-          "type": "row",
-          "settings": {
-            "kaadu_text": "Löhne offen, +50 %",
-            "other_text": "Löhne unbekannt",
-            "show_on_mobile": true
-          }
-        },
-        "row_4": {
-          "type": "row",
-          "settings": {
-            "kaadu_text": "Verarbeitet im Dorf",
-            "other_text": "Verarbeitet weit weg",
-            "show_on_mobile": true
-          }
-        },
-        "row_5": {
-          "type": "row",
-          "settings": {
-            "kaadu_text": "Soll dem Team gehören",
-            "other_text": "Gehört einem Konzern",
-            "show_on_mobile": false
-          }
-        },
-        "note_1": {
-          "type": "note",
-          "settings": {
-            "title": "Einkauf:",
-            "text": "direkt, A-Preis für jede Grösse.",
-            "show_on": "mobile"
-          }
-        },
-        "note_2": {
-          "type": "note",
-          "settings": {
-            "title": "Eigentum:",
-            "text": "soll dem Team gehören.",
-            "show_on": "mobile"
-          }
-        }
-      },
-      "block_order": [
-        "shape_divider_PyAmrw",
-        "row_1",
-        "row_2",
-        "row_3",
-        "row_4",
-        "row_5",
-        "note_1",
-        "note_2"
-      ],
-      "settings": {
-        "kicker": "Kaadu > Andere",
-        "heading": "Wir sind einfach besser.",
-        "mobile_kicker": "Zieh den Regler",
-        "mobile_heading": "Kaadu vs. der Rest im Regal",
-        "kaadu_label": "Kaadu",
-        "kaadu_logo": "shopify://shop_images/Kaadu_wordmark_red_RGB.svg",
-        "kaadu_image": "shopify://shop_images/14.png",
-        "other_label": "Der Rest",
-        "other_image": "shopify://shop_images/15_e0fd1f9d-1c77-4291-8ab6-89d94e9b15df.png",
-        "footnote": "<p>«Der Rest» steht für das, was im Regal daneben liegt. Kein Hersteller wird genannt, jede Kaadu-Zeile ist belegbar. [Belege verlinken]</p>",
-        "mobile_footnote": "<p>«Der Rest» steht für das, was im Regal daneben liegt. Kein Hersteller wird genannt. [Belege verlinken]</p>",
-        "start_position": 55,
-        "photo_shade": 0,
-        "handle_shape": "image",
-        "handle_image": "shopify://shop_images/Vector_f1de3305-1aa4-4f1c-9b06-f17b521b7581.png",
-        "handle_arrow": "default",
-        "handle_size_mobile": 50,
-        "handle_size": 68,
-        "rock_enabled": true,
-        "rock_delay": 2,
-        "rock_distance": 12,
-        "rock_speed": 6,
-        "color_scheme": "scheme1",
-        "use_custom_colors": true,
-        "background_color": "#ffc6ff",
-        "kicker_color": "#542a76",
-        "heading_color": "#ac0300",
-        "note_color": "#542a76",
-        "kaadu_bg_color": "#aeff64",
-        "kaadu_text_color": "#542a76",
-        "other_bg_color": "#9a9a94",
-        "other_text_color": "#fffff5",
-        "pill_bg_color": "#3a3a3a",
-        "pill_text_color": "#fffff5",
-        "handle_color": "#aeff64",
-        "handle_arrow_color": "#ac0300",
-        "card_color": "#fff9ee",
-        "card_text_color": "#542a76",
-        "scroll_motion": true,
-        "slider_label": "Vergleich verschieben"
       }
     },
     "kaadu_trial_cta": {
@@ -1463,7 +1337,6 @@
     "vertical_video_embeds_kJLBxQ",
     "image_with_highlights_mU9j66",
     "image_with_text_custom_vision",
-    "kaadu_comparison_main",
     "kaadu_trial_cta",
     "kaadu_cost_split_main",
     "custom_image_section_Mafcmn",
