@@ -940,7 +940,7 @@
         "focus_element_id": "template--32174860960078__kaadu_people_cards_wP7k2m",
         "mobile_link_position": "under",
         "link_color": "text",
-        "color_scheme": "scheme3",
+        "color_scheme": "scheme2",
         "use_custom_colors": true,
         "use_gradient_background": false,
         "background_color": "#ac0300",
@@ -1088,7 +1088,7 @@
       "settings": {
         "kicker": "",
         "heading": "Wo landen deine[br]CHF 4.45?",
-        "intro": "<p>Fair ist ein Wort. Das hier sind Zahlen. Klick auf einen Balken.</p>",
+        "intro": "<p>Wir haben keine geheimnisse, denn wir haben nichts zu vertecken.&nbsp;</p>",
         "mobile_heading": "",
         "mobile_intro": "<p>Fair ist ein Wort. Das hier sind Zahlen. Tipp auf einen Balken.</p>",
         "text_align": "left",
